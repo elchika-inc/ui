@@ -14,5 +14,6 @@
     "outDir": "lib",
     "paths": { "@/*": ["./src/*"] }
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["src/catalog/**/*", "src/layouts/**/*", "src/pages/**/*", "src/previews/**/*"]
 }

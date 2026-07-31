@@ -1,4 +1,5 @@
 ---
+import { previewItems } from "@/catalog/previews";
 import Layout from "@/layouts/main.astro";
 ---
 
@@ -13,31 +14,54 @@ import Layout from "@/layouts/main.astro";
         </p>
       </header>
 
-      <nav aria-labelledby="preview-heading">
-        <h2 id="preview-heading" class="text-lg font-medium">隔離プレビュー</h2>
-        <ul class="mt-3 flex flex-col gap-2">
+      <nav aria-labelledby="catalog-heading">
+        <h2 id="catalog-heading" class="text-lg font-medium">横断カタログ</h2>
+        <ul class="mt-3 flex flex-wrap gap-4">
           <li>
             <a
               class="text-primary underline underline-offset-4 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring"
-              href="/preview/button/"
+              href="/catalog/"
             >
-              Button — light
+              Light
             </a>
           </li>
           <li>
             <a
               class="text-primary underline underline-offset-4 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring"
-              href="/preview/button-dark/"
+              href="/catalog-dark/"
             >
-              Button — dark
+              Dark
             </a>
           </li>
         </ul>
       </nav>
 
-      <p class="text-sm text-muted-foreground">
-        本格的なカタログはサブプロジェクト #3 で構築します。
-      </p>
+      <nav aria-labelledby="preview-heading">
+        <h2 id="preview-heading" class="text-lg font-medium">隔離プレビュー</h2>
+        <ul class="mt-3 grid gap-3 sm:grid-cols-2">
+          {
+            previewItems.map(({ name, title }) => (
+              <li class="rounded-lg border border-border p-4">
+                <h3 class="font-medium">{title}</h3>
+                <div class="mt-2 flex gap-3 text-sm">
+                  <a
+                    class="text-primary underline underline-offset-4 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring"
+                    href={`/preview/${name}/`}
+                  >
+                    Light
+                  </a>
+                  <a
+                    class="text-primary underline underline-offset-4 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring"
+                    href={`/preview/${name}-dark/`}
+                  >
+                    Dark
+                  </a>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
     </div>
   </main>
 </Layout>

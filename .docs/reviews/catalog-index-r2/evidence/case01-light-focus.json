@@ -1,0 +1,156 @@
+[
+  {
+    "index": 1,
+    "tagName": "A",
+    "text": "Light",
+    "href": "/catalog/",
+    "focusVisible": true,
+    "outlineStyle": "none",
+    "outlineWidth": "1px",
+    "outlineColor": "oklch(0.556 0 0)",
+    "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+  },
+  {
+    "index": 2,
+    "tagName": "A",
+    "text": "Dark",
+    "href": "/catalog-dark/",
+    "focusVisible": true,
+    "outlineStyle": "none",
+    "outlineWidth": "1px",
+    "outlineColor": "oklch(0.556 0 0)",
+    "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+  },
+  {
+    "index": 3,
+    "tagName": "A",
+    "text": "Light",
+    "href": "/preview/badge/",
+    "focusVisible": true,
+    "outlineStyle": "none",
+    "outlineWidth": "1px",
+    "outlineColor": "oklch(0.556 0 0)",
+    "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+  },
+  {
+    "index": 4,
+    "tagName": "A",
+    "text": "Dark",
+    "href": "/preview/badge-dark/",
+    "focusVisible": true,
+    "outlineStyle": "none",
+    "outlineWidth": "1px",
+    "outlineColor": "oklch(0.556 0 0)",
+    "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+  },
+  {
+    "index": 5,
+    "tagName": "A",
+    "text": "Light",
+    "href": "/preview/button/",
+    "focusVisible": true,
+    "outlineStyle": "none",
+    "outlineWidth": "1px",
+    "outlineColor": "oklch(0.556 0 0)",
+    "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+  },
+  {
+    "index": 6,
+    "tagName": "A",
+    "text": "Dark",
+    "href": "/preview/button-dark/",
+    "focusVisible": true,
+    "outlineStyle": "none",
+    "outlineWidth": "1px",
+    "outlineColor": "oklch(0.556 0 0)",
+    "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+  },
+  {
+    "index": 7,
+    "tagName": "A",
+    "text": "Light",
+    "href": "/preview/dialog/",
+    "focusVisible": true,
+    "outlineStyle": "none",
+    "outlineWidth": "1px",
+    "outlineColor": "oklch(0.556 0 0)",
+    "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+  },
+  {
+    "index": 8,
+    "tagName": "A",
+    "text": "Dark",
+    "href": "/preview/dialog-dark/",
+    "focusVisible": true,
+    "outlineStyle": "none",
+    "outlineWidth": "1px",
+    "outlineColor": "oklch(0.556 0 0)",
+    "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+  },
+  {
+    "index": 9,
+    "tagName": "A",
+    "text": "Light",
+    "href": "/preview/input/",
+    "focusVisible": true,
+    "outlineStyle": "none",
+    "outlineWidth": "1px",
+    "outlineColor": "oklch(0.556 0 0)",
+    "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+  },
+  {
+    "index": 10,
+    "tagName": "A",
+    "text": "Dark",
+    "href": "/preview/input-dark/",
+    "focusVisible": true,
+    "outlineStyle": "none",
+    "outlineWidth": "1px",
+    "outlineColor": "oklch(0.556 0 0)",
+    "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+  },
+  {
+    "index": 11,
+    "tagName": "A",
+    "text": "Light",
+    "href": "/preview/sonner/",
+    "focusVisible": true,
+    "outlineStyle": "none",
+    "outlineWidth": "1px",
+    "outlineColor": "oklch(0.556 0 0)",
+    "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+  },
+  {
+    "index": 12,
+    "tagName": "A",
+    "text": "Dark",
+    "href": "/preview/sonner-dark/",
+    "focusVisible": true,
+    "outlineStyle": "none",
+    "outlineWidth": "1px",
+    "outlineColor": "oklch(0.556 0 0)",
+    "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+  },
+  {
+    "index": 13,
+    "tagName": "A",
+    "text": "Light",
+    "href": "/preview/tabs/",
+    "focusVisible": true,
+    "outlineStyle": "none",
+    "outlineWidth": "1px",
+    "outlineColor": "oklch(0.556 0 0)",
+    "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+  },
+  {
+    "index": 14,
+    "tagName": "A",
+    "text": "Dark",
+    "href": "/preview/tabs-dark/",
+    "focusVisible": true,
+    "outlineStyle": "none",
+    "outlineWidth": "1px",
+    "outlineColor": "oklch(0.556 0 0)",
+    "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+  }
+]

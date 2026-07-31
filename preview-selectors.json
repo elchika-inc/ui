@@ -1,6 +1,8 @@
 {
   "badge": "[data-slot=\"badge\"]",
   "button": "[data-slot=\"button\"]",
+  "catalog": "[data-slot=\"verification-catalog\"]",
+  "catalog-dark": "[data-slot=\"verification-catalog\"]",
   "dialog": "[data-slot=\"dialog-content\"]",
   "input": "[data-slot=\"input\"]",
   "sonner": "[data-sonner-toast]",

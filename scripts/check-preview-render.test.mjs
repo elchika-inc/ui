@@ -37,3 +37,15 @@ test("全コンポーネントに selector があれば問題なし", async () =
     { problems: [] },
   );
 });
+
+test("catalog 2 route も selector の必須対象に含める", async () => {
+  assert.ok(existsSync(checkerPath), "check-preview-render.mjs がまだ無い");
+  const { requiredPreviewNames } = await import(checkerPath);
+
+  assert.deepEqual(requiredPreviewNames(["badge", "button"]), [
+    "badge",
+    "button",
+    "catalog",
+    "catalog-dark",
+  ]);
+});

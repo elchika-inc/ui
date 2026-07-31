@@ -1,0 +1,14 @@
+検証対象: index `/`（light / html.dark 強制適用）
+対象コミット: 71ade34f3a14e3af19cdaa8100d7fc4552aed4ba
+成功基準（実行前定義）:
+1. `src/previews/*.tsx` の scan 結果が badge/button/dialog/input/sonner/tabs の6件であり、index の各項目に light/dark の個別 route（計12リンク）が存在する。
+2. 横断カタログの Light `/catalog/` と Dark `/catalog-dark/` が存在し、index のリンク総数は14件である。
+3. light と forced-dark の双方で main=1、navigation=2、h1=1、h2=2、h3=6、link=14。各 navigation は対応する heading で命名される。
+4. 14リンクを実ブラウザから GET し、全て HTTP 2xx、HTML body を持ち、エラーページを示す body ではない。
+5. light / forced-dark の双方で console error、例外、Network.loadingFailed、HTTP 4xx/5xx が0件。
+6. 全`Network.responseReceived`を保存し、全responseのoriginが対象loopback originと一致し、outsideOrigin responseが0件。
+7. light / forced-dark双方で、観測したsame-origin response path集合が`/`とexpectedRoutes全14件を含み、missingが0件。
+8. viewport 幅1280pxで document/body/main の scrollWidth がclientWidth以下（横スクロールなし）。
+9. lightはhtmlにdark classがなく、背景/前景tokenの実計算色が明背景/暗文字。forced-darkはhtmlにdark classを付与し、暗背景/明文字へ変わる。
+10. light / forced-dark双方で実キーボードTabにより14リンクすべてへ順番に到達し、focus-visibleの可視スタイル（outlineまたはbox-shadow）が存在する。
+11. light / forced-darkの全ページスクリーンショット、DOM、Accessibility tree、console、network、実測JSONをevidenceに保存する。

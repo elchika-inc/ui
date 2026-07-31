@@ -1,8 +1,8 @@
 // 実ブラウザ証跡の形式と、検証後に component 固有 path が変わっていないことを検査する。
 // 共有面の変更は全証跡を一律に失敗させず、陳腐化の可能性として一覧化する。
 import { execFileSync, spawnSync } from "node:child_process";
-import { existsSync, readdirSync, readFileSync } from "node:fs";
-import { basename, extname, join } from "node:path";
+import { lstatSync, readdirSync, readFileSync, realpathSync } from "node:fs";
+import { basename, extname, isAbsolute, join, relative } from "node:path";
 import { pathToFileURL } from "node:url";
 
 // preview 全体へ影響しうる共有面はここだけを育てる。
@@ -50,6 +50,40 @@ function componentPaths(name) {
   ];
 }
 
+function evidencePaths(file) {
+  if (
+    /^\d{4}-\d{2}-\d{2}-index-page\.md$/.test(basename(file)) ||
+    file === "catalog-index-r2/report.md"
+  ) {
+    return [
+      "src/pages/index.astro",
+      "src/catalog/preview-manifest.mjs",
+      "src/catalog/previews.ts",
+      "src/previews",
+    ];
+  }
+  if (/^\d{4}-\d{2}-\d{2}-verification-catalog\.md$/.test(basename(file))) {
+    return [
+      "src/pages/catalog.astro",
+      "src/pages/catalog-dark.astro",
+      "src/catalog/preview-manifest.mjs",
+      "src/catalog/previews.ts",
+      "src/catalog/verification-catalog.tsx",
+      "src/components/ui",
+      "src/previews",
+    ];
+  }
+  return [];
+}
+
+function reviewEntries(reviewsRoot, directory = "") {
+  return readdirSync(join(reviewsRoot, directory), { withFileTypes: true }).flatMap((entry) => {
+    const relativePath = join(directory, entry.name);
+    if (entry.isDirectory()) return reviewEntries(reviewsRoot, relativePath);
+    return [{ path: relativePath, isFile: entry.isFile() }];
+  });
+}
+
 function commitExists(root, sha) {
   return (
     spawnSync("git", ["cat-file", "-e", `${sha}^{commit}`], {
@@ -84,6 +118,10 @@ function inspectMarkdown(repositoryRoot, reviewsRoot, file) {
   if (component && pathsChanged(repositoryRoot, sha, componentPaths(component))) {
     problems.push(`${file}: 検証 SHA 以降に component 固有 path が変更されている`);
   }
+  const specificPaths = evidencePaths(file);
+  if (specificPaths.length && pathsChanged(repositoryRoot, sha, specificPaths)) {
+    problems.push(`${file}: 検証 SHA 以降に証跡固有 path が変更されている`);
+  }
   const changedShared = SHARED_EVIDENCE_PATHS.filter((path) =>
     pathsChanged(repositoryRoot, sha, [path]),
   );
@@ -94,18 +132,36 @@ function inspectMarkdown(repositoryRoot, reviewsRoot, file) {
 export function checkEvidenceInRepo(root) {
   const repositoryRoot = git(root, ["rev-parse", "--show-toplevel"]).trim();
   const reviewsRoot = join(repositoryRoot, ".docs/reviews");
-  if (!existsSync(reviewsRoot)) {
-    return { problems: [".docs/reviews が無い"], stale: [] };
+  const problems = [];
+  if (lstatSync(join(repositoryRoot, ".docs/verifications"), { throwIfNoEntry: false })) {
+    problems.push(".docs/verifications は証跡の正規レイヤーではない。.docs/reviews 配下へ移動する");
+  }
+  const reviewsStatus = lstatSync(reviewsRoot, { throwIfNoEntry: false });
+  if (!reviewsStatus) {
+    problems.push(".docs/reviews が無い");
+    return { problems, stale: [] };
+  }
+  const reviewsRelativePath = relative(repositoryRoot, realpathSync(reviewsRoot));
+  if (
+    !reviewsStatus.isDirectory() ||
+    reviewsRelativePath.startsWith("..") ||
+    isAbsolute(reviewsRelativePath)
+  ) {
+    problems.push(".docs/reviews は repo 内の通常ディレクトリでなければならない");
+    return { problems, stale: [] };
   }
 
-  const files = readdirSync(reviewsRoot, { withFileTypes: true })
-    .filter((entry) => entry.isFile())
-    .map((entry) => entry.name)
-    .sort();
+  const entries = reviewEntries(reviewsRoot).sort((left, right) =>
+    left.path.localeCompare(right.path),
+  );
+  const files = entries.filter((entry) => entry.isFile).map((entry) => entry.path);
   const imageFiles = files.filter((file) => [".png", ".jpg", ".jpeg"].includes(extname(file)));
   const markdownFiles = files.filter((file) => extname(file) === ".md");
-  const problems = [];
   const stale = [];
+
+  for (const entry of entries.filter((candidate) => !candidate.isFile)) {
+    problems.push(`${entry.path}: 通常ファイルではないため証跡として検査できない`);
+  }
 
   if (imageFiles.length === 0) problems.push("証跡画像が 0 件（走査が空走している）");
   if (markdownFiles.length === 0) problems.push("証跡 Markdown が 0 件（走査が空走している）");
@@ -124,7 +180,7 @@ export function checkEvidenceInRepo(root) {
   return { problems, stale };
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const { problems, stale } = checkEvidenceInRepo(process.cwd());
   if (stale.length) {
     console.warn(`${stale.length} 件の証跡が共有面の変更より古い:\n  ${stale.join("\n  ")}`);

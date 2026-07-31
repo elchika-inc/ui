@@ -1,3 +1,4 @@
+import type { PreviewProps } from "@/catalog/preview-types";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,10 +10,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-export function DialogPreview() {
+export function DialogPreview({ mode = "isolated" }: PreviewProps) {
   return (
     <div className="p-6">
-      <Dialog defaultOpen>
+      <Dialog defaultOpen={mode === "isolated"}>
         <DialogTrigger render={<Button variant="outline" />}>ダイアログを開く</DialogTrigger>
         <DialogContent>
           <DialogHeader>

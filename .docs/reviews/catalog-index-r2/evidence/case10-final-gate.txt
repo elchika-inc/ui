@@ -1,0 +1,24 @@
+final_gate_datetime=2026-08-01T07:58:57+09:00
+commit=71ade34f3a14e3af19cdaa8100d7fc4552aed4ba
+case01-light_responses=18
+case01-light_required_paths=15
+case01-light_missing_paths=0
+case01-light_outside_origin=0
+case02-forced-dark_responses=18
+case02-forced-dark_required_paths=15
+case02-forced-dark_missing_paths=0
+case02-forced-dark_outside_origin=0
+summary_checks=39/39
+console_errors=0/0
+link_http_checks=14/14_each_mode
+evidence_files=31
+json_integrity_exit_code=0
+source_integrity_exit_code=0
+.docs/verifications/catalog-index-r2/evidence/case01-light-index.png: PNG image data, 1280 x 900, 8-bit/color RGB, non-interlaced
+.docs/verifications/catalog-index-r2/evidence/case02-forced-dark-index.png: PNG image data, 1280 x 900, 8-bit/color RGB, non-interlaced
+.docs/verifications/catalog-index-r2/evidence/case05-light-focus.png: PNG image data, 1280 x 900, 8-bit/color RGB, non-interlaced
+.docs/verifications/catalog-index-r2/evidence/case06-forced-dark-focus.png: PNG image data, 1280 x 900, 8-bit/color RGB, non-interlaced
+server_listener=absent
+report_md=present_parent_owned
+492	.docs/verifications/catalog-index-r2/evidence
+final_gate_exit_code=0

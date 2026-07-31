@@ -1,0 +1,74 @@
+
+> ui-scaffold@0.0.1 build
+> npm run build:lib && npm run registry:build && npm run registry:legal && npm run build:site
+
+
+> ui-scaffold@0.0.1 build:lib
+> tsup && tsc -p tsconfig.lib.json
+
+CLI Building entry: src/index.ts
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.5.1
+CLI Using tsup config: /Users/nishikawa/projects/elchika-inc/ui/tsup.config.ts
+CLI Target: esnext
+CLI Cleaning output folder
+ESM Build start
+ESM lib/index.js 14.27 KB
+ESM ⚡️ Build success in 27ms
+
+> ui-scaffold@0.0.1 registry:build
+> npm run registry:tokens && shadcn build --output public/r
+
+
+> ui-scaffold@0.0.1 registry:tokens
+> node scripts/sync-registry-tokens.mjs && biome format --write registry.json
+
+6 item に 37 個のトークンを載せた
+Formatted 1 file in 6ms. Fixed 1 file.
+- Building badge...
+- Building button...
+- Building dialog...
+- Building input...
+- Building sonner...
+- Building tabs...
+✔ Building registry.
+
+> ui-scaffold@0.0.1 registry:legal
+> cp LICENSE THIRD_PARTY_LICENSES public/r/
+
+
+> ui-scaffold@0.0.1 build:site
+> astro build
+
+07:57:36 [types] Generated 24ms
+07:57:36 [build] output: "static"
+07:57:36 [build] mode: "static"
+07:57:36 [build] directory: /Users/nishikawa/projects/elchika-inc/ui/dist/
+07:57:36 [build] Collecting build info...
+07:57:36 [build] ✓ Completed in 55ms.
+07:57:36 [build] Building static entrypoints...
+07:57:36 [vite] ✓ built in 154ms
+07:57:36 [vite] ✓ built in 164ms
+07:57:36 [build] Rearranging server assets...
+
+ generating static routes 
+07:57:36   ├─ /catalog/index.html (+123ms) 
+07:57:36   ├─ /catalog-dark/index.html (+3ms) 
+07:57:36   ├─ /preview/badge/index.html (+1ms) 
+07:57:36   ├─ /preview/badge-dark/index.html (+1ms) 
+07:57:36   ├─ /preview/button/index.html (+1ms) 
+07:57:36   ├─ /preview/button-dark/index.html (+1ms) 
+07:57:36   ├─ /preview/dialog/index.html (+1ms) 
+07:57:36   ├─ /preview/dialog-dark/index.html (+1ms) 
+07:57:36   ├─ /preview/input/index.html (+1ms) 
+07:57:36   ├─ /preview/input-dark/index.html (+1ms) 
+07:57:36   ├─ /preview/sonner/index.html (+1ms) 
+07:57:36   ├─ /preview/sonner-dark/index.html (+1ms) 
+07:57:36   ├─ /preview/tabs/index.html (+1ms) 
+07:57:36   ├─ /preview/tabs-dark/index.html (+1ms) 
+07:57:36   ├─ /index.html (+1ms) 
+07:57:36 ✓ Completed in 151ms.
+
+07:57:36 [build] ✓ Completed in 484ms.
+07:57:36 [build] 15 page(s) built in 548ms
+07:57:36 [build] Complete!
