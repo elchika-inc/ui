@@ -1,7 +1,17 @@
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
+import { type PreviewTheme, watchPreviewTheme } from "@/previews/preview-theme";
+
+function PreviewThemeToaster() {
+  const [theme, setTheme] = useState<PreviewTheme>();
+
+  useEffect(() => watchPreviewTheme(document.documentElement, setTheme), []);
+
+  return theme ? <Toaster position="top-center" theme={theme} /> : null;
+}
 
 export function SonnerPreview() {
   return (
@@ -17,7 +27,7 @@ export function SonnerPreview() {
       >
         通知を表示
       </Button>
-      <Toaster position="top-center" />
+      <PreviewThemeToaster />
     </div>
   );
 }

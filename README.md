@@ -54,6 +54,8 @@ npx serve public -l 3011
 npx shadcn@latest add --overwrite http://127.0.0.1:3011/r/button.json
 ```
 
+`sonner` は `next-themes` の `ThemeProvider` を前提とする。
+
 ## トークンの適用
 
 取り込むと `elchika-ui/tokens.css` が置かれる。**利用側に既存のトークン定義がある場合、registry はそれを上書きしない**（shadcn の仕様）。elchika の見た目を共有するには、自分の CSS から**最後に** import する。
