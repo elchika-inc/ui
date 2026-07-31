@@ -11,7 +11,12 @@
 import { globSync, readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 
-const RING_OPACITY = /\bring-(?:ring|[a-z-]+)\/\d+/g;
+// 色名は [a-z0-9-]+（[a-z-]+ だと ring-red-500/50 を見逃す）。
+// 不透明度の指定は Tailwind v4 が 4 形式を受けるため全部拾う（実測で確認）:
+//   /50  /12.5  /[50%]  /[.5]  /(--ring-alpha)
+// \d+ だけだと角括弧・丸括弧の形式を見逃し、透明度禁止を迂回できる。
+// arbitrary 検査にも掛からないので、ここが唯一の検出経路になる。
+const RING_OPACITY = /\bring-(?:ring|[a-z0-9-]+)\/(?:\d+(?:\.\d+)?%?|\[[^\]]+\]|\([^)]+\))/g;
 
 // 値系ユーティリティだけを対象にする。プレフィックスの列挙は AUDIT.md の
 // arbitrary value 検査コマンドから逐語で写した。

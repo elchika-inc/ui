@@ -1,5 +1,5 @@
 // src/components/ui/*.tsx を正本として、各コンポーネントが
-// 消費側の 4 経路すべてに載っていることを検査する。
+// 消費側の 5 経路すべてに載っていることを検査する。
 // Button 固定の検査を一般化したもので、#2 で 50 件足すときの安全網になる。
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
@@ -10,7 +10,30 @@ const pascal = (s) =>
     .map((w) => w[0].toUpperCase() + w.slice(1))
     .join("");
 
-export function checkCompleteness({ components, barrel, dts, registry, previewFiles }) {
+// design §8 DoneCriteria 8 が要求する来歴の全項目。Task 2 Step 5 は button 固定
+// なので 2 件目以降を担保しない。ここが唯一の一般化されたゲートになる。
+const PROVENANCE_KEYS = [
+  "sourceUrl",
+  "upstreamPath",
+  "upstreamPathSha",
+  "registry",
+  "registryUrl",
+  "registryContentSha256",
+  "normalizedContentSha256",
+  "shadcnCliVersion",
+  "fetchedAt",
+  "license",
+];
+
+export function checkCompleteness({
+  components,
+  barrel,
+  dts,
+  registry,
+  previewFiles,
+  previewSources,
+  provenance,
+}) {
   const problems = [];
   for (const name of components) {
     const P = pascal(name);
@@ -21,10 +44,25 @@ export function checkCompleteness({ components, barrel, dts, registry, previewFi
     if (!registry.items.some((i) => i.name === name)) {
       problems.push(`${name}: registry.json に item が無い`);
     }
+    // ルート（.astro）だけでなく中身（src/previews/<name>.tsx）も見る。
+    // ルートだけ在って中身が無いと、誤った import でもビルドが通りうる。
+    if (!previewSources.includes(`${name}.tsx`)) {
+      problems.push(`${name}: src/previews/${name}.tsx が無い`);
+    }
     for (const suffix of ["", "-dark"]) {
       if (!previewFiles.includes(`${name}${suffix}.astro`)) {
         problems.push(`${name}: プレビュー ${name}${suffix}.astro が無い`);
       }
+    }
+    // CONTRIBUTING が挙げる 5 項目の 1 つ。DoneCriteria 8 もコンポーネントごとの
+    // 来歴を要求するため、ここを見ないと 2 件目以降の欠落を CI が見逃す。
+    const p = provenance.components?.[name];
+    if (!p) {
+      problems.push(`${name}: provenance.json に来歴が無い`);
+      continue;
+    }
+    for (const k of PROVENANCE_KEYS) {
+      if (!p[k]) problems.push(`${name}: provenance の ${k} が無い`);
     }
   }
   return { problems };
@@ -48,10 +86,12 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     dts: readFileSync("lib/index.d.ts", "utf8"),
     registry: JSON.parse(readFileSync("registry.json", "utf8")),
     previewFiles: readdirSync("src/pages/preview"),
+    previewSources: readdirSync("src/previews"),
+    provenance: JSON.parse(readFileSync("provenance.json", "utf8")),
   });
   if (problems.length) {
     console.error(`欠落:\n  ${problems.join("\n  ")}`);
     process.exit(1);
   }
-  console.log(`${components.length} 件のコンポーネントが 4 経路すべてに載っている`);
+  console.log(`${components.length} 件のコンポーネントが 5 経路すべてに載っている`);
 }

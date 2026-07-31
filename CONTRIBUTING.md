@@ -29,12 +29,15 @@ npm run build:lib
 - フォーカスリングは `focus-visible:ring-[3px] focus-visible:ring-ring`。透明度合成（`/50` 等）を使わない
 - 外部から移植したコードは `provenance.json` に来歴を記録する。PR 本文の「来歴の申告」も実態どおりに埋める
 
-新しいコンポーネントを追加したら、次の 4 経路すべてに載せる（`node scripts/check-completeness.mjs` が検査する）。
+新しいコンポーネントを追加したら、次の経路すべてに載せる（`node scripts/check-completeness.mjs` が検査する）。
 
-1. `src/index.ts` からの export と `export type <Name>Props`
-2. `registry.json` の `items`
-3. `src/previews/<name>.tsx` と `src/pages/preview/<name>.astro` / `<name>-dark.astro`
-4. `provenance.json`（`PROVENANCE_DATE=$(date +%F) node scripts/record-provenance.mjs` で自動記録される）
+1. `src/index.ts` からの値 export（`checkCompleteness` の barrel 検査）
+2. `export type <Name>Props`（同 Props 検査。ビルド後の `lib/index.d.ts` に現れること）
+3. `registry.json` の `items`
+4. `src/previews/<name>.tsx` と `src/pages/preview/<name>.astro` / `<name>-dark.astro`
+5. `provenance.json`（`PROVENANCE_DATE=$(date +%F) node scripts/record-provenance.mjs` で自動記録される）
+
+この 5 項目は `checkCompleteness` が見る 5 つの検査次元と 1 対 1 で対応する。**片方を増減させたら他方も合わせる。**
 
 そのうえで、追加したプレビューの両テーマを実ブラウザで検証してから PR を出す（AI_FIRST §2）。
 

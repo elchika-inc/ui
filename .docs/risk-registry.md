@@ -55,3 +55,12 @@
 - status: accepted
 - reason: shadcn の CSS 更新は `overwriteCssVars` が既定 `false` で、利用者側に同名の宣言が既にあれば何もしないため、registry からトークン値を強制適用できない。全トークンの正本を `~/elchika-ui/tokens.css` として配り、README で利用者自身の CSS から最後に `@import` するよう案内する。既定値を持たない `--success` / `--warning` とその foreground は `cssVars` で自動追加する。
 - anchor: 利用者側プロジェクトのビルド出力に elchika のトークン値が現れるかを、サブプロジェクト #2 以降で実際に取り込むときに確認する。
+
+## RISK-008: GitHub Actions を可変タグで参照する
+
+- date: 2026-07-31
+- confidence: high
+- location: `.github/workflows/ci.yml` の `actions/checkout@v4` / `actions/setup-node@v4`
+- status: accepted
+- reason: 可変タグは同じ参照が別のコードを指しうる supply-chain risk を持つが、standards の正準テンプレートが `@v4` を採用しており、本リポジトリだけ SHA pin すると運用が分岐する。また、workflow は `permissions: contents: read` のみで secrets を使わず DOCS_OPS §6 の信頼境界を満たす。更新機構なしの pin は陳腐化して CVE 対応を遅らせるため、standards レベルの方針決定に先行して分岐させない。
+- anchor: standards 側の Action Queue `manual-github-actions-sha-pin.md` で決まった判断に従う。

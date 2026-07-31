@@ -11,6 +11,20 @@ test("透明度を合成したフォーカスリングを検出する", () => {
   assert.equal(violations[0].rule, "focus-ring-opacity");
 });
 
+test("色名に数字を含むリングも検出する", () => {
+  const { violations } = checkFile("a.tsx", `className="focus-visible:ring-red-500/50"`);
+  assert.equal(violations.length, 1);
+  assert.equal(violations[0].rule, "focus-ring-opacity");
+});
+
+test("角括弧・丸括弧の不透明度指定も検出する", () => {
+  for (const cls of ["ring-red-500/[50%]", "ring-red-500/[.5]", "ring-ring/(--ring-alpha)"]) {
+    const { violations } = checkFile("a.tsx", `className="focus-visible:${cls}"`);
+    assert.equal(violations.length, 1, cls);
+    assert.equal(violations[0].rule, "focus-ring-opacity", cls);
+  }
+});
+
 test("許可済み例外の ring-[3px] は違反にしない", () => {
   const { violations } = checkFile(
     "a.tsx",
