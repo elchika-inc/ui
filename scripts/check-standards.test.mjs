@@ -18,10 +18,23 @@ test("色名に数字を含むリングも検出する", () => {
 });
 
 test("角括弧・丸括弧の不透明度指定も検出する", () => {
-  for (const cls of ["ring-red-500/[50%]", "ring-red-500/[.5]", "ring-ring/(--ring-alpha)"]) {
+  for (const cls of [
+    "ring-red-500/[50%]",
+    "ring-red-500/[.5]",
+    "ring-ring/(--ring-alpha)",
+    // 色側の変数短縮・任意値。色を [a-z0-9-]+ だけにすると見逃す
+    "ring-(--brand)/50",
+    "ring-[#f00]/50",
+  ]) {
     const { violations } = checkFile("a.tsx", `className="focus-visible:${cls}"`);
-    assert.equal(violations.length, 1, cls);
-    assert.equal(violations[0].rule, "focus-ring-opacity", cls);
+    // **件数で判定しない。** `ring-[#f00]/50` のように 2 つの規定へ同時に
+    // 違反するクラスがあり、そのとき 2 件出るのが正しい（任意値であり、かつ
+    // 透明度合成でもある）。ここで見たいのは「focus-ring-opacity として
+    // 検出されること」なので、rule の有無で判定する。
+    assert.ok(
+      violations.some((v) => v.rule === "focus-ring-opacity"),
+      `${cls}: focus-ring-opacity として検出されない`,
+    );
   }
 });
 

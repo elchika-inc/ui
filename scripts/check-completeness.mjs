@@ -12,18 +12,22 @@ const pascal = (s) =>
 
 // design §8 DoneCriteria 8 が要求する来歴の全項目。Task 2 Step 5 は button 固定
 // なので 2 件目以降を担保しない。ここが唯一の一般化されたゲートになる。
-const PROVENANCE_KEYS = [
-  "sourceUrl",
-  "upstreamPath",
-  "upstreamPathSha",
-  "registry",
-  "registryUrl",
-  "registryContentSha256",
-  "normalizedContentSha256",
-  "shadcnCliVersion",
-  "fetchedAt",
-  "license",
-];
+//
+// **存在（truthy）だけを見ない。** 全キーに "x" を入れれば通ってしまい、
+// 形式の要求（40 桁 commit SHA・64 桁ハッシュ・HTTPS URL・exact semver・
+// YYYY-MM-DD）が 2 件目以降で fail-open になる。キーごとに形式を持たせる。
+const PROVENANCE_SPEC = {
+  sourceUrl: /^https:\/\/\S+$/,
+  upstreamPath: /^\S+\.tsx$/,
+  upstreamPathSha: /^[0-9a-f]{40}$/,
+  registry: /^https:\/\/\S+$/,
+  registryUrl: /^https:\/\/\S+$/,
+  registryContentSha256: /^[0-9a-f]{64}$/,
+  normalizedContentSha256: /^[0-9a-f]{64}$/,
+  shadcnCliVersion: /^\d+\.\d+\.\d+/,
+  fetchedAt: /^\d{4}-\d{2}-\d{2}$/,
+  license: /^\S+$/,
+};
 
 export function checkCompleteness({
   components,
@@ -61,8 +65,14 @@ export function checkCompleteness({
       problems.push(`${name}: provenance.json に来歴が無い`);
       continue;
     }
-    for (const k of PROVENANCE_KEYS) {
-      if (!p[k]) problems.push(`${name}: provenance の ${k} が無い`);
+    for (const [k, re] of Object.entries(PROVENANCE_SPEC)) {
+      if (!p[k]) {
+        problems.push(`${name}: provenance の ${k} が無い`);
+        continue;
+      }
+      if (!re.test(String(p[k]))) {
+        problems.push(`${name}: provenance の ${k} が形式に合わない: ${p[k]}`);
+      }
     }
   }
   return { problems };

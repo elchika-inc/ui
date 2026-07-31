@@ -77,6 +77,15 @@ test("来歴の必須キーが空なら検出する", () => {
   }
 });
 
+test("来歴の全キーが x なら形式違反を検出する", () => {
+  const provenance = structuredClone(complete.provenance);
+  for (const key of Object.keys(provenance.components.button)) {
+    provenance.components.button[key] = "x";
+  }
+  const { problems } = checkCompleteness({ ...complete, provenance });
+  assert.notDeepEqual(problems, []);
+});
+
 test("5 経路が揃っていれば問題なし", () => {
   assert.deepEqual(checkCompleteness(complete).problems, []);
 });
