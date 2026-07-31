@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Lint, typecheck, test & build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.12.0"
+          cache: npm
+
+      # 各コマンドを個別ステップにする。&& で連結すると exit code が
+      # 最後のコマンドのものになり、途中の失敗が消える。
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      # node --test に裸のディレクトリを渡すと glob pattern として解釈され、
+      # `scripts` というモジュールを実行しようとして必ず失敗する（実測）。
+      # かつ glob が 0 件一致でも tests 0 / exit 0 になるため（実測）、
+      # 「テストが実際に走ったか」を出力の件数で確かめる。
+      # **ファイル数を定数で書かない** — テストを 1 本足すたびにここがずれ、
+      # 実際にずれた（round 13 で check-completeness.test.mjs を足したとき）。
+      # 出力から読めば、本数が増えても減っても正しく判定できる。
+      # GitHub Actions の run は bash -e なので、前段が失敗すればステップごと落ちる。
+      - name: Unit tests
+        run: |
+          node --test "scripts/*.test.mjs" > /tmp/ui-tests.txt 2>&1
+          cat /tmp/ui-tests.txt
+          grep -qE '^. tests [1-9]' /tmp/ui-tests.txt
+
+      - name: Standards check
+        run: node scripts/check-standards.mjs
+
+      # registry を先に作る。Astro は build 時点の public/ を dist/ へコピーするため、
+      # build のあとに public/r を生成しても dist/ には入らない（実測: public/r/x.json →
+      # dist/r/x.json になるのは build 前に置いた場合だけ）。Astro サイトが registry の
+      # 配信も兼ねる設計なので、順序を逆にすると配信物が丸ごと欠ける。
+      - name: Build registry
+        run: npm run registry:build
+
+      - name: Bundle legal files
+        run: npm run registry:legal
+
+      - name: Distribution check
+        run: node scripts/check-distribution.mjs
+
+      - name: Build library
+        run: npm run build:lib
+
+      - name: Props contract
+        run: npx tsc --noEmit --ignoreConfig --strict --module esnext --moduleResolution bundler --target es2022 --jsx react-jsx types/dts-contract.ts
+
+      # lib/index.d.ts を読むので Build library の後ろに置く。
+      - name: Completeness check
+        run: node scripts/check-completeness.mjs
+
+      - name: Build site
+        run: npm run build:site
+
+      # dist/ が registry を配信できる状態かを見る。public/ に置いたことと
+      # dist/ に入ったことは別の事実。
+      - name: Dist registry check
+        run: |
+          test -f dist/r/button.json
+          test -f dist/r/LICENSE
+          test -f dist/r/THIRD_PARTY_LICENSES
+          cmp dist/r/button.json public/r/button.json
