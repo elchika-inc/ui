@@ -1,0 +1,24 @@
+{
+  "components": {
+    "button": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/button.json",
+      "registryPath": "registry/base-nova/ui/button.tsx",
+      "registryContentSha256": "93edbf2075d6104e1b20d263419d91a9587208d3d05efdd06dfafcfe4d0dfd65",
+      "normalizedContentSha256": "d14549ab3ba7a9d5d1f424c2599233bffa0b317121abf3b6efa2fb902d5e2781",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/button.tsx",
+      "upstreamPathSha": "4f421aba659a1f5e5bc2d36b591ac4753c0108e7",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-07-31",
+      "license": "MIT",
+      "modified": "DESIGN.md §5 適合のため focus ring と arbitrary value を修正",
+      "notes": "registry は preset を解決したビルド生成物を配信するため、配信内容と byte 一致する上流 commit は存在しない。registryContentSha256 が受け取った内容そのものの錨であり、upstreamPathSha は元テンプレートを最後に変更した commit を指す（byte 一致は主張しない）。"
+    }
+  }
+}
