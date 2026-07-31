@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { before, test } from "node:test";
 import { fileURLToPath } from "node:url";
@@ -8,6 +8,11 @@ import { fileURLToPath } from "node:url";
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 
 before(() => {
+  for (const directory of ["catalog", "previews"]) {
+    const staleDirectory = join(root, "lib", directory);
+    mkdirSync(staleDirectory, { recursive: true });
+    writeFileSync(join(staleDirectory, "stale.d.ts"), "export type Stale = true;\n");
+  }
   execFileSync("npm", ["run", "build"], { cwd: root, stdio: "pipe" });
 });
 
@@ -45,5 +50,15 @@ test("index が全 component の light / dark route を列挙する", () => {
   for (const name of componentNames()) {
     assert.match(html, new RegExp(`href="/preview/${name}/"`), `${name}: light link`);
     assert.match(html, new RegExp(`href="/preview/${name}-dark/"`), `${name}: dark link`);
+  }
+});
+
+test("library build が site 専用 declaration を残さない", () => {
+  for (const directory of ["catalog", "previews"]) {
+    const path = join(root, "lib", directory);
+    const declarations = existsSync(path)
+      ? readdirSync(path, { recursive: true }).filter((file) => file.endsWith(".d.ts"))
+      : [];
+    assert.deepEqual(declarations, [], `${directory}: site 専用 declaration が残っている`);
   }
 });

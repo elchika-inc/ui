@@ -9,6 +9,7 @@ import { defineConfig } from "tsup";
 export default defineConfig({
   entry: ["src/index.ts"],
   outDir: "lib",
+  clean: true,
   format: ["esm"],
   dts: false,
   external: ["react", "react-dom", "@base-ui/react"],
