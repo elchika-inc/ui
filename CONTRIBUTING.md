@@ -35,7 +35,7 @@ npm run build:lib
 2. `export type <Name>Props`（同 Props 検査。ビルド後の `lib/index.d.ts` に現れること）
 3. `registry.json` の `items`
 4. `src/previews/<name>.tsx` と `src/pages/preview/<name>.astro` / `<name>-dark.astro`
-5. `provenance.json`（`PROVENANCE_DATE=$(date +%F) node scripts/record-provenance.mjs` で自動記録される）
+5. `provenance.json`（`PROVENANCE_DATE=$(date +%F) PROVENANCE_MODIFIED='{"<name>":"実際の変更内容"}' node scripts/record-provenance.mjs` で自動記録される。`modified` は自動生成せず、未指定なら停止する）
 
 この 5 項目は `checkCompleteness` が見る 5 つの検査次元と 1 対 1 で対応する。**片方を増減させたら他方も合わせる。**
 

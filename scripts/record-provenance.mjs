@@ -8,6 +8,7 @@
 // を個別に記録し、それぞれが何を保証するかを notes に明記する。
 import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { modifiedFor, parseModifiedInput } from "./provenance-input.mjs";
 
 const pkg = JSON.parse(readFileSync("package.json", "utf8"));
 // scaffold が shadcn をどちらに置くかはテンプレート依存。
@@ -59,8 +60,15 @@ const sha256 = (s) => createHash("sha256").update(s, "utf8").digest("hex");
 const prev = existsSync("provenance.json")
   ? JSON.parse(readFileSync("provenance.json", "utf8"))
   : { components: {} };
+const componentFiles = readdirSync("src/components/ui").filter((f) => f.endsWith(".tsx"));
+const pendingComponents = componentFiles
+  .map((f) => f.replace(/\.tsx$/, ""))
+  .filter((name) => !prev.components[name]);
+const modifiedByComponent = pendingComponents.length
+  ? parseModifiedInput(process.env.PROVENANCE_MODIFIED)
+  : {};
 
-for (const f of readdirSync("src/components/ui")) {
+for (const f of componentFiles) {
   const name = f.replace(/\.tsx$/, "");
   if (prev.components[name]) continue;
 
@@ -115,7 +123,7 @@ for (const f of readdirSync("src/components/ui")) {
     shadcnRange,
     fetchedAt: date,
     license: "MIT",
-    modified: "DESIGN.md §5 適合のため focus ring と arbitrary value を修正",
+    modified: modifiedFor(modifiedByComponent, name),
     notes:
       "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。" +
       "registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。" +

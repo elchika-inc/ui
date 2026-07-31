@@ -17,6 +17,7 @@ import type {
   TabsListProps,
   TabsProps,
   TabsTriggerProps,
+  ToasterProps,
 } from "../lib/index.js"
 
 // variant / size が ButtonProps から到達でき、実際の union を持つ
@@ -49,6 +50,7 @@ const dialogContractsReachable: DialogContracts extends unknown[] ? true : never
 
 type TabsContracts = [TabsProps, TabsListProps, TabsTriggerProps, TabsContentProps]
 const tabsContractsReachable: TabsContracts extends unknown[] ? true : never = true
+const toasterPosition: ToasterProps["position"] = "top-center"
 
 export {
   variant,
@@ -58,4 +60,5 @@ export {
   dialogFooterCloseButton,
   dialogContractsReachable,
   tabsContractsReachable,
+  toasterPosition,
 }

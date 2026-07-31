@@ -18,8 +18,8 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-07-31",
       "license": "MIT",
-      "modified": "DESIGN.md §5 適合のため focus ring と arbitrary value を修正",
-      "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。generatedContentSha256 は CLI 生成直後ではなく standards 正規化を適用したあとの現行ファイルのハッシュである。正規化では DESIGN.md §5 適合のためフォーカスリングの透明度合成と値系 arbitrary value を除去した。この機構を dialog の時点で導入したため、先行コンポーネントの生成直後の値は遡って記録できない。"
+      "modified": "DESIGN.md §5 適合のため focus ring の透明度合成と値系 arbitrary value を除去し、BadgeProps を追加",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。generatedContentSha256 は CLI 生成直後ではなく standards 正規化を適用したあとの現行ファイルのハッシュである。正規化では DESIGN.md §5 適合のためフォーカスリングの透明度合成と値系 arbitrary value を除去した。この機構を dialog の時点で導入したため、先行コンポーネントの生成直後の値は遡って記録できない。2026-07-31: modified の固定文言を実態に合わせて訂正した。ハッシュは変更していない。"
     },
     "button": {
       "origin": "shadcn/ui registry",
@@ -39,8 +39,8 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-07-31",
       "license": "MIT",
-      "modified": "DESIGN.md §5 適合のため focus ring と arbitrary value を修正",
-      "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。generatedContentSha256 は CLI 生成直後ではなく standards 正規化を適用したあとの現行ファイルのハッシュである。正規化では DESIGN.md §5 適合のためフォーカスリングの透明度合成と値系 arbitrary value を除去した。この機構を dialog の時点で導入したため、先行コンポーネントの生成直後の値は遡って記録できない。"
+      "modified": "DESIGN.md §5 適合のため focus ring の透明度合成と値系 arbitrary value を除去し、ButtonProps を追加",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。generatedContentSha256 は CLI 生成直後ではなく standards 正規化を適用したあとの現行ファイルのハッシュである。正規化では DESIGN.md §5 適合のためフォーカスリングの透明度合成と値系 arbitrary value を除去した。この機構を dialog の時点で導入したため、先行コンポーネントの生成直後の値は遡って記録できない。2026-07-31: modified の固定文言を実態に合わせて訂正した。ハッシュは変更していない。"
     },
     "dialog": {
       "origin": "shadcn/ui registry",
@@ -60,8 +60,8 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-07-31",
       "license": "MIT",
-      "modified": "DESIGN.md §5 適合のため focus ring と arbitrary value を修正",
-      "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。"
+      "modified": "DESIGN.md §5 適合のため値系 arbitrary value を theme token へ移行し、全 public export の Props 型を追加",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。2026-07-31: modified の固定文言を実態に合わせて訂正した。ハッシュは変更していない。"
     },
     "input": {
       "origin": "shadcn/ui registry",
@@ -81,8 +81,8 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-07-31",
       "license": "MIT",
-      "modified": "DESIGN.md §5 適合のため focus ring と arbitrary value を修正",
-      "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。generatedContentSha256 は CLI 生成直後ではなく standards 正規化を適用したあとの現行ファイルのハッシュである。正規化では DESIGN.md §5 適合のためフォーカスリングの透明度合成と値系 arbitrary value を除去した。この機構を dialog の時点で導入したため、先行コンポーネントの生成直後の値は遡って記録できない。"
+      "modified": "DESIGN.md §5 適合のため focus ring の透明度合成と値系 arbitrary value を除去し、InputProps を追加",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。generatedContentSha256 は CLI 生成直後ではなく standards 正規化を適用したあとの現行ファイルのハッシュである。正規化では DESIGN.md §5 適合のためフォーカスリングの透明度合成と値系 arbitrary value を除去した。この機構を dialog の時点で導入したため、先行コンポーネントの生成直後の値は遡って記録できない。2026-07-31: modified の固定文言を実態に合わせて訂正した。ハッシュは変更していない。"
     },
     "tabs": {
       "origin": "shadcn/ui registry",
@@ -102,8 +102,29 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-07-31",
       "license": "MIT",
-      "modified": "DESIGN.md §5 適合のため focus ring と arbitrary value を修正",
-      "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。"
+      "modified": "DESIGN.md §5 適合のため focus ring の透明度合成と値系 arbitrary value を除去し、全 public export の Props 型を追加",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。2026-07-31: modified の固定文言を実態に合わせて訂正した。ハッシュは変更していない。"
+    },
+    "sonner": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/sonner.json",
+      "registryPath": "registry/base-nova/ui/sonner.tsx",
+      "registryContentSha256": "d5178ce4c7834d3f46d261698395b498b8f45fef29975585df7e26cb43aa3cc7",
+      "generatedContentSha256": "0c729f9f1ada0b0bedd9296710cc257dc43559fa6b8cc40f010d129e8ff85fdd",
+      "addTarget": "@shadcn/sonner",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/sonner.tsx",
+      "upstreamPathSha": "66d24007849ca34c18a5c28b55f2d8dac29ce1e0",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-07-31",
+      "license": "MIT",
+      "modified": "公開 API 契約のため ToasterProps を追加（standards 正規化は変更なし。生成直後の違反 0）",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。2026-07-31: modified の固定文言を実態に合わせて訂正した。ハッシュは変更していない。"
     }
   }
 }

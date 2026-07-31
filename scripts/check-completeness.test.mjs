@@ -26,6 +26,7 @@ const complete = {
         shadcnCliVersion: "4.16.0",
         fetchedAt: "2026-07-31",
         license: "MIT",
+        modified: "focus ring を修正",
       },
     },
   },
@@ -110,6 +111,7 @@ test("来歴の必須キーが空なら検出する", () => {
     "shadcnCliVersion",
     "fetchedAt",
     "license",
+    "modified",
   ]) {
     const provenance = structuredClone(complete.provenance);
     provenance.components.button[key] = "";
