@@ -14,7 +14,7 @@ CLI Target: esnext
 CLI Cleaning output folder
 ESM Build start
 ESM lib/index.js 14.27 KB
-ESM ⚡️ Build success in 36ms
+ESM ⚡️ Build success in 28ms
 
 > ui-scaffold@0.0.1 registry:build
 > npm run registry:tokens && shadcn build --output public/r
@@ -40,35 +40,35 @@ Formatted 1 file in 5ms. Fixed 1 file.
 > ui-scaffold@0.0.1 build:site
 > astro build
 
-07:21:12 [types] Generated 21ms
-07:21:12 [build] output: "static"
-07:21:12 [build] mode: "static"
-07:21:12 [build] directory: /Users/nishikawa/projects/elchika-inc/ui/dist/
-07:21:12 [build] Collecting build info...
-07:21:12 [build] ✓ Completed in 46ms.
-07:21:12 [build] Building static entrypoints...
-07:21:12 [vite] ✓ built in 206ms
-07:21:12 [vite] ✓ built in 158ms
-07:21:12 [build] Rearranging server assets...
+07:45:09 [types] Generated 26ms
+07:45:09 [build] output: "static"
+07:45:09 [build] mode: "static"
+07:45:09 [build] directory: /Users/nishikawa/projects/elchika-inc/ui/dist/
+07:45:09 [build] Collecting build info...
+07:45:09 [build] ✓ Completed in 52ms.
+07:45:09 [build] Building static entrypoints...
+07:45:09 [vite] ✓ built in 174ms
+07:45:09 [vite] ✓ built in 166ms
+07:45:09 [build] Rearranging server assets...
 
  generating static routes 
-07:21:12   ├─ /catalog/index.html (+113ms) 
-07:21:12   ├─ /catalog-dark/index.html (+2ms) 
-07:21:12   ├─ /preview/badge/index.html (+1ms) 
-07:21:12   ├─ /preview/badge-dark/index.html (+1ms) 
-07:21:12   ├─ /preview/button/index.html (+1ms) 
-07:21:12   ├─ /preview/button-dark/index.html (+1ms) 
-07:21:12   ├─ /preview/dialog/index.html (+1ms) 
-07:21:12   ├─ /preview/dialog-dark/index.html (+1ms) 
-07:21:12   ├─ /preview/input/index.html (+1ms) 
-07:21:12   ├─ /preview/input-dark/index.html (+1ms) 
-07:21:12   ├─ /preview/sonner/index.html (+1ms) 
-07:21:12   ├─ /preview/sonner-dark/index.html (+1ms) 
-07:21:12   ├─ /preview/tabs/index.html (+1ms) 
-07:21:12   ├─ /preview/tabs-dark/index.html (+1ms) 
-07:21:12   ├─ /index.html (+1ms) 
-07:21:12 ✓ Completed in 138ms.
+07:45:09   ├─ /catalog/index.html (+130ms) 
+07:45:09   ├─ /catalog-dark/index.html (+2ms) 
+07:45:09   ├─ /preview/badge/index.html (+1ms) 
+07:45:09   ├─ /preview/badge-dark/index.html (+1ms) 
+07:45:09   ├─ /preview/button/index.html (+1ms) 
+07:45:09   ├─ /preview/button-dark/index.html (+1ms) 
+07:45:09   ├─ /preview/dialog/index.html (+1ms) 
+07:45:09   ├─ /preview/dialog-dark/index.html (+1ms) 
+07:45:09   ├─ /preview/input/index.html (+1ms) 
+07:45:09   ├─ /preview/input-dark/index.html (+1ms) 
+07:45:09   ├─ /preview/sonner/index.html (+1ms) 
+07:45:09   ├─ /preview/sonner-dark/index.html (+1ms) 
+07:45:09   ├─ /preview/tabs/index.html (+1ms) 
+07:45:09   ├─ /preview/tabs-dark/index.html (+1ms) 
+07:45:09   ├─ /index.html (+1ms) 
+07:45:09 ✓ Completed in 157ms.
 
-07:21:12 [build] ✓ Completed in 517ms.
-07:21:12 [build] 15 page(s) built in 569ms
-07:21:12 [build] Complete!
+07:45:09 [build] ✓ Completed in 511ms.
+07:45:09 [build] 15 page(s) built in 571ms
+07:45:09 [build] Complete!

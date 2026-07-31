@@ -100,6 +100,7 @@ test("検証済みcomponentだけを変更すると落ち、別componentは落�
 
   assert.deepEqual(result.problems, [
     "2026-08-01-button-preview.md: 検証 SHA 以降に component 固有 path が変更されている",
+    "2026-08-01-verification-catalog.md: 検証 SHA 以降に証跡固有 path が変更されている",
   ]);
   assert.deepEqual(result.stale, []);
   assert.ok(

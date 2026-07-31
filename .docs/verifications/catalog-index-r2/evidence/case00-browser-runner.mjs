@@ -12,7 +12,17 @@ import { join, resolve } from "node:path";
 
 const root = process.cwd();
 const evidence = resolve(root, ".docs/verifications/catalog-index-r2/evidence");
-const baseUrl = process.env.CATALOG_BASE_URL ?? "http://127.0.0.1:3193";
+const requestedBaseUrl = new URL(process.env.CATALOG_BASE_URL ?? "http://127.0.0.1:3193");
+const loopbackHosts = new Set(["127.0.0.1", "localhost", "[::1]"]);
+if (
+  !["http:", "https:"].includes(requestedBaseUrl.protocol) ||
+  !loopbackHosts.has(requestedBaseUrl.hostname) ||
+  requestedBaseUrl.username ||
+  requestedBaseUrl.password
+) {
+  throw new Error(`CATALOG_BASE_URL は認証情報なしのloopback HTTP(S) URLに限定する: ${requestedBaseUrl.origin}`);
+}
+const baseUrl = requestedBaseUrl.origin;
 const chromePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const expectedNames = readdirSync(join(root, "src/previews"))
   .filter((name) => name.endsWith(".tsx"))
@@ -341,10 +351,17 @@ try {
   cdp.on("Network.responseReceived", (message) => {
     if (message.sessionId !== sessionId || !modeState) return;
     const { response, type, requestId } = message.params;
-    if (!response.url.startsWith(baseUrl)) return;
+    let origin = null;
+    try {
+      origin = new URL(response.url).origin;
+    } catch {
+      // URLとして解釈できないresponseも記録し、対象origin外として失敗させる。
+    }
     modeState.networkResponses.push({
       requestId,
       url: response.url,
+      origin,
+      outsideOrigin: origin !== baseUrl,
       status: response.status,
       mimeType: response.mimeType,
       type,
@@ -444,6 +461,7 @@ try {
       (entry) => entry.type === "error" || entry.type === "assert" || entry.source === "exception",
     );
     const httpErrors = modeState.networkResponses.filter((response) => response.status >= 400);
+    const outsideOriginResponses = modeState.networkResponses.filter((response) => response.outsideOrigin);
     const focusRoutes = focus.map((item) => item.href);
     const visibleFocus = focus.every(
       (item) =>
@@ -493,6 +511,7 @@ try {
     check(`${mode}: console errorなし`, consoleErrors.length === 0, consoleErrors);
     check(`${mode}: network loading failureなし`, modeState.networkFailures.length === 0, modeState.networkFailures);
     check(`${mode}: network HTTP 4xx/5xxなし`, httpErrors.length === 0, httpErrors);
+    check(`${mode}: 対象origin外responseなし`, outsideOriginResponses.length === 0, outsideOriginResponses);
     check(`${mode}: 横スクロールなし`, !structure.scroll.hasHorizontalScroll, structure.scroll);
     check(`${mode}: Tabで14リンク順次到達`, JSON.stringify(focusRoutes) === JSON.stringify(expectedRoutes), focusRoutes);
     check(`${mode}: 14リンクのfocus-visible可視`, visibleFocus, focus);

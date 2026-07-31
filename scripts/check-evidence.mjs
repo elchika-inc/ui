@@ -66,6 +66,7 @@ function evidencePaths(file) {
       "src/catalog/preview-manifest.mjs",
       "src/catalog/previews.ts",
       "src/catalog/verification-catalog.tsx",
+      "src/components/ui",
       "src/previews",
     ];
   }

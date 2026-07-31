@@ -2,14 +2,13 @@
 
 ## 実行環境
 
-- 対象SHA: `dabfe38678db2ddd9f2f9ebbae78cd3c26835f5b`
-- 実行日時: 2026-08-01 07:21〜07:31 JST
+- 対象SHA: `6b3e8046b8a422f87379c56bf2cbe5f10d394a6f`
+- 日時: 2026-08-01 07:45〜07:47 JST
 - URL: `http://127.0.0.1:3193/`
-- OS: Darwin 25.3.0 arm64
-- Node.js 26.4.0 / npm 11.17.0 / Google Chrome 150.0.7871.187
-- 実行可否: ✅実ブラウザ検証完了
+- Darwin 25.3.0 arm64 / Node.js 26.4.0 / npm 11.17.0 / Chrome 150.0.7871.187
+- 実行可否: ✅実Chrome検証完了
 
-## 手順
+## 再現手順
 
 ```bash
 npm run build
@@ -18,41 +17,34 @@ CATALOG_BASE_URL=http://127.0.0.1:3193 \
   node .docs/verifications/catalog-index-r2/evidence/case00-browser-runner.mjs
 ```
 
-Chrome CDPで1280×900表示、DOM・Accessibility tree・console・networkを採取した。forced-darkは`document.documentElement.classList.add("dark")`を実行した。最後にサーバーを停止した。
-
 ## 結果
 
-| 項目 | 判定 | 実測結果 |
+| 項目 | 判定 | 実測 |
 |---|---|---|
-| build | ✅ | `npm run build` exit 0 |
-| preview scan | ✅ | badge/button/dialog/input/sonner/tabsの6件 |
-| light構造 | ✅ | main 1、navigation 2、h1 1、h2 2、h3 6、link 14 |
-| forced-dark構造 | ✅ | lightと同数。`html.dark`適用を確認 |
-| navigation名 | ✅ | 「横断カタログ」2リンク、「隔離プレビュー」12リンク |
-| 全リンクHTTP | ✅ | light/forced-dark各14件すべて200、HTML本文あり、error bodyなし |
-| console/network | ✅ | 両モードともpage console error 0、例外0、loading failure 0、4xx/5xx 0 |
-| 横スクロール | ✅ | document/body/mainすべて1280px、overflowなし |
-| theme token | ✅ | light背景/前景=`oklch(1 0 0)`/`oklch(0.145 0 0)`、darkでは反転 |
-| focus | ✅ | 両モードでTabにより14リンクへ順番に到達。`:focus-visible=true`、3px ringあり |
-| スクリーンショット | ✅ | light/darkおよびfocus状態を各1280×900 PNGで保存 |
-| cleanup | ✅ | 3193 listenerなし、停止後curl exit 7。一時Chrome profile削除済み |
-| source保全 | ✅ | 検証前からの3ファイル以外にtracked差分増加なし |
+| build | ✅実測確認 | exit 0 |
+| preview scan | ✅実測確認 | badge/button/dialog/input/sonner/tabsの6件 |
+| light/forced-dark構造 | ✅実測確認 | 各main 1、navigation 2、h1 1、h2 2、h3 6、link 14 |
+| navigation名 | ✅実測確認 | 横断カタログ2リンク、隔離プレビュー12リンク |
+| 全リンクHTTP | ✅実測確認 | 両モード各14件すべて200、HTMLあり、error bodyなし |
+| page console/network | ✅実測確認 | console error・例外・loading failure・4xx/5xxすべて0 |
+| 全response origin | ✅実測確認 | 両モード各18件を全記録。全件`http://127.0.0.1:3193`、outsideOrigin 0 |
+| 横スクロール | ✅実測確認 | viewport/document/body/mainすべて1280px、overflowなし |
+| theme | ✅実測確認 | light背景/前景=`oklch(1 0 0)`/`oklch(0.145 0 0)`、forced-darkで反転 |
+| focus | ✅実測確認 | 両モードでTabにより14リンクへ順次到達、`:focus-visible=true`、3px ringあり |
+| スクリーンショット | ✅実測確認 | light/dark/focusを各1280×900 PNGで保存 |
 
-最終検証ゲートは35/35合格、不具合0件。
+最終summaryは37/37合格、不具合0件。
 
-## 三方向クロスチェック
+## クロスチェック・限界
 
-- コード: `import.meta.glob("../previews/*.tsx")`とindexのmapから6 preview・12個別リンクを導出。
-- 画面: DOM/Accessibility treeでnavigation 2、link 14、見出し階層を実測。
-- スキーマ: 静的indexのため対象となるOpenAPI・入力スキーマなし。
-- コードのみ・画面のみ・スキーマのみの不一致は確認されなかった。
+- コードのglob/map、実DOM、Accessibility treeで6 preview・14リンクが一致。静的indexのため対象スキーマなし。
+- manifestの不正path、Preview exportなし・複数の例外分岐はsource変更禁止のため未到達。
+- 1280×900以外、Chrome以外、リンク先の詳細操作は未確認。
+- error-body判定は通常のAstro runtime文字列を除外し、可視本文/titleで判定する修正版を使用。
+- Chromeの外部名前解決はhost-resolver ruleで遮断。CDPで観測したpage responseに外部originなし。
 
-## 誤検知の自己修復
+## クリーンアップ
 
-初回のerror-body検出が通常のAstroランタイム文字列`astro:hydration-error`を誤検知した。URISK-046を適用し、script/styleを除いた可視本文とtitleによる判定へ修正して再実行し、exit 0を確認した。対象実装の不具合やflakyではない。
-
-## 未到達・未確認
-
-- manifestの不正path、Preview exportなし・複数の例外分岐は、source変更禁止のため未実行。
-- 1280×900以外のviewport、Chrome以外のブラウザ、各リンク先の詳細操作は対象外。
-- Chrome process stderrには外部通信を遮断した結果のSSL handshake failureがあるが、page console/networkの対象URLにはエラーなし。
+- 3193 listener停止済み、停止後curl exit 7。
+- 一時Chrome profile削除済み。
+- 検証前からの`check-evidence` 2ファイルとevidence runner以外にsource差分増加なし。

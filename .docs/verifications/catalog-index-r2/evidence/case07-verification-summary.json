@@ -1,5 +1,5 @@
 {
-  "executedAt": "2026-07-31T22:30:34.600Z",
+  "executedAt": "2026-07-31T22:45:33.485Z",
   "baseUrl": "http://127.0.0.1:3193",
   "expectedNames": [
     "badge",
@@ -274,6 +274,11 @@
     },
     {
       "name": "light: network HTTP 4xx/5xxなし",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "name": "light: 対象origin外responseなし",
       "pass": true,
       "actual": []
     },
@@ -719,6 +724,11 @@
     },
     {
       "name": "forced-dark: network HTTP 4xx/5xxなし",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "name": "forced-dark: 対象origin外responseなし",
       "pass": true,
       "actual": []
     },

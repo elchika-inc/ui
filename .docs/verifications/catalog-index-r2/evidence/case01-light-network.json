@@ -1,8 +1,10 @@
 {
   "responses": [
     {
-      "requestId": "1CB20A2A68A9D399E2478ABDF5BA0E52",
+      "requestId": "596E527BA23D7771644AB67730ECE61D",
       "url": "http://127.0.0.1:3193/",
+      "origin": "http://127.0.0.1:3193",
+      "outsideOrigin": false,
       "status": 200,
       "mimeType": "text/html",
       "type": "Document",
@@ -10,8 +12,10 @@
       "fromServiceWorker": false
     },
     {
-      "requestId": "91680.2",
+      "requestId": "14106.2",
       "url": "http://127.0.0.1:3193/_astro/global.QTRiE9O7.css",
+      "origin": "http://127.0.0.1:3193",
+      "outsideOrigin": false,
       "status": 200,
       "mimeType": "text/css",
       "type": "Stylesheet",
@@ -19,17 +23,10 @@
       "fromServiceWorker": false
     },
     {
-      "requestId": "91680.9",
-      "url": "http://127.0.0.1:3193/favicon.svg",
-      "status": 200,
-      "mimeType": "image/svg+xml",
-      "type": "Other",
-      "fromDiskCache": false,
-      "fromServiceWorker": false
-    },
-    {
-      "requestId": "91680.8",
+      "requestId": "14106.8",
       "url": "http://127.0.0.1:3193/_astro/geist-latin-wght-normal.BgDaEnEv.woff2",
+      "origin": "http://127.0.0.1:3193",
+      "outsideOrigin": false,
       "status": 200,
       "mimeType": "font/woff2",
       "type": "Font",
@@ -37,8 +34,21 @@
       "fromServiceWorker": false
     },
     {
-      "requestId": "91680.12",
+      "requestId": "14106.9",
+      "url": "http://127.0.0.1:3193/favicon.svg",
+      "origin": "http://127.0.0.1:3193",
+      "outsideOrigin": false,
+      "status": 200,
+      "mimeType": "image/svg+xml",
+      "type": "Other",
+      "fromDiskCache": false,
+      "fromServiceWorker": false
+    },
+    {
+      "requestId": "14106.12",
       "url": "http://127.0.0.1:3193/preview/badge/",
+      "origin": "http://127.0.0.1:3193",
+      "outsideOrigin": false,
       "status": 200,
       "mimeType": "text/html",
       "type": "Fetch",
@@ -46,26 +56,10 @@
       "fromServiceWorker": false
     },
     {
-      "requestId": "91680.10",
-      "url": "http://127.0.0.1:3193/catalog/",
-      "status": 200,
-      "mimeType": "text/html",
-      "type": "Fetch",
-      "fromDiskCache": false,
-      "fromServiceWorker": false
-    },
-    {
-      "requestId": "91680.13",
-      "url": "http://127.0.0.1:3193/preview/badge-dark/",
-      "status": 200,
-      "mimeType": "text/html",
-      "type": "Fetch",
-      "fromDiskCache": false,
-      "fromServiceWorker": false
-    },
-    {
-      "requestId": "91680.11",
+      "requestId": "14106.11",
       "url": "http://127.0.0.1:3193/catalog-dark/",
+      "origin": "http://127.0.0.1:3193",
+      "outsideOrigin": false,
       "status": 200,
       "mimeType": "text/html",
       "type": "Fetch",
@@ -73,8 +67,32 @@
       "fromServiceWorker": false
     },
     {
-      "requestId": "91680.14",
+      "requestId": "14106.10",
+      "url": "http://127.0.0.1:3193/catalog/",
+      "origin": "http://127.0.0.1:3193",
+      "outsideOrigin": false,
+      "status": 200,
+      "mimeType": "text/html",
+      "type": "Fetch",
+      "fromDiskCache": false,
+      "fromServiceWorker": false
+    },
+    {
+      "requestId": "14106.13",
+      "url": "http://127.0.0.1:3193/preview/badge-dark/",
+      "origin": "http://127.0.0.1:3193",
+      "outsideOrigin": false,
+      "status": 200,
+      "mimeType": "text/html",
+      "type": "Fetch",
+      "fromDiskCache": false,
+      "fromServiceWorker": false
+    },
+    {
+      "requestId": "14106.14",
       "url": "http://127.0.0.1:3193/preview/button/",
+      "origin": "http://127.0.0.1:3193",
+      "outsideOrigin": false,
       "status": 200,
       "mimeType": "text/html",
       "type": "Fetch",
@@ -82,8 +100,10 @@
       "fromServiceWorker": false
     },
     {
-      "requestId": "91680.15",
+      "requestId": "14106.15",
       "url": "http://127.0.0.1:3193/preview/button-dark/",
+      "origin": "http://127.0.0.1:3193",
+      "outsideOrigin": false,
       "status": 200,
       "mimeType": "text/html",
       "type": "Fetch",
@@ -91,17 +111,10 @@
       "fromServiceWorker": false
     },
     {
-      "requestId": "91680.16",
-      "url": "http://127.0.0.1:3193/preview/dialog/",
-      "status": 200,
-      "mimeType": "text/html",
-      "type": "Fetch",
-      "fromDiskCache": false,
-      "fromServiceWorker": false
-    },
-    {
-      "requestId": "91680.17",
+      "requestId": "14106.17",
       "url": "http://127.0.0.1:3193/preview/dialog-dark/",
+      "origin": "http://127.0.0.1:3193",
+      "outsideOrigin": false,
       "status": 200,
       "mimeType": "text/html",
       "type": "Fetch",
@@ -109,17 +122,10 @@
       "fromServiceWorker": false
     },
     {
-      "requestId": "91680.18",
-      "url": "http://127.0.0.1:3193/preview/input/",
-      "status": 200,
-      "mimeType": "text/html",
-      "type": "Fetch",
-      "fromDiskCache": false,
-      "fromServiceWorker": false
-    },
-    {
-      "requestId": "91680.19",
+      "requestId": "14106.19",
       "url": "http://127.0.0.1:3193/preview/input-dark/",
+      "origin": "http://127.0.0.1:3193",
+      "outsideOrigin": false,
       "status": 200,
       "mimeType": "text/html",
       "type": "Fetch",
@@ -127,8 +133,32 @@
       "fromServiceWorker": false
     },
     {
-      "requestId": "91680.20",
+      "requestId": "14106.18",
+      "url": "http://127.0.0.1:3193/preview/input/",
+      "origin": "http://127.0.0.1:3193",
+      "outsideOrigin": false,
+      "status": 200,
+      "mimeType": "text/html",
+      "type": "Fetch",
+      "fromDiskCache": false,
+      "fromServiceWorker": false
+    },
+    {
+      "requestId": "14106.16",
+      "url": "http://127.0.0.1:3193/preview/dialog/",
+      "origin": "http://127.0.0.1:3193",
+      "outsideOrigin": false,
+      "status": 200,
+      "mimeType": "text/html",
+      "type": "Fetch",
+      "fromDiskCache": false,
+      "fromServiceWorker": false
+    },
+    {
+      "requestId": "14106.20",
       "url": "http://127.0.0.1:3193/preview/sonner/",
+      "origin": "http://127.0.0.1:3193",
+      "outsideOrigin": false,
       "status": 200,
       "mimeType": "text/html",
       "type": "Fetch",
@@ -136,8 +166,10 @@
       "fromServiceWorker": false
     },
     {
-      "requestId": "91680.21",
+      "requestId": "14106.21",
       "url": "http://127.0.0.1:3193/preview/sonner-dark/",
+      "origin": "http://127.0.0.1:3193",
+      "outsideOrigin": false,
       "status": 200,
       "mimeType": "text/html",
       "type": "Fetch",
@@ -145,17 +177,21 @@
       "fromServiceWorker": false
     },
     {
-      "requestId": "91680.22",
-      "url": "http://127.0.0.1:3193/preview/tabs/",
-      "status": 200,
-      "mimeType": "text/html",
-      "type": "Fetch",
-      "fromDiskCache": false,
-      "fromServiceWorker": false
-    },
-    {
-      "requestId": "91680.23",
+      "requestId": "14106.23",
       "url": "http://127.0.0.1:3193/preview/tabs-dark/",
+      "origin": "http://127.0.0.1:3193",
+      "outsideOrigin": false,
+      "status": 200,
+      "mimeType": "text/html",
+      "type": "Fetch",
+      "fromDiskCache": false,
+      "fromServiceWorker": false
+    },
+    {
+      "requestId": "14106.22",
+      "url": "http://127.0.0.1:3193/preview/tabs/",
+      "origin": "http://127.0.0.1:3193",
+      "outsideOrigin": false,
       "status": 200,
       "mimeType": "text/html",
       "type": "Fetch",
