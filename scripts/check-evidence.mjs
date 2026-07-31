@@ -50,6 +50,28 @@ function componentPaths(name) {
   ];
 }
 
+function evidencePaths(file) {
+  if (/^\d{4}-\d{2}-\d{2}-index-page\.md$/.test(file)) {
+    return [
+      "src/pages/index.astro",
+      "src/catalog/preview-manifest.mjs",
+      "src/catalog/previews.ts",
+      "src/previews",
+    ];
+  }
+  if (/^\d{4}-\d{2}-\d{2}-verification-catalog\.md$/.test(file)) {
+    return [
+      "src/pages/catalog.astro",
+      "src/pages/catalog-dark.astro",
+      "src/catalog/preview-manifest.mjs",
+      "src/catalog/previews.ts",
+      "src/catalog/verification-catalog.tsx",
+      "src/previews",
+    ];
+  }
+  return [];
+}
+
 function commitExists(root, sha) {
   return (
     spawnSync("git", ["cat-file", "-e", `${sha}^{commit}`], {
@@ -83,6 +105,10 @@ function inspectMarkdown(repositoryRoot, reviewsRoot, file) {
   const component = componentFromEvidence(file);
   if (component && pathsChanged(repositoryRoot, sha, componentPaths(component))) {
     problems.push(`${file}: 検証 SHA 以降に component 固有 path が変更されている`);
+  }
+  const specificPaths = evidencePaths(file);
+  if (specificPaths.length && pathsChanged(repositoryRoot, sha, specificPaths)) {
+    problems.push(`${file}: 検証 SHA 以降に証跡固有 path が変更されている`);
   }
   const changedShared = SHARED_EVIDENCE_PATHS.filter((path) =>
     pathsChanged(repositoryRoot, sha, [path]),
@@ -124,7 +150,7 @@ export function checkEvidenceInRepo(root) {
   return { problems, stale };
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const { problems, stale } = checkEvidenceInRepo(process.cwd());
   if (stale.length) {
     console.warn(`${stale.length} 件の証跡が共有面の変更より古い:\n  ${stale.join("\n  ")}`);

@@ -16,11 +16,14 @@ before(() => {
   execFileSync("npm", ["run", "build"], { cwd: root, stdio: "pipe" });
 });
 
-const componentNames = () =>
-  readdirSync(join(root, "src/components/ui"))
+const previewNames = () => {
+  const names = readdirSync(join(root, "src/previews"))
     .filter((file) => file.endsWith(".tsx"))
     .map((file) => file.replace(/\.tsx$/, ""))
     .sort();
+  assert.notEqual(names.length, 0, "preview scan が空走している");
+  return names;
+};
 
 const builtPage = (route) => {
   const path = join(root, "dist", route, "index.html");
@@ -28,14 +31,15 @@ const builtPage = (route) => {
   return readFileSync(path, "utf8");
 };
 
-test("light / dark catalog が全 component を単一 island に描画する", () => {
-  const components = componentNames();
+test("light / dark catalog が全 preview を単一 island に描画する", () => {
+  const previews = previewNames();
 
   for (const route of ["catalog", "catalog-dark"]) {
     const html = builtPage(route);
-    for (const name of components) {
-      assert.match(html, new RegExp(`data-catalog-preview="${name}"`), `${route}: ${name}`);
-    }
+    const renderedPreviews = [...html.matchAll(/data-catalog-preview="([^"]+)"/g)]
+      .map((match) => match[1])
+      .sort();
+    assert.deepEqual(renderedPreviews, previews, `${route}: preview scan と描画対象が一致する`);
     assert.equal(html.match(/<astro-island\b/g)?.length, 1, `${route}: island は1個`);
     assert.match(html, /data-slot="dialog-trigger"/);
     assert.doesNotMatch(html, /data-slot="dialog-content"/);
@@ -44,12 +48,14 @@ test("light / dark catalog が全 component を単一 island に描画する", (
   assert.match(builtPage("catalog-dark"), /<html[^>]*class="dark"/);
 });
 
-test("index が全 component の light / dark route を列挙する", () => {
+test("index と個別 route が全 preview の light / dark を列挙する", () => {
   const html = builtPage("");
 
-  for (const name of componentNames()) {
+  for (const name of previewNames()) {
     assert.match(html, new RegExp(`href="/preview/${name}/"`), `${name}: light link`);
     assert.match(html, new RegExp(`href="/preview/${name}-dark/"`), `${name}: dark link`);
+    builtPage(`preview/${name}`);
+    builtPage(`preview/${name}-dark`);
   }
 });
 

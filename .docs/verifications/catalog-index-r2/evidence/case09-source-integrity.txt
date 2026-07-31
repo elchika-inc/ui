@@ -1,0 +1,11 @@
+対象HEAD=dabfe38678db2ddd9f2f9ebbae78cd3c26835f5b
+検証前から存在した変更:
+scripts/catalog-build.test.mjs
+scripts/check-evidence.mjs
+scripts/check-evidence.test.mjs
+検証後のtracked変更:
+scripts/catalog-build.test.mjs
+scripts/check-evidence.mjs
+scripts/check-evidence.test.mjs
+検証起因のsource変更判定exit_code=0
+検証起因のsource変更=なし

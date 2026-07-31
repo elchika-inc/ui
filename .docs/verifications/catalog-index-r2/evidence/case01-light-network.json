@@ -1,0 +1,167 @@
+{
+  "responses": [
+    {
+      "requestId": "1CB20A2A68A9D399E2478ABDF5BA0E52",
+      "url": "http://127.0.0.1:3193/",
+      "status": 200,
+      "mimeType": "text/html",
+      "type": "Document",
+      "fromDiskCache": false,
+      "fromServiceWorker": false
+    },
+    {
+      "requestId": "91680.2",
+      "url": "http://127.0.0.1:3193/_astro/global.QTRiE9O7.css",
+      "status": 200,
+      "mimeType": "text/css",
+      "type": "Stylesheet",
+      "fromDiskCache": false,
+      "fromServiceWorker": false
+    },
+    {
+      "requestId": "91680.9",
+      "url": "http://127.0.0.1:3193/favicon.svg",
+      "status": 200,
+      "mimeType": "image/svg+xml",
+      "type": "Other",
+      "fromDiskCache": false,
+      "fromServiceWorker": false
+    },
+    {
+      "requestId": "91680.8",
+      "url": "http://127.0.0.1:3193/_astro/geist-latin-wght-normal.BgDaEnEv.woff2",
+      "status": 200,
+      "mimeType": "font/woff2",
+      "type": "Font",
+      "fromDiskCache": false,
+      "fromServiceWorker": false
+    },
+    {
+      "requestId": "91680.12",
+      "url": "http://127.0.0.1:3193/preview/badge/",
+      "status": 200,
+      "mimeType": "text/html",
+      "type": "Fetch",
+      "fromDiskCache": false,
+      "fromServiceWorker": false
+    },
+    {
+      "requestId": "91680.10",
+      "url": "http://127.0.0.1:3193/catalog/",
+      "status": 200,
+      "mimeType": "text/html",
+      "type": "Fetch",
+      "fromDiskCache": false,
+      "fromServiceWorker": false
+    },
+    {
+      "requestId": "91680.13",
+      "url": "http://127.0.0.1:3193/preview/badge-dark/",
+      "status": 200,
+      "mimeType": "text/html",
+      "type": "Fetch",
+      "fromDiskCache": false,
+      "fromServiceWorker": false
+    },
+    {
+      "requestId": "91680.11",
+      "url": "http://127.0.0.1:3193/catalog-dark/",
+      "status": 200,
+      "mimeType": "text/html",
+      "type": "Fetch",
+      "fromDiskCache": false,
+      "fromServiceWorker": false
+    },
+    {
+      "requestId": "91680.14",
+      "url": "http://127.0.0.1:3193/preview/button/",
+      "status": 200,
+      "mimeType": "text/html",
+      "type": "Fetch",
+      "fromDiskCache": false,
+      "fromServiceWorker": false
+    },
+    {
+      "requestId": "91680.15",
+      "url": "http://127.0.0.1:3193/preview/button-dark/",
+      "status": 200,
+      "mimeType": "text/html",
+      "type": "Fetch",
+      "fromDiskCache": false,
+      "fromServiceWorker": false
+    },
+    {
+      "requestId": "91680.16",
+      "url": "http://127.0.0.1:3193/preview/dialog/",
+      "status": 200,
+      "mimeType": "text/html",
+      "type": "Fetch",
+      "fromDiskCache": false,
+      "fromServiceWorker": false
+    },
+    {
+      "requestId": "91680.17",
+      "url": "http://127.0.0.1:3193/preview/dialog-dark/",
+      "status": 200,
+      "mimeType": "text/html",
+      "type": "Fetch",
+      "fromDiskCache": false,
+      "fromServiceWorker": false
+    },
+    {
+      "requestId": "91680.18",
+      "url": "http://127.0.0.1:3193/preview/input/",
+      "status": 200,
+      "mimeType": "text/html",
+      "type": "Fetch",
+      "fromDiskCache": false,
+      "fromServiceWorker": false
+    },
+    {
+      "requestId": "91680.19",
+      "url": "http://127.0.0.1:3193/preview/input-dark/",
+      "status": 200,
+      "mimeType": "text/html",
+      "type": "Fetch",
+      "fromDiskCache": false,
+      "fromServiceWorker": false
+    },
+    {
+      "requestId": "91680.20",
+      "url": "http://127.0.0.1:3193/preview/sonner/",
+      "status": 200,
+      "mimeType": "text/html",
+      "type": "Fetch",
+      "fromDiskCache": false,
+      "fromServiceWorker": false
+    },
+    {
+      "requestId": "91680.21",
+      "url": "http://127.0.0.1:3193/preview/sonner-dark/",
+      "status": 200,
+      "mimeType": "text/html",
+      "type": "Fetch",
+      "fromDiskCache": false,
+      "fromServiceWorker": false
+    },
+    {
+      "requestId": "91680.22",
+      "url": "http://127.0.0.1:3193/preview/tabs/",
+      "status": 200,
+      "mimeType": "text/html",
+      "type": "Fetch",
+      "fromDiskCache": false,
+      "fromServiceWorker": false
+    },
+    {
+      "requestId": "91680.23",
+      "url": "http://127.0.0.1:3193/preview/tabs-dark/",
+      "status": 200,
+      "mimeType": "text/html",
+      "type": "Fetch",
+      "fromDiskCache": false,
+      "fromServiceWorker": false
+    }
+  ],
+  "loadingFailures": []
+}

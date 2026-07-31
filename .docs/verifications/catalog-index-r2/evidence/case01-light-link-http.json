@@ -1,0 +1,142 @@
+[
+  {
+    "href": "/catalog/",
+    "finalUrl": "http://127.0.0.1:3193/catalog/",
+    "status": 200,
+    "ok": true,
+    "contentType": "text/html; charset=utf-8",
+    "bodyLength": 26393,
+    "errorBody": false,
+    "title": "検証用カタログ — elchika-inc/ui"
+  },
+  {
+    "href": "/catalog-dark/",
+    "finalUrl": "http://127.0.0.1:3193/catalog-dark/",
+    "status": 200,
+    "ok": true,
+    "contentType": "text/html; charset=utf-8",
+    "bodyLength": 26411,
+    "errorBody": false,
+    "title": "検証用カタログ Dark — elchika-inc/ui"
+  },
+  {
+    "href": "/preview/badge/",
+    "finalUrl": "http://127.0.0.1:3193/preview/badge/",
+    "status": 200,
+    "ok": true,
+    "contentType": "text/html; charset=utf-8",
+    "bodyLength": 8675,
+    "errorBody": false,
+    "title": "Badge"
+  },
+  {
+    "href": "/preview/badge-dark/",
+    "finalUrl": "http://127.0.0.1:3193/preview/badge-dark/",
+    "status": 200,
+    "ok": true,
+    "contentType": "text/html; charset=utf-8",
+    "bodyLength": 8688,
+    "errorBody": false,
+    "title": "Badge"
+  },
+  {
+    "href": "/preview/button/",
+    "finalUrl": "http://127.0.0.1:3193/preview/button/",
+    "status": 200,
+    "ok": true,
+    "contentType": "text/html; charset=utf-8",
+    "bodyLength": 11396,
+    "errorBody": false,
+    "title": "Button"
+  },
+  {
+    "href": "/preview/button-dark/",
+    "finalUrl": "http://127.0.0.1:3193/preview/button-dark/",
+    "status": 200,
+    "ok": true,
+    "contentType": "text/html; charset=utf-8",
+    "bodyLength": 11409,
+    "errorBody": false,
+    "title": "Button"
+  },
+  {
+    "href": "/preview/dialog/",
+    "finalUrl": "http://127.0.0.1:3193/preview/dialog/",
+    "status": 200,
+    "ok": true,
+    "contentType": "text/html; charset=utf-8",
+    "bodyLength": 6197,
+    "errorBody": false,
+    "title": "Dialog"
+  },
+  {
+    "href": "/preview/dialog-dark/",
+    "finalUrl": "http://127.0.0.1:3193/preview/dialog-dark/",
+    "status": 200,
+    "ok": true,
+    "contentType": "text/html; charset=utf-8",
+    "bodyLength": 6210,
+    "errorBody": false,
+    "title": "Dialog"
+  },
+  {
+    "href": "/preview/input/",
+    "finalUrl": "http://127.0.0.1:3193/preview/input/",
+    "status": 200,
+    "ok": true,
+    "contentType": "text/html; charset=utf-8",
+    "bodyLength": 7543,
+    "errorBody": false,
+    "title": "Input"
+  },
+  {
+    "href": "/preview/input-dark/",
+    "finalUrl": "http://127.0.0.1:3193/preview/input-dark/",
+    "status": 200,
+    "ok": true,
+    "contentType": "text/html; charset=utf-8",
+    "bodyLength": 7556,
+    "errorBody": false,
+    "title": "Input"
+  },
+  {
+    "href": "/preview/sonner/",
+    "finalUrl": "http://127.0.0.1:3193/preview/sonner/",
+    "status": 200,
+    "ok": true,
+    "contentType": "text/html; charset=utf-8",
+    "bodyLength": 6090,
+    "errorBody": false,
+    "title": "Sonner"
+  },
+  {
+    "href": "/preview/sonner-dark/",
+    "finalUrl": "http://127.0.0.1:3193/preview/sonner-dark/",
+    "status": 200,
+    "ok": true,
+    "contentType": "text/html; charset=utf-8",
+    "bodyLength": 6108,
+    "errorBody": false,
+    "title": "Sonner Dark"
+  },
+  {
+    "href": "/preview/tabs/",
+    "finalUrl": "http://127.0.0.1:3193/preview/tabs/",
+    "status": 200,
+    "ok": true,
+    "contentType": "text/html; charset=utf-8",
+    "bodyLength": 9711,
+    "errorBody": false,
+    "title": "Tabs"
+  },
+  {
+    "href": "/preview/tabs-dark/",
+    "finalUrl": "http://127.0.0.1:3193/preview/tabs-dark/",
+    "status": 200,
+    "ok": true,
+    "contentType": "text/html; charset=utf-8",
+    "bodyLength": 9724,
+    "errorBody": false,
+    "title": "Tabs"
+  }
+]

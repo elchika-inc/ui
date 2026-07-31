@@ -1,0 +1,982 @@
+{
+  "executedAt": "2026-07-31T22:30:34.600Z",
+  "baseUrl": "http://127.0.0.1:3193",
+  "expectedNames": [
+    "badge",
+    "button",
+    "dialog",
+    "input",
+    "sonner",
+    "tabs"
+  ],
+  "expectedRoutes": [
+    "/catalog/",
+    "/catalog-dark/",
+    "/preview/badge/",
+    "/preview/badge-dark/",
+    "/preview/button/",
+    "/preview/button-dark/",
+    "/preview/dialog/",
+    "/preview/dialog-dark/",
+    "/preview/input/",
+    "/preview/input-dark/",
+    "/preview/sonner/",
+    "/preview/sonner-dark/",
+    "/preview/tabs/",
+    "/preview/tabs-dark/"
+  ],
+  "checks": [
+    {
+      "name": "light: Page.navigate errorTextなし",
+      "pass": true,
+      "actual": null
+    },
+    {
+      "name": "light: preview scan 6件",
+      "pass": true,
+      "actual": [
+        "badge",
+        "button",
+        "dialog",
+        "input",
+        "sonner",
+        "tabs"
+      ]
+    },
+    {
+      "name": "light: preview scan名一致",
+      "pass": true,
+      "actual": [
+        "badge",
+        "button",
+        "dialog",
+        "input",
+        "sonner",
+        "tabs"
+      ]
+    },
+    {
+      "name": "light: リンク14件・route順一致",
+      "pass": true,
+      "actual": [
+        "/catalog/",
+        "/catalog-dark/",
+        "/preview/badge/",
+        "/preview/badge-dark/",
+        "/preview/button/",
+        "/preview/button-dark/",
+        "/preview/dialog/",
+        "/preview/dialog-dark/",
+        "/preview/input/",
+        "/preview/input-dark/",
+        "/preview/sonner/",
+        "/preview/sonner-dark/",
+        "/preview/tabs/",
+        "/preview/tabs-dark/"
+      ]
+    },
+    {
+      "name": "light: 構造 main1/nav2/h1=1/h2=2/h3=6/link14",
+      "pass": true,
+      "actual": {
+        "main": 1,
+        "navigation": 2,
+        "h1": 1,
+        "h2": 2,
+        "h3": 6,
+        "link": 14
+      }
+    },
+    {
+      "name": "light: navigation名",
+      "pass": true,
+      "actual": [
+        {
+          "labelledBy": "catalog-heading",
+          "accessibleName": "横断カタログ",
+          "linkCount": 2
+        },
+        {
+          "labelledBy": "preview-heading",
+          "accessibleName": "隔離プレビュー",
+          "linkCount": 12
+        }
+      ]
+    },
+    {
+      "name": "light: AX navigation 2",
+      "pass": true,
+      "actual": [
+        "横断カタログ",
+        "隔離プレビュー"
+      ]
+    },
+    {
+      "name": "light: AX link 14",
+      "pass": true,
+      "actual": 14
+    },
+    {
+      "name": "light: 14リンクHTTP 2xx・HTML・error bodyなし",
+      "pass": true,
+      "actual": [
+        {
+          "href": "/catalog/",
+          "finalUrl": "http://127.0.0.1:3193/catalog/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 26393,
+          "errorBody": false,
+          "title": "検証用カタログ — elchika-inc/ui"
+        },
+        {
+          "href": "/catalog-dark/",
+          "finalUrl": "http://127.0.0.1:3193/catalog-dark/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 26411,
+          "errorBody": false,
+          "title": "検証用カタログ Dark — elchika-inc/ui"
+        },
+        {
+          "href": "/preview/badge/",
+          "finalUrl": "http://127.0.0.1:3193/preview/badge/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 8675,
+          "errorBody": false,
+          "title": "Badge"
+        },
+        {
+          "href": "/preview/badge-dark/",
+          "finalUrl": "http://127.0.0.1:3193/preview/badge-dark/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 8688,
+          "errorBody": false,
+          "title": "Badge"
+        },
+        {
+          "href": "/preview/button/",
+          "finalUrl": "http://127.0.0.1:3193/preview/button/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 11396,
+          "errorBody": false,
+          "title": "Button"
+        },
+        {
+          "href": "/preview/button-dark/",
+          "finalUrl": "http://127.0.0.1:3193/preview/button-dark/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 11409,
+          "errorBody": false,
+          "title": "Button"
+        },
+        {
+          "href": "/preview/dialog/",
+          "finalUrl": "http://127.0.0.1:3193/preview/dialog/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 6197,
+          "errorBody": false,
+          "title": "Dialog"
+        },
+        {
+          "href": "/preview/dialog-dark/",
+          "finalUrl": "http://127.0.0.1:3193/preview/dialog-dark/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 6210,
+          "errorBody": false,
+          "title": "Dialog"
+        },
+        {
+          "href": "/preview/input/",
+          "finalUrl": "http://127.0.0.1:3193/preview/input/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 7543,
+          "errorBody": false,
+          "title": "Input"
+        },
+        {
+          "href": "/preview/input-dark/",
+          "finalUrl": "http://127.0.0.1:3193/preview/input-dark/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 7556,
+          "errorBody": false,
+          "title": "Input"
+        },
+        {
+          "href": "/preview/sonner/",
+          "finalUrl": "http://127.0.0.1:3193/preview/sonner/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 6090,
+          "errorBody": false,
+          "title": "Sonner"
+        },
+        {
+          "href": "/preview/sonner-dark/",
+          "finalUrl": "http://127.0.0.1:3193/preview/sonner-dark/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 6108,
+          "errorBody": false,
+          "title": "Sonner Dark"
+        },
+        {
+          "href": "/preview/tabs/",
+          "finalUrl": "http://127.0.0.1:3193/preview/tabs/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 9711,
+          "errorBody": false,
+          "title": "Tabs"
+        },
+        {
+          "href": "/preview/tabs-dark/",
+          "finalUrl": "http://127.0.0.1:3193/preview/tabs-dark/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 9724,
+          "errorBody": false,
+          "title": "Tabs"
+        }
+      ]
+    },
+    {
+      "name": "light: console errorなし",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "name": "light: network loading failureなし",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "name": "light: network HTTP 4xx/5xxなし",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "name": "light: 横スクロールなし",
+      "pass": true,
+      "actual": {
+        "viewportWidth": 1280,
+        "documentClientWidth": 1280,
+        "documentScrollWidth": 1280,
+        "bodyClientWidth": 1280,
+        "bodyScrollWidth": 1280,
+        "mainClientWidth": 1280,
+        "mainScrollWidth": 1280,
+        "hasHorizontalScroll": false
+      }
+    },
+    {
+      "name": "light: Tabで14リンク順次到達",
+      "pass": true,
+      "actual": [
+        "/catalog/",
+        "/catalog-dark/",
+        "/preview/badge/",
+        "/preview/badge-dark/",
+        "/preview/button/",
+        "/preview/button-dark/",
+        "/preview/dialog/",
+        "/preview/dialog-dark/",
+        "/preview/input/",
+        "/preview/input-dark/",
+        "/preview/sonner/",
+        "/preview/sonner-dark/",
+        "/preview/tabs/",
+        "/preview/tabs-dark/"
+      ]
+    },
+    {
+      "name": "light: 14リンクのfocus-visible可視",
+      "pass": true,
+      "actual": [
+        {
+          "index": 1,
+          "tagName": "A",
+          "text": "Light",
+          "href": "/catalog/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 2,
+          "tagName": "A",
+          "text": "Dark",
+          "href": "/catalog-dark/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 3,
+          "tagName": "A",
+          "text": "Light",
+          "href": "/preview/badge/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 4,
+          "tagName": "A",
+          "text": "Dark",
+          "href": "/preview/badge-dark/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 5,
+          "tagName": "A",
+          "text": "Light",
+          "href": "/preview/button/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 6,
+          "tagName": "A",
+          "text": "Dark",
+          "href": "/preview/button-dark/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 7,
+          "tagName": "A",
+          "text": "Light",
+          "href": "/preview/dialog/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 8,
+          "tagName": "A",
+          "text": "Dark",
+          "href": "/preview/dialog-dark/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 9,
+          "tagName": "A",
+          "text": "Light",
+          "href": "/preview/input/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 10,
+          "tagName": "A",
+          "text": "Dark",
+          "href": "/preview/input-dark/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 11,
+          "tagName": "A",
+          "text": "Light",
+          "href": "/preview/sonner/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 12,
+          "tagName": "A",
+          "text": "Dark",
+          "href": "/preview/sonner-dark/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 13,
+          "tagName": "A",
+          "text": "Light",
+          "href": "/preview/tabs/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 14,
+          "tagName": "A",
+          "text": "Dark",
+          "href": "/preview/tabs-dark/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        }
+      ]
+    },
+    {
+      "name": "forced-dark: Page.navigate errorTextなし",
+      "pass": true,
+      "actual": null
+    },
+    {
+      "name": "forced-dark: preview scan 6件",
+      "pass": true,
+      "actual": [
+        "badge",
+        "button",
+        "dialog",
+        "input",
+        "sonner",
+        "tabs"
+      ]
+    },
+    {
+      "name": "forced-dark: preview scan名一致",
+      "pass": true,
+      "actual": [
+        "badge",
+        "button",
+        "dialog",
+        "input",
+        "sonner",
+        "tabs"
+      ]
+    },
+    {
+      "name": "forced-dark: リンク14件・route順一致",
+      "pass": true,
+      "actual": [
+        "/catalog/",
+        "/catalog-dark/",
+        "/preview/badge/",
+        "/preview/badge-dark/",
+        "/preview/button/",
+        "/preview/button-dark/",
+        "/preview/dialog/",
+        "/preview/dialog-dark/",
+        "/preview/input/",
+        "/preview/input-dark/",
+        "/preview/sonner/",
+        "/preview/sonner-dark/",
+        "/preview/tabs/",
+        "/preview/tabs-dark/"
+      ]
+    },
+    {
+      "name": "forced-dark: 構造 main1/nav2/h1=1/h2=2/h3=6/link14",
+      "pass": true,
+      "actual": {
+        "main": 1,
+        "navigation": 2,
+        "h1": 1,
+        "h2": 2,
+        "h3": 6,
+        "link": 14
+      }
+    },
+    {
+      "name": "forced-dark: navigation名",
+      "pass": true,
+      "actual": [
+        {
+          "labelledBy": "catalog-heading",
+          "accessibleName": "横断カタログ",
+          "linkCount": 2
+        },
+        {
+          "labelledBy": "preview-heading",
+          "accessibleName": "隔離プレビュー",
+          "linkCount": 12
+        }
+      ]
+    },
+    {
+      "name": "forced-dark: AX navigation 2",
+      "pass": true,
+      "actual": [
+        "横断カタログ",
+        "隔離プレビュー"
+      ]
+    },
+    {
+      "name": "forced-dark: AX link 14",
+      "pass": true,
+      "actual": 14
+    },
+    {
+      "name": "forced-dark: 14リンクHTTP 2xx・HTML・error bodyなし",
+      "pass": true,
+      "actual": [
+        {
+          "href": "/catalog/",
+          "finalUrl": "http://127.0.0.1:3193/catalog/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 26393,
+          "errorBody": false,
+          "title": "検証用カタログ — elchika-inc/ui"
+        },
+        {
+          "href": "/catalog-dark/",
+          "finalUrl": "http://127.0.0.1:3193/catalog-dark/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 26411,
+          "errorBody": false,
+          "title": "検証用カタログ Dark — elchika-inc/ui"
+        },
+        {
+          "href": "/preview/badge/",
+          "finalUrl": "http://127.0.0.1:3193/preview/badge/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 8675,
+          "errorBody": false,
+          "title": "Badge"
+        },
+        {
+          "href": "/preview/badge-dark/",
+          "finalUrl": "http://127.0.0.1:3193/preview/badge-dark/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 8688,
+          "errorBody": false,
+          "title": "Badge"
+        },
+        {
+          "href": "/preview/button/",
+          "finalUrl": "http://127.0.0.1:3193/preview/button/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 11396,
+          "errorBody": false,
+          "title": "Button"
+        },
+        {
+          "href": "/preview/button-dark/",
+          "finalUrl": "http://127.0.0.1:3193/preview/button-dark/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 11409,
+          "errorBody": false,
+          "title": "Button"
+        },
+        {
+          "href": "/preview/dialog/",
+          "finalUrl": "http://127.0.0.1:3193/preview/dialog/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 6197,
+          "errorBody": false,
+          "title": "Dialog"
+        },
+        {
+          "href": "/preview/dialog-dark/",
+          "finalUrl": "http://127.0.0.1:3193/preview/dialog-dark/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 6210,
+          "errorBody": false,
+          "title": "Dialog"
+        },
+        {
+          "href": "/preview/input/",
+          "finalUrl": "http://127.0.0.1:3193/preview/input/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 7543,
+          "errorBody": false,
+          "title": "Input"
+        },
+        {
+          "href": "/preview/input-dark/",
+          "finalUrl": "http://127.0.0.1:3193/preview/input-dark/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 7556,
+          "errorBody": false,
+          "title": "Input"
+        },
+        {
+          "href": "/preview/sonner/",
+          "finalUrl": "http://127.0.0.1:3193/preview/sonner/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 6090,
+          "errorBody": false,
+          "title": "Sonner"
+        },
+        {
+          "href": "/preview/sonner-dark/",
+          "finalUrl": "http://127.0.0.1:3193/preview/sonner-dark/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 6108,
+          "errorBody": false,
+          "title": "Sonner Dark"
+        },
+        {
+          "href": "/preview/tabs/",
+          "finalUrl": "http://127.0.0.1:3193/preview/tabs/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 9711,
+          "errorBody": false,
+          "title": "Tabs"
+        },
+        {
+          "href": "/preview/tabs-dark/",
+          "finalUrl": "http://127.0.0.1:3193/preview/tabs-dark/",
+          "status": 200,
+          "ok": true,
+          "contentType": "text/html; charset=utf-8",
+          "bodyLength": 9724,
+          "errorBody": false,
+          "title": "Tabs"
+        }
+      ]
+    },
+    {
+      "name": "forced-dark: console errorなし",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "name": "forced-dark: network loading failureなし",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "name": "forced-dark: network HTTP 4xx/5xxなし",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "name": "forced-dark: 横スクロールなし",
+      "pass": true,
+      "actual": {
+        "viewportWidth": 1280,
+        "documentClientWidth": 1280,
+        "documentScrollWidth": 1280,
+        "bodyClientWidth": 1280,
+        "bodyScrollWidth": 1280,
+        "mainClientWidth": 1280,
+        "mainScrollWidth": 1280,
+        "hasHorizontalScroll": false
+      }
+    },
+    {
+      "name": "forced-dark: Tabで14リンク順次到達",
+      "pass": true,
+      "actual": [
+        "/catalog/",
+        "/catalog-dark/",
+        "/preview/badge/",
+        "/preview/badge-dark/",
+        "/preview/button/",
+        "/preview/button-dark/",
+        "/preview/dialog/",
+        "/preview/dialog-dark/",
+        "/preview/input/",
+        "/preview/input-dark/",
+        "/preview/sonner/",
+        "/preview/sonner-dark/",
+        "/preview/tabs/",
+        "/preview/tabs-dark/"
+      ]
+    },
+    {
+      "name": "forced-dark: 14リンクのfocus-visible可視",
+      "pass": true,
+      "actual": [
+        {
+          "index": 1,
+          "tagName": "A",
+          "text": "Light",
+          "href": "/catalog/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 2,
+          "tagName": "A",
+          "text": "Dark",
+          "href": "/catalog-dark/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 3,
+          "tagName": "A",
+          "text": "Light",
+          "href": "/preview/badge/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 4,
+          "tagName": "A",
+          "text": "Dark",
+          "href": "/preview/badge-dark/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 5,
+          "tagName": "A",
+          "text": "Light",
+          "href": "/preview/button/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 6,
+          "tagName": "A",
+          "text": "Dark",
+          "href": "/preview/button-dark/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 7,
+          "tagName": "A",
+          "text": "Light",
+          "href": "/preview/dialog/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 8,
+          "tagName": "A",
+          "text": "Dark",
+          "href": "/preview/dialog-dark/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 9,
+          "tagName": "A",
+          "text": "Light",
+          "href": "/preview/input/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 10,
+          "tagName": "A",
+          "text": "Dark",
+          "href": "/preview/input-dark/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 11,
+          "tagName": "A",
+          "text": "Light",
+          "href": "/preview/sonner/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 12,
+          "tagName": "A",
+          "text": "Dark",
+          "href": "/preview/sonner-dark/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 13,
+          "tagName": "A",
+          "text": "Light",
+          "href": "/preview/tabs/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        },
+        {
+          "index": 14,
+          "tagName": "A",
+          "text": "Dark",
+          "href": "/preview/tabs-dark/",
+          "focusVisible": true,
+          "outlineStyle": "none",
+          "outlineWidth": "1px",
+          "outlineColor": "oklch(0.556 0 0)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.556 0 0) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+        }
+      ]
+    },
+    {
+      "name": "light: html dark classなし",
+      "pass": true,
+      "actual": ""
+    },
+    {
+      "name": "forced-dark: html dark classあり",
+      "pass": true,
+      "actual": "dark"
+    },
+    {
+      "name": "light: color-scheme light",
+      "pass": true,
+      "actual": {
+        "colorScheme": "light",
+        "backgroundToken": "oklch(100% 0 0)",
+        "foregroundToken": "oklch(14.5% 0 0)",
+        "primaryToken": "oklch(20.5% 0 0)",
+        "ringToken": "oklch(55.6% 0 0)",
+        "computedMainBackground": "oklch(1 0 0)",
+        "computedMainForeground": "oklch(0.145 0 0)"
+      }
+    },
+    {
+      "name": "forced-dark: color-scheme dark",
+      "pass": true,
+      "actual": {
+        "colorScheme": "dark",
+        "backgroundToken": "oklch(14.5% 0 0)",
+        "foregroundToken": "oklch(98.5% 0 0)",
+        "primaryToken": "oklch(92.2% 0 0)",
+        "ringToken": "oklch(55.6% 0 0)",
+        "computedMainBackground": "oklch(0.145 0 0)",
+        "computedMainForeground": "oklch(0.985 0 0)"
+      }
+    },
+    {
+      "name": "light/dark token実計算色が切替",
+      "pass": true,
+      "actual": {
+        "light": {
+          "colorScheme": "light",
+          "backgroundToken": "oklch(100% 0 0)",
+          "foregroundToken": "oklch(14.5% 0 0)",
+          "primaryToken": "oklch(20.5% 0 0)",
+          "ringToken": "oklch(55.6% 0 0)",
+          "computedMainBackground": "oklch(1 0 0)",
+          "computedMainForeground": "oklch(0.145 0 0)"
+        },
+        "forcedDark": {
+          "colorScheme": "dark",
+          "backgroundToken": "oklch(14.5% 0 0)",
+          "foregroundToken": "oklch(98.5% 0 0)",
+          "primaryToken": "oklch(92.2% 0 0)",
+          "ringToken": "oklch(55.6% 0 0)",
+          "computedMainBackground": "oklch(0.145 0 0)",
+          "computedMainForeground": "oklch(0.985 0 0)"
+        }
+      }
+    }
+  ],
+  "failures": [],
+  "pass": true
+}

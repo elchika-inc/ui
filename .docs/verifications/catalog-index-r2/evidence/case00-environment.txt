@@ -1,0 +1,23 @@
+verification_datetime=2026-08-01T07:21:09+09:00
+commit=dabfe38678db2ddd9f2f9ebbae78cd3c26835f5b
+os=Darwin inta-m5-mac.local 25.3.0 Darwin Kernel Version 25.3.0: Wed Jan 28 20:56:42 PST 2026; root:xnu-12377.91.3~2/RELEASE_ARM64_T8142 arm64
+node=v26.4.0
+npm=11.17.0
+chrome=Google Chrome 150.0.7871.187 
+selected_port=3193
+initial_worktree_status_before_evidence:
+ M scripts/catalog-build.test.mjs
+ M scripts/check-evidence.mjs
+ M scripts/check-evidence.test.mjs
+status_after_evidence_init:
+ M scripts/catalog-build.test.mjs
+ M scripts/check-evidence.mjs
+ M scripts/check-evidence.test.mjs
+?? .docs/verifications/
+build_exit_code=0
+server_probe_exit_code=0
+COMMAND   PID      USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+node    84639 nishikawa   17u  IPv6 0x3fde03f88c05bb38      0t0  TCP *:3193 (LISTEN)
+browser_runner_exit_code=1
+browser_runner_rerun_exit_code=0
+browser_runner_network_isolated_exit_code=0

@@ -1,0 +1,16 @@
+final_gate_datetime=2026-08-01T07:31:11+09:00
+commit=dabfe38678db2ddd9f2f9ebbae78cd3c26835f5b
+summary_checks=35/35
+light_console_errors=0
+forced_dark_console_errors=0
+link_http_checks=14/14 each mode
+evidence_files=31
+json_integrity_exit_code=0
+.docs/verifications/catalog-index-r2/evidence/case01-light-index.png: PNG image data, 1280 x 900, 8-bit/color RGB, non-interlaced
+.docs/verifications/catalog-index-r2/evidence/case02-forced-dark-index.png: PNG image data, 1280 x 900, 8-bit/color RGB, non-interlaced
+.docs/verifications/catalog-index-r2/evidence/case05-light-focus.png: PNG image data, 1280 x 900, 8-bit/color RGB, non-interlaced
+.docs/verifications/catalog-index-r2/evidence/case06-forced-dark-focus.png: PNG image data, 1280 x 900, 8-bit/color RGB, non-interlaced
+server_listener=absent
+report_md=absent_as_required_for_subagent
+500	.docs/verifications/catalog-index-r2/evidence
+final_gate_exit_code=0

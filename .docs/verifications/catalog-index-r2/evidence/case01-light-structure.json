@@ -1,0 +1,221 @@
+{
+  "title": "elchika-inc/ui",
+  "lang": "ja",
+  "htmlClass": "",
+  "counts": {
+    "main": 1,
+    "navigation": 2,
+    "h1": 1,
+    "h2": 2,
+    "h3": 6,
+    "link": 14
+  },
+  "headings": [
+    {
+      "level": 1,
+      "text": "elchika-inc/ui",
+      "id": null
+    },
+    {
+      "level": 2,
+      "text": "横断カタログ",
+      "id": "catalog-heading"
+    },
+    {
+      "level": 2,
+      "text": "隔離プレビュー",
+      "id": "preview-heading"
+    },
+    {
+      "level": 3,
+      "text": "Badge",
+      "id": null
+    },
+    {
+      "level": 3,
+      "text": "Button",
+      "id": null
+    },
+    {
+      "level": 3,
+      "text": "Dialog",
+      "id": null
+    },
+    {
+      "level": 3,
+      "text": "Input",
+      "id": null
+    },
+    {
+      "level": 3,
+      "text": "Sonner",
+      "id": null
+    },
+    {
+      "level": 3,
+      "text": "Tabs",
+      "id": null
+    }
+  ],
+  "navigations": [
+    {
+      "labelledBy": "catalog-heading",
+      "accessibleName": "横断カタログ",
+      "linkCount": 2
+    },
+    {
+      "labelledBy": "preview-heading",
+      "accessibleName": "隔離プレビュー",
+      "linkCount": 12
+    }
+  ],
+  "links": [
+    {
+      "text": "Light",
+      "href": "/catalog/",
+      "absoluteUrl": "http://127.0.0.1:3193/catalog/",
+      "section": null
+    },
+    {
+      "text": "Dark",
+      "href": "/catalog-dark/",
+      "absoluteUrl": "http://127.0.0.1:3193/catalog-dark/",
+      "section": null
+    },
+    {
+      "text": "Light",
+      "href": "/preview/badge/",
+      "absoluteUrl": "http://127.0.0.1:3193/preview/badge/",
+      "section": "Badge"
+    },
+    {
+      "text": "Dark",
+      "href": "/preview/badge-dark/",
+      "absoluteUrl": "http://127.0.0.1:3193/preview/badge-dark/",
+      "section": "Badge"
+    },
+    {
+      "text": "Light",
+      "href": "/preview/button/",
+      "absoluteUrl": "http://127.0.0.1:3193/preview/button/",
+      "section": "Button"
+    },
+    {
+      "text": "Dark",
+      "href": "/preview/button-dark/",
+      "absoluteUrl": "http://127.0.0.1:3193/preview/button-dark/",
+      "section": "Button"
+    },
+    {
+      "text": "Light",
+      "href": "/preview/dialog/",
+      "absoluteUrl": "http://127.0.0.1:3193/preview/dialog/",
+      "section": "Dialog"
+    },
+    {
+      "text": "Dark",
+      "href": "/preview/dialog-dark/",
+      "absoluteUrl": "http://127.0.0.1:3193/preview/dialog-dark/",
+      "section": "Dialog"
+    },
+    {
+      "text": "Light",
+      "href": "/preview/input/",
+      "absoluteUrl": "http://127.0.0.1:3193/preview/input/",
+      "section": "Input"
+    },
+    {
+      "text": "Dark",
+      "href": "/preview/input-dark/",
+      "absoluteUrl": "http://127.0.0.1:3193/preview/input-dark/",
+      "section": "Input"
+    },
+    {
+      "text": "Light",
+      "href": "/preview/sonner/",
+      "absoluteUrl": "http://127.0.0.1:3193/preview/sonner/",
+      "section": "Sonner"
+    },
+    {
+      "text": "Dark",
+      "href": "/preview/sonner-dark/",
+      "absoluteUrl": "http://127.0.0.1:3193/preview/sonner-dark/",
+      "section": "Sonner"
+    },
+    {
+      "text": "Light",
+      "href": "/preview/tabs/",
+      "absoluteUrl": "http://127.0.0.1:3193/preview/tabs/",
+      "section": "Tabs"
+    },
+    {
+      "text": "Dark",
+      "href": "/preview/tabs-dark/",
+      "absoluteUrl": "http://127.0.0.1:3193/preview/tabs-dark/",
+      "section": "Tabs"
+    }
+  ],
+  "previewCards": [
+    {
+      "title": "Badge",
+      "hrefs": [
+        "/preview/badge/",
+        "/preview/badge-dark/"
+      ]
+    },
+    {
+      "title": "Button",
+      "hrefs": [
+        "/preview/button/",
+        "/preview/button-dark/"
+      ]
+    },
+    {
+      "title": "Dialog",
+      "hrefs": [
+        "/preview/dialog/",
+        "/preview/dialog-dark/"
+      ]
+    },
+    {
+      "title": "Input",
+      "hrefs": [
+        "/preview/input/",
+        "/preview/input-dark/"
+      ]
+    },
+    {
+      "title": "Sonner",
+      "hrefs": [
+        "/preview/sonner/",
+        "/preview/sonner-dark/"
+      ]
+    },
+    {
+      "title": "Tabs",
+      "hrefs": [
+        "/preview/tabs/",
+        "/preview/tabs-dark/"
+      ]
+    }
+  ],
+  "scroll": {
+    "viewportWidth": 1280,
+    "documentClientWidth": 1280,
+    "documentScrollWidth": 1280,
+    "bodyClientWidth": 1280,
+    "bodyScrollWidth": 1280,
+    "mainClientWidth": 1280,
+    "mainScrollWidth": 1280,
+    "hasHorizontalScroll": false
+  },
+  "tokens": {
+    "colorScheme": "light",
+    "backgroundToken": "oklch(100% 0 0)",
+    "foregroundToken": "oklch(14.5% 0 0)",
+    "primaryToken": "oklch(20.5% 0 0)",
+    "ringToken": "oklch(55.6% 0 0)",
+    "computedMainBackground": "oklch(1 0 0)",
+    "computedMainForeground": "oklch(0.145 0 0)"
+  }
+}

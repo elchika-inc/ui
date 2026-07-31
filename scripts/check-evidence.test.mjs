@@ -31,12 +31,20 @@ const createEvidenceRepo = () => {
     writeFileSync(join(root, `src/pages/preview/${name}-dark.astro`), `${name} dark\n`);
   }
   mkdirSync(join(root, "src/styles"), { recursive: true });
+  mkdirSync(join(root, "src/catalog"), { recursive: true });
   mkdirSync(join(root, "src/layouts"), { recursive: true });
   mkdirSync(join(root, "src/lib"), { recursive: true });
+  mkdirSync(join(root, "src/pages"), { recursive: true });
   mkdirSync(join(root, ".docs/reviews"), { recursive: true });
   writeFileSync(join(root, "src/styles/global.css"), "tokens\n");
+  writeFileSync(join(root, "src/catalog/preview-manifest.mjs"), "manifest\n");
+  writeFileSync(join(root, "src/catalog/previews.ts"), "previews\n");
+  writeFileSync(join(root, "src/catalog/verification-catalog.tsx"), "catalog\n");
   writeFileSync(join(root, "src/layouts/main.astro"), "layout\n");
   writeFileSync(join(root, "src/lib/utils.ts"), "utils\n");
+  writeFileSync(join(root, "src/pages/catalog.astro"), "catalog light\n");
+  writeFileSync(join(root, "src/pages/catalog-dark.astro"), "catalog dark\n");
+  writeFileSync(join(root, "src/pages/index.astro"), "index\n");
   writeFileSync(join(root, ".docs/reviews/button.png"), png);
   writeFileSync(join(root, ".docs/reviews/input.jpg"), jpeg);
   git(root, ["add", "."]);
@@ -48,6 +56,14 @@ const createEvidenceRepo = () => {
   );
   writeFileSync(
     join(root, ".docs/reviews/2026-08-01-input-preview.md"),
+    `検証した commit: \`${verifiedSha}\`\n`,
+  );
+  writeFileSync(
+    join(root, ".docs/reviews/2026-08-01-index-page.md"),
+    `検証した commit: \`${verifiedSha}\`\n`,
+  );
+  writeFileSync(
+    join(root, ".docs/reviews/2026-08-01-verification-catalog.md"),
     `検証した commit: \`${verifiedSha}\`\n`,
   );
   git(root, ["add", ".docs/reviews"]);
@@ -105,6 +121,26 @@ test("共有面の変更は落とさず陳腐化一覧へ出す", async (t) => {
   assert.deepEqual(result.problems, []);
   assert.deepEqual(result.stale, [
     "2026-08-01-button-preview.md: src/styles/global.css",
+    "2026-08-01-index-page.md: src/styles/global.css",
     "2026-08-01-input-preview.md: src/styles/global.css",
+    "2026-08-01-verification-catalog.md: src/styles/global.css",
   ]);
+});
+
+test("index と catalog の固有 path が検証 SHA 以降に変わると検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  writeFileSync(join(root, "src/pages/index.astro"), "index changed\n");
+  writeFileSync(join(root, "src/catalog/verification-catalog.tsx"), "catalog changed\n");
+  git(root, ["add", "src/pages/index.astro", "src/catalog/verification-catalog.tsx"]);
+  git(root, ["commit", "-m", "change index and catalog"]);
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual(result.problems, [
+    "2026-08-01-index-page.md: 検証 SHA 以降に証跡固有 path が変更されている",
+    "2026-08-01-verification-catalog.md: 検証 SHA 以降に証跡固有 path が変更されている",
+  ]);
+  assert.deepEqual(result.stale, []);
 });
