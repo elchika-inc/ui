@@ -1,11 +1,23 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import { test } from "node:test";
+import ts from "typescript";
 
 async function loadPreviewTheme() {
   try {
-    return await import("../src/previews/preview-theme.ts");
+    const source = await readFile(
+      new URL("../src/previews/preview-theme.ts", import.meta.url),
+      "utf8",
+    );
+    const output = ts.transpileModule(source, {
+      compilerOptions: {
+        module: ts.ModuleKind.ESNext,
+        target: ts.ScriptTarget.ES2022,
+      },
+    }).outputText;
+    return await import(`data:text/javascript;base64,${Buffer.from(output).toString("base64")}`);
   } catch (error) {
-    if (error?.code === "ERR_MODULE_NOT_FOUND") return {};
+    if (error?.code === "ENOENT") return {};
     throw error;
   }
 }
