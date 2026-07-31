@@ -19,6 +19,26 @@
       "license": "MIT",
       "modified": "DESIGN.md §5 適合のため focus ring と arbitrary value を修正",
       "notes": "registry は preset を解決したビルド生成物を配信するため、配信内容と byte 一致する上流 commit は存在しない。registryContentSha256 が受け取った内容そのものの錨であり、upstreamPathSha は元テンプレートを最後に変更した commit を指す（byte 一致は主張しない）。"
+    },
+    "badge": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/badge.json",
+      "registryPath": "registry/base-nova/ui/badge.tsx",
+      "registryContentSha256": "cf51b4988c4c7e6eec9f107259ebd8af6be31a29a5f5b50716c99e9dd6bdee32",
+      "normalizedContentSha256": "968b0403af74a785c9408ca69a677235e49d0c80b2c27fb9858ad421a8778c7d",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/badge.tsx",
+      "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-07-31",
+      "license": "MIT",
+      "modified": "DESIGN.md §5 適合のため focus ring と arbitrary value を修正",
+      "notes": "registry は preset を解決したビルド生成物を配信するため、配信内容と byte 一致する上流 commit は存在しない。registryContentSha256 が受け取った内容そのものの錨であり、upstreamPathSha は元テンプレートを最後に変更した commit を指す（byte 一致は主張しない）。"
     }
   }
 }
