@@ -11,6 +11,8 @@
 import { globSync, readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 
+// 状態表示の variant が前置されたリングだけを対象にする。無条件の
+// ring-foreground/10 のような装飾リングは WCAG 1.4.11 の状態表示ではない。
 // 色名は [a-z0-9-]+（[a-z-]+ だと ring-red-500/50 を見逃す）。
 // 不透明度の指定は Tailwind v4 が 4 形式を受けるため全部拾う（実測で確認）:
 //   /50  /12.5  /[50%]  /[.5]  /(--ring-alpha)
@@ -19,7 +21,7 @@ import { pathToFileURL } from "node:url";
 // 色側も v4 の変数短縮 ring-(--brand) と任意値 ring-[#f00] を拾う。
 // 色側を [a-z0-9-]+ だけにすると ring-(--brand)/50 を見逃す（実測）。
 const RING_OPACITY =
-  /\bring-(?:ring|[a-z0-9-]+|\([^)]+\)|\[[^\]]+\])\/(?:\d+(?:\.\d+)?%?|\[[^\]]+\]|\([^)]+\))/g;
+  /\b(?:focus|focus-visible|focus-within|aria-invalid|data-invalid|invalid)(?:-[a-z-]+)?:(?:[a-z0-9-]+:)*ring-(?:ring|[a-z0-9-]+|\([^)]+\)|\[[^\]]+\])\/(?:\d+(?:\.\d+)?%?|\[[^\]]+\]|\([^)]+\))/g;
 
 // 値系ユーティリティだけを対象にする。プレフィックスの列挙は AUDIT.md の
 // arbitrary value 検査コマンドから逐語で写した。

@@ -2,11 +2,13 @@
 
 検証した commit: 3a5d932406cd97ef8d3a53a58d27b51d9c3cb1b0
 
+保存時の実体が JPEG だったため拡張子を実体に合わせた。画像の byte は撮影時のまま。
+
 | route | light | dark | console | network | a11y tree | keyboard | 崩れ |
 |---|---|---|---|---|---|---|---|
-| / | ✅ index-light.png | ✅ index-dark.png | ✅ 0 件 | ✅ 失敗 0 件（favicon.ico の 404 を除く） | ✅ button 1 個 | ✅ Tab で到達 | ✅ |
-| /preview/button/ | ✅ button-preview-light.png | ✅ button-preview-light-forced-dark.png | ✅ 0 件 | ✅ 失敗 0 件（favicon.ico の 404 を除く） | ✅ button 7 個 | ✅ Tab で到達 | ✅ |
-| /preview/button-dark/ | ✅ button-preview-dark-forced-light.png | ✅ button-preview-dark.png | ✅ 0 件 | ✅ 失敗 0 件 | ✅ button 7 個 | ✅ Tab で到達 | ✅ |
+| / | ✅ index-light.jpg | ✅ index-dark.jpg | ✅ 0 件 | ✅ 失敗 0 件（favicon.ico の 404 を除く） | ✅ button 1 個 | ✅ Tab で到達 | ✅ |
+| /preview/button/ | ✅ button-preview-light.jpg | ✅ button-preview-light-forced-dark.jpg | ✅ 0 件 | ✅ 失敗 0 件（favicon.ico の 404 を除く） | ✅ button 7 個 | ✅ Tab で到達 | ✅ |
+| /preview/button-dark/ | ✅ button-preview-dark-forced-light.jpg | ✅ button-preview-dark.jpg | ✅ 0 件 | ✅ 失敗 0 件 | ✅ button 7 個 | ✅ Tab で到達 | ✅ |
 
 ## computed backgroundColor
 

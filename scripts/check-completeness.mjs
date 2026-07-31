@@ -4,11 +4,35 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 
-const pascal = (s) =>
-  s
-    .split("-")
-    .map((w) => w[0].toUpperCase() + w.slice(1))
-    .join("");
+const exportedNames = (dts, typeOnly) => {
+  const prefix = typeOnly ? "type\\s*" : "(?!type\\b)";
+  const re = new RegExp(`export\\s+${prefix}\\{([\\s\\S]*?)\\}\\s*from\\s*["'][^"']+["']`, "g");
+  const names = [];
+  for (const match of dts.matchAll(re)) {
+    for (const item of match[1].split(",")) {
+      const parts = item.trim().split(/\s+as\s+/);
+      const publicName = parts.at(-1)?.trim();
+      if (publicName) names.push(publicName);
+    }
+  }
+  return names;
+};
+
+// registry / preview / provenance は配布ファイル単位だが、design-sync は .d.ts の
+// PascalCase value export を独立した component として扱う。そのため Props だけは
+// export 単位で検査し、各 public value に同名の <Name>Props を要求する。
+const dtsContractProblems = (dts) => {
+  const typeExports = new Set(exportedNames(dts, true));
+  const componentExports = exportedNames(dts, false).filter(
+    (name) => /^[A-Z]/.test(name) && !name.endsWith("Props") && !/^[A-Z][A-Z0-9_]+$/.test(name),
+  );
+  if (componentExports.length === 0) {
+    return ["lib/index.d.ts の PascalCase value export が 0 件（走査が空走している）"];
+  }
+  return componentExports
+    .filter((name) => !typeExports.has(`${name}Props`))
+    .map((name) => `${name}: lib/index.d.ts に ${name}Props が無い`);
+};
 
 // design §8 DoneCriteria 8 が要求する来歴の全項目。Task 2 Step 5 は button 固定
 // なので 2 件目以降を担保しない。ここが唯一の一般化されたゲートになる。
@@ -23,7 +47,8 @@ const PROVENANCE_SPEC = {
   registry: /^https:\/\/\S+$/,
   registryUrl: /^https:\/\/\S+$/,
   registryContentSha256: /^[0-9a-f]{64}$/,
-  normalizedContentSha256: /^[0-9a-f]{64}$/,
+  generatedContentSha256: /^[0-9a-f]{64}$/,
+  addTarget: /^@[\w-]+\/[\w-]+$/,
   // SemVer 2.0.0 の公式正規表現（semver.org 掲載）。自前で簡略化すると必ずずれる
   // — 実測で `-[\w.]+` 版は 4.16.0-alpha-beta と 4.16.0+build-meta を誤って拒否し、
   // 4.16.0+bad_meta と 4.16.0-.. を誤って許した（`\w` は `_` を含み `-` を含まない）。
@@ -31,6 +56,7 @@ const PROVENANCE_SPEC = {
     /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/,
   fetchedAt: /^\d{4}-\d{2}-\d{2}$/,
   license: /^\S+$/,
+  modified: /\S/,
 };
 
 export function checkCompleteness({
@@ -42,13 +68,11 @@ export function checkCompleteness({
   previewSources,
   provenance,
 }) {
-  const problems = [];
+  const problems = dtsContractProblems(dts);
   for (const name of components) {
-    const P = pascal(name);
     if (!barrel.includes(`./components/ui/${name}`)) {
       problems.push(`${name}: src/index.ts から export されていない`);
     }
-    if (!dts.includes(`${P}Props`)) problems.push(`${name}: lib/index.d.ts に ${P}Props が無い`);
     if (!registry.items.some((i) => i.name === name)) {
       problems.push(`${name}: registry.json に item が無い`);
     }

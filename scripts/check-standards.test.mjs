@@ -38,6 +38,27 @@ test("角括弧・丸括弧の不透明度指定も検出する", () => {
   }
 });
 
+test("テーマ修飾付きと focus-within の状態リングを検出する", () => {
+  for (const cls of [
+    "dark:focus-visible:ring-destructive/40",
+    "focus-visible:dark:ring-destructive/40",
+    "focus-within:ring-ring/50",
+  ]) {
+    const { violations } = checkFile("a.tsx", `className="${cls}"`);
+    assert.ok(
+      violations.some((v) => v.rule === "focus-ring-opacity"),
+      `${cls}: focus-ring-opacity として検出されない`,
+    );
+  }
+});
+
+test("無条件の装飾リングはフォーカスリング違反にしない", () => {
+  for (const cls of ["ring-foreground/10", "ring-border/20", "ring-[3px]"]) {
+    const { violations } = checkFile("a.tsx", `className="${cls}"`);
+    assert.deepEqual(violations, [], cls);
+  }
+});
+
 test("2 規定へ同時に違反するクラスは 2 診断とも出す", () => {
   // ring-[#f00]/50 は任意値であり、かつ透明度合成でもある。
   // focus-ring-opacity だけを assert すると、ARBITRARY 側が

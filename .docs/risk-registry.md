@@ -64,3 +64,21 @@
 - status: accepted
 - reason: 可変タグは同じ参照が別のコードを指しうる supply-chain risk を持つが、standards の正準テンプレートが `@v4` を採用しており、本リポジトリだけ SHA pin すると運用が分岐する。また、workflow は `permissions: contents: read` のみで secrets を使わず DOCS_OPS §6 の信頼境界を満たす。更新機構なしの pin は陳腐化して CVE 対応を遅らせるため、standards レベルの方針決定に先行して分岐させない。
 - anchor: standards 側の Action Queue `manual-github-actions-sha-pin.md` で決まった判断に従う。
+
+## RISK-009: Base UI Dialog が `aria-modal` を付与しない
+
+- date: 2026-07-31
+- confidence: high
+- location: `src/components/ui/dialog.tsx`（`@base-ui/react` 1.6.0）
+- status: accepted
+- reason: Base UI 1.6.0 の Dialog は `role="dialog"` に `aria-modal` を付与しない。Root の `modal` は `true` / `false` / `"trap-focus"` を取るため、wrapper から無条件に `aria-modal="true"` を付けると非 modal 用途を誤表現する。上流の挙動を受容し、modal の実効性は content 内の focus trap、閉じたあとの trigger への focus return、背景の `aria-hidden="true"` と overlay の pointer event 捕捉で確認する。
+- anchor: `@base-ui/react` の更新時に実ブラウザで `role="dialog"` の属性を再確認する。上流が `aria-modal` を付与するようになった場合は本受容を解消し、`aria-modal` と Root の `modal` 値の対応を検証項目へ戻す。
+
+## RISK-010: Sonner が `next-themes` の ThemeProvider を前提とする
+
+- date: 2026-08-01
+- confidence: high
+- location: `src/components/ui/sonner.tsx`（`next-themes` 0.4.6）
+- status: accepted
+- reason: `@elchika/sonner` は `next-themes` の `ThemeProvider` を前提とする。Provider が無い環境では `useTheme()` が `undefined` となり、Sonner は OS の `prefers-color-scheme` に従うため、`html.dark` によるテーマ切替と乖離する。サブプロジェクト #1〜#2 では、DESIGN.md §5 の standards 正規化と公開型の追加に範囲を限定し、上流 component のテーマ契約は変更せずそのまま配る。registry の dependencies には `next-themes` を含め、README で Provider の前提を案内する。本リポジトリのプレビューだけは、専用 wrapper が `html` の class を監視して `theme` prop へ明示的に渡す。
+- anchor: 利用者が `@elchika/sonner` を実際に取り込んだとき、そのプロジェクトのテーマ切替で toast が追従するかを確認する。プレビューでは `.docs/reviews/2026-08-01-sonner-preview.md` の 2 route × 2 theme 実測が、toast の `data-sonner-theme` と `html.dark` の一致を固定する。
