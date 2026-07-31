@@ -76,6 +76,7 @@ npx shadcn@latest add --overwrite http://127.0.0.1:3011/r/button.json
 | `node --test "scripts/*.test.mjs"` | テスト実行 |
 | `npm run build` | registry と Astro サイトのビルド |
 | `npm run build:lib` | ライブラリビルド |
+| `npm run check:all` | component の全 checker を順次実行 |
 
 ### Architecture
 
