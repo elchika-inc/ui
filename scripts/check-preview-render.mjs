@@ -3,6 +3,10 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 
+const CATALOG_PREVIEW_NAMES = ["catalog", "catalog-dark"];
+
+export const requiredPreviewNames = (components) => [...components, ...CATALOG_PREVIEW_NAMES];
+
 export function checkPreviewRender(components, selectors) {
   const problems = [];
 
@@ -40,7 +44,7 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   }
 
   const selectors = JSON.parse(readFileSync(manifestPath, "utf8"));
-  const { problems } = checkPreviewRender(components, selectors);
+  const { problems } = checkPreviewRender(requiredPreviewNames(components), selectors);
   if (problems.length) {
     console.error(`preview selector の検査に失敗:\n  ${problems.join("\n  ")}`);
     process.exit(1);

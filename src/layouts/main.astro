@@ -1,13 +1,18 @@
 ---
 import "@/styles/global.css";
+
+interface Props {
+  dark?: boolean;
+  title?: string;
+}
 ---
 
-<html lang="ja">
+<html lang="ja" class:list={{ dark: Astro.props.dark }}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>elchika-inc/ui</title>
+    <title>{Astro.props.title ?? "elchika-inc/ui"}</title>
   </head>
   <body>
     <slot />
