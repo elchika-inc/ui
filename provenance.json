@@ -83,6 +83,27 @@
       "license": "MIT",
       "modified": "DESIGN.md §5 適合のため focus ring と arbitrary value を修正",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。generatedContentSha256 は CLI 生成直後ではなく standards 正規化を適用したあとの現行ファイルのハッシュである。正規化では DESIGN.md §5 適合のためフォーカスリングの透明度合成と値系 arbitrary value を除去した。この機構を dialog の時点で導入したため、先行コンポーネントの生成直後の値は遡って記録できない。"
+    },
+    "tabs": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/tabs.json",
+      "registryPath": "registry/base-nova/ui/tabs.tsx",
+      "registryContentSha256": "fce559ee7903a2599277021fcf14687ec269ebb3b3a7666d5398d396f7b904aa",
+      "generatedContentSha256": "84c1ebcee9c620b4b9543b1fe097307051a68ee7bd2901241a962360337f1191",
+      "addTarget": "@shadcn/tabs",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/tabs.tsx",
+      "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-07-31",
+      "license": "MIT",
+      "modified": "DESIGN.md §5 適合のため focus ring と arbitrary value を修正",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。"
     }
   }
 }

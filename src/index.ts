@@ -28,3 +28,10 @@ export {
 } from "./components/ui/dialog";
 export type { InputProps } from "./components/ui/input";
 export { Input } from "./components/ui/input";
+export type {
+  TabsContentProps,
+  TabsListProps,
+  TabsProps,
+  TabsTriggerProps,
+} from "./components/ui/tabs";
+export { Tabs, TabsContent, TabsList, TabsTrigger, tabsListVariants } from "./components/ui/tabs";
