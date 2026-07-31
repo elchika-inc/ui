@@ -39,3 +39,11 @@
 - status: accepted
 - reason: 本リポジトリは本タスクで新規作成した fresh clone であり、保護すべき既存作業ツリーも共有 DB もない。実装を先にコミットし、その SHA からビルドした静的成果物を検証することで、AI_FIRST §2 の目的である「PR に入るコードを検証する」を満たす。
 - anchor: 証跡に記録した `VERIFIED_SHA` が実在する commit であることと、`git diff --quiet "$VERIFIED_SHA" HEAD -- src/` が exit 0 であることを最終ゲートで検査する。差分があれば3 route × 2テーマの実ブラウザ検証を再実行する。
+
+## RISK-006: light の warning ペアが WCAG AA を満たさない
+- date: 2026-07-31
+- confidence: high
+- location: `src/styles/global.css` の `--warning` / `--warning-foreground`
+- status: accepted
+- reason: standards の正本を byte 一致で取り込んだ状態で実計算したコントラスト比は 3.9190:1 であり、通常テキストに必要な 4.5:1 を満たさない。本サブプロジェクトの Button は warning ペアを使わないため #1 では実害がなく、standards 側の修正を待つ。warning 背景と foreground を使うコンポーネントを追加する前に再検討する。
+- anchor: standards の `.docs/actions/next-session-warning-foreground-contrast.md` が閉じられて `templates/design-tokens.css` の該当トークンが変更されること、および本リポジトリの `scripts/contrast.mjs` が `src/styles/global.css` の実値から PASS / FAIL を再計算すること。Task 10 の整合検査は PASS 後に本エントリが残る状態も拒否する。
