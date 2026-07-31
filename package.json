@@ -19,7 +19,7 @@
     "build": "npm run build:lib && npm run registry:build && npm run registry:legal && npm run build:site",
     "build:site": "astro build",
     "build:lib": "tsup && tsc -p tsconfig.lib.json",
-    "registry:tokens": "node scripts/sync-registry-tokens.mjs",
+    "registry:tokens": "node scripts/sync-registry-tokens.mjs && biome format --write registry.json",
     "registry:build": "npm run registry:tokens && shadcn build --output public/r",
     "registry:legal": "cp LICENSE THIRD_PARTY_LICENSES public/r/",
     "preview": "astro preview",
