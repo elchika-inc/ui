@@ -7,7 +7,7 @@
 - 配信: `npx serve dist -l 3193`
 - ブラウザ: Google Chrome 150.0.7871.187、1280 × 900
 - 対象 route: `/` の light と、`html.dark` を付与した forced-dark
-- 詳細な再現手順と生データ: `../verifications/catalog-index-r2/report.md`
+- 詳細な再現手順と生データ: `catalog-index-r2/report.md`
 
 ## 実測結果
 

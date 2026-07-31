@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
@@ -142,6 +142,146 @@ test("index と catalog の固有 path が検証 SHA 以降に変わると検出
   assert.deepEqual(result.problems, [
     "2026-08-01-index-page.md: 検証 SHA 以降に証跡固有 path が変更されている",
     "2026-08-01-verification-catalog.md: 検証 SHA 以降に証跡固有 path が変更されている",
+  ]);
+  assert.deepEqual(result.stale, []);
+});
+
+test("reviews 配下の入れ子にある画像も magic bytes を検査する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  const evidenceDirectory = join(root, ".docs/reviews/catalog-index-r2/evidence");
+  mkdirSync(evidenceDirectory, { recursive: true });
+  writeFileSync(join(evidenceDirectory, "wrong.png"), jpeg);
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual(result.problems, [
+    "catalog-index-r2/evidence/wrong.png: 拡張子 png だが実体は JPEG",
+  ]);
+  assert.deepEqual(result.stale, []);
+});
+
+test("reviews 配下の入れ子にある index 検証レポートの鮮度も検査する", async (t) => {
+  const { root, verifiedSha } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  const reportDirectory = join(root, ".docs/reviews/catalog-index-r2");
+  mkdirSync(reportDirectory, { recursive: true });
+  writeFileSync(join(reportDirectory, "report.md"), `検証した commit: \`${verifiedSha}\`\n`);
+  git(root, ["add", ".docs/reviews/catalog-index-r2/report.md"]);
+  git(root, ["commit", "-m", "add deep verification report"]);
+  writeFileSync(join(root, "src/pages/index.astro"), "index changed\n");
+  git(root, ["add", "src/pages/index.astro"]);
+  git(root, ["commit", "-m", "change index"]);
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual(result.problems, [
+    "2026-08-01-index-page.md: 検証 SHA 以降に証跡固有 path が変更されている",
+    "catalog-index-r2/report.md: 検証 SHA 以降に証跡固有 path が変更されている",
+  ]);
+  assert.deepEqual(result.stale, []);
+});
+
+test("独自の verifications 証跡レイヤーを検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  const legacyDirectory = join(root, ".docs/verifications");
+  mkdirSync(legacyDirectory, { recursive: true });
+  writeFileSync(join(legacyDirectory, "result.md"), "checker を迂回する証跡\n");
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual(result.problems, [
+    ".docs/verifications は証跡の正規レイヤーではない。.docs/reviews 配下へ移動する",
+  ]);
+  assert.deepEqual(result.stale, []);
+});
+
+test("reviews 配下の symlink 証跡を黙って除外しない", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  symlinkSync("button.png", join(root, ".docs/reviews/linked.png"));
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual(result.problems, ["linked.png: 通常ファイルではないため証跡として検査できない"]);
+  assert.deepEqual(result.stale, []);
+});
+
+test("dangling verifications symlink も独自証跡レイヤーとして検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  symlinkSync("missing-verifications", join(root, ".docs/verifications"));
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual(result.problems, [
+    ".docs/verifications は証跡の正規レイヤーではない。.docs/reviews 配下へ移動する",
+  ]);
+  assert.deepEqual(result.stale, []);
+});
+
+test("入れ子の catalog 検証 Markdown も固有 path の鮮度を検査する", async (t) => {
+  const { root, verifiedSha } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  const nestedDirectory = join(root, ".docs/reviews/deep");
+  mkdirSync(nestedDirectory, { recursive: true });
+  writeFileSync(
+    join(nestedDirectory, "2026-08-01-verification-catalog.md"),
+    `検証した commit: \`${verifiedSha}\`\n`,
+  );
+  git(root, ["add", ".docs/reviews/deep/2026-08-01-verification-catalog.md"]);
+  git(root, ["commit", "-m", "add nested catalog evidence"]);
+  writeFileSync(join(root, "src/catalog/verification-catalog.tsx"), "catalog changed\n");
+  git(root, ["add", "src/catalog/verification-catalog.tsx"]);
+  git(root, ["commit", "-m", "change catalog"]);
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual(result.problems, [
+    "2026-08-01-verification-catalog.md: 検証 SHA 以降に証跡固有 path が変更されている",
+    "deep/2026-08-01-verification-catalog.md: 検証 SHA 以降に証跡固有 path が変更されている",
+  ]);
+  assert.deepEqual(result.stale, []);
+});
+
+test("reviews root 自体の symlink で repo 外を走査しない", async (t) => {
+  const { root } = createEvidenceRepo();
+  const externalReviews = mkdtempSync(join(tmpdir(), "elchika-external-reviews-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(() => rmSync(externalReviews, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  rmSync(join(root, ".docs/reviews"), { recursive: true, force: true });
+  symlinkSync(externalReviews, join(root, ".docs/reviews"));
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual(result.problems, [
+    ".docs/reviews は repo 内の通常ディレクトリでなければならない",
+  ]);
+  assert.deepEqual(result.stale, []);
+});
+
+test("reviews の祖先 symlink で repo 外を走査しない", async (t) => {
+  const { root } = createEvidenceRepo();
+  const externalDocs = mkdtempSync(join(tmpdir(), "elchika-external-docs-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(() => rmSync(externalDocs, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  rmSync(join(root, ".docs"), { recursive: true, force: true });
+  mkdirSync(join(externalDocs, "reviews"));
+  symlinkSync(externalDocs, join(root, ".docs"));
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual(result.problems, [
+    ".docs/reviews は repo 内の通常ディレクトリでなければならない",
   ]);
   assert.deepEqual(result.stale, []);
 });

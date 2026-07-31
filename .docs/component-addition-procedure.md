@@ -48,6 +48,7 @@ npm run check:all
 2. catalog、light route、dark route を実ブラウザで開く。各 route で console error がなく、`preview-selectors.json` の selector が hydrated 後に1件以上存在することを確認する。Provider と overlay の設計に応じた操作も行う。
 3. light / dark をそれぞれ撮影する。拡張子と画像実体を一致させ、既存証跡を上書きせず `.docs/reviews/` に新規保存する。
 4. 検証 route、テーマ、操作、selector の件数、console 結果、実装 commit の40桁 SHA を新規 Markdown に記録する。
+   component 追加ごとの恒常証跡は、結論 Markdown と light / dark screenshot だけを既定で commit する。console、DOM、Accessibility tree、network、server log は再実行時に生成する一時データとし、特定の correctness、security、明示要件を簡潔な証跡だけでは再現できない場合に限り、理由をレポートに書いて必要最小限を `.docs/reviews/` 配下に commit する。
 5. `node scripts/check-evidence.mjs` を実行する。component 固有 path が検証 SHA より新しければ証跡を作り直す。shared surface の stale 一覧は自動失敗ではないため、見た目への影響を人が確認し、必要な証跡を再撮影する。過去の記録は書き換えない。
 6. 証跡だけを明示パスで stage し、新しい証跡 commit を作る。最後に `npm run check:all` を再実行してから PR を作る。
 

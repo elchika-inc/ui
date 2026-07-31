@@ -8,10 +8,15 @@ import {
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { join } from "node:path";
 
 const root = process.cwd();
-const evidence = resolve(root, ".docs/verifications/catalog-index-r2/evidence");
+const evidence = mkdtempSync(join(tmpdir(), "catalog-index-r2-evidence-"));
+if (process.argv.includes("--print-evidence-dir")) {
+  console.log(evidence);
+  process.exit(0);
+}
+console.log(`証跡の一時出力先: ${evidence}`);
 const requestedBaseUrl = new URL(process.env.CATALOG_BASE_URL ?? "http://127.0.0.1:3193");
 const loopbackHosts = new Set(["127.0.0.1", "localhost", "[::1]"]);
 if (

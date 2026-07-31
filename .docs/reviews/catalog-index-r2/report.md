@@ -14,8 +14,12 @@
 npm run build
 npx serve dist -l 3193
 CATALOG_BASE_URL=http://127.0.0.1:3193 \
-  node .docs/verifications/catalog-index-r2/evidence/case00-browser-runner.mjs
+  node .docs/reviews/catalog-index-r2/evidence/case00-browser-runner.mjs
 ```
+
+runner は実行ごとに異なる一時ディレクトリを作り、その絶対 path を標準出力へ示す。過去の恒常証跡は上書きせず、再検証の結果を残す場合は一時出力から必要最小限の新規証跡だけを `.docs/reviews/` 配下へ保存する。
+
+この検証は、自動 scan が3 route・2 theme・全 linkへ到達することを実測する、複数 component 横断の一回限りの基盤検証である。結論だけでは response origin・path coverage・Accessibility tree の一致を再検査できないため、例外として必要な生データを `.docs/reviews/catalog-index-r2/` に保存した。生データ内のパスは検証実行時の保存先を示し、実行後に `DOCS_OPS §3` の正規レイヤーへ移動している。
 
 ## 結果
 
