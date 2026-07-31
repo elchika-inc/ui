@@ -86,6 +86,31 @@ test("来歴の全キーが x なら形式違反を検出する", () => {
   assert.notDeepEqual(problems, []);
 });
 
+test("shadcn CLI の版は SemVer 2.0.0 の境界に従う", () => {
+  const valid = [
+    "4.16.0",
+    "4.16.0-beta.1",
+    "4.16.0-alpha-beta",
+    "4.16.0+build-meta",
+    "1.0.0-rc.1+exp.sha.5114f85",
+  ];
+  const invalid = ["4.16.0garbage", "4.16.0+bad_meta", "4.16.0-..", "4.16", "^4.16.0", "x"];
+  for (const version of valid) {
+    const provenance = structuredClone(complete.provenance);
+    provenance.components.button.shadcnCliVersion = version;
+    assert.deepEqual(checkCompleteness({ ...complete, provenance }).problems, [], version);
+  }
+  for (const version of invalid) {
+    const provenance = structuredClone(complete.provenance);
+    provenance.components.button.shadcnCliVersion = version;
+    const { problems } = checkCompleteness({ ...complete, provenance });
+    assert.ok(
+      problems.some((problem) => problem.includes("shadcnCliVersion")),
+      version,
+    );
+  }
+});
+
 test("5 経路が揃っていれば問題なし", () => {
   assert.deepEqual(checkCompleteness(complete).problems, []);
 });

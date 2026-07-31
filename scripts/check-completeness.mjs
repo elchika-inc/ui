@@ -24,9 +24,11 @@ const PROVENANCE_SPEC = {
   registryUrl: /^https:\/\/\S+$/,
   registryContentSha256: /^[0-9a-f]{64}$/,
   normalizedContentSha256: /^[0-9a-f]{64}$/,
-  // 末尾を固定する。/^\d+\.\d+\.\d+/ だけだと "4.16.0garbage" を通す（実測）。
-  // プレリリース・ビルドメタデータは許す。
-  shadcnCliVersion: /^\d+\.\d+\.\d+(?:-[\w.]+)?(?:\+[\w.]+)?$/,
+  // SemVer 2.0.0 の公式正規表現（semver.org 掲載）。自前で簡略化すると必ずずれる
+  // — 実測で `-[\w.]+` 版は 4.16.0-alpha-beta と 4.16.0+build-meta を誤って拒否し、
+  // 4.16.0+bad_meta と 4.16.0-.. を誤って許した（`\w` は `_` を含み `-` を含まない）。
+  shadcnCliVersion:
+    /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/,
   fetchedAt: /^\d{4}-\d{2}-\d{2}$/,
   license: /^\S+$/,
 };
