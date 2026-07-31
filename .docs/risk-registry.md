@@ -47,3 +47,11 @@
 - status: accepted
 - reason: standards の正本を byte 一致で取り込んだ状態で実計算したコントラスト比は 3.9190:1 であり、通常テキストに必要な 4.5:1 を満たさない。本サブプロジェクトの Button は warning ペアを使わないため #1 では実害がなく、standards 側の修正を待つ。warning 背景と foreground を使うコンポーネントを追加する前に再検討する。
 - anchor: standards の `.docs/actions/next-session-warning-foreground-contrast.md` が閉じられて `templates/design-tokens.css` の該当トークンが変更されること、および本リポジトリの `scripts/contrast.mjs` が `src/styles/global.css` の実値から PASS / FAIL を再計算すること。Task 10 の整合検査は PASS 後に本エントリが残る状態も拒否する。
+
+## RISK-007: 利用者の既存トークンを registry から上書きできない
+- date: 2026-07-31
+- confidence: high
+- location: `registry.json` の `cssVars` と `~/elchika-ui/tokens.css`
+- status: accepted
+- reason: shadcn の CSS 更新は `overwriteCssVars` が既定 `false` で、利用者側に同名の宣言が既にあれば何もしないため、registry からトークン値を強制適用できない。全トークンの正本を `~/elchika-ui/tokens.css` として配り、README で利用者自身の CSS から最後に `@import` するよう案内する。既定値を持たない `--success` / `--warning` とその foreground は `cssVars` で自動追加する。
+- anchor: 利用者側プロジェクトのビルド出力に elchika のトークン値が現れるかを、サブプロジェクト #2 以降で実際に取り込むときに確認する。

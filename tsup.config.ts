@@ -1,4 +1,4 @@
-import { defineConfig } from "tsup"
+import { defineConfig } from "tsup";
 
 // 出力先は lib/。dist/ は Astro の outDir 既定値であり奪い合うと成果物が消える。
 // ESM のみ。CJS を出さないのは PRODUCT_PLAYBOOK §15 が警告する
@@ -15,6 +15,6 @@ export default defineConfig({
   // esbuild は tsconfig の paths を自動では読まないため alias を明示する。
   // これが無いと `@/lib/utils` を解決できず Build failed になる（実測）。
   esbuildOptions(options) {
-    options.alias = { ...(options.alias ?? {}), "@": new URL("src/", import.meta.url).pathname }
+    options.alias = { ...(options.alias ?? {}), "@": new URL("src/", import.meta.url).pathname };
   },
-})
+});
