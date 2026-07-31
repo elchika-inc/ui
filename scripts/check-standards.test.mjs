@@ -38,6 +38,16 @@ test("角括弧・丸括弧の不透明度指定も検出する", () => {
   }
 });
 
+test("2 規定へ同時に違反するクラスは 2 診断とも出す", () => {
+  // ring-[#f00]/50 は任意値であり、かつ透明度合成でもある。
+  // focus-ring-opacity だけを assert すると、ARBITRARY 側が
+  // ring-[#f00] を検出しなくなる回帰を素通りさせる。両方を固定する。
+  const { violations } = checkFile("a.tsx", `className="focus-visible:ring-[#f00]/50"`);
+  const rules = new Set(violations.map((v) => v.rule));
+  assert.ok(rules.has("focus-ring-opacity"), "focus-ring-opacity が無い");
+  assert.ok(rules.has("arbitrary-value"), "arbitrary-value が無い");
+});
+
 test("許可済み例外の ring-[3px] は違反にしない", () => {
   const { violations } = checkFile(
     "a.tsx",
