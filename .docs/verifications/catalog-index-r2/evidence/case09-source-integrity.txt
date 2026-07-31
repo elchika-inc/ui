@@ -1,8 +1,5 @@
-対象HEAD=6b3e8046b8a422f87379c56bf2cbe5f10d394a6f
-検証前から存在したsource変更:
-scripts/check-evidence.mjs
-scripts/check-evidence.test.mjs
-検証前から存在したevidence runner変更:
+対象HEAD=71ade34f3a14e3af19cdaa8100d7fc4552aed4ba
+検証前から存在した変更:
 .docs/verifications/catalog-index-r2/evidence/case00-browser-runner.mjs
 検証後の全tracked変更:
 .docs/verifications/catalog-index-r2/evidence/case00-browser-runner.mjs
@@ -19,8 +16,5 @@ scripts/check-evidence.test.mjs
 .docs/verifications/catalog-index-r2/evidence/case07-verification-summary.json
 .docs/verifications/catalog-index-r2/evidence/case08-server-stop.txt
 .docs/verifications/catalog-index-r2/evidence/case09-source-integrity.txt
-.docs/verifications/catalog-index-r2/evidence/case10-final-gate.txt
-scripts/check-evidence.mjs
-scripts/check-evidence.test.mjs
-evidenceと既存変更を除くsource差分判定exit_code=0
+evidenceを除くsource差分判定exit_code=0
 検証起因のsource変更=なし

@@ -462,6 +462,15 @@ try {
     );
     const httpErrors = modeState.networkResponses.filter((response) => response.status >= 400);
     const outsideOriginResponses = modeState.networkResponses.filter((response) => response.outsideOrigin);
+    const observedResponsePaths = [
+      ...new Set(
+        modeState.networkResponses
+          .filter((response) => !response.outsideOrigin)
+          .map((response) => new URL(response.url).pathname),
+      ),
+    ].sort();
+    const expectedResponsePaths = ["/", ...expectedRoutes];
+    const missingResponsePaths = expectedResponsePaths.filter((path) => !observedResponsePaths.includes(path));
     const focusRoutes = focus.map((item) => item.href);
     const visibleFocus = focus.every(
       (item) =>
@@ -512,6 +521,11 @@ try {
     check(`${mode}: network loading failureなし`, modeState.networkFailures.length === 0, modeState.networkFailures);
     check(`${mode}: network HTTP 4xx/5xxなし`, httpErrors.length === 0, httpErrors);
     check(`${mode}: 対象origin外responseなし`, outsideOriginResponses.length === 0, outsideOriginResponses);
+    check(
+      `${mode}: network responseがindexと全routeを観測`,
+      missingResponsePaths.length === 0,
+      { expected: expectedResponsePaths, observed: observedResponsePaths, missing: missingResponsePaths },
+    );
     check(`${mode}: 横スクロールなし`, !structure.scroll.hasHorizontalScroll, structure.scroll);
     check(`${mode}: Tabで14リンク順次到達`, JSON.stringify(focusRoutes) === JSON.stringify(expectedRoutes), focusRoutes);
     check(`${mode}: 14リンクのfocus-visible可視`, visibleFocus, focus);

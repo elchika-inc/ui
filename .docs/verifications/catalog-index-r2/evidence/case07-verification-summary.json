@@ -1,5 +1,5 @@
 {
-  "executedAt": "2026-07-31T22:45:33.485Z",
+  "executedAt": "2026-07-31T22:57:59.020Z",
   "baseUrl": "http://127.0.0.1:3193",
   "expectedNames": [
     "badge",
@@ -281,6 +281,50 @@
       "name": "light: 対象origin外responseなし",
       "pass": true,
       "actual": []
+    },
+    {
+      "name": "light: network responseがindexと全routeを観測",
+      "pass": true,
+      "actual": {
+        "expected": [
+          "/",
+          "/catalog/",
+          "/catalog-dark/",
+          "/preview/badge/",
+          "/preview/badge-dark/",
+          "/preview/button/",
+          "/preview/button-dark/",
+          "/preview/dialog/",
+          "/preview/dialog-dark/",
+          "/preview/input/",
+          "/preview/input-dark/",
+          "/preview/sonner/",
+          "/preview/sonner-dark/",
+          "/preview/tabs/",
+          "/preview/tabs-dark/"
+        ],
+        "observed": [
+          "/",
+          "/_astro/geist-latin-wght-normal.BgDaEnEv.woff2",
+          "/_astro/global.QTRiE9O7.css",
+          "/catalog-dark/",
+          "/catalog/",
+          "/favicon.svg",
+          "/preview/badge-dark/",
+          "/preview/badge/",
+          "/preview/button-dark/",
+          "/preview/button/",
+          "/preview/dialog-dark/",
+          "/preview/dialog/",
+          "/preview/input-dark/",
+          "/preview/input/",
+          "/preview/sonner-dark/",
+          "/preview/sonner/",
+          "/preview/tabs-dark/",
+          "/preview/tabs/"
+        ],
+        "missing": []
+      }
     },
     {
       "name": "light: 横スクロールなし",
@@ -731,6 +775,50 @@
       "name": "forced-dark: 対象origin外responseなし",
       "pass": true,
       "actual": []
+    },
+    {
+      "name": "forced-dark: network responseがindexと全routeを観測",
+      "pass": true,
+      "actual": {
+        "expected": [
+          "/",
+          "/catalog/",
+          "/catalog-dark/",
+          "/preview/badge/",
+          "/preview/badge-dark/",
+          "/preview/button/",
+          "/preview/button-dark/",
+          "/preview/dialog/",
+          "/preview/dialog-dark/",
+          "/preview/input/",
+          "/preview/input-dark/",
+          "/preview/sonner/",
+          "/preview/sonner-dark/",
+          "/preview/tabs/",
+          "/preview/tabs-dark/"
+        ],
+        "observed": [
+          "/",
+          "/_astro/geist-latin-wght-normal.BgDaEnEv.woff2",
+          "/_astro/global.QTRiE9O7.css",
+          "/catalog-dark/",
+          "/catalog/",
+          "/favicon.svg",
+          "/preview/badge-dark/",
+          "/preview/badge/",
+          "/preview/button-dark/",
+          "/preview/button/",
+          "/preview/dialog-dark/",
+          "/preview/dialog/",
+          "/preview/input-dark/",
+          "/preview/input/",
+          "/preview/sonner-dark/",
+          "/preview/sonner/",
+          "/preview/tabs-dark/",
+          "/preview/tabs/"
+        ],
+        "missing": []
+      }
     },
     {
       "name": "forced-dark: 横スクロールなし",

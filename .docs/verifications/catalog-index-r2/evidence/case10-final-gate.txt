@@ -1,10 +1,14 @@
-final_gate_datetime=2026-08-01T07:47:56+09:00
-commit=6b3e8046b8a422f87379c56bf2cbe5f10d394a6f
+final_gate_datetime=2026-08-01T07:58:57+09:00
+commit=71ade34f3a14e3af19cdaa8100d7fc4552aed4ba
 case01-light_responses=18
+case01-light_required_paths=15
+case01-light_missing_paths=0
 case01-light_outside_origin=0
 case02-forced-dark_responses=18
+case02-forced-dark_required_paths=15
+case02-forced-dark_missing_paths=0
 case02-forced-dark_outside_origin=0
-summary_checks=37/37
+summary_checks=39/39
 console_errors=0/0
 link_http_checks=14/14_each_mode
 evidence_files=31

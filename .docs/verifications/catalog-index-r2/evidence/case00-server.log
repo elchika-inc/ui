@@ -1,77 +1,77 @@
  INFO  Accepting connections at http://localhost:3193
- HTTP  8/1/2026 7:45:21 AM 127.0.0.1 GET /
- HTTP  8/1/2026 7:45:21 AM 127.0.0.1 Returned 200 in 6 ms
- HTTP  8/1/2026 7:45:29 AM 127.0.0.1 GET /
- HTTP  8/1/2026 7:45:29 AM 127.0.0.1 Returned 200 in 4 ms
- HTTP  8/1/2026 7:45:29 AM 127.0.0.1 GET /_astro/global.QTRiE9O7.css
- HTTP  8/1/2026 7:45:29 AM 127.0.0.1 Returned 200 in 2 ms
- HTTP  8/1/2026 7:45:29 AM 127.0.0.1 GET /_astro/geist-latin-wght-normal.BgDaEnEv.woff2
- HTTP  8/1/2026 7:45:29 AM 127.0.0.1 Returned 200 in 2 ms
- HTTP  8/1/2026 7:45:29 AM 127.0.0.1 GET /favicon.svg
- HTTP  8/1/2026 7:45:29 AM 127.0.0.1 Returned 200 in 1 ms
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 GET /catalog/
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 GET /catalog-dark/
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 GET /preview/badge/
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 GET /preview/badge-dark/
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 GET /preview/button/
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 GET /preview/button-dark/
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 Returned 200 in 1 ms
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 Returned 200 in 2 ms
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 Returned 200 in 1 ms
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 Returned 200 in 1 ms
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 Returned 200 in 0 ms
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 Returned 200 in 1 ms
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 GET /preview/dialog/
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 GET /preview/dialog-dark/
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 GET /preview/input/
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 GET /preview/input-dark/
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 GET /preview/sonner/
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 GET /preview/sonner-dark/
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 Returned 200 in 2 ms
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 Returned 200 in 2 ms
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 Returned 200 in 1 ms
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 Returned 200 in 1 ms
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 Returned 200 in 1 ms
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 Returned 200 in 1 ms
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 GET /preview/tabs/
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 GET /preview/tabs-dark/
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 Returned 200 in 1 ms
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 Returned 200 in 1 ms
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 GET /
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 Returned 200 in 0 ms
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 GET /_astro/global.QTRiE9O7.css
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 Returned 200 in 1 ms
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 GET /_astro/geist-latin-wght-normal.BgDaEnEv.woff2
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 Returned 200 in 1 ms
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 GET /favicon.svg
- HTTP  8/1/2026 7:45:31 AM 127.0.0.1 Returned 200 in 1 ms
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 GET /catalog/
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 GET /catalog-dark/
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 GET /preview/badge/
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 GET /preview/badge-dark/
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 GET /preview/button/
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 GET /preview/button-dark/
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 Returned 200 in 0 ms
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 Returned 200 in 0 ms
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 Returned 200 in 0 ms
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 Returned 200 in 0 ms
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 Returned 200 in 0 ms
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 Returned 200 in 1 ms
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 GET /preview/dialog/
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 GET /preview/dialog-dark/
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 Returned 200 in 0 ms
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 GET /preview/input/
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 GET /preview/input-dark/
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 GET /preview/sonner/
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 Returned 200 in 1 ms
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 Returned 200 in 1 ms
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 Returned 200 in 1 ms
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 GET /preview/sonner-dark/
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 Returned 200 in 1 ms
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 Returned 200 in 0 ms
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 GET /preview/tabs/
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 GET /preview/tabs-dark/
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 Returned 200 in 0 ms
- HTTP  8/1/2026 7:45:32 AM 127.0.0.1 Returned 200 in 0 ms
+ HTTP  8/1/2026 7:57:48 AM 127.0.0.1 GET /
+ HTTP  8/1/2026 7:57:48 AM 127.0.0.1 Returned 200 in 6 ms
+ HTTP  8/1/2026 7:57:55 AM 127.0.0.1 GET /
+ HTTP  8/1/2026 7:57:55 AM 127.0.0.1 Returned 200 in 3 ms
+ HTTP  8/1/2026 7:57:55 AM 127.0.0.1 GET /_astro/global.QTRiE9O7.css
+ HTTP  8/1/2026 7:57:55 AM 127.0.0.1 Returned 200 in 2 ms
+ HTTP  8/1/2026 7:57:55 AM 127.0.0.1 GET /_astro/geist-latin-wght-normal.BgDaEnEv.woff2
+ HTTP  8/1/2026 7:57:55 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:55 AM 127.0.0.1 GET /favicon.svg
+ HTTP  8/1/2026 7:57:55 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 GET /catalog/
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 GET /catalog-dark/
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 GET /preview/badge/
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 GET /preview/badge-dark/
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 GET /preview/button/
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 GET /preview/button-dark/
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 Returned 200 in 0 ms
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 GET /preview/dialog/
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 GET /preview/dialog-dark/
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 GET /preview/input/
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 GET /preview/input-dark/
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 GET /preview/sonner/
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 GET /preview/sonner-dark/
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 Returned 200 in 2 ms
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 Returned 200 in 0 ms
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 Returned 200 in 2 ms
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 GET /preview/tabs/
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 GET /preview/tabs-dark/
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:56 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:57 AM 127.0.0.1 GET /
+ HTTP  8/1/2026 7:57:57 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:57 AM 127.0.0.1 GET /_astro/global.QTRiE9O7.css
+ HTTP  8/1/2026 7:57:57 AM 127.0.0.1 Returned 200 in 0 ms
+ HTTP  8/1/2026 7:57:57 AM 127.0.0.1 GET /_astro/geist-latin-wght-normal.BgDaEnEv.woff2
+ HTTP  8/1/2026 7:57:57 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:57 AM 127.0.0.1 GET /favicon.svg
+ HTTP  8/1/2026 7:57:57 AM 127.0.0.1 Returned 200 in 0 ms
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 GET /catalog/
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 GET /catalog-dark/
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 GET /preview/badge/
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 GET /preview/badge-dark/
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 GET /preview/button/
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 GET /preview/button-dark/
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 Returned 200 in 2 ms
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 GET /preview/dialog/
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 GET /preview/dialog-dark/
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 GET /preview/input/
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 GET /preview/input-dark/
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 GET /preview/sonner/
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 GET /preview/sonner-dark/
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 Returned 200 in 0 ms
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 GET /preview/tabs/
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 GET /preview/tabs-dark/
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 Returned 200 in 1 ms
+ HTTP  8/1/2026 7:57:58 AM 127.0.0.1 Returned 200 in 1 ms
 
  INFO  Gracefully shutting down. Please wait...
