@@ -2,6 +2,8 @@
 
 検証した commit: `f8f3424d9418c61dd5b35d7677bd7f1d4237694b`
 
+保存時の実体が JPEG だったため拡張子を実体に合わせた。画像の byte は撮影時のまま。
+
 ## 検証条件
 
 - 配信: `npx serve dist -l 3012`
@@ -15,10 +17,10 @@
 
 | route / theme | screenshot | console | network | DOM / a11y | keyboard / focus ring | theme token | 崩れ |
 |---|---|---|---|---|---|---|---|
-| `/preview/badge/` light | ✅ `badge-preview-light.png` | ✅ error / warning 0件 | ✅ 失敗・4xx / 5xx 0件 | ✅ `generic` 5個。「公開中」「下書き」「停止中」「審査待ち」「任意」 | N/A（focusable 0個） | ✅ body `oklch(1 0 0)` | ✅ 横scrollなし、5要素すべて 42–66 × 20 px、文字色≠背景色 |
-| `/preview/badge/` forced-dark | ✅ `badge-preview-light-forced-dark.png` | ✅ error / warning 0件 | ✅ 同一読込済みsubresourceに失敗なし | ✅ `generic` 5個、名前はlightと同一 | N/A（focusable 0個） | ✅ body `oklch(0.145 0 0)` | ✅ 横scrollなし、5要素すべて 42–66 × 20 px、文字色≠背景色 |
-| `/preview/badge-dark/` forced-light | ✅ `badge-preview-dark-forced-light.png` | ✅ error / warning 0件 | ✅ 失敗・4xx / 5xx 0件 | ✅ `generic` 5個、名前はlightと同一 | N/A（focusable 0個） | ✅ body `oklch(1 0 0)` | ✅ 横scrollなし、5要素すべて 42–66 × 20 px、文字色≠背景色 |
-| `/preview/badge-dark/` dark | ✅ `badge-preview-dark.png` | ✅ error / warning 0件 | ✅ 同一読込済みsubresourceに失敗なし | ✅ `generic` 5個、名前はlightと同一 | N/A（focusable 0個） | ✅ body `oklch(0.145 0 0)` | ✅ 横scrollなし、5要素すべて 42–66 × 20 px、文字色≠背景色 |
+| `/preview/badge/` light | ✅ `badge-preview-light.jpg` | ✅ error / warning 0件 | ✅ 失敗・4xx / 5xx 0件 | ✅ `generic` 5個。「公開中」「下書き」「停止中」「審査待ち」「任意」 | N/A（focusable 0個） | ✅ body `oklch(1 0 0)` | ✅ 横scrollなし、5要素すべて 42–66 × 20 px、文字色≠背景色 |
+| `/preview/badge/` forced-dark | ✅ `badge-preview-light-forced-dark.jpg` | ✅ error / warning 0件 | ✅ 同一読込済みsubresourceに失敗なし | ✅ `generic` 5個、名前はlightと同一 | N/A（focusable 0個） | ✅ body `oklch(0.145 0 0)` | ✅ 横scrollなし、5要素すべて 42–66 × 20 px、文字色≠背景色 |
+| `/preview/badge-dark/` forced-light | ✅ `badge-preview-dark-forced-light.jpg` | ✅ error / warning 0件 | ✅ 失敗・4xx / 5xx 0件 | ✅ `generic` 5個、名前はlightと同一 | N/A（focusable 0個） | ✅ body `oklch(1 0 0)` | ✅ 横scrollなし、5要素すべて 42–66 × 20 px、文字色≠背景色 |
+| `/preview/badge-dark/` dark | ✅ `badge-preview-dark.jpg` | ✅ error / warning 0件 | ✅ 同一読込済みsubresourceに失敗なし | ✅ `generic` 5個、名前はlightと同一 | N/A（focusable 0個） | ✅ body `oklch(0.145 0 0)` | ✅ 横scrollなし、5要素すべて 42–66 × 20 px、文字色≠背景色 |
 
 ## network 実測
 
