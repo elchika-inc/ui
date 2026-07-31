@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 
 before(() => {
-  execFileSync("npm", ["run", "build:site"], { cwd: root, stdio: "pipe" });
+  execFileSync("npm", ["run", "build"], { cwd: root, stdio: "pipe" });
 });
 
 const componentNames = () =>
