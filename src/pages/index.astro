@@ -1,17 +1,43 @@
 ---
-import { Button } from "@/components/ui/button";
 import Layout from "@/layouts/main.astro";
 ---
 
 <Layout>
-  <div class="flex min-h-svh p-6">
-    <div class="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-      <div>
-        <h1 class="font-medium">Project ready!</h1>
-        <p>You may now add components and start building.</p>
-        <p>We've already added the button component for you.</p>
-        <Button client:load className="mt-2">Button</Button>
-      </div>
+  <main class="min-h-svh bg-background px-6 py-12 text-foreground">
+    <div class="mx-auto flex max-w-2xl flex-col gap-8">
+      <header class="flex flex-col gap-3">
+        <h1 class="text-3xl font-semibold tracking-tight">elchika-inc/ui</h1>
+        <p class="text-muted-foreground">
+          elchika-inc の共有 UI コンポーネントです。Base UI と Tailwind CSS v4 を使い、shadcn
+          registry で配布します。
+        </p>
+      </header>
+
+      <nav aria-labelledby="preview-heading">
+        <h2 id="preview-heading" class="text-lg font-medium">隔離プレビュー</h2>
+        <ul class="mt-3 flex flex-col gap-2">
+          <li>
+            <a
+              class="text-primary underline underline-offset-4 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring"
+              href="/preview/button/"
+            >
+              Button — light
+            </a>
+          </li>
+          <li>
+            <a
+              class="text-primary underline underline-offset-4 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring"
+              href="/preview/button-dark/"
+            >
+              Button — dark
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <p class="text-sm text-muted-foreground">
+        本格的なカタログはサブプロジェクト #3 で構築します。
+      </p>
     </div>
-  </div>
+  </main>
 </Layout>
