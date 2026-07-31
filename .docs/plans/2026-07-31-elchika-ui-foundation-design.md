@@ -10,7 +10,7 @@
 
 | 項目 | 決定 | 根拠 |
 |---|---|---|
-| リポジトリ | `elchika-inc/ui`（public・新規作成） | 利用者は両 org のプロダクト（elchika-inc/manako 等、naoto24kawa/tools 等） |
+| リポジトリ | `elchika-inc/ui`（public・新規作成） | 利用者は両 org のプロダクト（elchika-inc/tools 等、naoto24kawa/miseru 等） |
 | 基底層 | Base UI `@base-ui/react`（MIT） | 実測 §7-1 |
 | コンポーネント生成 | shadcn CLI v4 の `--base base` | 実測 §7-2 |
 | 配布 | **shadcn custom registry 単独**（静的 JSON）。npm publish しない | DESIGN.md §2 のコピー所有モデルと整合。PRODUCT_PLAYBOOK §15 の「公開は取り消せない」制約を負わない |

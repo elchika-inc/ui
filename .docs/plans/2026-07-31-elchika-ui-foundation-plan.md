@@ -28,6 +28,18 @@
 - **合否を判定するコマンドを `&&` で連結しない**。exit code が最後のコマンドのものになり、途中の失敗が消えるため、1 ステップにつき合否判定は 1 つにする
 - **pipe は「判定したいコマンドが最後段にある場合」に限り使ってよい**。`sed ... | grep -c ...` は合否を決めるのが最後段の `grep` なので可。逆に `build 2>&1 | tail` のように**判定したいコマンドが前段にある形は禁止**（`tail` の exit code が返り、ビルドの失敗が消える）。前段の結果が要るときはファイルへリダイレクトしてから読む
 - **テストの実行形は `node --test "scripts/*.test.mjs"`**。`node --test scripts/` のように裸のディレクトリを渡さない。Node は指定を glob pattern として扱うため `scripts` というモジュールを実行しようとして必ず失敗する（実測）。さらに glob が 0 件一致でも `tests 0` / **exit 0** になる（実測）ため、**出力の `tests N` が 1 以上であること**で走ったことを確かめる。**テストファイルの本数を定数で書かない**（足すたびにずれる）
+- **他所で定義された列挙の件数を Expected に書かない（本計画で 5 回破って 5 回とも壊れた）**。危険なのは「**その数を決めている定義が別の場所にある**」場合だけ。例: CI のステップ数（workflow で定義）、registry の `files` 数（`registry.json` で定義）、テストファイル数（各 Task で追加）。1 つ足した瞬間に参照側がずれる。こういうものは「`Run:` 行すべて」「出力に含まれる名前」で指定し、**検査スクリプトの出力にも件数を含めない**（Expected に転記されて同じ穴が開く）。
+  - **同じ Step の中で数が決まっているものは書いてよい**。例: `THIRD_PARTY_LICENSES` の `Source:` が 2 本（同じスクリプトの `SOURCES` が 2 件）、`.docs/plans` が 2 件（同じ Step で 2 つコピーする）、負の検査の `0` 件。これらは他所の変更で勝手にずれない
+  - **外部の生成物に由来する件数は Expected でなく参考値として書く**。例: scaffold が出す違反件数、テストの pass 件数。Expected は「exit 0 / exit 1」と「出力に含まれる文字列」で書き、件数は「本計画の作成時点の実測値」と添える
+- **Task 4 以降、ファイルを新規作成・変更した Task は、コミットする前に `npm run format` を実行し、`npm run lint` が exit 0 になることを確認する**。Task 4 で biome へ移行した時点の整形は、その後に足したファイルへ効かない。放置すると Task 10 の CI（`biome check .`）が必ず落ちる。**各 Task のコミット手順の直前に置く**:
+
+  ```bash
+  npm run format
+  npm run lint
+  ```
+
+  `npm run lint` が exit 0 にならなければコミットしない。
+- **ローカルの残存生成物が失敗を隠す**。`lib/` `dist/` `public/r/` `node_modules/` は前の Task が作ったものが残っており、fresh checkout の CI では存在しない。**「ローカルで通った」を CI が通る根拠にしない。** 生成物に依存しうる検証（型検査・ビルド・配布物検査）は、対象を消してから実行して確かめる
 - **コミットは作業ブランチへ行い、main へ直接コミットしない**（DOCS_OPS §5）
 
 ## File Structure
@@ -401,6 +413,8 @@ autonomy: manual
 - **PR CI を build-check だけに絞らない** — DOCS_OPS §6 の役割分担は「PR はビルドチェックのみ。lint / fmt / test はスキップ。フルセットは main push の Deploy job」と定めている。本リポジトリはこれを**意図的に逸脱**し、PR CI でフルセットを走らせる。理由は次のとおり。①§6 の分担は `vp check` がローカルの一次責任者であることを前提にしているが、本リポジトリに `vp` は存在せず、コミット前ゲートも無い。PR で lint / test を飛ばすと、それらは人間のマージ後まで一度も走らない。②本リポジトリは配布物を持つが `main` push で deploy する対象を #1 の時点で持たない（Cloudflare 配信はサブプロジェクト #3）。フルセットを main push に置くと、唯一の実行機会が human-gate の**後**になり、マージ判断の材料にならない。代償として PR ごとの Actions 実行時間が増える。#3 で deploy が入った時点で、§6 の分担へ寄せられるかを再評価する
 - **検証スクリーンショットを PR へ直接添付せず、リポジトリへコミットする** — AI_FIRST §2 は「スクリーンショットは PR への直接添付を正本とする」としているが、GitHub の添付アップロードは Web UI 経由でしか行えず、CLI で作業するエージェントからは実行できない。代わりに `.docs/reviews/` へコミットし、PR 本文からは**画像を含むコミットの SHA に固定した permalink** で参照する（`https://github.com/elchika-inc/ui/blob/<commit-sha>/.docs/reviews/<file>.png?raw=1`）。**ブランチ名を含む URL を使わない** — `feat/foundation` はマージ後に削除され、その時点で証跡が 404 になる。ブランチ ref は可変なので内容の同一性も保証しない。SHA 固定なら §2 が求める性質（インライン表示・マージ後も参照可能・TTL 無し・改ざん不可）をすべて満たす。public リポジトリのため、証跡に機微情報を写り込ませないことを条件とする
 - **実ブラウザ検証を別 worktree で行わない** — AI_FIRST §2 手順 1 は clean worktree を切ることを求めるが、その目的は「オーナーの作業ツリーを汚さない」ことと「DB を共有しない」ことの 2 つ。本リポジトリは Task 1 がこのタスク自身で作成したものであり、守るべき別の作業ツリーが存在しない。DB も持たない（`dev-data-safety: local`）。代わりに §2 の実質的な要求である「PR に入るコードを検証する」を、**実装を先にコミットしてから、その SHA でビルドして検証し、SHA を証跡へ記録する**ことで満たす（Task 9 Step 7・11）
+- **GitHub Actions を可変タグで参照する** — `actions/checkout@v4` と `actions/setup-node@v4` はタグであり、同じ参照が別のコードを指しうる（supply-chain risk）。commit SHA で pin する方が堅い。**それでも pin しない理由**は 3 つ。①standards の `templates/.github/workflows/ci.yml` が `@v4` を使っており、ここだけ変えると 1 リポジトリだけ運用が分岐する ②本 workflow は `permissions: contents: read` のみで secrets を一切使わないため、侵害された action が持ち出せるものが無い（DOCS_OPS §6 の信頼境界を満たしている）③pin は自動更新の仕組みとセットでないと陳腐化し、CVE 対応が遅れる。**SHA pin を採用するかは standards レベルで一度決めるべき事項**であり、本サブプロジェクトで先行して分岐させない。anchor: standards 側へ Action Queue の項目として提起し、そこで決まった方針に従う
+- **利用者の既存トークンを上書きできない** — shadcn の CSS 更新は `overwriteCssVars` が既定 `false` で、利用者側に同名の宣言が既にあれば**何もしない**（実装を実読・実測で確認）。したがって registry からトークン値を強制適用することはできない。対策として全トークンの正本を `~/elchika-ui/tokens.css` として配り、README で「elchika の見た目を共有するには自分の CSS から最後に `@import` する」と案内する。**採用するかどうかは利用者の判断になる**。既定値を持たない新規キー（`--success` / `--warning` とその foreground）は `cssVars` で自動的に足される。anchor: 利用者側プロジェクトのビルド出力に elchika のトークン値が現れるかを、#2 以降で実際に取り込むときに確認する
 - **（Task 3 Step 4b の実測結果しだいで足す）`--warning` × `--warning-foreground` が WCAG AA を満たさないまま取り込む** — この 1 件だけは**ここで書かない**。トークンを取り込むのは Task 3 であり、比が 4.5:1 に届くかどうかはその時点の standards の実値で決まる。**Task 3 Step 4b が FAIL を観測したときにだけ、そこで追記する。** 本計画の作成時点（2026-07-31）の実測は 3.919:1 で FAIL であり、standards 側にも `.docs/actions/next-session-warning-foreground-contrast.md` として記録がある。したがって通常はこのエントリが 1 件足され、`.docs/risk-registry.md` には Task 1 で書いた分とあわせて受容エントリが並ぶ（件数を他所から参照しない — 項目を足したときに参照側がずれるため）
 
 書式は DOCS_OPS §3 の受容エントリ規約に従い、ループ外の `anchor` を持たせる。
@@ -995,6 +1009,40 @@ test("透明度を合成したフォーカスリングを検出する", () => {
   assert.equal(violations[0].rule, "focus-ring-opacity")
 })
 
+test("色名に数字を含むリングも検出する", () => {
+  const { violations } = checkFile("a.tsx", `className="focus-visible:ring-red-500/50"`)
+  assert.equal(violations.length, 1)
+  assert.equal(violations[0].rule, "focus-ring-opacity")
+})
+
+test("角括弧・丸括弧の不透明度指定も検出する", () => {
+  for (const cls of [
+    "ring-red-500/[50%]", "ring-red-500/[.5]", "ring-ring/(--ring-alpha)",
+    // 色側の変数短縮・任意値。色を [a-z0-9-]+ だけにすると見逃す
+    "ring-(--brand)/50", "ring-[#f00]/50",
+  ]) {
+    const { violations } = checkFile("a.tsx", `className="focus-visible:${cls}"`)
+    // **件数で判定しない。** `ring-[#f00]/50` のように 2 つの規定へ同時に
+    // 違反するクラスがあり、そのとき 2 件出るのが正しい（任意値であり、かつ
+    // 透明度合成でもある）。ここで見たいのは「focus-ring-opacity として
+    // 検出されること」なので、rule の有無で判定する。
+    assert.ok(
+      violations.some((v) => v.rule === "focus-ring-opacity"),
+      `${cls}: focus-ring-opacity として検出されない`,
+    )
+  }
+})
+
+test("2 規定へ同時に違反するクラスは 2 診断とも出す", () => {
+  // ring-[#f00]/50 は任意値であり、かつ透明度合成でもある。
+  // focus-ring-opacity だけを assert すると、ARBITRARY 側が
+  // ring-[#f00] を検出しなくなる回帰を素通りさせる。両方を固定する。
+  const { violations } = checkFile("a.tsx", `className="focus-visible:ring-[#f00]/50"`)
+  const rules = new Set(violations.map((v) => v.rule))
+  assert.ok(rules.has("focus-ring-opacity"), "focus-ring-opacity が無い")
+  assert.ok(rules.has("arbitrary-value"), "arbitrary-value が無い")
+})
+
 test("許可済み例外の ring-[3px] は違反にしない", () => {
   const { violations } = checkFile("a.tsx", `className="focus-visible:ring-[3px] focus-visible:ring-ring"`)
   assert.deepEqual(violations, [])
@@ -1066,7 +1114,15 @@ Expected: FAIL（`checkFile` が存在しない）
 import { readFileSync, globSync } from "node:fs"
 import { pathToFileURL } from "node:url"
 
-const RING_OPACITY = /\bring-(?:ring|[a-z-]+)\/\d+/g
+// 色名は [a-z0-9-]+（[a-z-]+ だと ring-red-500/50 を見逃す）。
+// 不透明度の指定は Tailwind v4 が 4 形式を受けるため全部拾う（実測で確認）:
+//   /50  /12.5  /[50%]  /[.5]  /(--ring-alpha)
+// \d+ だけだと角括弧・丸括弧の形式を見逃し、透明度禁止を迂回できる。
+// arbitrary 検査にも掛からないので、ここが唯一の検出経路になる。
+// 色側も v4 の変数短縮 ring-(--brand) と任意値 ring-[#f00] を拾う。
+// 色側を [a-z0-9-]+ だけにすると ring-(--brand)/50 を見逃す（実測）。
+const RING_OPACITY =
+  /\bring-(?:ring|[a-z0-9-]+|\([^)]+\)|\[[^\]]+\])\/(?:\d+(?:\.\d+)?%?|\[[^\]]+\]|\([^)]+\))/g
 
 // 値系ユーティリティだけを対象にする。プレフィックスの列挙は AUDIT.md の
 // arbitrary value 検査コマンドから逐語で写した。
@@ -1112,20 +1168,22 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
 - [ ] **Step 4: テストが通ることを確認する**
 
 Run: `node --test scripts/check-standards.test.mjs`
-Expected: PASS（9 テスト）。**`ℹ pass 9` を目視で確認する**。0 件でも exit 0 になるため（実測: 一致しない指定では `tests 0` / exit 0）、件数を見ないと「テストが 1 つも走らなかった」を成功と読み違える
+Expected: exit 0 かつ出力に `fail 0` があり、`tests` が **1 以上**であること。0 件一致でも `tests 0` / exit 0 になるため（実測）、`tests` の数を見ないと「テストが 1 つも走らなかった」を成功と読み違える。本計画の作成時点で書いたテストは 9 件（参考値。テストを足したらここは増える）
 
 - [ ] **Step 5: 検知が実際に走り、違反を出すことを確認する（ベースライン）**
 
 走査対象 0 件で素通りしていないことを、出力のファイル数で確かめる。
 
 Run: `node scripts/check-standards.mjs`
-Expected: **exit 1**。`src/components/ui/button.tsx` について、少なくとも次が列挙される（shadcn 4.16.0 の実生成物に対する実測値）。
+Expected: **exit 1**。`src/components/ui/button.tsx` について次が列挙される。件数は shadcn の生成物しだいで変わるため Expected にしない（本計画の作成時点の実測は 11 件 = `focus-ring-opacity` 5 + `arbitrary-value` 6）。
 
 | rule | 検出される文字列 |
 |---|---|
-| `focus-ring-opacity` | `ring-ring/50` |
-| `focus-ring-opacity` | `ring-destructive/20` |
-| `focus-ring-opacity` | `ring-destructive/40` |
+| `focus-ring-opacity` | `ring-ring/50`（base の行）|
+| `focus-ring-opacity` | `ring-destructive/20`（base の行）|
+| `focus-ring-opacity` | `ring-destructive/40`（base の行）|
+| `focus-ring-opacity` | `ring-destructive/20`（`destructive` variant の行）|
+| `focus-ring-opacity` | `ring-destructive/40`（`destructive` variant の行）|
 | `arbitrary-value` | `rounded-[min(var(--radius-md),10px)]`（2 箇所）|
 | `arbitrary-value` | `rounded-[min(var(--radius-md),12px)]`（2 箇所）|
 | `arbitrary-value` | `text-[0.8rem]` |
@@ -1168,6 +1226,13 @@ Expected: exit 1。違反が列挙される
 | `aria-invalid:ring-3 aria-invalid:ring-destructive/20` | `aria-invalid:ring-[3px] aria-invalid:ring-destructive` | 同上 |
 | `dark:aria-invalid:ring-destructive/40` | `dark:aria-invalid:ring-destructive` | 同上 |
 | `dark:aria-invalid:border-destructive/50` | `dark:aria-invalid:border-destructive` | 同じ透明度合成。`check-standards.mjs` は `ring-` しか見ないので**機械検知に出ない**。ここで手で直す |
+| `focus-visible:ring-destructive/20`（`destructive` variant の行）| `focus-visible:ring-destructive` | 同上。cva の `variants.variant.destructive` にも独立したフォーカスリングがある |
+| `dark:focus-visible:ring-destructive/40`（同上）| `dark:focus-visible:ring-destructive` | 同上 |
+| `focus-visible:border-destructive/40`（同上）| `focus-visible:border-destructive` | フォーカス表示の一部。`ring-` でないため機械検知に出ない。ここで手で直す |
+
+**背景色の透明度合成（`bg-destructive/10`・`hover:bg-destructive/20`・`dark:bg-destructive/20`・`dark:hover:bg-destructive/30`・`dark:hover:bg-muted/50`）は触らない。** DESIGN.md §5 が禁じているのはフォーカスリングのコントラストであり、背景の淡い着色は対象外。触ると destructive variant の見た目が壊れる。
+
+**検知される違反の件数は 11 件**（`focus-ring-opacity` 5 件 + `arbitrary-value` 6 件。shadcn 4.16.0 の実生成物に対する実測）。上の表が対応するのはそのうち機械検知に出る 5 件と、出ない 2 件（`border-*/NN`）。
 
 - [ ] **Step 3: 値系の arbitrary value を除去する**
 
@@ -1224,7 +1289,15 @@ Run: `grep -c 'ring-ring/50' src/components/ui/button.tsx`
 Run: `grep -c 'aria-invalid:ring-destructive/20' src/components/ui/button.tsx`
 Run: `grep -c 'aria-invalid:ring-destructive/40' src/components/ui/button.tsx`
 Run: `grep -c 'aria-invalid:border-destructive/50' src/components/ui/button.tsx`
+Run: `grep -c 'focus-visible:ring-destructive/20' src/components/ui/button.tsx`
+Run: `grep -c 'focus-visible:ring-destructive/40' src/components/ui/button.tsx`
+Run: `grep -c 'focus-visible:border-destructive/40' src/components/ui/button.tsx`
 Expected: すべて `0`
+
+背景の透明度合成が**残っている**ことも見る（消してしまうと destructive variant の見た目が壊れる）。
+
+Run: `grep -c 'bg-destructive/10' src/components/ui/button.tsx`
+Expected: `1` 以上
 
 - [ ] **Step 6: Base UI を参照していることを確認する**
 
@@ -1248,8 +1321,8 @@ git commit -m "fix: Button を DESIGN.md §5 へ適合させ props 型を export
 ### Task 7: ライブラリビルドを足す
 
 **Files:**
-- Create: `src/index.ts`、`tsup.config.ts`、`types/dts-contract.ts`
-- Modify: `package.json`、`package-lock.json`（`npm i -D tsup` が更新する）、`.gitignore`
+- Create: `src/index.ts`、`tsup.config.ts`、`tsconfig.lib.json`、`types/dts-contract.ts`
+- Modify: `package.json`、`package-lock.json`（`npm i -D tsup` が更新する）、`.gitignore`、`tsconfig.json`
 
 design-sync がビルド出力の `.d.ts` から props 契約を読む。ビルドがないと synth-entry モードになり props が `{ [key: string]: unknown }` に潰れることを実測で確認済み（design §7-4）。publish はしないため `private: true` は維持する。
 
@@ -1274,20 +1347,59 @@ npm i -D tsup
 
 `tsup.config.ts`:
 
+**`.d.ts` は tsup に作らせない。** tsup 8.5.1 の DTS ビルドは、tsconfig の内容に関わらず内部で `baseUrl` を注入する。TypeScript 6.0.3 はこれを `TS5101` のハードエラーにするため、**`dts: true` は必ず失敗する**（実測。`dts: { tsconfig: ... }` で別 tsconfig を渡しても、その tsconfig に `ignoreDeprecations: "6.0"` を書いても回避できなかった）。
+
+JS のバンドルは tsup、`.d.ts` は `tsc` に分担させる。
+
+`tsup.config.ts`:
+
 ```ts
 import { defineConfig } from "tsup"
 
 // 出力先は lib/。dist/ は Astro の outDir 既定値であり奪い合うと成果物が消える。
 // ESM のみ。CJS を出さないのは PRODUCT_PLAYBOOK §15 が警告する
 // exports マップの片側だけ壊れる失敗面を作らないため。
+//
+// dts: false — tsup 8.5.1 の DTS ビルドは baseUrl を内部注入し、
+// TypeScript 6 では TS5101 で必ず落ちる（実測）。.d.ts は tsc が作る。
 export default defineConfig({
   entry: ["src/index.ts"],
   outDir: "lib",
   format: ["esm"],
-  dts: true,
+  dts: false,
   external: ["react", "react-dom", "@base-ui/react"],
+  // esbuild は tsconfig の paths を自動では読まないため alias を明示する。
+  // これが無いと `@/lib/utils` を解決できず Build failed になる（実測）。
+  esbuildOptions(options) {
+    options.alias = { ...(options.alias ?? {}), "@": new URL("src/", import.meta.url).pathname }
+  },
 })
 ```
+
+`tsconfig.lib.json`（ライブラリビルド専用。Astro の設定と混ぜない — Astro 側は `noEmit` で `allowImportingTsExtensions` を使うため、宣言を出すビルドとは要件が違う）:
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "strict": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "rootDir": "./src",
+    "outDir": "lib",
+    "paths": { "@/*": ["./src/*"] }
+  },
+  "include": ["src/**/*"]
+}
+```
+
+`rootDir` は省略できない。無いと `TS5011` で落ちる（実測）。`paths` は tsconfig の位置基準で解決されるため `baseUrl` は不要。
 
 - [ ] **Step 3: `package.json` に script と exports を足し、`lib/` を gitignore する**
 
@@ -1298,13 +1410,23 @@ export default defineConfig({
     ".": { "types": "./lib/index.d.ts", "import": "./lib/index.js" },
     "./styles.css": "./src/styles/global.css"
   },
-  "scripts": { "build:lib": "tsup" }
+  "scripts": { "build:lib": "tsup && tsc -p tsconfig.lib.json" }
 }
 ```
 
 **トップレベルの `types` は省略できない。** design-sync は型の入口を `pj.types || pj.typings || 'index.d.ts'` の順で解決し、**`exports['.'].types` を読まない**（`lib/dts.mjs:90` を実読して確認）。`exports` にだけ書くと、`lib/index.d.ts` が実在してもルートの存在しない `index.d.ts` を見に行き、export 名の集合が空になる。`lib/index.js` は在るので synth-entry にも入らず、**コンポーネントを 1 件も発見できないまま `[ZERO_MATCH]` で停止する**。#1 の目的が達成されない。
 
 `.gitignore` に `lib/` を追加する。
+
+**`tsconfig.json` の `exclude` に `types` と `lib` を足す。**
+
+```json
+{ "exclude": ["dist", "lib", "types"] }
+```
+
+理由は 2 つ。①`types/dts-contract.ts` は `../lib/index.js` を import するが、`lib/` は**ビルド生成物**なので fresh checkout には存在しない。`astro check`（= `npm run typecheck`）がこのファイルまで検査すると、ライブラリを先にビルドしていない環境で `TS2307` になる。②`lib/` 自体もビルド生成物であり型検査の対象ではない。
+
+契約テストは Task 7 Step 6 が専用のフラグ（`--ignoreConfig` ほか）で単独実行する。`astro check` と二重に検査する必要はなく、二重にすると**ビルド順序への依存が生まれる**。
 
 - [ ] **Step 4: ビルドする**
 
@@ -1344,8 +1466,23 @@ const invalid: ButtonProps["variant"] = "存在しない variant"
 export { variant, size, invalid }
 ```
 
-Run: `npx tsc --noEmit --strict --module esnext --moduleResolution bundler --target es2022 --jsx react-jsx types/dts-contract.ts`
+Run: `npx tsc --noEmit --ignoreConfig --strict --module esnext --moduleResolution bundler --target es2022 --jsx react-jsx types/dts-contract.ts`
 Expected: exit 0、出力なし
+
+- [ ] **Step 6c: `lib/` が無い状態でも `typecheck` が通ることを確認する**
+
+**ローカルには前の Task が作った `lib/` が残っているため、この結合は手元では見えない。** CI は fresh checkout なので、`typecheck` が `types/dts-contract.ts` を検査すると `TS2307` で落ちる。消してから確かめる。
+
+```bash
+rm -rf lib
+```
+
+Run: `npm run typecheck`
+Expected: exit 0（`tsconfig.json` の `exclude` に `types` と `lib` が入っていれば通る）
+
+```bash
+npm run build:lib
+```
 
 **失敗の読み分け**（どちらも「潰れている」を意味するので Task 6 の props 型 export とライブラリビルド設定へ戻る）:
 
@@ -1366,7 +1503,7 @@ Expected: どちらも exit 0（Astro のビルド後もライブラリ出力が
 - [ ] **Step 8: コミットする**
 
 ```bash
-git add src/index.ts tsup.config.ts types/dts-contract.ts package.json package-lock.json .gitignore
+git add src/index.ts tsup.config.ts tsconfig.lib.json types/dts-contract.ts package.json package-lock.json .gitignore tsconfig.json
 git commit -m "feat: design-sync 用にライブラリビルドを足し props 契約を型で固定する"
 ```
 
@@ -1379,13 +1516,15 @@ git commit -m "feat: design-sync 用にライブラリビルドを足し props �
 - Modify: `package.json`
 
 **Interfaces:**
-- Produces: `public/r/button.json`（`files` に Button と法務ファイル 2 件を含む）、`public/r/LICENSE`、`public/r/THIRD_PARTY_LICENSES`（直接 URL 取得用の補助）
+- Produces: `public/r/button.json`（`files` に Button・`tokens.css`・法務ファイルを含む）、`public/r/LICENSE`、`public/r/THIRD_PARTY_LICENSES`（直接 URL 取得用の補助）
 
 - [ ] **Step 1: `registry.json` を書く**
 
 **法務ファイルを item の `files` に入れる。** PRODUCT_PLAYBOOK §15 は「配布物そのものに同梱する。リポジトリのルートに置くだけでは要件を満たさない」と定めている。registry における「配布物」とは `npx shadcn add` が利用者の手元へ**書き込むもの**であり、それは item の `files` に列挙されたものだけ。`public/r/` にファイルを並べても、URL で取れるだけで install されない。
 
 `registry:file` 型は `target`（利用者側の書き込み先）が**必須**（shadcn 4.16.0 の schema を実読して確認）。`target` を `LICENSE` にすると利用者自身の `LICENSE` を上書きするため、名前空間を切った配下へ置く。
+
+**`~/` を付ける。** shadcn は `target` が `~/` で始まるときだけプロジェクトルート基準で解決し、付けないと `src/` 配下へ書き込む（実装を実読して確認。実測でも `elchika-ui/LICENSE` は `src/elchika-ui/LICENSE` になった）。法務ファイルは利用者が見つけられる位置に置きたいので、ルート直下の `elchika-ui/` に置く。
 
 ```json
 {
@@ -1401,8 +1540,9 @@ git commit -m "feat: design-sync 用にライブラリビルドを足し props �
       "description": "Button component.",
       "files": [
         { "path": "src/components/ui/button.tsx", "type": "registry:ui" },
-        { "path": "LICENSE", "type": "registry:file", "target": "elchika-ui/LICENSE" },
-        { "path": "THIRD_PARTY_LICENSES", "type": "registry:file", "target": "elchika-ui/THIRD_PARTY_LICENSES" }
+        { "path": "src/styles/global.css", "type": "registry:file", "target": "~/elchika-ui/tokens.css" },
+        { "path": "LICENSE", "type": "registry:file", "target": "~/elchika-ui/LICENSE" },
+        { "path": "THIRD_PARTY_LICENSES", "type": "registry:file", "target": "~/elchika-ui/THIRD_PARTY_LICENSES" }
       ],
       "dependencies": ["@base-ui/react", "class-variance-authority"]
     }
@@ -1416,7 +1556,22 @@ git commit -m "feat: design-sync 用にライブラリビルドを足し props �
 
 **コードを配ってもトークンを配らなければ「同じ見た目」にならない。** registry item が配るのは `button.tsx` と法務ファイルだけで、`src/styles/global.css` の値は利用者へ届かない。利用者は自分の `components.json` が持つ既定トークンで描画するため、**コードは同じでも elchika の共有デザインにならない**。`package.json` の `./styles.css` export は npm publish しない設計なので、registry 利用者の取得経路にならない。
 
-shadcn の registry item は `cssVars.light` / `cssVars.dark` を受け付ける（ローカルの shadcn 4.16.0 の型定義で確認）。`global.css` から機械的に生成して `registry.json` へ流し込む。**手で写さない**（写した値は CSS が変わっても据え置きになる。round 5 で同じ穴を踏んでいる）。
+**`cssVars` だけでは届かない。** shadcn の CSS 更新は `overwriteCssVars` が既定 `false` で、実装は次のようになっている（4.16.0 を実読）。
+
+```js
+overwriteCssVars ? (d ? d.replaceWith(u) : c?.append(u)) : (d || c?.append(u))
+```
+
+`d` は利用者側の既存宣言。**既存の宣言があれば何もしない**（新規キーだけ追加される）。実測でも、probe に既に存在する `--muted-foreground` / `--destructive` / `--chart-1..5` は elchika の値に置き換わらなかった。`shadcn add --overwrite` はファイルの上書き用で、これには効かない。
+
+そこで**2 系統で配る**。
+
+1. **`cssVars`** — 利用者側に存在しないキー（`--success` / `--warning` とその foreground など）はこれで追加される
+2. **`tokens.css` を `registry:file` として配る** — 全トークンの正本。利用者は自分の CSS から**最後に** `@import` して採用する
+
+利用者が既定値を持っている場合、どちらを採るかは利用者の判断になる。**こちらから強制はできない**ため、README に「elchika の見た目を共有するには `tokens.css` を import する」と明記する。
+
+`cssVars` は `global.css` から機械的に生成して `registry.json` へ流し込む。**手で写さない**（写した値は CSS が変わっても据え置きになる。round 5 で同じ穴を踏んでいる）。
 
 `scripts/sync-registry-tokens.mjs`:
 
@@ -1554,7 +1709,7 @@ export function checkDistribution(item, origin) {
     if (!e) { problems.push(`${name}: registry item の files に無い（install されない）`); continue }
     if (e.type !== "registry:file") { problems.push(`${name}: type が registry:file でない`); continue }
     if (!e.content) { problems.push(`${name}: content が空`); continue }
-    if (e.content !== origin[name]) { problems.push(`${name}: 原本と内容が一致しない`); continue }
+    if (e.content !== origin[name]) { problems.push(`${name}: 原本と内容が一致しない`) }
   }
   return { problems }
 }
@@ -1573,21 +1728,22 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     console.error(`配布物の検査に失敗:\n  ${problems.join("\n  ")}`)
     process.exit(1)
   }
-  console.log(`配布物 OK（${item.files.length} files / 法務ファイル ${REQUIRED.length} 件が原本と一致）`)
+  // 件数を出力に含めない。files が増えるたびに Expected とずれ、実際に 5 回ずれた。
+  console.log(`配布物 OK（${REQUIRED.join(" / ")} が原本と一致）`)
 }
 ```
 
 - [ ] **Step 6: テストが通ることを確認する**
 
 Run: `node --test scripts/check-distribution.test.mjs`
-Expected: PASS（5 テスト）。`ℹ pass 5` を目視で確認する
+Expected: exit 0 かつ `fail 0`、`tests` が 1 以上。本計画の作成時点で書いたテストは 5 件（参考値）
 
 - [ ] **Step 7: registry を出力して検査する**
 
 Run: `npm run registry:build`
 Run: `npm run registry:legal`
 Run: `node scripts/check-distribution.mjs`
-Expected: すべて exit 0。最後は `配布物 OK（3 files / 法務ファイル 2 件が原本と一致）` が出力される
+Expected: すべて exit 0。最後は `配布物 OK（LICENSE / THIRD_PARTY_LICENSES が原本と一致）` が出力される
 
 - [ ] **Step 7b: 検査が「同梱漏れ」を実際に落とすことを確認する（sensor の空走ガード）**
 
@@ -1646,11 +1802,21 @@ Expected: exit 0（複合ビルドの順序が正しく、registry が配信物�
 
 ワークスペース内での確認を根拠にしない（PRODUCT_PLAYBOOK §15）。ローカル配信して外から引く。**削除は元のディレクトリへ戻ってから行う**（probe 内にいる状態で probe を消すと戻り先が消える）。
 
+**ポートを決め打ちしない。** 3001 は Docker 等に占有されていることがあり（実測で衝突を確認した）、`npx serve` は占有されていると**黙って別のポートを選ぶ**。その場合 `shadcn add` に渡す URL と実際の配信先がずれる。空きポートを先に選んで固定する。
+
 ```bash
 # export する。後続の node -e が process.env.UI_DIR で読むため、
 # shell 変数のままだと undefined になる。
 export UI_DIR="$(pwd)"
-npx serve public -l 3001 &
+
+# 空きポートを選ぶ。見つからなければ止める（勝手に別ポートで走らせない）。
+for p in 3011 3021 3031 3041; do
+  if ! lsof -nP -iTCP:$p -sTCP:LISTEN > /dev/null 2>&1; then export UI_PORT=$p; break; fi
+done
+test -n "$UI_PORT" || { echo "候補ポートがすべて使用中"; exit 1; }
+echo "使用するポート: $UI_PORT"
+
+npx serve public -l "$UI_PORT" &
 SERVE_PID=$!
 mkdir -p /tmp/registry-probe
 cd /tmp/registry-probe
@@ -1662,7 +1828,7 @@ cd probe
 # for you." と書いて Button を描画する）。--overwrite なしだと
 # 「Would you like to overwrite?」（初期値 No）が出て、非対話では skip される。
 # skip されると scaffold 由来の Button が残り、配布物の到達確認にならない。
-npx shadcn@latest add --overwrite http://127.0.0.1:3001/r/button.json
+npx shadcn@latest add --overwrite "http://127.0.0.1:$UI_PORT/r/button.json"
 ```
 
 Run: `grep -c 'ring-ring/50' src/components/ui/button.tsx`
@@ -1690,27 +1856,37 @@ Expected: exit 0（利用者自身の `LICENSE` を上書きする位置へ書�
 Run: `grep -c -- '--primary:' src/*.css src/**/*.css`
 Expected: `1` 以上
 
+**トークンの正本ファイルが届いていること**を見る。利用者の既存 CSS が上書きされることは期待しない（できないため）。
+
+Run: `test -s elchika-ui/tokens.css`
+Expected: exit 0
+
 Run:
 
 ```bash
 node -e '
-const fs = require("node:fs"), path = require("node:path")
-// probe 側の CSS を集めて、elchika のトークン値が入っているかを見る。
-const want = JSON.parse(fs.readFileSync(process.env.UI_DIR + "/registry.json", "utf8")).items[0].cssVars.light
-const files = []
-const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).forEach((e) => {
-  const f = path.join(d, e.name)
-  if (e.isDirectory()) walk(f); else if (f.endsWith(".css")) files.push(f)
-})
-walk("src")
-const all = files.map((f) => fs.readFileSync(f, "utf8")).join("\n")
-const missing = Object.entries(want).filter(([k, v]) => !all.includes(`--${k}: ${v}`))
-if (missing.length) { console.error(`届いていないトークン ${missing.length} 件: ${missing.slice(0, 5).map(([k]) => k).join(", ")}`); process.exit(1) }
-console.log(`${Object.keys(want).length} 個のトークンが利用者側へ届いている`)
+const fs = require("node:fs")
+// 届いた tokens.css が、配信元の :root と完全に一致することを見る。
+const parse = (t) => {
+  const m = t.match(/:root\s*\{([\s\S]*?)\n\}/)
+  if (!m) return null
+  return Object.fromEntries([...m[1].matchAll(/^\s*--([\w-]+):\s*([^;]+);/gm)].map(([, k, v]) => [k, v.trim()]))
+}
+const got = parse(fs.readFileSync("elchika-ui/tokens.css", "utf8"))
+const want = parse(fs.readFileSync(process.env.UI_DIR + "/src/styles/global.css", "utf8"))
+if (!got || !want) { console.error(":root を読めない"); process.exit(1) }
+const diff = Object.keys(want).filter((k) => got[k] !== want[k])
+if (diff.length) { console.error(`一致しないトークン ${diff.length} 件: ${diff.slice(0, 5).join(", ")}`); process.exit(1) }
+console.log(`${Object.keys(want).length} 個のトークンが正本と一致して届いている`)
 '
 ```
 
-Expected: `N 個のトークンが利用者側へ届いている` が出力され exit 0
+Expected: `N 個のトークンが正本と一致して届いている` が出力され exit 0
+
+**`cssVars` による新規キーの追加も確認する**（利用者に存在しなかったキーは実際に足される）。
+
+Run: `grep -rc -- '--success:' src/*.css`
+Expected: `1` 以上（`--success` は nova 既定に無いため `cssVars` で追加される）
 
 **probe 側が実際にビルドできることも見る。** ソース文字列の一致は「コンパイルできる」を意味しない。
 
@@ -1725,22 +1901,56 @@ Expected: exit 0（取り込んだ Button を含むプロジェクトがビル�
 
 ```js
 // src/components/ui/*.tsx を正本として、各コンポーネントが
-// 消費側の 4 経路すべてに載っていることを検査する。
+// 消費側の 5 経路すべてに載っていることを検査する。
 // Button 固定の検査を一般化したもので、#2 で 50 件足すときの安全網になる。
 import { readFileSync, readdirSync, existsSync } from "node:fs"
 import { pathToFileURL } from "node:url"
 
 const pascal = (s) => s.split("-").map((w) => w[0].toUpperCase() + w.slice(1)).join("")
 
-export function checkCompleteness({ components, barrel, dts, registry, previewFiles }) {
+// design §8 DoneCriteria 8 が要求する来歴の全項目。Task 2 Step 5 は button 固定
+// なので 2 件目以降を担保しない。ここが唯一の一般化されたゲートになる。
+//
+// **存在（truthy）だけを見ない。** 全キーに "x" を入れれば通ってしまい、
+// 形式の要求（40 桁 commit SHA・64 桁ハッシュ・HTTPS URL・exact semver・
+// YYYY-MM-DD）が 2 件目以降で fail-open になる。キーごとに形式を持たせる。
+const PROVENANCE_SPEC = {
+  sourceUrl: /^https:\/\/\S+$/,
+  upstreamPath: /^\S+\.tsx$/,
+  upstreamPathSha: /^[0-9a-f]{40}$/,
+  registry: /^https:\/\/\S+$/,
+  registryUrl: /^https:\/\/\S+$/,
+  registryContentSha256: /^[0-9a-f]{64}$/,
+  normalizedContentSha256: /^[0-9a-f]{64}$/,
+  // SemVer 2.0.0 の公式正規表現（semver.org 掲載）。自前で簡略化すると必ずずれる
+  // — 実測で `-[\w.]+` 版は 4.16.0-alpha-beta と 4.16.0+build-meta を誤って拒否し、
+  // 4.16.0+bad_meta と 4.16.0-.. を誤って許した（`\w` は `_` を含み `-` を含まない）。
+  shadcnCliVersion:
+    /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/,
+  fetchedAt: /^\d{4}-\d{2}-\d{2}$/,
+  license: /^\S+$/,
+}
+
+export function checkCompleteness({ components, barrel, dts, registry, previewFiles, previewSources, provenance }) {
   const problems = []
   for (const name of components) {
     const P = pascal(name)
     if (!barrel.includes(`./components/ui/${name}`)) problems.push(`${name}: src/index.ts から export されていない`)
     if (!dts.includes(`${P}Props`)) problems.push(`${name}: lib/index.d.ts に ${P}Props が無い`)
     if (!registry.items.some((i) => i.name === name)) problems.push(`${name}: registry.json に item が無い`)
+    // ルート（.astro）だけでなく中身（src/previews/<name>.tsx）も見る。
+    // ルートだけ在って中身が無いと、誤った import でもビルドが通りうる。
+    if (!previewSources.includes(`${name}.tsx`)) problems.push(`${name}: src/previews/${name}.tsx が無い`)
     for (const suffix of ["", "-dark"]) {
       if (!previewFiles.includes(`${name}${suffix}.astro`)) problems.push(`${name}: プレビュー ${name}${suffix}.astro が無い`)
+    }
+    // CONTRIBUTING が挙げる 5 項目の 1 つ。DoneCriteria 8 もコンポーネントごとの
+    // 来歴を要求するため、ここを見ないと 2 件目以降の欠落を CI が見逃す。
+    const p = provenance.components?.[name]
+    if (!p) { problems.push(`${name}: provenance.json に来歴が無い`); continue }
+    for (const [k, re] of Object.entries(PROVENANCE_SPEC)) {
+      if (!p[k]) { problems.push(`${name}: provenance の ${k} が無い`); continue }
+      if (!re.test(String(p[k]))) problems.push(`${name}: provenance の ${k} が形式に合わない: ${p[k]}`)
     }
   }
   return { problems }
@@ -1756,28 +1966,41 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     dts: readFileSync("lib/index.d.ts", "utf8"),
     registry: JSON.parse(readFileSync("registry.json", "utf8")),
     previewFiles: readdirSync("src/pages/preview"),
+    previewSources: readdirSync("src/previews"),
+    provenance: JSON.parse(readFileSync("provenance.json", "utf8")),
   })
   if (problems.length) { console.error(`欠落:\n  ${problems.join("\n  ")}`); process.exit(1) }
-  console.log(`${components.length} 件のコンポーネントが 4 経路すべてに載っている`)
+  console.log(`${components.length} 件のコンポーネントが 5 経路すべてに載っている`)
 }
 ```
 
 **この検査は Task 9 でプレビューを作ってから通る。** ここではスクリプトとテストだけ置き、実行は Task 9 Step 12 の後に行う。
 
-`scripts/check-completeness.test.mjs` に、欠落 4 種（バレル / Props / registry / プレビュー）をそれぞれ検出するテストと、揃っていれば問題なしとするテストを書く。
+`scripts/check-completeness.test.mjs` に、次をそれぞれ検出するテストと、揃っていれば問題なしとするテストを書く。
+
+- バレル export の欠落 / `<Name>Props` の欠落 / registry item の欠落
+- `src/previews/<name>.tsx` の欠落 / `.astro` ルートの欠落
+- 来歴エントリ自体の欠落 / **`PROVENANCE_SPEC` の各キーの欠落**（1 キーずつ落として検出されることを確かめる）
+- **各キーの形式違反**（全キーに `"x"` を入れた来歴が**通らない**ことを確かめる。存在だけを見ていたのが元の欠陥で、`upstreamPathSha` に `"x"` が入っていても通っていた）
+- **`shadcnCliVersion` の境界**（正負の両方を明示する）:
+  - 通る: `4.16.0` / `4.16.0-beta.1` / `4.16.0-alpha-beta` / `4.16.0+build-meta` / `1.0.0-rc.1+exp.sha.5114f85`
+  - 弾く: `4.16.0garbage` / `4.16.0+bad_meta` / `4.16.0-..` / `4.16` / `^4.16.0` / `x`
 
 Run: `node --test scripts/check-completeness.test.mjs`
-Expected: PASS（5 テスト）。`ℹ pass 5` を目視で確認する
+Expected: exit 0 かつ `fail 0`、`tests` が 1 以上。本計画の作成時点で書いたテストは 5 件（参考値）
 
 `CONTRIBUTING.md` の「コンポーネントを追加・変更するときの規約」に次を追記する。
 
 ```markdown
-新しいコンポーネントを追加したら、次の 4 経路すべてに載せる（`node scripts/check-completeness.mjs` が検査する）。
+新しいコンポーネントを追加したら、次の経路すべてに載せる（`node scripts/check-completeness.mjs` が検査する）。
 
-1. `src/index.ts` からの export と `export type <Name>Props`
-2. `registry.json` の `items`
-3. `src/previews/<name>.tsx` と `src/pages/preview/<name>.astro` / `<name>-dark.astro`
-4. `provenance.json`（`PROVENANCE_DATE=$(date +%F) node scripts/record-provenance.mjs` で自動記録される）
+1. `src/index.ts` からの値 export（`checkCompleteness` の barrel 検査）
+2. `export type <Name>Props`（同 Props 検査。ビルド後の `lib/index.d.ts` に現れること）
+3. `registry.json` の `items`
+4. `src/previews/<name>.tsx` と `src/pages/preview/<name>.astro` / `<name>-dark.astro`
+5. `provenance.json`（`PROVENANCE_DATE=$(date +%F) node scripts/record-provenance.mjs` で自動記録される）
+
+この 5 項目は `checkCompleteness` が見る 5 つの検査次元と 1 対 1 で対応する。**片方を増減させたら他方も合わせる。**
 
 そのうえで、追加したプレビューの両テーマを実ブラウザで検証してから PR を出す（AI_FIRST §2）。
 ```
@@ -1891,18 +2114,27 @@ Expected: **出力なし**（`src/` に未コミットの変更が残ってい�
 ```bash
 rm -rf dist
 npm run build
-npx serve dist -l 3002 &
+
+# 空きポートを選ぶ。serve は占有されていると黙って別ポートを選ぶため、
+# 決め打ちにすると以降の URL が実配信先とずれる。
+for p in 3012 3022 3032 3042; do
+  if ! lsof -nP -iTCP:$p -sTCP:LISTEN > /dev/null 2>&1; then export PREVIEW_PORT=$p; break; fi
+done
+test -n "$PREVIEW_PORT" || { echo "候補ポートがすべて使用中"; exit 1; }
+echo "使用するポート: $PREVIEW_PORT"
+
+npx serve dist -l "$PREVIEW_PORT" &
 PREVIEW_PID=$!
 ```
 
 `dist/` は静的サイトなので dev サーバは不要。DB を持たないため AI_FIRST §2 手順 1 の DB 隔離の論点は発生しない（`dev-data-safety: local`）。オーナーの作業ツリーを汚さないための worktree 分離も、本リポジトリはこのタスクが作った当のリポジトリであり守るべき別の作業ツリーが存在しないため適用しない。この解釈は Task 1 Step 8 の risk-registry に記録する。
 
-Run: `curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:3002/`
-Run: `curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:3002/preview/button/`
-Run: `curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:3002/preview/button-dark/`
+Run: `curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:$PREVIEW_PORT/`
+Run: `curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:$PREVIEW_PORT/preview/button/`
+Run: `curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:$PREVIEW_PORT/preview/button-dark/`
 Expected: 3 つとも `200`
 
-ポート 3002 が使用中なら別番号にし、以降の URL をその番号に読み替える。`serve` が出力した実ポートを使う。
+以降の URL の `$PREVIEW_PORT` は、上で選んだ実際のポート番号に読み替える。
 
 - [ ] **Step 8: 走査対象を確定する**
 
@@ -1931,7 +2163,7 @@ AI_FIRST §2 は走査スコープを次のように定めている。
 | アクセシブル名が付いている | 同上 | `/preview/*` は「保存する」「キャンセル」「絞り込み」「詳細」「削除する」「利用規約」「送信中」、`/` は「Button」が名前として読める |
 | `disabled` が伝わっている | 同上 | `/preview/*` で「送信中」が disabled として現れる（`/` は対象外）|
 | console にエラー・警告が無い | console メッセージ取得 | error と warning が **0 件** |
-| **ネットワークエラーが無い** | ネットワークリクエスト一覧を取得 | 失敗したリクエストが **0 件**、かつ status が 4xx / 5xx のものが **0 件**。1 件でもあれば失敗した URL を記録する（AI_FIRST §2 手順 4 が「表示崩れ・console error・ネットワークエラー」を MUST としている。route 本体の 200 と console 0 件は、フォント・CSS・JS 等のサブリソース失敗を独立には証明しない）|
+| **ネットワークエラーが無い** | ネットワークリクエスト一覧を取得 | **ページが参照するサブリソース**（CSS / JS / フォント / 画像）に失敗と 4xx / 5xx が **0 件**。**ブラウザが自動で試行する `/favicon.ico` は対象外**（ドキュメントが `favicon.svg` を宣言していても Chrome は `.ico` を要求し 404 になる。実測）。それ以外の 4xx / 5xx は 1 件でも失敗とし、URL を記録する（AI_FIRST §2 手順 4 が「表示崩れ・console error・ネットワークエラー」を MUST としている。route 本体の 200 と console 0 件は、フォント・CSS・JS のサブリソース失敗を独立には証明しない）|
 | トークンが効いている | `getComputedStyle(document.body).backgroundColor` を評価 | 値を記録する（Step 10 で比較する）|
 | キーボードで到達できる | `Tab` を押して `document.activeElement.tagName` と `textContent` を評価 | 最初の Button にフォーカスが移る |
 | フォーカスリングが透明合成でない | 下記のスクリプトで**可視レイヤーだけ**を判定 | 可視レイヤーが 1 枚以上あり、そのどれもが 1 未満の alpha を持たない |
@@ -1967,6 +2199,8 @@ Expected: `visible` が **1 件以上**（リングが実際に描画されて�
 
 ネットワークエラーが出た場合は、フォント（Geist Variable）やスタイルの読み込み失敗が最も疑わしい。**失敗を残したまま「表示は問題ない」で通さない** — フォントが落ちてフォールバックで描画されていても見た目は成立してしまう。
 
+**`/favicon.ico` の 404 だけは除外してよい理由**: これはドキュメントが参照しているものではなく、ブラウザが既定で試すもの。除外の判断はこの 1 パスに限定し、**他の URL を「たぶん無害」で除外しない**。除外したものは証跡へ明記する。
+
 スクリーンショットのファイル名:
 
 | route | light | dark |
@@ -1991,7 +2225,7 @@ AI_FIRST §2 は **route × テーマ × チェック項目のマトリクス**�
 
 | route | light | dark | console | network | a11y tree | keyboard | 崩れ |
 |---|---|---|---|---|---|---|---|
-| /                     | ✅ index-light.png | ✅ index-dark.png | ✅ 0 件 | ✅ 失敗 0 件 | ✅ button 1 個 | ✅ Tab で到達 | ✅ |
+| /                     | ✅ index-light.png | ✅ index-dark.png | ✅ 0 件 | ✅ 失敗 0 件（favicon.ico の 404 を除く）| ✅ button 1 個 | ✅ Tab で到達 | ✅ |
 | /preview/button/      | ✅ button-preview-light.png | ✅ button-preview-light-forced-dark.png | ✅ 0 件 | ✅ 失敗 0 件 | ✅ button 7 個 | ✅ Tab で到達 | ✅ |
 | /preview/button-dark/ | ✅ button-preview-dark-forced-light.png | ✅ button-preview-dark.png | ✅ 0 件 | ✅ 失敗 0 件 | ✅ button 7 個 | ✅ Tab で到達 | ✅ |
 ```
@@ -2018,12 +2252,12 @@ Expected: `1` 以上（証跡が検証対象のコミットに束縛されてい
 Run: `grep -c '—' .docs/reviews/2026-07-31-button-preview.md`
 Expected: `0`（未実施のセルが残っていない）
 
-- [ ] **Step 13: 4 経路の網羅検査を初めて通す**
+- [ ] **Step 13: 網羅検査を初めて通す**
 
 Task 8 Step 8b で作った検査は、プレビューが揃って初めて成立する。ここで通す。
 
 Run: `node scripts/check-completeness.mjs`
-Expected: `1 件のコンポーネントが 4 経路すべてに載っている` が出力され exit 0
+Expected: exit 0 かつ出力が `... 件のコンポーネントが 5 経路すべてに載っている`（件数は `src/components/ui/` の実数。#2 で増えるため Expected にしない。本計画の作成時点では 1 件）
 
 **落ちたら**、出力が名指しした経路（バレル / `<Name>Props` / registry / プレビュー）へ戻って足す。この検査が #2 で 50 件を足すときの安全網になるので、ここで通ることを確かめておく。
 
@@ -2033,6 +2267,7 @@ Expected: `1 件のコンポーネントが 4 経路すべてに載っている`
 
 **Files:**
 - Create: `.github/workflows/ci.yml`、`AGENTS.md`、`CLAUDE.md`、`README.md`、`.design-sync/config.json`、`.docs/reviews/2026-07-31-donecriteria.md`
+- Modify: `.docs/plans/` の 2 文書（Step 5a で最新版へ取り込み直す）
 
 **Interfaces:**
 - Consumes: Task 2 の `provenance.json`（`sourceUrl` / `upstreamPathSha` / `registryContentSha256` / `license` を PR 本文へ転記する）、Task 2 Step 2b の `typecheck` script、Task 7 の `types/dts-contract.ts`、Task 9 Step 11 の証跡マトリクス
@@ -2113,7 +2348,7 @@ jobs:
         run: npm run build:lib
 
       - name: Props contract
-        run: npx tsc --noEmit --strict --module esnext --moduleResolution bundler --target es2022 --jsx react-jsx types/dts-contract.ts
+        run: npx tsc --noEmit --ignoreConfig --strict --module esnext --moduleResolution bundler --target es2022 --jsx react-jsx types/dts-contract.ts
 
       # lib/index.d.ts を読むので Build library の後ろに置く。
       - name: Completeness check
@@ -2253,13 +2488,21 @@ registry はまだ公開していない。配信 URL はサブプロジェクト
 ```bash
 npm ci
 npm run build
-npx serve public -l 3001
+npx serve public -l 3011
 ```
 
-別のプロジェクトから取り込む。
+別のプロジェクトから取り込む（`serve` が表示したポートに読み替える）。
 
 ```bash
-npx shadcn@latest add --overwrite http://127.0.0.1:3001/r/button.json
+npx shadcn@latest add --overwrite http://127.0.0.1:3011/r/button.json
+```
+
+## トークンの適用
+
+取り込むと `elchika-ui/tokens.css` が置かれる。**利用側に既存のトークン定義がある場合、registry はそれを上書きしない**（shadcn の仕様）。elchika の見た目を共有するには、自分の CSS から**最後に** import する。
+
+```css
+@import "./elchika-ui/tokens.css";
 ```
 ````
 
@@ -2286,7 +2529,9 @@ Expected: どちらも exit 0
 
 既知の placeholder 名を列挙して grep すると、**列挙から漏れたものを見逃す**。テンプレートには表に書ききれない `<一行説明 — ...>` 形式が多数あるため、「`<...>` の形をしたものがゼロ件」を条件にする。HTML コメント（`<!--`）と閉じタグ（`</`）は除外する。
 
-Run: `grep -nE '<[^!/][^>]*>' README.md AGENTS.md CLAUDE.md SECURITY.md CONTRIBUTING.md`
+Run: `grep -nE '<[^!/][^>]*>' README.md AGENTS.md CLAUDE.md SECURITY.md`
+
+**`CONTRIBUTING.md` は対象外**。この検査の目的は「テンプレート由来の未差し替え placeholder が残っていないこと」で、`CONTRIBUTING.md` は本計画が逐語で書き下ろしたもの（テンプレートが存在しない）。中の `<Name>Props` や `<name>.tsx` は差し替え対象でなく、**任意のコンポーネント名を指す汎用記法**として意図的に書いている。
 Expected: **ヒットなし**（`grep` は 0 件で exit 1 を返す）
 
 ヒットが出た行の扱いは 2 通りしかない。**実値へ差し替える**か、**その記述ごと削除する**か。テンプレートの案内コメント内に残っている穴埋め記法も、判断に使い終わったら削除する。「コメントだから残してよい」と解釈しない — 残すと次に読む人が未完成のドキュメントと区別できない。処理してから再実行する。
@@ -2307,8 +2552,8 @@ Expected: `0`
 Run: `grep -c 'apps/web\|apps/api\|packages/core' README.md`
 Expected: `0`
 
-Run: `grep -c 'src/components/ui/' README.md`
-Expected: `1` 以上（実構成の Architecture に置き換わっている）
+Run: `grep -c 'components/ui/' README.md`
+Expected: `1` 以上（実構成の Architecture に置き換わっている。Architecture ブロックは `src/` の子として `components/ui/` を書くため、`src/components/ui/` という連結では一致しない）
 
 バッジと `standards_version` が同じ値であることを見る（DOCS_OPS §1）。
 
@@ -2416,6 +2661,38 @@ Expected: `protected の条件をすべて満たす` が出力され exit 0
 
 不一致で止まった場合は Step 4 の body を直して ruleset を作り直す（既存を消すには `gh api -X DELETE "repos/elchika-inc/ui/rulesets/$RULESET_ID"`）。
 
+- [ ] **Step 5a: 実装計画と設計の最新版を target repo へ取り込み直す**
+
+Task 1 Step 8 でコピーした `.docs/plans/` の 2 文書は、**その時点のスナップショット**。実行中に計画へ修正が入るたび古くなる。PR 本文の「実装計画」欄はこのパスを指すので、古いままだと**実際に作ったものと違う手順を指す参照**になり、来歴として誤りになる。
+
+最終コミットの直前に取り込み直す。
+
+```bash
+STANDARDS=~/projects/naoto24kawa/standards
+cp "$STANDARDS/.docs/plans/2026-07-31-elchika-ui-foundation-design.md" .docs/plans/
+cp "$STANDARDS/.docs/plans/2026-07-31-elchika-ui-foundation-plan.md" .docs/plans/
+```
+
+Run: `cmp .docs/plans/2026-07-31-elchika-ui-foundation-plan.md "$STANDARDS/.docs/plans/2026-07-31-elchika-ui-foundation-plan.md"`
+Run: `cmp .docs/plans/2026-07-31-elchika-ui-foundation-design.md "$STANDARDS/.docs/plans/2026-07-31-elchika-ui-foundation-design.md"`
+Expected: どちらも exit 0、出力なし
+
+**この Step 以降に計画が更新されたら、ここへ戻ってコピーし直す。** PR に載る計画が、実際に従った最終版であることを保つ。
+
+- [ ] **Step 5b: push 前に整形と lint をリポジトリ全体へ通す**
+
+CI の `biome check .` はリポジトリ全体を見る。ここまでの各 Task で整形しているはずだが、取りこぼしがあると PR が赤くなる。push 前にローカルで確定させる。
+
+```bash
+npm run format
+```
+
+Run: `npm run lint`
+Expected: exit 0
+
+Run: `git status --porcelain`
+Expected: `npm run format` による変更が残っていればコミットする（残したまま push すると CI と手元がずれる）
+
 - [ ] **Step 6: PR を出し、来歴の申告を実態どおりに埋める**
 
 ```bash
@@ -2503,8 +2780,28 @@ console.log("来歴 4 要素が provenance.json と一致")
 
 Expected: `来歴 4 要素が provenance.json と一致` が出力され exit 0
 
-Run: `grep -cE 'blob/[0-9a-f]{40}/\.docs/reviews/[a-z0-9-]+\.png' /tmp/ui-pr-remote.md`
-Expected: `6` 以上（3 route × 2 テーマの証跡がすべて貼られている）
+**件数で数えない。** `grep -c` は一致数でなく**一致した行数**を返すため、同じ行に 2 本の URL があると 1 と数える（実測でずれた）。また証跡の枚数は Task 9 が決めるので、ここに数値を書くと増減でずれる。**実在するファイル名の集合**と突き合わせる。
+
+Run:
+
+```bash
+node -e '
+const fs = require("node:fs")
+const body = fs.readFileSync("/tmp/ui-pr-remote.md", "utf8")
+const names = fs.readdirSync(".docs/reviews").filter((f) => f.endsWith(".png"))
+if (names.length === 0) { console.error("証跡の画像が 1 件も無い"); process.exit(1) }
+const missing = names.filter(
+  (n) => !new RegExp(`blob/[0-9a-f]{40}/\\.docs/reviews/${n}\\?raw=1`).test(body),
+)
+if (missing.length) {
+  console.error(`SHA 固定の permalink が PR 本文に無い: ${missing.join(", ")}`)
+  process.exit(1)
+}
+console.log(`${names.length} 件の証跡がすべて SHA 固定 permalink で貼られている`)
+'
+```
+
+Expected: `... 件の証跡がすべて SHA 固定 permalink で貼られている` が出力され exit 0
 
 Run: `grep -c 'blob/feat/foundation/' /tmp/ui-pr-remote.md`
 Expected: `0`（**ブランチ名を含む URL が残っていない**。`feat/foundation` はマージ後に削除され証跡が 404 になる）
@@ -2581,10 +2878,10 @@ Expected: どちらも exit 0
 | 1 | `node -e "console.log(require('./components.json').style)"` | `base-nova` |
 | 2 | `node scripts/check-standards.mjs` / `grep -c '@base-ui/react' src/components/ui/button.tsx` / Task 6 Step 5b の `Run:` 行すべて | 1 つ目 exit 0、2 つ目 `1` 以上、Step 5b は各行の Expected どおり（正の検査は `1` 以上、負の検査は `0`）|
 | 3 | **Task 3 Step 3 と Step 4 の `Run:` 行すべて**（正本との `cmp` / `Hiragino Sans` / `--success:` / `prefers-reduced-motion`）と `node scripts/contrast.mjs` | `cmp` が exit 0、Step 4 の各行が `1` 以上、contrast は Step 4b と同じ 3 行が出る。**トークン数を固定条件にしない** |
-| 4 | `npx tsc --noEmit --strict --module esnext --moduleResolution bundler --target es2022 --jsx react-jsx types/dts-contract.ts` と `node scripts/check-completeness.mjs` | 前者は exit 0・出力なし、後者は `... 4 経路すべてに載っている` |
+| 4 | `npx tsc --noEmit --ignoreConfig --strict --module esnext --moduleResolution bundler --target es2022 --jsx react-jsx types/dts-contract.ts` と `node scripts/check-completeness.mjs` | 前者は exit 0・出力なし、後者は exit 0 で `... 5 経路すべてに載っている` |
 | 5 | Task 8 Step 8 の外部 probe を再実行し、**Step 9 の後始末（`kill "$SERVE_PID"` と `rm -rf /tmp/registry-probe`）まで必ず行う** | probe 側に Button と `elchika-ui/LICENSE` / `elchika-ui/THIRD_PARTY_LICENSES` が届き、**Step 8 の `Run:` 行すべて**が Expected どおり。実行後に `pgrep -f 'serve public'` が 1 件も返さず、`test ! -d /tmp/registry-probe` が exit 0（残すと次の再実行がポート衝突と既存 probe の混在で収束しない）|
 | 6 | 下記「条件 6 の再確認」 | すべて Expected どおり |
-| 7 | `node scripts/check-distribution.mjs` と、条件 5 で再実行した probe 側の法務関連 `Run:` 行すべて（`elchika-ui/LICENSE` と `elchika-ui/THIRD_PARTY_LICENSES` の存在・内容、および利用者の `LICENSE` を上書きしていないこと）| 前者 exit 0 で `配布物 OK（3 files / 法務ファイル 2 件が原本と一致）`、後者も Expected どおり |
+| 7 | `node scripts/check-distribution.mjs` と、条件 5 で再実行した probe 側の法務関連 `Run:` 行すべて（`elchika-ui/LICENSE` と `elchika-ui/THIRD_PARTY_LICENSES` の存在・内容、および利用者の `LICENSE` を上書きしていないこと）| 前者 exit 0 で `配布物 OK（LICENSE / THIRD_PARTY_LICENSES が原本と一致）`、後者も Expected どおり |
 | 8 | Task 2 Step 5 と、下記「条件 8 の再確認」 | 前者は `ok` に続いて 40 桁 SHA・64 桁ハッシュ・shadcn version・日付。後者は `来歴が scaffold 時の実体と一致` |
 | 9 | Task 1 Step 6b の `Run:` 行すべて | すべて Expected どおり |
 | 10 | Task 1 Step 8b の `Run:` 行すべて（`git ls-files` による追跡確認を含む）と Task 3 Step 4c | 前者は各行の Expected どおり。後者は `整合: light warning = ...`（`3.919` のような固定値を期待値にしない — standards が直れば食い違うため）|
@@ -2677,13 +2974,25 @@ Expected: exit 0（その SHA がこのリポジトリに実在するコミッ�
 Run: `git diff --quiet "$VERIFIED_SHA" HEAD -- src/`
 Expected: **exit 0**。非 0 なら、証跡を撮ったあとに `src/` が変わっている＝いま出荷しようとしているコードは検証されていない。その場合は Task 9 Step 7 から実ブラウザ検証をやり直し、証跡と SHA を更新する
 
-そのうえで `npx serve dist -l 3002 &` して **Task 9 Step 9 の全項目を 3 route × 2 テーマで再実行する**。`backgroundColor` の 2 値比較だけで済ませない（Task 9 のあとにコンポーネントやトークンが変わっていれば、a11y・keyboard・console・崩れのいずれもが回帰しうる）。確認後 `serve` を止める。
+そのうえで上と同じ手順で空きポートを選んで `serve` を起動し、 **Task 9 Step 9 の全項目を 3 route × 2 テーマで再実行する**。`backgroundColor` の 2 値比較だけで済ませない（Task 9 のあとにコンポーネントやトークンが変わっていれば、a11y・keyboard・console・崩れのいずれもが回帰しうる）。確認後 `serve` を止める。
 
 Expected: Task 9 Step 9 の表の全項目が同じ Expected を満たし、Step 10 の色比較が 3 route すべてで異なる
 
 **1 つでも Expected を満たさなければ、その条件を作ったタスクへ戻って直し、`git push` してから本 Step を先頭からやり直す。** 部分的な再確認で済ませない。
 
-結果を `.docs/reviews/2026-07-31-donecriteria.md` に、条件番号・実行したコマンド・実際の出力の 3 列で記録する。**#12 の行には「本タスクの Step 9 で PR 本文へ記録」と書く**（ファイルへ書くと追記コミットがまた未検証の head を作り、終わらなくなる）。
+結果を `.docs/reviews/2026-07-31-donecriteria.md` に、条件番号・実行したコマンド・実際の出力の 3 列で記録する。
+
+**記録は実行結果の転記であり、編集してはならない（MUST）。** あとから検査の内容が変わっても、**過去の記録を書き換えて辻褄を合わせない**。書き換えると、SHA で束縛した証跡が実際には別の出力だったことになり、証跡そのものが偽になる（実際に一度起きた: 検証時の出力は「4 経路」だったのに、検査を 5 経路化したあとで記録の数字だけを書き換えてしまった）。
+
+検査やコードが変わったら、次の順で**やり直す**。
+
+1. コードの変更をコミットする
+2. その head で条件 #1〜#11 を**もう一度通しで実行する**
+3. 得られた出力で記録を**作り直す**（差分編集でなく置き換え）
+4. 記録をコミットして push し、Step 9 で最終 head の CI を確認する
+
+Run: `git diff --quiet HEAD -- .docs/reviews/2026-07-31-donecriteria.md`
+Expected: 記録を作り直した直後は差分が出る（コミット前）。**コミット後に再実行して exit 0** — つまり記録がコミット済みで、以降手を加えていないこと**#12 の行には「本タスクの Step 9 で PR 本文へ記録」と書く**（ファイルへ書くと追記コミットがまた未検証の head を作り、終わらなくなる）。
 
 記録をコミットして**push する**。push しないと、この記録は PR に存在せず、CI も検証していない状態のままになる。
 
@@ -2776,8 +3085,9 @@ Expected: `1` 以上（その run がどの head に対するものかも辿れ�
 
 - **Task 1 Step 2 の上流ライセンス探索**: ファイル名とブランチを総当たりするが、上流が両方とも変えた場合は例外で止まる。止まったら実際のパスを確認して `NAMES` / `BRANCHES` に足す。**取得できないまま先へ進まない。**
 - **Task 2 Step 3 の上流 SHA 取得**: 未認証の GitHub API は時間あたりの回数制限がある。429 / 403 で止まったら `GH_TOKEN` を `Authorization: Bearer` ヘッダに載せて再実行する。**SHA を手で書いて先へ進まない**（来歴が実態と食い違う）。
-- **Task 8 Step 8 / Task 9 Step 7 のポート衝突**: 3001・3002 が使用中なら別番号にする。`npx serve` の出力する実ポートを確認してから URL に使う。
+- **Task 8 Step 8 / Task 9 Step 7 のポート衝突**: どちらも空きポートを先に選んで `UI_PORT` / `PREVIEW_PORT` に固定する。**`npx serve` は占有されていると黙って別ポートを選ぶ**ため、決め打ちの URL と実配信先がずれる（実測で 3001 が Docker に占有され 61026 が選ばれた）。候補がすべて埋まっていたら止める。
 - **Task 10 Step 4 の ruleset API**: 本計画の body は 2026-07-31 時点の API 定義（`POST /repos/{owner}/{repo}/rulesets`、`pull_request` rule の必須 parameters 5 件）に基づく。422 が返った場合はレスポンス body が不足している parameter 名を返すので、**その名前だけを足す**。推測でフィールドを増やさない。
+- **TypeScript 6 の非互換**: 本計画は TS 6.0.3 での実測に基づく。①`tsc` にファイルを直接渡すと `TS5112`（tsconfig を読まない旨のエラー）になるため型契約の検査に `--ignoreConfig` を付けている ②tsup の DTS ビルドは `baseUrl` を内部注入し `TS5101` で落ちるため `dts: false` にして `tsc` に分担させている。**TS を上げ下げしたらこの 2 つを再確認する。**
 - **ビルド順序への依存**: `registry:build` → `build` の順序は、Astro が `public/` を build 時に `dist/` へコピーする仕様に依存する。将来この挙動が変わったら `Dist registry check` が落ちる。落ちたら順序ではなく Astro 側の仕様変更を疑う（順序を戻して通しても、配信物が欠けたままになる）。
 - **Task 10 Step 7・9 の workflow 名依存**: ステップ名の期待値が `.github/workflows/ci.yml` の `name:` と文字列一致する前提。workflow 側の名前を変えるなら期待値の配列も同時に変える。片方だけ変えると、実行されているのに「不足」と判定される（偽失敗）。
 - **Task 8 Step 8 の `--overwrite`**: probe は vite テンプレート由来の `button.tsx` を上書きする前提で組んでいる。将来テンプレートが Button を同梱しなくなったら `--overwrite` は無害な no-op になるだけで、検証は成立し続ける。逆に `--overwrite` を外すと非対話 skip で偽の成功になる。**外さない。**
