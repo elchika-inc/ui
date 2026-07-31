@@ -64,3 +64,12 @@
 - status: accepted
 - reason: 可変タグは同じ参照が別のコードを指しうる supply-chain risk を持つが、standards の正準テンプレートが `@v4` を採用しており、本リポジトリだけ SHA pin すると運用が分岐する。また、workflow は `permissions: contents: read` のみで secrets を使わず DOCS_OPS §6 の信頼境界を満たす。更新機構なしの pin は陳腐化して CVE 対応を遅らせるため、standards レベルの方針決定に先行して分岐させない。
 - anchor: standards 側の Action Queue `manual-github-actions-sha-pin.md` で決まった判断に従う。
+
+## RISK-009: Base UI Dialog が `aria-modal` を付与しない
+
+- date: 2026-07-31
+- confidence: high
+- location: `src/components/ui/dialog.tsx`（`@base-ui/react` 1.6.0）
+- status: accepted
+- reason: Base UI 1.6.0 の Dialog は `role="dialog"` に `aria-modal` を付与しない。Root の `modal` は `true` / `false` / `"trap-focus"` を取るため、wrapper から無条件に `aria-modal="true"` を付けると非 modal 用途を誤表現する。上流の挙動を受容し、modal の実効性は content 内の focus trap、閉じたあとの trigger への focus return、背景の `aria-hidden="true"` と overlay の pointer event 捕捉で確認する。
+- anchor: `@base-ui/react` の更新時に実ブラウザで `role="dialog"` の属性を再確認する。上流が `aria-modal` を付与するようになった場合は本受容を解消し、`aria-modal` と Root の `modal` 値の対応を検証項目へ戻す。

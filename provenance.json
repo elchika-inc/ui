@@ -1,25 +1,5 @@
 {
   "components": {
-    "button": {
-      "origin": "shadcn/ui registry",
-      "sourceUrl": "https://github.com/shadcn-ui/ui",
-      "registry": "https://ui.shadcn.com",
-      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/button.json",
-      "registryPath": "registry/base-nova/ui/button.tsx",
-      "registryContentSha256": "93edbf2075d6104e1b20d263419d91a9587208d3d05efdd06dfafcfe4d0dfd65",
-      "normalizedContentSha256": "d14549ab3ba7a9d5d1f424c2599233bffa0b317121abf3b6efa2fb902d5e2781",
-      "upstreamRepo": "shadcn-ui/ui",
-      "upstreamPath": "apps/v4/registry/bases/base/ui/button.tsx",
-      "upstreamPathSha": "4f421aba659a1f5e5bc2d36b591ac4753c0108e7",
-      "style": "base-nova",
-      "shadcnCliVersion": "4.16.0",
-      "shadcnVersion": "4.16.0",
-      "shadcnRange": "^4.16.0",
-      "fetchedAt": "2026-07-31",
-      "license": "MIT",
-      "modified": "DESIGN.md §5 適合のため focus ring と arbitrary value を修正",
-      "notes": "registry は preset を解決したビルド生成物を配信するため、配信内容と byte 一致する上流 commit は存在しない。registryContentSha256 が受け取った内容そのものの錨であり、upstreamPathSha は元テンプレートを最後に変更した commit を指す（byte 一致は主張しない）。"
-    },
     "badge": {
       "origin": "shadcn/ui registry",
       "sourceUrl": "https://github.com/shadcn-ui/ui",
@@ -27,7 +7,8 @@
       "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/badge.json",
       "registryPath": "registry/base-nova/ui/badge.tsx",
       "registryContentSha256": "cf51b4988c4c7e6eec9f107259ebd8af6be31a29a5f5b50716c99e9dd6bdee32",
-      "normalizedContentSha256": "968b0403af74a785c9408ca69a677235e49d0c80b2c27fb9858ad421a8778c7d",
+      "generatedContentSha256": "d1c37c75990007615b34e0b8c4a6c91f3e3dc57eeea7cc13311890b02f9841bf",
+      "addTarget": "@shadcn/badge",
       "upstreamRepo": "shadcn-ui/ui",
       "upstreamPath": "apps/v4/registry/bases/base/ui/badge.tsx",
       "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
@@ -38,7 +19,49 @@
       "fetchedAt": "2026-07-31",
       "license": "MIT",
       "modified": "DESIGN.md §5 適合のため focus ring と arbitrary value を修正",
-      "notes": "registry は preset を解決したビルド生成物を配信するため、配信内容と byte 一致する上流 commit は存在しない。registryContentSha256 が受け取った内容そのものの錨であり、upstreamPathSha は元テンプレートを最後に変更した commit を指す（byte 一致は主張しない）。"
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。generatedContentSha256 は CLI 生成直後ではなく standards 正規化を適用したあとの現行ファイルのハッシュである。正規化では DESIGN.md §5 適合のためフォーカスリングの透明度合成と値系 arbitrary value を除去した。この機構を dialog の時点で導入したため、先行コンポーネントの生成直後の値は遡って記録できない。"
+    },
+    "button": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/button.json",
+      "registryPath": "registry/base-nova/ui/button.tsx",
+      "registryContentSha256": "93edbf2075d6104e1b20d263419d91a9587208d3d05efdd06dfafcfe4d0dfd65",
+      "generatedContentSha256": "78fa2028ca261a75c3357430aa22e5dc443438a5b17973d6bda5a5e8a7145854",
+      "addTarget": "@shadcn/button",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/button.tsx",
+      "upstreamPathSha": "4f421aba659a1f5e5bc2d36b591ac4753c0108e7",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-07-31",
+      "license": "MIT",
+      "modified": "DESIGN.md §5 適合のため focus ring と arbitrary value を修正",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。generatedContentSha256 は CLI 生成直後ではなく standards 正規化を適用したあとの現行ファイルのハッシュである。正規化では DESIGN.md §5 適合のためフォーカスリングの透明度合成と値系 arbitrary value を除去した。この機構を dialog の時点で導入したため、先行コンポーネントの生成直後の値は遡って記録できない。"
+    },
+    "dialog": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/dialog.json",
+      "registryPath": "registry/base-nova/ui/dialog.tsx",
+      "registryContentSha256": "4a20c4f16cf1564f0852155736a6041a7f2a5a94d29c3103c06ba2a1aed3a72f",
+      "generatedContentSha256": "dd373d38c46f0e2227238fb517a7e58351cba91cd8b4a663641b7cfab7fbd697",
+      "addTarget": "@shadcn/dialog",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/dialog.tsx",
+      "upstreamPathSha": "687f09817b614a3450f0f56779edf367082e1e53",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-07-31",
+      "license": "MIT",
+      "modified": "DESIGN.md §5 適合のため focus ring と arbitrary value を修正",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。"
     },
     "input": {
       "origin": "shadcn/ui registry",
@@ -47,7 +70,8 @@
       "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/input.json",
       "registryPath": "registry/base-nova/ui/input.tsx",
       "registryContentSha256": "451323f9b25c6d52713165a248197a9724f602915b18a8460cf3d888138ea83b",
-      "normalizedContentSha256": "f7d6ecff9a4d631feeaf401c02bb87e26ddb38131c55d15a43b9290747390847",
+      "generatedContentSha256": "28ed88eb022d5b34052c66a455a5de112f9f7a099ac201b057422300d7c927c2",
+      "addTarget": "@shadcn/input",
       "upstreamRepo": "shadcn-ui/ui",
       "upstreamPath": "apps/v4/registry/bases/base/ui/input.tsx",
       "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
@@ -58,7 +82,7 @@
       "fetchedAt": "2026-07-31",
       "license": "MIT",
       "modified": "DESIGN.md §5 適合のため focus ring と arbitrary value を修正",
-      "notes": "registry は preset を解決したビルド生成物を配信するため、配信内容と byte 一致する上流 commit は存在しない。registryContentSha256 が受け取った内容そのものの錨であり、upstreamPathSha は元テンプレートを最後に変更した commit を指す（byte 一致は主張しない）。"
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。generatedContentSha256 は CLI 生成直後ではなく standards 正規化を適用したあとの現行ファイルのハッシュである。正規化では DESIGN.md §5 適合のためフォーカスリングの透明度合成と値系 arbitrary value を除去した。この機構を dialog の時点で導入したため、先行コンポーネントの生成直後の値は遡って記録できない。"
     }
   }
 }

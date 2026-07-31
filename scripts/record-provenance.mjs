@@ -1,11 +1,11 @@
 // コンポーネントの来歴を機械可読に記録する（PRODUCT_PLAYBOOK §15）。
 // §15 が移植コードへ要求するのは「出典 URL・commit SHA・ライセンス」。
 //
-// registry は preset を解決したビルド生成物を配信するため、配信内容と
-// byte 一致する上流 commit は存在しない（実測）。そこで
+// registry 配信物と CLI 生成物は byte 等価ではない（実測）。そこで
 //   - 受け取った内容そのものの SHA-256（改ざん・すり替えを検出できる錨）
+//   - CLI が手元へ書き出した内容の SHA-256（生成物を追跡する錨）
 //   - 元テンプレートのパスと、それを最後に変更した commit SHA
-// の両方を記録し、どちらが何を保証するかを notes に明記する。
+// を個別に記録し、それぞれが何を保証するかを notes に明記する。
 import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 
@@ -55,9 +55,6 @@ const gh = async (p) => {
   return res.json();
 };
 const sha256 = (s) => createHash("sha256").update(s, "utf8").digest("hex");
-// CLI は install 時に import のエイリアスだけを書き換える。比較・ハッシュの
-// 双方でこの差を吸収する。
-const norm = (s) => s.replace(/@\/(?:registry\/[^/]+\/)?lib\/utils/g, "@/lib/utils");
 
 const prev = existsSync("provenance.json")
   ? JSON.parse(readFileSync("provenance.json", "utf8"))
@@ -75,12 +72,10 @@ for (const f of readdirSync("src/components/ui")) {
   const served = item.files?.[0]?.content;
   if (!served) throw new Error(`${name}: registry 応答に content が無い`);
 
-  // 2. 手元の生成物が配信物と同じであることを確かめる。
-  //    CLI は import のエイリアスだけを書き換えるので、そこを正規化して比較する。
+  // 2. CLI が手元へ書き出した内容を独立した錨として記録する。
+  //    registry 配信物との等価性は主張しない。CLI は import 以外にも
+  //    directive・icon・preset 変数を変換するため、正規化比較は false failure になる。
   const local = readFileSync(`src/components/ui/${f}`, "utf8");
-  if (norm(local) !== norm(served)) {
-    throw new Error(`${name}: 手元の生成物が registry 配信物と一致しない。来歴を記録できない`);
-  }
 
   // 3. 元テンプレートを最後に変更した commit を取る。
   const upstreamPath = upstreamPathFor(name);
@@ -109,9 +104,8 @@ for (const f of readdirSync("src/components/ui")) {
     registryUrl,
     registryPath: item.files[0].path,
     registryContentSha256: sha256(served),
-    // import エイリアスを正規化した内容のハッシュ。手元のファイルと
-    // ネットワーク無しで突き合わせるための錨（最終ゲートで使う）。
-    normalizedContentSha256: sha256(norm(served)),
+    generatedContentSha256: sha256(local),
+    addTarget: `@shadcn/${name}`,
     upstreamRepo: UPSTREAM_REPO,
     upstreamPath,
     upstreamPathSha,
@@ -123,8 +117,9 @@ for (const f of readdirSync("src/components/ui")) {
     license: "MIT",
     modified: "DESIGN.md §5 適合のため focus ring と arbitrary value を修正",
     notes:
-      "registry は preset を解決したビルド生成物を配信するため、配信内容と byte 一致する上流 commit は存在しない。" +
-      "registryContentSha256 が受け取った内容そのものの錨であり、upstreamPathSha は元テンプレートを最後に変更した commit を指す（byte 一致は主張しない）。",
+      "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。" +
+      "registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。" +
+      "upstreamPathSha は元テンプレートを最後に変更した commit を指す。",
   };
 }
 writeFileSync("provenance.json", JSON.stringify(prev, null, 2) + "\n");

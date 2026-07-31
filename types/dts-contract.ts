@@ -1,7 +1,19 @@
 // lib/index.d.ts が公開する props 契約を型で検査する。
 // design-sync はこの .d.ts を読んで API 契約を組み立てるため、
 // ここが潰れると設計エージェントが全コンポーネントで API を誤用する。
-import type { ButtonProps } from "../lib/index.js"
+import type {
+  ButtonProps,
+  DialogCloseProps,
+  DialogContentProps,
+  DialogDescriptionProps,
+  DialogFooterProps,
+  DialogHeaderProps,
+  DialogOverlayProps,
+  DialogPortalProps,
+  DialogProps,
+  DialogTitleProps,
+  DialogTriggerProps,
+} from "../lib/index.js"
 
 // variant / size が ButtonProps から到達でき、実際の union を持つ
 const variant: ButtonProps["variant"] = "secondary"
@@ -14,4 +26,28 @@ const size: ButtonProps["size"] = "sm"
 // 潰れを検出できる。
 const invalid: ButtonProps["variant"] = "存在しない variant"
 
-export { variant, size, invalid }
+type DialogContracts = [
+  DialogProps,
+  DialogTriggerProps,
+  DialogPortalProps,
+  DialogCloseProps,
+  DialogOverlayProps,
+  DialogContentProps,
+  DialogHeaderProps,
+  DialogFooterProps,
+  DialogTitleProps,
+  DialogDescriptionProps,
+]
+
+const dialogContentCloseButton: DialogContentProps["showCloseButton"] = true
+const dialogFooterCloseButton: DialogFooterProps["showCloseButton"] = false
+const dialogContractsReachable: DialogContracts extends unknown[] ? true : never = true
+
+export {
+  variant,
+  size,
+  invalid,
+  dialogContentCloseButton,
+  dialogFooterCloseButton,
+  dialogContractsReachable,
+}
