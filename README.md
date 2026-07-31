@@ -3,7 +3,7 @@
 > elchika-inc の共有 UI コンポーネントライブラリ
 
 [![CI](https://github.com/elchika-inc/ui/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/elchika-inc/ui/actions/workflows/ci.yml)
-[![standards](https://img.shields.io/badge/standards-2026--07--29_(rev.46)-blue)](https://github.com/naoto24kawa/standards/blob/main/CHANGELOG.md)
+[![standards](https://img.shields.io/badge/standards-2026--07--29_(rev.46)-blue)](https://github.com/elchika-inc/standards/blob/main/CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Base UI と Tailwind CSS v4 で作った UI コンポーネント集。elchika-inc の各プロダクトが同じ見た目と操作性を共有するための正本。npm publish はせず shadcn の custom registry で配布し、利用側はソースをコピーして所有する。
