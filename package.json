@@ -3,12 +3,21 @@
   "type": "module",
   "version": "0.0.1",
   "private": true,
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js"
+    },
+    "./styles.css": "./src/styles/global.css"
+  },
   "engines": {
     "node": ">=22.12.0"
   },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "build:lib": "tsup && tsc -p tsconfig.lib.json",
     "preview": "astro preview",
     "astro": "astro",
     "lint": "biome check .",
@@ -36,6 +45,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9",
     "@biomejs/biome": "^2.5.6",
+    "tsup": "^8.5.1",
     "typescript": "~6"
   }
 }
