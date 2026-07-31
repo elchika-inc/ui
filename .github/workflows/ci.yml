@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -74,6 +76,12 @@ jobs:
       # lib/index.d.ts を読むので Build library の後ろに置く。
       - name: Completeness check
         run: node scripts/check-completeness.mjs
+
+      - name: Preview render declaration
+        run: node scripts/check-preview-render.mjs
+
+      - name: Evidence check
+        run: node scripts/check-evidence.mjs
 
       - name: Build site
         run: npm run build:site

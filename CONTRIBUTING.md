@@ -14,12 +14,13 @@ npm ci
 ## 変更を出す前に通すもの
 
 ```bash
+npm run format
 npm run lint
 npm run typecheck
 node --test "scripts/*.test.mjs"
-node scripts/check-standards.mjs
 npm run build
 npm run build:lib
+npm run check:all
 ```
 
 ## コンポーネントを追加・変更するときの規約
@@ -39,7 +40,7 @@ npm run build:lib
 
 この 5 項目は `checkCompleteness` が見る 5 つの検査次元と 1 対 1 で対応する。**片方を増減させたら他方も合わせる。**
 
-そのうえで、追加したプレビューの両テーマを実ブラウザで検証してから PR を出す（AI_FIRST §2）。
+そのうえで、[component 追加手順](.docs/component-addition-procedure.md)に従い、追加したプレビューの両テーマを実ブラウザで検証してから PR を出す（AI_FIRST §2）。
 
 ## ブランチとマージ
 

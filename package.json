@@ -26,7 +26,8 @@
     "astro": "astro",
     "lint": "biome check .",
     "format": "biome check --write .",
-    "typecheck": "astro check"
+    "typecheck": "astro check",
+    "check:all": "node scripts/check-all.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^5",
