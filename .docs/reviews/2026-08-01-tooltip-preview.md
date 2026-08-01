@@ -1,6 +1,6 @@
 # Tooltip preview 実ブラウザ検証
 
-- 実装 commit: `f256f6d04604520235f61acd6df2c036a67e8eb4`
+- 実装 commit: `e22d241c8b64fc94a0b087081bc1b1ca10c407cf`
 - 検証 URL: `http://127.0.0.1:4175/preview/tooltip/`、`http://127.0.0.1:4175/preview/tooltip-dark/`、`http://127.0.0.1:4175/catalog/`、`http://127.0.0.1:4175/catalog-dark/`
 - stable selector: `[data-slot="tooltip-content"]`
 - 実行環境: 固定実装 commit の build 済み成果物を `npm run preview -- --host 127.0.0.1 --port 4175` で起動し、Chrome 実ブラウザで検証した。
@@ -9,7 +9,9 @@
 
 `@base-ui/react` 1.6.0 をそのまま包んだ実装 commit `33c89b045aeae1d01c8e1dd8a7dfe0437f5fd612` では、hydration 後の Popup に `role` と `id` がなく、Trigger に `aria-describedby` がなかった。`node_modules/@base-ui/react/tooltip/popup/TooltipPopup.mjs` は `useRenderElement` へ state、ref、popup props、利用者 props を渡すだけで tooltip role を付けず、`trigger/TooltipTrigger.mjs` も内部 trigger id は付けるが `aria-describedby` を生成しないことをソースで確認した。
 
-公開 props の実ブラウザ probe では、content の `id="tooltip-preview-content"` と `role="tooltip"`、trigger の `aria-describedby="tooltip-preview-content"` がそのまま DOM へ到達し、`document.getElementById(trigger.getAttribute("aria-describedby")) === content` が成立した。これを受け、固定実装では配布 component の `TooltipContent` が `role="tooltip"` を上書き不能な位置で固定し、利用側が一意な content `id` と同値の trigger `aria-describedby` を公開 props で配線する契約を README と preview に置いた。`role` だけでは trigger と説明の関係が成立しないため、`aria-describedby` と参照先 ID の一致を対で要求する。
+公開 props の実ブラウザ probe では、content の `id="tooltip-preview-content"` と `role="tooltip"`、trigger の `aria-describedby="tooltip-preview-content"` がそのまま DOM へ到達し、`document.getElementById(trigger.getAttribute("aria-describedby")) === content` が成立した。これを受け、利用側が一意な content `id` と同値の trigger `aria-describedby` を公開 props で配線する契約を README と preview に置いた。`role` だけでは trigger と説明の関係が成立しないため、`aria-describedby` と参照先 ID の一致を対で要求する。
+
+最初の補完実装は JSX の `{...props}` より後に `role="tooltip"` を置いて通常の `role` props を固定したが、Base UI の `render` 要素が通常 props を後勝ちで上書きできる経路を残していた。review 修正では `TooltipContentProps` から `render` と `role` を除外し、Popup の spread 後に `render={undefined}`、`role="tooltip"` の順で渡した。負の型契約を実装前に追加した際は両方の `@ts-expect-error` が未使用となる TS2578 の RED を確認し、修正・library build 後は同じ契約が exit 0になった。配布 JS でも `...props` の後が `render: void 0`、`role: "tooltip"` の順であることを確認し、型と JavaScript 実行時の双方で上書き経路を閉じた。
 
 上流 Base UI が将来 ARIA tooltip pattern と ID 関係を実装した場合は、二重指定や競合を避けるためこの正規化と利用契約を再評価する。
 
@@ -41,7 +43,7 @@
 ## 画像
 
 - `.docs/reviews/tooltip-preview-light.jpg` と `.docs/reviews/tooltip-preview-dark.jpg` は、open 状態を Chrome Browser API の `tab.screenshot({ fullPage: true })` で取得した。返却された `Uint8Array` は JPEG / JFIF magic bytes `FF D8 FF E0` を持つため、その byte 列をそのまま `.jpg` として保存した。取得方法と画像形式・拡張子は一致する。
-- light は 16,607 bytes、dark は 16,663 bytesで、双方とも 1512 × 772px、baseline、8-bit、3 components の JFIF JPEG である。
+- review 修正後の fresh run では light は 17,035 bytes・1512 × 828px、dark は 16,663 bytes・1512 × 772pxだった。双方とも baseline、8-bit、3 components の JFIF JPEG である。dark は fresh run の byte 列を書き戻した結果、修正前証跡と byte 同一だった。
 
 ## 見た範囲 / 見ていない範囲
 
