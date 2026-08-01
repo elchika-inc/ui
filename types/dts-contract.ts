@@ -44,6 +44,21 @@ import type {
   ContextMenuSubProps,
   ContextMenuSubTriggerProps,
   ContextMenuTriggerProps,
+  DropdownMenuCheckboxItemProps,
+  DropdownMenuContentProps,
+  DropdownMenuGroupProps,
+  DropdownMenuItemProps,
+  DropdownMenuLabelProps,
+  DropdownMenuPortalProps,
+  DropdownMenuProps,
+  DropdownMenuRadioGroupProps,
+  DropdownMenuRadioItemProps,
+  DropdownMenuSeparatorProps,
+  DropdownMenuShortcutProps,
+  DropdownMenuSubContentProps,
+  DropdownMenuSubProps,
+  DropdownMenuSubTriggerProps,
+  DropdownMenuTriggerProps,
   DialogCloseProps,
   DialogContentProps,
   DialogDescriptionProps,
@@ -260,6 +275,28 @@ const contextMenuContractsReachable: ContextMenuContracts extends unknown[] ? tr
 const contextMenuDefaultOpen: ContextMenuProps["defaultOpen"] = true
 // @ts-expect-error ContextMenu の defaultOpen は文字列を受けない。
 const invalidContextMenuDefaultOpen: ContextMenuProps["defaultOpen"] = "true"
+
+type DropdownMenuContracts = [
+  DropdownMenuProps,
+  DropdownMenuPortalProps,
+  DropdownMenuTriggerProps,
+  DropdownMenuContentProps,
+  DropdownMenuGroupProps,
+  DropdownMenuLabelProps,
+  DropdownMenuItemProps,
+  DropdownMenuSubProps,
+  DropdownMenuSubTriggerProps,
+  DropdownMenuSubContentProps,
+  DropdownMenuCheckboxItemProps,
+  DropdownMenuRadioGroupProps,
+  DropdownMenuRadioItemProps,
+  DropdownMenuSeparatorProps,
+  DropdownMenuShortcutProps,
+]
+const dropdownMenuContractsReachable: DropdownMenuContracts extends unknown[] ? true : never = true
+const dropdownMenuDefaultOpen: DropdownMenuProps["defaultOpen"] = true
+// @ts-expect-error DropdownMenu の defaultOpen は文字列を受けない。
+const invalidDropdownMenuDefaultOpen: DropdownMenuProps["defaultOpen"] = "true"
 
 type DialogContracts = [
   DialogProps,

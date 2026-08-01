@@ -734,6 +734,27 @@
       "license": "MIT",
       "modified": "Base UIに正規化し、semantic token・非透明3px focus ring・全slotのProps型とbarrel export、isolated/catalog用preview・selectorを追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "dropdown-menu": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/dropdown-menu.json",
+      "registryPath": "registry/base-nova/ui/dropdown-menu.tsx",
+      "registryContentSha256": "ff60876271751b8427b3dd0f60be44db305c4a5faaedc3516b2b581ce3f676b0",
+      "generatedContentSha256": "c143e8692f7b899d55c889d2978e3f1d0aef1bf5a83dffe1590a0640aba60044",
+      "addTarget": "@shadcn/dropdown-menu",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/dropdown-menu.tsx",
+      "upstreamPathSha": "49616d2e162d2213d76478798ed3773b8cfe3089",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-01",
+      "license": "MIT",
+      "modified": "Base UI Menuを用いるDropdown Menuの追加。semantic token、非透明3px focus ring、data属性、公開Props、isolated限定defaultOpenのpreviewに正規化する。",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }

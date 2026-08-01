@@ -18,6 +18,7 @@
       "position": "center"
     }
   },
+  "dropdown-menu": "[data-slot=\"dropdown-menu-content\"]",
   "catalog": "[data-slot=\"verification-catalog\"]",
   "catalog-dark": "[data-slot=\"verification-catalog\"]",
   "dialog": "[data-slot=\"dialog-content\"]",
