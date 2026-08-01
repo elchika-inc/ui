@@ -353,6 +353,22 @@ export { HoverCard, HoverCardContent, HoverCardTrigger } from "./components/ui/h
 export type { InputProps } from "./components/ui/input";
 export { Input } from "./components/ui/input";
 export type {
+  InputGroupAddonProps,
+  InputGroupButtonProps,
+  InputGroupInputProps,
+  InputGroupProps,
+  InputGroupTextareaProps,
+  InputGroupTextProps,
+} from "./components/ui/input-group";
+export {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupText,
+  InputGroupTextarea,
+} from "./components/ui/input-group";
+export type {
   InputOTPGroupProps,
   InputOTPProps,
   InputOTPSeparatorProps,
