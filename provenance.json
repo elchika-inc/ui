@@ -732,7 +732,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-01",
       "license": "MIT",
-      "modified": "Base UIに正規化し、semantic token・非透明3px focus ring・全slotのProps型とbarrel export、isolated/catalog用preview・selectorを追加し、inset=falseではdata-inset属性を出さないよう正規化",
+      "modified": "Base UIに正規化し、semantic token・非透明3px focus ring・全slotのProps型とbarrel export、isolated/catalog用preview・selectorを追加する。inset=falseではdata-inset属性を出さず、preview triggerをbuttonへ差し替えてkeyboard contextmenu操作とfocus ringを提供する。",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "dropdown-menu": {
@@ -816,7 +816,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-01",
       "license": "MIT",
-      "modified": "Base UI Navigation Menu を基底に、semantic token と非透明フォーカスリングへ正規化し、公開契約と隔離プレビューを追加する",
+      "modified": "Base UI Navigation Menu を基底に、semantic token と非透明フォーカスリングへ正規化し、公開契約と隔離プレビューを追加する。Content配下でもLink自身の3px focus ringを保持する。",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "popover": {
@@ -858,7 +858,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "Base UI Selectを既存のsemantic tokenと非透明focus ringへ正規化し、全value/Props公開とisolated限定defaultOpenの対話preview、barrel、型契約、selector、registryを追加する",
+      "modified": "Base UI Selectを既存のsemantic tokenと非透明focus ringへ正規化し、全value/Props公開とisolated限定defaultOpenの対話preview、barrel、型契約、selector、registryを追加する。keyboard focus中のItemへ不透明3px ringを付与する。",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "tooltip": {

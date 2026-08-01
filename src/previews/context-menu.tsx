@@ -21,7 +21,10 @@ export function ContextMenuPreview({ mode = "isolated" }: PreviewProps) {
     <section data-slot="context-menu-preview" className="flex max-w-xl flex-col gap-3 p-6">
       <PreviewSentinel mode={mode} position="before" />
       <ContextMenu>
-        <ContextMenuTrigger className="rounded-lg border border-dashed border-border bg-muted px-6 py-12 text-center text-sm text-muted-foreground">
+        <ContextMenuTrigger
+          render={<button type="button" />}
+          className="rounded-lg border border-dashed border-border bg-muted px-6 py-12 text-center text-sm text-muted-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring"
+        >
           ここを右クリック
         </ContextMenuTrigger>
         <ContextMenuContent>
