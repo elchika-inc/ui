@@ -11,7 +11,8 @@
 import { globSync, readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 
-// 状態表示の variant が前置されたリングだけを対象にする。無条件の
+// 同じクラストークン内に focus / invalid の状態語があるリングだけを対象にする。
+// variant の前後や arbitrary variant の内外には依存しない。無条件の
 // ring-foreground/10 のような装飾リングは WCAG 1.4.11 の状態表示ではない。
 // 色名は [a-z0-9-]+（[a-z-]+ だと ring-red-500/50 を見逃す）。
 // 不透明度の指定は Tailwind v4 が 4 形式を受けるため全部拾う（実測で確認）:
@@ -20,8 +21,9 @@ import { pathToFileURL } from "node:url";
 // arbitrary 検査にも掛からないので、ここが唯一の検出経路になる。
 // 色側も v4 の変数短縮 ring-(--brand) と任意値 ring-[#f00] を拾う。
 // 色側を [a-z0-9-]+ だけにすると ring-(--brand)/50 を見逃す（実測）。
+const STATEFUL_RING = /(?:focus|invalid)/;
 const RING_OPACITY =
-  /\b(?:focus|focus-visible|focus-within|aria-invalid|data-invalid|invalid)(?:-[a-z-]+)?:(?:[a-z0-9-]+:)*ring-(?:ring|[a-z0-9-]+|\([^)]+\)|\[[^\]]+\])\/(?:\d+(?:\.\d+)?%?|\[[^\]]+\]|\([^)]+\))/g;
+  /ring-(?:ring|[a-z0-9-]+|\([^)]+\)|\[[^\]]+\])\/(?:\d+(?:\.\d+)?%?|\[[^\]]+\]|\([^)]+\))/g;
 
 // 値系ユーティリティだけを対象にする。プレフィックスの列挙は AUDIT.md の
 // arbitrary value 検査コマンドから逐語で写した。
@@ -36,8 +38,11 @@ export function checkFile(path, source) {
   const violations = [];
   source.split("\n").forEach((line, i) => {
     if (line.includes("@custom-variant dark")) return;
-    for (const m of line.matchAll(RING_OPACITY)) {
-      violations.push({ rule: "focus-ring-opacity", line: i + 1, text: m[0] });
+    for (const token of line.split(/\s+/)) {
+      if (!STATEFUL_RING.test(token)) continue;
+      for (const m of token.matchAll(RING_OPACITY)) {
+        violations.push({ rule: "focus-ring-opacity", line: i + 1, text: m[0] });
+      }
     }
     for (const m of line.matchAll(ARBITRARY)) {
       if (ALLOWED_ARBITRARY.has(m[0])) continue;

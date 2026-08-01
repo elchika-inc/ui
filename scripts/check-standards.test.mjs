@@ -57,6 +57,17 @@ test("テーマ修飾付きと focus-within の状態リングを検出する", 
   }
 });
 
+test("arbitrary variant 内の focus-visible でも透明リングを検出する", () => {
+  const { violations } = checkFile(
+    "a.tsx",
+    `className="has-[[data-slot=x]:focus-visible]:ring-ring/50"`,
+  );
+  assert.ok(
+    violations.some((v) => v.rule === "focus-ring-opacity"),
+    "variant 内の focus-visible を含む透明リングが検出されない",
+  );
+});
+
 test("無条件の装飾リングはフォーカスリング違反にしない", () => {
   for (const cls of ["ring-foreground/10", "ring-border/20", "ring-[3px]"]) {
     const { violations } = checkFile("a.tsx", `className="${cls}"`);
