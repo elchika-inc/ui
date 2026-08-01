@@ -944,6 +944,27 @@
       "license": "MIT",
       "modified": "全 PascalCase export の Props 型と、role=group を維持する日本語 lint 注記を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "calendar": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/calendar.json",
+      "registryPath": "registry/base-nova/ui/calendar.tsx",
+      "registryContentSha256": "f6f2599031e9ba98d6f99dead753d6f6a0a39e0c64d05a9003e9041774e8ed01",
+      "generatedContentSha256": "671ee643522872a573c021ce70a183b0629ad5f04b9823e4d725f6bc24745f6e",
+      "addTarget": "@shadcn/calendar",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/calendar.tsx",
+      "upstreamPathSha": "3ffd3e1c7c801f5af5aa72f7c70e21ace3b356bc",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-02",
+      "license": "MIT",
+      "modified": "全 PascalCase export の Props 型を追加し、focus ring と arbitrary text size を standards へ正規化",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }

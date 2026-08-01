@@ -125,6 +125,8 @@ export {
   ButtonGroupText,
   buttonGroupVariants,
 } from "./components/ui/button-group";
+export type { CalendarDayButtonProps, CalendarProps } from "./components/ui/calendar";
+export { Calendar, CalendarDayButton } from "./components/ui/calendar";
 export type {
   CardActionProps,
   CardContentProps,
