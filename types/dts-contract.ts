@@ -77,6 +77,9 @@ import type {
   ScrollAreaScrollbarProps,
   ScrollAreaThumbProps,
   ScrollAreaViewportProps,
+  ResizableHandleProps,
+  ResizablePanelGroupProps,
+  ResizablePanelProps,
   SpinnerProps,
   SwitchProps,
   TableBodyProps,
@@ -161,6 +164,19 @@ const scrollAreaContractsReachable: ScrollAreaContracts extends unknown[] ? true
 const scrollAreaScrollbarOrientation: ScrollAreaScrollbarProps["orientation"] = "horizontal"
 // @ts-expect-error ScrollAreaScrollbar の orientation は vertical または horizontal に限る。
 const invalidScrollAreaScrollbarOrientation: ScrollAreaScrollbarProps["orientation"] = "diagonal"
+
+type ResizableContracts = [
+  ResizablePanelGroupProps,
+  ResizablePanelProps,
+  ResizableHandleProps,
+]
+const resizableContractsReachable: ResizableContracts extends unknown[] ? true : never = true
+const resizablePanelGroupOrientation: ResizablePanelGroupProps["orientation"] = "horizontal"
+// @ts-expect-error ResizablePanelGroup の orientation は horizontal または vertical に限る。
+const invalidResizablePanelGroupOrientation: ResizablePanelGroupProps["orientation"] = "diagonal"
+const resizablePanelMinSize: ResizablePanelProps["minSize"] = "25%"
+// @ts-expect-error ResizableHandle の disabled は boolean に限る。
+const invalidResizableHandleDisabled: ResizableHandleProps["disabled"] = "true"
 const switchChecked: SwitchProps["checked"] = true
 // @ts-expect-error Switch の checked は文字列を受けない。
 const invalidSwitchChecked: SwitchProps["checked"] = "true"
@@ -300,6 +316,11 @@ export {
   scrollAreaContractsReachable,
   scrollAreaScrollbarOrientation,
   invalidScrollAreaScrollbarOrientation,
+  resizableContractsReachable,
+  resizablePanelGroupOrientation,
+  invalidResizablePanelGroupOrientation,
+  resizablePanelMinSize,
+  invalidResizableHandleDisabled,
   switchChecked,
   invalidSwitchChecked,
   textareaRows,

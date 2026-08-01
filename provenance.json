@@ -692,6 +692,27 @@
       "license": "MIT",
       "modified": "DESIGN.md §5に適合させるため、ScrollArea全slotをBase UI・semantic token・非透明3px focus ringへ正規化し、全Props型とbarrel export、縦横overflowを持つisolated/catalog preview、selectorとd.ts契約を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "resizable": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/resizable.json",
+      "registryPath": "registry/base-nova/ui/resizable.tsx",
+      "registryContentSha256": "2bfc1dfa5959622a7ce87abe96d76dd48339c8902c24ed5c6c4e41a9afdbbeb9",
+      "generatedContentSha256": "6e3f0f912a0d68614281e7570f4077a966a0517f8adcde65aed5cf9c88af073c",
+      "addTarget": "@shadcn/resizable",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/resizable.tsx",
+      "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-01",
+      "license": "MIT",
+      "modified": "react-resizable-panelsの実APIを用いるResizable各slotを追加し、semantic tokenと非透明3px focus ringへ正規化する。公開Props、隔離light/dark preview routes、registry、型契約、selector、package dependencyとlockfileを追加する。",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }

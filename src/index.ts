@@ -193,6 +193,12 @@ export {
 export type { RadioGroupItemProps, RadioGroupProps } from "./components/ui/radio-group";
 export { RadioGroup, RadioGroupItem } from "./components/ui/radio-group";
 export type {
+  ResizableHandleProps,
+  ResizablePanelGroupProps,
+  ResizablePanelProps,
+} from "./components/ui/resizable";
+export { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "./components/ui/resizable";
+export type {
   ScrollAreaContentProps,
   ScrollAreaCornerProps,
   ScrollAreaProps,
