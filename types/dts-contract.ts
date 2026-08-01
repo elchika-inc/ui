@@ -107,6 +107,15 @@ import type {
   NativeSelectOptGroupProps,
   NativeSelectOptionProps,
   NativeSelectProps,
+  NavigationMenuContentProps,
+  NavigationMenuIndicatorProps,
+  NavigationMenuItemProps,
+  NavigationMenuLinkProps,
+  NavigationMenuListProps,
+  NavigationMenuPositionerProps,
+  NavigationMenuProps,
+  NavigationMenuTriggerProps,
+  NavigationMenuViewportProps,
   ProgressIndicatorProps,
   ProgressLabelProps,
   ProgressProps,
@@ -385,6 +394,22 @@ const nativeSelectSize: NativeSelectProps["size"] = "sm"
 // @ts-expect-error 未知の size は弾かれること。
 const invalidNativeSelectSize: NativeSelectProps["size"] = "lg"
 
+type NavigationMenuContracts = [
+  NavigationMenuProps,
+  NavigationMenuListProps,
+  NavigationMenuItemProps,
+  NavigationMenuTriggerProps,
+  NavigationMenuContentProps,
+  NavigationMenuPositionerProps,
+  NavigationMenuViewportProps,
+  NavigationMenuLinkProps,
+  NavigationMenuIndicatorProps,
+]
+const navigationMenuContractsReachable: NavigationMenuContracts extends unknown[] ? true : never = true
+const navigationMenuDefaultValue: NavigationMenuProps["defaultValue"] = "products"
+// @ts-expect-error NavigationMenu の defaultValue は object を受けない。
+const invalidNavigationMenuDefaultValue: NavigationMenuProps["defaultValue"] = {}
+
 type ProgressContracts = [
   ProgressProps,
   ProgressTrackProps,
@@ -467,6 +492,9 @@ export {
   nativeSelectContractsReachable,
   nativeSelectSize,
   invalidNativeSelectSize,
+  navigationMenuContractsReachable,
+  navigationMenuDefaultValue,
+  invalidNavigationMenuDefaultValue,
   progressContractsReachable,
   progressValue,
   spinnerContractsReachable,

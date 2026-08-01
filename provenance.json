@@ -797,6 +797,27 @@
       "license": "MIT",
       "modified": "Base UIの実APIでHover Cardを実装し、生成時の値系arbitrary valueをsemantic tokenと標準durationへ正規化する。全PascalCase exportのProps、barrel、isolated限定defaultOpenのlight/dark preview、selector、registry型契約を追加する。",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "navigation-menu": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/navigation-menu.json",
+      "registryPath": "registry/base-nova/ui/navigation-menu.tsx",
+      "registryContentSha256": "cacc3d131673f82af85c0d446d9f56a3e26b725066178de69fedc9881180fd58",
+      "generatedContentSha256": "076ba62c2d4292970470455ab9719badec7fedd74aaaaa40a7955cc366128e97",
+      "addTarget": "@shadcn/navigation-menu",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/navigation-menu.tsx",
+      "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-01",
+      "license": "MIT",
+      "modified": "Base UI Navigation Menu を基底に、semantic token と非透明フォーカスリングへ正規化し、公開契約と隔離プレビューを追加する",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }
