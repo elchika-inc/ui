@@ -13,7 +13,7 @@
 | `/preview/context-menu-dark/` / dark | sentinel before/after 各1、content 0、`html.dark` | 同一中央操作後、content 1、rect `(281.77, 137, 164.50, 205.67)` | content `role=menu`、Portal parent は `DIV`、body `inert=null`、初期 focus は content | error 0 |
 | `/catalog/` / catalog | Context Menu section の sentinel before/after 各0、content 0 | trigger は1件のみで overlay は閉じたまま | catalog section の静的描画を確認 | error 0 |
 
-light の再 open で `ArrowDown` は「新規作成」へ移動した。表示文字列を維持したまま `label="new"` を指定し、`N` の typeahead でも同じ menuitem へ移動した。Escape は Chrome の `ESC` 入力で content 0、focus `BODY` を実測したため、Context Menu では trigger へ return しない実値を記録する。
+light の再 open で `ArrowDown` は「新規作成」へ移動した。表示文字列を維持したまま `label="new"` を指定し、`N` の typeahead でも同じ menuitem へ移動した。Escape は Chrome の `ESC` 入力で content 0、focus `BODY` を実測した。右クリックでは trigger が focus されず返す先がないため、閉じた content 内に focus が取り残されていない `BODY` が正しい結果である。
 
 ## JPEG
 

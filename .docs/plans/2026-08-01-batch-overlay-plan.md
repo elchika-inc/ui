@@ -23,6 +23,7 @@
 - 対話群12件のpreviewは`mode === "isolated"`のときだけ`data-sentinel="before"`と`data-sentinel="after"`のfocusable buttonを1件ずつ描画し、catalogでは両方0件にする。既存22件は変更しない。
 - Portal群はcontext-menuを除きisolatedで`defaultOpen`を使い、catalogでは閉じる。`open={true}`は禁止する。context-menuは閉じたpreviewから実際の`contextmenu`イベントで開く。
 - `aria-modal`を仮定しない。ARIA、Portal DOM、inert、focus trap、focus returnはhydration後の実DOMで実測する。
+- focus returnの期待値は開き方で決める。click/keyboardでtriggerを操作した場合はtriggerへ戻り、pointerだけの右クリックでは閉じたcontentへ取り残されないことを確認し、hoverではfocusが動かないことを確認する。
 - Portal群で`defaultOpen`、hydration後DOM、focus trap/inert/returnのdialog知見が通用しなければ、そのcomponentの作業を止めて都度Claudeへ報告する。
 - 各実装commit前に`npm run format`、`npm run lint`、`npm run typecheck`、Props contract単独tsc、scripts tests、`npm run build`、`npm run build:lib`、`npm run check:pre`を通す。
 - 各実装commitの固定SHAからcomponent固有実装pathに差分がない状態でlight/darkを実ブラウザ検証し、新規MarkdownとJPEG 2件だけの証跡commitを作る。証跡commit後に`npm run check:all`を通す。
@@ -103,7 +104,7 @@
 
 - [ ] wrapper REDを確認し、全slot value/Propsを公開する。
 - [ ] trigger中央で`contextmenu`イベントを発火し、hydration後のcontentが発火座標近傍に表示されることを確認する。context-menuはpointer座標にanchorするため`defaultOpen`で位置検証が成立しない実測事実を手順書へ記録する。
-- [ ] light/darkでsentinel各1、Portal DOM、実ARIA、background inert、focus trap、Escape close、triggerへのfocus return、再度contextmenu open、typeaheadを含むkeyboard item移動、consoleを実測する。
+- [ ] light/darkでsentinel各1、Portal DOM、実ARIA、background inert、focus trap、Escape close後にfocusが閉じたcontentへ取り残されないこと、再度contextmenu open、typeaheadを含むkeyboard item移動、consoleを実測する。右クリックではtriggerがfocusされないため、BODYへ移る実値を正常として理由とともに記録する。
 - [ ] catalogでsentinel/content 0を確認し、実装commit→証跡commit→review cleanを完了する。
 
 ### Task 8: Dropdown Menu
