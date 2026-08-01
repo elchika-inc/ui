@@ -380,6 +380,30 @@ export {
   InputOTPSeparator,
   InputOTPSlot,
 } from "./components/ui/input-otp";
+export type {
+  ItemActionsProps,
+  ItemContentProps,
+  ItemDescriptionProps,
+  ItemFooterProps,
+  ItemGroupProps,
+  ItemHeaderProps,
+  ItemMediaProps,
+  ItemProps,
+  ItemSeparatorProps,
+  ItemTitleProps,
+} from "./components/ui/item";
+export {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemFooter,
+  ItemGroup,
+  ItemHeader,
+  ItemMedia,
+  ItemSeparator,
+  ItemTitle,
+} from "./components/ui/item";
 export type { KbdGroupProps, KbdProps } from "./components/ui/kbd";
 export { Kbd, KbdGroup } from "./components/ui/kbd";
 export type { LabelProps } from "./components/ui/label";

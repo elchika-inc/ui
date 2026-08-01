@@ -1049,6 +1049,27 @@
       "license": "MIT",
       "modified": "全 PascalCase export の Props 型公開、arbitrary margin・radius と focus / invalid ring の透明度を semantic utility へ正規化、汎用 group の role と補助 click を保持する局所 lint 理由、barrel export、prefix・suffix・button・focus-visible の preview と light/dark route、hydration selector を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "item": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/item.json",
+      "registryPath": "registry/base-nova/ui/item.tsx",
+      "registryContentSha256": "e0e31128183f570c7cf94a46e6ef9bf6aa41fde6fb7dcff89dc6329e577e27d0",
+      "generatedContentSha256": "3f5ec6eac0a7c2daea3f4403408974ff4bae1e949d328701bcf3a74a4554b6e0",
+      "addTarget": "@shadcn/item",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/item.tsx",
+      "upstreamPathSha": "6ba39bb720667eb041caefdd31dda95ef30de448",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-02",
+      "license": "MIT",
+      "modified": "全 PascalCase export の Props 型公開、focus ring の透明度を除去、ItemGroup の div props と role=list を保持する局所 lint 理由、barrel export、media・content・actions・separator の preview と light/dark route、hydration selector を追加",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }

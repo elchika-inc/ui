@@ -35,6 +35,7 @@
   "input": "[data-slot=\"input\"]",
   "input-group": "[data-slot=\"input-group-preview\"]",
   "input-otp": "[data-slot=\"input-otp-preview\"]",
+  "item": "[data-slot=\"item-preview\"]",
   "kbd": "[data-slot=\"kbd-preview\"]",
   "label": "[data-slot=\"label\"]",
   "marker": "[data-slot=\"marker-preview\"]",
