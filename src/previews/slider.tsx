@@ -20,7 +20,9 @@ export function SliderPreview() {
       <Slider
         id="slider-default"
         value={value}
-        onValueChange={(nextValue) => setValue(Array.isArray(nextValue) ? [...nextValue] : [nextValue])}
+        onValueChange={(nextValue) =>
+          setValue(Array.isArray(nextValue) ? [...nextValue] : [nextValue])
+        }
         aria-labelledby="slider-title"
       />
       <output data-slot="slider-status" data-value={value[0]}>
