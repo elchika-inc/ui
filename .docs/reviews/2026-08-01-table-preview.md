@@ -1,5 +1,7 @@
 # Table preview 実ブラウザ検証
 
+verified_impl_sha: a4d66c53f761a63309426091bf4149246b7ce7bd
+
 - 検証 SHA: `a4d66c53f761a63309426091bf4149246b7ce7bd`
 - Browser: Chrome
 - server: `http://127.0.0.1:4332`（固定 SHA の worktree を起動）

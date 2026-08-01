@@ -1,5 +1,7 @@
 # Breadcrumb プレビュー実ブラウザ検証
 
+verified_impl_sha: d9c1c949bc65ff776e791e911e45b1cc44fdcf47
+
 検証した commit: `d9c1c949bc65ff776e791e911e45b1cc44fdcf47`
 
 配信は `npm run dev -- --host 127.0.0.1 --port 4324` で起動し、Chrome で Breadcrumb の個別 route のみを確認した。catalog 横断確認はバッチ末尾で実施する。

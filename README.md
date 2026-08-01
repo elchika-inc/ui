@@ -56,6 +56,29 @@ npx shadcn@latest add --overwrite http://127.0.0.1:3011/r/button.json
 
 `sonner` は `next-themes` の `ThemeProvider` を前提とする。
 
+### Tooltip のアクセシビリティ
+
+`TooltipContent` は `role="tooltip"` を固定する。利用側は content に一意な `id` を付け、同じ値を trigger の `aria-describedby` に渡す。
+
+`TooltipContent` では `render` と `role` を指定できない。Base UI の `render` 要素が通常 props を後勝ちで上書きして固定 role を迂回する経路を、型と実行時の両方で閉じるためである。
+
+```tsx
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+
+const tooltipId = "save-button-help";
+
+<TooltipProvider>
+  <Tooltip>
+    <TooltipTrigger aria-describedby={tooltipId} aria-label="変更を保存する">
+      保存
+    </TooltipTrigger>
+    <TooltipContent id={tooltipId}>変更内容を保存します</TooltipContent>
+  </Tooltip>
+</TooltipProvider>;
+```
+
+操作に必須の情報は tooltip だけに置かず、trigger の表示テキストや `aria-label` などでも同等の情報を提供する。上流 Base UI が ARIA tooltip pattern を実装した場合は、二重指定を避けるためこの正規化を再評価する。
+
 ## トークンの適用
 
 取り込むと `elchika-ui/tokens.css` が置かれる。**利用側に既存のトークン定義がある場合、registry はそれを上書きしない**（shadcn の仕様）。elchika の見た目を共有するには、自分の CSS から**最後に** import する。
@@ -94,13 +117,7 @@ public/r/          # shadcn build の出力（registry の配信物）
 
 ## Contributing
 
-詳細は [CONTRIBUTING.md](CONTRIBUTING.md) を参照してください。または直接：
-
-1. Fork する
-2. feature ブランチを切る (`git checkout -b feat/your-feature`)
-3. 変更をコミットする (`git commit -m 'feat: add your feature'`)
-4. ブランチを push する (`git push origin feat/your-feature`)
-5. Pull Request を作成する
+詳細は [CONTRIBUTING.md](CONTRIBUTING.md) を参照してください。
 
 ## License
 

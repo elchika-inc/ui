@@ -13,14 +13,33 @@ test("selector 宣言が無いコンポーネントを検出する", async () =>
   });
 });
 
-test("空または文字列でない selector を検出する", async () => {
+test("object の selector 宣言を受理する", async () => {
   assert.ok(existsSync(checkerPath), "check-preview-render.mjs がまだ無い");
   const { checkPreviewRender } = await import(checkerPath);
 
   assert.deepEqual(
-    checkPreviewRender(["button", "dialog"], { button: "  ", dialog: ["[role=dialog]"] }),
+    checkPreviewRender(["context-menu"], {
+      "context-menu": {
+        selector: '[data-slot="context-menu-content"]',
+        setup: {
+          action: "contextmenu",
+          target: '[data-slot="context-menu-trigger"]',
+          position: "center",
+        },
+      },
+    }),
+    { problems: [] },
+  );
+});
+
+test("空または selector が無い object を検出する", async () => {
+  assert.ok(existsSync(checkerPath), "check-preview-render.mjs がまだ無い");
+  const { checkPreviewRender } = await import(checkerPath);
+
+  assert.deepEqual(
+    checkPreviewRender(["button", "dialog"], { button: { selector: "  " }, dialog: {} }),
     {
-      problems: ["button: preview selector が空", "dialog: preview selector は文字列で宣言する"],
+      problems: ["button: preview selector が空", "dialog: preview selector が無い"],
     },
   );
 });

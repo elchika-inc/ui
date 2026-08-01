@@ -1,5 +1,7 @@
 # Spinner preview 実ブラウザ検証
 
+verified_impl_sha: 77f8e164bbaf00a75caf03fd861ae6a33a8e8a1f
+
 - implementation commit: `77f8e164bbaf00a75caf03fd861ae6a33a8e8a1f`
 - 対象 route: `http://localhost:4331/preview/spinner/`（light）と `http://localhost:4331/preview/spinner-dark/`（dark）
 - 実測対象は Spinner 固有 route のみであり、catalog はバッチ末尾の横断確認まで開かない。

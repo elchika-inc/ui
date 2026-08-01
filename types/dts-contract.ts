@@ -2,6 +2,10 @@
 // design-sync はこの .d.ts を読んで API 契約を組み立てるため、
 // ここが潰れると設計エージェントが全コンポーネントで API を誤用する。
 import type {
+  AccordionContentProps,
+  AccordionItemProps,
+  AccordionProps,
+  AccordionTriggerProps,
   AspectRatioProps,
   AvatarBadgeProps,
   AvatarFallbackProps,
@@ -22,6 +26,42 @@ import type {
   BubbleReactionsProps,
   ButtonProps,
   CheckboxProps,
+  CollapsibleContentProps,
+  CollapsibleProps,
+  CollapsibleTriggerProps,
+  ContextMenuCheckboxItemProps,
+  ContextMenuContentProps,
+  ContextMenuGroupProps,
+  ContextMenuItemProps,
+  ContextMenuLabelProps,
+  ContextMenuPortalProps,
+  ContextMenuProps,
+  ContextMenuRadioGroupProps,
+  ContextMenuRadioItemProps,
+  ContextMenuSeparatorProps,
+  ContextMenuShortcutProps,
+  ContextMenuSubContentProps,
+  ContextMenuSubProps,
+  ContextMenuSubTriggerProps,
+  ContextMenuTriggerProps,
+  DropdownMenuCheckboxItemProps,
+  DropdownMenuContentProps,
+  DropdownMenuGroupProps,
+  DropdownMenuItemProps,
+  DropdownMenuLabelProps,
+  DropdownMenuPortalProps,
+  DropdownMenuProps,
+  DropdownMenuRadioGroupProps,
+  DropdownMenuRadioItemProps,
+  DropdownMenuSeparatorProps,
+  DropdownMenuShortcutProps,
+  DropdownMenuSubContentProps,
+  DropdownMenuSubProps,
+  DropdownMenuSubTriggerProps,
+  DropdownMenuTriggerProps,
+  HoverCardContentProps,
+  HoverCardProps,
+  HoverCardTriggerProps,
   DialogCloseProps,
   DialogContentProps,
   DialogDescriptionProps,
@@ -32,6 +72,17 @@ import type {
   DialogProps,
   DialogTitleProps,
   DialogTriggerProps,
+  DrawerCloseProps,
+  DrawerContentProps,
+  DrawerDescriptionProps,
+  DrawerFooterProps,
+  DrawerHeaderProps,
+  DrawerOverlayProps,
+  DrawerPortalProps,
+  DrawerProps,
+  DrawerSwipeHandleProps,
+  DrawerTitleProps,
+  DrawerTriggerProps,
   EmptyContentProps,
   EmptyDescriptionProps,
   EmptyHeaderProps,
@@ -56,6 +107,21 @@ import type {
   NativeSelectOptGroupProps,
   NativeSelectOptionProps,
   NativeSelectProps,
+  PopoverContentProps,
+  PopoverDescriptionProps,
+  PopoverHeaderProps,
+  PopoverProps,
+  PopoverTitleProps,
+  PopoverTriggerProps,
+  NavigationMenuContentProps,
+  NavigationMenuIndicatorProps,
+  NavigationMenuItemProps,
+  NavigationMenuLinkProps,
+  NavigationMenuListProps,
+  NavigationMenuPositionerProps,
+  NavigationMenuProps,
+  NavigationMenuTriggerProps,
+  NavigationMenuViewportProps,
   ProgressIndicatorProps,
   ProgressLabelProps,
   ProgressProps,
@@ -64,6 +130,25 @@ import type {
   RadioGroupItemProps,
   RadioGroupProps,
   SliderProps,
+  ScrollAreaContentProps,
+  ScrollAreaCornerProps,
+  ScrollAreaProps,
+  ScrollAreaScrollbarProps,
+  ScrollAreaThumbProps,
+  ScrollAreaViewportProps,
+  ResizableHandleProps,
+  ResizablePanelGroupProps,
+  ResizablePanelProps,
+  SelectContentProps,
+  SelectGroupProps,
+  SelectItemProps,
+  SelectLabelProps,
+  SelectProps,
+  SelectScrollDownButtonProps,
+  SelectScrollUpButtonProps,
+  SelectSeparatorProps,
+  SelectTriggerProps,
+  SelectValueProps,
   SpinnerProps,
   SwitchProps,
   TableBodyProps,
@@ -79,9 +164,24 @@ import type {
   TabsProps,
   TabsTriggerProps,
   TextareaProps,
+  TooltipContentProps,
+  TooltipProps,
+  TooltipProviderProps,
+  TooltipTriggerProps,
   ToasterProps,
   ToggleProps,
 } from "../lib/index.js"
+
+type AccordionContracts = [
+  AccordionProps,
+  AccordionItemProps,
+  AccordionTriggerProps,
+  AccordionContentProps,
+]
+const accordionContractsReachable: AccordionContracts extends unknown[] ? true : never = true
+const accordionItemDisabled: AccordionItemProps["disabled"] = true
+// @ts-expect-error AccordionItem の disabled は文字列を受けない。
+const invalidAccordionItemDisabled: AccordionItemProps["disabled"] = "true"
 
 type NewPropsContracts = [
   BreadcrumbProps,
@@ -124,6 +224,32 @@ const invalidRadioGroupDisabled: RadioGroupProps["disabled"] = "true"
 const sliderValue: SliderProps["value"] = 40
 // @ts-expect-error Slider値は文字列を受けない。
 const invalidSliderValue: SliderProps["value"] = "40"
+
+type ScrollAreaContracts = [
+  ScrollAreaProps,
+  ScrollAreaViewportProps,
+  ScrollAreaContentProps,
+  ScrollAreaScrollbarProps,
+  ScrollAreaThumbProps,
+  ScrollAreaCornerProps,
+]
+const scrollAreaContractsReachable: ScrollAreaContracts extends unknown[] ? true : never = true
+const scrollAreaScrollbarOrientation: ScrollAreaScrollbarProps["orientation"] = "horizontal"
+// @ts-expect-error ScrollAreaScrollbar の orientation は vertical または horizontal に限る。
+const invalidScrollAreaScrollbarOrientation: ScrollAreaScrollbarProps["orientation"] = "diagonal"
+
+type ResizableContracts = [
+  ResizablePanelGroupProps,
+  ResizablePanelProps,
+  ResizableHandleProps,
+]
+const resizableContractsReachable: ResizableContracts extends unknown[] ? true : never = true
+const resizablePanelGroupOrientation: ResizablePanelGroupProps["orientation"] = "horizontal"
+// @ts-expect-error ResizablePanelGroup の orientation は horizontal または vertical に限る。
+const invalidResizablePanelGroupOrientation: ResizablePanelGroupProps["orientation"] = "diagonal"
+const resizablePanelMinSize: ResizablePanelProps["minSize"] = "25%"
+// @ts-expect-error ResizableHandle の disabled は boolean に限る。
+const invalidResizableHandleDisabled: ResizableHandleProps["disabled"] = "true"
 const switchChecked: SwitchProps["checked"] = true
 // @ts-expect-error Switch の checked は文字列を受けない。
 const invalidSwitchChecked: SwitchProps["checked"] = "true"
@@ -161,6 +287,66 @@ type CheckboxContracts = [CheckboxProps]
 const checkboxContractsReachable: CheckboxContracts extends unknown[] ? true : never = true
 const checkboxDefaultChecked: CheckboxProps["defaultChecked"] = true
 
+type CollapsibleContracts = [
+  CollapsibleProps,
+  CollapsibleTriggerProps,
+  CollapsibleContentProps,
+]
+const collapsibleContractsReachable: CollapsibleContracts extends unknown[] ? true : never = true
+const collapsibleDefaultOpen: CollapsibleProps["defaultOpen"] = true
+// @ts-expect-error Collapsible の defaultOpen は文字列を受けない。
+const invalidCollapsibleDefaultOpen: CollapsibleProps["defaultOpen"] = "true"
+
+type ContextMenuContracts = [
+  ContextMenuProps,
+  ContextMenuPortalProps,
+  ContextMenuTriggerProps,
+  ContextMenuContentProps,
+  ContextMenuGroupProps,
+  ContextMenuLabelProps,
+  ContextMenuItemProps,
+  ContextMenuSubProps,
+  ContextMenuSubTriggerProps,
+  ContextMenuSubContentProps,
+  ContextMenuCheckboxItemProps,
+  ContextMenuRadioGroupProps,
+  ContextMenuRadioItemProps,
+  ContextMenuSeparatorProps,
+  ContextMenuShortcutProps,
+]
+const contextMenuContractsReachable: ContextMenuContracts extends unknown[] ? true : never = true
+const contextMenuDefaultOpen: ContextMenuProps["defaultOpen"] = true
+// @ts-expect-error ContextMenu の defaultOpen は文字列を受けない。
+const invalidContextMenuDefaultOpen: ContextMenuProps["defaultOpen"] = "true"
+
+type HoverCardContracts = [HoverCardProps, HoverCardTriggerProps, HoverCardContentProps]
+const hoverCardContractsReachable: HoverCardContracts extends unknown[] ? true : never = true
+const hoverCardDefaultOpen: HoverCardProps["defaultOpen"] = true
+// @ts-expect-error HoverCard の defaultOpen は文字列を受けない。
+const invalidHoverCardDefaultOpen: HoverCardProps["defaultOpen"] = "true"
+
+type DropdownMenuContracts = [
+  DropdownMenuProps,
+  DropdownMenuPortalProps,
+  DropdownMenuTriggerProps,
+  DropdownMenuContentProps,
+  DropdownMenuGroupProps,
+  DropdownMenuLabelProps,
+  DropdownMenuItemProps,
+  DropdownMenuSubProps,
+  DropdownMenuSubTriggerProps,
+  DropdownMenuSubContentProps,
+  DropdownMenuCheckboxItemProps,
+  DropdownMenuRadioGroupProps,
+  DropdownMenuRadioItemProps,
+  DropdownMenuSeparatorProps,
+  DropdownMenuShortcutProps,
+]
+const dropdownMenuContractsReachable: DropdownMenuContracts extends unknown[] ? true : never = true
+const dropdownMenuDefaultOpen: DropdownMenuProps["defaultOpen"] = true
+// @ts-expect-error DropdownMenu の defaultOpen は文字列を受けない。
+const invalidDropdownMenuDefaultOpen: DropdownMenuProps["defaultOpen"] = "true"
+
 type DialogContracts = [
   DialogProps,
   DialogTriggerProps,
@@ -177,6 +363,24 @@ type DialogContracts = [
 const dialogContentCloseButton: DialogContentProps["showCloseButton"] = true
 const dialogFooterCloseButton: DialogFooterProps["showCloseButton"] = false
 const dialogContractsReachable: DialogContracts extends unknown[] ? true : never = true
+
+type DrawerContracts = [
+  DrawerProps,
+  DrawerPortalProps,
+  DrawerOverlayProps,
+  DrawerSwipeHandleProps,
+  DrawerTriggerProps,
+  DrawerCloseProps,
+  DrawerContentProps,
+  DrawerHeaderProps,
+  DrawerFooterProps,
+  DrawerTitleProps,
+  DrawerDescriptionProps,
+]
+const drawerContractsReachable: DrawerContracts extends unknown[] ? true : never = true
+const drawerDefaultOpen: DrawerProps["defaultOpen"] = true
+// @ts-expect-error Drawer の defaultOpen は文字列を受けない。
+const invalidDrawerDefaultOpen: DrawerProps["defaultOpen"] = "true"
 
 type MarkerContracts = [MarkerProps, MarkerIconProps, MarkerContentProps]
 const markerContractsReachable: MarkerContracts extends unknown[] ? true : never = true
@@ -210,6 +414,52 @@ const nativeSelectSize: NativeSelectProps["size"] = "sm"
 // @ts-expect-error 未知の size は弾かれること。
 const invalidNativeSelectSize: NativeSelectProps["size"] = "lg"
 
+type NavigationMenuContracts = [
+  NavigationMenuProps,
+  NavigationMenuListProps,
+  NavigationMenuItemProps,
+  NavigationMenuTriggerProps,
+  NavigationMenuContentProps,
+  NavigationMenuPositionerProps,
+  NavigationMenuViewportProps,
+  NavigationMenuLinkProps,
+  NavigationMenuIndicatorProps,
+]
+const navigationMenuContractsReachable: NavigationMenuContracts extends unknown[] ? true : never = true
+const navigationMenuOrientation: NavigationMenuProps["orientation"] = "horizontal"
+// @ts-expect-error NavigationMenu の orientation は horizontal または vertical に限る。
+const invalidNavigationMenuOrientation: NavigationMenuProps["orientation"] = "diagonal"
+
+type PopoverContracts = [
+  PopoverProps,
+  PopoverTriggerProps,
+  PopoverContentProps,
+  PopoverHeaderProps,
+  PopoverTitleProps,
+  PopoverDescriptionProps,
+]
+const popoverContractsReachable: PopoverContracts extends unknown[] ? true : never = true
+const popoverDefaultOpen: PopoverProps["defaultOpen"] = true
+// @ts-expect-error Popover の defaultOpen は文字列を受けない。
+const invalidPopoverDefaultOpen: PopoverProps["defaultOpen"] = "true"
+
+type SelectContracts = [
+  SelectProps,
+  SelectGroupProps,
+  SelectValueProps,
+  SelectTriggerProps,
+  SelectContentProps,
+  SelectLabelProps,
+  SelectItemProps,
+  SelectSeparatorProps,
+  SelectScrollUpButtonProps,
+  SelectScrollDownButtonProps,
+]
+const selectContractsReachable: SelectContracts extends unknown[] ? true : never = true
+const selectTriggerSize: SelectTriggerProps["size"] = "sm"
+// @ts-expect-error SelectTrigger の size は sm または default に限る。
+const invalidSelectTriggerSize: SelectTriggerProps["size"] = "lg"
+
 type ProgressContracts = [
   ProgressProps,
   ProgressTrackProps,
@@ -222,6 +472,21 @@ const progressValue: ProgressProps["value"] = 50
 
 type SpinnerContracts = [SpinnerProps]
 const spinnerContractsReachable: SpinnerContracts extends unknown[] ? true : never = true
+
+type TooltipContracts = [
+  TooltipProps,
+  TooltipProviderProps,
+  TooltipTriggerProps,
+  TooltipContentProps,
+]
+const tooltipContractsReachable: TooltipContracts extends unknown[] ? true : never = true
+const tooltipDefaultOpen: TooltipProps["defaultOpen"] = true
+// @ts-expect-error Tooltip の defaultOpen は文字列を受けない。
+const invalidTooltipDefaultOpen: TooltipProps["defaultOpen"] = "true"
+// @ts-expect-error TooltipContent は render による role の上書き経路を公開しない。
+const invalidTooltipContentRender: TooltipContentProps["render"] = undefined
+// @ts-expect-error TooltipContent の role は tooltip に固定する。
+const invalidTooltipContentRole: TooltipContentProps["role"] = "dialog"
 
 type TableContracts = [
   TableProps,
@@ -240,6 +505,9 @@ const tabsContractsReachable: TabsContracts extends unknown[] ? true : never = t
 const toasterPosition: ToasterProps["position"] = "top-center"
 
 export {
+  accordionContractsReachable,
+  accordionItemDisabled,
+  invalidAccordionItemDisabled,
   newPropsContractsReachable,
   inputOtpMaxLength,
   invalidInputOtpMaxLength,
@@ -247,6 +515,14 @@ export {
   invalidRadioGroupDisabled,
   sliderValue,
   invalidSliderValue,
+  scrollAreaContractsReachable,
+  scrollAreaScrollbarOrientation,
+  invalidScrollAreaScrollbarOrientation,
+  resizableContractsReachable,
+  resizablePanelGroupOrientation,
+  invalidResizablePanelGroupOrientation,
+  resizablePanelMinSize,
+  invalidResizableHandleDisabled,
   switchChecked,
   invalidSwitchChecked,
   textareaRows,
@@ -260,6 +536,15 @@ export {
   invalid,
   checkboxContractsReachable,
   checkboxDefaultChecked,
+  collapsibleContractsReachable,
+  collapsibleDefaultOpen,
+  invalidCollapsibleDefaultOpen,
+  contextMenuContractsReachable,
+  contextMenuDefaultOpen,
+  invalidContextMenuDefaultOpen,
+  hoverCardContractsReachable,
+  hoverCardDefaultOpen,
+  invalidHoverCardDefaultOpen,
   dialogContentCloseButton,
   dialogFooterCloseButton,
   dialogContractsReachable,
@@ -272,6 +557,15 @@ export {
   nativeSelectContractsReachable,
   nativeSelectSize,
   invalidNativeSelectSize,
+  navigationMenuContractsReachable,
+  navigationMenuOrientation,
+  invalidNavigationMenuOrientation,
+  popoverContractsReachable,
+  popoverDefaultOpen,
+  invalidPopoverDefaultOpen,
+  selectContractsReachable,
+  selectTriggerSize,
+  invalidSelectTriggerSize,
   progressContractsReachable,
   progressValue,
   spinnerContractsReachable,

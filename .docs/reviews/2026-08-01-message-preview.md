@@ -1,5 +1,7 @@
 # Message プレビュー実ブラウザ検証
 
+verified_impl_sha: db0e0a6aff33ac2d7b1cb070d13c2f32a396609e
+
 検証した実装 commit: `db0e0a6aff33ac2d7b1cb070d13c2f32a396609e`
 
 ## 検証条件

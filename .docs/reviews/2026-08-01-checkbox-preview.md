@@ -1,5 +1,7 @@
 # Checkbox preview 実ブラウザ検証
 
+verified_impl_sha: b12845f58afc38d27f2f252e1d413a7b7aafb76d
+
 - 検証 SHA: `b12845f58afc38d27f2f252e1d413a7b7aafb76d`
 - Browser: Chrome
 - server: `http://127.0.0.1:4334`（implementation commit の固定 SHA で起動）

@@ -1,5 +1,7 @@
 # Empty プレビュー実ブラウザ検証
 
+verified_impl_sha: 6dcd78c9e140458a8b6f2296f50ab6493aff8467
+
 検証した実装 commit: `6dcd78c9e140458a8b6f2296f50ab6493aff8467`
 
 ## 検証条件

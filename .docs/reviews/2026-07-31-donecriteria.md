@@ -1,5 +1,7 @@
 # サブプロジェクト #1 DoneCriteria 通し確認
 
+verified_impl_sha: 063671bb699e15d604185ac6d0d6d7d085121a86
+
 検証時の head: `063671bb699e15d604185ac6d0d6d7d085121a86`
 
 | 条件番号 | 実行したコマンド | 実際の出力 |

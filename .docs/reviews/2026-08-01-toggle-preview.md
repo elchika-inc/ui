@@ -1,5 +1,7 @@
 # Toggle preview 実ブラウザ検証
 
+verified_impl_sha: d6cf3f4cea682437027b68f5b4ed32999f0f52d2
+
 - implementation commit: `d6cf3f4cea682437027b68f5b4ed32999f0f52d2`
 - Browser: Chrome（Browser Plugin）
 - server: `http://127.0.0.1:4322`（空き listener を確認後、build 済み `dist` を `astro preview` で配信）

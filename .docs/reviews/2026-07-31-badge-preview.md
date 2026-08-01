@@ -1,5 +1,7 @@
 # Badge プレビュー実ブラウザ検証
 
+verified_impl_sha: f8f3424d9418c61dd5b35d7677bd7f1d4237694b
+
 検証した commit: `f8f3424d9418c61dd5b35d7677bd7f1d4237694b`
 
 保存時の実体が JPEG だったため拡張子を実体に合わせた。画像の byte は撮影時のまま。

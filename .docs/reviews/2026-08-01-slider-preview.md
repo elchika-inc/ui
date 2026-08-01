@@ -1,5 +1,7 @@
 # Slider preview 実ブラウザ検証
 
+verified_impl_sha: cf2542b675ad78804c8af239b866b6c290e69bdb
+
 - 検証 SHA: `cf2542b675ad78804c8af239b866b6c290e69bdb`
 - Browser: Chrome
 - server: `http://127.0.0.1:3011`（implementation commit の固定 SHA で起動）

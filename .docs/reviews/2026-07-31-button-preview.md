@@ -1,5 +1,7 @@
 # Button 隔離プレビュー実ブラウザ検証
 
+verified_impl_sha: 3a5d932406cd97ef8d3a53a58d27b51d9c3cb1b0
+
 検証した commit: 3a5d932406cd97ef8d3a53a58d27b51d9c3cb1b0
 
 保存時の実体が JPEG だったため拡張子を実体に合わせた。画像の byte は撮影時のまま。

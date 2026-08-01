@@ -1,5 +1,7 @@
 # Label プレビュー実ブラウザ検証
 
+verified_impl_sha: 72230d25f239b8673629f242eae8f036b2e98c1d
+
 検証した commit: `72230d25f239b8673629f242eae8f036b2e98c1d`
 
 ## 検証条件

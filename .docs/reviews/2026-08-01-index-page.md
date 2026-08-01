@@ -1,5 +1,7 @@
 # トップページ実ブラウザ再検証
 
+verified_impl_sha: 71ade34f3a14e3af19cdaa8100d7fc4552aed4ba
+
 検証した commit: `71ade34f3a14e3af19cdaa8100d7fc4552aed4ba`
 
 ## 検証条件

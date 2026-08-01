@@ -1,4 +1,5 @@
 {
+  "accordion": "[data-slot=\"accordion-preview\"]",
   "alert": "[data-slot=\"alert\"]",
   "aspect-ratio": "[data-slot=\"aspect-ratio\"]",
   "avatar": "[data-slot=\"avatar-preview\"]",
@@ -8,9 +9,21 @@
   "button": "[data-slot=\"button\"]",
   "card": "[data-slot=\"card\"]",
   "checkbox": "[data-slot=\"checkbox-preview\"]",
+  "collapsible": "[data-slot=\"collapsible-preview\"]",
+  "context-menu": {
+    "selector": "[data-slot=\"context-menu-content\"]",
+    "setup": {
+      "action": "contextmenu",
+      "target": "[data-slot=\"context-menu-trigger\"]",
+      "position": "center"
+    }
+  },
+  "dropdown-menu": "[data-slot=\"dropdown-menu-content\"]",
   "catalog": "[data-slot=\"verification-catalog\"]",
   "catalog-dark": "[data-slot=\"verification-catalog\"]",
   "dialog": "[data-slot=\"dialog-content\"]",
+  "drawer": "[data-slot=\"drawer-content\"]",
+  "hover-card": "[data-slot=\"hover-card-content\"]",
   "empty": "[data-slot=\"empty-preview\"]",
   "input": "[data-slot=\"input\"]",
   "input-otp": "[data-slot=\"input-otp-preview\"]",
@@ -19,8 +32,13 @@
   "marker": "[data-slot=\"marker-preview\"]",
   "message": "[data-slot=\"message-preview\"]",
   "native-select": "[data-slot=\"native-select-preview\"]",
+  "navigation-menu": "[data-slot=\"navigation-menu-content\"]",
+  "popover": "[data-slot=\"popover-content\"]",
   "progress": "[data-slot=\"progress-preview\"]",
   "radio-group": "[data-slot=\"radio-group-preview\"]",
+  "scroll-area": "[data-slot=\"scroll-area-preview\"]",
+  "resizable": "[data-slot=\"resizable-preview\"]",
+  "select": "[data-slot=\"select-content\"]",
   "spinner": "[data-slot=\"spinner-preview\"]",
   "switch": "[data-slot=\"switch-preview\"]",
   "separator": "[data-slot=\"separator\"]",
@@ -30,5 +48,6 @@
   "tabs": "[data-slot=\"tabs\"]",
   "table": "[data-slot=\"table-preview\"]",
   "textarea": "[data-slot=\"textarea-preview\"]",
+  "tooltip": "[data-slot=\"tooltip-content\"]",
   "toggle": "[data-slot=\"toggle-preview\"]"
 }

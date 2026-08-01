@@ -1,5 +1,7 @@
 # Dialog プレビュー catalog mode 回帰検証
 
+verified_impl_sha: ad97ea4e5cf30e66c3edad3ba50f4fdc4e4f7249
+
 検証した commit: `ad97ea4e5cf30e66c3edad3ba50f4fdc4e4f7249`
 
 ## 検証条件

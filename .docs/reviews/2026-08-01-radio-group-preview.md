@@ -1,5 +1,7 @@
 # Radio Group preview 実ブラウザ検証
 
+verified_impl_sha: e3a4b05008aa84b1b4ac2c02172b3cf53653339b
+
 - 検証 SHA: `e3a4b05008aa84b1b4ac2c02172b3cf53653339b`
 - 対象 route: `/preview/radio-group/`、`/preview/radio-group-dark/`
 - catalog: 未訪問。バッチ末尾の横断検証で実施する。

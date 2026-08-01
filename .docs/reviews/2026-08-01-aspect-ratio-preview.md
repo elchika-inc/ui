@@ -1,5 +1,7 @@
 # Aspect Ratio プレビュー実ブラウザ検証
 
+verified_impl_sha: 22d5b4c463b7f46bf04c0872417040e4afbb357a
+
 検証した commit: `22d5b4c463b7f46bf04c0872417040e4afbb357a`
 
 配信は `npm run dev -- --host 127.0.0.1 --port 4322` で起動し、Chrome で個別 route だけを確認した。catalog 横断確認はバッチ末尾で実施する。

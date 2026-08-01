@@ -1,6 +1,11 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { checkFile } from "./check-standards.mjs";
+
+function readSource(path) {
+  return readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
+}
 
 test("透明度を合成したフォーカスリングを検出する", () => {
   const { violations } = checkFile(
@@ -120,4 +125,42 @@ test("任意セレクタの variant 構文は違反にしない", () => {
 test("dark variant の宣言は違反にしない", () => {
   const { violations } = checkFile("a.css", `@custom-variant dark (&:is(.dark *));`);
   assert.deepEqual(violations, []);
+});
+
+test("真のときだけ存在させる data-inset に boolean を直接渡す実装を検出する", () => {
+  const { violations } = checkFile("a.tsx", `data-inset={inset}`);
+  assert.deepEqual(violations, [
+    { rule: "boolean-data-inset", line: 1, text: "data-inset={inset}" },
+  ]);
+});
+
+test("data-inset の false と undefined を属性なしへ正規化する実装を受理する", () => {
+  const { violations } = checkFile("a.tsx", `data-inset={inset ? "" : undefined}`);
+  assert.deepEqual(violations, []);
+});
+
+test("Context Menu preview のtriggerはkeyboard focusとcontextmenu keyを受けられる", () => {
+  const source = readSource("src/previews/context-menu.tsx");
+  assert.match(source, /<ContextMenuTrigger[\s\S]*?render=\{<button type="button" \/>\}/);
+  assert.match(source, /onKeyDown=\{handleContextMenuKey\}/);
+  assert.match(source, /event\.key === "ContextMenu"/);
+  assert.match(source, /event\.shiftKey && event\.key === "F10"/);
+  assert.match(source, /new MouseEvent\("contextmenu"/);
+  assert.match(source, /<ContextMenuTrigger[\s\S]*?focus-visible:ring-3 focus-visible:ring-ring/);
+});
+
+test("Navigation Menu contentは子linkのfocus ringを打ち消さない", () => {
+  const source = readSource("src/components/ui/navigation-menu.tsx");
+  assert.doesNotMatch(source, /\*\*:data-\[slot=navigation-menu-link\]:focus:ring-0/);
+  assert.doesNotMatch(source, /\*\*:data-\[slot=navigation-menu-link\]:focus:outline-none/);
+});
+
+test("Select itemはkeyboard focusを不透明3px ringで示す", () => {
+  const source = readSource("src/components/ui/select.tsx");
+  const start = source.indexOf("function SelectItem(");
+  const end = source.indexOf("function SelectScrollUpButton(");
+  assert.notEqual(start, -1, "SelectItemが存在しない");
+  assert.notEqual(end, -1, "SelectItemの終端が見つからない");
+  const selectItem = source.slice(start, end);
+  assert.match(selectItem, /focus-visible:ring-3 focus-visible:ring-ring/);
 });

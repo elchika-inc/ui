@@ -1,5 +1,7 @@
 # Input OTP preview 実ブラウザ検証
 
+verified_impl_sha: 957bd50a6e9698594705a9a9f08473321f6903dc
+
 - 検証 SHA: `957bd50a6e9698594705a9a9f08473321f6903dc`
 - Browser: Chrome
 - server: `http://127.0.0.1:4336`（implementation commit の固定 SHA で起動）

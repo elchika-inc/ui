@@ -1,11 +1,20 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  symlinkSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
 const checkerUrl = new URL("./check-evidence.mjs", import.meta.url);
+const migrationUrl = new URL("./migrate-evidence-sha.mjs", import.meta.url);
 const png = Buffer.from("89504e470d0a1a0a", "hex");
 const jpeg = Buffer.from("ffd8ff", "hex");
 
@@ -14,6 +23,11 @@ const git = (root, args) => execFileSync("git", args, { cwd: root, encoding: "ut
 const loadModule = async () => {
   assert.ok(existsSync(checkerUrl), "check-evidence.mjs がまだ無い");
   return import(checkerUrl);
+};
+
+const loadMigration = async () => {
+  assert.ok(existsSync(migrationUrl), "migrate-evidence-sha.mjs がまだ無い");
+  return import(migrationUrl);
 };
 
 const createEvidenceRepo = () => {
@@ -52,19 +66,19 @@ const createEvidenceRepo = () => {
   const verifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
   writeFileSync(
     join(root, ".docs/reviews/2026-08-01-button-preview.md"),
-    `検証した commit: \`${verifiedSha}\`\n`,
+    `verified_impl_sha: ${verifiedSha}\n`,
   );
   writeFileSync(
     join(root, ".docs/reviews/2026-08-01-input-preview.md"),
-    `検証した commit: \`${verifiedSha}\`\n`,
+    `verified_impl_sha: ${verifiedSha}\n`,
   );
   writeFileSync(
     join(root, ".docs/reviews/2026-08-01-index-page.md"),
-    `検証した commit: \`${verifiedSha}\`\n`,
+    `verified_impl_sha: ${verifiedSha}\n`,
   );
   writeFileSync(
     join(root, ".docs/reviews/2026-08-01-verification-catalog.md"),
-    `検証した commit: \`${verifiedSha}\`\n`,
+    `verified_impl_sha: ${verifiedSha}\n`,
   );
   git(root, ["add", ".docs/reviews"]);
   git(root, ["commit", "-m", "evidence"]);
@@ -79,13 +93,120 @@ test("PNG/JPEG の拡張子と magic bytes の不一致を検出する", async (
   assert.match(checkImage("wrong.jpg", png), /拡張子 jpg.*PNG/);
 });
 
-test("証跡 Markdown に40桁SHAが無ければ検出する", async () => {
-  const { verificationSha } = await loadModule();
-  assert.equal(verificationSha("検証した commit: abc123"), undefined);
-  assert.equal(
-    verificationSha("検証した commit: 0123456789abcdef0123456789abcdef01234567"),
-    "0123456789abcdef0123456789abcdef01234567",
+test("verified_impl_shaを一意な構造化欄として読む", async () => {
+  const { parseVerificationSha } = await loadModule();
+  const sha = "0123456789abcdef0123456789abcdef01234567";
+  assert.deepEqual(parseVerificationSha(`verified_impl_sha: ${sha}\n`), { sha });
+  assert.deepEqual(parseVerificationSha(`検証した commit: \`${sha}\`\n`), {
+    problem: "verified_impl_sha が無い",
+  });
+  assert.deepEqual(parseVerificationSha(`verified_impl_sha: ${sha}\nverified_impl_sha: ${sha}\n`), {
+    problem: "verified_impl_sha が複数ある",
+  });
+});
+
+test("verified_impl_shaの欠落・重複・存在しないcommitをfail-closedにする", async (t) => {
+  const { root, verifiedSha } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  const evidence = join(root, ".docs/reviews/2026-08-01-button-preview.md");
+
+  writeFileSync(evidence, `検証した commit: \`${verifiedSha}\`\n`);
+  assert.ok(
+    checkEvidenceInRepo(root).problems.includes(
+      "2026-08-01-button-preview.md: verified_impl_sha が無い",
+    ),
   );
+
+  writeFileSync(evidence, `verified_impl_sha: ${verifiedSha}\nverified_impl_sha: ${verifiedSha}\n`);
+  assert.ok(
+    checkEvidenceInRepo(root).problems.includes(
+      "2026-08-01-button-preview.md: verified_impl_sha が複数ある",
+    ),
+  );
+
+  const missingCommit = "f".repeat(40);
+  writeFileSync(evidence, `verified_impl_sha: ${missingCommit}\n`);
+  assert.ok(
+    checkEvidenceInRepo(root).problems.includes(
+      `2026-08-01-button-preview.md: 検証 SHA ${missingCommit} が commit として存在しない`,
+    ),
+  );
+});
+
+test("verified_impl_shaがHEADの祖先でなければfail-closedにする", async (t) => {
+  const { root, verifiedSha } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  const currentBranch = git(root, ["branch", "--show-current"]).trim();
+  git(root, ["switch", "-c", "sibling", verifiedSha]);
+  writeFileSync(join(root, "sibling.txt"), "sibling\n");
+  git(root, ["add", "sibling.txt"]);
+  git(root, ["commit", "-m", "sibling"]);
+  const siblingSha = git(root, ["rev-parse", "HEAD"]).trim();
+  git(root, ["switch", currentBranch]);
+  writeFileSync(
+    join(root, ".docs/reviews/2026-08-01-button-preview.md"),
+    `verified_impl_sha: ${siblingSha}\n`,
+  );
+
+  assert.ok(
+    checkEvidenceInRepo(root).problems.includes(
+      `2026-08-01-button-preview.md: 検証 SHA ${siblingSha} が現在のHEADの祖先ではない`,
+    ),
+  );
+});
+
+test("移行は旧位置依存ロジックの値を構造化欄へ等価に写し冪等である", async () => {
+  const { legacyVerificationSha, migrateMarkdown, structuredVerificationSha } =
+    await loadMigration();
+  const first = "0123456789abcdef0123456789abcdef01234567";
+  const later = "fedcba9876543210fedcba9876543210fedcba98";
+  const before = `# 証跡\n\n初回: \`${first}\`\n最終: \`${later}\`\n`;
+  const after = migrateMarkdown(before);
+
+  assert.equal(legacyVerificationSha(before), first);
+  assert.equal(structuredVerificationSha(after), first);
+  assert.equal(legacyVerificationSha(after), first);
+  assert.equal(migrateMarkdown(after), after);
+});
+
+test("移行は祖先symlink経由でrepo外の証跡を書き換えない", async (t) => {
+  const root = mkdtempSync(join(tmpdir(), "elchika-evidence-migration-root-"));
+  const outside = mkdtempSync(join(tmpdir(), "elchika-evidence-migration-outside-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(() => rmSync(outside, { recursive: true, force: true }));
+  mkdirSync(join(outside, "reviews"));
+  const report = join(outside, "reviews/report.md");
+  const sha = "0123456789abcdef0123456789abcdef01234567";
+  writeFileSync(report, `# 証跡\n\ncommit: ${sha}\n`);
+  symlinkSync(outside, join(root, ".docs"));
+  const { migrateEvidence } = await loadMigration();
+
+  assert.throws(
+    () => migrateEvidence(join(root, ".docs/reviews"), { write: true, repositoryRoot: root }),
+    /repo 内の通常ディレクトリ/,
+  );
+  assert.equal(readFileSync(report, "utf8"), `# 証跡\n\ncommit: ${sha}\n`);
+});
+
+test("移行はreviews配下のsymlink証跡を黙って除外しない", async (t) => {
+  const root = mkdtempSync(join(tmpdir(), "elchika-evidence-migration-nested-"));
+  const outside = mkdtempSync(join(tmpdir(), "elchika-evidence-migration-target-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(() => rmSync(outside, { recursive: true, force: true }));
+  mkdirSync(join(root, ".docs/reviews"), { recursive: true });
+  const sha = "0123456789abcdef0123456789abcdef01234567";
+  writeFileSync(join(root, ".docs/reviews/report.md"), `# 証跡\n\ncommit: ${sha}\n`);
+  writeFileSync(join(outside, "linked.md"), `# 外部証跡\n\ncommit: ${sha}\n`);
+  symlinkSync(join(outside, "linked.md"), join(root, ".docs/reviews/linked.md"));
+  const { migrateEvidence } = await loadMigration();
+
+  assert.throws(
+    () => migrateEvidence(join(root, ".docs/reviews"), { write: true, repositoryRoot: root }),
+    /通常ファイルではない/,
+  );
+  assert.equal(readFileSync(join(outside, "linked.md"), "utf8"), `# 外部証跡\n\ncommit: ${sha}\n`);
 });
 
 test("検証済みcomponentだけを変更すると落ち、別componentは落とさない", async (t) => {
@@ -120,6 +241,28 @@ test("検証済みcomponentの未コミット変更も hard failure にする", 
     "2026-08-01-button-preview.md: 検証 SHA 以降に component 固有 path が変更されている",
   ]);
   assert.deepEqual(result.stale, ["2026-08-01-verification-catalog.md: src/components/ui"]);
+});
+
+test("検証SHAに存在しないcomponent固有pathの未追跡追加も hard failure にする", async (t) => {
+  const { root, verifiedSha } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  writeFileSync(
+    join(root, ".docs/reviews/2026-08-01-new-widget-preview.md"),
+    `verified_impl_sha: ${verifiedSha}\n`,
+  );
+  git(root, ["add", ".docs/reviews/2026-08-01-new-widget-preview.md"]);
+  git(root, ["commit", "-m", "add new widget evidence"]);
+  writeFileSync(join(root, "src/components/ui/new-widget.tsx"), "untracked component\n");
+  writeFileSync(join(root, "src/previews/new-widget.tsx"), "untracked preview\n");
+  writeFileSync(join(root, "src/pages/preview/new-widget.astro"), "untracked light\n");
+  writeFileSync(join(root, "src/pages/preview/new-widget-dark.astro"), "untracked dark\n");
+
+  assert.ok(
+    checkEvidenceInRepo(root).problems.includes(
+      "2026-08-01-new-widget-preview.md: 検証 SHA 以降に component 固有 path が変更されている",
+    ),
+  );
 });
 
 test("共有面の変更は落とさず陳腐化一覧へ出す", async (t) => {
@@ -166,7 +309,7 @@ test("日付とscopeを持つcatalog証跡も実装変更を陳腐化一覧へ�
   const batchCatalogEvidence = "2026-08-01-batch-static-2-catalog.md";
   writeFileSync(
     join(root, ".docs/reviews", batchCatalogEvidence),
-    `検証した commit: \`${verifiedSha}\`\n`,
+    `verified_impl_sha: ${verifiedSha}\n`,
   );
   git(root, ["add", `.docs/reviews/${batchCatalogEvidence}`]);
   git(root, ["commit", "-m", "add batch catalog evidence"]);
@@ -208,7 +351,7 @@ test("reviews 配下の入れ子にある index 集約レポートも陳腐化�
   const { checkEvidenceInRepo } = await loadModule();
   const reportDirectory = join(root, ".docs/reviews/catalog-index-r2");
   mkdirSync(reportDirectory, { recursive: true });
-  writeFileSync(join(reportDirectory, "report.md"), `検証した commit: \`${verifiedSha}\`\n`);
+  writeFileSync(join(reportDirectory, "report.md"), `verified_impl_sha: ${verifiedSha}\n`);
   git(root, ["add", ".docs/reviews/catalog-index-r2/report.md"]);
   git(root, ["commit", "-m", "add deep verification report"]);
   writeFileSync(join(root, "src/pages/index.astro"), "index changed\n");
@@ -274,7 +417,7 @@ test("入れ子の catalog 集約 Markdown も陳腐化一覧へ出す", async (
   mkdirSync(nestedDirectory, { recursive: true });
   writeFileSync(
     join(nestedDirectory, "2026-08-01-verification-catalog.md"),
-    `検証した commit: \`${verifiedSha}\`\n`,
+    `verified_impl_sha: ${verifiedSha}\n`,
   );
   git(root, ["add", ".docs/reviews/deep/2026-08-01-verification-catalog.md"]);
   git(root, ["commit", "-m", "add nested catalog evidence"]);
