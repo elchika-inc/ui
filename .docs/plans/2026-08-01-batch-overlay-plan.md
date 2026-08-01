@@ -163,10 +163,10 @@
 
 **Files:** Create `src/components/ui/select.tsx`、`src/previews/select.tsx`、`src/pages/preview/select.astro`、`src/pages/preview/select-dark.astro`、`.docs/reviews/2026-08-01-select-preview.md`、`.docs/reviews/select-preview-light.jpg`、`.docs/reviews/select-preview-dark.jpg`。Modify `src/index.ts`、`types/dts-contract.ts`、`preview-selectors.json`、`provenance.json`、`registry.json`。
 
-**Interfaces:** isolatedだけ`defaultOpen`、catalogでは閉じる。trigger/value/Portal content/group/label/item/separator/scroll buttonsを含め、選択値を観測可能にする。previewで`modal`を上書きせず、配布componentのBase UI既定値`modal: true`を検証する。実測上はbodyのscroll lockだけを行う非modal listboxとして扱う。
+**Interfaces:** isolatedだけ`defaultOpen`、catalogでは閉じる。trigger/value/Portal content/group/label/item/separator/scroll buttonsを含め、選択値を観測可能にする。previewで`modal`を上書きせず、配布componentのBase UI既定値`modal: true`を検証する。実測上はbodyのscroll lockと透明なInternalBackdropによるpointer遮蔽を行う一方、keyboard focusはtrapしないlistboxとして扱う。
 
 - [ ] wrapper REDと全slot value/Props公開を完了する。
-- [ ] light/darkでsentinel各1、Portal/実ARIA、bodyの`overflow: hidden`、背景の`inert` / `aria-hidden`なし・pointer-events維持、focus guard 0・focus trapなし、keyboard item移動/選択、typeahead実値、Escape close、選択close、trigger return、再open、選択値更新、disabled item不変を実測する。close後もcontentが残る場合は`data-closed=true`・rect 0・focus非残留に加え、閉状態からTabを開始して残置contentへ再侵入しないことを確認する。
+- [ ] light/darkでsentinel各1、Portal/実ARIA、bodyの`overflow: hidden`、背景の`inert` / `aria-hidden`なし、focus guard 0・focus trapなし、keyboard item移動/選択、typeahead実値、Escape close、選択close、trigger return、再open、選択値更新、disabled item不変を実測する。pointer遮蔽は背景要素自身のcomputed `pointer-events`だけで判定せず、透明な`[data-base-ui-inert]`の属性・rect・clip-path、背景座標の`document.elementFromPoint`、実clickの到達先とclose/focus結果を確認する。close後もcontentが残る場合は`data-closed=true`・rect 0・focus非残留に加え、閉状態からTabを開始して残置contentへ再侵入しないことを確認する。
 - [ ] catalogでsentinel/content 0を確認し、実装commit→証跡commit→review cleanを完了する。
 
 ### Task 14: Tooltip
