@@ -10,6 +10,7 @@
   "card": "[data-slot=\"card\"]",
   "checkbox": "[data-slot=\"checkbox-preview\"]",
   "collapsible": "[data-slot=\"collapsible-preview\"]",
+  "context-menu": "[data-slot=\"context-menu-preview\"]",
   "catalog": "[data-slot=\"verification-catalog\"]",
   "catalog-dark": "[data-slot=\"verification-catalog\"]",
   "dialog": "[data-slot=\"dialog-content\"]",

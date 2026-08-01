@@ -713,6 +713,27 @@
       "license": "MIT",
       "modified": "react-resizable-panelsの実APIを用いるResizable各slotを追加し、semantic tokenと非透明3px focus ringへ正規化する。公開Props、隔離light/dark preview routes、registry、型契約、selector、package dependencyとlockfileを追加する。",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "context-menu": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/context-menu.json",
+      "registryPath": "registry/base-nova/ui/context-menu.tsx",
+      "registryContentSha256": "8ccf036c15ff87b52c3c91bb5fe2ea6da5a196df9c2adf3ab6241e6529b632ea",
+      "generatedContentSha256": "cbef7e0a095e9311dde6485595663b7d29de52f4f040499448165b9dbfe4be8b",
+      "addTarget": "@shadcn/context-menu",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/context-menu.tsx",
+      "upstreamPathSha": "49616d2e162d2213d76478798ed3773b8cfe3089",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-01",
+      "license": "MIT",
+      "modified": "Base UIに正規化し、semantic token・非透明3px focus ring・全slotのProps型とbarrel export、isolated/catalog用preview・selectorを追加",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }

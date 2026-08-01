@@ -29,6 +29,21 @@ import type {
   CollapsibleContentProps,
   CollapsibleProps,
   CollapsibleTriggerProps,
+  ContextMenuCheckboxItemProps,
+  ContextMenuContentProps,
+  ContextMenuGroupProps,
+  ContextMenuItemProps,
+  ContextMenuLabelProps,
+  ContextMenuPortalProps,
+  ContextMenuProps,
+  ContextMenuRadioGroupProps,
+  ContextMenuRadioItemProps,
+  ContextMenuSeparatorProps,
+  ContextMenuShortcutProps,
+  ContextMenuSubContentProps,
+  ContextMenuSubProps,
+  ContextMenuSubTriggerProps,
+  ContextMenuTriggerProps,
   DialogCloseProps,
   DialogContentProps,
   DialogDescriptionProps,
@@ -224,6 +239,28 @@ const collapsibleDefaultOpen: CollapsibleProps["defaultOpen"] = true
 // @ts-expect-error Collapsible の defaultOpen は文字列を受けない。
 const invalidCollapsibleDefaultOpen: CollapsibleProps["defaultOpen"] = "true"
 
+type ContextMenuContracts = [
+  ContextMenuProps,
+  ContextMenuPortalProps,
+  ContextMenuTriggerProps,
+  ContextMenuContentProps,
+  ContextMenuGroupProps,
+  ContextMenuLabelProps,
+  ContextMenuItemProps,
+  ContextMenuSubProps,
+  ContextMenuSubTriggerProps,
+  ContextMenuSubContentProps,
+  ContextMenuCheckboxItemProps,
+  ContextMenuRadioGroupProps,
+  ContextMenuRadioItemProps,
+  ContextMenuSeparatorProps,
+  ContextMenuShortcutProps,
+]
+const contextMenuContractsReachable: ContextMenuContracts extends unknown[] ? true : never = true
+const contextMenuDefaultOpen: ContextMenuProps["defaultOpen"] = true
+// @ts-expect-error ContextMenu の defaultOpen は文字列を受けない。
+const invalidContextMenuDefaultOpen: ContextMenuProps["defaultOpen"] = "true"
+
 type DialogContracts = [
   DialogProps,
   DialogTriggerProps,
@@ -337,6 +374,9 @@ export {
   collapsibleContractsReachable,
   collapsibleDefaultOpen,
   invalidCollapsibleDefaultOpen,
+  contextMenuContractsReachable,
+  contextMenuDefaultOpen,
+  invalidContextMenuDefaultOpen,
   dialogContentCloseButton,
   dialogFooterCloseButton,
   dialogContractsReachable,
