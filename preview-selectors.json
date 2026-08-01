@@ -1,4 +1,5 @@
 {
+  "accordion": "[data-slot=\"accordion-preview\"]",
   "alert": "[data-slot=\"alert\"]",
   "aspect-ratio": "[data-slot=\"aspect-ratio\"]",
   "avatar": "[data-slot=\"avatar-preview\"]",

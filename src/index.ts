@@ -1,4 +1,16 @@
 export type {
+  AccordionContentProps,
+  AccordionItemProps,
+  AccordionProps,
+  AccordionTriggerProps,
+} from "./components/ui/accordion";
+export {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "./components/ui/accordion";
+export type {
   AlertActionProps,
   AlertDescriptionProps,
   AlertProps,

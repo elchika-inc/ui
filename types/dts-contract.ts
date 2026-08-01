@@ -2,6 +2,10 @@
 // design-sync はこの .d.ts を読んで API 契約を組み立てるため、
 // ここが潰れると設計エージェントが全コンポーネントで API を誤用する。
 import type {
+  AccordionContentProps,
+  AccordionItemProps,
+  AccordionProps,
+  AccordionTriggerProps,
   AspectRatioProps,
   AvatarBadgeProps,
   AvatarFallbackProps,
@@ -82,6 +86,17 @@ import type {
   ToasterProps,
   ToggleProps,
 } from "../lib/index.js"
+
+type AccordionContracts = [
+  AccordionProps,
+  AccordionItemProps,
+  AccordionTriggerProps,
+  AccordionContentProps,
+]
+const accordionContractsReachable: AccordionContracts extends unknown[] ? true : never = true
+const accordionItemDisabled: AccordionItemProps["disabled"] = true
+// @ts-expect-error AccordionItem の disabled は文字列を受けない。
+const invalidAccordionItemDisabled: AccordionItemProps["disabled"] = "true"
 
 type NewPropsContracts = [
   BreadcrumbProps,
@@ -240,6 +255,9 @@ const tabsContractsReachable: TabsContracts extends unknown[] ? true : never = t
 const toasterPosition: ToasterProps["position"] = "top-center"
 
 export {
+  accordionContractsReachable,
+  accordionItemDisabled,
+  invalidAccordionItemDisabled,
   newPropsContractsReachable,
   inputOtpMaxLength,
   invalidInputOtpMaxLength,
