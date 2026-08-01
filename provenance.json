@@ -776,6 +776,27 @@
       "license": "MIT",
       "modified": "既存の@base-ui/react Drawerで全slotを実装し、生成時の値系arbitrary valueをsemantic tokenと標準durationへ正規化する。全PascalCase exportのProps、barrel、isolated限定defaultOpenのlight/dark preview、selector、registry型契約を追加する。",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "hover-card": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/hover-card.json",
+      "registryPath": "registry/base-nova/ui/hover-card.tsx",
+      "registryContentSha256": "7bc0e6335da91d7c6c74dcd42bab1cf9aaa88fd98760f1cd57029de37a47c53d",
+      "generatedContentSha256": "7dd51a91bb5b82b81abc9e76b7b166481328386877dfc54bdb2a73874fd5afec",
+      "addTarget": "@shadcn/hover-card",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/hover-card.tsx",
+      "upstreamPathSha": "a4ee54836ea574ce7a2c43e3ff26a78502b9b938",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-01",
+      "license": "MIT",
+      "modified": "Base UIの実APIでHover Cardを実装し、生成時の値系arbitrary valueをsemantic tokenと標準durationへ正規化する。全PascalCase exportのProps、barrel、isolated限定defaultOpenのlight/dark preview、selector、registry型契約を追加する。",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }

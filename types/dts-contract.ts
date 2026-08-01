@@ -59,6 +59,9 @@ import type {
   DropdownMenuSubProps,
   DropdownMenuSubTriggerProps,
   DropdownMenuTriggerProps,
+  HoverCardContentProps,
+  HoverCardProps,
+  HoverCardTriggerProps,
   DialogCloseProps,
   DialogContentProps,
   DialogDescriptionProps,
@@ -287,6 +290,12 @@ const contextMenuDefaultOpen: ContextMenuProps["defaultOpen"] = true
 // @ts-expect-error ContextMenu の defaultOpen は文字列を受けない。
 const invalidContextMenuDefaultOpen: ContextMenuProps["defaultOpen"] = "true"
 
+type HoverCardContracts = [HoverCardProps, HoverCardTriggerProps, HoverCardContentProps]
+const hoverCardContractsReachable: HoverCardContracts extends unknown[] ? true : never = true
+const hoverCardDefaultOpen: HoverCardProps["defaultOpen"] = true
+// @ts-expect-error HoverCard の defaultOpen は文字列を受けない。
+const invalidHoverCardDefaultOpen: HoverCardProps["defaultOpen"] = "true"
+
 type DropdownMenuContracts = [
   DropdownMenuProps,
   DropdownMenuPortalProps,
@@ -443,6 +452,9 @@ export {
   contextMenuContractsReachable,
   contextMenuDefaultOpen,
   invalidContextMenuDefaultOpen,
+  hoverCardContractsReachable,
+  hoverCardDefaultOpen,
+  invalidHoverCardDefaultOpen,
   dialogContentCloseButton,
   dialogFooterCloseButton,
   dialogContractsReachable,

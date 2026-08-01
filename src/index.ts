@@ -224,6 +224,12 @@ export {
   EmptyMedia,
   EmptyTitle,
 } from "./components/ui/empty";
+export type {
+  HoverCardContentProps,
+  HoverCardProps,
+  HoverCardTriggerProps,
+} from "./components/ui/hover-card";
+export { HoverCard, HoverCardContent, HoverCardTrigger } from "./components/ui/hover-card";
 export type { InputProps } from "./components/ui/input";
 export { Input } from "./components/ui/input";
 export type {

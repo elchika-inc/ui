@@ -23,6 +23,7 @@
   "catalog-dark": "[data-slot=\"verification-catalog\"]",
   "dialog": "[data-slot=\"dialog-content\"]",
   "drawer": "[data-slot=\"drawer-content\"]",
+  "hover-card": "[data-slot=\"hover-card-content\"]",
   "empty": "[data-slot=\"empty-preview\"]",
   "input": "[data-slot=\"input\"]",
   "input-otp": "[data-slot=\"input-otp-preview\"]",
