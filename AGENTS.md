@@ -50,6 +50,7 @@ elchika-inc の共有 UI コンポーネント。Base UI + Tailwind CSS v4。sha
 ## 重要な設計原則（What NOT to Do）
 
 - `main` へ直接コミットしない。
+- コミットメッセージ・PR 本文・ドキュメント・コード内コメントは日本語（技術用語と識別子は原語のまま）。
 - 生の色指定と値系 arbitrary value を使わない。
 - フォーカスリングに透明度合成を使わない。
 - `private: true` を外して npm publish しない。
