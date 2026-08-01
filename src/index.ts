@@ -7,6 +7,22 @@ export type {
 export { Alert, AlertAction, AlertDescription, AlertTitle } from "./components/ui/alert";
 export type { AspectRatioProps } from "./components/ui/aspect-ratio";
 export { AspectRatio } from "./components/ui/aspect-ratio";
+export type {
+  AvatarBadgeProps,
+  AvatarFallbackProps,
+  AvatarGroupCountProps,
+  AvatarGroupProps,
+  AvatarImageProps,
+  AvatarProps,
+} from "./components/ui/avatar";
+export {
+  Avatar,
+  AvatarBadge,
+  AvatarFallback,
+  AvatarGroup,
+  AvatarGroupCount,
+  AvatarImage,
+} from "./components/ui/avatar";
 export type { BadgeProps } from "./components/ui/badge";
 export { Badge, badgeVariants } from "./components/ui/badge";
 export type { ButtonProps } from "./components/ui/button";

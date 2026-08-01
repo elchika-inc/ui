@@ -3,6 +3,12 @@
 // ここが潰れると設計エージェントが全コンポーネントで API を誤用する。
 import type {
   AspectRatioProps,
+  AvatarBadgeProps,
+  AvatarFallbackProps,
+  AvatarGroupCountProps,
+  AvatarGroupProps,
+  AvatarImageProps,
+  AvatarProps,
   ButtonProps,
   DialogCloseProps,
   DialogContentProps,
@@ -22,6 +28,16 @@ import type {
 } from "../lib/index.js"
 
 const aspectRatio: AspectRatioProps["ratio"] = 16 / 9
+
+type AvatarContracts = [
+  AvatarProps,
+  AvatarImageProps,
+  AvatarFallbackProps,
+  AvatarBadgeProps,
+  AvatarGroupProps,
+  AvatarGroupCountProps,
+]
+const avatarContractsReachable: AvatarContracts extends unknown[] ? true : never = true
 
 // variant / size が ButtonProps から到達でき、実際の union を持つ
 const variant: ButtonProps["variant"] = "secondary"
@@ -57,6 +73,7 @@ const toasterPosition: ToasterProps["position"] = "top-center"
 
 export {
   aspectRatio,
+  avatarContractsReachable,
   variant,
   size,
   invalid,
