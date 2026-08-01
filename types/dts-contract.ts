@@ -20,6 +20,9 @@ import type {
   DialogProps,
   DialogTitleProps,
   DialogTriggerProps,
+  MarkerContentProps,
+  MarkerIconProps,
+  MarkerProps,
   TabsContentProps,
   TabsListProps,
   TabsProps,
@@ -67,6 +70,13 @@ const dialogContentCloseButton: DialogContentProps["showCloseButton"] = true
 const dialogFooterCloseButton: DialogFooterProps["showCloseButton"] = false
 const dialogContractsReachable: DialogContracts extends unknown[] ? true : never = true
 
+type MarkerContracts = [MarkerProps, MarkerIconProps, MarkerContentProps]
+const markerContractsReachable: MarkerContracts extends unknown[] ? true : never = true
+const markerVariant: MarkerProps["variant"] = "separator"
+
+// @ts-expect-error 未知の variant は弾かれること。
+const invalidMarkerVariant: MarkerProps["variant"] = "unknown"
+
 type TabsContracts = [TabsProps, TabsListProps, TabsTriggerProps, TabsContentProps]
 const tabsContractsReachable: TabsContracts extends unknown[] ? true : never = true
 const toasterPosition: ToasterProps["position"] = "top-center"
@@ -80,6 +90,9 @@ export {
   dialogContentCloseButton,
   dialogFooterCloseButton,
   dialogContractsReachable,
+  markerContractsReachable,
+  markerVariant,
+  invalidMarkerVariant,
   tabsContractsReachable,
   toasterPosition,
 }

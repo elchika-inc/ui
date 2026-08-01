@@ -356,6 +356,27 @@
       "license": "MIT",
       "modified": "全 public export の Props 型を追加し、KbdGroup を div として正規化、単独 Kbd と複合ショートカットを観測する light/dark 隔離 preview、公開 barrel、安定 selector を追加する",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "marker": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/marker.json",
+      "registryPath": "registry/base-nova/ui/marker.tsx",
+      "registryContentSha256": "ce0eab983b7297de91290df7dcd8a8c9f223e5c77d58ce3205377959ce4f5f64",
+      "generatedContentSha256": "cbeeb7baa6a8bdc7402bec4e37cd12ced0d78ec808441e0bc1b61293b8ede7f5",
+      "addTarget": "@shadcn/marker",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/marker.tsx",
+      "upstreamPathSha": "18fcf0f766857a7249cc0daac3c1609610edd158",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-01",
+      "license": "MIT",
+      "modified": "公開用 Props 型と barrel export を追加し、全 slot・variant と text semantics を示す light/dark 隔離 preview を追加",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }

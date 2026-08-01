@@ -116,6 +116,8 @@ export type { KbdGroupProps, KbdProps } from "./components/ui/kbd";
 export { Kbd, KbdGroup } from "./components/ui/kbd";
 export type { LabelProps } from "./components/ui/label";
 export { Label } from "./components/ui/label";
+export type { MarkerContentProps, MarkerIconProps, MarkerProps } from "./components/ui/marker";
+export { Marker, MarkerContent, MarkerIcon, markerVariants } from "./components/ui/marker";
 export type { SeparatorProps } from "./components/ui/separator";
 export { Separator } from "./components/ui/separator";
 export type { SkeletonProps } from "./components/ui/skeleton";
