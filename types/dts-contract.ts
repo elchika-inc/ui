@@ -139,6 +139,16 @@ import type {
   ResizableHandleProps,
   ResizablePanelGroupProps,
   ResizablePanelProps,
+  SelectContentProps,
+  SelectGroupProps,
+  SelectItemProps,
+  SelectLabelProps,
+  SelectProps,
+  SelectScrollDownButtonProps,
+  SelectScrollUpButtonProps,
+  SelectSeparatorProps,
+  SelectTriggerProps,
+  SelectValueProps,
   SpinnerProps,
   SwitchProps,
   TableBodyProps,
@@ -429,6 +439,23 @@ const popoverDefaultOpen: PopoverProps["defaultOpen"] = true
 // @ts-expect-error Popover の defaultOpen は文字列を受けない。
 const invalidPopoverDefaultOpen: PopoverProps["defaultOpen"] = "true"
 
+type SelectContracts = [
+  SelectProps,
+  SelectGroupProps,
+  SelectValueProps,
+  SelectTriggerProps,
+  SelectContentProps,
+  SelectLabelProps,
+  SelectItemProps,
+  SelectSeparatorProps,
+  SelectScrollUpButtonProps,
+  SelectScrollDownButtonProps,
+]
+const selectContractsReachable: SelectContracts extends unknown[] ? true : never = true
+const selectTriggerSize: SelectTriggerProps["size"] = "sm"
+// @ts-expect-error SelectTrigger の size は sm または default に限る。
+const invalidSelectTriggerSize: SelectTriggerProps["size"] = "lg"
+
 type ProgressContracts = [
   ProgressProps,
   ProgressTrackProps,
@@ -517,6 +544,9 @@ export {
   popoverContractsReachable,
   popoverDefaultOpen,
   invalidPopoverDefaultOpen,
+  selectContractsReachable,
+  selectTriggerSize,
+  invalidSelectTriggerSize,
   progressContractsReachable,
   progressValue,
   spinnerContractsReachable,

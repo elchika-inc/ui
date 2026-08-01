@@ -353,6 +353,30 @@ export {
   ScrollAreaThumb,
   ScrollAreaViewport,
 } from "./components/ui/scroll-area";
+export type {
+  SelectContentProps,
+  SelectGroupProps,
+  SelectItemProps,
+  SelectLabelProps,
+  SelectProps,
+  SelectScrollDownButtonProps,
+  SelectScrollUpButtonProps,
+  SelectSeparatorProps,
+  SelectTriggerProps,
+  SelectValueProps,
+} from "./components/ui/select";
+export {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectScrollDownButton,
+  SelectScrollUpButton,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+} from "./components/ui/select";
 export type { SeparatorProps } from "./components/ui/separator";
 export { Separator } from "./components/ui/separator";
 export type { SkeletonProps } from "./components/ui/skeleton";

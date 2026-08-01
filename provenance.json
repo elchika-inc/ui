@@ -839,6 +839,27 @@
       "license": "MIT",
       "modified": "Base UI Popoverを既存のsemantic tokenと非透明focus ringへ正規化し、全value/Props公開と隔離previewを追加する",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "select": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/select.json",
+      "registryPath": "registry/base-nova/ui/select.tsx",
+      "registryContentSha256": "098125c59bb186d22083637e48a6c3427fd469f4f98363ff915fc0c3ac32e5d3",
+      "generatedContentSha256": "41685f5d3a488b4e512bc9cee80738087f3e84c92f67e89eed9fc4858f81abe6",
+      "addTarget": "@shadcn/select",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/select.tsx",
+      "upstreamPathSha": "49616d2e162d2213d76478798ed3773b8cfe3089",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-02",
+      "license": "MIT",
+      "modified": "Base UI Selectを既存のsemantic tokenと非透明focus ringへ正規化し、全value/Props公開とisolated限定defaultOpenの対話preview、barrel、型契約、selector、registryを追加する",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }
