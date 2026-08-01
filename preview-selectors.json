@@ -8,6 +8,7 @@
   "input": "[data-slot=\"input\"]",
   "label": "[data-slot=\"label\"]",
   "separator": "[data-slot=\"separator\"]",
+  "skeleton": "[data-slot=\"skeleton\"]",
   "sonner": "[data-sonner-toast]",
   "tabs": "[data-slot=\"tabs\"]"
 }
