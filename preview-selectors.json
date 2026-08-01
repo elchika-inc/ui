@@ -23,6 +23,7 @@
   "native-select": "[data-slot=\"native-select-preview\"]",
   "progress": "[data-slot=\"progress-preview\"]",
   "radio-group": "[data-slot=\"radio-group-preview\"]",
+  "scroll-area": "[data-slot=\"scroll-area-preview\"]",
   "spinner": "[data-slot=\"spinner-preview\"]",
   "switch": "[data-slot=\"switch-preview\"]",
   "separator": "[data-slot=\"separator\"]",

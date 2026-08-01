@@ -71,6 +71,12 @@ import type {
   RadioGroupItemProps,
   RadioGroupProps,
   SliderProps,
+  ScrollAreaContentProps,
+  ScrollAreaCornerProps,
+  ScrollAreaProps,
+  ScrollAreaScrollbarProps,
+  ScrollAreaThumbProps,
+  ScrollAreaViewportProps,
   SpinnerProps,
   SwitchProps,
   TableBodyProps,
@@ -142,6 +148,19 @@ const invalidRadioGroupDisabled: RadioGroupProps["disabled"] = "true"
 const sliderValue: SliderProps["value"] = 40
 // @ts-expect-error Slider値は文字列を受けない。
 const invalidSliderValue: SliderProps["value"] = "40"
+
+type ScrollAreaContracts = [
+  ScrollAreaProps,
+  ScrollAreaViewportProps,
+  ScrollAreaContentProps,
+  ScrollAreaScrollbarProps,
+  ScrollAreaThumbProps,
+  ScrollAreaCornerProps,
+]
+const scrollAreaContractsReachable: ScrollAreaContracts extends unknown[] ? true : never = true
+const scrollAreaScrollbarOrientation: ScrollAreaScrollbarProps["orientation"] = "horizontal"
+// @ts-expect-error ScrollAreaScrollbar の orientation は vertical または horizontal に限る。
+const invalidScrollAreaScrollbarOrientation: ScrollAreaScrollbarProps["orientation"] = "diagonal"
 const switchChecked: SwitchProps["checked"] = true
 // @ts-expect-error Switch の checked は文字列を受けない。
 const invalidSwitchChecked: SwitchProps["checked"] = "true"
@@ -278,6 +297,9 @@ export {
   invalidRadioGroupDisabled,
   sliderValue,
   invalidSliderValue,
+  scrollAreaContractsReachable,
+  scrollAreaScrollbarOrientation,
+  invalidScrollAreaScrollbarOrientation,
   switchChecked,
   invalidSwitchChecked,
   textareaRows,

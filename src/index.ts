@@ -192,6 +192,22 @@ export {
 } from "./components/ui/progress";
 export type { RadioGroupItemProps, RadioGroupProps } from "./components/ui/radio-group";
 export { RadioGroup, RadioGroupItem } from "./components/ui/radio-group";
+export type {
+  ScrollAreaContentProps,
+  ScrollAreaCornerProps,
+  ScrollAreaProps,
+  ScrollAreaScrollbarProps,
+  ScrollAreaThumbProps,
+  ScrollAreaViewportProps,
+} from "./components/ui/scroll-area";
+export {
+  ScrollArea,
+  ScrollAreaContent,
+  ScrollAreaCorner,
+  ScrollAreaScrollbar,
+  ScrollAreaThumb,
+  ScrollAreaViewport,
+} from "./components/ui/scroll-area";
 export type { SeparatorProps } from "./components/ui/separator";
 export { Separator } from "./components/ui/separator";
 export type { SkeletonProps } from "./components/ui/skeleton";

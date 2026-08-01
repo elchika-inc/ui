@@ -671,6 +671,27 @@
       "license": "MIT",
       "modified": "DESIGN.md §5適合のためsemantic tokenと非透明3px focus ringへ正規化し、Collapsible全slotのProps型・barrel export、isolated/catalog用previewとpreview selectorを追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "scroll-area": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/scroll-area.json",
+      "registryPath": "registry/base-nova/ui/scroll-area.tsx",
+      "registryContentSha256": "59111600eb9dc6cabb3ce324e630ec3ca7e534875a90e9bc4ca48bf3dc34efb3",
+      "generatedContentSha256": "455522020830f8676f6df42b325c8dc43e5f45d18bdfe6ceee6351d49ad2a43c",
+      "addTarget": "@shadcn/scroll-area",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/scroll-area.tsx",
+      "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-01",
+      "license": "MIT",
+      "modified": "DESIGN.md §5に適合させるため、ScrollArea全slotをBase UI・semantic token・非透明3px focus ringへ正規化し、全Props型とbarrel export、縦横overflowを持つisolated/catalog preview、selectorとd.ts契約を追加",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }
