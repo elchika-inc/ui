@@ -963,8 +963,8 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "全 PascalCase export の Props 型を追加し、focus ring と arbitrary text size を standards へ正規化",
-      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+      "modified": "全 PascalCase export の Props 型を追加し、focus ring と arbitrary text size を standards へ正規化。上流の CalendarDayButton は ref を要素へ渡しておらず focus 移動が機能しないため、ref を接続して上流の意図どおりに修正",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。shadcn/ui base-nova の calendar には CalendarDayButton の ref 未接続という既知バグがある。上流が修正したら、この ref 接続差分が不要になったか再評価する。"
     }
   }
 }
