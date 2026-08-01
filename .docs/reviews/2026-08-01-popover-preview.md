@@ -14,8 +14,10 @@
 ## dark
 
 - `html.dark=true` で、content1件、前後 sentinel各1件、Portal/`role="dialog"`/`aria-labelledby`/`aria-describedby`/`aria-expanded="true"` を確認した。
-- preview の `inert` / `aria-hidden` は未設定、overlay 0件、focus guard 6件、初期 focus は「通知を管理」だった。Escape 後は content 0件、triggerへ focus return、`aria-expanded="false"` だった。
-- console error は0件だった。
+- review指摘後、固定実装SHAから fresh build し、`http://localhost:4334/preview/popover-dark/` で再実測した。属性対象は `body`、`section[data-slot="popover-preview"]`、および `body` 直下の `STYLE` 1件・`SCRIPT` 2件・`ASTRO-ISLAND` 1件・Portalの `DIV` 1件で、全て `inert` 属性なし（`hasAttribute=false` / 実値 `null`）かつ `aria-hidden=null` だった。
+- overlay 0件、focus guard 6件、初期 focus は「通知を管理」、初期 `aria-expanded="true"`。Escape 後は content 0件・`aria-expanded="false"`・trigger「設定を開く」へfocus returnした。trigger clickで content 1件・`aria-expanded="true"`・control focusへ再openした。
+- control「通知を管理」から Tab 後は content 0件・`aria-expanded="false"`・`data-sentinel="after"` の「次の操作要素」へfocus移動した。再度trigger click後は content 1件・`aria-expanded="true"`、外側の「前の操作要素」click後は content 0件・`aria-expanded="false"`・`data-sentinel="before"` へfocus移動した。
+- この再実測の console error は0件だった。
 
 ## catalog
 
