@@ -23,6 +23,12 @@ import type {
   MarkerContentProps,
   MarkerIconProps,
   MarkerProps,
+  MessageAvatarProps,
+  MessageContentProps,
+  MessageFooterProps,
+  MessageGroupProps,
+  MessageHeaderProps,
+  MessageProps,
   TabsContentProps,
   TabsListProps,
   TabsProps,
@@ -77,6 +83,20 @@ const markerVariant: MarkerProps["variant"] = "separator"
 // @ts-expect-error 未知の variant は弾かれること。
 const invalidMarkerVariant: MarkerProps["variant"] = "unknown"
 
+type MessageContracts = [
+  MessageProps,
+  MessageGroupProps,
+  MessageAvatarProps,
+  MessageContentProps,
+  MessageHeaderProps,
+  MessageFooterProps,
+]
+const messageContractsReachable: MessageContracts extends unknown[] ? true : never = true
+const messageAlignment: MessageProps["align"] = "end"
+
+// @ts-expect-error 未知の alignment は弾かれること。
+const invalidMessageAlignment: MessageProps["align"] = "center"
+
 type TabsContracts = [TabsProps, TabsListProps, TabsTriggerProps, TabsContentProps]
 const tabsContractsReachable: TabsContracts extends unknown[] ? true : never = true
 const toasterPosition: ToasterProps["position"] = "top-center"
@@ -93,6 +113,9 @@ export {
   markerContractsReachable,
   markerVariant,
   invalidMarkerVariant,
+  messageContractsReachable,
+  messageAlignment,
+  invalidMessageAlignment,
   tabsContractsReachable,
   toasterPosition,
 }

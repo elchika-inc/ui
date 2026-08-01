@@ -118,6 +118,22 @@ export type { LabelProps } from "./components/ui/label";
 export { Label } from "./components/ui/label";
 export type { MarkerContentProps, MarkerIconProps, MarkerProps } from "./components/ui/marker";
 export { Marker, MarkerContent, MarkerIcon, markerVariants } from "./components/ui/marker";
+export type {
+  MessageAvatarProps,
+  MessageContentProps,
+  MessageFooterProps,
+  MessageGroupProps,
+  MessageHeaderProps,
+  MessageProps,
+} from "./components/ui/message";
+export {
+  Message,
+  MessageAvatar,
+  MessageContent,
+  MessageFooter,
+  MessageGroup,
+  MessageHeader,
+} from "./components/ui/message";
 export type { SeparatorProps } from "./components/ui/separator";
 export { Separator } from "./components/ui/separator";
 export type { SkeletonProps } from "./components/ui/skeleton";
