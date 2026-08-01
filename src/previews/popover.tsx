@@ -22,7 +22,10 @@ export function PopoverPreview({ mode = "isolated" }: PreviewProps) {
             <PopoverTitle>通知設定</PopoverTitle>
             <PopoverDescription>通知方法を確認して変更できます。</PopoverDescription>
           </PopoverHeader>
-          <button className="w-fit rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring">
+          <button
+            type="button"
+            className="w-fit rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring"
+          >
             通知を管理
           </button>
         </PopoverContent>
