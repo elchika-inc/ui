@@ -732,7 +732,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-01",
       "license": "MIT",
-      "modified": "Base UIに正規化し、semantic token・非透明3px focus ring・全slotのProps型とbarrel export、isolated/catalog用preview・selectorを追加",
+      "modified": "Base UIに正規化し、semantic token・非透明3px focus ring・全slotのProps型とbarrel export、isolated/catalog用preview・selectorを追加し、inset=falseではdata-inset属性を出さないよう正規化",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "dropdown-menu": {
@@ -753,7 +753,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-01",
       "license": "MIT",
-      "modified": "Base UI Menuを用いるDropdown Menuの追加。semantic token、非透明3px focus ring、data属性、公開Props、isolated限定defaultOpenのpreviewに正規化する。",
+      "modified": "Base UI Menuを用いるDropdown Menuの追加。semantic token、非透明3px focus ring、data属性、公開Props、isolated限定defaultOpenのpreviewへ正規化し、inset=falseではdata-inset属性を出さない。",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "drawer": {

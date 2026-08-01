@@ -121,3 +121,15 @@ test("dark variant の宣言は違反にしない", () => {
   const { violations } = checkFile("a.css", `@custom-variant dark (&:is(.dark *));`);
   assert.deepEqual(violations, []);
 });
+
+test("真のときだけ存在させる data-inset に boolean を直接渡す実装を検出する", () => {
+  const { violations } = checkFile("a.tsx", `data-inset={inset}`);
+  assert.deepEqual(violations, [
+    { rule: "boolean-data-inset", line: 1, text: "data-inset={inset}" },
+  ]);
+});
+
+test("data-inset の false と undefined を属性なしへ正規化する実装を受理する", () => {
+  const { violations } = checkFile("a.tsx", `data-inset={inset ? "" : undefined}`);
+  assert.deepEqual(violations, []);
+});

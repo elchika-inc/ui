@@ -30,6 +30,7 @@ const RING_OPACITY =
 const ARBITRARY =
   /\b(?:w|h|size|p[trblxy]?|m[trblxy]?|text|gap|z|top|left|right|bottom|inset|rounded|duration|leading|tracking|ring|border|shadow|bg|fill|stroke)-\[[^\]]+\]/g;
 const ALLOWED_ARBITRARY = new Set(["ring-[3px]"]);
+const BOOLEAN_DATA_INSET = /data-inset=\{inset\}/g;
 
 export function checkFile(path, source) {
   const violations = [];
@@ -41,6 +42,9 @@ export function checkFile(path, source) {
     for (const m of line.matchAll(ARBITRARY)) {
       if (ALLOWED_ARBITRARY.has(m[0])) continue;
       violations.push({ rule: "arbitrary-value", line: i + 1, text: m[0] });
+    }
+    for (const m of line.matchAll(BOOLEAN_DATA_INSET)) {
+      violations.push({ rule: "boolean-data-inset", line: i + 1, text: m[0] });
     }
   });
   return { violations };

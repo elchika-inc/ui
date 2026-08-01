@@ -88,7 +88,7 @@ function ContextMenuLabel({ className, inset, ...props }: ContextMenuLabelProps)
   return (
     <ContextMenuPrimitive.GroupLabel
       data-slot="context-menu-label"
-      data-inset={inset}
+      data-inset={inset ? "" : undefined}
       className={cn(
         "px-1.5 py-1 text-xs font-medium text-muted-foreground data-inset:pl-7",
         className,
@@ -107,7 +107,7 @@ function ContextMenuItem({
   return (
     <ContextMenuPrimitive.Item
       data-slot="context-menu-item"
-      data-inset={inset}
+      data-inset={inset ? "" : undefined}
       data-variant={variant}
       className={cn(
         "group/context-menu-item relative flex cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-sm outline-none select-none focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:ring-3 focus-visible:ring-ring data-inset:pl-7 data-[variant=destructive]:text-destructive data-[variant=destructive]:focus-visible:bg-destructive data-[variant=destructive]:focus-visible:text-destructive-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 focus-visible:*:[svg]:text-accent-foreground data-[variant=destructive]:*:[svg]:text-destructive",
@@ -131,7 +131,7 @@ function ContextMenuSubTrigger({
   return (
     <ContextMenuPrimitive.SubmenuTrigger
       data-slot="context-menu-sub-trigger"
-      data-inset={inset}
+      data-inset={inset ? "" : undefined}
       className={cn(
         "flex cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-sm outline-none select-none focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:ring-3 focus-visible:ring-ring data-inset:pl-7 data-open:bg-accent data-open:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
@@ -165,7 +165,7 @@ function ContextMenuCheckboxItem({
   return (
     <ContextMenuPrimitive.CheckboxItem
       data-slot="context-menu-checkbox-item"
-      data-inset={inset}
+      data-inset={inset ? "" : undefined}
       className={cn(
         "relative flex cursor-default items-center gap-1.5 rounded-md py-1 pr-8 pl-1.5 text-sm outline-none select-none focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:ring-3 focus-visible:ring-ring data-inset:pl-7 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
@@ -191,7 +191,7 @@ function ContextMenuRadioItem({ className, children, inset, ...props }: ContextM
   return (
     <ContextMenuPrimitive.RadioItem
       data-slot="context-menu-radio-item"
-      data-inset={inset}
+      data-inset={inset ? "" : undefined}
       className={cn(
         "relative flex cursor-default items-center gap-1.5 rounded-md py-1 pr-8 pl-1.5 text-sm outline-none select-none focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:ring-3 focus-visible:ring-ring data-inset:pl-7 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
