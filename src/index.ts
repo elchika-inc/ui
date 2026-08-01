@@ -1,3 +1,10 @@
+export type {
+  AlertActionProps,
+  AlertDescriptionProps,
+  AlertProps,
+  AlertTitleProps,
+} from "./components/ui/alert";
+export { Alert, AlertAction, AlertDescription, AlertTitle } from "./components/ui/alert";
 export type { BadgeProps } from "./components/ui/badge";
 export { Badge, badgeVariants } from "./components/ui/badge";
 export type { ButtonProps } from "./components/ui/button";
