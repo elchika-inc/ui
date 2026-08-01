@@ -16,6 +16,10 @@ const lastPage = 8;
 
 export function PaginationPreview(_props: PreviewProps) {
   const [currentPage, setCurrentPage] = useState(1);
+  const visiblePages =
+    currentPage > pages[pages.length - 1] && currentPage < lastPage
+      ? [...pages, currentPage]
+      : pages;
 
   const selectPage = (page: number) => (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
@@ -34,7 +38,7 @@ export function PaginationPreview(_props: PreviewProps) {
               onClick={selectPage(Math.max(1, currentPage - 1))}
             />
           </PaginationItem>
-          {pages.map((page) => (
+          {visiblePages.map((page) => (
             <PaginationItem key={page}>
               <PaginationLink
                 href={`#page-${page}`}

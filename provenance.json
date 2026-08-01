@@ -1131,7 +1131,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "全 PascalCase export の Props 型公開、IconPlaceholder を Lucide icon へ置換、navigation と前後・ellipsis の accessible name を日本語化、ellipsis の hidden tree を修正、boolean data-active と aria-disabled 表示を正規化、barrel export、current page・前後 link・無効境界の preview と light/dark route、hydration selector を追加",
+      "modified": "全 PascalCase export の Props 型公開、IconPlaceholder を Lucide icon へ置換、navigation と前後・ellipsis の accessible name を日本語化、anchor の link semantics と ellipsis の hidden tree を修正、boolean data-active と aria-disabled 表示を正規化、barrel export、current page・前後 link・無効境界の preview と light/dark route、hydration selector を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }

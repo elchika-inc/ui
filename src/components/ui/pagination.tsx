@@ -1,7 +1,7 @@
 import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon } from "lucide-react";
 import type * as React from "react";
 
-import { Button, type ButtonProps } from "@/components/ui/button";
+import { type ButtonProps, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 type PaginationProps = React.ComponentProps<"nav">;
@@ -42,19 +42,16 @@ type PaginationLinkProps = {
 
 function PaginationLink({ className, isActive, size = "icon", ...props }: PaginationLinkProps) {
   return (
-    <Button
-      variant={isActive ? "outline" : "ghost"}
-      size={size}
-      className={cn("aria-disabled:pointer-events-none aria-disabled:opacity-50", className)}
-      nativeButton={false}
-      render={
-        <a
-          aria-current={isActive ? "page" : undefined}
-          data-slot="pagination-link"
-          data-active={isActive ? "" : undefined}
-          {...props}
-        />
-      }
+    <a
+      aria-current={isActive ? "page" : undefined}
+      data-slot="pagination-link"
+      data-active={isActive ? "" : undefined}
+      className={cn(
+        buttonVariants({ variant: isActive ? "outline" : "ghost", size }),
+        "aria-disabled:pointer-events-none aria-disabled:opacity-50",
+        className,
+      )}
+      {...props}
     />
   );
 }
