@@ -29,6 +29,8 @@
 | light | `animation-name=caret-blink`、`duration=1.25s`、`iteration-count=infinite` | 400ms間で `0` → `1` | slot=32×32px、先頭slot radius=10px、border=`oklch(0.922 0 0)`。`--background=oklch(1 0 0)`、`--foreground=oklch(0.145 0 0)`、`--input=oklch(0.922 0 0)`、`--ring=oklch(0.556 0 0)` |
 | dark | light と同じ | 400ms間で約`0` → `0.256639` | slot=32×32px、先頭slot radius=10px、border=`oklch(1 0 0 / 0.15)`。`--background=oklch(0.145 0 0)`、`--foreground=oklch(0.985 0 0)`、`--input=oklch(1 0 0 / 15%)`、`--ring=oklch(0.556 0 0)` |
 
+build後のCSSに`.animate-caret-blink`と`@keyframes caret-blink`が実在し、utility classだけでなくアニメーション定義まで生成されることを確認した。
+
 両themeでpreviewは384×240px、separatorはnative `hr`としてAccessibility treeにseparatorで公開され、console errorは0件だった。slotは視覚表現専用で、各slotに`tabIndex`を追加していない。
 
 ## screenshots
