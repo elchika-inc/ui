@@ -463,6 +463,25 @@ export {
   MessageHeader,
 } from "./components/ui/message";
 export type {
+  MessageScrollerButtonProps,
+  MessageScrollerContentProps,
+  MessageScrollerItemProps,
+  MessageScrollerProps,
+  MessageScrollerProviderProps,
+  MessageScrollerViewportProps,
+} from "./components/ui/message-scroller";
+export {
+  MessageScroller,
+  MessageScrollerButton,
+  MessageScrollerContent,
+  MessageScrollerItem,
+  MessageScrollerProvider,
+  MessageScrollerViewport,
+  useMessageScroller,
+  useMessageScrollerScrollable,
+  useMessageScrollerVisibility,
+} from "./components/ui/message-scroller";
+export type {
   NativeSelectOptGroupProps,
   NativeSelectOptionProps,
   NativeSelectProps,

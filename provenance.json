@@ -1091,6 +1091,27 @@
       "license": "MIT",
       "modified": "全 PascalCase export の Props 型公開、IconPlaceholder を Lucide icon へ置換、arbitrary spacing と boolean data-inset を正規化、CheckboxItem と RadioItem を standards 適合済み DropdownMenu wrapper へ委譲、不透明な focus ring、barrel export、menu・submenu・keyboard・focus return の preview と light/dark route、hydration selector を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "message-scroller": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/message-scroller.json",
+      "registryPath": "registry/base-nova/ui/message-scroller.tsx",
+      "registryContentSha256": "4562f04e413b7f7af234ee48c85eaef7a415af2684f877448412703e0f7e95e8",
+      "generatedContentSha256": "ac2094e785430db2005bb63253112c7c939daf64d0b1d90e3a558f7a0e59fa3a",
+      "addTarget": "@shadcn/message-scroller",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/message-scroller.tsx",
+      "upstreamPathSha": "5a3ad36a5ed973c3246d5998e813b0313bb8ca1b",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-02",
+      "license": "MIT",
+      "modified": "全 PascalCase export の Props 型公開、IconPlaceholder を Lucide icon へ置換、arbitrary easing を semantic utility へ正規化、scroll button の accessible name を日本語化、barrel export、scroll 追従・最下部移動 button・追加 message の preview と light/dark route、hydration selector を追加",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }
