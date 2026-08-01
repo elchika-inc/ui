@@ -881,6 +881,27 @@
       "license": "MIT",
       "modified": "Base UI TooltipのProvider・Root・Trigger・ContentとProps型を公開し、semantic token・非透明3px focus ringへ正規化する。standards DESIGN.md §8適合のARIA補完としてTooltipContentのrole=tooltipを固定し、idとaria-describedbyを公開propsで配線する。renderとroleをProps型から除外し、spread後のrender=undefinedと固定roleで実行時の上書き経路も閉じる。preview内でProviderを所有し、isolated限定defaultOpenのlight/dark preview、barrel、型契約、selector、registryを追加する",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "alert-dialog": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/alert-dialog.json",
+      "registryPath": "registry/base-nova/ui/alert-dialog.tsx",
+      "registryContentSha256": "5a50dc2ef74955182bdcc4965f70d654f5f32fa836c4d693566b8167195a19d3",
+      "generatedContentSha256": "7abcaccfeb706cdaecc56f02a1b0ccb1be3f26ff2de8cf172a46b2bd550c1987",
+      "addTarget": "@shadcn/alert-dialog",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/alert-dialog.tsx",
+      "upstreamPathSha": "687f09817b614a3450f0f56779edf367082e1e53",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-02",
+      "license": "MIT",
+      "modified": "全 PascalCase export の Props 型を追加し、生の overlay 色を semantic token へ置換",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }
