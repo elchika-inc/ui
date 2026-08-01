@@ -20,6 +20,7 @@
   "message": "[data-slot=\"message-preview\"]",
   "native-select": "[data-slot=\"native-select-preview\"]",
   "progress": "[data-slot=\"progress-preview\"]",
+  "radio-group": "[data-slot=\"radio-group-preview\"]",
   "spinner": "[data-slot=\"spinner-preview\"]",
   "separator": "[data-slot=\"separator\"]",
   "skeleton": "[data-slot=\"skeleton\"]",

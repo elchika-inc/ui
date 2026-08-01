@@ -524,6 +524,27 @@
       "license": "MIT",
       "modified": "単一の実フォーカス、semantic token と data-active によるOTPスロット、native hr separator、全 PascalCase Props 型、6桁interactive preview、light/dark route、安定selectorへ正規化する",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "radio-group": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/radio-group.json",
+      "registryPath": "registry/base-nova/ui/radio-group.tsx",
+      "registryContentSha256": "3febc1d82dd236e398fb5045e57405ccafadb0494e598406e71cc573e00be991",
+      "generatedContentSha256": "e008134cd81946231c4676f2ebc62c7c23572d6b3cfa26f131bf51a17d92ec21",
+      "addTarget": "@shadcn/radio-group",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/radio-group.tsx",
+      "upstreamPathSha": "9e6765f4e2300916027160bf020929bf68f8be34",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-01",
+      "license": "MIT",
+      "modified": "semantic token と Base UI の状態属性、全 Props 型、label付きinteractive previewへ正規化する",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }

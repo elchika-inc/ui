@@ -172,6 +172,8 @@ export {
   ProgressTrack,
   ProgressValue,
 } from "./components/ui/progress";
+export type { RadioGroupItemProps, RadioGroupProps } from "./components/ui/radio-group";
+export { RadioGroup, RadioGroupItem } from "./components/ui/radio-group";
 export type { SeparatorProps } from "./components/ui/separator";
 export { Separator } from "./components/ui/separator";
 export type { SkeletonProps } from "./components/ui/skeleton";
