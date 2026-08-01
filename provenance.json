@@ -650,6 +650,27 @@
       "license": "MIT",
       "modified": "DESIGN.md §5適合のため半透明focus ringを非透明3px ringへ正規化し、Accordion全slotのProps型・barrel export、isolated/catalog用previewとshared PreviewSentinel、preview selectorを追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "collapsible": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/collapsible.json",
+      "registryPath": "registry/base-nova/ui/collapsible.tsx",
+      "registryContentSha256": "ead4349ff7b01d696ef89294a81d18ee1d3f732321398896462c834ab9b9e065",
+      "generatedContentSha256": "3de60b605e64c835588cecc189fbcf907eb602b0158f970d614b067e868b491e",
+      "addTarget": "@shadcn/collapsible",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/collapsible.tsx",
+      "upstreamPathSha": "86d9b00084affa7010e6c7c7bd410ec62525caac",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-01",
+      "license": "MIT",
+      "modified": "DESIGN.md §5適合のためsemantic tokenと非透明3px focus ringへ正規化し、Collapsible全slotのProps型・barrel export、isolated/catalog用previewとpreview selectorを追加",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }

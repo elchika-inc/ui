@@ -26,6 +26,9 @@ import type {
   BubbleReactionsProps,
   ButtonProps,
   CheckboxProps,
+  CollapsibleContentProps,
+  CollapsibleProps,
+  CollapsibleTriggerProps,
   DialogCloseProps,
   DialogContentProps,
   DialogDescriptionProps,
@@ -176,6 +179,16 @@ type CheckboxContracts = [CheckboxProps]
 const checkboxContractsReachable: CheckboxContracts extends unknown[] ? true : never = true
 const checkboxDefaultChecked: CheckboxProps["defaultChecked"] = true
 
+type CollapsibleContracts = [
+  CollapsibleProps,
+  CollapsibleTriggerProps,
+  CollapsibleContentProps,
+]
+const collapsibleContractsReachable: CollapsibleContracts extends unknown[] ? true : never = true
+const collapsibleDefaultOpen: CollapsibleProps["defaultOpen"] = true
+// @ts-expect-error Collapsible の defaultOpen は文字列を受けない。
+const invalidCollapsibleDefaultOpen: CollapsibleProps["defaultOpen"] = "true"
+
 type DialogContracts = [
   DialogProps,
   DialogTriggerProps,
@@ -278,6 +291,9 @@ export {
   invalid,
   checkboxContractsReachable,
   checkboxDefaultChecked,
+  collapsibleContractsReachable,
+  collapsibleDefaultOpen,
+  invalidCollapsibleDefaultOpen,
   dialogContentCloseButton,
   dialogFooterCloseButton,
   dialogContractsReachable,

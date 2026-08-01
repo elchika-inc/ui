@@ -85,6 +85,12 @@ export {
 export type { CheckboxProps } from "./components/ui/checkbox";
 export { Checkbox } from "./components/ui/checkbox";
 export type {
+  CollapsibleContentProps,
+  CollapsibleProps,
+  CollapsibleTriggerProps,
+} from "./components/ui/collapsible";
+export { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./components/ui/collapsible";
+export type {
   DialogCloseProps,
   DialogContentProps,
   DialogDescriptionProps,
