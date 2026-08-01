@@ -22,6 +22,7 @@
   "progress": "[data-slot=\"progress-preview\"]",
   "radio-group": "[data-slot=\"radio-group-preview\"]",
   "spinner": "[data-slot=\"spinner-preview\"]",
+  "switch": "[data-slot=\"switch-preview\"]",
   "separator": "[data-slot=\"separator\"]",
   "slider": "[data-slot=\"slider-preview\"]",
   "skeleton": "[data-slot=\"skeleton\"]",

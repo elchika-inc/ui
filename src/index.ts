@@ -184,6 +184,8 @@ export type { ToasterProps } from "./components/ui/sonner";
 export { Toaster } from "./components/ui/sonner";
 export type { SpinnerProps } from "./components/ui/spinner";
 export { Spinner } from "./components/ui/spinner";
+export type { SwitchProps } from "./components/ui/switch";
+export { Switch } from "./components/ui/switch";
 export type {
   TableBodyProps,
   TableCaptionProps,

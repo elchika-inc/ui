@@ -566,6 +566,27 @@
       "license": "MIT",
       "modified": "semantic token と Base UI の状態属性、全 Props 型、interactive previewへ正規化する",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "switch": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/switch.json",
+      "registryPath": "registry/base-nova/ui/switch.tsx",
+      "registryContentSha256": "bf6e6cdf20d482569608185aa9def360ecab50ec0eeb621c9f05eccf0e189f97",
+      "generatedContentSha256": "5762b1a46dd7739e535bfdefbccc3afe4932023800c74d6160c49fd59f6a1e6b",
+      "addTarget": "@shadcn/switch",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/switch.tsx",
+      "upstreamPathSha": "86d9b00084affa7010e6c7c7bd410ec62525caac",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-01",
+      "license": "MIT",
+      "modified": "semantic token・Base UI 状態属性・非透明 focus ring へ正規化し、SwitchProps 公開と controlled / disabled preview、light / dark route、selector を追加する",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }
