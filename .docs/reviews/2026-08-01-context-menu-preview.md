@@ -15,6 +15,12 @@
 
 light の再 open で `ArrowDown` は「新規作成」へ移動した。表示文字列を維持したまま `label="new"` を指定し、`N` の typeahead でも同じ menuitem へ移動した。Escape は Chrome の `ESC` 入力で content 0、focus `BODY` を実測した。右クリックでは trigger が focus されず返す先がないため、閉じた content 内に focus が取り残されていない `BODY` が正しい結果である。
 
+## dark 再 open のレビュー補完
+
+レビュー指摘により、component 固有 path が最終実装 SHA `d37b6b4e95ecb59e591a390f9ea3bb00aa9063c1` から差分0であることを確認した。docs-only 後続 HEAD `b1bc9e693382a3e384e061f92c87fcaa63d0593d` を fresh build し、空き確認済み `127.0.0.1:4330` で dark route を再実測した。
+
+trigger 中央 `(288, 133)` の初回 contextmenu 後に content 1を確認し、Escape の完了を hidden まで待機した結果は content 0 / focus `BODY` だった。同じ trigger で再 open 後、`ArrowDown` と `N` typeahead はともに `role=menuitem` の「新規作成」へ移動し、再度 Escape 後も content 0 / focus `BODY` だった。console error は0件である。右クリックは trigger を focus しないため、これは閉じた content に取り残されない正常な focus 終端である。
+
 ## JPEG
 
 Browser `tab.screenshot({ fullPage: true })` の Uint8Array を変換せず保存した。light / dark とも JPEG/JFIF、`1512 × 828px`、magic bytes は `ffd8ffe0` であり、拡張子 `.jpg` と実体が一致する。
