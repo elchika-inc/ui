@@ -157,6 +157,26 @@ export { Toaster } from "./components/ui/sonner";
 export type { SpinnerProps } from "./components/ui/spinner";
 export { Spinner } from "./components/ui/spinner";
 export type {
+  TableBodyProps,
+  TableCaptionProps,
+  TableCellProps,
+  TableFooterProps,
+  TableHeaderProps,
+  TableHeadProps,
+  TableProps,
+  TableRowProps,
+} from "./components/ui/table";
+export {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "./components/ui/table";
+export type {
   TabsContentProps,
   TabsListProps,
   TabsProps,
