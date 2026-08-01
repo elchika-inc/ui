@@ -411,6 +411,42 @@ export { Label } from "./components/ui/label";
 export type { MarkerContentProps, MarkerIconProps, MarkerProps } from "./components/ui/marker";
 export { Marker, MarkerContent, MarkerIcon, markerVariants } from "./components/ui/marker";
 export type {
+  MenubarCheckboxItemProps,
+  MenubarContentProps,
+  MenubarGroupProps,
+  MenubarItemProps,
+  MenubarLabelProps,
+  MenubarMenuProps,
+  MenubarPortalProps,
+  MenubarProps,
+  MenubarRadioGroupProps,
+  MenubarRadioItemProps,
+  MenubarSeparatorProps,
+  MenubarShortcutProps,
+  MenubarSubContentProps,
+  MenubarSubProps,
+  MenubarSubTriggerProps,
+  MenubarTriggerProps,
+} from "./components/ui/menubar";
+export {
+  Menubar,
+  MenubarCheckboxItem,
+  MenubarContent,
+  MenubarGroup,
+  MenubarItem,
+  MenubarLabel,
+  MenubarMenu,
+  MenubarPortal,
+  MenubarRadioGroup,
+  MenubarRadioItem,
+  MenubarSeparator,
+  MenubarShortcut,
+  MenubarSub,
+  MenubarSubContent,
+  MenubarSubTrigger,
+  MenubarTrigger,
+} from "./components/ui/menubar";
+export type {
   MessageAvatarProps,
   MessageContentProps,
   MessageFooterProps,

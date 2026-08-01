@@ -1070,6 +1070,27 @@
       "license": "MIT",
       "modified": "全 PascalCase export の Props 型公開、focus ring の透明度を除去、ItemGroup の div props と role=list を保持する局所 lint 理由、barrel export、media・content・actions・separator の preview と light/dark route、hydration selector を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "menubar": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/menubar.json",
+      "registryPath": "registry/base-nova/ui/menubar.tsx",
+      "registryContentSha256": "21c0b48c7d18e5fa5c5d0a5f3eee1ec3b2cef6692d21a3302f2b49e45c1ee82b",
+      "generatedContentSha256": "a0001ea6d9dfda9f52cf282438317f19cb99447947b54cb80dca764f04c308e9",
+      "addTarget": "@shadcn/menubar",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/menubar.tsx",
+      "upstreamPathSha": "49616d2e162d2213d76478798ed3773b8cfe3089",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-02",
+      "license": "MIT",
+      "modified": "全 PascalCase export の Props 型公開、IconPlaceholder を Lucide icon へ置換、arbitrary spacing と boolean data-inset を正規化、不透明な focus ring、barrel export、menu・submenu・keyboard・focus return の preview と light/dark route、hydration selector を追加",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }

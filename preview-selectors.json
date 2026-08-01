@@ -39,6 +39,7 @@
   "kbd": "[data-slot=\"kbd-preview\"]",
   "label": "[data-slot=\"label\"]",
   "marker": "[data-slot=\"marker-preview\"]",
+  "menubar": "[data-slot=\"menubar-content\"]",
   "message": "[data-slot=\"message-preview\"]",
   "native-select": "[data-slot=\"native-select-preview\"]",
   "navigation-menu": "[data-slot=\"navigation-menu-content\"]",
