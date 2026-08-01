@@ -27,7 +27,7 @@ export function ContextMenuPreview({ mode = "isolated" }: PreviewProps) {
         <ContextMenuContent>
           <ContextMenuGroup>
             <ContextMenuLabel>ファイル</ContextMenuLabel>
-            <ContextMenuItem>新規作成</ContextMenuItem>
+            <ContextMenuItem label="new">新規作成</ContextMenuItem>
             <ContextMenuCheckboxItem defaultChecked>隠しファイルを表示</ContextMenuCheckboxItem>
           </ContextMenuGroup>
           <ContextMenuSeparator />
