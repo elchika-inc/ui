@@ -70,6 +70,8 @@ export {
   CardHeader,
   CardTitle,
 } from "./components/ui/card";
+export type { CheckboxProps } from "./components/ui/checkbox";
+export { Checkbox } from "./components/ui/checkbox";
 export type {
   DialogCloseProps,
   DialogContentProps,

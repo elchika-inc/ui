@@ -7,6 +7,7 @@
   "bubble": "[data-slot=\"bubble-preview\"]",
   "button": "[data-slot=\"button\"]",
   "card": "[data-slot=\"card\"]",
+  "checkbox": "[data-slot=\"checkbox-preview\"]",
   "catalog": "[data-slot=\"verification-catalog\"]",
   "catalog-dark": "[data-slot=\"verification-catalog\"]",
   "dialog": "[data-slot=\"dialog-content\"]",

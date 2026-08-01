@@ -10,6 +10,7 @@ import type {
   AvatarImageProps,
   AvatarProps,
   ButtonProps,
+  CheckboxProps,
   DialogCloseProps,
   DialogContentProps,
   DialogDescriptionProps,
@@ -72,6 +73,10 @@ const size: ButtonProps["size"] = "sm"
 // その場合 tsc は「未使用の @ts-expect-error」として失敗するので、
 // 潰れを検出できる。
 const invalid: ButtonProps["variant"] = "存在しない variant"
+
+type CheckboxContracts = [CheckboxProps]
+const checkboxContractsReachable: CheckboxContracts extends unknown[] ? true : never = true
+const checkboxDefaultChecked: CheckboxProps["defaultChecked"] = true
 
 type DialogContracts = [
   DialogProps,
@@ -146,6 +151,8 @@ export {
   variant,
   size,
   invalid,
+  checkboxContractsReachable,
+  checkboxDefaultChecked,
   dialogContentCloseButton,
   dialogFooterCloseButton,
   dialogContractsReachable,
