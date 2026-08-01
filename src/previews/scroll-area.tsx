@@ -26,8 +26,8 @@ export function ScrollAreaPreview({ mode = "isolated" }: PreviewProps) {
       <PreviewSentinel mode={mode} position="before" />
       <ScrollArea className="h-52 w-full max-w-lg">
         <ScrollAreaViewport aria-label="操作記録" className="focus-visible:ring-offset-2">
-          <ScrollAreaContent className="min-h-144 min-w-160 p-4">
-            <div className="flex flex-col gap-3">
+          <ScrollAreaContent className="min-h-144 p-4">
+            <div className="flex min-w-160 flex-col gap-3">
               {entries.map((entry, index) => (
                 <button
                   key={entry}
