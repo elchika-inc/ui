@@ -1,6 +1,6 @@
 # Slider preview 実ブラウザ検証
 
-- 検証 SHA: `aa10e4b6829b350c4ce77a493d2730330705725b`
+- 検証 SHA: `cf2542b675ad78804c8af239b866b6c290e69bdb`
 - Browser: Chrome
 - server: `http://127.0.0.1:3011`（implementation commit の固定 SHA で起動）
 - 対象 route: `/preview/slider/`、`/preview/slider-dark/`
@@ -31,7 +31,7 @@ Accessibility tree では、enabled は `group "音量"` 内の `slider "音量"
 
 ## screenshots と取得方法
 
-- `2026-08-01-slider-preview-light-r2.jpg`: JPEG/JFIF、1512×828px、Browserのfull-page取得。
-- `2026-08-01-slider-preview-dark-r2.jpg`: JPEG/JFIF、1512×828px、Browserのfull-page取得。
+- `2026-08-01-slider-preview-light-r3.jpg`: JPEG/JFIF、Browserのfull-page取得。
+- `2026-08-01-slider-preview-dark-r3.jpg`: JPEG/JFIF、Browserのfull-page取得。
 
-scalar `value`、scalar `defaultValue`、unsetはcompiled public Sliderでthumb 1件、range valueはthumb 2件となるassertを確認した。
+scalar `value`、scalar `defaultValue`、unset、`value=40/defaultValue=[20,80]`はcompiled public Sliderでthumb 1件、range valueとrange defaultValueはthumb 2件となるassertを確認した。r3のlight/dark console errorはともに0件。
