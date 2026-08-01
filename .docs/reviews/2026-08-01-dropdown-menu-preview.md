@@ -1,8 +1,10 @@
 # Dropdown Menu 実ブラウザ検証
 
+- 検証済み最終実装 commit: `8457a94f60280d0e60e288258bb569f4f0572c6f`
+
 ## 対象
 
-- 実装 commit: `05637f546f73eba004e8ce731292a2b3360f90e3`
+- 初回実装 commit: `05637f546f73eba004e8ce731292a2b3360f90e3`
 - 裁定 commit: `00ae542741c015bfe70f3b9d4b7c2268a3ce6a36`
 - 配信 URL: `http://127.0.0.1:4326/preview/dropdown-menu/`、`http://127.0.0.1:4326/preview/dropdown-menu-dark/`
 - 安定 selector: `[data-slot="dropdown-menu-content"]`
@@ -39,3 +41,17 @@ Base UI Menu は Menu Button として非モーダルに動作する。したが
 ## 見た範囲
 
 light/dark の isolated route で初期表示、Portal、ARIA、focus、キーボードとクリック操作、選択状態、submenu を確認した。catalog は閉状態のみを確認し、batch 末尾の全component横断走査は本証跡の対象外である。
+
+## 最終レビューでの inset 契約再検証
+
+Core Logicレビューで、`inset={false}`が`data-inset="false"`としてDOMへ残り、値を見ないTailwindの`data-inset:pl-7`が誤適用される欠陥を検出した。実装commit `8457a94f60280d0e60e288258bb569f4f0572c6f` で、`DropdownMenuLabel`、`DropdownMenuItem`、`DropdownMenuSubTrigger`、`DropdownMenuCheckboxItem`、`DropdownMenuRadioItem`の5件を、trueのときだけ空の`data-inset`属性を出す形へ修正した。
+
+同commitをAstro devで`127.0.0.1:4341`へ配信し、製品ファイルを変更しないruntime probeから実componentをPortal内へmountした。5 wrapper × `undefined` / `false` / `true` × light / darkの30ケースを実測し、次で一致した。
+
+| 値 | `data-inset` | computed `padding-left` |
+|---|---|---:|
+| `undefined` | 属性なし | `6px` |
+| `false` | 属性なし | `6px` |
+| `true` | 空属性あり | `28px` |
+
+component由来のconsole exception / warningは0件だった。browser navigationが要求した`/favicon.ico`の404はcomponent実行経路外として分離記録した。probe後はChrome pageを閉じ、`npx astro dev stop`でdaemonを停止した。終了時は当該repoのAstro process 0、4341 LISTEN 0、HTTP接続はexit 7、HEADは同commit、worktreeはcleanだった。

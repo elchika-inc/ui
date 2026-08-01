@@ -1,6 +1,7 @@
 # Context Menu preview 実ブラウザ検証
 
-- 実装固定 SHA: `d37b6b4e95ecb59e591a390f9ea3bb00aa9063c1`
+- 検証済み最終実装 SHA: `8457a94f60280d0e60e288258bb569f4f0572c6f`
+- 初回実装固定 SHA: `d37b6b4e95ecb59e591a390f9ea3bb00aa9063c1`
 - fresh build: この SHA で `npm run build` を再実行後、空き確認済みの `127.0.0.1:4329` を `npm run preview -- --host 127.0.0.1 --port 4329` で配信した。
 - 裁定事実: Context Menu は pointer 座標を anchor にするため、`defaultOpen` の位置検証は成立しない。preview は閉じた状態とし、実際の `contextmenu` event で開いた。
 - setup schema: `preview-selectors.json` の `context-menu` は `{ selector: "[data-slot=\"context-menu-content\"]", setup: { action: "contextmenu", target: "[data-slot=\"context-menu-trigger\"]", position: "center" } }`。静的 checker は selector 宣言だけを検査し、setup 実行と DOM match は実ブラウザ検証の責務とする。
@@ -29,3 +30,17 @@ Browser `tab.screenshot({ fullPage: true })` の Uint8Array を変換せず保�
 - `context-menu-preview-dark.jpg`
 
 見た範囲は固定 SHA のlight/dark hydration、実 contextmenu の座標 anchor、Portal、ARIA、sentinel、background inert、focus、ArrowDown、typeahead、Escape、catalog閉状態、console error、JPEG実体である。見ていない範囲は screen reader の読み上げ、RTL、高倍率、pointer以外の入力装置である。
+
+## 最終レビューでの inset 契約再検証
+
+Core Logicレビューで、`inset={false}`が`data-inset="false"`としてDOMへ残り、値を見ないTailwindの`data-inset:pl-7`が誤適用される欠陥を検出した。実装commit `8457a94f60280d0e60e288258bb569f4f0572c6f` で、`ContextMenuLabel`、`ContextMenuItem`、`ContextMenuSubTrigger`、`ContextMenuCheckboxItem`、`ContextMenuRadioItem`の5件を、trueのときだけ空の`data-inset`属性を出す形へ修正した。
+
+同commitをAstro devで`127.0.0.1:4341`へ配信し、製品ファイルを変更しないruntime probeから実componentをPortal内へmountした。5 wrapper × `undefined` / `false` / `true` × light / darkの30ケースを実測し、次で一致した。
+
+| 値 | `data-inset` | computed `padding-left` |
+|---|---|---:|
+| `undefined` | 属性なし | `6px` |
+| `false` | 属性なし | `6px` |
+| `true` | 空属性あり | `28px` |
+
+component由来のconsole exception / warningは0件だった。browser navigationが要求した`/favicon.ico`の404はcomponent実行経路外として分離記録した。probe後はChrome pageを閉じ、`npx astro dev stop`でdaemonを停止した。終了時は当該repoのAstro process 0、4341 LISTEN 0、HTTP接続はexit 7、HEADは同commit、worktreeはcleanだった。

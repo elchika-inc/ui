@@ -18,7 +18,7 @@
 - Scroll Area / Resizable は全必須slotが正の矩形を持って静的表示
 - console error / warning: Light / Dark とも0
 - full-page JPEG 2件はChrome取得bytesを無変換で保存し、JFIF magic、拡張子、寸法を検査済み
-- Chromeタブとpreview serverは終了済み
+- Task 16で使ったChromeタブとport 4317のpreview serverは終了済み。最終レビューで同repo由来の別Astro dev processが残っていたことを検出し、後述の訂正手順で停止済み
 - 不具合、flaky、仕様矛盾: なし
 
 ## 実行環境（再現性の前提）
@@ -148,7 +148,7 @@ Light / Darkのhydration後DOMから採取・sortした実集合も上記42件�
 | 10 | Scroll Area / Resizable静的表示 | コード・画面 | 構造・矩形 | Medium | ✅実測確認 | 4/4 | 全必須slotが正矩形 |
 | 11 | console error / warning | 画面 | 異常系監視 | High | ✅実測確認 | 2/2 | Light `[]`、Dark `[]` |
 | 12 | full-page JPEG実体 | 画面・ファイル | magic/dimension | High | ✅実測確認 | 2/2 | JFIF、1512×5833、画像目視済み |
-| 13 | server/browser cleanup、終了integrity | 環境 | 終了ゲート | High | ✅実測確認 | 1/1 | listenerなし、curl接続不可、HEAD不変 |
+| 13 | server/browser cleanup、終了integrity | 環境 | 終了ゲート | High | ✅訂正後に実測確認 | 2/2 | 初回は4317だけを確認して別portのorphanを見逃した。最終レビューでrepo全体を再走査し停止済み |
 
 ## Light / Dark のcatalog全体実測値
 
@@ -622,6 +622,14 @@ git diff --exit-code e22d241c8b64fc94a0b087081bc1b1ca10c407cf..HEAD -- src types
   - `.docs/reviews/batch-overlay-catalog-light.jpg`
   - `.docs/reviews/batch-overlay-catalog-dark.jpg`
 - 削除・外部送信・push・commit: 実施なし
+
+### 最終レビューでのcleanup訂正
+
+Task 16の終了検査はport 4317だけを見ており、同repoをcwdとする`astro dev --port 4340 --host 127.0.0.1 --json`（PID 47279、PPID 1）が約7時間45分後もLISTENしていることをTestsレビューが検出した。これはcleanupゲートの偽greenであり、Task 16時点の「server cleanup完了」という広い主張を撤回する。
+
+親エージェントがPID、PPID、command、cwd、TCP 4340 LISTEN、HTTP応答を再確認してPID 47279を停止した。その後のmenu inset再検証で起動したAstro dev daemon PID 61675も、親PTYのCtrl-Cだけでは残ることを確認し、CLIが提示した`npx astro dev stop`で停止した。
+
+最終確認では、当該repoの`node_modules/astro/bin/astro.mjs`に一致するprocessは0件、4340 / 4341のLISTENは各0件、両portへのcurlはexit 7で接続不可だった。固定実装SHAは `8457a94f60280d0e60e288258bb569f4f0572c6f`、worktreeは証跡文書の意図的変更以外に差分なしだった。以降のcleanupゲートは特定portだけでなく、当該repo由来のAstro processも併せて検査する。
 
 ## 申し送り候補
 
