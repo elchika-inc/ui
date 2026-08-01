@@ -84,6 +84,7 @@ Expected: すべて exit 0。warning がある場合は新規差分か既存 bas
 - [ ] `verification-documenter` に light / dark route、起動方法、非破壊操作、上流から導出した観測項目を渡す。
 - [ ] light / dark の両 route で selector が hydration 後に実在することを確認する。
 - [ ] console error、主要 interaction、keyboard / focus / live region のうち実在する経路を確認する。
+- [ ] focus 表示の有無は checker では判定せず、keyboard focus 後の computed style をブラウザで確認する。
 - [ ] screenshot API の format、返却 bytes の magic、`.jpg` 拡張子が一致することを確認する。
 - [ ] `verified_impl_sha: <IMPL_SHA>` を一意に含む Markdown と light / dark JPEG を新規作成する。
 - [ ] agent の検証可能な主張を main agent が SHA、status、selector、ファイル実在で裏取りする。

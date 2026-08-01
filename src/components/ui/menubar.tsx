@@ -1,11 +1,11 @@
 "use client";
 
-import { Menu as MenuPrimitive } from "@base-ui/react/menu";
 import { Menubar as MenubarPrimitive } from "@base-ui/react/menubar";
-import { CheckIcon } from "lucide-react";
 
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
+  type DropdownMenuCheckboxItemProps,
   DropdownMenuContent,
   type DropdownMenuContentProps,
   DropdownMenuGroup,
@@ -19,6 +19,8 @@ import {
   type DropdownMenuProps,
   DropdownMenuRadioGroup,
   type DropdownMenuRadioGroupProps,
+  DropdownMenuRadioItem,
+  type DropdownMenuRadioItemProps,
   DropdownMenuSeparator,
   type DropdownMenuSeparatorProps,
   DropdownMenuShortcut,
@@ -41,13 +43,9 @@ export type MenubarPortalProps = DropdownMenuPortalProps;
 export type MenubarTriggerProps = DropdownMenuTriggerProps;
 export type MenubarContentProps = DropdownMenuContentProps;
 export type MenubarItemProps = DropdownMenuItemProps;
-export type MenubarCheckboxItemProps = MenuPrimitive.CheckboxItem.Props & {
-  inset?: boolean;
-};
+export type MenubarCheckboxItemProps = DropdownMenuCheckboxItemProps;
 export type MenubarRadioGroupProps = DropdownMenuRadioGroupProps;
-export type MenubarRadioItemProps = MenuPrimitive.RadioItem.Props & {
-  inset?: boolean;
-};
+export type MenubarRadioItemProps = DropdownMenuRadioItemProps;
 export type MenubarLabelProps = DropdownMenuLabelProps;
 export type MenubarSeparatorProps = DropdownMenuSeparatorProps;
 export type MenubarShortcutProps = DropdownMenuShortcutProps;
@@ -127,57 +125,16 @@ function MenubarItem({ className, inset, variant = "default", ...props }: Menuba
   );
 }
 
-function MenubarCheckboxItem({
-  className,
-  children,
-  checked,
-  inset,
-  ...props
-}: MenubarCheckboxItemProps) {
-  return (
-    <MenuPrimitive.CheckboxItem
-      data-slot="menubar-checkbox-item"
-      data-inset={inset ? "" : undefined}
-      className={cn(
-        "relative flex cursor-default items-center gap-1.5 rounded-md py-1 pr-1.5 pl-7 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground focus:**:text-accent-foreground data-inset:pl-7 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
-        className,
-      )}
-      checked={checked}
-      {...props}
-    >
-      <span className="pointer-events-none absolute left-1.5 flex size-4 items-center justify-center [&_svg:not([class*='size-'])]:size-4">
-        <MenuPrimitive.CheckboxItemIndicator>
-          <CheckIcon />
-        </MenuPrimitive.CheckboxItemIndicator>
-      </span>
-      {children}
-    </MenuPrimitive.CheckboxItem>
-  );
+function MenubarCheckboxItem(props: MenubarCheckboxItemProps) {
+  return <DropdownMenuCheckboxItem data-slot="menubar-checkbox-item" {...props} />;
 }
 
 function MenubarRadioGroup(props: MenubarRadioGroupProps) {
   return <DropdownMenuRadioGroup data-slot="menubar-radio-group" {...props} />;
 }
 
-function MenubarRadioItem({ className, children, inset, ...props }: MenubarRadioItemProps) {
-  return (
-    <MenuPrimitive.RadioItem
-      data-slot="menubar-radio-item"
-      data-inset={inset ? "" : undefined}
-      className={cn(
-        "relative flex cursor-default items-center gap-1.5 rounded-md py-1 pr-1.5 pl-7 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground focus:**:text-accent-foreground data-inset:pl-7 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        className,
-      )}
-      {...props}
-    >
-      <span className="pointer-events-none absolute left-1.5 flex size-4 items-center justify-center [&_svg:not([class*='size-'])]:size-4">
-        <MenuPrimitive.RadioItemIndicator>
-          <CheckIcon />
-        </MenuPrimitive.RadioItemIndicator>
-      </span>
-      {children}
-    </MenuPrimitive.RadioItem>
-  );
+function MenubarRadioItem(props: MenubarRadioItemProps) {
+  return <DropdownMenuRadioItem data-slot="menubar-radio-item" {...props} />;
 }
 
 function MenubarLabel({ className, inset, ...props }: MenubarLabelProps) {

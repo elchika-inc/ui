@@ -6,6 +6,8 @@ import {
   MenubarContent,
   MenubarItem,
   MenubarMenu,
+  MenubarRadioGroup,
+  MenubarRadioItem,
   MenubarSeparator,
   MenubarShortcut,
   MenubarSub,
@@ -32,6 +34,11 @@ export function MenubarPreview({ mode = "isolated" }: PreviewProps) {
             </MenubarItem>
             <MenubarSeparator />
             <MenubarCheckboxItem defaultChecked>自動保存</MenubarCheckboxItem>
+            <MenubarRadioGroup defaultValue="team">
+              <MenubarRadioItem value="personal">個人用</MenubarRadioItem>
+              <MenubarRadioItem value="team">チーム用</MenubarRadioItem>
+            </MenubarRadioGroup>
+            <MenubarSeparator />
             <MenubarSub>
               <MenubarSubTrigger>共有</MenubarSubTrigger>
               <MenubarSubContent>
