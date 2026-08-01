@@ -215,3 +215,5 @@ export type {
 export { Tabs, TabsContent, TabsList, TabsTrigger, tabsListVariants } from "./components/ui/tabs";
 export type { TextareaProps } from "./components/ui/textarea";
 export { Textarea } from "./components/ui/textarea";
+export type { ToggleProps } from "./components/ui/toggle";
+export { Toggle, toggleVariants } from "./components/ui/toggle";

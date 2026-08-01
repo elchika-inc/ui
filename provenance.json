@@ -608,6 +608,27 @@
       "license": "MIT",
       "modified": "非透明 focus ring・semantic token・全 Props 型へ正規化し、controlled / disabled / readOnly preview、light / dark route、selector を追加する",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "toggle": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/toggle.json",
+      "registryPath": "registry/base-nova/ui/toggle.tsx",
+      "registryContentSha256": "e489c66669a2d8667807ff14c5a00c735f1aba08af57a40d92f20b94705d98a5",
+      "generatedContentSha256": "38b81d3872be232a2617a791069a43e2cc415208e3eff14814324319559fdde9",
+      "addTarget": "@shadcn/toggle",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/toggle.tsx",
+      "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-01",
+      "license": "MIT",
+      "modified": "DESIGN.md §5適合のため透明度付きfocus/aria-invalid ringと値系arbitrary valueを正規化し、Radix由来のstate selectorをBase UIのdata-pressedへ修正してTogglePropsを追加",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }
