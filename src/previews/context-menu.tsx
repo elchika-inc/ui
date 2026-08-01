@@ -1,3 +1,5 @@
+import type { KeyboardEvent } from "react";
+
 import { PreviewSentinel } from "@/catalog/preview-sentinel";
 import type { PreviewProps } from "@/catalog/preview-types";
 import {
@@ -16,6 +18,23 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 
+function handleContextMenuKey(event: KeyboardEvent<HTMLDivElement>) {
+  const isContextMenuKey = event.key === "ContextMenu";
+  const isShiftF10 = event.shiftKey && event.key === "F10";
+  if (!isContextMenuKey && !isShiftF10) return;
+
+  event.preventDefault();
+  const rect = event.currentTarget.getBoundingClientRect();
+  event.currentTarget.dispatchEvent(
+    new MouseEvent("contextmenu", {
+      bubbles: true,
+      cancelable: true,
+      clientX: rect.left + rect.width / 2,
+      clientY: rect.top + rect.height / 2,
+    }),
+  );
+}
+
 export function ContextMenuPreview({ mode = "isolated" }: PreviewProps) {
   return (
     <section data-slot="context-menu-preview" className="flex max-w-xl flex-col gap-3 p-6">
@@ -23,6 +42,7 @@ export function ContextMenuPreview({ mode = "isolated" }: PreviewProps) {
       <ContextMenu>
         <ContextMenuTrigger
           render={<button type="button" />}
+          onKeyDown={handleContextMenuKey}
           className="rounded-lg border border-dashed border-border bg-muted px-6 py-12 text-center text-sm text-muted-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring"
         >
           ここを右クリック

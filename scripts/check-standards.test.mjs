@@ -142,6 +142,10 @@ test("data-inset の false と undefined を属性なしへ正規化する実装
 test("Context Menu preview のtriggerはkeyboard focusとcontextmenu keyを受けられる", () => {
   const source = readSource("src/previews/context-menu.tsx");
   assert.match(source, /<ContextMenuTrigger[\s\S]*?render=\{<button type="button" \/>\}/);
+  assert.match(source, /onKeyDown=\{handleContextMenuKey\}/);
+  assert.match(source, /event\.key === "ContextMenu"/);
+  assert.match(source, /event\.shiftKey && event\.key === "F10"/);
+  assert.match(source, /new MouseEvent\("contextmenu"/);
   assert.match(source, /<ContextMenuTrigger[\s\S]*?focus-visible:ring-3 focus-visible:ring-ring/);
 });
 
