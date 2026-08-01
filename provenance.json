@@ -419,6 +419,27 @@
       "license": "MIT",
       "modified": "Base UI と semantic token 規約へ正規化し、Progress の全 PascalCase value export の Props 型と barrel 公開、複数値を示す light/dark 隔離プレビューと安定 selector を追加する",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "spinner": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/spinner.json",
+      "registryPath": "registry/base-nova/ui/spinner.tsx",
+      "registryContentSha256": "28d55babd3a141b406b5103e4566fe53875ed9bb44df168fd0e6b4564ce12fbf",
+      "generatedContentSha256": "900f722c961fa6e1c28104809d56831c9056dc69599e49d364cc13a6f33966a3",
+      "addTarget": "@shadcn/spinner",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/spinner.tsx",
+      "upstreamPathSha": "6ec117715f8519326f0ae8c9984b930f313bdb71",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-01",
+      "license": "MIT",
+      "modified": "Spinner を上流の SVG とアクセシビリティ意味論を保持したまま semantic token と animation 規約へ正規化し、SpinnerProps 型公開、standalone・label併用・size を示す light/dark 隔離プレビューと安定 selector を追加する",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }

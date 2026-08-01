@@ -154,6 +154,8 @@ export type { SkeletonProps } from "./components/ui/skeleton";
 export { Skeleton } from "./components/ui/skeleton";
 export type { ToasterProps } from "./components/ui/sonner";
 export { Toaster } from "./components/ui/sonner";
+export type { SpinnerProps } from "./components/ui/spinner";
+export { Spinner } from "./components/ui/spinner";
 export type {
   TabsContentProps,
   TabsListProps,

@@ -34,6 +34,7 @@ import type {
   ProgressProps,
   ProgressTrackProps,
   ProgressValueProps,
+  SpinnerProps,
   TabsContentProps,
   TabsListProps,
   TabsProps,
@@ -112,6 +113,9 @@ type ProgressContracts = [
 const progressContractsReachable: ProgressContracts extends unknown[] ? true : never = true
 const progressValue: ProgressProps["value"] = 50
 
+type SpinnerContracts = [SpinnerProps]
+const spinnerContractsReachable: SpinnerContracts extends unknown[] ? true : never = true
+
 type TabsContracts = [TabsProps, TabsListProps, TabsTriggerProps, TabsContentProps]
 const tabsContractsReachable: TabsContracts extends unknown[] ? true : never = true
 const toasterPosition: ToasterProps["position"] = "top-center"
@@ -133,6 +137,7 @@ export {
   invalidMessageAlignment,
   progressContractsReachable,
   progressValue,
+  spinnerContractsReachable,
   tabsContractsReachable,
   toasterPosition,
 }
