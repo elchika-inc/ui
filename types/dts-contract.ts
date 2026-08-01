@@ -69,6 +69,17 @@ import type {
   DialogProps,
   DialogTitleProps,
   DialogTriggerProps,
+  DrawerCloseProps,
+  DrawerContentProps,
+  DrawerDescriptionProps,
+  DrawerFooterProps,
+  DrawerHeaderProps,
+  DrawerOverlayProps,
+  DrawerPortalProps,
+  DrawerProps,
+  DrawerSwipeHandleProps,
+  DrawerTitleProps,
+  DrawerTriggerProps,
   EmptyContentProps,
   EmptyDescriptionProps,
   EmptyHeaderProps,
@@ -314,6 +325,24 @@ type DialogContracts = [
 const dialogContentCloseButton: DialogContentProps["showCloseButton"] = true
 const dialogFooterCloseButton: DialogFooterProps["showCloseButton"] = false
 const dialogContractsReachable: DialogContracts extends unknown[] ? true : never = true
+
+type DrawerContracts = [
+  DrawerProps,
+  DrawerPortalProps,
+  DrawerOverlayProps,
+  DrawerSwipeHandleProps,
+  DrawerTriggerProps,
+  DrawerCloseProps,
+  DrawerContentProps,
+  DrawerHeaderProps,
+  DrawerFooterProps,
+  DrawerTitleProps,
+  DrawerDescriptionProps,
+]
+const drawerContractsReachable: DrawerContracts extends unknown[] ? true : never = true
+const drawerDefaultOpen: DrawerProps["defaultOpen"] = true
+// @ts-expect-error Drawer の defaultOpen は文字列を受けない。
+const invalidDrawerDefaultOpen: DrawerProps["defaultOpen"] = "true"
 
 type MarkerContracts = [MarkerProps, MarkerIconProps, MarkerContentProps]
 const markerContractsReachable: MarkerContracts extends unknown[] ? true : never = true

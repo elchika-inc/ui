@@ -755,6 +755,27 @@
       "license": "MIT",
       "modified": "Base UI Menuを用いるDropdown Menuの追加。semantic token、非透明3px focus ring、data属性、公開Props、isolated限定defaultOpenのpreviewに正規化する。",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "drawer": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/drawer.json",
+      "registryPath": "registry/base-nova/ui/drawer.tsx",
+      "registryContentSha256": "75c0dc527183de4a3524d3803dcfb24da60a6d4f705a00c9e794558c9f554e1f",
+      "generatedContentSha256": "6735b69dcbf7b75780ed1e155a12a1ac678a18daa63c2b4cedecc8491e3c4758",
+      "addTarget": "@shadcn/drawer",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/drawer.tsx",
+      "upstreamPathSha": "34223a842df71bc87e4a8bce80115fed1301437a",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-01",
+      "license": "MIT",
+      "modified": "既存の@base-ui/react Drawerで全slotを実装し、生成時の値系arbitrary valueをsemantic tokenと標準durationへ正規化する。全PascalCase exportのProps、barrel、isolated限定defaultOpenのlight/dark preview、selector、registry型契約を追加する。",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }
