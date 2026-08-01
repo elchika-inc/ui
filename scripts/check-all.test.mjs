@@ -29,6 +29,27 @@ test("5 checker を定義順にすべて実行する", async () => {
   );
 });
 
+test("pre-flight はevidenceを除く先頭4 checkerだけを実行する", async () => {
+  const { CHECKS, PRE_FLIGHT_CHECKS, runChecks } = await loadModule();
+  assert.deepEqual(PRE_FLIGHT_CHECKS, CHECKS.slice(0, 4));
+  assert.doesNotThrow(() =>
+    runChecks(
+      PRE_FLIGHT_CHECKS,
+      (_command, args) => ({
+        status: args[0] === "scripts/check-evidence.mjs" ? 1 : 0,
+      }),
+      "check:pre",
+    ),
+  );
+  assert.throws(
+    () =>
+      runChecks(CHECKS, (_command, args) => ({
+        status: args[0] === "scripts/check-evidence.mjs" ? 1 : 0,
+      })),
+    /evidence.*exit 1/,
+  );
+});
+
 test("途中の checker が失敗したら後続を実行せず停止する", async () => {
   const { runChecks } = await loadModule();
   const calls = [];

@@ -37,10 +37,10 @@ npm run typecheck
 node --test "scripts/*.test.mjs"
 npm run build
 npm run build:lib
-npm run check:all
+npm run check:pre
 ```
 
-`check:all` は standards、completeness、distribution、preview selector 宣言、証跡形式を順に検査する。すべて通ったら component 実装だけを明示パスで stage して commit する。
+`check:pre` は standards、completeness、distribution、preview selector 宣言の4検査を順に実行する。すべて通ったら component 実装だけを明示パスで stage して commit する。CIと証跡commit後の最終検査は、evidenceを含む`check:all`を維持する。
 
 証跡の鮮度検査は `git diff <検証SHA> -- <paths>` で検証 SHA と作業ツリーを比較し、検証済み component 固有 path の未コミット変更も hard failure にする。catalog / index の集約証跡と共有面の変更は component 追加のたびに必然的に古くなりうるため、hard failure ではなく陳腐化一覧として扱う。
 
@@ -55,6 +55,7 @@ npm run check:all
    component 追加ごとの恒常証跡は、結論 Markdown と light / dark screenshot だけを既定で commit する。console、DOM、Accessibility tree、network、server log は再実行時に生成する一時データとし、特定の correctness、security、明示要件を簡潔な証跡だけでは再現できない場合に限り、理由をレポートに書いて必要最小限を `.docs/reviews/` 配下に commit する。
 5. `node scripts/check-evidence.mjs` を実行する。component 固有 path が検証 SHA より新しければ証跡を作り直す。catalog / index の集約証跡と shared surface の stale 一覧は自動失敗ではないため、見た目への影響を人が確認し、必要な証跡だけを再撮影する。`catalog-index-r2/report.md` は一度きりの深い検証として履歴に残し、以後の hard gate 対象にしない。過去の記録は書き換えない。
 6. 証跡だけを明示パスで stage し、新しい証跡 commit を作る。
+   証跡commit後は`npm run check:all`がexit 0であることを必須とする。
 
 ### 4.2 バッチ末尾の catalog 横断走査
 
