@@ -412,9 +412,9 @@ type NavigationMenuContracts = [
   NavigationMenuIndicatorProps,
 ]
 const navigationMenuContractsReachable: NavigationMenuContracts extends unknown[] ? true : never = true
-const navigationMenuDefaultValue: NavigationMenuProps["defaultValue"] = "products"
-// @ts-expect-error NavigationMenu の defaultValue は object を受けない。
-const invalidNavigationMenuDefaultValue: NavigationMenuProps["defaultValue"] = {}
+const navigationMenuOrientation: NavigationMenuProps["orientation"] = "horizontal"
+// @ts-expect-error NavigationMenu の orientation は horizontal または vertical に限る。
+const invalidNavigationMenuOrientation: NavigationMenuProps["orientation"] = "diagonal"
 
 type PopoverContracts = [
   PopoverProps,
@@ -512,8 +512,8 @@ export {
   nativeSelectSize,
   invalidNativeSelectSize,
   navigationMenuContractsReachable,
-  navigationMenuDefaultValue,
-  invalidNavigationMenuDefaultValue,
+  navigationMenuOrientation,
+  invalidNavigationMenuOrientation,
   popoverContractsReachable,
   popoverDefaultOpen,
   invalidPopoverDefaultOpen,
