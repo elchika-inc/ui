@@ -47,7 +47,8 @@ verified_impl_sha: abc381d207f54a41211c62cba88b8b427f0e0885
 | 12 | console error | 画面 | 異常系監視 | High | ✅実測確認 | 2/2 | Light=`[]`、Dark=`[]` | 全操作後に Browser dev logs を error level で取得 |
 | 13 | JPEG 証跡の実在・形式 | 実体ファイル | 書き出しゲート | High | ✅実測確認 | 2/2 | 下記「JPEG証跡」参照 | Browser screenshot→PNG保存→`sips`変換→`file` / `xxd` / `sips` / `shasum` |
 
-判定ラベル: ✅実測確認 / ⚠️未確認・要人間判断 / 🔁flaky（再現率を併記） / ⏭️未実行（破壊的・要人間実行） / ❌不具合  
+判定ラベル: ✅実測確認 / ⚠️未確認・要人間判断 / 🔁flaky（再現率を併記） / ⏭️未実行（破壊的・要人間実行） / ❌不具合
+
 導出元ラベル: コード / 画面 / スキーマ（複数可）
 
 ## 修正前後の回帰比較
