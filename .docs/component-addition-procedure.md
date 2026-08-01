@@ -27,6 +27,7 @@
 2. `src/index.ts` から値と `export type <Name>Props` を公開する。
 3. `src/previews/<name>.tsx` と light / dark の2 route を作る。Provider が必要な component は、その責務を library、preview、利用側のどこへ置くか人が決める。`direction` は描画を持たない `DirectionProvider` + `useDirection` なので、検証用 consumer と selector を人が設計する。Dialog など overlay は、初期 open にして描画を常時検証するか、操作後だけ開くかを人が決める。
 4. hydrated 後に必ず1件以上存在する安定 selector を `preview-selectors.json` に追加する。Portal や操作後 DOM の selector でもよいが、実ブラウザで同じ操作を再現できるようにする。
+   Context Menu は pointer 座標を anchor にするため、`defaultOpen` では位置検証が成立しない。閉じた preview で trigger の `contextmenu` を実行してから Portal content を検証する。
 
 ## 3. 実装 commit のゲート
 

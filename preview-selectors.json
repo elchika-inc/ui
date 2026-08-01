@@ -10,7 +10,14 @@
   "card": "[data-slot=\"card\"]",
   "checkbox": "[data-slot=\"checkbox-preview\"]",
   "collapsible": "[data-slot=\"collapsible-preview\"]",
-  "context-menu": "[data-slot=\"context-menu-preview\"]",
+  "context-menu": {
+    "selector": "[data-slot=\"context-menu-content\"]",
+    "setup": {
+      "action": "contextmenu",
+      "target": "[data-slot=\"context-menu-trigger\"]",
+      "position": "center"
+    }
+  },
   "catalog": "[data-slot=\"verification-catalog\"]",
   "catalog-dark": "[data-slot=\"verification-catalog\"]",
   "dialog": "[data-slot=\"dialog-content\"]",

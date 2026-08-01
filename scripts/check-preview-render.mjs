@@ -11,9 +11,14 @@ export function checkPreviewRender(components, selectors) {
   const problems = [];
 
   for (const name of components) {
-    const selector = selectors[name];
-    if (selector === undefined) {
+    const declaration = selectors[name];
+    if (declaration === undefined) {
       problems.push(`${name}: preview selector の宣言が無い`);
+      continue;
+    }
+    const selector = typeof declaration === "string" ? declaration : declaration?.selector;
+    if (selector === undefined) {
+      problems.push(`${name}: preview selector が無い`);
       continue;
     }
     if (typeof selector !== "string") {
