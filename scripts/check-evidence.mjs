@@ -1,5 +1,5 @@
 // 実ブラウザ証跡の形式と、検証後に component 固有 path が変わっていないことを検査する。
-// 共有面の変更は全証跡を一律に失敗させず、陳腐化の可能性として一覧化する。
+// 集約証跡と共有面の変更は全証跡を一律に失敗させず、陳腐化の可能性として一覧化する。
 import { execFileSync, spawnSync } from "node:child_process";
 import { lstatSync, readdirSync, readFileSync, realpathSync } from "node:fs";
 import { basename, extname, isAbsolute, join, relative } from "node:path";
@@ -94,7 +94,7 @@ function commitExists(root, sha) {
 }
 
 function pathsChanged(root, sha, paths) {
-  const result = spawnSync("git", ["diff", "--quiet", sha, "HEAD", "--", ...paths], {
+  const result = spawnSync("git", ["diff", "--quiet", sha, "--", ...paths], {
     cwd: root,
     stdio: "ignore",
   });
@@ -118,14 +118,14 @@ function inspectMarkdown(repositoryRoot, reviewsRoot, file) {
   if (component && pathsChanged(repositoryRoot, sha, componentPaths(component))) {
     problems.push(`${file}: 検証 SHA 以降に component 固有 path が変更されている`);
   }
-  const specificPaths = evidencePaths(file);
-  if (specificPaths.length && pathsChanged(repositoryRoot, sha, specificPaths)) {
-    problems.push(`${file}: 検証 SHA 以降に証跡固有 path が変更されている`);
-  }
+  const changedAggregate = evidencePaths(file).filter((path) =>
+    pathsChanged(repositoryRoot, sha, [path]),
+  );
   const changedShared = SHARED_EVIDENCE_PATHS.filter((path) =>
     pathsChanged(repositoryRoot, sha, [path]),
   );
-  if (changedShared.length) stale.push(`${file}: ${changedShared.join(", ")}`);
+  const changedAdvisory = [...new Set([...changedAggregate, ...changedShared])];
+  if (changedAdvisory.length) stale.push(`${file}: ${changedAdvisory.join(", ")}`);
   return { problems, stale };
 }
 
