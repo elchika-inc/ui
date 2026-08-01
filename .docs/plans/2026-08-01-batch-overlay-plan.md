@@ -114,7 +114,7 @@
 **Interfaces:** isolatedだけ`defaultOpen`、catalogでは閉じる。trigger、Portal content、item、checkbox/radio/submenuを含める。
 
 - [ ] wrapper REDと全slot value/Props公開を完了する。
-- [ ] light/darkでsentinel各1、Portal、実ARIA、inert、focus trap/return、Escape、trigger click再開、Arrow navigation/選択、状態変化を実測する。
+- [ ] light/darkでsentinel各1、Portal、実ARIA、trigger anchor、初期menu focus、Escape後のtrigger return、trigger click再開、Arrow navigation、typeahead、checkbox/radioの状態変化を実測する。menuは非モーダルなのでbackground inertを持たず、Tabで閉じてafter sentinelへ、Shift+Tabでtriggerへ抜けられることを正常契約として確認する。
 - [ ] catalogでsentinel/content 0を確認し、実装commit→証跡commit→review cleanを完了する。
 
 ### Task 9: Drawer
