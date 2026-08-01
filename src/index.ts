@@ -515,6 +515,24 @@ export {
   navigationMenuTriggerStyle,
 } from "./components/ui/navigation-menu";
 export type {
+  PaginationContentProps,
+  PaginationEllipsisProps,
+  PaginationItemProps,
+  PaginationLinkProps,
+  PaginationNextProps,
+  PaginationPreviousProps,
+  PaginationProps,
+} from "./components/ui/pagination";
+export {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "./components/ui/pagination";
+export type {
   PopoverContentProps,
   PopoverDescriptionProps,
   PopoverHeaderProps,

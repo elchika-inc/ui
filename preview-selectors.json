@@ -44,6 +44,7 @@
   "message-scroller": "[data-slot=\"message-scroller-preview\"]",
   "native-select": "[data-slot=\"native-select-preview\"]",
   "navigation-menu": "[data-slot=\"navigation-menu-content\"]",
+  "pagination": "[data-slot=\"pagination-preview\"]",
   "popover": "[data-slot=\"popover-content\"]",
   "progress": "[data-slot=\"progress-preview\"]",
   "radio-group": "[data-slot=\"radio-group-preview\"]",
