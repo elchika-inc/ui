@@ -3,6 +3,7 @@
   "alert": "[data-slot=\"alert\"]",
   "alert-dialog": "[data-slot=\"alert-dialog-content\"]",
   "aspect-ratio": "[data-slot=\"aspect-ratio\"]",
+  "attachment": "[data-slot=\"attachment-preview\"]",
   "avatar": "[data-slot=\"avatar-preview\"]",
   "breadcrumb": "[data-slot=\"breadcrumb-preview\"]",
   "badge": "[data-slot=\"badge\"]",

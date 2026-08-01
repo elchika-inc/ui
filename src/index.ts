@@ -48,6 +48,28 @@ export {
 export type { AspectRatioProps } from "./components/ui/aspect-ratio";
 export { AspectRatio } from "./components/ui/aspect-ratio";
 export type {
+  AttachmentActionProps,
+  AttachmentActionsProps,
+  AttachmentContentProps,
+  AttachmentDescriptionProps,
+  AttachmentGroupProps,
+  AttachmentMediaProps,
+  AttachmentProps,
+  AttachmentTitleProps,
+  AttachmentTriggerProps,
+} from "./components/ui/attachment";
+export {
+  Attachment,
+  AttachmentAction,
+  AttachmentActions,
+  AttachmentContent,
+  AttachmentDescription,
+  AttachmentGroup,
+  AttachmentMedia,
+  AttachmentTitle,
+  AttachmentTrigger,
+} from "./components/ui/attachment";
+export type {
   AvatarBadgeProps,
   AvatarFallbackProps,
   AvatarGroupCountProps,

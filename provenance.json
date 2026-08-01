@@ -902,6 +902,27 @@
       "license": "MIT",
       "modified": "全 PascalCase export の Props 型を追加し、生の overlay 色を semantic token へ置換",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "attachment": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/attachment.json",
+      "registryPath": "registry/base-nova/ui/attachment.tsx",
+      "registryContentSha256": "03133067fb206fad9674b8ef8aa03310409037218068821c73da24c876b065f4",
+      "generatedContentSha256": "a31f77d517247d84204d4f391656756c8d0f094d65a5aae2238e3731932d36a9",
+      "addTarget": "@shadcn/attachment",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/attachment.tsx",
+      "upstreamPathSha": "8d6553a7f5b11d87b8968ec47479ec310e4c09af",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-02",
+      "license": "MIT",
+      "modified": "全 PascalCase export の Props 型を追加し、focus-within ring を不透明3pxへ正規化",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }
