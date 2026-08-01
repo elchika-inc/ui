@@ -125,6 +125,27 @@
       "license": "MIT",
       "modified": "公開 API 契約のため ToasterProps を追加（standards 正規化は変更なし。生成直後の違反 0）",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。2026-07-31: modified の固定文言を実態に合わせて訂正した。ハッシュは変更していない。"
+    },
+    "separator": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/separator.json",
+      "registryPath": "registry/base-nova/ui/separator.tsx",
+      "registryContentSha256": "bae21788c7454bee017799fbe99e8ea75cc88b1f586e8e07b7bbd0246fa60afe",
+      "generatedContentSha256": "082aff76b823256112a622d92dcef79dd008fe8c252611e184c002db770763f3",
+      "addTarget": "@shadcn/separator",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/separator.tsx",
+      "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-01",
+      "license": "MIT",
+      "modified": "SeparatorProps を追加",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }
