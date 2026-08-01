@@ -94,6 +94,22 @@ export {
   DialogTitle,
   DialogTrigger,
 } from "./components/ui/dialog";
+export type {
+  EmptyContentProps,
+  EmptyDescriptionProps,
+  EmptyHeaderProps,
+  EmptyMediaProps,
+  EmptyProps,
+  EmptyTitleProps,
+} from "./components/ui/empty";
+export {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "./components/ui/empty";
 export type { InputProps } from "./components/ui/input";
 export { Input } from "./components/ui/input";
 export type { LabelProps } from "./components/ui/label";
