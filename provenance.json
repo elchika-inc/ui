@@ -293,6 +293,27 @@
       "license": "MIT",
       "modified": "Base UI と semantic token・focus ring・data-slot へ正規化し、Breadcrumb の全 PascalCase slot の Props 公開、light/dark 隔離プレビューと hydrated selector を追加する",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "bubble": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/bubble.json",
+      "registryPath": "registry/base-nova/ui/bubble.tsx",
+      "registryContentSha256": "0a33b640e01ab3510f9a6659243119c155c7f51ddfb21e399279a99f52ec60d0",
+      "generatedContentSha256": "c30f7689bb2be006fb12e5a5bf37e0c04eb2a3138327fb9324e293367394e9ba",
+      "addTarget": "@shadcn/bubble",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/bubble.tsx",
+      "upstreamPathSha": "18fcf0f766857a7249cc0daac3c1609610edd158",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-01",
+      "license": "MIT",
+      "modified": "DESIGN.md §5 適合のため arbitrary value と focus ring の透明度合成を semantic token / fixed utility へ正規化し、全公開 value export の Props 型、chat 文脈の全 slot/variant を観測する最小 preview、light/dark route、安定 selector を追加",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }

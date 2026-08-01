@@ -4,6 +4,7 @@
   "avatar": "[data-slot=\"avatar-preview\"]",
   "breadcrumb": "[data-slot=\"breadcrumb-preview\"]",
   "badge": "[data-slot=\"badge\"]",
+  "bubble": "[data-slot=\"bubble-preview\"]",
   "button": "[data-slot=\"button\"]",
   "card": "[data-slot=\"card\"]",
   "catalog": "[data-slot=\"verification-catalog\"]",

@@ -43,6 +43,13 @@ export {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "./components/ui/breadcrumb";
+export type {
+  BubbleContentProps,
+  BubbleGroupProps,
+  BubbleProps,
+  BubbleReactionsProps,
+} from "./components/ui/bubble";
+export { Bubble, BubbleContent, BubbleGroup, BubbleReactions } from "./components/ui/bubble";
 export type { ButtonProps } from "./components/ui/button";
 export { Button, buttonVariants } from "./components/ui/button";
 export type {
