@@ -5,13 +5,13 @@ import { cn } from "@/lib/utils";
 export type SliderProps = SliderPrimitive.Root.Props;
 
 function Slider({ className, defaultValue, value, min = 0, max = 100, ...props }: SliderProps) {
-  const _values = Array.isArray(value)
-    ? value
+  const thumbCount = Array.isArray(value)
+    ? value.length
     : Array.isArray(defaultValue)
-      ? defaultValue
-      : [min, max];
+      ? defaultValue.length
+      : 1;
   const thumbKeys = Array.from(
-    { length: _values.length },
+    { length: thumbCount },
     (_, thumbPosition) => `slider-thumb-${thumbPosition}`,
   );
 
