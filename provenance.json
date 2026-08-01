@@ -398,6 +398,27 @@
       "license": "MIT",
       "modified": "全 public export の Props 型と barrel export を追加し、chat の slot・variant・alignment・actions を観測する light/dark 隔離 preview と安定 selector を追加する",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "progress": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/progress.json",
+      "registryPath": "registry/base-nova/ui/progress.tsx",
+      "registryContentSha256": "f7684b7f854bb2904eebd65ce6f23034592d9a03fb544857f2cb11aa26709db9",
+      "generatedContentSha256": "1094f7bfab6d69aa0fd8132987147be4ea3583efd826050278344629e9a6d555",
+      "addTarget": "@shadcn/progress",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/progress.tsx",
+      "upstreamPathSha": "86d9b00084affa7010e6c7c7bd410ec62525caac",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-01",
+      "license": "MIT",
+      "modified": "Base UI と semantic token 規約へ正規化し、Progress の全 PascalCase value export の Props 型と barrel 公開、複数値を示す light/dark 隔離プレビューと安定 selector を追加する",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }

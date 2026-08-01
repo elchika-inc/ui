@@ -16,6 +16,7 @@
   "label": "[data-slot=\"label\"]",
   "marker": "[data-slot=\"marker-preview\"]",
   "message": "[data-slot=\"message-preview\"]",
+  "progress": "[data-slot=\"progress-preview\"]",
   "separator": "[data-slot=\"separator\"]",
   "skeleton": "[data-slot=\"skeleton\"]",
   "sonner": "[data-sonner-toast]",

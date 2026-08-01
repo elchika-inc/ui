@@ -134,6 +134,20 @@ export {
   MessageGroup,
   MessageHeader,
 } from "./components/ui/message";
+export type {
+  ProgressIndicatorProps,
+  ProgressLabelProps,
+  ProgressProps,
+  ProgressTrackProps,
+  ProgressValueProps,
+} from "./components/ui/progress";
+export {
+  Progress,
+  ProgressIndicator,
+  ProgressLabel,
+  ProgressTrack,
+  ProgressValue,
+} from "./components/ui/progress";
 export type { SeparatorProps } from "./components/ui/separator";
 export { Separator } from "./components/ui/separator";
 export type { SkeletonProps } from "./components/ui/skeleton";

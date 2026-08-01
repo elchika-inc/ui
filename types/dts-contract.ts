@@ -29,6 +29,11 @@ import type {
   MessageGroupProps,
   MessageHeaderProps,
   MessageProps,
+  ProgressIndicatorProps,
+  ProgressLabelProps,
+  ProgressProps,
+  ProgressTrackProps,
+  ProgressValueProps,
   TabsContentProps,
   TabsListProps,
   TabsProps,
@@ -97,6 +102,16 @@ const messageAlignment: MessageProps["align"] = "end"
 // @ts-expect-error 未知の alignment は弾かれること。
 const invalidMessageAlignment: MessageProps["align"] = "center"
 
+type ProgressContracts = [
+  ProgressProps,
+  ProgressTrackProps,
+  ProgressIndicatorProps,
+  ProgressLabelProps,
+  ProgressValueProps,
+]
+const progressContractsReachable: ProgressContracts extends unknown[] ? true : never = true
+const progressValue: ProgressProps["value"] = 50
+
 type TabsContracts = [TabsProps, TabsListProps, TabsTriggerProps, TabsContentProps]
 const tabsContractsReachable: TabsContracts extends unknown[] ? true : never = true
 const toasterPosition: ToasterProps["position"] = "top-center"
@@ -116,6 +131,8 @@ export {
   messageContractsReachable,
   messageAlignment,
   invalidMessageAlignment,
+  progressContractsReachable,
+  progressValue,
   tabsContractsReachable,
   toasterPosition,
 }
