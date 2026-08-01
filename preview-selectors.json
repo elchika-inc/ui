@@ -31,6 +31,7 @@
   "drawer": "[data-slot=\"drawer-content\"]",
   "hover-card": "[data-slot=\"hover-card-content\"]",
   "empty": "[data-slot=\"empty-preview\"]",
+  "field": "[data-slot=\"field-preview\"]",
   "input": "[data-slot=\"input\"]",
   "input-otp": "[data-slot=\"input-otp-preview\"]",
   "kbd": "[data-slot=\"kbd-preview\"]",

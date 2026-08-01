@@ -321,6 +321,30 @@ export {
   EmptyTitle,
 } from "./components/ui/empty";
 export type {
+  FieldContentProps,
+  FieldDescriptionProps,
+  FieldErrorProps,
+  FieldGroupProps,
+  FieldLabelProps,
+  FieldLegendProps,
+  FieldProps,
+  FieldSeparatorProps,
+  FieldSetProps,
+  FieldTitleProps,
+} from "./components/ui/field";
+export {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSeparator,
+  FieldSet,
+  FieldTitle,
+} from "./components/ui/field";
+export type {
   HoverCardContentProps,
   HoverCardProps,
   HoverCardTriggerProps,
