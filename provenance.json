@@ -272,6 +272,27 @@
       "license": "MIT",
       "modified": "Base UI と semantic token 規約へ正規化し、Avatar・AvatarImage・AvatarFallback の Props 型公開、light/dark 隔離プレビュー、安定 selector を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "breadcrumb": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/breadcrumb.json",
+      "registryPath": "registry/base-nova/ui/breadcrumb.tsx",
+      "registryContentSha256": "4fb1dcd4dfb82ffec01f9d87d711655aa66303d2bd7fec00bde14e89b896b143",
+      "generatedContentSha256": "26f83fc8ed302d710851a71b705f5f8f28c805561c1fb6945370617267c5a4a9",
+      "addTarget": "@shadcn/breadcrumb",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/breadcrumb.tsx",
+      "upstreamPathSha": "dba86053f5d118ed891d1f1d6b80aee94af2bdb3",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-01",
+      "license": "MIT",
+      "modified": "Base UI と semantic token・focus ring・data-slot へ正規化し、Breadcrumb の全 PascalCase slot の Props 公開、light/dark 隔離プレビューと hydrated selector を追加する",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }
