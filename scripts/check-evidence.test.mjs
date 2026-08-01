@@ -1,6 +1,14 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  symlinkSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
@@ -126,6 +134,29 @@ test("verified_impl_shaの欠落・重複・存在しないcommitをfail-closed�
   );
 });
 
+test("verified_impl_shaがHEADの祖先でなければfail-closedにする", async (t) => {
+  const { root, verifiedSha } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  const currentBranch = git(root, ["branch", "--show-current"]).trim();
+  git(root, ["switch", "-c", "sibling", verifiedSha]);
+  writeFileSync(join(root, "sibling.txt"), "sibling\n");
+  git(root, ["add", "sibling.txt"]);
+  git(root, ["commit", "-m", "sibling"]);
+  const siblingSha = git(root, ["rev-parse", "HEAD"]).trim();
+  git(root, ["switch", currentBranch]);
+  writeFileSync(
+    join(root, ".docs/reviews/2026-08-01-button-preview.md"),
+    `verified_impl_sha: ${siblingSha}\n`,
+  );
+
+  assert.ok(
+    checkEvidenceInRepo(root).problems.includes(
+      `2026-08-01-button-preview.md: 検証 SHA ${siblingSha} が現在のHEADの祖先ではない`,
+    ),
+  );
+});
+
 test("移行は旧位置依存ロジックの値を構造化欄へ等価に写し冪等である", async () => {
   const { legacyVerificationSha, migrateMarkdown, structuredVerificationSha } =
     await loadMigration();
@@ -138,6 +169,44 @@ test("移行は旧位置依存ロジックの値を構造化欄へ等価に写�
   assert.equal(structuredVerificationSha(after), first);
   assert.equal(legacyVerificationSha(after), first);
   assert.equal(migrateMarkdown(after), after);
+});
+
+test("移行は祖先symlink経由でrepo外の証跡を書き換えない", async (t) => {
+  const root = mkdtempSync(join(tmpdir(), "elchika-evidence-migration-root-"));
+  const outside = mkdtempSync(join(tmpdir(), "elchika-evidence-migration-outside-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(() => rmSync(outside, { recursive: true, force: true }));
+  mkdirSync(join(outside, "reviews"));
+  const report = join(outside, "reviews/report.md");
+  const sha = "0123456789abcdef0123456789abcdef01234567";
+  writeFileSync(report, `# 証跡\n\ncommit: ${sha}\n`);
+  symlinkSync(outside, join(root, ".docs"));
+  const { migrateEvidence } = await loadMigration();
+
+  assert.throws(
+    () => migrateEvidence(join(root, ".docs/reviews"), { write: true, repositoryRoot: root }),
+    /repo 内の通常ディレクトリ/,
+  );
+  assert.equal(readFileSync(report, "utf8"), `# 証跡\n\ncommit: ${sha}\n`);
+});
+
+test("移行はreviews配下のsymlink証跡を黙って除外しない", async (t) => {
+  const root = mkdtempSync(join(tmpdir(), "elchika-evidence-migration-nested-"));
+  const outside = mkdtempSync(join(tmpdir(), "elchika-evidence-migration-target-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(() => rmSync(outside, { recursive: true, force: true }));
+  mkdirSync(join(root, ".docs/reviews"), { recursive: true });
+  const sha = "0123456789abcdef0123456789abcdef01234567";
+  writeFileSync(join(root, ".docs/reviews/report.md"), `# 証跡\n\ncommit: ${sha}\n`);
+  writeFileSync(join(outside, "linked.md"), `# 外部証跡\n\ncommit: ${sha}\n`);
+  symlinkSync(join(outside, "linked.md"), join(root, ".docs/reviews/linked.md"));
+  const { migrateEvidence } = await loadMigration();
+
+  assert.throws(
+    () => migrateEvidence(join(root, ".docs/reviews"), { write: true, repositoryRoot: root }),
+    /通常ファイルではない/,
+  );
+  assert.equal(readFileSync(join(outside, "linked.md"), "utf8"), `# 外部証跡\n\ncommit: ${sha}\n`);
 });
 
 test("検証済みcomponentだけを変更すると落ち、別componentは落とさない", async (t) => {
@@ -172,6 +241,28 @@ test("検証済みcomponentの未コミット変更も hard failure にする", 
     "2026-08-01-button-preview.md: 検証 SHA 以降に component 固有 path が変更されている",
   ]);
   assert.deepEqual(result.stale, ["2026-08-01-verification-catalog.md: src/components/ui"]);
+});
+
+test("検証SHAに存在しないcomponent固有pathの未追跡追加も hard failure にする", async (t) => {
+  const { root, verifiedSha } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  writeFileSync(
+    join(root, ".docs/reviews/2026-08-01-new-widget-preview.md"),
+    `verified_impl_sha: ${verifiedSha}\n`,
+  );
+  git(root, ["add", ".docs/reviews/2026-08-01-new-widget-preview.md"]);
+  git(root, ["commit", "-m", "add new widget evidence"]);
+  writeFileSync(join(root, "src/components/ui/new-widget.tsx"), "untracked component\n");
+  writeFileSync(join(root, "src/previews/new-widget.tsx"), "untracked preview\n");
+  writeFileSync(join(root, "src/pages/preview/new-widget.astro"), "untracked light\n");
+  writeFileSync(join(root, "src/pages/preview/new-widget-dark.astro"), "untracked dark\n");
+
+  assert.ok(
+    checkEvidenceInRepo(root).problems.includes(
+      "2026-08-01-new-widget-preview.md: 検証 SHA 以降に component 固有 path が変更されている",
+    ),
+  );
 });
 
 test("共有面の変更は落とさず陳腐化一覧へ出す", async (t) => {

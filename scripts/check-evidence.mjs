@@ -98,14 +98,33 @@ function commitExists(root, sha) {
   );
 }
 
+function commitIsAncestor(root, sha) {
+  const result = spawnSync("git", ["merge-base", "--is-ancestor", sha, "HEAD"], {
+    cwd: root,
+    stdio: "ignore",
+  });
+  if (result.status === 0) return true;
+  if (result.status === 1) return false;
+  throw new Error(`git merge-base に失敗: ${sha} HEAD`);
+}
+
 function pathsChanged(root, sha, paths) {
   const result = spawnSync("git", ["diff", "--quiet", sha, "--", ...paths], {
     cwd: root,
     stdio: "ignore",
   });
-  if (result.status === 0) return false;
   if (result.status === 1) return true;
-  throw new Error(`git diff に失敗: ${sha} -- ${paths.join(" ")}`);
+  if (result.status !== 0) throw new Error(`git diff に失敗: ${sha} -- ${paths.join(" ")}`);
+
+  const untracked = spawnSync(
+    "git",
+    ["ls-files", "--others", "--exclude-standard", "--", ...paths],
+    { cwd: root, encoding: "utf8" },
+  );
+  if (untracked.status !== 0) {
+    throw new Error(`git ls-files に失敗: ${paths.join(" ")}`);
+  }
+  return untracked.stdout.trim().length > 0;
 }
 
 function inspectMarkdown(repositoryRoot, reviewsRoot, file) {
@@ -116,6 +135,12 @@ function inspectMarkdown(repositoryRoot, reviewsRoot, file) {
   const sha = parsed.sha;
   if (!commitExists(repositoryRoot, sha)) {
     return { problems: [`${file}: 検証 SHA ${sha} が commit として存在しない`], stale };
+  }
+  if (!commitIsAncestor(repositoryRoot, sha)) {
+    return {
+      problems: [`${file}: 検証 SHA ${sha} が現在のHEADの祖先ではない`],
+      stale,
+    };
   }
 
   const component = componentFromEvidence(file);

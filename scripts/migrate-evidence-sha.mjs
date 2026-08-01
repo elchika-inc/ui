@@ -1,6 +1,6 @@
 import { execFileSync } from "node:child_process";
-import { lstatSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
-import { extname, join, relative } from "node:path";
+import { lstatSync, readdirSync, readFileSync, realpathSync, writeFileSync } from "node:fs";
+import { extname, isAbsolute, join, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
 const LEGACY_SHA = /(?:^|[^0-9a-f])([0-9a-f]{40})(?![0-9a-f])/;
@@ -40,14 +40,27 @@ function markdownFiles(root, directory = "") {
   return readdirSync(join(root, directory), { withFileTypes: true }).flatMap((entry) => {
     const path = join(directory, entry.name);
     if (entry.isDirectory()) return markdownFiles(root, path);
-    if (!entry.isFile() || extname(entry.name) !== ".md") return [];
+    if (!entry.isFile()) throw new Error(`${path}: 通常ファイルではないため移行できない`);
+    if (extname(entry.name) !== ".md") return [];
     return [path];
   });
 }
 
-export function migrateEvidence(reviewsRoot, { write = false } = {}) {
+export function migrateEvidence(
+  reviewsRoot,
+  { write = false, repositoryRoot = resolve(reviewsRoot, "..", "..") } = {},
+) {
   const status = lstatSync(reviewsRoot, { throwIfNoEntry: false });
-  if (!status?.isDirectory()) throw new Error(".docs/reviews が通常ディレクトリではない");
+  const reviewsRelativePath = status
+    ? relative(realpathSync(repositoryRoot), realpathSync(reviewsRoot))
+    : "..";
+  if (
+    !status?.isDirectory() ||
+    reviewsRelativePath.startsWith("..") ||
+    isAbsolute(reviewsRelativePath)
+  ) {
+    throw new Error(".docs/reviews はrepo 内の通常ディレクトリでなければならない");
+  }
   const files = markdownFiles(reviewsRoot).sort((left, right) => left.localeCompare(right));
   if (files.length === 0) throw new Error("証跡Markdownが0件（移行が空走している）");
 
@@ -87,7 +100,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   }).trim();
   const reviewsRoot = join(repositoryRoot, ".docs/reviews");
   const write = process.argv.includes("--write");
-  const result = migrateEvidence(reviewsRoot, { write });
+  const result = migrateEvidence(reviewsRoot, { write, repositoryRoot });
   const relativeRoot = relative(repositoryRoot, reviewsRoot);
   console.log(
     `${relativeRoot} の全Markdownで構造化SHAと旧ロジックの値が一致（対象 ${result.files.length}、変更 ${result.changed.length}）`,
