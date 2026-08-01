@@ -62,7 +62,7 @@ function evidencePaths(file) {
       "src/previews",
     ];
   }
-  if (/^\d{4}-\d{2}-\d{2}-verification-catalog\.md$/.test(basename(file))) {
+  if (/^\d{4}-\d{2}-\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*-catalog\.md$/.test(basename(file))) {
     return [
       "src/pages/catalog.astro",
       "src/pages/catalog-dark.astro",

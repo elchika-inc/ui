@@ -5,8 +5,51 @@ export type {
   AlertTitleProps,
 } from "./components/ui/alert";
 export { Alert, AlertAction, AlertDescription, AlertTitle } from "./components/ui/alert";
+export type { AspectRatioProps } from "./components/ui/aspect-ratio";
+export { AspectRatio } from "./components/ui/aspect-ratio";
+export type {
+  AvatarBadgeProps,
+  AvatarFallbackProps,
+  AvatarGroupCountProps,
+  AvatarGroupProps,
+  AvatarImageProps,
+  AvatarProps,
+} from "./components/ui/avatar";
+export {
+  Avatar,
+  AvatarBadge,
+  AvatarFallback,
+  AvatarGroup,
+  AvatarGroupCount,
+  AvatarImage,
+} from "./components/ui/avatar";
 export type { BadgeProps } from "./components/ui/badge";
 export { Badge, badgeVariants } from "./components/ui/badge";
+export type {
+  BreadcrumbEllipsisProps,
+  BreadcrumbItemProps,
+  BreadcrumbLinkProps,
+  BreadcrumbListProps,
+  BreadcrumbPageProps,
+  BreadcrumbProps,
+  BreadcrumbSeparatorProps,
+} from "./components/ui/breadcrumb";
+export {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "./components/ui/breadcrumb";
+export type {
+  BubbleContentProps,
+  BubbleGroupProps,
+  BubbleProps,
+  BubbleReactionsProps,
+} from "./components/ui/bubble";
+export { Bubble, BubbleContent, BubbleGroup, BubbleReactions } from "./components/ui/bubble";
 export type { ButtonProps } from "./components/ui/button";
 export { Button, buttonVariants } from "./components/ui/button";
 export type {
@@ -27,6 +70,8 @@ export {
   CardHeader,
   CardTitle,
 } from "./components/ui/card";
+export type { CheckboxProps } from "./components/ui/checkbox";
+export { Checkbox } from "./components/ui/checkbox";
 export type {
   DialogCloseProps,
   DialogContentProps,
@@ -51,16 +96,116 @@ export {
   DialogTitle,
   DialogTrigger,
 } from "./components/ui/dialog";
+export type {
+  EmptyContentProps,
+  EmptyDescriptionProps,
+  EmptyHeaderProps,
+  EmptyMediaProps,
+  EmptyProps,
+  EmptyTitleProps,
+} from "./components/ui/empty";
+export {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "./components/ui/empty";
 export type { InputProps } from "./components/ui/input";
 export { Input } from "./components/ui/input";
+export type {
+  InputOTPGroupProps,
+  InputOTPProps,
+  InputOTPSeparatorProps,
+  InputOTPSlotProps,
+} from "./components/ui/input-otp";
+export {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "./components/ui/input-otp";
+export type { KbdGroupProps, KbdProps } from "./components/ui/kbd";
+export { Kbd, KbdGroup } from "./components/ui/kbd";
 export type { LabelProps } from "./components/ui/label";
 export { Label } from "./components/ui/label";
+export type { MarkerContentProps, MarkerIconProps, MarkerProps } from "./components/ui/marker";
+export { Marker, MarkerContent, MarkerIcon, markerVariants } from "./components/ui/marker";
+export type {
+  MessageAvatarProps,
+  MessageContentProps,
+  MessageFooterProps,
+  MessageGroupProps,
+  MessageHeaderProps,
+  MessageProps,
+} from "./components/ui/message";
+export {
+  Message,
+  MessageAvatar,
+  MessageContent,
+  MessageFooter,
+  MessageGroup,
+  MessageHeader,
+} from "./components/ui/message";
+export type {
+  NativeSelectOptGroupProps,
+  NativeSelectOptionProps,
+  NativeSelectProps,
+} from "./components/ui/native-select";
+export {
+  NativeSelect,
+  NativeSelectOptGroup,
+  NativeSelectOption,
+} from "./components/ui/native-select";
+export type {
+  ProgressIndicatorProps,
+  ProgressLabelProps,
+  ProgressProps,
+  ProgressTrackProps,
+  ProgressValueProps,
+} from "./components/ui/progress";
+export {
+  Progress,
+  ProgressIndicator,
+  ProgressLabel,
+  ProgressTrack,
+  ProgressValue,
+} from "./components/ui/progress";
+export type { RadioGroupItemProps, RadioGroupProps } from "./components/ui/radio-group";
+export { RadioGroup, RadioGroupItem } from "./components/ui/radio-group";
 export type { SeparatorProps } from "./components/ui/separator";
 export { Separator } from "./components/ui/separator";
 export type { SkeletonProps } from "./components/ui/skeleton";
 export { Skeleton } from "./components/ui/skeleton";
+export type { SliderProps } from "./components/ui/slider";
+export { Slider } from "./components/ui/slider";
 export type { ToasterProps } from "./components/ui/sonner";
 export { Toaster } from "./components/ui/sonner";
+export type { SpinnerProps } from "./components/ui/spinner";
+export { Spinner } from "./components/ui/spinner";
+export type { SwitchProps } from "./components/ui/switch";
+export { Switch } from "./components/ui/switch";
+export type {
+  TableBodyProps,
+  TableCaptionProps,
+  TableCellProps,
+  TableFooterProps,
+  TableHeaderProps,
+  TableHeadProps,
+  TableProps,
+  TableRowProps,
+} from "./components/ui/table";
+export {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "./components/ui/table";
 export type {
   TabsContentProps,
   TabsListProps,
@@ -68,3 +213,7 @@ export type {
   TabsTriggerProps,
 } from "./components/ui/tabs";
 export { Tabs, TabsContent, TabsList, TabsTrigger, tabsListVariants } from "./components/ui/tabs";
+export type { TextareaProps } from "./components/ui/textarea";
+export { Textarea } from "./components/ui/textarea";
+export type { ToggleProps } from "./components/ui/toggle";
+export { Toggle, toggleVariants } from "./components/ui/toggle";

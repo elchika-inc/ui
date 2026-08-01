@@ -9,10 +9,18 @@ export const CHECKS = [
   { name: "preview render", command: process.execPath, args: ["scripts/check-preview-render.mjs"] },
   { name: "evidence", command: process.execPath, args: ["scripts/check-evidence.mjs"] },
 ];
+export const PRE_FLIGHT_CHECKS = CHECKS.filter((check) => check.name !== "evidence");
 
-export function runChecks(checks = CHECKS, runner = spawnSync) {
+export function selectChecksForArgv(argv) {
+  if (argv.includes("--pre")) {
+    return { checks: PRE_FLIGHT_CHECKS, prefix: "check:pre" };
+  }
+  return { checks: CHECKS, prefix: "check:all" };
+}
+
+export function runChecks(checks = CHECKS, runner = spawnSync, prefix = "check:all") {
   for (const check of checks) {
-    console.log(`[check:all] ${check.name}`);
+    console.log(`[${prefix}] ${check.name}`);
     const result = runner(check.command, check.args, { stdio: "inherit" });
     if (result.status !== 0) {
       throw new Error(`${check.name}: exit ${result.status ?? "unknown"}`);
@@ -22,7 +30,8 @@ export function runChecks(checks = CHECKS, runner = spawnSync) {
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   try {
-    runChecks();
+    const { checks, prefix } = selectChecksForArgv(process.argv.slice(2));
+    runChecks(checks, spawnSync, prefix);
   } catch (error) {
     console.error(error instanceof Error ? error.message : error);
     process.exit(1);
