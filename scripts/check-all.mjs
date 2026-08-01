@@ -11,6 +11,13 @@ export const CHECKS = [
 ];
 export const PRE_FLIGHT_CHECKS = CHECKS.filter((check) => check.name !== "evidence");
 
+export function selectChecksForArgv(argv) {
+  if (argv.includes("--pre")) {
+    return { checks: PRE_FLIGHT_CHECKS, prefix: "check:pre" };
+  }
+  return { checks: CHECKS, prefix: "check:all" };
+}
+
 export function runChecks(checks = CHECKS, runner = spawnSync, prefix = "check:all") {
   for (const check of checks) {
     console.log(`[${prefix}] ${check.name}`);
@@ -23,12 +30,8 @@ export function runChecks(checks = CHECKS, runner = spawnSync, prefix = "check:a
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   try {
-    const preFlight = process.argv.includes("--pre");
-    runChecks(
-      preFlight ? PRE_FLIGHT_CHECKS : CHECKS,
-      spawnSync,
-      preFlight ? "check:pre" : "check:all",
-    );
+    const { checks, prefix } = selectChecksForArgv(process.argv.slice(2));
+    runChecks(checks, spawnSync, prefix);
   } catch (error) {
     console.error(error instanceof Error ? error.message : error);
     process.exit(1);

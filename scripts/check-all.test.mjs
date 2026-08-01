@@ -50,6 +50,16 @@ test("pre-flight はevidenceを除く先頭4 checkerだけを実行する", asyn
   );
 });
 
+test("CLI引数でdefault fullと--preのchecker/prefixを選ぶ", async () => {
+  const { CHECKS, PRE_FLIGHT_CHECKS, selectChecksForArgv } = await loadModule();
+
+  assert.deepEqual(selectChecksForArgv([]), { checks: CHECKS, prefix: "check:all" });
+  assert.deepEqual(selectChecksForArgv(["--pre"]), {
+    checks: PRE_FLIGHT_CHECKS,
+    prefix: "check:pre",
+  });
+});
+
 test("途中の checker が失敗したら後続を実行せず停止する", async () => {
   const { runChecks } = await loadModule();
   const calls = [];

@@ -9,6 +9,17 @@ import type {
   AvatarGroupProps,
   AvatarImageProps,
   AvatarProps,
+  BreadcrumbEllipsisProps,
+  BreadcrumbItemProps,
+  BreadcrumbLinkProps,
+  BreadcrumbListProps,
+  BreadcrumbPageProps,
+  BreadcrumbProps,
+  BreadcrumbSeparatorProps,
+  BubbleContentProps,
+  BubbleGroupProps,
+  BubbleProps,
+  BubbleReactionsProps,
   ButtonProps,
   CheckboxProps,
   DialogCloseProps,
@@ -21,6 +32,18 @@ import type {
   DialogProps,
   DialogTitleProps,
   DialogTriggerProps,
+  EmptyContentProps,
+  EmptyDescriptionProps,
+  EmptyHeaderProps,
+  EmptyMediaProps,
+  EmptyProps,
+  EmptyTitleProps,
+  InputOTPGroupProps,
+  InputOTPProps,
+  InputOTPSeparatorProps,
+  InputOTPSlotProps,
+  KbdGroupProps,
+  KbdProps,
   MarkerContentProps,
   MarkerIconProps,
   MarkerProps,
@@ -38,7 +61,11 @@ import type {
   ProgressProps,
   ProgressTrackProps,
   ProgressValueProps,
+  RadioGroupItemProps,
+  RadioGroupProps,
+  SliderProps,
   SpinnerProps,
+  SwitchProps,
   TableBodyProps,
   TableCaptionProps,
   TableCellProps,
@@ -51,8 +78,61 @@ import type {
   TabsListProps,
   TabsProps,
   TabsTriggerProps,
+  TextareaProps,
   ToasterProps,
+  ToggleProps,
 } from "../lib/index.js"
+
+type NewPropsContracts = [
+  BreadcrumbProps,
+  BreadcrumbListProps,
+  BreadcrumbItemProps,
+  BreadcrumbLinkProps,
+  BreadcrumbPageProps,
+  BreadcrumbSeparatorProps,
+  BreadcrumbEllipsisProps,
+  BubbleProps,
+  BubbleGroupProps,
+  BubbleContentProps,
+  BubbleReactionsProps,
+  EmptyProps,
+  EmptyHeaderProps,
+  EmptyMediaProps,
+  EmptyTitleProps,
+  EmptyDescriptionProps,
+  EmptyContentProps,
+  InputOTPProps,
+  InputOTPGroupProps,
+  InputOTPSlotProps,
+  InputOTPSeparatorProps,
+  KbdProps,
+  KbdGroupProps,
+  RadioGroupProps,
+  RadioGroupItemProps,
+  SliderProps,
+  SwitchProps,
+  TextareaProps,
+  ToggleProps,
+]
+const newPropsContractsReachable: NewPropsContracts extends unknown[] ? true : never = true
+const inputOtpMaxLength: InputOTPProps["maxLength"] = 6
+// @ts-expect-error InputOTP の maxLength は文字列を受けない。
+const invalidInputOtpMaxLength: InputOTPProps["maxLength"] = "6"
+const radioGroupValue: RadioGroupProps["value"] = "team"
+// @ts-expect-error RadioGroup の value は数値を受けない。
+const invalidRadioGroupValue: RadioGroupProps["value"] = 1
+const sliderValue: SliderProps["value"] = 40
+// @ts-expect-error Slider値は文字列を受けない。
+const invalidSliderValue: SliderProps["value"] = "40"
+const switchChecked: SwitchProps["checked"] = true
+// @ts-expect-error Switch の checked は文字列を受けない。
+const invalidSwitchChecked: SwitchProps["checked"] = "true"
+const textareaRows: TextareaProps["rows"] = 4
+// @ts-expect-error Textarea の rows は文字列を受けない。
+const invalidTextareaRows: TextareaProps["rows"] = "4"
+const toggleVariant: ToggleProps["variant"] = "outline"
+// @ts-expect-error Toggle の未知 variant は弾かれること。
+const invalidToggleVariant: ToggleProps["variant"] = "ghost"
 
 const aspectRatio: AspectRatioProps["ratio"] = 16 / 9
 
@@ -160,6 +240,19 @@ const tabsContractsReachable: TabsContracts extends unknown[] ? true : never = t
 const toasterPosition: ToasterProps["position"] = "top-center"
 
 export {
+  newPropsContractsReachable,
+  inputOtpMaxLength,
+  invalidInputOtpMaxLength,
+  radioGroupValue,
+  invalidRadioGroupValue,
+  sliderValue,
+  invalidSliderValue,
+  switchChecked,
+  invalidSwitchChecked,
+  textareaRows,
+  invalidTextareaRows,
+  toggleVariant,
+  invalidToggleVariant,
   aspectRatio,
   avatarContractsReachable,
   variant,

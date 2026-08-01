@@ -159,6 +159,33 @@ test("index と catalog の集約 path が変わると陳腐化一覧へ出す",
   ]);
 });
 
+test("日付とscopeを持つcatalog証跡も実装変更を陳腐化一覧へ出す", async (t) => {
+  const { root, verifiedSha } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  const batchCatalogEvidence = "2026-08-01-batch-static-2-catalog.md";
+  writeFileSync(
+    join(root, ".docs/reviews", batchCatalogEvidence),
+    `検証した commit: \`${verifiedSha}\`\n`,
+  );
+  git(root, ["add", `.docs/reviews/${batchCatalogEvidence}`]);
+  git(root, ["commit", "-m", "add batch catalog evidence"]);
+  writeFileSync(join(root, "src/catalog/verification-catalog.tsx"), "catalog changed\n");
+  writeFileSync(join(root, "src/previews/new-component.tsx"), "new preview\n");
+  git(root, ["add", "src/catalog/verification-catalog.tsx", "src/previews/new-component.tsx"]);
+  git(root, ["commit", "-m", "change catalog inputs"]);
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual(result.problems, []);
+  assert.ok(
+    result.stale.includes(
+      `${batchCatalogEvidence}: src/catalog/verification-catalog.tsx, src/previews`,
+    ),
+    result.stale.join("\n"),
+  );
+});
+
 test("reviews 配下の入れ子にある画像も magic bytes を検査する", async (t) => {
   const { root } = createEvidenceRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));
