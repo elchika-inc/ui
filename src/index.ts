@@ -420,3 +420,15 @@ export type { TextareaProps } from "./components/ui/textarea";
 export { Textarea } from "./components/ui/textarea";
 export type { ToggleProps } from "./components/ui/toggle";
 export { Toggle, toggleVariants } from "./components/ui/toggle";
+export type {
+  TooltipContentProps,
+  TooltipProps,
+  TooltipProviderProps,
+  TooltipTriggerProps,
+} from "./components/ui/tooltip";
+export {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./components/ui/tooltip";

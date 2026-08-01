@@ -164,6 +164,10 @@ import type {
   TabsProps,
   TabsTriggerProps,
   TextareaProps,
+  TooltipContentProps,
+  TooltipProps,
+  TooltipProviderProps,
+  TooltipTriggerProps,
   ToasterProps,
   ToggleProps,
 } from "../lib/index.js"
@@ -468,6 +472,17 @@ const progressValue: ProgressProps["value"] = 50
 
 type SpinnerContracts = [SpinnerProps]
 const spinnerContractsReachable: SpinnerContracts extends unknown[] ? true : never = true
+
+type TooltipContracts = [
+  TooltipProps,
+  TooltipProviderProps,
+  TooltipTriggerProps,
+  TooltipContentProps,
+]
+const tooltipContractsReachable: TooltipContracts extends unknown[] ? true : never = true
+const tooltipDefaultOpen: TooltipProps["defaultOpen"] = true
+// @ts-expect-error Tooltip の defaultOpen は文字列を受けない。
+const invalidTooltipDefaultOpen: TooltipProps["defaultOpen"] = "true"
 
 type TableContracts = [
   TableProps,

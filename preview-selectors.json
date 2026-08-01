@@ -48,5 +48,6 @@
   "tabs": "[data-slot=\"tabs\"]",
   "table": "[data-slot=\"table-preview\"]",
   "textarea": "[data-slot=\"textarea-preview\"]",
+  "tooltip": "[data-slot=\"tooltip-content\"]",
   "toggle": "[data-slot=\"toggle-preview\"]"
 }
