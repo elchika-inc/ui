@@ -16,6 +16,9 @@ import {
 const labels: Record<string, string> = {
   compact: "コンパクト",
   comfortable: "ゆったり",
+  editorial: "編集向け",
+  presentation: "プレゼン向け",
+  standard: "標準",
   spacious: "広々",
 };
 
@@ -37,12 +40,15 @@ export function SelectPreview({ mode = "isolated" }: PreviewProps) {
         <SelectTrigger id="density-select" aria-label="表示密度" className="min-w-40">
           <SelectValue>{(value) => labels[String(value)] ?? "選択してください"}</SelectValue>
         </SelectTrigger>
-        <SelectContent className="max-h-48">
+        <SelectContent className="max-h-32">
           <SelectGroup>
             <SelectLabel>利用可能</SelectLabel>
             <SelectItem value="compact">コンパクト</SelectItem>
             <SelectItem value="comfortable">ゆったり</SelectItem>
+            <SelectItem value="standard">標準</SelectItem>
             <SelectItem value="spacious">広々</SelectItem>
+            <SelectItem value="editorial">編集向け</SelectItem>
+            <SelectItem value="presentation">プレゼン向け</SelectItem>
           </SelectGroup>
           <SelectSeparator />
           <SelectGroup>
