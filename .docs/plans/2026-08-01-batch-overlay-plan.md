@@ -4,7 +4,7 @@
 
 **Goal:** 対話・オーバーレイ群12件を指定順で共有UIへ追加し、isolated previewでは前後sentinelと実操作を、catalogではoverlayを閉じた横断描画を保証する。
 
-**Architecture:** 各componentは`.docs/component-addition-procedure.md`どおり、wrapper RED、standards正規化、5公開経路、実装commit、固定SHAのlight/dark実ブラウザ検証、証跡commitの順で1件ずつ追加する。共有sentinelはcatalog scan対象外の`src/catalog/preview-sentinel.tsx`に置き、`mode === "isolated"`だけbuttonを描画する。Portal群は`defaultOpen`でisolated時だけ初期表示し、catalogでは閉じる。
+**Architecture:** 各componentは`.docs/component-addition-procedure.md`どおり、wrapper RED、standards正規化、5公開経路、実装commit、固定SHAのlight/dark実ブラウザ検証、証跡commitの順で1件ずつ追加する。共有sentinelはcatalog scan対象外の`src/catalog/preview-sentinel.tsx`に置き、`mode === "isolated"`だけbuttonを描画する。Portal群はcontext-menuを除き`defaultOpen`でisolated時だけ初期表示し、catalogでは閉じる。context-menuは実際の`contextmenu`イベントで開く。
 
 **Tech Stack:** Astro 7、React 19、TypeScript、Base UI、Tailwind CSS v4、Biome、Node test、Chrome実ブラウザ。
 
@@ -21,7 +21,7 @@
 - 全PascalCase value exportに、そのexport名と同じ接頭辞を持つProps型を公開し、`types/dts-contract.ts`へ到達性と主要な負の型契約を追加する。
 - `provenance.modified`は生成物と最終差分を確認してcomponent固有に書く。
 - 対話群12件のpreviewは`mode === "isolated"`のときだけ`data-sentinel="before"`と`data-sentinel="after"`のfocusable buttonを1件ずつ描画し、catalogでは両方0件にする。既存22件は変更しない。
-- Portal群はisolatedで`defaultOpen`を使い、catalogでは閉じる。`open={true}`は禁止する。
+- Portal群はcontext-menuを除きisolatedで`defaultOpen`を使い、catalogでは閉じる。`open={true}`は禁止する。context-menuは閉じたpreviewから実際の`contextmenu`イベントで開く。
 - `aria-modal`を仮定しない。ARIA、Portal DOM、inert、focus trap、focus returnはhydration後の実DOMで実測する。
 - Portal群で`defaultOpen`、hydration後DOM、focus trap/inert/returnのdialog知見が通用しなければ、そのcomponentの作業を止めて都度Claudeへ報告する。
 - 各実装commit前に`npm run format`、`npm run lint`、`npm run typecheck`、Props contract単独tsc、scripts tests、`npm run build`、`npm run build:lib`、`npm run check:pre`を通す。
@@ -97,13 +97,13 @@
 
 ### Task 7: Context Menu
 
-**Files:** Create `src/components/ui/context-menu.tsx`、`src/previews/context-menu.tsx`、`src/pages/preview/context-menu.astro`、`src/pages/preview/context-menu-dark.astro`、`.docs/reviews/2026-08-01-context-menu-preview.md`、`.docs/reviews/context-menu-preview-light.jpg`、`.docs/reviews/context-menu-preview-dark.jpg`。Modify `src/index.ts`、`types/dts-contract.ts`、`preview-selectors.json`、`provenance.json`、`registry.json`。
+**Files:** Create `src/components/ui/context-menu.tsx`、`src/previews/context-menu.tsx`、`src/pages/preview/context-menu.astro`、`src/pages/preview/context-menu-dark.astro`、`.docs/reviews/2026-08-01-context-menu-preview.md`、`.docs/reviews/context-menu-preview-light.jpg`、`.docs/reviews/context-menu-preview-dark.jpg`。Modify `src/index.ts`、`types/dts-contract.ts`、`preview-selectors.json`、`provenance.json`、`registry.json`、`scripts/check-preview-render.mjs`、`scripts/check-preview-render.test.mjs`、`.docs/component-addition-procedure.md`。
 
-**Interfaces:** isolatedだけ`defaultOpen`を指定し、context trigger、Portal content、item、checkbox/radio/submenuを最小previewへ含める。
+**Interfaces:** previewはisolated/catalogとも閉じた状態で描画し、context trigger、Portal content、item、checkbox/radio/submenuを最小previewへ含める。`preview-selectors.json`は既存の文字列宣言を維持し、context-menuだけ`selector`と`setup`を持つobjectで、trigger中央への`contextmenu`操作を宣言する。静的checkerはobjectの非空`selector`だけを検査し、setup実行やDOM matchを行わない。
 
 - [ ] wrapper REDを確認し、全slot value/Propsを公開する。
-- [ ] hydration後にcontentが存在するか最初に確認し、`defaultOpen`で位置/anchorが成立しなければdialog知見不一致として停止報告する。
-- [ ] light/darkでsentinel各1、Portal DOM、実ARIA、background inert、focus trap、Escape close、triggerへのfocus return、再度contextmenu open、keyboard item移動、consoleを実測する。
+- [ ] trigger中央で`contextmenu`イベントを発火し、hydration後のcontentが発火座標近傍に表示されることを確認する。context-menuはpointer座標にanchorするため`defaultOpen`で位置検証が成立しない実測事実を手順書へ記録する。
+- [ ] light/darkでsentinel各1、Portal DOM、実ARIA、background inert、focus trap、Escape close、triggerへのfocus return、再度contextmenu open、typeaheadを含むkeyboard item移動、consoleを実測する。
 - [ ] catalogでsentinel/content 0を確認し、実装commit→証跡commit→review cleanを完了する。
 
 ### Task 8: Dropdown Menu
