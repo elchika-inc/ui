@@ -146,7 +146,7 @@
 
 - [ ] wrapper REDと全slot value/Props公開を完了する。
 - [ ] hydration後Portal/viewport実態を確認し、dialog知見と異なる場合は停止報告する。
-- [ ] light/darkでsentinel各1、実ARIA、keyboard navigation、Escape close、focus return、再open、viewport/indicator寸法を実測する。背景には`inert`/`aria-hidden`が付かず、Tabでcontentを抜けると全triggerが閉じ、閉じたPortal内Viewport自身だけに`inert`が付いてTab順から外れることを確認する。
+- [ ] light/darkでsentinel各1、実ARIA、keyboard navigation、Escape close、focus return、再open、viewport/indicator寸法を実測する。背景には`inert`/`aria-hidden`が付かず、Tabでcontentを抜けると全triggerが閉じることを確認する。初回だけ観測した閉じたViewportの`inert`はfresh buildで再現せず上流でも経路依存なため、恒常要件にせず非再現の履歴として証跡へ残す。
 - [ ] catalogでsentinel/content/viewport 0を確認し、実装commit→証跡commit→review cleanを完了する。
 
 ### Task 12: Popover
