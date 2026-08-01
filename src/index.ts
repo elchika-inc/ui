@@ -300,6 +300,22 @@ export {
   navigationMenuTriggerStyle,
 } from "./components/ui/navigation-menu";
 export type {
+  PopoverContentProps,
+  PopoverDescriptionProps,
+  PopoverHeaderProps,
+  PopoverProps,
+  PopoverTitleProps,
+  PopoverTriggerProps,
+} from "./components/ui/popover";
+export {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "./components/ui/popover";
+export type {
   ProgressIndicatorProps,
   ProgressLabelProps,
   ProgressProps,

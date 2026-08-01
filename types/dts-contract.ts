@@ -107,6 +107,12 @@ import type {
   NativeSelectOptGroupProps,
   NativeSelectOptionProps,
   NativeSelectProps,
+  PopoverContentProps,
+  PopoverDescriptionProps,
+  PopoverHeaderProps,
+  PopoverProps,
+  PopoverTitleProps,
+  PopoverTriggerProps,
   NavigationMenuContentProps,
   NavigationMenuIndicatorProps,
   NavigationMenuItemProps,
@@ -410,6 +416,19 @@ const navigationMenuDefaultValue: NavigationMenuProps["defaultValue"] = "product
 // @ts-expect-error NavigationMenu の defaultValue は object を受けない。
 const invalidNavigationMenuDefaultValue: NavigationMenuProps["defaultValue"] = {}
 
+type PopoverContracts = [
+  PopoverProps,
+  PopoverTriggerProps,
+  PopoverContentProps,
+  PopoverHeaderProps,
+  PopoverTitleProps,
+  PopoverDescriptionProps,
+]
+const popoverContractsReachable: PopoverContracts extends unknown[] ? true : never = true
+const popoverDefaultOpen: PopoverProps["defaultOpen"] = true
+// @ts-expect-error Popover の defaultOpen は文字列を受けない。
+const invalidPopoverDefaultOpen: PopoverProps["defaultOpen"] = "true"
+
 type ProgressContracts = [
   ProgressProps,
   ProgressTrackProps,
@@ -495,6 +514,9 @@ export {
   navigationMenuContractsReachable,
   navigationMenuDefaultValue,
   invalidNavigationMenuDefaultValue,
+  popoverContractsReachable,
+  popoverDefaultOpen,
+  invalidPopoverDefaultOpen,
   progressContractsReachable,
   progressValue,
   spinnerContractsReachable,
