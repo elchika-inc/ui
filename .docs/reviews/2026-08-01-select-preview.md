@@ -1,6 +1,7 @@
 # Select preview 実ブラウザ検証
 
-- 実装 commit: `d27504d03214707f523ea800a11b3fe417d87866`
+- 検証済み最終実装 commit: `03f451135830675652a5c1df08d92c31cab5226c`
+- 初回実装 commit: `d27504d03214707f523ea800a11b3fe417d87866`
 - 検証 URL: `http://127.0.0.1:4335/preview/select/`、`http://127.0.0.1:4335/preview/select-dark/`、`http://127.0.0.1:4335/catalog/`、`http://127.0.0.1:4335/catalog-dark/`
 - 実行環境: 固定実装 commit の `npm run build` 後に `astro preview` を明示 port 4335 で起動し、Chrome で検証した。
 
@@ -41,3 +42,11 @@
 
 - 見た範囲は isolated light / dark の defaultOpen、Portal / ARIA、semantic token、scroll lock、背景属性、InternalBackdrop の属性・rect・pointer-events・trigger cutout・`elementFromPoint`・背景座標の実 click、focus、typeahead、ArrowDown、disabled、Enter、Tab、Escape、close 後の残置 DOM と Tab 順、および catalog light / dark の閉状態である。
 - touch 操作、mobile viewport、multiple select、form submit、readOnly / required / invalid、scroll button の hover 連続スクロール速度は見ていない。
+
+## 最終レビューでのitem focus ring再検証
+
+Frontend Domainレビューで、`SelectItem`は`outline-none`に対して背景色だけを変え、keyboard focusを非透明3px ringで示していないことを検出した。RED実測ではdefaultOpen後の選択itemとArrowDown後のitemが`:focus-visible=true`でもcomputed `box-shadow`は`none`だった。
+
+実装commit `03f451135830675652a5c1df08d92c31cab5226c` で`SelectItem`へ`focus-visible:ring-3 focus-visible:ring-ring`を追加した。空き確認済みのAstro dev `127.0.0.1:4342`でlight / darkを開き、初期focusが「Relaxed（ゆったり）」にあること、ArrowDown後に「Standard（標準）」へ移ることを確認した。移動後は両themeで`:focus-visible=true`、computed ring色は`oklch(0.556 0 0)`、幅は`3px`だった。console error / warningは0件だった。
+
+既存JPEGは初回の対話証跡として保持し、このfocus修正では再取得していない。Chrome pageを閉じて`npx astro dev stop`を実行し、終了時は当該repoのAstro process 0、4342 LISTEN 0、HTTP接続はexit 7、HEADは同commit、worktreeはcleanだった。

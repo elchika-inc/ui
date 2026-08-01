@@ -1,6 +1,6 @@
 # Context Menu preview 実ブラウザ検証
 
-- 検証済み最終実装 SHA: `8457a94f60280d0e60e288258bb569f4f0572c6f`
+- 検証済み最終実装 SHA: `03f451135830675652a5c1df08d92c31cab5226c`
 - 初回実装固定 SHA: `d37b6b4e95ecb59e591a390f9ea3bb00aa9063c1`
 - fresh build: この SHA で `npm run build` を再実行後、空き確認済みの `127.0.0.1:4329` を `npm run preview -- --host 127.0.0.1 --port 4329` で配信した。
 - 裁定事実: Context Menu は pointer 座標を anchor にするため、`defaultOpen` の位置検証は成立しない。preview は閉じた状態とし、実際の `contextmenu` event で開いた。
@@ -18,7 +18,7 @@ light の再 open で `ArrowDown` は「新規作成」へ移動した。表示�
 
 ## dark 再 open のレビュー補完
 
-レビュー指摘により、component 固有 path が最終実装 SHA `d37b6b4e95ecb59e591a390f9ea3bb00aa9063c1` から差分0であることを確認した。docs-only 後続 HEAD `b1bc9e693382a3e384e061f92c87fcaa63d0593d` を fresh build し、空き確認済み `127.0.0.1:4330` で dark route を再実測した。
+レビュー指摘により、component 固有 path が当時の実装 SHA `d37b6b4e95ecb59e591a390f9ea3bb00aa9063c1` から差分0であることを確認した。docs-only 後続 HEAD `b1bc9e693382a3e384e061f92c87fcaa63d0593d` を fresh build し、空き確認済み `127.0.0.1:4330` で dark route を再実測した。
 
 trigger 中央 `(288, 133)` の初回 contextmenu 後に content 1を確認し、Escape の完了を hidden まで待機した結果は content 0 / focus `BODY` だった。同じ trigger で再 open 後、`ArrowDown` と `N` typeahead はともに `role=menuitem` の「新規作成」へ移動し、再度 Escape 後も content 0 / focus `BODY` だった。console error は0件である。右クリックは trigger を focus しないため、これは閉じた content に取り残されない正常な focus 終端である。
 
@@ -44,3 +44,17 @@ Core Logicレビューで、`inset={false}`が`data-inset="false"`としてDOM�
 | `true` | 空属性あり | `28px` |
 
 component由来のconsole exception / warningは0件だった。browser navigationが要求した`/favicon.ico`の404はcomponent実行経路外として分離記録した。probe後はChrome pageを閉じ、`npx astro dev stop`でdaemonを停止した。終了時は当該repoのAstro process 0、4341 LISTEN 0、HTTP接続はexit 7、HEADは同commit、worktreeはcleanだった。
+
+## 最終レビューでのkeyboard起動再検証
+
+Frontend Domainレビューで、既定の`div` triggerはTab順に入らず、pointer以外の起動経路を持たないことを検出した。RED実測ではbefore sentinelからTabするとafter sentinelへ直接移り、`Shift+F10`後もcontentは0件だった。
+
+実装commit `03f451135830675652a5c1df08d92c31cab5226c` ではpreview triggerを`button`へ差し替え、`Shift+F10`と`ContextMenu` keyを既存の`contextmenu` eventへ橋渡しした。空き確認済みのAstro dev `127.0.0.1:4342`でlight / darkを実測し、両themeで次を確認した。
+
+- before sentinelからTabすると`BUTTON[data-slot="context-menu-trigger"]`へ移り、`:focus-visible=true`、不透明な`ring`のcomputed幅は`3px`だった。
+- `Shift+F10`後はcontent 1件、focusは`[data-slot="context-menu-content"]`へ移った。
+- Escape後はcontentを閉じ、focusはtrigger buttonへ戻った。
+- light routeでは`ContextMenu` keyでもcontent 1件、focusはcontentへ移った。
+- console error / warningは0件だった。既存JPEGはpointer起動の初回証跡として保持し、このkeyboard修正では再取得していない。
+
+Chrome pageを閉じて`npx astro dev stop`を実行した。終了時は当該repoのAstro process 0、4342 LISTEN 0、HTTP接続はexit 7、HEADは同commit、worktreeはcleanだった。
