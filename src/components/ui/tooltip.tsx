@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 export type TooltipProviderProps = TooltipPrimitive.Provider.Props;
 export type TooltipProps = TooltipPrimitive.Root.Props;
 export type TooltipTriggerProps = TooltipPrimitive.Trigger.Props;
-export type TooltipContentProps = TooltipPrimitive.Popup.Props &
+export type TooltipContentProps = Omit<TooltipPrimitive.Popup.Props, "render" | "role"> &
   Pick<TooltipPrimitive.Positioner.Props, "align" | "alignOffset" | "side" | "sideOffset">;
 
 function TooltipProvider({ delay = 0, ...props }: TooltipProviderProps) {
@@ -45,6 +45,7 @@ function TooltipContent({
             className,
           )}
           {...props}
+          render={undefined}
           role="tooltip"
         >
           {children}

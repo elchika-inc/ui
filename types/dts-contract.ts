@@ -483,6 +483,10 @@ const tooltipContractsReachable: TooltipContracts extends unknown[] ? true : nev
 const tooltipDefaultOpen: TooltipProps["defaultOpen"] = true
 // @ts-expect-error Tooltip の defaultOpen は文字列を受けない。
 const invalidTooltipDefaultOpen: TooltipProps["defaultOpen"] = "true"
+// @ts-expect-error TooltipContent は render による role の上書き経路を公開しない。
+const invalidTooltipContentRender: TooltipContentProps["render"] = undefined
+// @ts-expect-error TooltipContent の role は tooltip に固定する。
+const invalidTooltipContentRole: TooltipContentProps["role"] = "dialog"
 
 type TableContracts = [
   TableProps,

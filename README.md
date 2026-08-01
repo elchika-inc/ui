@@ -60,6 +60,8 @@ npx shadcn@latest add --overwrite http://127.0.0.1:3011/r/button.json
 
 `TooltipContent` は `role="tooltip"` を固定する。利用側は content に一意な `id` を付け、同じ値を trigger の `aria-describedby` に渡す。
 
+`TooltipContent` では `render` と `role` を指定できない。Base UI の `render` 要素が通常 props を後勝ちで上書きして固定 role を迂回する経路を、型と実行時の両方で閉じるためである。
+
 ```tsx
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
