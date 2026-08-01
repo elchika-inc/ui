@@ -145,6 +145,22 @@ export {
   CardHeader,
   CardTitle,
 } from "./components/ui/card";
+export type {
+  CarouselApi,
+  CarouselContentProps,
+  CarouselItemProps,
+  CarouselNextProps,
+  CarouselPreviousProps,
+  CarouselProps,
+} from "./components/ui/carousel";
+export {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  useCarousel,
+} from "./components/ui/carousel";
 export type { CheckboxProps } from "./components/ui/checkbox";
 export { Checkbox } from "./components/ui/checkbox";
 export type {

@@ -965,6 +965,27 @@
       "license": "MIT",
       "modified": "全 PascalCase export の Props 型を追加し、focus ring と arbitrary text size を standards へ正規化。上流の CalendarDayButton は ref を要素へ渡しておらず focus 移動が機能しないため、ref を接続して上流の意図どおりに修正",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。shadcn/ui base-nova の calendar には CalendarDayButton の ref 未接続という既知バグがある。上流が修正したら、この ref 接続差分が不要になったか再評価する。"
+    },
+    "carousel": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/carousel.json",
+      "registryPath": "registry/base-nova/ui/carousel.tsx",
+      "registryContentSha256": "1e1ff335eb8a42eaab58351134bcc79213f61377765a995da868d4001251edca",
+      "generatedContentSha256": "603eeef732fd59e84e87332d784716bd6d53ba3c114bccaa2b232daa07e33003",
+      "addTarget": "@shadcn/carousel",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/carousel.tsx",
+      "upstreamPathSha": "13eb6a81d139b00272caebba098c2ae8bfc27aaf",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-02",
+      "license": "MIT",
+      "modified": "全 PascalCase export の Props 型を追加し、表示文言とエラーを日本語化。role=region / group を維持する日本語 lint 注記を追加",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }
