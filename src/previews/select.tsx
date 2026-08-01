@@ -14,12 +14,12 @@ import {
 } from "@/components/ui/select";
 
 const labels: Record<string, string> = {
-  compact: "コンパクト",
-  comfortable: "ゆったり",
-  editorial: "編集向け",
-  presentation: "プレゼン向け",
-  standard: "標準",
-  spacious: "広々",
+  compact: "Compact（コンパクト）",
+  comfortable: "Relaxed（ゆったり）",
+  editorial: "Editorial（編集向け）",
+  presentation: "Presentation（プレゼン向け）",
+  standard: "Standard（標準）",
+  spacious: "Wide（広々）",
 };
 
 export function SelectPreview({ mode = "isolated" }: PreviewProps) {
@@ -42,18 +42,18 @@ export function SelectPreview({ mode = "isolated" }: PreviewProps) {
         <SelectContent className="max-h-32">
           <SelectGroup>
             <SelectLabel>利用可能</SelectLabel>
-            <SelectItem value="compact">コンパクト</SelectItem>
-            <SelectItem value="comfortable">ゆったり</SelectItem>
-            <SelectItem value="standard">標準</SelectItem>
-            <SelectItem value="spacious">広々</SelectItem>
-            <SelectItem value="editorial">編集向け</SelectItem>
-            <SelectItem value="presentation">プレゼン向け</SelectItem>
+            <SelectItem value="compact">Compact（コンパクト）</SelectItem>
+            <SelectItem value="comfortable">Relaxed（ゆったり）</SelectItem>
+            <SelectItem value="standard">Standard（標準）</SelectItem>
+            <SelectItem value="spacious">Wide（広々）</SelectItem>
+            <SelectItem value="editorial">Editorial（編集向け）</SelectItem>
+            <SelectItem value="presentation">Presentation（プレゼン向け）</SelectItem>
           </SelectGroup>
           <SelectSeparator />
           <SelectGroup>
             <SelectLabel>準備中</SelectLabel>
             <SelectItem value="automatic" disabled>
-              自動（準備中）
+              Automatic（自動・準備中）
             </SelectItem>
           </SelectGroup>
         </SelectContent>
