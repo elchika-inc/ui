@@ -34,7 +34,6 @@ export function SelectPreview({ mode = "isolated" }: PreviewProps) {
       <Select
         defaultOpen={mode === "isolated"}
         defaultValue="comfortable"
-        modal={false}
         onValueChange={(value) => setSelectedValue(String(value))}
       >
         <SelectTrigger id="density-select" aria-label="表示密度" className="min-w-40">
