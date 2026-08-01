@@ -30,6 +30,9 @@ import type {
   MessageGroupProps,
   MessageHeaderProps,
   MessageProps,
+  NativeSelectOptGroupProps,
+  NativeSelectOptionProps,
+  NativeSelectProps,
   ProgressIndicatorProps,
   ProgressLabelProps,
   ProgressProps,
@@ -116,6 +119,17 @@ const messageAlignment: MessageProps["align"] = "end"
 // @ts-expect-error 未知の alignment は弾かれること。
 const invalidMessageAlignment: MessageProps["align"] = "center"
 
+type NativeSelectContracts = [
+  NativeSelectProps,
+  NativeSelectOptionProps,
+  NativeSelectOptGroupProps,
+]
+const nativeSelectContractsReachable: NativeSelectContracts extends unknown[] ? true : never = true
+const nativeSelectSize: NativeSelectProps["size"] = "sm"
+
+// @ts-expect-error 未知の size は弾かれること。
+const invalidNativeSelectSize: NativeSelectProps["size"] = "lg"
+
 type ProgressContracts = [
   ProgressProps,
   ProgressTrackProps,
@@ -162,6 +176,9 @@ export {
   messageContractsReachable,
   messageAlignment,
   invalidMessageAlignment,
+  nativeSelectContractsReachable,
+  nativeSelectSize,
+  invalidNativeSelectSize,
   progressContractsReachable,
   progressValue,
   spinnerContractsReachable,

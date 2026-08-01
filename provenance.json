@@ -482,6 +482,27 @@
       "license": "MIT",
       "modified": "Base UI Checkbox を semantic token、focus-visible ring、状態属性へ正規化し、Checkbox 値と CheckboxProps を公開して、label 付き4状態の interactive preview と light / dark route、安定 selector を追加する",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "native-select": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/native-select.json",
+      "registryPath": "registry/base-nova/ui/native-select.tsx",
+      "registryContentSha256": "9f0da2cc2303bb5157f6ff82d75f52283e72b62dd298811681d8c14e373f2fce",
+      "generatedContentSha256": "0010395c3c1cbedf60c47e52df4417a7a66944f0a85c8f9304ee900a2493648f",
+      "addTarget": "@shadcn/native-select",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/native-select.tsx",
+      "upstreamPathSha": "a7c3300d7a90f5930815c5b161a78ee2edc4efac",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-01",
+      "license": "MIT",
+      "modified": "native select の全 slot を semantic token、focus-visible ring、size・disabled・invalid 状態へ正規化し、全 PascalCase 値と Props 型、label 付き interactive preview、light/dark route、安定 selector を追加する",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }

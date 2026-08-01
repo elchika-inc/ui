@@ -17,6 +17,7 @@
   "label": "[data-slot=\"label\"]",
   "marker": "[data-slot=\"marker-preview\"]",
   "message": "[data-slot=\"message-preview\"]",
+  "native-select": "[data-slot=\"native-select-preview\"]",
   "progress": "[data-slot=\"progress-preview\"]",
   "spinner": "[data-slot=\"spinner-preview\"]",
   "separator": "[data-slot=\"separator\"]",

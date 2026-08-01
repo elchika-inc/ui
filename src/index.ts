@@ -137,6 +137,16 @@ export {
   MessageHeader,
 } from "./components/ui/message";
 export type {
+  NativeSelectOptGroupProps,
+  NativeSelectOptionProps,
+  NativeSelectProps,
+} from "./components/ui/native-select";
+export {
+  NativeSelect,
+  NativeSelectOptGroup,
+  NativeSelectOption,
+} from "./components/ui/native-select";
+export type {
   ProgressIndicatorProps,
   ProgressLabelProps,
   ProgressProps,
