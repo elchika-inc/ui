@@ -1,5 +1,7 @@
 # Hover Card preview 実ブラウザ検証
 
+verified_impl_sha: 1099d0bbffa539e9023f2db8d42a26028c265b01
+
 - 実装 commit: `1099d0bbffa539e9023f2db8d42a26028c265b01`
 - 配信: fresh `npm run build:site` 後、`npm run preview -- --port 4321`（`http://localhost:4321`）
 - stable selector: `[data-slot="hover-card-content"]`

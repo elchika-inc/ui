@@ -1,5 +1,7 @@
 # Avatar プレビュー実ブラウザ検証
 
+verified_impl_sha: c7d0ff6ed02ef1ebfbddfe7698e2a7cf338ac680
+
 検証した commit: `c7d0ff6ed02ef1ebfbddfe7698e2a7cf338ac680`
 
 配信は `npm run dev -- --host 127.0.0.1 --port 4323` で起動し、Chrome で Avatar の個別 route のみを確認した。catalog 横断確認はバッチ末尾で実施する。

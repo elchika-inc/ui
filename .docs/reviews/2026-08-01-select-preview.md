@@ -1,5 +1,7 @@
 # Select preview 実ブラウザ検証
 
+verified_impl_sha: 03f451135830675652a5c1df08d92c31cab5226c
+
 - 検証済み最終実装 commit: `03f451135830675652a5c1df08d92c31cab5226c`
 - 初回実装 commit: `d27504d03214707f523ea800a11b3fe417d87866`
 - 検証 URL: `http://127.0.0.1:4335/preview/select/`、`http://127.0.0.1:4335/preview/select-dark/`、`http://127.0.0.1:4335/catalog/`、`http://127.0.0.1:4335/catalog-dark/`

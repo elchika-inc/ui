@@ -1,5 +1,7 @@
 # Separator プレビュー実ブラウザ検証
 
+verified_impl_sha: a3ff56ccce6add652a07fb845a0df2d5852680d7
+
 検証した commit: `a3ff56ccce6add652a07fb845a0df2d5852680d7`
 
 ## 検証条件

@@ -1,5 +1,7 @@
 # Switch preview 実ブラウザ検証
 
+verified_impl_sha: 1dc76479e48b8469c8b167a0bf987e57deeb9256
+
 - implementation commit: `1dc76479e48b8469c8b167a0bf987e57deeb9256`
 - Browser: Chrome（Browser Plugin）
 - server: `http://127.0.0.1:4319`（空き listener を確認後、build 済み `dist` を `astro preview` で配信）

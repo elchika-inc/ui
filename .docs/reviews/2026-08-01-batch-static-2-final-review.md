@@ -1,5 +1,7 @@
 # Batch static 2 最終レビュー
 
+verified_impl_sha: 73f7cd2a41ec2d83da03391e25b8836a04aea482
+
 - 対象: `73f7cd2a41ec2d83da03391e25b8836a04aea482..b289d2ff581e7ae9f5e65d053c06b7a71a43b775`
 - 終了条件: correctness・security・明示要件に影響する確信度80%以上の flag が0件
 - 結果: `INSPECTION_STATUS=flag 0 / optional 0（R1のoptional 1件は独立レビューでflagとなり修正済み）`

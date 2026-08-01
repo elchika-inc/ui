@@ -1,5 +1,7 @@
 # Tooltip preview 実ブラウザ検証
 
+verified_impl_sha: e22d241c8b64fc94a0b087081bc1b1ca10c407cf
+
 - 実装 commit: `e22d241c8b64fc94a0b087081bc1b1ca10c407cf`
 - 検証 URL: `http://127.0.0.1:4175/preview/tooltip/`、`http://127.0.0.1:4175/preview/tooltip-dark/`、`http://127.0.0.1:4175/catalog/`、`http://127.0.0.1:4175/catalog-dark/`
 - stable selector: `[data-slot="tooltip-content"]`
@@ -48,4 +50,4 @@
 ## 見た範囲 / 見ていない範囲
 
 - 見た範囲は固定実装 commit の isolated light / dark における defaultOpen、sentinel、Portal 実DOM、ARIA 実値と参照先一致、semantic token、hover / pointer leave、focus / blur、Escape、focus 維持、背景属性・hit-test・実 click、console、および catalog light / dark の hydration と closed 状態である。
-- スクリーンリーダーによる読み上げ音声、touch 操作、mobile viewport、複数 Tooltip 間の Provider delay、バッチ全 component の catalog 視覚走査は見ていない。バッチ横断 catalog 走査は Task 15 で実施する。
+- スクリーンリーダーによる読み上げ音声、touch 操作、mobile viewport、複数 Tooltip 間の Provider delay、バッチ全 component の catalog 視覚走査は見ていない。バッチ横断 catalog 走査は Task 16 で実施する。

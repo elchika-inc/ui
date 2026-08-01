@@ -1,5 +1,7 @@
 # Card プレビュー実ブラウザ検証
 
+verified_impl_sha: 63b9239b7996cdd319c14cc330d5a2cbff5ad82a
+
 検証した commit: `63b9239b7996cdd319c14cc330d5a2cbff5ad82a`
 
 ## 検証条件

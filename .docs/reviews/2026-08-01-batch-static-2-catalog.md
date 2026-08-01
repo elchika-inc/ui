@@ -1,5 +1,7 @@
 # Batch static 2 catalog 横断実ブラウザ検証
 
+verified_impl_sha: 76193cb42b086adf313d7a608cc07abc23b04b8a
+
 - batch final commit: `76193cb42b086adf313d7a608cc07abc23b04b8a`
 - Browser: Chrome（Browser Plugin）
 - 対象 route: `/catalog/`、`/catalog-dark/`

@@ -1,5 +1,7 @@
 # Accordion 実ブラウザ検証
 
+verified_impl_sha: 055cb3c86e3a78636dbd893a3ce8ef093075e321
+
 - 実装commit: `055cb3c86e3a78636dbd893a3ce8ef093075e321`
 - URL: `http://127.0.0.1:4322/preview/accordion/`、`http://127.0.0.1:4322/preview/accordion-dark/`
 - 配信: `npm run preview -- --host 127.0.0.1 --port 4322`

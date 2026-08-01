@@ -1,5 +1,7 @@
 # Drawer プレビュー検証
 
+verified_impl_sha: c4ddd8cdeec35fee773aa05a3d25e094edcaf404
+
 検証した実装 commit: `c4ddd8cdeec35fee773aa05a3d25e094edcaf404`
 
 ## 検証条件

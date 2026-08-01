@@ -1,5 +1,7 @@
 # Bubble プレビュー実ブラウザ検証
 
+verified_impl_sha: 2e5dee5a404c403f7fe87155ad41317766d28e46
+
 検証した implementation commit: `2e5dee5a404c403f7fe87155ad41317766d28e46`
 
 ## 検証条件

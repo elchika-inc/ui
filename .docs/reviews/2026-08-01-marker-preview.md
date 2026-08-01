@@ -1,5 +1,7 @@
 # Marker プレビュー実ブラウザ検証
 
+verified_impl_sha: 78d685458def8ef64e3219d400b24f9130d272e8
+
 検証した実装 commit: `78d685458def8ef64e3219d400b24f9130d272e8`
 
 ## 検証条件

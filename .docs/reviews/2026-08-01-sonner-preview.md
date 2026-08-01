@@ -1,5 +1,7 @@
 # Sonner プレビュー実ブラウザ検証
 
+verified_impl_sha: 1c8170e6d70ba53f22ee81810076553552dd9629
+
 検証した commit: `1c8170e6d70ba53f22ee81810076553552dd9629`
 
 ## 検証条件

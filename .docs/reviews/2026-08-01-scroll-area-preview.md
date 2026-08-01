@@ -1,5 +1,7 @@
 # Scroll Area 実ブラウザ検証
 
+verified_impl_sha: d9147d340fd4b13cb69dd48d5d97d6f9db87d074
+
 - 実装SHA: `d9147d340fd4b13cb69dd48d5d97d6f9db87d074`
 - 配信URL: `http://127.0.0.1:4327/preview/scroll-area/` と `http://127.0.0.1:4327/preview/scroll-area-dark/`
 - 配信: fixed SHAを`npm run build`した後、空き確認済みport 4327で`npm run preview -- --host 127.0.0.1 --port 4327`を実行した。

@@ -33,8 +33,13 @@ export function checkImage(path, bytes) {
   return undefined;
 }
 
-export function verificationSha(markdown) {
-  return markdown.match(/(?:^|[^0-9a-f])([0-9a-f]{40})(?![0-9a-f])/)?.[1];
+export function parseVerificationSha(markdown) {
+  const fields = markdown.match(/^verified_impl_sha:.*$/gm) ?? [];
+  if (fields.length === 0) return { problem: "verified_impl_sha が無い" };
+  if (fields.length > 1) return { problem: "verified_impl_sha が複数ある" };
+  const matched = fields[0].match(/^verified_impl_sha:\s*([0-9a-f]{40})\s*$/);
+  if (!matched) return { problem: "verified_impl_sha は40桁の小文字SHAでなければならない" };
+  return { sha: matched[1] };
 }
 
 function componentFromEvidence(path) {
@@ -106,10 +111,9 @@ function pathsChanged(root, sha, paths) {
 function inspectMarkdown(repositoryRoot, reviewsRoot, file) {
   const problems = [];
   const stale = [];
-  const sha = verificationSha(readFileSync(join(reviewsRoot, file), "utf8"));
-  if (!sha) {
-    return { problems: [`${file}: 40 桁の検証 SHA が無い`], stale };
-  }
+  const parsed = parseVerificationSha(readFileSync(join(reviewsRoot, file), "utf8"));
+  if (parsed.problem) return { problems: [`${file}: ${parsed.problem}`], stale };
+  const sha = parsed.sha;
   if (!commitExists(repositoryRoot, sha)) {
     return { problems: [`${file}: 検証 SHA ${sha} が commit として存在しない`], stale };
   }

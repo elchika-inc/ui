@@ -1,5 +1,7 @@
 # Native Select preview 実ブラウザ検証
 
+verified_impl_sha: a34c757376b9491cde8ce547ba77a541f1adfed6
+
 - 検証 SHA: `a34c757376b9491cde8ce547ba77a541f1adfed6`
 - Browser: Chrome
 - server: `http://127.0.0.1:4335`（implementation commit の固定 SHA で起動）

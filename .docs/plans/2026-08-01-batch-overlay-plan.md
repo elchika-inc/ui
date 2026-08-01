@@ -20,7 +20,7 @@
 - 追加npm依存は`resizable`の`react-resizable-panels`だけを許容する。`drawer`の`@base-ui/react`は既存依存を利用する。
 - 全PascalCase value exportに、そのexport名と同じ接頭辞を持つProps型を公開し、`types/dts-contract.ts`へ到達性と主要な負の型契約を追加する。
 - `provenance.modified`は生成物と最終差分を確認してcomponent固有に書く。
-- 対話群12件のpreviewは`mode === "isolated"`のときだけ`data-sentinel="before"`と`data-sentinel="after"`のfocusable buttonを1件ずつ描画し、catalogでは両方0件にする。既存22件は変更しない。
+- 対話群12件のpreviewは`mode === "isolated"`のときだけ`data-sentinel="before"`と`data-sentinel="after"`のfocusable buttonを1件ずつ描画し、catalogでは両方0件にする。baseに存在する既存previewは変更しない。
 - Portal群はcontext-menuを除きisolatedで`defaultOpen`を使い、catalogでは閉じる。`open={true}`は禁止する。context-menuは閉じたpreviewから実際の`contextmenu`イベントで開く。
 - `aria-modal`を仮定しない。ARIA、Portal DOM、inert、focus trap、focus returnはhydration後の実DOMで実測する。
 - `inert`、`aria-hidden`、`pointer-events`は件数だけでなく付与対象と意味を記録する。背景への付与はmodal性、閉じたcomponent自身への付与はTab順から外す後片付け、overlayへの付与は遮蔽として区別する。

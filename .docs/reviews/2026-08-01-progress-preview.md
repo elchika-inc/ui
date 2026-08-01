@@ -1,5 +1,7 @@
 # Progress preview 実ブラウザ検証
 
+verified_impl_sha: fbcab83afbca5cb96ad5f01f75f2fd497885638f
+
 - 検証 SHA: `fbcab83afbca5cb96ad5f01f75f2fd497885638f`
 - Browser: Chrome
 - server: `http://localhost:4330`（固定 SHA の worktree を起動）

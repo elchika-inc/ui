@@ -1,5 +1,7 @@
 # Collapsible 実ブラウザ検証
 
+verified_impl_sha: 6a18f02b7baf722b6524e96c1dc1c8dd902614b6
+
 - 実装SHA: `6a18f02b7baf722b6524e96c1dc1c8dd902614b6`
 - 配信URL: `http://127.0.0.1:4325/preview/collapsible/` と `http://127.0.0.1:4325/preview/collapsible-dark/`
 - light/dark: stable selector `[data-slot="collapsible-preview"]` は各1件、before/after sentinelは各1件、trigger/contentは初期表示、`aria-expanded="true"` を確認した。

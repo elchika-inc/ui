@@ -117,13 +117,7 @@ public/r/          # shadcn build の出力（registry の配信物）
 
 ## Contributing
 
-詳細は [CONTRIBUTING.md](CONTRIBUTING.md) を参照してください。または直接：
-
-1. Fork する
-2. feature ブランチを切る (`git checkout -b feat/your-feature`)
-3. 変更をコミットする (`git commit -m 'feat: add your feature'`)
-4. ブランチを push する (`git push origin feat/your-feature`)
-5. Pull Request を作成する
+詳細は [CONTRIBUTING.md](CONTRIBUTING.md) を参照してください。
 
 ## License
 

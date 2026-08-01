@@ -44,7 +44,9 @@ npm run check:pre
 
 `check:pre` は standards、completeness、distribution、preview selector 宣言の4検査を順に実行する。すべて通ったら component 実装だけを明示パスで stage して commit する。CIと証跡commit後の最終検査は、evidenceを含む`check:all`を維持する。
 
-証跡の鮮度検査は `git diff <検証SHA> -- <paths>` で検証 SHA と作業ツリーを比較し、検証済み component 固有 path の未コミット変更も hard failure にする。catalog / index の集約証跡と共有面の変更は component 追加のたびに必然的に古くなりうるため、hard failure ではなく陳腐化一覧として扱う。
+証跡の鮮度検査は、Markdown内に一意に置く`verified_impl_sha: <40桁SHA>`を正本とし、`git diff <検証SHA> -- <paths>`で検証SHAと作業ツリーを比較する。構造化欄の欠落・重複・実在しないcommit、および検証済みcomponent固有pathの未コミット変更はhard failureにする。
+
+集約証跡の陳腐化には2種類ある。共有面が変わって単に古くなった場合はadvisoryとして一覧に出し、証跡に書いた具体的な観測が現在の実装でも再現するかを確認する。要素名・属性・挙動・数値など、記述内容が現在の実装と食い違う場合はadvisoryで済ませず、最終実装SHAで集約証跡を作り直す。
 
 ## 4. 実ブラウザ検証と証跡 commit
 
@@ -52,10 +54,10 @@ npm run check:pre
 
 1. 実装 commit の SHA を固定して preview site を起動する。空きポートを明示的に選び、起動ログと実際の URL が一致することを確認する。
 2. component 固有の light route と dark route を実ブラウザで開く。各 route で console error がなく、`preview-selectors.json` の selector が hydrated 後に1件以上存在することを確認する。Provider と overlay の設計に応じた操作も行う。
-3. light / dark をそれぞれ撮影する。拡張子と画像実体を一致させ、既存証跡を上書きせず `.docs/reviews/` に新規保存する。Browser の `screenshot` は `Uint8Array` API でも実体が JPEG、CDP `Page.captureScreenshot` は PNG なので、取得方法に対応する拡張子を使う。
-4. 検証 route、テーマ、操作、selector の件数、console 結果、実装 commit の40桁 SHA を新規 Markdown に記録し、catalog 横断確認はバッチ末尾で実施することも記録する。
+3. light / dark をそれぞれ撮影する。取得API名から形式を推測せず、指定した`format`、返却bytesのmagic、拡張子が一致することを検査し、既存証跡を上書きせず `.docs/reviews/` に新規保存する。`format`を省略したAPIでは返却bytesのmagicを正本にする。
+4. 検証 route、テーマ、操作、selector の件数、console 結果と、一意な`verified_impl_sha: <実装commitの40桁SHA>`を新規 Markdown に記録し、catalog 横断確認はバッチ末尾で実施することも記録する。
    component 追加ごとの恒常証跡は、結論 Markdown と light / dark screenshot だけを既定で commit する。console、DOM、Accessibility tree、network、server log は再実行時に生成する一時データとし、特定の correctness、security、明示要件を簡潔な証跡だけでは再現できない場合に限り、理由をレポートに書いて必要最小限を `.docs/reviews/` 配下に commit する。
-5. `node scripts/check-evidence.mjs` を実行する。component 固有 path が検証 SHA より新しければ証跡を作り直す。catalog / index の集約証跡と shared surface の stale 一覧は自動失敗ではないため、見た目への影響を人が確認し、必要な証跡だけを再撮影する。`catalog-index-r2/report.md` は一度きりの深い検証として履歴に残し、以後の hard gate 対象にしない。過去の記録は書き換えない。
+5. `node scripts/check-evidence.mjs` を実行する。component 固有 path が検証 SHA より新しければ証跡を作り直す。catalog / index の集約証跡と shared surface の stale 一覧は自動失敗ではないが、証跡に書いた具体的な観測が再現しない場合は集約証跡を作り直す。`catalog-index-r2/report.md` は一度きりの深い検証として履歴に残し、以後の hard gate 対象にしない。過去の記録は書き換えない。
 6. 証跡だけを明示パスで stage し、新しい証跡 commit を作る。
    証跡commit後は`npm run check:all`がexit 0であることを必須とする。
 

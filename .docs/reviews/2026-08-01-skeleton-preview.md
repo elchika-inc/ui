@@ -1,5 +1,7 @@
 # Skeleton プレビュー実ブラウザ検証
 
+verified_impl_sha: 7b5ff20923105794ec15f216ab0538d9577c7b83
+
 検証した commit: `7b5ff20923105794ec15f216ab0538d9577c7b83`
 
 ## 検証条件

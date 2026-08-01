@@ -1,5 +1,7 @@
 # Textarea preview 実ブラウザ検証
 
+verified_impl_sha: d7c0500d253c71399bdfe5aef7f7d1116abfaeae
+
 - implementation commit: `d7c0500d253c71399bdfe5aef7f7d1116abfaeae`
 - Browser: Chrome（Browser Plugin）
 - server: `http://127.0.0.1:4320`（空き listener を確認後、build 済み `dist` を `astro preview` で配信）

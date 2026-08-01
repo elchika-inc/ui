@@ -1,5 +1,7 @@
 # Kbd プレビュー実ブラウザ検証
 
+verified_impl_sha: 41ade99b60b4593346481a89a11bcbabedd481bf
+
 検証した実装 commit: `41ade99b60b4593346481a89a11bcbabedd481bf`
 
 ## 検証条件

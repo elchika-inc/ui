@@ -1,5 +1,7 @@
 # Resizable 実ブラウザ検証
 
+verified_impl_sha: c37037c78cc0a24757e1963d68e6bc7be371bca7
+
 - 実装commit: `c37037c78cc0a24757e1963d68e6bc7be371bca7`
 - URL: `http://127.0.0.1:4325/preview/resizable/`（light）と `http://127.0.0.1:4325/preview/resizable-dark/`（dark）、明示port `4325` は起動前に空きを確認した。
 - wrapper: `node scripts/add-component.mjs resizable --modified "…"` を1回だけ実行し、停止・復元path・分類不能pathはなかった。生成直後SHA-256は`6e3f0f912a0d68614281e7570f4077a966a0517f8adcde65aed5cf9c88af073c`、registry SHA-256は`2bfc1dfa5959622a7ce87abe96d76dd48339c8902c24ed5c6c4e41a9afdbbeb9`だった。

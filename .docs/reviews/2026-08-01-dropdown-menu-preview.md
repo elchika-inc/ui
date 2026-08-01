@@ -1,5 +1,7 @@
 # Dropdown Menu 実ブラウザ検証
 
+verified_impl_sha: 8457a94f60280d0e60e288258bb569f4f0572c6f
+
 - 検証済み最終実装 commit: `8457a94f60280d0e60e288258bb569f4f0572c6f`
 
 ## 対象

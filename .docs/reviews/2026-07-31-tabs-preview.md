@@ -1,5 +1,7 @@
 # Tabs プレビュー実ブラウザ検証
 
+verified_impl_sha: 996ef81e0d52766f6bc21828991afb7f586efa64
+
 検証した commit: `996ef81e0d52766f6bc21828991afb7f586efa64`
 
 ## 検証条件

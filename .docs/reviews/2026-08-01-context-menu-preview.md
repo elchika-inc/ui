@@ -1,5 +1,7 @@
 # Context Menu preview 実ブラウザ検証
 
+verified_impl_sha: 03f451135830675652a5c1df08d92c31cab5226c
+
 - 検証済み最終実装 SHA: `03f451135830675652a5c1df08d92c31cab5226c`
 - 初回実装固定 SHA: `d37b6b4e95ecb59e591a390f9ea3bb00aa9063c1`
 - fresh build: この SHA で `npm run build` を再実行後、空き確認済みの `127.0.0.1:4329` を `npm run preview -- --host 127.0.0.1 --port 4329` で配信した。
@@ -29,7 +31,7 @@ Browser `tab.screenshot({ fullPage: true })` の Uint8Array を変換せず保�
 - `context-menu-preview-light.jpg`
 - `context-menu-preview-dark.jpg`
 
-見た範囲は固定 SHA のlight/dark hydration、実 contextmenu の座標 anchor、Portal、ARIA、sentinel、background inert、focus、ArrowDown、typeahead、Escape、catalog閉状態、console error、JPEG実体である。見ていない範囲は screen reader の読み上げ、RTL、高倍率、pointer以外の入力装置である。
+初回に見た範囲は固定 SHA のlight/dark hydration、実 contextmenu の座標 anchor、Portal、ARIA、sentinel、background inert、focus、ArrowDown、typeahead、Escape、catalog閉状態、console error、JPEG実体である。初回時点で見ていなかったkeyboard起動は後段の最終レビューで追加実測した。引き続き見ていない範囲はscreen readerの読み上げ、RTL、高倍率である。
 
 ## 最終レビューでの inset 契約再検証
 

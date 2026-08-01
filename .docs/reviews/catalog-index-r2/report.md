@@ -1,5 +1,7 @@
 # 動作検証レポート: catalog index `/`
 
+verified_impl_sha: 71ade34f3a14e3af19cdaa8100d7fc4552aed4ba
+
 ## 実行環境
 
 - 対象SHA: `71ade34f3a14e3af19cdaa8100d7fc4552aed4ba`

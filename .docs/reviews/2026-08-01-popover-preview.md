@@ -1,5 +1,7 @@
 # Popover preview r2 実ブラウザ検証
 
+verified_impl_sha: 237b4e65749cdbc968e67f5656139fd2ffd67ecc
+
 - 実装 commit: `237b4e65749cdbc968e67f5656139fd2ffd67ecc`
 - 検証 URL: `http://localhost:4332/preview/popover/`、`http://localhost:4332/preview/popover-dark/`、`/catalog/`、`/catalog-dark/`
 - 実行環境: fresh build 後の Astro preview（port 4332）、Chrome

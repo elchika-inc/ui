@@ -1,5 +1,7 @@
 # Navigation Menu 実ブラウザ検証
 
+verified_impl_sha: 03f451135830675652a5c1df08d92c31cab5226c
+
 ## 対象
 
 - 検証済み最終実装 SHA: `03f451135830675652a5c1df08d92c31cab5226c`

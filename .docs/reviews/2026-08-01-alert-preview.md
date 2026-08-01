@@ -1,5 +1,7 @@
 # Alert プレビュー実ブラウザ検証
 
+verified_impl_sha: d00b1644144a338446751141fb7d258a54ce7d1a
+
 検証した commit: `d00b1644144a338446751141fb7d258a54ce7d1a`
 
 ## 検証条件
