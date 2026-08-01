@@ -100,13 +100,26 @@ test("検証済みcomponentだけを変更すると落ち、別componentは落�
 
   assert.deepEqual(result.problems, [
     "2026-08-01-button-preview.md: 検証 SHA 以降に component 固有 path が変更されている",
-    "2026-08-01-verification-catalog.md: 検証 SHA 以降に証跡固有 path が変更されている",
   ]);
-  assert.deepEqual(result.stale, []);
+  assert.deepEqual(result.stale, ["2026-08-01-verification-catalog.md: src/components/ui"]);
   assert.ok(
     !result.problems.some((problem) => problem.includes("input-preview")),
     "別componentの変更で input 証跡を落としてはならない",
   );
+});
+
+test("検証済みcomponentの未コミット変更も hard failure にする", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  writeFileSync(join(root, "src/components/ui/button.tsx"), "button changed but uncommitted\n");
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual(result.problems, [
+    "2026-08-01-button-preview.md: 検証 SHA 以降に component 固有 path が変更されている",
+  ]);
+  assert.deepEqual(result.stale, ["2026-08-01-verification-catalog.md: src/components/ui"]);
 });
 
 test("共有面の変更は落とさず陳腐化一覧へ出す", async (t) => {
@@ -128,7 +141,7 @@ test("共有面の変更は落とさず陳腐化一覧へ出す", async (t) => {
   ]);
 });
 
-test("index と catalog の固有 path が検証 SHA 以降に変わると検出する", async (t) => {
+test("index と catalog の集約 path が変わると陳腐化一覧へ出す", async (t) => {
   const { root } = createEvidenceRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));
   const { checkEvidenceInRepo } = await loadModule();
@@ -139,11 +152,11 @@ test("index と catalog の固有 path が検証 SHA 以降に変わると検出
 
   const result = checkEvidenceInRepo(root);
 
-  assert.deepEqual(result.problems, [
-    "2026-08-01-index-page.md: 検証 SHA 以降に証跡固有 path が変更されている",
-    "2026-08-01-verification-catalog.md: 検証 SHA 以降に証跡固有 path が変更されている",
+  assert.deepEqual(result.problems, []);
+  assert.deepEqual(result.stale, [
+    "2026-08-01-index-page.md: src/pages/index.astro",
+    "2026-08-01-verification-catalog.md: src/catalog/verification-catalog.tsx",
   ]);
-  assert.deepEqual(result.stale, []);
 });
 
 test("reviews 配下の入れ子にある画像も magic bytes を検査する", async (t) => {
@@ -162,7 +175,7 @@ test("reviews 配下の入れ子にある画像も magic bytes を検査する",
   assert.deepEqual(result.stale, []);
 });
 
-test("reviews 配下の入れ子にある index 検証レポートの鮮度も検査する", async (t) => {
+test("reviews 配下の入れ子にある index 集約レポートも陳腐化一覧へ出す", async (t) => {
   const { root, verifiedSha } = createEvidenceRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));
   const { checkEvidenceInRepo } = await loadModule();
@@ -177,11 +190,11 @@ test("reviews 配下の入れ子にある index 検証レポートの鮮度も�
 
   const result = checkEvidenceInRepo(root);
 
-  assert.deepEqual(result.problems, [
-    "2026-08-01-index-page.md: 検証 SHA 以降に証跡固有 path が変更されている",
-    "catalog-index-r2/report.md: 検証 SHA 以降に証跡固有 path が変更されている",
+  assert.deepEqual(result.problems, []);
+  assert.deepEqual(result.stale, [
+    "2026-08-01-index-page.md: src/pages/index.astro",
+    "catalog-index-r2/report.md: src/pages/index.astro",
   ]);
-  assert.deepEqual(result.stale, []);
 });
 
 test("独自の verifications 証跡レイヤーを検出する", async (t) => {
@@ -226,7 +239,7 @@ test("dangling verifications symlink も独自証跡レイヤーとして検出�
   assert.deepEqual(result.stale, []);
 });
 
-test("入れ子の catalog 検証 Markdown も固有 path の鮮度を検査する", async (t) => {
+test("入れ子の catalog 集約 Markdown も陳腐化一覧へ出す", async (t) => {
   const { root, verifiedSha } = createEvidenceRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));
   const { checkEvidenceInRepo } = await loadModule();
@@ -244,11 +257,11 @@ test("入れ子の catalog 検証 Markdown も固有 path の鮮度を検査す�
 
   const result = checkEvidenceInRepo(root);
 
-  assert.deepEqual(result.problems, [
-    "2026-08-01-verification-catalog.md: 検証 SHA 以降に証跡固有 path が変更されている",
-    "deep/2026-08-01-verification-catalog.md: 検証 SHA 以降に証跡固有 path が変更されている",
+  assert.deepEqual(result.problems, []);
+  assert.deepEqual(result.stale, [
+    "2026-08-01-verification-catalog.md: src/catalog/verification-catalog.tsx",
+    "deep/2026-08-01-verification-catalog.md: src/catalog/verification-catalog.tsx",
   ]);
-  assert.deepEqual(result.stale, []);
 });
 
 test("reviews root 自体の symlink で repo 外を走査しない", async (t) => {

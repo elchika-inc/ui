@@ -1,10 +1,15 @@
 {
+  "alert": "[data-slot=\"alert\"]",
   "badge": "[data-slot=\"badge\"]",
   "button": "[data-slot=\"button\"]",
+  "card": "[data-slot=\"card\"]",
   "catalog": "[data-slot=\"verification-catalog\"]",
   "catalog-dark": "[data-slot=\"verification-catalog\"]",
   "dialog": "[data-slot=\"dialog-content\"]",
   "input": "[data-slot=\"input\"]",
+  "label": "[data-slot=\"label\"]",
+  "separator": "[data-slot=\"separator\"]",
+  "skeleton": "[data-slot=\"skeleton\"]",
   "sonner": "[data-sonner-toast]",
   "tabs": "[data-slot=\"tabs\"]"
 }
