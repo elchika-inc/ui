@@ -4,6 +4,8 @@ import { PreviewSentinel } from "@/catalog/preview-sentinel";
 import type { PreviewProps } from "@/catalog/preview-types";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
+const tooltipContentId = "tooltip-preview-content";
+
 export function TooltipPreview({ mode = "isolated" }: PreviewProps) {
   const [backgroundClicks, setBackgroundClicks] = useState(0);
 
@@ -12,10 +14,13 @@ export function TooltipPreview({ mode = "isolated" }: PreviewProps) {
       <PreviewSentinel mode={mode} position="before" />
       <TooltipProvider>
         <Tooltip defaultOpen={mode === "isolated"}>
-          <TooltipTrigger className="w-fit rounded-md border border-border px-3 py-2 text-sm font-medium focus-visible:ring-3 focus-visible:ring-ring focus-visible:outline-none">
+          <TooltipTrigger
+            aria-describedby={tooltipContentId}
+            className="w-fit rounded-md border border-border px-3 py-2 text-sm font-medium focus-visible:ring-3 focus-visible:ring-ring focus-visible:outline-none"
+          >
             詳細を見る
           </TooltipTrigger>
-          <TooltipContent>共通 UI の補足情報です</TooltipContent>
+          <TooltipContent id={tooltipContentId}>共通 UI の補足情報です</TooltipContent>
         </Tooltip>
       </TooltipProvider>
       <button

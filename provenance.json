@@ -879,7 +879,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "Base UI TooltipのProvider・Root・Trigger・ContentとProps型を公開し、semantic token・非透明3px focus ringへ正規化する。preview内でProviderを所有し、isolated限定defaultOpenのlight/dark preview、barrel、型契約、selector、registryを追加する",
+      "modified": "Base UI TooltipのProvider・Root・Trigger・ContentとProps型を公開し、semantic token・非透明3px focus ringへ正規化する。standards DESIGN.md §8適合のARIA補完としてTooltipContentのrole=tooltipを固定し、idとaria-describedbyを公開propsで配線する。preview内でProviderを所有し、isolated限定defaultOpenのlight/dark preview、barrel、型契約、selector、registryを追加する",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
