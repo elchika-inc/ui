@@ -213,3 +213,5 @@ export type {
   TabsTriggerProps,
 } from "./components/ui/tabs";
 export { Tabs, TabsContent, TabsList, TabsTrigger, tabsListVariants } from "./components/ui/tabs";
+export type { TextareaProps } from "./components/ui/textarea";
+export { Textarea } from "./components/ui/textarea";

@@ -28,5 +28,6 @@
   "skeleton": "[data-slot=\"skeleton\"]",
   "sonner": "[data-sonner-toast]",
   "tabs": "[data-slot=\"tabs\"]",
-  "table": "[data-slot=\"table-preview\"]"
+  "table": "[data-slot=\"table-preview\"]",
+  "textarea": "[data-slot=\"textarea-preview\"]"
 }
