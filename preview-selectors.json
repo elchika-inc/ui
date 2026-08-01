@@ -13,6 +13,7 @@
   "dialog": "[data-slot=\"dialog-content\"]",
   "empty": "[data-slot=\"empty-preview\"]",
   "input": "[data-slot=\"input\"]",
+  "input-otp": "[data-slot=\"input-otp-preview\"]",
   "kbd": "[data-slot=\"kbd-preview\"]",
   "label": "[data-slot=\"label\"]",
   "marker": "[data-slot=\"marker-preview\"]",

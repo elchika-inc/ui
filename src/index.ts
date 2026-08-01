@@ -114,6 +114,18 @@ export {
 } from "./components/ui/empty";
 export type { InputProps } from "./components/ui/input";
 export { Input } from "./components/ui/input";
+export type {
+  InputOTPGroupProps,
+  InputOTPProps,
+  InputOTPSeparatorProps,
+  InputOTPSlotProps,
+} from "./components/ui/input-otp";
+export {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "./components/ui/input-otp";
 export type { KbdGroupProps, KbdProps } from "./components/ui/kbd";
 export { Kbd, KbdGroup } from "./components/ui/kbd";
 export type { LabelProps } from "./components/ui/label";

@@ -503,6 +503,27 @@
       "license": "MIT",
       "modified": "native select の全 slot を semantic token、focus-visible ring、size・disabled・invalid 状態へ正規化し、全 PascalCase 値と Props 型、label 付き interactive preview、light/dark route、安定 selector を追加する",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "input-otp": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/input-otp.json",
+      "registryPath": "registry/base-nova/ui/input-otp.tsx",
+      "registryContentSha256": "2c3f7fc68589ab156a0ccb1af443c0c25fd0292be49b0901aba10d64d2a77443",
+      "generatedContentSha256": "d010504eeb4982e5fd0e535111d81813829997b3c979b49592be2b4a510f3525",
+      "addTarget": "@shadcn/input-otp",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/input-otp.tsx",
+      "upstreamPathSha": "b9f62a83999dc7df855738a8715f40ab156b1f10",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-01",
+      "license": "MIT",
+      "modified": "単一の実フォーカス、semantic token と data-active によるOTPスロット、native hr separator、全 PascalCase Props 型、6桁interactive preview、light/dark route、安定selectorへ正規化する",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }
