@@ -146,6 +146,27 @@
       "license": "MIT",
       "modified": "SeparatorProps を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "label": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/label.json",
+      "registryPath": "registry/base-nova/ui/label.tsx",
+      "registryContentSha256": "e144f164426dedf34a64b570539c13854fd655157cd022ca5deb53d17b3be290",
+      "generatedContentSha256": "fc58859ab5ee622b2fe853a6501a0ed8008d022ab34a4f0bf98bb7324c5b3619",
+      "addTarget": "@shadcn/label",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/label.tsx",
+      "upstreamPathSha": "86d9b00084affa7010e6c7c7bd410ec62525caac",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-01",
+      "license": "MIT",
+      "modified": "LabelProps を追加し、htmlFor と children を明示的に描画",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }

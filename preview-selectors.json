@@ -5,6 +5,7 @@
   "catalog-dark": "[data-slot=\"verification-catalog\"]",
   "dialog": "[data-slot=\"dialog-content\"]",
   "input": "[data-slot=\"input\"]",
+  "label": "[data-slot=\"label\"]",
   "separator": "[data-slot=\"separator\"]",
   "sonner": "[data-sonner-toast]",
   "tabs": "[data-slot=\"tabs\"]"

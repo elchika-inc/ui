@@ -28,6 +28,8 @@ export {
 } from "./components/ui/dialog";
 export type { InputProps } from "./components/ui/input";
 export { Input } from "./components/ui/input";
+export type { LabelProps } from "./components/ui/label";
+export { Label } from "./components/ui/label";
 export type { SeparatorProps } from "./components/ui/separator";
 export { Separator } from "./components/ui/separator";
 export type { ToasterProps } from "./components/ui/sonner";
