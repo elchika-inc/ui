@@ -118,9 +118,9 @@ const newPropsContractsReachable: NewPropsContracts extends unknown[] ? true : n
 const inputOtpMaxLength: InputOTPProps["maxLength"] = 6
 // @ts-expect-error InputOTP の maxLength は文字列を受けない。
 const invalidInputOtpMaxLength: InputOTPProps["maxLength"] = "6"
-const radioGroupValue: RadioGroupProps["value"] = "team"
-// @ts-expect-error RadioGroup の value は数値を受けない。
-const invalidRadioGroupValue: RadioGroupProps["value"] = 1
+const radioGroupDisabled: RadioGroupProps["disabled"] = true
+// @ts-expect-error RadioGroup の disabled は文字列を受けない。
+const invalidRadioGroupDisabled: RadioGroupProps["disabled"] = "true"
 const sliderValue: SliderProps["value"] = 40
 // @ts-expect-error Slider値は文字列を受けない。
 const invalidSliderValue: SliderProps["value"] = "40"
@@ -243,8 +243,8 @@ export {
   newPropsContractsReachable,
   inputOtpMaxLength,
   invalidInputOtpMaxLength,
-  radioGroupValue,
-  invalidRadioGroupValue,
+  radioGroupDisabled,
+  invalidRadioGroupDisabled,
   sliderValue,
   invalidSliderValue,
   switchChecked,
