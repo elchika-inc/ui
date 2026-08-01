@@ -173,7 +173,7 @@
 
 **Files:** Create `src/components/ui/tooltip.tsx`、`src/previews/tooltip.tsx`、`src/pages/preview/tooltip.astro`、`src/pages/preview/tooltip-dark.astro`、`.docs/reviews/2026-08-01-tooltip-preview.md`、`.docs/reviews/tooltip-preview-light.jpg`、`.docs/reviews/tooltip-preview-dark.jpg`。Modify `src/index.ts`、`types/dts-contract.ts`、`preview-selectors.json`、`provenance.json`、`registry.json`、`README.md`。
 
-**Interfaces:** preview内で`TooltipProvider`を所有し、isolatedだけ`defaultOpen`、catalogでは閉じる。triggerとPortal contentを含める。上流に無いARIA tooltip patternを配布component側で補完し、`TooltipContent`は`role="tooltip"`を固定する。利用者が一意なcontent `id`とtrigger `aria-describedby`を明示する契約をREADMEとpreviewへ置く。独自contextによる自動ID生成はopen-state同期とdangling referenceの責務を増やすため採用しない。
+**Interfaces:** preview内で`TooltipProvider`を所有し、isolatedだけ`defaultOpen`、catalogでは閉じる。triggerとPortal contentを含める。上流に無いARIA tooltip patternを配布component側で補完し、`TooltipContent`は`role="tooltip"`を固定する。Base UIの`render`要素が通常propsを後勝ちで上書きするため、`TooltipContentProps`から`render`と`role`を除外し、実行時も`render={undefined}`と固定roleを最後に渡して上書き経路を閉じる。利用者が一意なcontent `id`とtrigger `aria-describedby`を明示する契約をREADMEとpreviewへ置く。独自contextによる自動ID生成はopen-state同期とdangling referenceの責務を増やすため採用しない。
 
 - [ ] wrapper REDとProvider責務、全slot value/Props公開を完了する。
 - [ ] light/darkでsentinel各1、Portal、`role="tooltip"` / `id` / `aria-describedby`と参照先一致、hover/focus open、pointer leave/blur/Escape close、focus維持、非modal背景操作を実測する。証跡には上流のARIA欠落と補完後の実値、`role`と`aria-describedby`は対で必要なこと、上流実装時の再評価条件を残す。
