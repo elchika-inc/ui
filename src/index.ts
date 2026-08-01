@@ -112,6 +112,8 @@ export {
 } from "./components/ui/empty";
 export type { InputProps } from "./components/ui/input";
 export { Input } from "./components/ui/input";
+export type { KbdGroupProps, KbdProps } from "./components/ui/kbd";
+export { Kbd, KbdGroup } from "./components/ui/kbd";
 export type { LabelProps } from "./components/ui/label";
 export { Label } from "./components/ui/label";
 export type { SeparatorProps } from "./components/ui/separator";
