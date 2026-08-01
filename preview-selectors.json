@@ -1,5 +1,6 @@
 {
   "alert": "[data-slot=\"alert\"]",
+  "aspect-ratio": "[data-slot=\"aspect-ratio\"]",
   "badge": "[data-slot=\"badge\"]",
   "button": "[data-slot=\"button\"]",
   "card": "[data-slot=\"card\"]",

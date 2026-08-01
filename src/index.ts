@@ -5,6 +5,8 @@ export type {
   AlertTitleProps,
 } from "./components/ui/alert";
 export { Alert, AlertAction, AlertDescription, AlertTitle } from "./components/ui/alert";
+export type { AspectRatioProps } from "./components/ui/aspect-ratio";
+export { AspectRatio } from "./components/ui/aspect-ratio";
 export type { BadgeProps } from "./components/ui/badge";
 export { Badge, badgeVariants } from "./components/ui/badge";
 export type { ButtonProps } from "./components/ui/button";

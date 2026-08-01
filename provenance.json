@@ -230,6 +230,27 @@
       "license": "MIT",
       "modified": "Alert 系4 exportの Props 型を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "aspect-ratio": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/aspect-ratio.json",
+      "registryPath": "registry/base-nova/ui/aspect-ratio.tsx",
+      "registryContentSha256": "7a61bbe0bee2a0d2b898a862736227a814339de272dbb3fec713adbdb898e84a",
+      "generatedContentSha256": "c6db82ab2401e402c7c6d178ff59eb570535c76db5953b3bb78be564c5b24669",
+      "addTarget": "@shadcn/aspect-ratio",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/aspect-ratio.tsx",
+      "upstreamPathSha": "86d9b00084affa7010e6c7c7bd410ec62525caac",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-01",
+      "license": "MIT",
+      "modified": "AspectRatioProps を明示して公開し、16:9 の semantic token プレビュー、light/dark route、data-slot selector を追加する",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }

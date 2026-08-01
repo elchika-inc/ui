@@ -2,6 +2,7 @@
 // design-sync はこの .d.ts を読んで API 契約を組み立てるため、
 // ここが潰れると設計エージェントが全コンポーネントで API を誤用する。
 import type {
+  AspectRatioProps,
   ButtonProps,
   DialogCloseProps,
   DialogContentProps,
@@ -19,6 +20,8 @@ import type {
   TabsTriggerProps,
   ToasterProps,
 } from "../lib/index.js"
+
+const aspectRatio: AspectRatioProps["ratio"] = 16 / 9
 
 // variant / size が ButtonProps から到達でき、実際の union を持つ
 const variant: ButtonProps["variant"] = "secondary"
@@ -53,6 +56,7 @@ const tabsContractsReachable: TabsContracts extends unknown[] ? true : never = t
 const toasterPosition: ToasterProps["position"] = "top-center"
 
 export {
+  aspectRatio,
   variant,
   size,
   invalid,
