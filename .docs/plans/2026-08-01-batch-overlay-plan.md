@@ -163,10 +163,10 @@
 
 **Files:** Create `src/components/ui/select.tsx`、`src/previews/select.tsx`、`src/pages/preview/select.astro`、`src/pages/preview/select-dark.astro`、`.docs/reviews/2026-08-01-select-preview.md`、`.docs/reviews/select-preview-light.jpg`、`.docs/reviews/select-preview-dark.jpg`。Modify `src/index.ts`、`types/dts-contract.ts`、`preview-selectors.json`、`provenance.json`、`registry.json`。
 
-**Interfaces:** isolatedだけ`defaultOpen`、catalogでは閉じる。trigger/value/Portal content/group/label/item/separator/scroll buttonsを含め、選択値を観測可能にする。
+**Interfaces:** isolatedだけ`defaultOpen`、catalogでは閉じる。trigger/value/Portal content/group/label/item/separator/scroll buttonsを含め、選択値を観測可能にする。previewで`modal`を上書きせず、配布componentのBase UI既定値`modal: true`を検証する。
 
 - [ ] wrapper REDと全slot value/Props公開を完了する。
-- [ ] light/darkでsentinel各1、Portal/実ARIA、keyboard item移動/選択、Escape close、trigger return、再open、選択値更新、disabled item不変を実測する。
+- [ ] light/darkでsentinel各1、Portal/実ARIA、focus trap、背景の`inert` / `aria-hidden` / pointer遮蔽の対象と実値、keyboard item移動/選択、typeahead実値、Escape close、選択close、trigger return、再open、選択値更新、disabled item不変を実測する。
 - [ ] catalogでsentinel/content 0を確認し、実装commit→証跡commit→review cleanを完了する。
 
 ### Task 14: Tooltip
