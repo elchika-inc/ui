@@ -56,6 +56,8 @@ npx shadcn@latest add --overwrite http://127.0.0.1:3011/r/button.json
 
 `sonner` は `next-themes` の `ThemeProvider` を前提とする。
 
+`Toaster`（sonner ベース）と `ToastToaster`（Base UI Toast ベース）は別系統。どちらか一方を使う。
+
 ### Tooltip のアクセシビリティ
 
 `TooltipContent` は `role="tooltip"` を固定する。利用側は content に一意な `id` を付け、同じ値を trigger の `aria-describedby` に渡す。

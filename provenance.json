@@ -1154,6 +1154,27 @@
       "license": "MIT",
       "modified": "全 PascalCase export の Props 型公開、IconPlaceholder を Lucide XIcon へ置換、close の accessible name を日本語化、font と値系 arbitrary translate を semantic utility へ正規化、barrel export、modal open・close・dismiss・focus・背景 inert の preview と light/dark route、hydration selector を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "toast": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/toast.json",
+      "registryPath": "registry/base-nova/ui/toast.tsx",
+      "registryContentSha256": "8ef007ac835e8c6d87aa68e9d1f9af1be9a13121c0058d1362bd960e6268db2b",
+      "generatedContentSha256": "27dbd3ac55283a56d511378c396ab290c0827687d550659fb15cde990a29d3ec",
+      "addTarget": "@shadcn/toast",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/toast.tsx",
+      "upstreamPathSha": "6cd3f4c65c361ab6554e06a77e6a0af9cf8b6e37",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-02",
+      "license": "MIT",
+      "modified": "全 PascalCase export の Props 型公開、IconPlaceholder を Lucide icon へ置換、close の accessible name を日本語化、透明 focus ring と値系 arbitrary z・height・easing を semantic token・CSS variable・utility へ正規化、sonner の Toaster と名前が衝突するため toast 側を ToastToaster へ alias、barrel export、live notification の追加・自動消滅・Action・Close・複数通知・hover pause・背景到達の preview と light/dark route、hydration selector を追加",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }
