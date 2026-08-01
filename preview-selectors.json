@@ -9,6 +9,7 @@
   "badge": "[data-slot=\"badge\"]",
   "bubble": "[data-slot=\"bubble-preview\"]",
   "button": "[data-slot=\"button\"]",
+  "button-group": "[data-slot=\"button-group-preview\"]",
   "card": "[data-slot=\"card\"]",
   "checkbox": "[data-slot=\"checkbox-preview\"]",
   "collapsible": "[data-slot=\"collapsible-preview\"]",

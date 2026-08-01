@@ -115,6 +115,17 @@ export { Bubble, BubbleContent, BubbleGroup, BubbleReactions } from "./component
 export type { ButtonProps } from "./components/ui/button";
 export { Button, buttonVariants } from "./components/ui/button";
 export type {
+  ButtonGroupProps,
+  ButtonGroupSeparatorProps,
+  ButtonGroupTextProps,
+} from "./components/ui/button-group";
+export {
+  ButtonGroup,
+  ButtonGroupSeparator,
+  ButtonGroupText,
+  buttonGroupVariants,
+} from "./components/ui/button-group";
+export type {
   CardActionProps,
   CardContentProps,
   CardDescriptionProps,

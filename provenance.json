@@ -923,6 +923,27 @@
       "license": "MIT",
       "modified": "全 PascalCase export の Props 型を追加し、focus-within ring を不透明3pxへ正規化",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "button-group": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/button-group.json",
+      "registryPath": "registry/base-nova/ui/button-group.tsx",
+      "registryContentSha256": "5a9a63ebdb9822db1c3267e4ec2d8e746083ddbd57a65da361ace81c5d79feae",
+      "generatedContentSha256": "fe97631e1a07bc0add09503c5032002e37f4c71ef5dd3c7475b856a29848583d",
+      "addTarget": "@shadcn/button-group",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/button-group.tsx",
+      "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-02",
+      "license": "MIT",
+      "modified": "全 PascalCase export の Props 型と、role=group を維持する日本語 lint 注記を追加",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }
