@@ -986,6 +986,27 @@
       "license": "MIT",
       "modified": "全 PascalCase export の Props 型を追加し、表示文言とエラーを日本語化。role=region / group を維持する日本語 lint 注記を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "chart": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/chart.json",
+      "registryPath": "registry/base-nova/ui/chart.tsx",
+      "registryContentSha256": "86ee2054df8ef72d9d8113d63de726d880989781f9f5bf6c06b68e2b9dddc280",
+      "generatedContentSha256": "3029092cb861794ccb562c96618cf711e193ee500a50fe766cd50c962991dbd7",
+      "addTarget": "@shadcn/chart",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/chart.tsx",
+      "upstreamPathSha": "bebc4356afd08822375cb08b80249bdaf50289c1",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-02",
+      "license": "MIT",
+      "modified": "全 PascalCase export の Props 型を追加し、コメント・エラー言語と arbitrary value を standards へ正規化。動的 CSS を dangerouslySetInnerHTML ではなく style の text child で描画",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }

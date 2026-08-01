@@ -12,6 +12,7 @@
   "button-group": "[data-slot=\"button-group-preview\"]",
   "calendar": "[data-slot=\"calendar-preview\"]",
   "carousel": "[data-slot=\"carousel-preview\"]",
+  "chart": "[data-slot=\"chart-preview\"]",
   "card": "[data-slot=\"card\"]",
   "checkbox": "[data-slot=\"checkbox-preview\"]",
   "collapsible": "[data-slot=\"collapsible-preview\"]",

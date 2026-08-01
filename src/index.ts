@@ -161,6 +161,23 @@ export {
   CarouselPrevious,
   useCarousel,
 } from "./components/ui/carousel";
+export type {
+  ChartConfig,
+  ChartContainerProps,
+  ChartLegendContentProps,
+  ChartLegendProps,
+  ChartStyleProps,
+  ChartTooltipContentProps,
+  ChartTooltipProps,
+} from "./components/ui/chart";
+export {
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartStyle,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "./components/ui/chart";
 export type { CheckboxProps } from "./components/ui/checkbox";
 export { Checkbox } from "./components/ui/checkbox";
 export type {
