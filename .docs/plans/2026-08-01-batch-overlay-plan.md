@@ -23,6 +23,7 @@
 - 対話群12件のpreviewは`mode === "isolated"`のときだけ`data-sentinel="before"`と`data-sentinel="after"`のfocusable buttonを1件ずつ描画し、catalogでは両方0件にする。既存22件は変更しない。
 - Portal群はcontext-menuを除きisolatedで`defaultOpen`を使い、catalogでは閉じる。`open={true}`は禁止する。context-menuは閉じたpreviewから実際の`contextmenu`イベントで開く。
 - `aria-modal`を仮定しない。ARIA、Portal DOM、inert、focus trap、focus returnはhydration後の実DOMで実測する。
+- `inert`、`aria-hidden`、`pointer-events`は件数だけでなく付与対象と意味を記録する。背景への付与はmodal性、閉じたcomponent自身への付与はTab順から外す後片付け、overlayへの付与は遮蔽として区別する。
 - focus returnの期待値は開き方で決める。click/keyboardでtriggerを操作した場合はtriggerへ戻り、pointerだけの右クリックでは閉じたcontentへ取り残されないことを確認し、hoverではfocusが動かないことを確認する。
 - Portal群で`defaultOpen`、hydration後DOM、focus trap/inert/returnのdialog知見が通用しなければ、そのcomponentの作業を止めて都度Claudeへ報告する。
 - 各実装commit前に`npm run format`、`npm run lint`、`npm run typecheck`、Props contract単独tsc、scripts tests、`npm run build`、`npm run build:lib`、`npm run check:pre`を通す。
@@ -145,7 +146,7 @@
 
 - [ ] wrapper REDと全slot value/Props公開を完了する。
 - [ ] hydration後Portal/viewport実態を確認し、dialog知見と異なる場合は停止報告する。
-- [ ] light/darkでsentinel各1、実ARIA、keyboard navigation、Escape close、focus return、再open、viewport/indicator寸法を実測する。
+- [ ] light/darkでsentinel各1、実ARIA、keyboard navigation、Escape close、focus return、再open、viewport/indicator寸法を実測する。背景には`inert`/`aria-hidden`が付かず、Tabでcontentを抜けると全triggerが閉じ、閉じたPortal内Viewport自身だけに`inert`が付いてTab順から外れることを確認する。
 - [ ] catalogでsentinel/content/viewport 0を確認し、実装commit→証跡commit→review cleanを完了する。
 
 ### Task 12: Popover
