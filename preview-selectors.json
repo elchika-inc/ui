@@ -23,6 +23,7 @@
   "radio-group": "[data-slot=\"radio-group-preview\"]",
   "spinner": "[data-slot=\"spinner-preview\"]",
   "separator": "[data-slot=\"separator\"]",
+  "slider": "[data-slot=\"slider-preview\"]",
   "skeleton": "[data-slot=\"skeleton\"]",
   "sonner": "[data-sonner-toast]",
   "tabs": "[data-slot=\"tabs\"]",

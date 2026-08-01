@@ -545,6 +545,27 @@
       "license": "MIT",
       "modified": "semantic token と Base UI の状態属性、全 Props 型、label付きinteractive previewへ正規化する",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "slider": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/slider.json",
+      "registryPath": "registry/base-nova/ui/slider.tsx",
+      "registryContentSha256": "787685efba89a0d9e1081443fbf25b9d5ea87c25e6bb9ab699e362205731d9fb",
+      "generatedContentSha256": "d5f419f7f96a6aaf8c28251ceb58b48518379d8b61a9d7cb3f2dc9e254569290",
+      "addTarget": "@shadcn/slider",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/slider.tsx",
+      "upstreamPathSha": "4f421aba659a1f5e5bc2d36b591ac4753c0108e7",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-01",
+      "license": "MIT",
+      "modified": "semantic token と Base UI の状態属性、全 Props 型、interactive previewへ正規化する",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }

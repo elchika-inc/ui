@@ -178,6 +178,8 @@ export type { SeparatorProps } from "./components/ui/separator";
 export { Separator } from "./components/ui/separator";
 export type { SkeletonProps } from "./components/ui/skeleton";
 export { Skeleton } from "./components/ui/skeleton";
+export type { SliderProps } from "./components/ui/slider";
+export { Slider } from "./components/ui/slider";
 export type { ToasterProps } from "./components/ui/sonner";
 export { Toaster } from "./components/ui/sonner";
 export type { SpinnerProps } from "./components/ui/spinner";
