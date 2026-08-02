@@ -56,6 +56,7 @@
   "spinner": "[data-slot=\"spinner-preview\"]",
   "switch": "[data-slot=\"switch-preview\"]",
   "separator": "[data-slot=\"separator\"]",
+  "sidebar": "[data-slot=\"sidebar-preview\"]",
   "sheet": "[data-slot=\"sheet-content\"]",
   "slider": "[data-slot=\"slider-preview\"]",
   "skeleton": "[data-slot=\"skeleton\"]",

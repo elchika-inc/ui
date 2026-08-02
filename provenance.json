@@ -1259,6 +1259,27 @@
       "license": "MIT",
       "modified": "shadcn 生成物は未変更、registry:hook の独立 item として配布し hooks path の来歴を記録",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "sidebar": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/sidebar.json",
+      "registryPath": "registry/base-nova/ui/sidebar.tsx",
+      "registryContentSha256": "712427cd8f4d5b8c283ccfc34bee046718091263a33f30f67159596b6784c170",
+      "generatedContentSha256": "29e33400cfdd00cb499da3615ed2258d75192d2b2a5a5117a84d2db4242ed0bf",
+      "addTarget": "@shadcn/sidebar",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/sidebar.tsx",
+      "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-02",
+      "license": "MIT",
+      "modified": "全 PascalCase value export の Props 型公開、表示文言・コメント・accessible name とアイコンの読み上げを正規化、focus ring と値系 arbitrary utility を semantic token・CSS variable utility へ正規化、barrel export、desktop collapse・mobile sheet・keyboard shortcut・cookie side effect・focus の preview と light/dark route、hydration selector を追加",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }
