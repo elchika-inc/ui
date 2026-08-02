@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** ブランド token を light / dark、実 consumer、registry 配布、strict contrast sensor、SHA 固定の実ブラウザ証跡まで一貫して移行する。
+**Goal:** デザインシステム v1.8 を生成正本から取り込み、shadcn alias、light / dark、実 consumer、registry 配布、strict contrast sensor、SHA 固定の実ブラウザ証跡まで一貫して移行する。
 
-**Architecture:** `global.css` を token の唯一の正本とし、registry は既存同期 script で導出する。contrast は declarative consumer case と source utility coverage を分離し、gamma-encoded sRGB 合成で評価する。component 固有証跡の hard gate は維持し、shared token だけを一意な aggregate report で cover する。
+**Architecture:** `src/styles/design-system/design-tokens.html` を token 値の唯一の正本、生成 `tokens.css` を Layer 0 / 1、`global.css` を既存 shadcn 語彙への alias 層とする。v1.8 の generator が token 層と生成物同一性、consumer contrast sensor が実 class の合成結果を担当する。registry は alias CSS と生成 token を別 path で配り、component 固有証跡の hard gate は維持し、shared token だけを一意な aggregate report で cover する。
 
 **Tech Stack:** Node.js 22.12+、Astro 7、React 19、Base UI 1.6、Tailwind CSS v4、Biome 2、Node test runner、shadcn CLI 4.16、Chrome DevTools Protocol。
 
@@ -12,19 +12,22 @@
 
 - `standards` リポジトリは読み取り専用。書き込み、commit、push をしない。
 - 作業 branch は `feat/brand-tokens`。`main` へ直接 commit / push / merge しない。
-- この計画 SHA を Claude が確認するまで、Task 1 以降を実行しない。
+- この更新計画 SHA を Claude が確認するまで、Task 3 以降を実行しない。Task 1 / 2 は commit 済みで再実行しない。
 - 指示、実装、実測のいずれかが矛盾したら推測で補わず Claude へ報告し、影響範囲を止める。
 - コミットメッセージ、PR 本文、文書、コメントは日本語で書く。
 - repo 内の text file は `apply_patch` で編集する。生成 command による mechanical rewrite は許可する。
 - stage は task 所有 path を明示する。`git add -A` と `git add .` を使わない。
-- Task 4 以降は commit 前に `npm run format` と `npm run lint` を実行し、lint が exit 0 でなければ commit しない。
+- Task 3 以降は commit 前に `npm run format` と `npm run lint` を実行し、lint が exit 0 でなければ commit しない。
 - 検証 command に pipe を挟まない。出力解析が必要なら一度 file へ保存し、元 command の exit code を保持する。
 - 変動する件数を Expected に固定しない。空走 guard は「0件でないこと」のみ許可する。
 - RED の負の検査、uncommitted 差分、`test -s`、`git ls-files`、fresh install、light / dark の動的検証を省略しない。
 - 既存 evidence を編集・削除・rename しない。再検証は `.docs/reviews/brand-token-migration/` へ新規 file として追加する。
 - `verified_impl_sha` は画像を取得した実装 commit を指す。evidence commit 自身を自己参照させない。
 - review cycle は correctness / security / 明示要件の flag と optional を分離し、flag 0 または `ACCEPTED_RISKS` 明示受容まで反復する。
-- chart token は変更しない。overlay は両 theme とも `oklch(0 0 0 / 10%)` を維持する。
+- v1.8 の `--color-*` は alias 層から再定義しない。製品が上書きできるのは `--brand-*` だけとする。
+- `.dark` と `[data-theme="dark"]` は同じ theme を表す。preview の forced theme を含め、片方だけを切り替えない。
+- `brands.css` は生成・同一性検査の対象だが runtime import / registry 配布はしない。density / language variant は今回 consumer へ接続しない。
+- chart palette は v1.8 の5系列を既存 `--chart-1` から `--chart-5` へ alias して採用する。overlay は両 theme とも現行 black 10% を維持する。
 
 ---
 
@@ -34,18 +37,20 @@
 |---|---|
 | `scripts/check-evidence.mjs` | 全履歴の形式・immutability、component hard gate、shared aggregate coverage、stale 要約 |
 | `scripts/check-evidence.test.mjs` | coverage の祖先関係、uncommitted 差分、fail-closed、stale 要約の回帰 |
-| `scripts/contrast.mjs` | token parser、alias 解決、OKLCH/sRGB 変換、alpha 合成、gate 評価、CLI |
-| `scripts/contrast-cases.mjs` | consumer と source utility の declarative contract |
-| `scripts/contrast.test.mjs` | gamma 合成、parser、gate、source coverage、accepted-risk bridge の回帰 |
-| `src/styles/global.css` | light / dark token の唯一の正本 |
+| `scripts/contrast.mjs` | RGB triplet / alias / alpha parser、gamma sRGB 合成、gate 評価、CLI |
+| `scripts/contrast-cases.mjs` | consumer と TypeScript AST 由来 utility の declarative contract |
+| `scripts/contrast.test.mjs` | gamma 合成、parser fail-closed、gate、AST source coverage の回帰 |
+| `src/styles/design-system/` | v1.8 の HTML 正本、generator、生成物、設計 README、参照 Tailwind mapping |
+| `src/styles/global.css` | v1.8 を shadcn / Tailwind v4 語彙へ繋ぐ alias 層 |
 | `src/components/ui/*.tsx` | alpha 配色と overlay の consumer 正規化 |
+| `src/layouts/main.astro` / `src/previews/preview-theme.ts` | `.dark` と `data-theme` の同期 |
 | `src/previews/button.tsx` | primary / destructive の通常面と muted 最悪面の可視化 |
 | `src/previews/select.tsx` | Select placeholder と他 form control の dark background 比較 |
 | `provenance.json` | 上流との差分である consumer 正規化の記録 |
-| `.docs/risk-registry.md` | warning mitigation と chart palette 先送り |
+| `.docs/risk-registry.md` | warning mitigation と v1.8 取り込み判断 |
 | `.docs/PROJECT_GOAL.md` / `README.md` | 初期 token 同一性からブランド token の継続契約へ更新 |
-| `registry.json` / `public/r` | `global.css` と component source から生成する配布物 |
-| `package.json` / `scripts/check-all.mjs` / `.github/workflows/ci.yml` | strict contrast の常設 gate |
+| `registry.json` / `public/r` | alias CSS、生成 token、component source の配布物 |
+| `package.json` / `scripts/check-all.mjs` / `.github/workflows/ci.yml` | v1.8 build と strict consumer contrast の常設 gate |
 | `.docs/reviews/brand-token-migration/` | before / after 画像、component report、shared aggregate、fresh install 記録 |
 
 ---
@@ -287,8 +292,8 @@ git commit -m "fix: 共有証跡の鮮度判定を集約する"
 - Modify: `scripts/contrast.mjs`
 
 **Interfaces:**
-- Consumes: `src/styles/global.css`、`.docs/risk-registry.md`、`src/components/ui/*.tsx`。
-- Produces: `parseThemes(css)`、`resolveToken(themes, theme, name)`、`composite(fg, bg)`、`contrastRatio(fg, bg)`、`evaluateCase(case, themes)`、`checkContrastInRepo(root)`、`CONSUMER_CASES`。
+- Consumes: `src/styles/global.css`、将来追加する `src/styles/design-system/tokens.css`、`.docs/risk-registry.md`、`src/components/ui/*.tsx`。
+- Produces: `parseThemes(css)`、`resolveToken(themes, theme, name)`、`extractClassTokens(source, path)`、`composite(fg, bg)`、`contrastRatio(fg, bg)`、`evaluateCase(case, themes)`、`checkContrastInRepo(root)`、`CONSUMER_CASES`。
 
 - [ ] **Step 1: gamma sRGB 合成の RED test を書く**
 
@@ -308,16 +313,19 @@ linear sRGB 上で直接 alpha 合成する誤実装ではこの fixture が一�
 
 次を独立 test にする。
 
-- `:root` と `.dark` が両方必須。
+- `:root` と `.dark` または `[data-theme="dark"]` が必須。
+- `[data-theme="dark"]` を `.dark` と同じ dark override として読み、両方がある場合に同名 token の値が違えば problem。
 - `oklch(L C H / 10%)` の intrinsic alpha を読む。
+- `R G B` triplet、`rgb(var(--token))`、`rgb(var(--token) / alpha)`、alpha の multi-hop alias を読む。
 - `var(--card)` の multi-hop alias を解決する。
-- missing alias と cycle を problem にする。
+- missing alias、cycle、未知の値形式、範囲外 channel / alpha を problem にして fail-closed にする。
 - `text-aa` は 4.5 未満、`nontext-ui` は 3 未満で problem。
 - `disabled-exempt` と `decorative` は ratio を出すが AA problem にしない。
 - 全 case は空でない `reason` を必須にする。
-- source に存在する semantic slash alpha utility が case から漏れたら problem。
+- TypeScript AST が string / no-substitution template literal から取り出した semantic slash alpha utility が case から漏れたら problem。
 - case の `sourceClasses` が source から消えたら problem。
 - accepted `RISK-006` は現行 warning FAIL だけを受容し、PASS 後も accepted なら stale risk problem。
+- opening quote 直後の `bg-destructive/10` を抽出し、arbitrary variant 内の quote から class 断片を偽抽出しない。
 
 - [ ] **Step 3: test が未実装で落ちることを確認する**
 
@@ -334,7 +342,7 @@ Expected: module / export が存在しない理由で FAIL。
 { rgb: [number, number, number], alpha: number }
 ```
 
-class slash alpha は token intrinsic alpha と乗算する。foreground alpha は最終 background 上へ、background alpha は underlay 上へ合成する。
+class slash alpha は token intrinsic alpha と乗算する。foreground alpha は最終 background 上へ、background alpha は underlay 上へ合成する。Task 4 後は `tokens.css` の生成 token を先、`global.css` の alias を後に selector 単位で merge する。解析対象として参照された値を読めなければ case を省略せず problem にする。
 
 - [ ] **Step 5: consumer case を gate と根拠つきで列挙する**
 
@@ -367,13 +375,9 @@ class slash alpha は token intrinsic alpha と乗算する。foreground alpha �
 
 - [ ] **Step 6: source alpha coverage を実装する**
 
-scanner は次の utility family を対象にする。
+TypeScript compiler API で TSX を parse し、string literal と no-substitution template literal の値だけを取り出して whitespace split する。各 class token の最終 utility segment が `bg|text|border|ring|stroke|fill` の semantic slash alpha なら採用する。raw source regex は使わない。
 
-```js
-const ALPHA_UTILITY = /(?:^|\s)((?:[^\s"']+:)*(?:bg|text|border|ring|stroke|fill)-[a-z][a-z0-9-]*\/[0-9]+)(?=\s|["'])/g;
-```
-
-`src/components/ui/*.tsx` の unique `path + exact utility` と case の `source + sourceClasses` を双方向比較する。`bg-black/10` は semantic 違反として Task 5 で消すまで explicit legacy case に入れ、移行後は legacy case を削除する。
+`src/components/ui/*.tsx` の unique `path + exact utility` と case の `source + sourceClasses` を双方向比較する。`bg-black/10` は semantic 違反として Task 5 で消すまで explicit legacy case に入れ、移行後は legacy case を削除する。手順書に「CSS class coverage は raw source regex でなく AST + whitespace split を既定とする」と1行残す。
 
 - [ ] **Step 7: 現行 repository で sensor が欠陥を検出することを確認する**
 
@@ -399,306 +403,192 @@ git commit -m "test: 実利用配色のコントラスト検査を追加する"
 
 ---
 
-### Task 4: ブランド token と risk registry を更新する
+### Task 4: デザインシステム v1.8 と alias 層を取り込む
 
 **Files:**
+- Create from approved source: `src/styles/design-system/{README.md,design-tokens.html,build-tokens.mjs,tokens.css,brands.css,tailwind.config.js}`
+- Create: `scripts/design-tokens.test.mjs`
+- Modify: `src/styles/design-system/build-tokens.mjs`
 - Modify: `src/styles/global.css`
+- Modify: `src/layouts/main.astro`
+- Modify: `src/previews/preview-theme.ts`
+- Modify: `scripts/preview-theme.test.mjs`
+- Modify: `scripts/check-evidence.mjs`, `scripts/check-evidence.test.mjs`
 - Modify: `.docs/risk-registry.md`
 - Modify: `.docs/PROJECT_GOAL.md`
 - Modify: `README.md`
-- Modify generated: `registry.json`
 
 **Interfaces:**
-- Consumes: Task 3 の parser / cases。Task 5 の consumer が参照する token 名。
-- Produces: `--primary-hover`、`--destructive-subtle-foreground`、確定 light / dark token、sidebar alias、mitigated RISK-006、accepted RISK-013。
+- Consumes: Claude が修正した v1.8 source 一式、Task 3 parser / cases。
+- Produces: HTML 正本、disk 生成物同一性 gate、`--color-*` を再定義しない shadcn alias、同期した `.dark` / `data-theme`、mitigated RISK-006、v1.8 chart alias。
 
-- [ ] **Step 1: `@theme inline` に新 token mapping を追加する**
+- [ ] **Step 1: 承認済み v1.8 source を byte 一致で取り込む**
 
-```css
---color-primary-hover: var(--primary-hover);
---color-destructive-subtle-foreground: var(--destructive-subtle-foreground);
-```
+scratchpad の `dt/` から `.bak` を除く6 file を `src/styles/design-system/` へ mechanical copy する。copy 前後の SHA-256 を比較し、すべて一致しなければ停止する。`brands.css` は generator の完全性を保つため保存するが、runtime import と registry 配布はしない。
 
-- [ ] **Step 2: `:root` の color token を exact block へ置換する**
+- [ ] **Step 2: stale 生成物を拒否できない RED test を書く**
 
-font、radius、layout token、media query は変更しない。chart は現行値を維持する。
+temp directory へ6 file を copy し、`tokens.css` だけへ古い内容を追加して `node build-tokens.mjs --check` を実行する test を追加する。Expected は non-zero と生成物不一致 message。未修正 script が exit 0 を返すため test 自体が FAIL することを確認する。
 
-```css
---background: oklch(0.9734 0.0013 286.38);
---foreground: oklch(0.2265 0.0102 268.23);
---overlay: oklch(0 0 0 / 10%);
---card: oklch(1 0 0);
---card-foreground: oklch(0.2265 0.0102 268.23);
---popover: oklch(1 0 0);
---popover-foreground: oklch(0.2265 0.0102 268.23);
---primary: oklch(0.5204 0.1841 263.88);
---primary-hover: oklch(0.3834 0.1448 265.84);
---primary-foreground: oklch(1 0 0);
---secondary: oklch(0.9489 0.0029 264.54);
---secondary-foreground: oklch(0.2265 0.0102 268.23);
---muted: oklch(0.9489 0.0029 264.54);
---muted-foreground: oklch(0.5131 0.0135 264.45);
---accent: oklch(0.9368 0.0242 267.93);
---accent-foreground: oklch(0.3834 0.1448 265.84);
---destructive: oklch(0.5650 0.1774 22.67);
---destructive-foreground: oklch(1 0 0);
---destructive-subtle-foreground: oklch(0.4621 0.1633 24.39);
---success: oklch(0.5481 0.1131 162.54);
---success-foreground: oklch(1 0 0);
---warning: oklch(0.8340 0.1584 88.96);
---warning-foreground: oklch(0.2265 0.0102 268.23);
---border: oklch(0.9060 0.0046 258.33);
---input: oklch(0.8381 0.0077 260.73);
---ring: oklch(0.5204 0.1841 263.88);
-```
+- [ ] **Step 3: generator の `--check` を exact artifact comparison にする**
 
-- [ ] **Step 3: `.dark` の color token を exact block へ置換する**
-
-```css
---background: oklch(0.2047 0.0104 268.17);
---foreground: oklch(0.9734 0.0013 286.38);
---overlay: oklch(0 0 0 / 10%);
---card: oklch(0.2393 0.0142 266.97);
---card-foreground: oklch(0.9734 0.0013 286.38);
---popover: oklch(0.2393 0.0142 266.97);
---popover-foreground: oklch(0.9734 0.0013 286.38);
---primary: oklch(0.6775 0.1440 266.26);
---primary-hover: oklch(0.7513 0.1107 267.16);
---primary-foreground: oklch(0.2047 0.0104 268.17);
---secondary: oklch(0.2849 0.0175 266.34);
---secondary-foreground: oklch(0.9734 0.0013 286.38);
---muted: oklch(0.2849 0.0175 266.34);
---muted-foreground: oklch(0.7047 0.0188 264.45);
---accent: oklch(0.2849 0.0175 266.34);
---accent-foreground: oklch(0.7513 0.1107 267.16);
---destructive: oklch(0.7081 0.1528 19.78);
---destructive-foreground: oklch(0.2047 0.0104 268.17);
---destructive-subtle-foreground: oklch(0.8218 0.1004 16.40);
---success: oklch(0.7212 0.1420 162.45);
---success-foreground: oklch(0.2047 0.0104 268.17);
---warning: oklch(0.8687 0.1321 90.37);
---warning-foreground: oklch(0.2047 0.0104 268.17);
---border: oklch(0.3597 0.0202 266.00);
---input: oklch(0.4312 0.0244 267.00);
---ring: oklch(0.6775 0.1440 266.26);
-```
-
-- [ ] **Step 4: sidebar を両 theme で alias 化する**
-
-```css
---sidebar: var(--card);
---sidebar-foreground: var(--card-foreground);
---sidebar-primary: var(--primary);
---sidebar-primary-foreground: var(--primary-foreground);
---sidebar-accent: var(--muted);
---sidebar-accent-foreground: var(--secondary-foreground);
---sidebar-border: var(--border);
---sidebar-ring: var(--ring);
-```
-
-- [ ] **Step 5: RISK-006 を mitigated にし RISK-013 を追加する**
-
-RISK-006 は status を `mitigated` にし、reason に warning foreground のブランド token 置換で 4.5:1 以上へ是正したこと、anchor に `scripts/contrast.mjs` の strict case と本計画を記録する。
-
-追加 entry は次の内容を使う。
-
-```markdown
-## RISK-013: chart palette を旧無彩色のまま維持する
-- date: 2026-08-02
-- confidence: high
-- location: `src/styles/global.css` の `--chart-1` から `--chart-5`
-- status: accepted
-- reason: ブランド2色から5色を機械導出すると、系列間の識別性と色覚多様性を検証できない。今回の token 移行では現行無彩色を保持し、chart palette を独立した設計作業へ送る。
-- anchor: `scripts/contrast.mjs` が text / UI token の実 consumer を検査し、`.docs/reviews/brand-token-migration/report.md` が Chart の light / dark 表示を現行 palette のまま記録する。palette 設計時は本 entry を mitigated に変更する。
-```
-
-- [ ] **Step 6: PROJECT_GOAL と README の token 契約を更新する**
-
-`.docs/PROJECT_GOAL.md` の DoneCriteria 3 を次へ置換する。
-
-```markdown
-3. `src/styles/global.css` が standards 準拠の semantic token 構造と elchika ブランド値の正本であり、和文フォールバック・`--success`・`prefers-reduced-motion` を含む。実 consumer の text / non-text contrast は `scripts/contrast.mjs` で検査され、registry へ同じ token が配布される。
-```
-
-README の Features は次へ置換する。
-
-```markdown
-- standards 準拠の semantic token 構造と elchika ブランド値を同梱（light / dark 対応）
-```
-
-Architecture の `src/styles/` コメントも次へ更新する。
-
-```text
-styles/          # standards 準拠の semantic token と elchika ブランド値
-```
-
-- [ ] **Step 7: registry token を正本から同期する**
-
-Run: `npm run registry:tokens`
-
-Expected: exit 0。出力件数を Expected に転記しない。
-
-- [ ] **Step 8: parser、risk bridge、format、lint を確認する**
-
-Run:
+`--check` 時はメモリ上の `tokensCss` / `brandsCss` と disk の `tokens.css` / `brands.css` を byte 比較し、欠落または不一致を problem にする。通常 build は従来どおり両 file を生成してから同じ検査を通す。次を確認する。
 
 ```bash
-node --test scripts/contrast.test.mjs
+node --test scripts/design-tokens.test.mjs
+node src/styles/design-system/build-tokens.mjs --check
+```
+
+Expected: test と実 source の check が exit 0。temp 上で生成物を壊す負の検査は non-zero、通常 build 後は再び exit 0。
+
+- [ ] **Step 4: v1.8 を layer 付き import し Tailwind v4 alias を定義する**
+
+`global.css` の先頭、Tailwind import より前へ次を追加する。`design-system` layer を最初に確立して Tailwind の `theme / base / components / utilities` より低優先度にし、v1.8 の変数は使いつつ、今回 scope 外の body / focus base rule が既存 component contract を上書きしないようにする。
+
+```css
+@import "./design-system/tokens.css" layer(design-system);
+```
+
+`@theme inline` へ `primary-hover`、`destructive-subtle`、`destructive-subtle-foreground`、`state-hover`、`state-press`、`state-selected` を追加する。既存 shadcn token は両 theme で値を copy せず次へ alias する。
+
+| shadcn alias | v1.8 source |
+|---|---|
+| background | `rgb(var(--color-bg-canvas))` |
+| foreground / card-foreground / popover-foreground | `rgb(var(--color-text-primary))` |
+| card / popover | `rgb(var(--color-bg-surface))` |
+| primary | `rgb(var(--color-brand-primary))` |
+| primary-hover | `rgb(var(--color-brand-primary-hover))` |
+| primary-foreground | `rgb(var(--color-bg-surface))` |
+| secondary / muted | `rgb(var(--color-bg-surface-raised))` |
+| secondary-foreground | `rgb(var(--color-text-primary))` |
+| muted-foreground | `rgb(var(--color-text-muted))` |
+| accent | `rgb(var(--color-brand-subtle))` |
+| accent-foreground | `rgb(var(--color-brand-primary-hover))` |
+| destructive / destructive-foreground | `rgb(var(--color-status-danger))` / `rgb(var(--color-bg-surface))` |
+| destructive-subtle / destructive-subtle-foreground | `rgb(var(--color-status-danger-bg))` / `rgb(var(--color-status-danger-text))` |
+| success / success-foreground | `rgb(var(--color-status-success-bg))` / `rgb(var(--color-status-success-text))` |
+| warning / warning-foreground | `rgb(var(--color-status-warning-bg))` / `rgb(var(--color-status-warning-text))` |
+| border / input / ring | `rgb(var(--color-border-default))` / `rgb(var(--color-border-control))` / `rgb(var(--color-brand-primary))` |
+| chart-1..5 | `rgb(var(--chart-series-1..5))` |
+| sidebar family | card / foreground / primary / muted / border / ring alias |
+| overlay | 現行 `oklch(0 0 0 / 10%)` |
+
+`:root` と `.dark` は同じ alias 式を持ち、違いは v1.8 側の `[data-theme="dark"]` が解決する値と `color-scheme` だけにする。`--color-*` を `global.css` で定義しない。
+
+- [ ] **Step 5: `.dark` と `data-theme` を同期する RED→GREEN test を追加する**
+
+`main.astro` は light で `data-theme="light"`、dark で `class="dark" data-theme="dark"` を出す。`watchPreviewTheme` は class と data attribute の両方を監視し、不一致を callback の成功値として扱わず例外へ surface する。`preview-theme.test.mjs` に light / dark 一致、class のみ、data-theme のみ、未知値の test を追加し、先に RED を確認してから実装する。
+
+ブラウザから forced theme を切り替える手順は、必ず class と data attribute を同じ `evaluate` 内で更新する。片方だけの更新は禁止する。
+
+- [ ] **Step 5b: shared evidence coverage を生成 token まで拡張する**
+
+`SHARED_TOKEN_PATH` を `SHARED_TOKEN_PATHS = ["src/styles/global.css", "src/styles/design-system/tokens.css"]` へ拡張する。どちらか一方の committed / staged / unstaged 変更で aggregate coverage を失い、有効な最新 aggregate は両方の historical stale を cover する RED test を先に追加する。HTML 正本と生成 CSS の同一性は token build gate が担当し、visual stale は runtime に届く2 CSS file を対象にする。
+
+- [ ] **Step 6: RISK-006 と文書契約を v1.8 へ更新する**
+
+RISK-006 は `mitigated` とし、`--warning` / `--warning-foreground` が v1.8 の検査済み warning bg / text pair を alias すること、token build と consumer sensor の二重 anchor を記録する。chart defer の RISK-013 は追加せず、5系列を v1.8 から採用した判断を report に残す。
+
+PROJECT_GOAL DoneCriteria 3、README Features / Architecture は、HTML 正本 → generated Layer 0 / 1 → shadcn alias → registry の契約、token build と consumer contrast の分担へ更新する。
+
+- [ ] **Step 7: token 層と consumer RED を確認する**
+
+```bash
+node --test scripts/design-tokens.test.mjs scripts/preview-theme.test.mjs scripts/contrast.test.mjs
+node src/styles/design-system/build-tokens.mjs --check
 node scripts/contrast.mjs
 npm run format
 npm run lint
 ```
 
-Expected: unit test、format、lint は exit 0。CLI は consumer source が未修正なので primary hover、Tabs、destructive の既知 FAIL だけで exit 1。warning は PASS し、RISK-006 stale accepted problem は出ない。
+Expected: tests、token check、format、lint は exit 0。consumer CLI は Task 5 前なので primary hover、Tabs、destructive alpha、legacy state alpha の既知 FAIL だけで exit 1。warning は PASS し、RISK-006 stale accepted problem は出ない。未知 FAIL があれば停止して報告する。
 
-- [ ] **Step 9: token commit を consumer commit と分ける**
+- [ ] **Step 8: token commit を consumer commit と分ける**
 
-```bash
-git add src/styles/global.css .docs/risk-registry.md .docs/PROJECT_GOAL.md README.md registry.json
-git commit -m "feat: ブランドトークンを導入する"
-```
-
-この commit を `GLOBAL_TOKEN_SHA` とする。Task 6 の最終実装 SHA はこの strict descendant でなければならない。
+対象 path を明示 stage して `feat: デザインシステム v1.8 を導入する` で commit する。この commit を `GLOBAL_TOKEN_SHA` とし、Task 6 の最終実装 SHA は strict descendant とする。`registry.json` は配布 file 構造を更新する Task 5 まで変更しない。
 
 ---
 
-### Task 5: consumer、preview、provenance を正規化する
+### Task 5: consumer、registry、provenance を v1.8 state contract へ正規化する
 
 **Files:**
-- Modify: `src/components/ui/attachment.tsx`
-- Modify: `src/components/ui/alert.tsx`
-- Modify: `src/components/ui/badge.tsx`
-- Modify: `src/components/ui/button.tsx`
-- Modify: `src/components/ui/bubble.tsx`
-- Modify: `src/components/ui/dialog.tsx`
-- Modify: `src/components/ui/drawer.tsx`
-- Modify: `src/components/ui/menubar.tsx`
-- Modify: `src/components/ui/select.tsx`
-- Modify: `src/components/ui/tabs.tsx`
-- Modify: `src/previews/button.tsx`
-- Modify: `src/previews/select.tsx`
+- Modify: semantic alpha / theme class を持つ `src/components/ui/*.tsx`
+- Modify: `src/styles/global.css`
+- Modify: `src/previews/button.tsx`, `src/previews/select.tsx`
 - Modify: `scripts/contrast-cases.mjs`
+- Modify: `scripts/add-component.mjs`, `scripts/add-component.test.mjs`
+- Modify: `scripts/check-distribution.mjs`, `scripts/check-distribution.test.mjs`
 - Modify: `provenance.json`
 - Modify generated: `registry.json`, `public/r/*.json`
 
 **Interfaces:**
-- Consumes: Task 4 の `primary-hover`、`destructive-subtle-foreground`、opaque input。
-- Produces: contrast CLI が exit 0 になる actual consumer contract と最新 registry source。
+- Consumes: Task 4 の primary hover、status subtle pair、state tint / selected surface、opaque control surface、generated design-system token。
+- Produces: contrast CLI が exit 0 になる consumer contract と、alias CSS + generated token が必ず届く registry。
 
-- [ ] **Step 1: exact class 置換を適用する**
+- [ ] **Step 1: A〜E を v1.8 前提で確定する**
 
-| file | before | after |
-|---|---|---|
-| `button.tsx` | `hover:bg-primary/80` | `hover:bg-primary-hover` |
-| `badge.tsx` | `[a]:hover:bg-primary/80` | `[a]:hover:bg-primary-hover` |
-| `bubble.tsx` default | `hover:bg-primary/80` | `hover:bg-primary-hover` |
-| `button.tsx` destructive | `text-destructive` | `text-destructive-subtle-foreground` |
-| `badge.tsx` destructive | `text-destructive` | `text-destructive-subtle-foreground` |
-| `bubble.tsx` destructive | `text-destructive` | `text-destructive-subtle-foreground` |
-| `attachment.tsx` error preview | `text-destructive` | `text-destructive-subtle-foreground` |
-| `attachment.tsx` error description | `text-destructive/80` | `text-destructive-subtle-foreground` |
-| `alert.tsx` description | `text-destructive/90` | `text-destructive-subtle-foreground` |
-| `menubar.tsx` destructive text / focus / icon | `text-destructive` | `text-destructive-subtle-foreground` |
-| `tabs.tsx` inactive | `text-foreground/60 ... dark:text-muted-foreground` | `text-muted-foreground`。dark duplicate を削除 |
-| `select.tsx` trigger | `dark:bg-input` | `dark:bg-input/30` |
-| `dialog.tsx` overlay | `bg-black/10` | `bg-overlay` |
-| `drawer.tsx` overlay | `bg-black/10` | `bg-overlay` |
-
-destructive の background `/10`、`/20`、`/30` は変更しない。ContextMenu / DropdownMenu の solid destructive pair は変更しない。
-
-- [ ] **Step 2: Button preview に muted 最悪面を追加する**
-
-既存 variant 群を維持し、次を追加する。
-
-```tsx
-<div className="flex flex-wrap items-center gap-3 rounded-lg bg-muted p-3">
-  <Button>muted 上の保存</Button>
-  <Button variant="destructive">muted 上の削除</Button>
-</div>
-```
-
-- [ ] **Step 3: Select preview に form control comparison を追加する**
-
-`Input` を import し、既存 defaultOpen Select を維持したまま次を追加する。
-
-```tsx
-<div data-slot="select-input-comparison" className="grid max-w-sm gap-2">
-  <Input aria-label="比較用入力" placeholder="入力してください" />
-  <Select>
-    <SelectTrigger aria-label="比較用選択">
-      <SelectValue placeholder="選択してください" />
-    </SelectTrigger>
-    <SelectContent>
-      <SelectItem value="standard">Standard（標準）</SelectItem>
-    </SelectContent>
-  </Select>
-</div>
-```
-
-catalog mode では追加 Select も閉じたままにする。
-
-- [ ] **Step 4: provenance.modified を実差分へ更新する**
-
-既存 wording を削除せず、対象 entry の `modified` に次を反映する。
-
-| component | 追加する実差分 |
+| 旧裁定 | v1.8 での裁定 |
 |---|---|
-| attachment | destructive subtle foreground への正規化 |
-| alert | destructive description の opaque subtle foreground 化 |
-| badge | opaque primary hover と destructive subtle foreground |
-| button | opaque primary hover と destructive subtle foreground |
-| bubble | opaque primary hover と destructive subtle foreground |
-| dialog | hardcoded black overlay の semantic token 化 |
-| drawer | hardcoded black overlay の semantic token 化 |
-| menubar | destructive subtle foreground |
-| select | dark input surface を他 form control と `/30` へ統一 |
-| tabs | inactive foreground alpha を opaque muted foreground へ変更 |
+| A destructive subtle foreground 新設 | v1.8 の `status-danger-bg` / `status-danger-text` を `destructive-subtle` pair へ alias し、独自色は作らない |
+| B primary `/80` hover | solid primary は `primary-hover`、secondary / subtle surface の hover は state tint にする |
+| C muted foreground 調整 | v1.8 の検査済み `color-text-muted` をそのまま alias する |
+| D Tabs light alpha | light / dark とも opaque `text-muted-foreground` にする |
+| E passing pattern 維持 | 装飾 alpha だけを維持し、状態を表す alpha は `state-*`、control surface は card / muted へ正規化する |
 
-`sourceUrl`、upstream SHA、取得日、hash は変更しない。
+solid / subtle surface を保ったまま tint を重ねる箇所は、`background-image: linear-gradient(var(--state-hover-bg), var(--state-hover-bg))` の共通 `state-hover-overlay` utility を `global.css` に1つ定義する。component 別 hover token は作らない。focus ring と競合する `box-shadow` overlay は使わない。
 
-- [ ] **Step 5: contrast case の source contract を after class へ更新する**
+- [ ] **Step 2: semantic state alpha を exact class へ置換する**
 
-Task 3 の legacy `bg-black/10` case を削除し、Dialog / Drawer を `bg-overlay` case へ含める。primary hover、destructive subtle、Tabs、Select の `sourceClasses` を Step 1 の after 値へ変更する。
+- Button / Badge / Bubble の solid primary hover: `bg-primary/80` → `bg-primary-hover`。
+- Button / Badge / Bubble / Attachment / Alert / Menubar の destructive: alpha background / text を `bg-destructive-subtle`、`text-destructive-subtle-foreground`、必要な hover は `state-hover-overlay` へ置換する。
+- Bubble / Field の selected primary alpha: `bg-state-selected` と opaque foreground / border へ置換する。
+- muted `/50` を hover / open / active state として使う class: `bg-state-hover` または base surface + `state-hover-overlay` へ置換する。
+- Input / Textarea / NativeSelect / Select / InputGroup / Combobox / Command の control surface: light / dark とも `bg-card border-input`。disabled は `bg-muted opacity-disabled`、invalid border は alpha を外して `border-destructive`。
+- secondary `/80` hover: base secondary を保ち `state-hover-overlay` を使う。
+- Tabs inactive と Sidebar `/70`: opaque muted / sidebar foreground へ置換する。
+- Dialog / Drawer の `bg-black/10`: `bg-overlay` へ置換する。
+- ContextMenu / DropdownMenu の solid destructive、Kbd の tooltip 内 alpha、decorative ring / chart stroke / seam は維持し、Task 3 case に reason を残す。
 
-- [ ] **Step 6: strict contrast が GREEN になることを確認する**
+置換後に AST scanner が返す全 `path + exact utility` を出力し、case 側との双方向差分が空であることを確認する。対象外 component を見た目目的で変更しない。
 
-Run:
+- [ ] **Step 3: Button / Select preview を拡張する**
 
-```bash
-node --test scripts/contrast.test.mjs
-node scripts/contrast.mjs
+Button は muted 最悪面へ primary / destructive を追加する。Select は Input comparison を追加し、両方が `bg-card border-input` へ解決されることを観測できるようにする。catalog mode では追加 Select を閉じたままにする。
+
+- [ ] **Step 4: provenance.modified を全実差分へ更新する**
+
+変更した component entry だけへ state token 正規化の実差分を追記する。`sourceUrl`、upstream SHA、取得日、hash は変更しない。実際に変更していない component へ記載を足さない。
+
+- [ ] **Step 5: registry の2層 token 配布を RED→GREEN にする**
+
+先に test を追加し、全 registry item が次の両 file を持たない現状で RED を確認する。
+
+```text
+src/styles/global.css -> ~/elchika-ui/tokens.css
+src/styles/design-system/tokens.css -> ~/elchika-ui/design-system/tokens.css
 ```
 
-Expected: 両方 exit 0。CLI の全 `text-aa` / `nontext-ui` case は PASS、disabled / decorative は gate 名と reason を表示する。FAIL または未分類 utility があれば先へ進まない。
+`add-component.mjs` の shared files、既存 `registry.json` の全 item、`check-distribution.mjs` の REQUIRED を更新する。distribution checker は design-system token の存在、`registry:file`、non-empty、原本 byte 一致を法務 file と同じ fail-closed で検査する。出力へ変動件数を書かない。
 
-- [ ] **Step 7: registry 配布物を再生成する**
-
-Run:
+- [ ] **Step 6: contrast と distribution を GREEN にする**
 
 ```bash
+node --test scripts/contrast.test.mjs scripts/add-component.test.mjs scripts/check-distribution.test.mjs
+node scripts/contrast.mjs
 npm run registry:build
 npm run registry:legal
 node scripts/check-distribution.mjs
 ```
 
-Expected: すべて exit 0。`public/r/button.json` に `bg-primary-hover` と `text-destructive-subtle-foreground`、`public/r/select.json` に `dark:bg-input/30`、両 item の token file に新 token が含まれる。
+Expected: 全 command exit 0。CLI の全 `text-aa` / `nontext-ui` case は PASS、disabled / decorative は gate 名と non-empty reason を表示する。`public/r/button.json` は alias CSS と design-system token の両方、primary hover と destructive subtle pair を含む。`public/r/select.json` は opaque control surface を含む。FAIL、未分類 utility、配布 token 欠落があれば先へ進まない。
 
-- [ ] **Step 8: format / lint / source diff を確認して commit する**
+- [ ] **Step 7: format / lint / source diff を確認して commit する**
 
-```bash
-npm run format
-npm run lint
-git diff --check
-git add src/components/ui/attachment.tsx src/components/ui/alert.tsx src/components/ui/badge.tsx src/components/ui/button.tsx src/components/ui/bubble.tsx src/components/ui/dialog.tsx src/components/ui/drawer.tsx src/components/ui/menubar.tsx src/components/ui/select.tsx src/components/ui/tabs.tsx src/previews/button.tsx src/previews/select.tsx scripts/contrast-cases.mjs provenance.json registry.json
-git add public/r/*.json public/r/LICENSE public/r/THIRD_PARTY_LICENSES
-git commit -m "fix: alpha 配色の実利用契約を是正する"
-```
-
-Expected: commit SHA は `GLOBAL_TOKEN_SHA` の strict descendant。
+`npm run format`、`npm run lint`、`git diff --check` を通し、実差分 path と生成 `public/r` を明示 stage して `fix: 配色の実利用契約を v1.8 へ揃える` で commit する。commit SHA は `GLOBAL_TOKEN_SHA` の strict descendant とする。
 
 ---
 
-### Task 6: strict contrast を local / CI の permanent gate にする
+### Task 6: token build と strict contrast を local / CI の permanent gate にする
 
 **Files:**
 - Modify: `package.json`
@@ -707,8 +597,8 @@ Expected: commit SHA は `GLOBAL_TOKEN_SHA` の strict descendant。
 - Modify: `.github/workflows/ci.yml`
 
 **Interfaces:**
-- Consumes: Task 5 で GREEN になった `node scripts/contrast.mjs`。
-- Produces: `npm run check:contrast`、`check:pre` / `check:all` / CI の named Token contrast step。
+- Consumes: Task 4 の exact artifact check と Task 5 で GREEN になった consumer contrast。
+- Produces: `npm run check:design-tokens`、`npm run check:contrast`、`check:pre` / `check:all` / CI の独立 named steps。
 
 - [ ] **Step 1: check-all の RED test を更新する**
 
@@ -717,6 +607,7 @@ Expected: commit SHA は `GLOBAL_TOKEN_SHA` の strict descendant。
 ```js
 [
   "check-standards.mjs",
+  "build-tokens.mjs",
   "contrast.mjs",
   "check-completeness.mjs",
   "check-distribution.mjs",
@@ -731,19 +622,25 @@ pre-flight は `evidence` だけを除き、contrast を実行する。CLI argv 
 
 Run: `node --test scripts/check-all.test.mjs`
 
-Expected: `contrast.mjs` が未登録の理由で FAIL。
+Expected: design token check と `contrast.mjs` が未登録の理由で FAIL。
 
 - [ ] **Step 3: package と check-all を実装する**
 
 `package.json`:
 
 ```json
+"check:design-tokens": "node src/styles/design-system/build-tokens.mjs --check",
 "check:contrast": "node scripts/contrast.mjs"
 ```
 
-`scripts/check-all.mjs` の standards 直後へ追加する。
+`scripts/check-all.mjs` の standards 直後へ token build、その直後へ contrast を追加する。
 
 ```js
+{
+  name: "design tokens",
+  command: process.execPath,
+  args: ["src/styles/design-system/build-tokens.mjs", "--check"],
+},
 { name: "contrast", command: process.execPath, args: ["scripts/contrast.mjs"] }
 ```
 
@@ -752,6 +649,8 @@ Expected: `contrast.mjs` が未登録の理由で FAIL。
 Unit tests の後、Standards check の前に置く。
 
 ```yaml
+- name: Design token build
+  run: npm run check:design-tokens
 - name: Token contrast
   run: npm run check:contrast
 ```
@@ -762,11 +661,12 @@ Run:
 
 ```bash
 node --test scripts/check-all.test.mjs
+npm run check:design-tokens
 npm run check:contrast
 npm run check:pre
 ```
 
-Expected: 全て exit 0。test の mock runner は contrast が失敗した場合に後続を実行せず throw する assertion を持つ。
+Expected: 全て exit 0。test の mock runner は token build または contrast が失敗した場合に後続を実行せず throw する assertion を持つ。temp copy の `tokens.css` を古くした負の検査では design token check が non-zero になる。
 
 - [ ] **Step 6: format / lint 後に commit する**
 
@@ -800,6 +700,7 @@ npm run format
 npm run lint
 npm run typecheck
 node --test "scripts/*.test.mjs"
+npm run check:design-tokens
 npm run check:pre
 npm run build
 npm run check:props
@@ -811,9 +712,9 @@ Expected: 全 command exit 0。test 出力に tests が1以上あり fail 0。
 
 review scope:
 
-- correctness: parser、alias、alpha 合成、case coverage、ancestor 判定、source class replacement、registry sync
+- correctness: generator artifact identity、RGB / alias parser、alpha 合成、AST class coverage、theme selector 同期、ancestor 判定、source class replacement、2層 registry sync
 - security: path traversal、symlink、Git pathspec、CLI injection、temp probe cleanup
-- requirements: A〜E、Select、4 gate、overlay、chart defer、evidence immutability、fresh install
+- requirements: v1.8 Invariants、A〜E、Select、4 gate、overlay、chart 5系列採用、brands 非配布、evidence immutability、fresh install
 
 flag は correctness / security / 明示要件へ影響し確信度80%以上だけとし、optional を終了条件に数えない。
 
@@ -854,12 +755,13 @@ Expected: ancestor check exit 0、SHA は異なる。
 ### Task 8: component 固有 evidence と shared aggregate を追加する
 
 **Files:**
-- Create: `.docs/reviews/brand-token-migration/2026-08-02-{attachment,alert,badge,button,bubble,dialog,drawer,menubar,select,tabs}-preview.md`
-- Create: 対応する `*-light.jpg` / `*-dark.jpg`
+- Create: `GLOBAL_TOKEN_SHA..VERIFIED_IMPL_SHA` で変更された全 component の `.docs/reviews/brand-token-migration/2026-08-02-<name>-preview.md`
+- Create: 変更された全 component に対応する `*-light.jpg` / `*-dark.jpg`
 - Create: `.docs/reviews/brand-token-migration/catalog-light.jpg`
 - Create: `.docs/reviews/brand-token-migration/catalog-dark.jpg`
 - Create: `.docs/reviews/brand-token-migration/alert-dialog-{light,dark}.jpg`
 - Create: `.docs/reviews/brand-token-migration/sheet-{light,dark}.jpg`
+- Create: `.docs/reviews/brand-token-migration/chart-{light,dark}.jpg`
 - Create: `.docs/reviews/brand-token-migration/disabled-controls-{light,dark}.jpg`
 - Create: `.docs/reviews/brand-token-migration/report.md`
 
@@ -890,21 +792,23 @@ Expected: 指定 port で preview が起動する。fallback したら停止す�
 
 次の route を light / dark で開く。
 
-- attachment、alert、badge、button、bubble、dialog、drawer、menubar、select、tabs
+- `git diff --name-only "$GLOBAL_TOKEN_SHA".."$VERIFIED_IMPL_SHA" -- src/components/ui` から導出した全 changed component route。0件なら空走として停止する。
 - alert-dialog、sheet
 - input、textarea、native-select、input-group
+- chart
 - catalog
 
-各 component で DOM、computed color / background、hover / focus / open state、console error、horizontal overflow を確認する。interactive state は実 pointer / keyboard event で作る。
+各 component で DOM、computed color / background、hover / focus / open state、console error、horizontal overflow を確認する。interactive state は実 pointer / keyboard event で作る。forced theme は同じ evaluate 内で `.dark` と `data-theme="dark"` を同時に切り替え、各 route で両者が一致することを assert する。
 
 - [ ] **Step 3: exact visual contract を確認する**
 
-- Button / Badge / Bubble: primary hover が opaque `primary-hover`、destructive default / hover が subtle foreground で 4.5:1 以上。
+- Button / Badge / Bubble: primary hover が opaque `primary-hover`、destructive default / hover が v1.8 subtle pair + state tint で 4.5:1 以上。
 - Attachment / Alert / Menubar: destructive text が alpha なしの subtle foreground。
 - Tabs: inactive light / dark が opaque muted foreground、active は foreground。
-- Select comparison: dark placeholder Select と Input の computed background が一致する。before report の solid Selectとの差を記録する。
+- Select comparison: light / dark の placeholder Select と Input が同じ opaque surface / control border へ解決される。before report の solid Select / alpha Input との差を記録する。
 - disabled controls: disabled state が描画され、AA exempt だが文字消失、背景欠落、cursor / disabled semantics の回帰がない。
 - AlertDialog / Dialog / Drawer / Sheet: overlay の computed color が black 10%、backdrop blur が有効、open content の focus / close が既存契約を維持する。
+- Chart: `--chart-1` から `--chart-5` が v1.8 `--chart-series-*` へ解決され、light / dark で5系列と dash pattern が識別できる。
 - catalog: light / dark で全 preview、console error なし、horizontal overflow なし。
 
 - [ ] **Step 4: JPEG を新規保存する**
@@ -931,7 +835,7 @@ evidence_scope: shared-token-migration
 targeted_dynamic_sha: VERIFIED_IMPL_SHAの40桁実値
 ```
 
-本文に text-aa / nontext-ui / disabled-exempt / decorative の case 別結果、sidebar-border の DESIGN.md §8 根拠、chart palette defer、before / after Select、registry build、全 targeted route を記録する。
+本文に token build の Run 行すべて、text-aa / nontext-ui / disabled-exempt / decorative の case 別結果、sidebar-border の DESIGN.md §8 根拠、chart 5系列採用、theme 属性同期、before / after Select、registry build、全 targeted route を記録する。
 
 - [ ] **Step 7: evidence の magic / coverage / component hard gate を確認する**
 
@@ -940,10 +844,10 @@ Run:
 ```bash
 node scripts/check-evidence.mjs
 npm run check:all
-git diff --quiet "$VERIFIED_IMPL_SHA" -- src/components/ui src/previews src/styles
+git diff --quiet "$VERIFIED_IMPL_SHA" -- src/components/ui src/previews src/styles src/layouts scripts/preview-theme.test.mjs
 ```
 
-Expected: 全て exit 0。`global.css` stale は valid aggregate で covered、changed component の最新 evidence は新 report、component source は verified SHA 以降の committed / staged / unstaged 差分がない。
+Expected: 全て exit 0。`global.css` と design-system token の stale は valid aggregate で covered、changed component の最新 evidence は新 report、implementation source は verified SHA 以降の committed / staged / unstaged 差分がない。
 
 - [ ] **Step 8: evidence を commit する**
 
@@ -1002,33 +906,35 @@ Run:
 test -s src/components/ui/button.tsx
 test -s src/components/ui/select.tsx
 test -s elchika-ui/tokens.css
+test -s elchika-ui/design-system/tokens.css
 test -s elchika-ui/LICENSE
 test -s elchika-ui/THIRD_PARTY_LICENSES
-rg -n "bg-primary-hover|text-destructive-subtle-foreground" src/components/ui/button.tsx
-rg -n "dark:bg-input/30" src/components/ui/select.tsx
+rg -n "bg-primary-hover|destructive-subtle|state-hover" src/components/ui/button.tsx
+rg -n "bg-card|border-input" src/components/ui/select.tsx
 ```
 
 Expected: 全 command exit 0。source class は実出力に存在する。
 
-- [ ] **Step 4: installed tokens と host の正本を比較する**
+- [ ] **Step 4: installed alias / generated tokens と host の正本を比較する**
 
-Node script で `:root` と `.dark` の `--name: value;` map を両 file から読み、key set と value を比較する。少なくとも次を個別 assertion する。
+Node script で `elchika-ui/tokens.css` と host `src/styles/global.css`、`elchika-ui/design-system/tokens.css` と host generated token をそれぞれ byte 比較する。さらに alias map を読み、少なくとも次を個別 assertion する。
 
 ```js
 for (const name of [
   "primary-hover",
+  "destructive-subtle",
   "destructive-subtle-foreground",
   "muted-foreground",
   "sidebar",
   "sidebar-border",
+  "chart-1",
 ]) {
-  if (got.light[name] !== want.light[name] || got.dark[name] !== want.dark[name]) {
-    throw new Error(`${name}: 配布 token が正本と一致しない`);
-  }
+  if (got.light[name] !== want.light[name] || got.dark[name] !== want.dark[name])
+    throw new Error(`${name}: 配布 alias が正本と一致しない`);
 }
 ```
 
-Expected: key set と全 value が一致し exit 0。
+Expected: 2 file の bytes、alias key set と全 valueが一致し exit 0。global alias の relative import が `./design-system/tokens.css` であり、自己 import でないことも assert する。
 
 - [ ] **Step 5: consumer CSS import と build を確認する**
 
@@ -1040,7 +946,7 @@ probe の `src/index.css` の既存 import 後へ次を `apply_patch` で追加�
 
 Run: `npm run build`
 
-Expected: exit 0。build output CSS に primary-hover と destructive-subtle-foreground の実値が含まれる。
+Expected: exit 0。build output CSS に `--color-bg-canvas`、`--state-hover-bg`、`--primary-hover` が含まれ、import 解決 error がない。
 
 - [ ] **Step 6: probe 結果を新規 report へ記録する**
 
@@ -1054,7 +960,7 @@ verified_impl_sha: VERIFIED_IMPL_SHAの40桁実値
 - registry URL: 実際の URL
 - shadcn exact version: 実値
 - source 到達: Button / Select の実測
-- token key / value 一致: 実測
+- alias / generated token の byte 一致と relative import 解決: 実測
 - legal file: test -s の実測
 - consumer build: command と exit code
 ```
@@ -1099,6 +1005,7 @@ npm run format
 npm run lint
 npm run typecheck
 node --test "scripts/*.test.mjs"
+npm run check:design-tokens
 npm run check:all
 npm run build
 npm run check:props
@@ -1112,11 +1019,14 @@ Expected: 全 command exit 0、tests は1以上、fail 0、worktree clean。form
 - [ ] **Step 2: 負の検査を最終状態で再実行する**
 
 - contrast fixture を 4.5 未満へ変えた temp CSS は `checkContrastInRepo` problem を返す。
+- temp copy の generated `tokens.css` を古くすると design token check exit 1、通常生成後は exit 0。
 - source へ未分類 alpha utility を未commitで追加すると contrast checker exit 1。原状復帰後 exit 0。
+- opening quote 直後の alpha utility を AST scanner が拾い、arbitrary variant 内 quote の class 断片を拾わない。
+- `html.dark` と `data-theme=dark` の片方だけを temp fixture で変更すると theme sync test が fail-closed。
 - verified component source を未commitで変更すると evidence checker exit 1。原状復帰後 exit 0。
-- `global.css` を未commitで変更すると shared coverage が不成立になる。原状復帰後 exit 0。
+- `global.css` または design-system `tokens.css` を未commitで変更すると shared coverage が不成立になる。原状復帰後 exit 0。
 - aggregate report の `targeted_dynamic_sha` 欄を temp repo test で欠落させると fail-closed。
-- registry item から token file を temp copy 上で外すと distribution checker exit 1。
+- registry item から alias token または design-system token を temp copy 上で外すと distribution checker exit 1。
 
 repo file を直接壊す場合は exact path の backup と restore を行い、最後に `git status --short` が空であることを確認する。
 
@@ -1133,14 +1043,15 @@ gh pr create --base main --head feat/brand-tokens --title "feat: ブランドト
 
 PR body は次を含む。
 
-- token 変更と A〜E の要約
+- v1.8 HTML 正本 / generated token / shadcn alias と A〜E の要約
 - shared coverage と strict contrast sensor
+- generator の exact artifact comparison と AST class coverage
 - text-aa / nontext-ui / disabled-exempt / decorative の分類
 - Select before / after、4 overlay、catalog、fresh install の evidence permalink
-- RISK-006 mitigated と RISK-013 accepted
+- `.dark` / `data-theme` 同期、RISK-006 mitigated、chart 5系列採用
 - 実行した command と exit code
 - review cycle flag 0
-- npm publish / deploy / chart palette が scope 外であること
+- npm publish / deploy / brands runtime 配布が scope 外であること
 
 - [ ] **Step 5: final head に束縛した CI を確認する**
 
@@ -1150,7 +1061,7 @@ gh pr checks --watch
 gh run list --branch feat/brand-tokens --workflow ci.yml --limit 10 --json databaseId,headSha,conclusion
 ```
 
-`headSha == FINAL_HEAD` の run だけを選び、全 step の name / conclusion を API で読み戻す。Token contrast step が実在して success であることを個別確認する。
+`headSha == FINAL_HEAD` の run だけを選び、全 step の name / conclusion を API で読み戻す。Design token build と Token contrast の両 step が実在して success であることを個別確認する。
 
 - [ ] **Step 6: PR 本文を読み戻し Claude へ最終報告する**
 
@@ -1167,8 +1078,8 @@ Claude へ agmsg で次を送る。
 - review flag 0
 - final CI run ID / head SHA
 - contrast / evidence / fresh install / browser の実測結果
-- RISK-006 / RISK-013
-- chart palette、deploy、merge を実施していないこと
+- RISK-006 mitigated、chart 5系列採用、brands 非配布
+- deploy、merge を実施していないこと
 
 人間が merge するまで `main` を変更しない。
 
@@ -1179,14 +1090,17 @@ Claude へ agmsg で次を送る。
 ### Spec coverage
 
 - shared coverage: Task 2、Task 8、Task 10 の uncommitted negative test。
+- v1.8 HTML 正本 / generated artifact identity: Task 4、Task 6、Task 10。
 - contrast actual consumer / alpha: Task 3、Task 5、Task 6。
+- AST class coverage と fail-closed parser: Task 3、Task 10。
 - A〜E: Task 4 と Task 5。
 - Select dark input: Task 1 before、Task 5 source、Task 8 after。
+- `.dark` / `data-theme` 同期: Task 4 unit、Task 8 browser、Task 10 negative test。
 - disabled gate: Task 3 case、Task 8 browser。
 - overlay 4件: Task 5 と Task 8。
 - sidebar alias / decorative rationale: Task 4、Task 8 aggregate。
-- chart defer: Task 4 RISK-013。
-- registry / fresh install: Task 4、Task 5、Task 9。
+- chart 5系列採用: Task 4 alias、Task 8 browser、Task 9 配布比較。
+- alias / generated token の2層 registry と fresh install: Task 5、Task 9。
 - provenance.modified: Task 5。
 - review flag 0 / PR: Task 7、Task 10。
 
@@ -1198,11 +1112,11 @@ Claude へ agmsg で次を送る。
 
 ### Interface consistency
 
-- evidence: `parseSingleField`、`latestByAddition`、`inspectSharedTokenCoverage`、`summarizeStale` を Task 2 内で定義・利用する。
-- contrast: `parseThemes`、`resolveToken`、`composite`、`contrastRatio`、`evaluateCase`、`checkContrastInRepo` を Task 3 で定義し、Task 5 / 6 が同じ CLI を使う。
+- evidence: `parseSingleField`、`latestByAddition`、`inspectSharedTokenCoverage`、`summarizeStale` を Task 2 で定義し、Task 4 で runtime token 2 path へ拡張する。
+- contrast: `parseThemes`、`resolveToken`、`extractClassTokens`、`composite`、`contrastRatio`、`evaluateCase`、`checkContrastInRepo` を Task 3 で定義し、Task 5 / 6 が同じ CLI を使う。
 - gate 名は `text-aa` / `nontext-ui` / `disabled-exempt` / `decorative` の4種類で全 Task 一致する。
-- 新 token は `primary-hover` / `destructive-subtle-foreground` で CSS、Tailwind、consumer、registry、probe の名前が一致する。
-- `.docs/PROJECT_GOAL.md` と README は、standards の semantic 構造を維持しつつブランド固有値へ移る実態と一致する。
+- alias は `primary-hover` / `destructive-subtle` / `destructive-subtle-foreground` / `state-*` で CSS、Tailwind、consumer、registry、probe の名前が一致する。
+- `.docs/PROJECT_GOAL.md` と README は、v1.8 HTML 正本 → generated token → shadcn alias → registry の実態と一致する。
 - evidence structured field は `evidence_scope: shared-token-migration` / `targeted_dynamic_sha` で設計と Task 2 / 8 が一致する。
 
 ## Known Risks During Execution
@@ -1211,5 +1125,8 @@ Claude へ agmsg で次を送る。
 - `npx serve` は port 占有時に別 port へ fallback するため、候補を事前確認し実 URL と一致しなければ停止する。
 - shadcn CLI の latest は使わず `.shadcn-cli-version` の exact version を使う。
 - `public/r` は生成物だが task 所有であり、consumer source または token を変更した後は必ず再生成する。
+- `tokens.css` という basename は alias 配布物と v1.8 生成物で重なるため、生成物の `design-system/` directory を平坦化しない。
+- `.dark` と `data-theme` の一方だけを操作すると部分 theme になるため、forced theme も含め常に同時更新する。
+- v1.8 `tokens.css` は layer import し、今回 scope 外の base typography / focus rule が既存 UI を上書きしていないことを browser で確認する。
 - coverage report の SHA を evidence commit 自身へ更新しない。自己参照の固定点は存在しない。
 - browser evidence 後に source を変更した場合、画像の一部流用をせず Task 7 からやり直す。
