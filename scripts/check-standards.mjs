@@ -37,25 +37,35 @@ const ARBITRARY =
 const ALLOWED_ARBITRARY = new Set(["ring-[3px]"]);
 const BOOLEAN_DATA_INSET = /data-inset=\{inset\}/g;
 const SCRIPT_PATH = /\.(?:[cm]?[jt]sx?)$/;
+const SOURCE_GLOB = "src/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,css}";
 
 const blankComment = (comment) => comment.replace(/[^\r\n]/g, " ");
 
 function sourceWithoutScriptComments(path, source) {
-  const languageVariant = /\.[jt]sx$/.test(path)
-    ? ts.LanguageVariant.JSX
-    : ts.LanguageVariant.Standard;
-  const scanner = ts.createScanner(ts.ScriptTarget.Latest, false, languageVariant, source);
+  const sourceFile = ts.createSourceFile(
+    path,
+    source,
+    ts.ScriptTarget.Latest,
+    true,
+    scriptKindForPath(path),
+  );
+  const commentRanges = new Map();
+  const addCommentRanges = (ranges) => {
+    for (const range of ranges ?? []) {
+      commentRanges.set(`${range.pos}:${range.end}`, range);
+    }
+  };
+  const collectCommentRanges = (node) => {
+    addCommentRanges(ts.getLeadingCommentRanges(source, node.getFullStart()));
+    addCommentRanges(ts.getTrailingCommentRanges(source, node.getEnd()));
+    for (const child of node.getChildren(sourceFile)) collectCommentRanges(child);
+  };
+  collectCommentRanges(sourceFile);
+
   const chunks = [];
   let cursor = 0;
-  for (let token = scanner.scan(); token !== ts.SyntaxKind.EndOfFileToken; token = scanner.scan()) {
-    if (
-      token !== ts.SyntaxKind.SingleLineCommentTrivia &&
-      token !== ts.SyntaxKind.MultiLineCommentTrivia
-    ) {
-      continue;
-    }
-    const start = scanner.getTokenStart();
-    const end = scanner.getTokenEnd();
+  for (const { pos: start, end } of [...commentRanges.values()].sort((a, b) => a.pos - b.pos)) {
+    if (start < cursor) continue;
     chunks.push(source.slice(cursor, start), blankComment(source.slice(start, end)));
     cursor = end;
   }
@@ -702,17 +712,12 @@ export function checkFile(path, source) {
 // pathToFileURL を使う。`file://${process.argv[1]}` の素朴な連結は
 // パスに特殊文字を含む環境で一致しない。
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const files = globSync("src/**/*.{tsx,css}");
+  const files = globSync(SOURCE_GLOB);
   if (files.length === 0) {
     console.error("走査対象が 0 件（glob が壊れている）");
     process.exit(1);
   }
-  const analysisFiles = new Map(
-    globSync("src/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,css}").map((file) => [
-      file,
-      readFileSync(file, "utf8"),
-    ]),
-  );
+  const analysisFiles = new Map(files.map((file) => [file, readFileSync(file, "utf8")]));
   const results = checkFiles(analysisFiles);
   let total = 0;
   for (const f of files) {

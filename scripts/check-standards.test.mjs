@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { test } from "node:test";
+import { fileURLToPath } from "node:url";
 import { checkFile, checkFiles } from "./check-standards.mjs";
 
 function readSource(path) {
@@ -550,6 +554,42 @@ test("TSXコメント内の規約例を違反として扱わない", () => {
     const View = () => <div className="text-sm" />;`,
   );
   assert.deepEqual(violations, []);
+});
+
+test("template tail内のcomment記号を実行可能な文字列として保持する", () => {
+  const { violations } = checkFile(
+    "a.tsx",
+    [
+      "const classes = `",
+      "$",
+      "{value} bg-[url(https://example.com/a.png)] rounded-[7px]`;\n",
+      "const View = () => <div className={classes} />;",
+    ].join(""),
+  );
+  assert.deepEqual(
+    violations.filter((violation) => violation.rule === "arbitrary-value").map(({ text }) => text),
+    ["bg-[url(https://example.com/a.png)]", "rounded-[7px]"],
+  );
+});
+
+test("CLIはimport先のMJS自身にあるarbitrary valueを報告する", () => {
+  const root = mkdtempSync(join(tmpdir(), "ui-check-standards-cli-"));
+  try {
+    mkdirSync(join(root, "src"));
+    writeFileSync(join(root, "src/shared.mjs"), 'export const invalidClasses = "rounded-[7px]";\n');
+    writeFileSync(
+      join(root, "src/view.tsx"),
+      'import { invalidClasses } from "./shared.mjs";\n' +
+        "export const View = () => <div className={invalidClasses} />;\n",
+    );
+
+    const checker = fileURLToPath(new URL("./check-standards.mjs", import.meta.url));
+    const result = spawnSync(process.execPath, [checker], { cwd: root, encoding: "utf8" });
+    assert.equal(result.status, 1, result.stdout + result.stderr);
+    assert.match(result.stderr, /src\/shared\.mjs:1 {2}arbitrary-value {2}rounded-\[7px\]/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
 });
 
 test("CSSコメント内の規約例を違反として扱わない", () => {
