@@ -45,6 +45,14 @@ test("名前が前方一致する別componentをbarrel exportとして誤認し�
   assert.deepEqual(problems, ["button: src/index.ts から export されていない"]);
 });
 
+test("コメント内のbarrel exportを実exportとして誤認しない", () => {
+  const { problems } = checkCompleteness({
+    ...complete,
+    barrel: '// export { Button } from "./components/ui/button"',
+  });
+  assert.deepEqual(problems, ["button: src/index.ts から export されていない"]);
+});
+
 test("Props 型の欠落を検出する", () => {
   const { problems } = checkCompleteness({
     ...complete,
@@ -72,6 +80,17 @@ test("re-export の alias 後の公開名で Props 型を照合する", () => {
 
 test("export type の名前を value export と誤認しない", () => {
   const dts = 'export type { Dialog } from "./components/ui/dialog";';
+  const { problems } = checkCompleteness({ ...complete, dts });
+  assert.deepEqual(problems, [
+    "lib/index.d.ts の PascalCase value export が 0 件（走査が空走している）",
+  ]);
+});
+
+test("コメント内のd.ts exportを公開契約として誤認しない", () => {
+  const dts = [
+    '// export type { ButtonProps } from "./components/ui/button";',
+    '// export { Button } from "./components/ui/button";',
+  ].join("\n");
   const { problems } = checkCompleteness({ ...complete, dts });
   assert.deepEqual(problems, [
     "lib/index.d.ts の PascalCase value export が 0 件（走査が空走している）",

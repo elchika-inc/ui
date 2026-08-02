@@ -3,26 +3,33 @@
 // Button 固定の検査を一般化したもので、#2 で 50 件足すときの安全網になる。
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
+import ts from "typescript";
 
-const exportedNames = (dts, typeOnly) => {
-  const prefix = typeOnly ? "type\\s*" : "(?!type\\b)";
-  const re = new RegExp(`export\\s+${prefix}\\{([\\s\\S]*?)\\}\\s*from\\s*["'][^"']+["']`, "g");
-  const names = [];
-  for (const match of dts.matchAll(re)) {
-    for (const item of match[1].split(",")) {
-      const parts = item.trim().split(/\s+as\s+/);
-      const publicName = parts.at(-1)?.trim();
-      if (publicName) names.push(publicName);
-    }
-  }
-  return names;
+const exportDeclarations = (source, fileName) => {
+  const sourceFile = ts.createSourceFile(
+    fileName,
+    source,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TS,
+  );
+  return sourceFile.statements.filter(ts.isExportDeclaration);
 };
+
+const exportedNames = (dts, typeOnly) =>
+  exportDeclarations(dts, "lib/index.d.ts").flatMap((declaration) => {
+    if (!declaration.exportClause || !ts.isNamedExports(declaration.exportClause)) return [];
+    return declaration.exportClause.elements
+      .filter((element) => (declaration.isTypeOnly || element.isTypeOnly) === typeOnly)
+      .map((element) => element.name.text);
+  });
 
 const exportedModulePaths = (source) =>
   new Set(
-    [...source.matchAll(/export\s+(?:type\s+)?\{[\s\S]*?\}\s*from\s*["']([^"']+)["']/g)].map(
-      (match) => match[1],
-    ),
+    exportDeclarations(source, "src/index.ts")
+      .map((declaration) => declaration.moduleSpecifier)
+      .filter((specifier) => specifier && ts.isStringLiteralLike(specifier))
+      .map((specifier) => specifier.text),
   );
 
 // registry / preview / provenance は配布ファイル単位だが、design-sync は .d.ts の

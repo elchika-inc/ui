@@ -30,6 +30,22 @@ const loadMigration = async () => {
   return import(migrationUrl);
 };
 
+const addComponentEvidence = (root, report, verifiedSha) => {
+  const stem = report.replace(/\.md$/, "");
+  writeFileSync(
+    join(root, ".docs/reviews", report),
+    `verified_impl_sha: ${verifiedSha}\n${stem}-light.jpg\n${stem}-dark.jpg\n`,
+  );
+  writeFileSync(join(root, ".docs/reviews", `${stem}-light.jpg`), jpeg);
+  writeFileSync(join(root, ".docs/reviews", `${stem}-dark.jpg`), jpeg);
+  git(root, [
+    "add",
+    `.docs/reviews/${report}`,
+    `.docs/reviews/${stem}-light.jpg`,
+    `.docs/reviews/${stem}-dark.jpg`,
+  ]);
+};
+
 const createEvidenceRepo = () => {
   const root = mkdtempSync(join(tmpdir(), "elchika-evidence-test-"));
   git(root, ["init"]);
@@ -60,17 +76,20 @@ const createEvidenceRepo = () => {
   writeFileSync(join(root, "src/pages/catalog-dark.astro"), "catalog dark\n");
   writeFileSync(join(root, "src/pages/index.astro"), "index\n");
   writeFileSync(join(root, ".docs/reviews/button.png"), png);
-  writeFileSync(join(root, ".docs/reviews/input.jpg"), jpeg);
   git(root, ["add", "."]);
   git(root, ["commit", "-m", "source"]);
   const verifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
+  for (const name of ["button", "input"]) {
+    writeFileSync(join(root, `.docs/reviews/${name}-preview-light.jpg`), jpeg);
+    writeFileSync(join(root, `.docs/reviews/${name}-preview-dark.jpg`), jpeg);
+  }
   writeFileSync(
     join(root, ".docs/reviews/2026-08-01-button-preview.md"),
-    `verified_impl_sha: ${verifiedSha}\n`,
+    `verified_impl_sha: ${verifiedSha}\nbutton-preview-light.jpg\nbutton-preview-dark.jpg\n`,
   );
   writeFileSync(
     join(root, ".docs/reviews/2026-08-01-input-preview.md"),
-    `verified_impl_sha: ${verifiedSha}\n`,
+    `verified_impl_sha: ${verifiedSha}\ninput-preview-light.jpg\ninput-preview-dark.jpg\n`,
   );
   writeFileSync(
     join(root, ".docs/reviews/2026-08-01-index-page.md"),
@@ -84,6 +103,30 @@ const createEvidenceRepo = () => {
   git(root, ["commit", "-m", "evidence"]);
   return { root, verifiedSha };
 };
+
+test("component固有Markdownの欠落を検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  rmSync(join(root, ".docs/reviews/2026-08-01-input-preview.md"));
+
+  assert.ok(
+    checkEvidenceInRepo(root).problems.includes("input: component 固有の証跡 Markdown が無い"),
+  );
+});
+
+test("component固有light画像の欠落を検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  rmSync(join(root, ".docs/reviews/button-preview-light.jpg"));
+
+  assert.ok(
+    checkEvidenceInRepo(root).problems.includes(
+      "2026-08-01-button-preview.md: 対応する light 証跡画像が無い",
+    ),
+  );
+});
 
 test("PNG/JPEG の拡張子と magic bytes の不一致を検出する", async () => {
   const { checkImage } = await loadModule();
@@ -271,11 +314,7 @@ test("同じcomponentの古い証跡を残し、最新証跡だけを鮮度判�
   git(root, ["add", "src/components/ui/button.tsx"]);
   git(root, ["commit", "-m", "change button before reverification"]);
   const latestVerifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
-  writeFileSync(
-    join(root, ".docs/reviews/2026-08-02-button-preview.md"),
-    `verified_impl_sha: ${latestVerifiedSha}\n`,
-  );
-  git(root, ["add", ".docs/reviews/2026-08-02-button-preview.md"]);
+  addComponentEvidence(root, "2026-08-02-button-preview.md", latestVerifiedSha);
   git(root, ["commit", "-m", "add latest button evidence"]);
 
   const result = checkEvidenceInRepo(root);
@@ -298,11 +337,7 @@ test("分岐した証跡SHAが複数あればcommit件数にかかわらずfail-
   git(root, ["add", "src/components/ui/button.tsx"]);
   git(root, ["commit", "-m", "candidate a implementation"]);
   const candidateA = git(root, ["rev-parse", "HEAD"]).trim();
-  writeFileSync(
-    join(root, ".docs/reviews/2026-08-02-button-preview.md"),
-    `verified_impl_sha: ${candidateA}\n`,
-  );
-  git(root, ["add", ".docs/reviews/2026-08-02-button-preview.md"]);
+  addComponentEvidence(root, "2026-08-02-button-preview.md", candidateA);
   git(root, ["commit", "-m", "candidate a evidence"]);
 
   git(root, ["switch", "-c", "candidate-b", forkBase]);
@@ -310,11 +345,7 @@ test("分岐した証跡SHAが複数あればcommit件数にかかわらずfail-
   git(root, ["add", "candidate-b.txt"]);
   git(root, ["commit", "-m", "candidate b implementation"]);
   const candidateB = git(root, ["rev-parse", "HEAD"]).trim();
-  writeFileSync(
-    join(root, ".docs/reviews/2026-08-03-button-preview.md"),
-    `verified_impl_sha: ${candidateB}\n`,
-  );
-  git(root, ["add", ".docs/reviews/2026-08-03-button-preview.md"]);
+  addComponentEvidence(root, "2026-08-03-button-preview.md", candidateB);
   git(root, ["commit", "-m", "candidate b evidence"]);
 
   git(root, ["switch", trunk]);
@@ -338,11 +369,7 @@ test("同じcomponentの最新証跡より後の変更は hard failure にする
   git(root, ["add", "src/components/ui/button.tsx"]);
   git(root, ["commit", "-m", "change button before reverification"]);
   const latestVerifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
-  writeFileSync(
-    join(root, ".docs/reviews/2026-08-02-button-preview.md"),
-    `verified_impl_sha: ${latestVerifiedSha}\n`,
-  );
-  git(root, ["add", ".docs/reviews/2026-08-02-button-preview.md"]);
+  addComponentEvidence(root, "2026-08-02-button-preview.md", latestVerifiedSha);
   git(root, ["commit", "-m", "add latest button evidence"]);
   writeFileSync(join(root, "src/previews/button.tsx"), "button changed after evidence\n");
 
@@ -361,11 +388,7 @@ test("同じcomponentの古い証跡もSHA構造検査の対象に残す", async
   git(root, ["add", "src/components/ui/button.tsx"]);
   git(root, ["commit", "-m", "change button before reverification"]);
   const latestVerifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
-  writeFileSync(
-    join(root, ".docs/reviews/2026-08-02-button-preview.md"),
-    `verified_impl_sha: ${latestVerifiedSha}\n`,
-  );
-  git(root, ["add", ".docs/reviews/2026-08-02-button-preview.md"]);
+  addComponentEvidence(root, "2026-08-02-button-preview.md", latestVerifiedSha);
   git(root, ["commit", "-m", "add latest button evidence"]);
   const missingCommit = "f".repeat(40);
   writeFileSync(

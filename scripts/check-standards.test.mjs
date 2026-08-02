@@ -116,6 +116,20 @@ test("改行したcn引数の状態ring幅と透明ring色を関連付ける", (
   );
 });
 
+test("配列joinで結合する状態ring幅と透明ring色を関連付ける", () => {
+  const { violations } = checkFile(
+    "a.tsx",
+    `className={[
+      "focus-visible:ring-[3px]",
+      "ring-ring/50",
+    ].join(" ")}`,
+  );
+  assert.ok(
+    violations.some((violation) => violation.rule === "focus-ring-opacity"),
+    "配列joinで結合する透明なfocus ringが検出されない",
+  );
+});
+
 test("2 規定へ同時に違反するクラスは 2 診断とも出す", () => {
   // ring-[#f00]/50 は任意値であり、かつ透明度合成でもある。
   // focus-ring-opacity だけを assert すると、ARBITRARY 側が

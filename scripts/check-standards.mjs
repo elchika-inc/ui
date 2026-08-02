@@ -10,6 +10,7 @@
 // ここは意図的に対象へ含める。
 import { globSync, readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
+import ts from "typescript";
 
 // 同じクラストークン内に focus / invalid の状態語があるリングだけを対象にする。
 // variant の前後や arbitrary variant の内外には依存しない。無条件の
@@ -35,40 +36,39 @@ const ARBITRARY =
 const ALLOWED_ARBITRARY = new Set(["ring-[3px]"]);
 const BOOLEAN_DATA_INSET = /data-inset=\{inset\}/g;
 
-function findCallArguments(source, name) {
-  const calls = [];
-  const startPattern = new RegExp(`\\b${name}\\s*\\(`, "g");
-  for (const match of source.matchAll(startPattern)) {
-    const open = (match.index ?? 0) + match[0].length - 1;
-    let depth = 1;
-    let quote;
-    let escaped = false;
-    for (let index = open + 1; index < source.length; index++) {
-      const character = source[index];
-      if (quote) {
-        if (escaped) {
-          escaped = false;
-        } else if (character === "\\") {
-          escaped = true;
-        } else if (character === quote) {
-          quote = undefined;
-        }
-        continue;
-      }
-      if (character === '"' || character === "'" || character === "`") {
-        quote = character;
-      } else if (character === "(") {
-        depth++;
-      } else if (character === ")") {
-        depth--;
-        if (depth === 0) {
-          calls.push({ text: source.slice(open + 1, index), offset: open + 1 });
-          break;
-        }
+function classNameExpressions(path, source) {
+  if (!path.endsWith(".tsx")) return [];
+  const isAttributeFragment = !source.includes("<");
+  const prefix = isAttributeFragment ? "<div " : "";
+  const parsedSource = isAttributeFragment ? `${prefix}${source} />` : source;
+  const sourceFile = ts.createSourceFile(
+    path,
+    parsedSource,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TSX,
+  );
+  const expressions = [];
+  const visit = (node) => {
+    if (
+      ts.isJsxAttribute(node) &&
+      node.name.getText(sourceFile) === "className" &&
+      node.initializer
+    ) {
+      const value = ts.isJsxExpression(node.initializer)
+        ? node.initializer.expression
+        : node.initializer;
+      if (value) {
+        expressions.push({
+          text: value.getText(sourceFile),
+          offset: Math.max(0, value.getStart(sourceFile) - prefix.length),
+        });
       }
     }
-  }
-  return calls;
+    ts.forEachChild(node, visit);
+  };
+  visit(sourceFile);
+  return expressions;
 }
 
 function statefulRingViolations(text, source, offset) {
@@ -108,10 +108,8 @@ export function checkFile(path, source) {
       violations.push({ rule: "boolean-data-inset", line: i + 1, text: m[0] });
     }
   });
-  for (const call of findCallArguments(source, "cn")) {
-    if (call.text.includes("\n")) {
-      violations.push(...statefulRingViolations(call.text, source, call.offset));
-    }
+  for (const expression of classNameExpressions(path, source)) {
+    violations.push(...statefulRingViolations(expression.text, source, expression.offset));
   }
   const unique = new Map(
     violations.map((violation) => [

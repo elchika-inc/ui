@@ -198,6 +198,108 @@ function inspectLatestComponentEvidence(repositoryRoot, verifications) {
   return problems;
 }
 
+function evidenceAdditionFiles(repositoryRoot, report) {
+  const reportPath = `.docs/reviews/${report}`;
+  const additionCommit = git(repositoryRoot, [
+    "log",
+    "--diff-filter=A",
+    "--format=%H",
+    "--",
+    reportPath,
+  ])
+    .trim()
+    .split("\n")
+    .find(Boolean);
+  if (additionCommit) {
+    return git(repositoryRoot, [
+      "diff-tree",
+      "--no-commit-id",
+      "--name-only",
+      "--diff-filter=A",
+      "-r",
+      additionCommit,
+    ])
+      .trim()
+      .split("\n")
+      .filter(Boolean);
+  }
+  const staged = git(repositoryRoot, [
+    "diff",
+    "--cached",
+    "--name-only",
+    "--diff-filter=A",
+    "--",
+    ".docs/reviews",
+  ])
+    .trim()
+    .split("\n");
+  const untracked = git(repositoryRoot, [
+    "ls-files",
+    "--others",
+    "--exclude-standard",
+    "--",
+    ".docs/reviews",
+  ])
+    .trim()
+    .split("\n");
+  return [...new Set([...staged, ...untracked].filter(Boolean))];
+}
+
+function imageComponentAndTheme(path, components) {
+  const stem = basename(path, extname(path)).replace(/^\d{4}-\d{2}-\d{2}-/, "");
+  const component = components
+    .toSorted((left, right) => right.length - left.length)
+    .find((candidate) => stem === candidate || stem.startsWith(`${candidate}-`));
+  if (!component) return {};
+  const theme = stem
+    .slice(component.length)
+    .split("-")
+    .find((part) => part === "light" || part === "dark");
+  return { component, theme };
+}
+
+function inspectComponentEvidenceCoverage(repositoryRoot, components, verifications, imageFiles) {
+  const problems = [];
+  const byComponent = Map.groupBy(verifications, ({ component }) => component);
+  for (const component of components) {
+    const candidates = byComponent.get(component) ?? [];
+    if (candidates.length === 0) {
+      problems.push(`${component}: component 固有の証跡 Markdown が無い`);
+      continue;
+    }
+    const latest = candidates.filter(
+      (candidate) =>
+        !candidates.some(
+          (other) =>
+            candidate.file !== other.file &&
+            candidate.sha !== other.sha &&
+            commitIsAncestor(repositoryRoot, candidate.sha, other.sha),
+        ),
+    );
+    if (latest.length !== 1) continue;
+    const [report] = latest;
+    const addedImageStems = new Set(
+      evidenceAdditionFiles(repositoryRoot, report.file)
+        .filter((path) => path.startsWith(".docs/reviews/"))
+        .map((path) => path.slice(".docs/reviews/".length))
+        .filter((path) =>
+          IMAGE_SIGNATURES.some(({ extensions }) => extensions.includes(extname(path))),
+        )
+        .map((path) => path.slice(0, -extname(path).length)),
+    );
+    const addedImages = imageFiles
+      .filter((path) => addedImageStems.has(path.slice(0, -extname(path).length)))
+      .map((path) => imageComponentAndTheme(path, components))
+      .filter((image) => image.component === component);
+    for (const theme of ["light", "dark"]) {
+      if (!addedImages.some((image) => image.theme === theme)) {
+        problems.push(`${report.file}: 対応する ${theme} 証跡画像が無い`);
+      }
+    }
+  }
+  return problems;
+}
+
 export function checkEvidenceInRepo(root) {
   const repositoryRoot = git(root, ["rev-parse", "--show-toplevel"]).trim();
   const reviewsRoot = join(repositoryRoot, ".docs/reviews");
@@ -228,6 +330,12 @@ export function checkEvidenceInRepo(root) {
   const markdownFiles = files.filter((file) => extname(file) === ".md");
   const stale = [];
   const componentVerifications = [];
+  const componentsRoot = join(repositoryRoot, "src/components/ui");
+  const components = existsSync(componentsRoot)
+    ? readdirSync(componentsRoot)
+        .filter((file) => file.endsWith(".tsx"))
+        .map((file) => file.replace(/\.tsx$/, ""))
+    : [];
 
   for (const entry of entries.filter((candidate) => !candidate.isFile)) {
     problems.push(`${entry.path}: 通常ファイルではないため証跡として検査できない`);
@@ -248,6 +356,14 @@ export function checkEvidenceInRepo(root) {
     if (inspected.verification) componentVerifications.push(inspected.verification);
   }
   problems.push(...inspectLatestComponentEvidence(repositoryRoot, componentVerifications));
+  problems.push(
+    ...inspectComponentEvidenceCoverage(
+      repositoryRoot,
+      components,
+      componentVerifications,
+      imageFiles,
+    ),
+  );
 
   return { problems, stale };
 }
