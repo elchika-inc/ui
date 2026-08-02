@@ -98,14 +98,14 @@ function commitExists(root, sha) {
   );
 }
 
-function commitIsAncestor(root, sha) {
-  const result = spawnSync("git", ["merge-base", "--is-ancestor", sha, "HEAD"], {
+function commitIsAncestor(root, ancestor, descendant = "HEAD") {
+  const result = spawnSync("git", ["merge-base", "--is-ancestor", ancestor, descendant], {
     cwd: root,
     stdio: "ignore",
   });
   if (result.status === 0) return true;
   if (result.status === 1) return false;
-  throw new Error(`git merge-base に失敗: ${sha} HEAD`);
+  throw new Error(`git merge-base に失敗: ${ancestor} ${descendant}`);
 }
 
 function pathsChanged(root, sha, paths) {
@@ -125,12 +125,6 @@ function pathsChanged(root, sha, paths) {
     throw new Error(`git ls-files に失敗: ${paths.join(" ")}`);
   }
   return untracked.stdout.trim().length > 0;
-}
-
-function commitsSinceVerification(root, sha) {
-  const count = git(root, ["rev-list", "--count", `${sha}..HEAD`]).trim();
-  if (!/^\d+$/.test(count)) throw new Error(`git rev-list の件数が不正: ${sha}..HEAD`);
-  return Number(count);
 }
 
 function inspectMarkdown(repositoryRoot, reviewsRoot, file) {
@@ -166,12 +160,15 @@ function inspectLatestComponentEvidence(repositoryRoot, verifications) {
   const byComponent = Map.groupBy(verifications, ({ component }) => component);
 
   for (const [component, candidates] of byComponent) {
-    const withDistance = candidates.map((candidate) => ({
-      ...candidate,
-      distance: commitsSinceVerification(repositoryRoot, candidate.sha),
-    }));
-    const nearestDistance = Math.min(...withDistance.map(({ distance }) => distance));
-    const latest = withDistance.filter(({ distance }) => distance === nearestDistance);
+    const latest = candidates.filter(
+      (candidate) =>
+        !candidates.some(
+          (other) =>
+            candidate.file !== other.file &&
+            candidate.sha !== other.sha &&
+            commitIsAncestor(repositoryRoot, candidate.sha, other.sha),
+        ),
+    );
     if (latest.length !== 1) {
       problems.push(
         `${component}: 最新証跡が一意に決まらない (${latest.map(({ file }) => file).join(", ")})`,

@@ -249,6 +249,53 @@ test("同じcomponentの古い証跡を残し、最新証跡だけを鮮度判�
   assert.deepEqual(result.problems, []);
 });
 
+test("分岐した証跡SHAが複数あればcommit件数にかかわらずfail-closedにする", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  const trunk = git(root, ["branch", "--show-current"]).trim();
+  const forkBase = git(root, ["rev-parse", "HEAD"]).trim();
+
+  git(root, ["switch", "-c", "candidate-a"]);
+  writeFileSync(join(root, "candidate-a-prelude.txt"), "prelude\n");
+  git(root, ["add", "candidate-a-prelude.txt"]);
+  git(root, ["commit", "-m", "candidate a prelude"]);
+  writeFileSync(join(root, "src/components/ui/button.tsx"), "button candidate a\n");
+  git(root, ["add", "src/components/ui/button.tsx"]);
+  git(root, ["commit", "-m", "candidate a implementation"]);
+  const candidateA = git(root, ["rev-parse", "HEAD"]).trim();
+  writeFileSync(
+    join(root, ".docs/reviews/2026-08-02-button-preview.md"),
+    `verified_impl_sha: ${candidateA}\n`,
+  );
+  git(root, ["add", ".docs/reviews/2026-08-02-button-preview.md"]);
+  git(root, ["commit", "-m", "candidate a evidence"]);
+
+  git(root, ["switch", "-c", "candidate-b", forkBase]);
+  writeFileSync(join(root, "candidate-b.txt"), "candidate b\n");
+  git(root, ["add", "candidate-b.txt"]);
+  git(root, ["commit", "-m", "candidate b implementation"]);
+  const candidateB = git(root, ["rev-parse", "HEAD"]).trim();
+  writeFileSync(
+    join(root, ".docs/reviews/2026-08-03-button-preview.md"),
+    `verified_impl_sha: ${candidateB}\n`,
+  );
+  git(root, ["add", ".docs/reviews/2026-08-03-button-preview.md"]);
+  git(root, ["commit", "-m", "candidate b evidence"]);
+
+  git(root, ["switch", trunk]);
+  git(root, ["merge", "--no-ff", "candidate-a", "-m", "merge candidate a"]);
+  git(root, ["merge", "--no-ff", "candidate-b", "-m", "merge candidate b"]);
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.ok(
+    result.problems.includes(
+      "button: 最新証跡が一意に決まらない (2026-08-02-button-preview.md, 2026-08-03-button-preview.md)",
+    ),
+  );
+});
+
 test("同じcomponentの最新証跡より後の変更は hard failure にする", async (t) => {
   const { root } = createEvidenceRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));

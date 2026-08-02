@@ -1005,7 +1005,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "全 PascalCase export の Props 型を追加し、コメント・エラー言語と arbitrary value を standards へ正規化。動的 CSS を dangerouslySetInnerHTML ではなく style の text child で描画",
+      "modified": "全 PascalCase export の Props 型を追加し、コメント・エラー言語と arbitrary value を standards へ正規化。動的 CSS を dangerouslySetInnerHTML ではなく style の text child で描画し、公開 id を CSS 文字列として escape",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "field": {
@@ -1047,7 +1047,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "全 PascalCase export の Props 型公開、arbitrary margin・radius と focus / invalid ring の透明度を semantic utility へ正規化、汎用 group の role と補助 click を保持する局所 lint 理由、barrel export、prefix・suffix・button・focus-visible の preview と light/dark route、hydration selector を追加",
+      "modified": "全 PascalCase export の Props 型公開、arbitrary margin・radius と focus / invalid ring の透明度を semantic utility へ正規化、汎用 group の role と補助 click を保持する局所 lint 理由、addon click を input / textarea 共通 control へ接続、barrel export、prefix・suffix・button・focus-visible の preview と light/dark route、hydration selector を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "item": {
@@ -1278,7 +1278,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "全 PascalCase value export の Props 型公開、表示文言・コメント・accessible name とアイコンの読み上げを正規化、focus ring と値系 arbitrary utility を semantic token・CSS variable utility へ正規化、Tooltip を desktop collapsed 時だけ構築して mobile Sheet の Escape dismiss を維持、mobile Sheet の表示DOMへ公開div propsを転送してpreviewで検証、公開 dir を全表示経路のDOMへ転送、barrel export、desktop collapse・mobile sheet・keyboard shortcut・cookie side effect・focus の preview と light/dark route、hydration selector を追加",
+      "modified": "全 PascalCase value export の Props 型公開、表示文言・コメント・accessible name とアイコンの読み上げを正規化、focus ring と値系 arbitrary utility を semantic token・CSS variable utility へ正規化、Tooltip を desktop collapsed 時だけ構築して mobile Sheet の Escape dismiss を維持、mobile Sheet の表示DOMへ公開div propsを転送してpreviewで検証、公開 dir を全表示経路のDOMへ転送、SidebarMenuSkeleton の幅をSSRとhydrationで決定的に固定、barrel export、desktop collapse・mobile sheet・keyboard shortcut・cookie side effect・focus の preview と light/dark route、hydration selector を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "direction": {

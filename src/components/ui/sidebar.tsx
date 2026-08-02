@@ -617,10 +617,7 @@ type SidebarMenuSkeletonProps = React.ComponentProps<"div"> & {
 };
 
 function SidebarMenuSkeleton({ className, showIcon = false, ...props }: SidebarMenuSkeletonProps) {
-  // 実際のメニュー幅に近い50〜90%の skeleton を表示する。
-  const [width] = React.useState(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`;
-  });
+  const width = "70%";
 
   return (
     <div

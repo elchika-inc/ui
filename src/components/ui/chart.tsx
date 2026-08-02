@@ -10,6 +10,19 @@ const THEMES = { light: "", dark: ".dark" } as const;
 const INITIAL_DIMENSION = { width: 320, height: 200 } as const;
 type TooltipNameType = number | string;
 
+function escapeCssString(value: string) {
+  return Array.from(value, (character) => {
+    const codePoint = character.codePointAt(0);
+    if (
+      codePoint !== undefined &&
+      (codePoint <= 0x1f || codePoint === 0x7f || character === '"' || character === "\\")
+    ) {
+      return `\\${codePoint.toString(16)} `;
+    }
+    return character;
+  }).join("");
+}
+
 export type ChartConfig = Record<
   string,
   {
@@ -89,7 +102,7 @@ const ChartStyle = ({ id, config }: ChartStyleProps) => {
   const cssText = Object.entries(THEMES)
     .map(
       ([theme, prefix]) => `
-${prefix} [data-chart=${id}] {
+${prefix} [data-chart="${escapeCssString(id)}"] {
 ${colorConfig
   .map(([key, itemConfig]) => {
     const color = itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ?? itemConfig.color;

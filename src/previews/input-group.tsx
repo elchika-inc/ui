@@ -7,6 +7,7 @@ import {
   InputGroupButton,
   InputGroupInput,
   InputGroupText,
+  InputGroupTextarea,
 } from "@/components/ui/input-group";
 
 export function InputGroupPreview(_props: PreviewProps) {
@@ -33,6 +34,13 @@ export function InputGroupPreview(_props: PreviewProps) {
             {copied ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}
           </InputGroupButton>
         </InputGroupAddon>
+      </InputGroup>
+
+      <InputGroup>
+        <InputGroupAddon align="block-start" data-input-group-textarea-addon>
+          <InputGroupText>メモ</InputGroupText>
+        </InputGroupAddon>
+        <InputGroupTextarea aria-label="共有メモ" defaultValue="共有内容を確認してください" />
       </InputGroup>
 
       <p role="status" className="text-sm text-muted-foreground">

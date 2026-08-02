@@ -31,6 +31,7 @@ export function ChartPreview(_props: PreviewProps) {
   return (
     <div data-slot="chart-preview" className="p-6">
       <ChartContainer
+        id="利用者:2026"
         role="img"
         aria-label="月別利用者数"
         config={chartConfig}

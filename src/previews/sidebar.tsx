@@ -15,6 +15,7 @@ import {
   SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSkeleton,
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
@@ -96,6 +97,9 @@ export function SidebarPreview({ mode = "isolated" }: PreviewProps) {
                           <SidebarMenuSubButton href="#profile">プロフィール</SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       </SidebarMenuSub>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuSkeleton showIcon data-review-skeleton="stable" />
                     </SidebarMenuItem>
                   </SidebarMenu>
                 </SidebarGroupContent>

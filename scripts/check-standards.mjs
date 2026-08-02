@@ -44,10 +44,15 @@ export function checkFile(path, source) {
   const violations = [];
   source.split("\n").forEach((line, i) => {
     if (line.includes("@custom-variant dark")) return;
-    for (const token of ringTokens(line)) {
-      if (!STATEFUL_RING.test(token)) continue;
-      for (const m of token.matchAll(RING_OPACITY)) {
-        violations.push({ rule: "focus-ring-opacity", line: i + 1, text: m[0] });
+    const tokens = ringTokens(line);
+    const hasStatefulRing = tokens.some(
+      (token) => STATEFUL_RING.test(token) && token.includes("ring-"),
+    );
+    if (hasStatefulRing) {
+      for (const token of tokens) {
+        for (const m of token.matchAll(RING_OPACITY)) {
+          violations.push({ rule: "focus-ring-opacity", line: i + 1, text: m[0] });
+        }
       }
     }
     for (const m of line.matchAll(ARBITRARY)) {

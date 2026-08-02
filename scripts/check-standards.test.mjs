@@ -83,6 +83,25 @@ test("別の文字列引数にある装飾リングを状態リングと誤認�
   assert.deepEqual(violations, []);
 });
 
+test("同じliteralの状態ring幅と透明ring色を関連付ける", () => {
+  const { violations } = checkFile("a.tsx", `className="focus-visible:ring-[3px] ring-ring/50"`);
+  assert.ok(
+    violations.some((violation) => violation.rule === "focus-ring-opacity"),
+    "同じliteralの透明なfocus ringが検出されない",
+  );
+});
+
+test("別cn引数の状態ring幅と透明ring色を関連付ける", () => {
+  const { violations } = checkFile(
+    "a.tsx",
+    `className={cn("focus-visible:ring-[3px]", "ring-ring/50")}`,
+  );
+  assert.ok(
+    violations.some((violation) => violation.rule === "focus-ring-opacity"),
+    "別cn引数の透明なfocus ringが検出されない",
+  );
+});
+
 test("2 規定へ同時に違反するクラスは 2 診断とも出す", () => {
   // ring-[#f00]/50 は任意値であり、かつ透明度合成でもある。
   // focus-ring-opacity だけを assert すると、ARBITRARY 側が
@@ -249,4 +268,43 @@ test("Sidebarはdirを全表示経路のDOMへ渡す", () => {
   assert.match(source.slice(desktopStart, end), /data-slot="sidebar-container"[\s\S]*?dir=\{dir\}/);
   const preview = readSource("src/previews/sidebar.tsx");
   assert.match(preview, /data-preview-props="forwarded"[\s\S]*?dir="ltr"/);
+});
+
+test("ChartStyleはcustom idを引用済みCSS文字列としてselectorへ埋め込む", () => {
+  const source = readSource("src/components/ui/chart.tsx");
+  assert.match(source, /function escapeCssString\(/);
+  assert.match(source, /\[data-chart="\$\{escapeCssString\(id\)\}"\]/);
+  assert.doesNotMatch(source, /\[data-chart=\$\{id\}\]/);
+});
+
+test("InputGroup addonはinputとtextarea共通のcontrolをfocusする", () => {
+  const source = readSource("src/components/ui/input-group.tsx");
+  const start = source.indexOf("function InputGroupAddon(");
+  const end = source.indexOf("const inputGroupButtonVariants", start);
+  assert.notEqual(start, -1, "InputGroupAddonが存在しない");
+  assert.notEqual(end, -1, "InputGroupAddonの終端が見つからない");
+  const addon = source.slice(start, end);
+  assert.match(addon, /querySelector<HTMLElement>\("\[data-slot=input-group-control\]"\)/);
+  assert.doesNotMatch(addon, /querySelector\("input"\)/);
+});
+
+test("SidebarMenuSkeletonはSSRとhydrationで同じ幅を使う", () => {
+  const source = readSource("src/components/ui/sidebar.tsx");
+  const start = source.indexOf("function SidebarMenuSkeleton(");
+  const end = source.indexOf("type SidebarMenuSubProps", start);
+  assert.notEqual(start, -1, "SidebarMenuSkeletonが存在しない");
+  assert.notEqual(end, -1, "SidebarMenuSkeletonの終端が見つからない");
+  const skeleton = source.slice(start, end);
+  assert.doesNotMatch(skeleton, /Math\.random/);
+  assert.match(skeleton, /const width = "70%"/);
+});
+
+test("レビュー修正を実ブラウザで到達できるpreview probeがある", () => {
+  const chart = readSource("src/previews/chart.tsx");
+  const inputGroup = readSource("src/previews/input-group.tsx");
+  const sidebar = readSource("src/previews/sidebar.tsx");
+  assert.match(chart, /id="利用者:2026"/);
+  assert.match(inputGroup, /InputGroupTextarea/);
+  assert.match(inputGroup, /data-input-group-textarea-addon/);
+  assert.match(sidebar, /<SidebarMenuSkeleton showIcon/);
 });
