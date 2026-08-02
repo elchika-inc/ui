@@ -388,7 +388,7 @@ node --test scripts/contrast.test.mjs
 node scripts/contrast.mjs
 ```
 
-Expected: unit test は exit 0。CLI は exit 1 で、出力に Tabs inactive、primary `/80` hover、destructive subtle / alpha text の FAIL label が含まれる。`RISK-006` は accepted risk として明示表示される。他の未知 FAIL が出たら Task 4 へ進まず報告する。
+Expected: unit test は exit 0。CLI は exit 1 で、現行 token の FAIL は `Attachment destructive text /80 (dark)`、`destructive subtle /20 (light)`、`destructive subtle /30 (dark)` だけになる。primary `/80` hover と Tabs inactive は PASS する。`RISK-006` は accepted risk として明示表示される。他の未知 FAIL が出たら Task 4 へ進まず報告する。
 
 - [ ] **Step 8: strict sensor を gate へ未接続のまま commit する**
 
@@ -501,7 +501,7 @@ npm run format
 npm run lint
 ```
 
-Expected: tests、token check、format、lint は exit 0。consumer CLI は Task 5 前なので primary hover、Tabs、destructive alpha、legacy state alpha の既知 FAIL だけで exit 1。warning は PASS し、RISK-006 stale accepted problem は出ない。未知 FAIL があれば停止して報告する。
+Expected: tests、token check、format、lint は exit 0。consumer CLI は Task 5 前なので exit 1 になるが、FAIL の exact set は v1.8 適用後の実測結果を正本としてこの Step で再判定する。warning は PASS し、RISK-006 stale accepted problem は出ない。未宣言 utility、解析不能、coverage 欠落があれば停止して報告する。
 
 - [ ] **Step 8: token commit を consumer commit と分ける**
 
@@ -804,6 +804,7 @@ Expected: 指定 port で preview が起動する。fallback したら停止す�
 
 - Button / Badge / Bubble: primary hover が opaque `primary-hover`、destructive default / hover が v1.8 subtle pair + state tint で 4.5:1 以上。
 - Attachment / Alert / Menubar: destructive text が alpha なしの subtle foreground。
+- destructive 系は少なくとも1件、ブラウザで取得した foreground / background の computed color から算出した contrast と sensor の同一 case の比率を照合し、gamma-encoded sRGB 合成の実経路が一致することを確認する。
 - Tabs: inactive light / dark が opaque muted foreground、active は foreground。
 - Select comparison: light / dark の placeholder Select と Input が同じ opaque surface / control border へ解決される。before report の solid Select / alpha Input との差を記録する。
 - disabled controls: disabled state が描画され、AA exempt だが文字消失、背景欠落、cursor / disabled semantics の回帰がない。
