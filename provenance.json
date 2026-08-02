@@ -1217,6 +1217,27 @@
       "license": "MIT",
       "modified": "全 PascalCase export の Props 型公開、IconPlaceholder を Lucide icon へ置換、trigger・clear・chip remove の accessible name を日本語化、透明 focus ring と値系 arbitrary width・height を semantic token・CSS variable utility へ正規化、barrel export、option open・filter・keyboard selection・clear・focus return の preview と light/dark route、hydration selector を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "command": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/command.json",
+      "registryPath": "registry/base-nova/ui/command.tsx",
+      "registryContentSha256": "d34d89ee849708bbf9108a93115f21df5b3149362809f88815c4fdb770b03e1c",
+      "generatedContentSha256": "e85607682ae67fd7d4d95ca2dfde6d3a0fc43b69d3f312687ae06cfb3b3a77e2",
+      "addTarget": "@shadcn/command",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/command.tsx",
+      "upstreamPathSha": "dba86053f5d118ed891d1f1d6b80aee94af2bdb3",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-02",
+      "license": "MIT",
+      "modified": "全 PascalCase export の Props 型公開、IconPlaceholder を Lucide SearchIcon・CheckIcon へ置換、dialog の既定 title・description を日本語化、barrel export、inline と dialog の filter・keyboard selection・empty state の preview と light/dark route、hydration selector を追加",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }

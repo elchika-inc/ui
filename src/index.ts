@@ -222,6 +222,28 @@ export {
   useComboboxAnchor,
 } from "./components/ui/combobox";
 export type {
+  CommandDialogProps,
+  CommandEmptyProps,
+  CommandGroupProps,
+  CommandInputProps,
+  CommandItemProps,
+  CommandListProps,
+  CommandProps,
+  CommandSeparatorProps,
+  CommandShortcutProps,
+} from "./components/ui/command";
+export {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "./components/ui/command";
+export type {
   ContextMenuCheckboxItemProps,
   ContextMenuContentProps,
   ContextMenuGroupProps,
