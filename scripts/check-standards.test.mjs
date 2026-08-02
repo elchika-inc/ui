@@ -206,6 +206,102 @@ test("関数から参照する後置module変数もlexical bindingとして解�
   );
 });
 
+test("property名を同名のmodule変数へ誤解しない", () => {
+  const { violations } = checkFile(
+    "a.tsx",
+    `const ring = cn(
+      "focus-visible:ring-[3px]",
+      "ring-ring/50",
+    );
+    const styles = { ring: "text-sm" };
+    const classes = styles.ring;
+    const View = () => <div className={classes} />;`,
+  );
+  assert.deepEqual(violations, []);
+});
+
+test("parameter shadowingをmodule変数へ誤解しない", () => {
+  const { violations } = checkFile(
+    "a.tsx",
+    `const classes = cn(
+      "focus-visible:ring-[3px]",
+      "ring-ring/50",
+    );
+    function View(classes: string) {
+      return <div className={classes} />;
+    }`,
+  );
+  assert.deepEqual(violations, []);
+});
+
+test("destructured parameterのdefault initializerを解決する", () => {
+  const { violations } = checkFile(
+    "a.tsx",
+    `function View({
+      classes = cn(
+        "focus-visible:ring-[3px]",
+        "ring-ring/50",
+      ),
+    }: { classes?: string }) {
+      return <div className={classes} />;
+    }`,
+  );
+  assert.ok(
+    violations.some((violation) => violation.rule === "focus-ring-opacity"),
+    "destructured parameterのdefaultで透明なfocus ringが隠れている",
+  );
+});
+
+test("block内varをfunction scopeのbindingとして解決する", () => {
+  const { violations } = checkFile(
+    "a.tsx",
+    `function View() {
+      if (true) {
+        var classes = cn(
+          "focus-visible:ring-[3px]",
+          "ring-ring/50",
+        );
+      }
+      return <div className={classes} />;
+    }`,
+  );
+  assert.ok(
+    violations.some((violation) => violation.rule === "focus-ring-opacity"),
+    "block内varのfunction scopeで透明なfocus ringが隠れている",
+  );
+});
+
+test("ternaryの相互排他branchを同時適用と誤認しない", () => {
+  const { violations } = checkFile(
+    "a.tsx",
+    `const View = ({ active }: { active: boolean }) => (
+      <div
+        className={
+          active
+            ? "focus-visible:ring-[3px]"
+            : "ring-ring/50"
+        }
+      />
+    );`,
+  );
+  assert.deepEqual(violations, []);
+});
+
+test("相反するboolean条件のclassを同時適用と誤認しない", () => {
+  const { violations } = checkFile(
+    "a.tsx",
+    `const View = ({ active }: { active: boolean }) => (
+      <div
+        className={cn(
+          active && "focus-visible:ring-[3px]",
+          !active && "ring-ring/50",
+        )}
+      />
+    );`,
+  );
+  assert.deepEqual(violations, []);
+});
+
 test("2 規定へ同時に違反するクラスは 2 診断とも出す", () => {
   // ring-[#f00]/50 は任意値であり、かつ透明度合成でもある。
   // focus-ring-opacity だけを assert すると、ARBITRARY 側が

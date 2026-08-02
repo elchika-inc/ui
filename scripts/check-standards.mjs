@@ -41,85 +41,211 @@ function classNameExpressions(path, source) {
   const isAttributeFragment = !source.includes("<");
   const prefix = isAttributeFragment ? "<div " : "";
   const parsedSource = isAttributeFragment ? `${prefix}${source} />` : source;
+  const virtualPath = "/__elchika_check__/input.tsx";
   const sourceFile = ts.createSourceFile(
-    path,
+    virtualPath,
     parsedSource,
     ts.ScriptTarget.Latest,
     true,
     ts.ScriptKind.TSX,
   );
+  const compilerOptions = {
+    jsx: ts.JsxEmit.Preserve,
+    noLib: true,
+    noResolve: true,
+    target: ts.ScriptTarget.Latest,
+  };
+  const host = {
+    fileExists: (fileName) => fileName === virtualPath,
+    getCanonicalFileName: (fileName) => fileName,
+    getCurrentDirectory: () => "/",
+    getDefaultLibFileName: () => "",
+    getDirectories: () => [],
+    getNewLine: () => "\n",
+    getSourceFile: (fileName) => (fileName === virtualPath ? sourceFile : undefined),
+    readFile: (fileName) => (fileName === virtualPath ? parsedSource : undefined),
+    useCaseSensitiveFileNames: () => true,
+    writeFile: () => {},
+  };
+  const checker = ts.createProgram([virtualPath], compilerOptions, host).getTypeChecker();
   const expressions = [];
-  const variableDeclarations = new Map();
-  const collectVariables = (node) => {
-    if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer) {
-      const declarations = variableDeclarations.get(node.name.text) ?? [];
-      declarations.push(node);
-      variableDeclarations.set(node.name.text, declarations);
+  const symbolKeys = new WeakMap();
+  let nextSymbolKey = 1;
+  const symbolKey = (symbol) => {
+    if (!symbolKeys.has(symbol)) symbolKeys.set(symbol, nextSymbolKey++);
+    return symbolKeys.get(symbol);
+  };
+  const unwrapCondition = (expression, truthy) => {
+    let current = expression;
+    let required = truthy;
+    while (ts.isParenthesizedExpression(current)) current = current.expression;
+    while (
+      ts.isPrefixUnaryExpression(current) &&
+      current.operator === ts.SyntaxKind.ExclamationToken
+    ) {
+      required = !required;
+      current = current.operand;
+      while (ts.isParenthesizedExpression(current)) current = current.expression;
     }
-    ts.forEachChild(node, collectVariables);
+    const location = ts.isPropertyAccessExpression(current) ? current.name : current;
+    const symbol = checker.getSymbolAtLocation(location);
+    const key = symbol
+      ? `symbol:${symbolKey(symbol)}`
+      : `expression:${current.getStart(sourceFile)}:${current.getText(sourceFile)}`;
+    return { key, required };
   };
-  collectVariables(sourceFile);
-  const isLexicalScope = (node) =>
-    ts.isSourceFile(node) ||
-    ts.isBlock(node) ||
-    ts.isCaseBlock(node) ||
-    ts.isForStatement(node) ||
-    ts.isForInStatement(node) ||
-    ts.isForOfStatement(node) ||
-    ts.isCatchClause(node);
-  const lexicalScope = (node) => {
-    for (let current = node.parent; current; current = current.parent) {
-      if (isLexicalScope(current)) return current;
+
+  const withRequirement = (candidates, requirement) =>
+    candidates.flatMap((candidate) => {
+      const existing = candidate.requirements.get(requirement.key);
+      if (existing !== undefined && existing !== requirement.required) return [];
+      const requirements = new Map(candidate.requirements);
+      requirements.set(requirement.key, requirement.required);
+      return [{ ...candidate, requirements }];
+    });
+
+  const mergeCandidates = (left, right) => {
+    const requirements = new Map(left.requirements);
+    for (const [key, required] of right.requirements) {
+      const existing = requirements.get(key);
+      if (existing !== undefined && existing !== required) return undefined;
+      requirements.set(key, required);
     }
-    return sourceFile;
+    return { nodes: [...left.nodes, ...right.nodes], requirements };
   };
-  const containsNode = (ancestor, node) => {
-    for (let current = node; current; current = current.parent) {
-      if (current === ancestor) return true;
+
+  const combineCandidateSets = (sets) =>
+    sets.reduce(
+      (combined, candidates) =>
+        combined.flatMap((left) =>
+          candidates.flatMap((right) => {
+            const merged = mergeCandidates(left, right);
+            return merged ? [merged] : [];
+          }),
+        ),
+      [{ nodes: [], requirements: new Map() }],
+    );
+
+  const declarationInitializers = (expression) => {
+    const location = ts.isPropertyAccessExpression(expression) ? expression.name : expression;
+    const symbol = checker.getSymbolAtLocation(location);
+    if (!symbol) return {};
+    const initializers = (symbol.declarations ?? [])
+      .filter(
+        (declaration) =>
+          (ts.isVariableDeclaration(declaration) ||
+            ts.isParameter(declaration) ||
+            ts.isBindingElement(declaration) ||
+            ts.isPropertyAssignment(declaration) ||
+            ts.isPropertyDeclaration(declaration)) &&
+          declaration.initializer,
+      )
+      .map((declaration) => declaration.initializer);
+    return { symbol, initializers };
+  };
+
+  const candidatesForExpression = (expression, resolving = new Set()) => {
+    if (
+      ts.isParenthesizedExpression(expression) ||
+      ts.isAsExpression(expression) ||
+      ts.isSatisfiesExpression(expression) ||
+      ts.isNonNullExpression(expression)
+    ) {
+      return candidatesForExpression(expression.expression, resolving);
     }
-    return false;
-  };
-  const resolveExpression = (expression, useNode = expression, seen = new Set()) => {
-    if (!ts.isIdentifier(expression)) return expression;
-    const declarations = (variableDeclarations.get(expression.text) ?? [])
-      .filter((declaration) => containsNode(lexicalScope(declaration), useNode))
-      .toSorted((left, right) => {
-        const leftScope = lexicalScope(left);
-        const rightScope = lexicalScope(right);
-        const spanDifference =
-          leftScope.getEnd() -
-          leftScope.getStart(sourceFile) -
-          (rightScope.getEnd() - rightScope.getStart(sourceFile));
-        return spanDifference || right.getStart(sourceFile) - left.getStart(sourceFile);
-      });
-    const declaration = declarations[0];
-    if (!declaration || seen.has(declaration)) return expression;
-    const nextSeen = new Set(seen).add(declaration);
-    return resolveExpression(declaration.initializer, declaration, nextSeen);
-  };
-  const expressionFragments = (expression) => {
-    const fragments = new Map();
-    const addFragment = (node) => {
-      const key = `${node.getStart(sourceFile)}:${node.getEnd()}`;
-      fragments.set(key, {
-        text: node.getText(sourceFile),
-        offset: Math.max(0, node.getStart(sourceFile) - prefix.length),
-      });
-    };
-    const collectResolved = (node) => {
-      if (ts.isIdentifier(node)) {
-        const resolved = resolveExpression(node);
-        if (resolved !== node) {
-          addFragment(resolved);
-          collectResolved(resolved);
-          return;
-        }
+    if (ts.isConditionalExpression(expression)) {
+      return [
+        ...withRequirement(
+          candidatesForExpression(expression.whenTrue, resolving),
+          unwrapCondition(expression.condition, true),
+        ),
+        ...withRequirement(
+          candidatesForExpression(expression.whenFalse, resolving),
+          unwrapCondition(expression.condition, false),
+        ),
+      ];
+    }
+    if (ts.isBinaryExpression(expression)) {
+      if (expression.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken) {
+        return [
+          ...withRequirement(
+            [{ nodes: [], requirements: new Map() }],
+            unwrapCondition(expression.left, false),
+          ),
+          ...withRequirement(
+            candidatesForExpression(expression.right, resolving),
+            unwrapCondition(expression.left, true),
+          ),
+        ];
       }
-      ts.forEachChild(node, collectResolved);
-    };
-    addFragment(expression);
-    collectResolved(expression);
-    return [...fragments.values()];
+      if (expression.operatorToken.kind === ts.SyntaxKind.BarBarToken) {
+        return [
+          ...withRequirement(
+            [{ nodes: [], requirements: new Map() }],
+            unwrapCondition(expression.left, true),
+          ),
+          ...withRequirement(
+            candidatesForExpression(expression.right, resolving),
+            unwrapCondition(expression.left, false),
+          ),
+        ];
+      }
+      if (
+        expression.operatorToken.kind === ts.SyntaxKind.PlusToken ||
+        expression.operatorToken.kind === ts.SyntaxKind.CommaToken
+      ) {
+        return combineCandidateSets([
+          candidatesForExpression(expression.left, resolving),
+          candidatesForExpression(expression.right, resolving),
+        ]);
+      }
+    }
+    if (ts.isCallExpression(expression)) {
+      if (
+        ts.isPropertyAccessExpression(expression.expression) &&
+        expression.expression.name.text === "join" &&
+        ts.isArrayLiteralExpression(expression.expression.expression)
+      ) {
+        return candidatesForExpression(expression.expression.expression, resolving);
+      }
+      return combineCandidateSets(
+        expression.arguments.map((argument) => candidatesForExpression(argument, resolving)),
+      );
+    }
+    if (ts.isArrayLiteralExpression(expression)) {
+      return combineCandidateSets(
+        expression.elements.map((element) => candidatesForExpression(element, resolving)),
+      );
+    }
+    if (
+      ts.isIdentifier(expression) ||
+      ts.isPropertyAccessExpression(expression) ||
+      ts.isElementAccessExpression(expression)
+    ) {
+      const { symbol, initializers = [] } = declarationInitializers(expression);
+      if (symbol && initializers.length && !resolving.has(symbol)) {
+        const nextResolving = new Set(resolving).add(symbol);
+        return initializers.flatMap((initializer) =>
+          candidatesForExpression(initializer, nextResolving),
+        );
+      }
+    }
+    return [{ nodes: [expression], requirements: new Map() }];
+  };
+
+  const expressionFragments = (expression) => {
+    const candidates = candidatesForExpression(expression);
+    return candidates.map((candidate) => {
+      const fragments = new Map();
+      for (const node of candidate.nodes) {
+        const key = `${node.getStart(sourceFile)}:${node.getEnd()}`;
+        fragments.set(key, {
+          text: node.getText(sourceFile),
+          offset: Math.max(0, node.getStart(sourceFile) - prefix.length),
+        });
+      }
+      return [...fragments.values()];
+    });
   };
   const visit = (node) => {
     if (
@@ -131,7 +257,7 @@ function classNameExpressions(path, source) {
         ? node.initializer.expression
         : node.initializer;
       if (value) {
-        expressions.push(expressionFragments(value));
+        expressions.push(...expressionFragments(value));
       }
     }
     ts.forEachChild(node, visit);

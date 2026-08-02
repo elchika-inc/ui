@@ -355,7 +355,7 @@ function deletedComponentEvidence(repositoryRoot, components) {
     .trim()
     .split("\n");
   return [...new Set([...committed, ...uncommitted].filter(Boolean))]
-    .filter((path) => !existsSync(join(repositoryRoot, path)))
+    .filter((path) => !lstatSync(join(repositoryRoot, path), { throwIfNoEntry: false })?.isFile())
     .map((path) => path.replace(/^\.docs\/reviews\//, ""))
     .filter(
       (path) => componentFromEvidence(path) || imageComponentAndTheme(path, components).component,

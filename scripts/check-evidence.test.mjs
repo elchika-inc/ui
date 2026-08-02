@@ -471,6 +471,32 @@ test("既存component証跡をrenameしてSHAを書き換えても削除とし�
   );
 });
 
+test("既存component証跡fileを同名directoryへ置換しても削除として検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  writeFileSync(join(root, "src/components/ui/button.tsx"), "button reverified\n");
+  git(root, ["add", "src/components/ui/button.tsx"]);
+  git(root, ["commit", "-m", "change button before reverification"]);
+  const latestVerifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
+  addComponentEvidence(root, "2026-08-02-button-preview.md", latestVerifiedSha);
+  git(root, ["commit", "-m", "add latest button evidence"]);
+  git(root, ["rm", ".docs/reviews/2026-08-01-button-preview.md"]);
+  mkdirSync(join(root, ".docs/reviews/2026-08-01-button-preview.md"));
+  writeFileSync(
+    join(root, ".docs/reviews/2026-08-01-button-preview.md/note.txt"),
+    "旧証跡を置換\n",
+  );
+  git(root, ["add", ".docs/reviews/2026-08-01-button-preview.md/note.txt"]);
+  git(root, ["commit", "-m", "replace old evidence file with directory"]);
+
+  assert.ok(
+    checkEvidenceInRepo(root).problems.includes(
+      "2026-08-01-button-preview.md: 過去のcomponent証跡は削除・renameできない",
+    ),
+  );
+});
+
 test("分岐した証跡SHAが複数あればcommit件数にかかわらずfail-closedにする", async (t) => {
   const { root } = createEvidenceRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));
