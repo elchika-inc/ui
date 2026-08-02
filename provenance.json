@@ -1196,6 +1196,27 @@
       "license": "MIT",
       "modified": "全 PascalCase export の Props 型公開、値系 arbitrary gap と small radius を semantic CSS variable utility・rounded-md へ正規化、上流の ToggleGroup が orientation を primitive へ渡さず vertical の矢印キー移動が機能しない欠陥を公開 props 経路で転送して修正（上流修正時は再評価して除去）、barrel export、single・multiple の pressed state と keyboard 到達を確認する preview と light/dark route、hydration selector を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "combobox": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/combobox.json",
+      "registryPath": "registry/base-nova/ui/combobox.tsx",
+      "registryContentSha256": "3122d4c4d2219beee472a394490ee0934e46778a1ba4c2a97447d6871e7968d2",
+      "generatedContentSha256": "f85f566d4d53d69d2b87a625a12bbfc36585d48fe8797fd7ce555808307ce0ac",
+      "addTarget": "@shadcn/combobox",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/combobox.tsx",
+      "upstreamPathSha": "49616d2e162d2213d76478798ed3773b8cfe3089",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-02",
+      "license": "MIT",
+      "modified": "全 PascalCase export の Props 型公開、IconPlaceholder を Lucide icon へ置換、clear と chip remove の accessible name を日本語化、透明 focus ring と値系 arbitrary width・height を semantic token・CSS variable utility へ正規化、barrel export、option open・filter・keyboard selection・clear・focus return の preview と light/dark route、hydration selector を追加",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }

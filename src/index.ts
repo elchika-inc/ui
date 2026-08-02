@@ -187,6 +187,41 @@ export type {
 } from "./components/ui/collapsible";
 export { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./components/ui/collapsible";
 export type {
+  ComboboxChipProps,
+  ComboboxChipsInputProps,
+  ComboboxChipsProps,
+  ComboboxCollectionProps,
+  ComboboxContentProps,
+  ComboboxEmptyProps,
+  ComboboxGroupProps,
+  ComboboxInputProps,
+  ComboboxItemProps,
+  ComboboxLabelProps,
+  ComboboxListProps,
+  ComboboxProps,
+  ComboboxSeparatorProps,
+  ComboboxTriggerProps,
+  ComboboxValueProps,
+} from "./components/ui/combobox";
+export {
+  Combobox,
+  ComboboxChip,
+  ComboboxChips,
+  ComboboxChipsInput,
+  ComboboxCollection,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxGroup,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxLabel,
+  ComboboxList,
+  ComboboxSeparator,
+  ComboboxTrigger,
+  ComboboxValue,
+  useComboboxAnchor,
+} from "./components/ui/combobox";
+export type {
   ContextMenuCheckboxItemProps,
   ContextMenuContentProps,
   ContextMenuGroupProps,

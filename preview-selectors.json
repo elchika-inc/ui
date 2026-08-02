@@ -16,6 +16,7 @@
   "card": "[data-slot=\"card\"]",
   "checkbox": "[data-slot=\"checkbox-preview\"]",
   "collapsible": "[data-slot=\"collapsible-preview\"]",
+  "combobox": "[data-slot=\"combobox-preview\"]",
   "context-menu": {
     "selector": "[data-slot=\"context-menu-content\"]",
     "setup": {
