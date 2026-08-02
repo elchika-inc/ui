@@ -466,7 +466,7 @@ Expected: test と実 source の check が exit 0。temp 上で生成物を壊�
 | muted-foreground | `rgb(var(--color-text-muted))` |
 | accent | `rgb(var(--color-brand-subtle))` |
 | accent-foreground | `rgb(var(--color-brand-primary-hover))` |
-| destructive / destructive-foreground | `rgb(var(--color-status-danger))` / `rgb(var(--color-bg-surface))` |
+| destructive / destructive-foreground | `rgb(var(--color-status-danger-text))` / `rgb(var(--color-bg-surface))` |
 | destructive-subtle / destructive-subtle-foreground | `rgb(var(--color-status-danger-bg))` / `rgb(var(--color-status-danger-text))` |
 | success / success-foreground | `rgb(var(--color-status-success-bg))` / `rgb(var(--color-status-success-text))` |
 | warning / warning-foreground | `rgb(var(--color-status-warning-bg))` / `rgb(var(--color-status-warning-text))` |
@@ -540,8 +540,11 @@ Expected: tests、token check、format、lint は exit 0。consumer CLI は Task
 | C muted foreground 調整 | v1.8 の検査済み `color-text-muted` をそのまま alias する |
 | D Tabs light alpha | light / dark とも opaque `text-muted-foreground` にする |
 | E passing pattern 維持 | 装飾 alpha だけを維持し、状態を表す alpha は `state-*`、control surface は card / muted へ正規化する |
+| F solid destructive の light AA | component の solid class は維持し、`destructive` alias を v1.8 の solid / text 用 `color-status-danger-text` へ変更する。`color-status-danger` は subtle / indicator 経由で使用を継続する |
 
 solid / subtle surface を保ったまま tint を重ねる箇所は、`background-image: linear-gradient(var(--state-hover-bg), var(--state-hover-bg))` の共通 `state-hover-overlay` utility を `global.css` に1つ定義する。component 別 hover token は作らない。focus ring と競合する `box-shadow` overlay は使わない。
+
+正規化順序は `destructive` alias の変更を先、alpha class の置換を後に固定する。`global.css` には、solid AA のため `color-status-danger-text` を使い、`color-status-danger` は subtle / indicator で維持する理由を1行コメントする。alias 変更で濃くなる `border-destructive` / `ring-destructive` は nontext sensor の対象に含める。
 
 - [ ] **Step 2: semantic state alpha を exact class へ置換する**
 
@@ -564,6 +567,8 @@ Button は muted 最悪面へ primary / destructive を追加する。Select は
 - [ ] **Step 4: provenance.modified を全実差分へ更新する**
 
 変更した component entry だけへ state token 正規化の実差分を追記する。`sourceUrl`、upstream SHA、取得日、hash は変更しない。実際に変更していない component へ記載を足さない。
+
+solid destructive alias は共有 token の差分であり、component code を変更しない ContextMenu / DropdownMenu の `provenance.modified` は変更しない。判断理由と `color-status-danger` の使用継続は Task 8 の shared report へ記録する。
 
 - [ ] **Step 5: registry の2層 token 配布を RED→GREEN にする**
 
@@ -811,6 +816,8 @@ Expected: 指定 port で preview が起動する。fallback したら停止す�
 - Button / Badge / Bubble: primary hover が opaque `primary-hover`、destructive default / hover が v1.8 subtle pair + state tint で 4.5:1 以上。
 - Attachment / Alert / Menubar: destructive text が alpha なしの subtle foreground。
 - destructive 系は少なくとも1件、ブラウザで取得した foreground / background の computed color から算出した contrast と sensor の同一 case の比率を照合し、gamma-encoded sRGB 合成の実経路が一致することを確認する。
+- ContextMenu / DropdownMenu の solid destructive focus は class を維持し、light / dark とも computed contrast が 4.5:1 以上であることを確認する。shared report へ solid AA のため `destructive` alias を `color-status-danger-text` にしたことと、`color-status-danger` は subtle / indicator で使用を継続することを記録する。
+- `aria-invalid` の `border-destructive` / `ring-destructive` は light / dark とも 3:1 の nontext sensor と browser computed color で確認する。
 - Tabs: inactive light / dark が opaque muted foreground、active は foreground。
 - Select comparison: light / dark の placeholder Select と Input が同じ opaque surface / control border へ解決される。before report の solid Select / alpha Input との差を記録する。
 - disabled controls: disabled state が描画され、AA exempt だが文字消失、背景欠落、cursor / disabled semantics の回帰がない。
