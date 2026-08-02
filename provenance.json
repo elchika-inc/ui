@@ -270,7 +270,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-01",
       "license": "MIT",
-      "modified": "Base UI と semantic token 規約へ正規化し、Avatar・AvatarImage・AvatarFallback の Props 型公開、light/dark 隔離プレビュー、安定 selector、network-free な読み込み失敗による fallback 検証を追加",
+      "modified": "Base UI と semantic token 規約へ正規化し、Avatar・AvatarImage・AvatarFallback の Props 型公開、light/dark 隔離プレビュー、安定 selector、src を省略した画像未提供の fallback 検証を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "breadcrumb": {
