@@ -174,6 +174,38 @@ test("別scopeの同名変数があってもclassNameの最近傍initializerを�
   );
 });
 
+test("className合成式の子identifierもinitializerまで解決する", () => {
+  const { violations } = checkFile(
+    "a.tsx",
+    `const focusClasses = cn(
+      "focus-visible:ring-[3px]",
+      "ring-ring/50",
+    );
+    const View = () => <div className={cn("text-sm", focusClasses)} />;`,
+  );
+  assert.ok(
+    violations.some((violation) => violation.rule === "focus-ring-opacity"),
+    "className合成式の子identifierで透明なfocus ringが隠れている",
+  );
+});
+
+test("関数から参照する後置module変数もlexical bindingとして解決する", () => {
+  const { violations } = checkFile(
+    "a.tsx",
+    `function View() {
+      return <div className={classes} />;
+    }
+    const classes = cn(
+      "focus-visible:ring-[3px]",
+      "ring-ring/50",
+    );`,
+  );
+  assert.ok(
+    violations.some((violation) => violation.rule === "focus-ring-opacity"),
+    "後置module変数で透明なfocus ringが隠れている",
+  );
+});
+
 test("2 規定へ同時に違反するクラスは 2 診断とも出す", () => {
   // ring-[#f00]/50 は任意値であり、かつ透明度合成でもある。
   // focus-ring-opacity だけを assert すると、ARBITRARY 側が

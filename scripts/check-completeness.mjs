@@ -24,6 +24,9 @@ const exportedNames = (dts, typeOnly) =>
       .map((element) => element.name.text);
   });
 
+const isComponentValueName = (name) =>
+  /^[A-Z]/.test(name) && !name.endsWith("Props") && !/^[A-Z][A-Z0-9_]+$/.test(name);
+
 const exportedModulePaths = (source) =>
   new Set(
     exportDeclarations(source, "src/index.ts")
@@ -33,7 +36,7 @@ const exportedModulePaths = (source) =>
           declaration.exportClause &&
           ts.isNamedExports(declaration.exportClause) &&
           declaration.exportClause.elements.some(
-            (element) => !element.isTypeOnly && /^[A-Z]/.test(element.name.text),
+            (element) => !element.isTypeOnly && isComponentValueName(element.name.text),
           ),
       )
       .map((declaration) => declaration.moduleSpecifier)
@@ -46,9 +49,7 @@ const exportedModulePaths = (source) =>
 // export 単位で検査し、各 public value に同名の <Name>Props を要求する。
 const dtsContractProblems = (dts) => {
   const typeExports = new Set(exportedNames(dts, true));
-  const componentExports = exportedNames(dts, false).filter(
-    (name) => /^[A-Z]/.test(name) && !name.endsWith("Props") && !/^[A-Z][A-Z0-9_]+$/.test(name),
-  );
+  const componentExports = exportedNames(dts, false).filter(isComponentValueName);
   if (componentExports.length === 0) {
     return ["lib/index.d.ts の PascalCase value export が 0 件（走査が空走している）"];
   }

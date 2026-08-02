@@ -82,11 +82,7 @@ function classNameExpressions(path, source) {
   const resolveExpression = (expression, useNode = expression, seen = new Set()) => {
     if (!ts.isIdentifier(expression)) return expression;
     const declarations = (variableDeclarations.get(expression.text) ?? [])
-      .filter(
-        (declaration) =>
-          declaration.getStart(sourceFile) < useNode.getStart(sourceFile) &&
-          containsNode(lexicalScope(declaration), useNode),
-      )
+      .filter((declaration) => containsNode(lexicalScope(declaration), useNode))
       .toSorted((left, right) => {
         const leftScope = lexicalScope(left);
         const rightScope = lexicalScope(right);
@@ -101,6 +97,30 @@ function classNameExpressions(path, source) {
     const nextSeen = new Set(seen).add(declaration);
     return resolveExpression(declaration.initializer, declaration, nextSeen);
   };
+  const expressionFragments = (expression) => {
+    const fragments = new Map();
+    const addFragment = (node) => {
+      const key = `${node.getStart(sourceFile)}:${node.getEnd()}`;
+      fragments.set(key, {
+        text: node.getText(sourceFile),
+        offset: Math.max(0, node.getStart(sourceFile) - prefix.length),
+      });
+    };
+    const collectResolved = (node) => {
+      if (ts.isIdentifier(node)) {
+        const resolved = resolveExpression(node);
+        if (resolved !== node) {
+          addFragment(resolved);
+          collectResolved(resolved);
+          return;
+        }
+      }
+      ts.forEachChild(node, collectResolved);
+    };
+    addFragment(expression);
+    collectResolved(expression);
+    return [...fragments.values()];
+  };
   const visit = (node) => {
     if (
       ts.isJsxAttribute(node) &&
@@ -111,11 +131,7 @@ function classNameExpressions(path, source) {
         ? node.initializer.expression
         : node.initializer;
       if (value) {
-        const resolvedValue = resolveExpression(value);
-        expressions.push({
-          text: resolvedValue.getText(sourceFile),
-          offset: Math.max(0, resolvedValue.getStart(sourceFile) - prefix.length),
-        });
+        expressions.push(expressionFragments(value));
       }
     }
     ts.forEachChild(node, visit);
@@ -124,14 +140,16 @@ function classNameExpressions(path, source) {
   return expressions;
 }
 
-function statefulRingViolations(text, source, offset) {
-  const literalMatches = [...text.matchAll(STRING_LITERAL)];
-  const literals = literalMatches.length
-    ? literalMatches.map((match) => ({
-        text: match[0].slice(1, -1),
-        offset: (match.index ?? 0) + 1,
-      }))
-    : [{ text, offset: 0 }];
+function statefulRingFragmentViolations(fragments, source) {
+  const literals = fragments.flatMap((fragment) => {
+    const literalMatches = [...fragment.text.matchAll(STRING_LITERAL)];
+    return literalMatches.length
+      ? literalMatches.map((match) => ({
+          text: match[0].slice(1, -1),
+          offset: fragment.offset + (match.index ?? 0) + 1,
+        }))
+      : [{ text: fragment.text, offset: fragment.offset }];
+  });
   const tokens = literals.flatMap((literal) => literal.text.split(/\s+/));
   if (!tokens.some((token) => STATEFUL_RING.test(token) && token.includes("ring-"))) {
     return [];
@@ -139,10 +157,14 @@ function statefulRingViolations(text, source, offset) {
   return literals.flatMap((literal) =>
     [...literal.text.matchAll(RING_OPACITY)].map((match) => ({
       rule: "focus-ring-opacity",
-      line: source.slice(0, offset + literal.offset + (match.index ?? 0)).split("\n").length,
+      line: source.slice(0, literal.offset + (match.index ?? 0)).split("\n").length,
       text: match[0],
     })),
   );
+}
+
+function statefulRingViolations(text, source, offset) {
+  return statefulRingFragmentViolations([{ text, offset }], source);
 }
 
 export function checkFile(path, source) {
@@ -161,8 +183,8 @@ export function checkFile(path, source) {
       violations.push({ rule: "boolean-data-inset", line: i + 1, text: m[0] });
     }
   });
-  for (const expression of classNameExpressions(path, source)) {
-    violations.push(...statefulRingViolations(expression.text, source, expression.offset));
+  for (const fragments of classNameExpressions(path, source)) {
+    violations.push(...statefulRingFragmentViolations(fragments, source));
   }
   const unique = new Map(
     violations.map((violation) => [

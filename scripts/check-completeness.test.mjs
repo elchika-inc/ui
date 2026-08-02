@@ -79,6 +79,19 @@ test("lowercase helperだけのbarrel exportをcomponent valueとして誤認し
   assert.deepEqual(problems, ["button: src/index.ts から export されていない"]);
 });
 
+test("ALL_CAPS helperだけのbarrel exportをcomponent valueとして誤認しない", () => {
+  const dts = [
+    'export type { DialogProps } from "./components/ui/dialog";',
+    'export { Dialog, BUTTON_VARIANTS } from "./components/ui/dialog";',
+  ].join("\n");
+  const { problems } = checkCompleteness({
+    ...complete,
+    barrel: 'export { BUTTON_VARIANTS } from "./components/ui/button"',
+    dts,
+  });
+  assert.deepEqual(problems, ["button: src/index.ts から export されていない"]);
+});
+
 test("Props 型の欠落を検出する", () => {
   const { problems } = checkCompleteness({
     ...complete,

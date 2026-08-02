@@ -2,7 +2,7 @@
 // 集約証跡と共有面の変更は全証跡を一律に失敗させず、陳腐化の可能性として一覧化する。
 import { execFileSync, spawnSync } from "node:child_process";
 import { existsSync, lstatSync, readdirSync, readFileSync, realpathSync } from "node:fs";
-import { basename, extname, isAbsolute, join, relative } from "node:path";
+import { basename, extname, isAbsolute, join, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
 // preview 全体へ影響しうる共有面はここだけを育てる。
@@ -53,8 +53,9 @@ function componentPaths(repositoryRoot, name) {
     `src/pages/preview/${name}.astro`,
     `src/pages/preview/${name}-dark.astro`,
   ];
+  const problems = [];
   const registryPath = join(repositoryRoot, "registry.json");
-  if (!existsSync(registryPath)) return paths;
+  if (!existsSync(registryPath)) return { paths, problems };
   const registry = JSON.parse(readFileSync(registryPath, "utf8"));
   const item = registry.items?.find((candidate) => candidate.name === name);
   for (const file of item?.files ?? []) {
@@ -63,10 +64,25 @@ function componentPaths(repositoryRoot, name) {
       file.type !== "registry:file" &&
       !SHARED_EVIDENCE_PATHS.includes(file.path)
     ) {
-      paths.push(file.path);
+      const normalized = relative(repositoryRoot, resolve(repositoryRoot, file.path));
+      if (
+        file.path.startsWith(":") ||
+        isAbsolute(file.path) ||
+        !normalized ||
+        normalized === ".." ||
+        normalized.startsWith("../") ||
+        isAbsolute(normalized) ||
+        normalized !== file.path
+      ) {
+        problems.push(
+          `${name}: registry path ${file.path} はrepo内の通常相対pathでなければならない`,
+        );
+        continue;
+      }
+      paths.push(normalized);
     }
   }
-  return [...new Set(paths)];
+  return { paths: [...new Set(paths)], problems };
 }
 
 function evidencePaths(file) {
@@ -123,7 +139,7 @@ function commitIsAncestor(root, ancestor, descendant = "HEAD") {
 }
 
 function pathsChanged(root, sha, paths) {
-  const result = spawnSync("git", ["diff", "--quiet", sha, "--", ...paths], {
+  const result = spawnSync("git", ["--literal-pathspecs", "diff", "--quiet", sha, "--", ...paths], {
     cwd: root,
     stdio: "ignore",
   });
@@ -132,7 +148,7 @@ function pathsChanged(root, sha, paths) {
 
   const untracked = spawnSync(
     "git",
-    ["ls-files", "--others", "--exclude-standard", "--", ...paths],
+    ["--literal-pathspecs", "ls-files", "--others", "--exclude-standard", "--", ...paths],
     { cwd: root, encoding: "utf8" },
   );
   if (untracked.status !== 0) {
@@ -174,6 +190,8 @@ function inspectLatestComponentEvidence(repositoryRoot, verifications) {
   const byComponent = Map.groupBy(verifications, ({ component }) => component);
 
   for (const [component, candidates] of byComponent) {
+    const componentPathResult = componentPaths(repositoryRoot, component);
+    problems.push(...componentPathResult.problems);
     const latest = candidates.filter(
       (candidate) =>
         !candidates.some(
@@ -190,7 +208,7 @@ function inspectLatestComponentEvidence(repositoryRoot, verifications) {
       continue;
     }
     const [{ file, sha }] = latest;
-    if (pathsChanged(repositoryRoot, sha, componentPaths(repositoryRoot, component))) {
+    if (pathsChanged(repositoryRoot, sha, componentPathResult.paths)) {
       problems.push(`${file}: 検証 SHA 以降に component 固有 path が変更されている`);
     }
   }
@@ -291,6 +309,59 @@ function inspectVerificationHistory(repositoryRoot, verifications) {
   return problems;
 }
 
+function evidenceImmutabilityBaseline(repositoryRoot) {
+  const introduction = git(repositoryRoot, [
+    "log",
+    "--reverse",
+    "-SintroducedVerificationSha",
+    "--format=%H",
+    "--",
+    "scripts/check-evidence.mjs",
+  ])
+    .trim()
+    .split("\n")
+    .find(Boolean);
+  if (introduction) return introduction;
+  return git(repositoryRoot, ["rev-list", "--max-parents=0", "HEAD"])
+    .trim()
+    .split("\n")
+    .find(Boolean);
+}
+
+function deletedComponentEvidence(repositoryRoot, components) {
+  const baseline = evidenceImmutabilityBaseline(repositoryRoot);
+  if (!baseline) return [];
+  const committed = git(repositoryRoot, [
+    "log",
+    "--no-renames",
+    "--diff-filter=D",
+    "--name-only",
+    "--format=",
+    `${baseline}..HEAD`,
+    "--",
+    ".docs/reviews",
+  ])
+    .trim()
+    .split("\n");
+  const uncommitted = git(repositoryRoot, [
+    "diff",
+    "--no-renames",
+    "--name-only",
+    "--diff-filter=D",
+    "HEAD",
+    "--",
+    ".docs/reviews",
+  ])
+    .trim()
+    .split("\n");
+  return [...new Set([...committed, ...uncommitted].filter(Boolean))]
+    .filter((path) => !existsSync(join(repositoryRoot, path)))
+    .map((path) => path.replace(/^\.docs\/reviews\//, ""))
+    .filter(
+      (path) => componentFromEvidence(path) || imageComponentAndTheme(path, components).component,
+    );
+}
+
 function inspectComponentEvidenceCoverage(repositoryRoot, components, verifications, imageFiles) {
   const problems = [];
   const byComponent = Map.groupBy(verifications, ({ component }) => component);
@@ -373,6 +444,10 @@ export function checkEvidenceInRepo(root) {
 
   for (const entry of entries.filter((candidate) => !candidate.isFile)) {
     problems.push(`${entry.path}: 通常ファイルではないため証跡として検査できない`);
+  }
+
+  for (const file of deletedComponentEvidence(repositoryRoot, components)) {
+    problems.push(`${file}: 過去のcomponent証跡は削除・renameできない`);
   }
 
   if (imageFiles.length === 0) problems.push("証跡画像が 0 件（走査が空走している）");

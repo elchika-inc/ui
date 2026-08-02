@@ -355,6 +355,46 @@ test("registry itemが所有する補助sourceの変更もcomponent固有pathと
   );
 });
 
+test("registry pathのGit pathspec magicでcomponent固有pathを除外できない", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  writeFileSync(
+    join(root, "registry.json"),
+    `${JSON.stringify(
+      {
+        items: [
+          {
+            name: "button",
+            files: [
+              {
+                path: ":(exclude)src/components/ui/button.tsx",
+                type: "registry:ui",
+              },
+            ],
+          },
+        ],
+      },
+      null,
+      2,
+    )}\n`,
+  );
+  writeFileSync(join(root, "src/components/ui/button.tsx"), "button changed\n");
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.ok(
+    result.problems.includes(
+      "button: registry path :(exclude)src/components/ui/button.tsx はrepo内の通常相対pathでなければならない",
+    ),
+  );
+  assert.ok(
+    result.problems.includes(
+      "2026-08-01-button-preview.md: 検証 SHA 以降に component 固有 path が変更されている",
+    ),
+  );
+});
+
 test("同じcomponentの古い証跡を残し、最新証跡だけを鮮度判定する", async (t) => {
   const { root } = createEvidenceRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));
@@ -390,6 +430,43 @@ test("同じcomponentの古い証跡でもverified_impl_shaの改変を検出す
   assert.ok(
     checkEvidenceInRepo(root).problems.includes(
       "2026-08-01-button-preview.md: verified_impl_sha が初回記録から変更されている",
+    ),
+  );
+});
+
+test("既存component証跡をrenameしてSHAを書き換えても削除として検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  writeFileSync(join(root, "src/components/ui/button.tsx"), "button changed without capture\n");
+  git(root, ["add", "src/components/ui/button.tsx"]);
+  git(root, ["commit", "-m", "change button without capture"]);
+  const unverifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
+  git(root, [
+    "mv",
+    ".docs/reviews/2026-08-01-button-preview.md",
+    ".docs/reviews/2026-08-02-button-preview.md",
+  ]);
+  git(root, [
+    "mv",
+    ".docs/reviews/button-preview-light.jpg",
+    ".docs/reviews/2026-08-02-button-preview-light.jpg",
+  ]);
+  git(root, [
+    "mv",
+    ".docs/reviews/button-preview-dark.jpg",
+    ".docs/reviews/2026-08-02-button-preview-dark.jpg",
+  ]);
+  writeFileSync(
+    join(root, ".docs/reviews/2026-08-02-button-preview.md"),
+    `verified_impl_sha: ${unverifiedSha}\n2026-08-02-button-preview-light.jpg\n2026-08-02-button-preview-dark.jpg\n`,
+  );
+  git(root, ["add", ".docs/reviews"]);
+  git(root, ["commit", "-m", "rename evidence and rewrite sha"]);
+
+  assert.ok(
+    checkEvidenceInRepo(root).problems.includes(
+      "2026-08-01-button-preview.md: 過去のcomponent証跡は削除・renameできない",
     ),
   );
 });
