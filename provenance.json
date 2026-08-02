@@ -1299,7 +1299,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "DirectionProvider と useDirection を公開し、DirectionProviderProps 契約と LTR / RTL consumer preview を追加する",
+      "modified": "DirectionProvider と useDirection を公開し、DirectionProviderProps 契約と LTR / RTL consumer preview を追加し、Provider が HTML / CSS の文字方向を変更しない利用契約を README に記録",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
