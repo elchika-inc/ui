@@ -214,13 +214,14 @@ strict sensor を token 変更前に作る。現行 light warning 3.9190:1 は `
 `scripts/check-evidence.mjs` は全履歴に対して次を継続する。
 
 - `verified_impl_sha` の形式、存在、HEAD 祖先性
-- 初回 SHA の immutability
+- 全証跡 file の blob immutability。検査施行 commit の親に存在する file はその時点の blob、施行後に追加する file は追加 commit の blob を baseline とする
+- baseline 後の committed / staged / unstaged 変更、削除、rename を file 種別によらず拒否する。施行前の履歴だけを親 snapshot で grandfather し、文書別の例外リストは持たない
 - 画像 magic bytes と拡張子一致
 - component 固有 path の最新証跡以降の変更検知
-- component evidence の削除・rename 検知
 - symlink と repo 外 path の拒否
 
 component 固有 path の hard gate は aggregate evidence で解除しない。
+再検証では既存の証跡を更新せず、新しい file を追加する。
 
 ### 6.2 shared token coverage
 

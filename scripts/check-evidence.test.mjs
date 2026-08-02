@@ -74,6 +74,16 @@ const introduceReportImmutabilitySensor = (root) => {
   return git(root, ["rev-parse", "HEAD"]).trim();
 };
 
+const introduceLegacyComponentSensor = (root) => {
+  mkdirSync(join(root, "scripts"), { recursive: true });
+  writeFileSync(
+    join(root, "scripts/check-evidence.mjs"),
+    "const introducedVerificationSha = true;\n",
+  );
+  git(root, ["add", "scripts/check-evidence.mjs"]);
+  git(root, ["commit", "-m", "introduce legacy component sensor"]);
+};
+
 const createEvidenceRepo = () => {
   const root = mkdtempSync(join(tmpdir(), "elchika-evidence-test-"));
   git(root, ["init"]);
@@ -242,6 +252,27 @@ test("immutability sensor導入前のcomponent画像置換はbaseline時のblob�
 
   assert.equal(
     result.problems.some((problem) => problem.includes("証跡画像が追加時から変更")),
+    false,
+  );
+});
+
+test("旧component sensor後かつ全証跡sensor前の画像更新は施行時baselineへ取り込む", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  introduceLegacyComponentSensor(root);
+  const image = ".docs/reviews/button-preview-light.jpg";
+  writeFileSync(join(root, image), Buffer.from("ffd8ff01", "hex"));
+  git(root, ["add", image]);
+  git(root, ["commit", "-m", "replace component image before all evidence sensor"]);
+  introduceReportImmutabilitySensor(root);
+
+  const result = (await loadModule()).checkEvidenceInRepo(root);
+
+  assert.equal(
+    result.problems.some(
+      (problem) =>
+        problem.includes("2026-08-01-button-preview.md") && problem.includes("追加時から変更"),
+    ),
     false,
   );
 });
@@ -543,6 +574,73 @@ test("pathspec magicを含む画像の施行後置換をliteral pathで検出す
   assert.ok(
     result.problems.some(
       (problem) => problem.includes("[batch]/capture*.jpg") && problem.includes("baselineから変更"),
+    ),
+  );
+});
+
+test("施行後の文書変更を元bytesへ戻しても履歴変更として検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  introduceReportImmutabilitySensor(root);
+  const report = ".docs/reviews/2026-08-01-index-page.md";
+  const original = readFileSync(join(root, report));
+  writeFileSync(
+    join(root, report),
+    "verified_impl_sha: 0000000000000000000000000000000000000000\n",
+  );
+  git(root, ["add", report]);
+  git(root, ["commit", "-m", "rewrite report after enforcement"]);
+  writeFileSync(join(root, report), original);
+  git(root, ["add", report]);
+  git(root, ["commit", "-m", "restore report bytes"]);
+
+  const result = (await loadModule()).checkEvidenceInRepo(root);
+
+  assert.ok(
+    result.problems.some(
+      (problem) => problem.includes("2026-08-01-index-page.md") && problem.includes("施行後の履歴"),
+    ),
+  );
+});
+
+test("施行後に画像を削除して同じbytesで復元しても履歴変更として検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  introduceReportImmutabilitySensor(root);
+  const image = ".docs/reviews/button-preview-light.jpg";
+  const original = readFileSync(join(root, image));
+  rmSync(join(root, image));
+  git(root, ["add", image]);
+  git(root, ["commit", "-m", "delete image after enforcement"]);
+  writeFileSync(join(root, image), original);
+  git(root, ["add", image]);
+  git(root, ["commit", "-m", "restore image bytes"]);
+
+  const result = (await loadModule()).checkEvidenceInRepo(root);
+
+  assert.ok(
+    result.problems.some(
+      (problem) => problem.includes("button-preview-light.jpg") && problem.includes("施行後の履歴"),
+    ),
+  );
+});
+
+test("施行後に文書をrenameして元pathへ戻しても履歴変更として検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  introduceReportImmutabilitySensor(root);
+  const report = ".docs/reviews/2026-08-01-index-page.md";
+  const moved = ".docs/reviews/temporary-index-page.md";
+  git(root, ["mv", report, moved]);
+  git(root, ["commit", "-m", "rename report after enforcement"]);
+  git(root, ["mv", moved, report]);
+  git(root, ["commit", "-m", "restore report path"]);
+
+  const result = (await loadModule()).checkEvidenceInRepo(root);
+
+  assert.ok(
+    result.problems.some(
+      (problem) => problem.includes("2026-08-01-index-page.md") && problem.includes("施行後の履歴"),
     ),
   );
 });

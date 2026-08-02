@@ -334,6 +334,12 @@ function immutablePathBaseline(repositoryRoot, path) {
     .split("\n")
     .find(Boolean);
   if (!additionCommit) return undefined;
+  const reportEnforcement = reportImmutabilityEnforcement(repositoryRoot);
+  if (reportEnforcement) {
+    return strictAncestor(repositoryRoot, additionCommit, reportEnforcement)
+      ? enforcementParent(repositoryRoot, reportEnforcement)
+      : additionCommit;
+  }
   const sensorBaseline = evidenceImmutabilityBaseline(repositoryRoot);
   return sensorBaseline && strictAncestor(repositoryRoot, additionCommit, sensorBaseline)
     ? sensorBaseline
@@ -411,6 +417,19 @@ function protectedEvidencePaths(repositoryRoot, enforcement) {
   return [...new Set([...atEnforcement, ...addedAfterEnforcement].filter(Boolean))];
 }
 
+function evidencePathChangedAfterBaseline(repositoryRoot, baseline, path) {
+  const committed = git(repositoryRoot, [
+    "--literal-pathspecs",
+    "log",
+    "-1",
+    "--format=%H",
+    `${baseline}..HEAD`,
+    "--",
+    path,
+  ]).trim();
+  return Boolean(committed) || pathsChanged(repositoryRoot, "HEAD", [path]);
+}
+
 function inspectEvidenceImmutability(repositoryRoot, currentFiles) {
   const enforcement = reportImmutabilityEnforcement(repositoryRoot);
   if (!enforcement) return [];
@@ -421,9 +440,9 @@ function inspectEvidenceImmutability(repositoryRoot, currentFiles) {
 
   for (const path of currentFiles) {
     const baseline = reportBaselineCommit(repositoryRoot, path);
-    if (baseline && pathsChanged(repositoryRoot, baseline, [path])) {
+    if (baseline && evidencePathChangedAfterBaseline(repositoryRoot, baseline, path)) {
       problems.push(
-        `${path.replace(/^\.docs\/reviews\//, "")}: 証跡が施行時baselineから変更されている`,
+        `${path.replace(/^\.docs\/reviews\//, "")}: 証跡が施行後の履歴または作業ツリーでbaselineから変更されている`,
       );
     }
   }
@@ -657,6 +676,7 @@ function evidenceImmutabilityBaseline(repositoryRoot) {
 }
 
 function deletedComponentEvidence(repositoryRoot, components) {
+  if (reportImmutabilityEnforcement(repositoryRoot)) return [];
   const baseline = evidenceImmutabilityBaseline(repositoryRoot);
   if (!baseline) return [];
   const committed = git(repositoryRoot, [
