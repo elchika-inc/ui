@@ -338,6 +338,56 @@ function sharedImageSubjectAndTheme(path) {
   return {};
 }
 
+function sharedTokenImageProblems(report) {
+  const addedImages = new Set(
+    report.additionFiles
+      .filter((path) => path.startsWith(".docs/reviews/"))
+      .map(sharedImageSubjectAndTheme)
+      .filter(({ subject, theme }) => subject && theme)
+      .map(({ subject, theme }) => `${subject}-${theme}`),
+  );
+  return SHARED_TOKEN_IMAGE_SUBJECTS.flatMap((subject) =>
+    ["light", "dark"]
+      .map((theme) => `${subject}-${theme}`)
+      .filter((key) => !addedImages.has(key))
+      .map((image) => `${report.file}: 同時追加画像 ${image} が無い`),
+  );
+}
+
+function sharedTokenReportProblems(repositoryRoot, report) {
+  const targeted = parseSingleField(report.markdown, "targeted_dynamic_sha");
+  if (targeted.problem) return [`${report.file}: ${targeted.problem}`];
+  if (!/^[0-9a-f]{40}$/.test(targeted.value)) {
+    return [`${report.file}: targeted_dynamic_sha は40桁の小文字SHAでなければならない`];
+  }
+  if (!commitExists(repositoryRoot, targeted.value)) {
+    return [`${report.file}: targeted_dynamic_sha ${targeted.value} が commit として存在しない`];
+  }
+  if (!commitIsAncestor(repositoryRoot, targeted.value)) {
+    return [`${report.file}: targeted_dynamic_sha ${targeted.value} が現在のHEADの祖先ではない`];
+  }
+
+  const changedTokenPaths = SHARED_TOKEN_PATHS.filter((path) =>
+    pathsChanged(repositoryRoot, targeted.value, [path]),
+  );
+  if (changedTokenPaths.length > 0) {
+    return [`${report.file}: 動的検証 SHA 以降に ${changedTokenPaths.join(", ")} が変更されている`];
+  }
+
+  for (const tokenPath of SHARED_TOKEN_PATHS) {
+    const tokenSha = git(repositoryRoot, ["log", "-1", "--format=%H", "--", tokenPath]).trim();
+    if (!tokenSha || !strictAncestor(repositoryRoot, tokenSha, report.sha)) {
+      return [
+        `${report.file}: ${tokenPath} の最終変更 commit は verified_impl_sha の厳密な祖先でなければならない`,
+      ];
+    }
+  }
+  if (!commitIsAncestor(repositoryRoot, report.sha, targeted.value)) {
+    return [`${report.file}: verified_impl_sha が動的検証 SHA の祖先ではない`];
+  }
+  return sharedTokenImageProblems(report);
+}
+
 export function inspectSharedTokenCoverage(repositoryRoot, reports) {
   const problems = [];
   const candidates = [];
@@ -364,60 +414,8 @@ export function inspectSharedTokenCoverage(repositoryRoot, reports) {
     ]);
   }
   const [report] = latest;
-  const targeted = parseSingleField(report.markdown, "targeted_dynamic_sha");
-  if (targeted.problem) return emptyCoverage([`${report.file}: ${targeted.problem}`]);
-  if (!/^[0-9a-f]{40}$/.test(targeted.value)) {
-    return emptyCoverage([
-      `${report.file}: targeted_dynamic_sha は40桁の小文字SHAでなければならない`,
-    ]);
-  }
-  if (!commitExists(repositoryRoot, targeted.value)) {
-    return emptyCoverage([
-      `${report.file}: targeted_dynamic_sha ${targeted.value} が commit として存在しない`,
-    ]);
-  }
-  if (!commitIsAncestor(repositoryRoot, targeted.value)) {
-    return emptyCoverage([
-      `${report.file}: targeted_dynamic_sha ${targeted.value} が現在のHEADの祖先ではない`,
-    ]);
-  }
-
-  const changedTokenPaths = SHARED_TOKEN_PATHS.filter((path) =>
-    pathsChanged(repositoryRoot, targeted.value, [path]),
-  );
-  if (changedTokenPaths.length > 0) {
-    return emptyCoverage([
-      `${report.file}: 動的検証 SHA 以降に ${changedTokenPaths.join(", ")} が変更されている`,
-    ]);
-  }
-
-  for (const tokenPath of SHARED_TOKEN_PATHS) {
-    const tokenSha = git(repositoryRoot, ["log", "-1", "--format=%H", "--", tokenPath]).trim();
-    if (!tokenSha || !strictAncestor(repositoryRoot, tokenSha, report.sha)) {
-      return emptyCoverage([
-        `${report.file}: ${tokenPath} の最終変更 commit は verified_impl_sha の厳密な祖先でなければならない`,
-      ]);
-    }
-  }
-  if (!commitIsAncestor(repositoryRoot, report.sha, targeted.value)) {
-    return emptyCoverage([`${report.file}: verified_impl_sha が動的検証 SHA の祖先ではない`]);
-  }
-
-  const addedImages = new Set(
-    report.additionFiles
-      .filter((path) => path.startsWith(".docs/reviews/"))
-      .map(sharedImageSubjectAndTheme)
-      .filter(({ subject, theme }) => subject && theme)
-      .map(({ subject, theme }) => `${subject}-${theme}`),
-  );
-  const missingImages = SHARED_TOKEN_IMAGE_SUBJECTS.flatMap((subject) =>
-    ["light", "dark"].map((theme) => `${subject}-${theme}`).filter((key) => !addedImages.has(key)),
-  );
-  if (missingImages.length > 0) {
-    return emptyCoverage(
-      missingImages.map((image) => `${report.file}: 同時追加画像 ${image} が無い`),
-    );
-  }
+  const reportProblems = sharedTokenReportProblems(repositoryRoot, report);
+  if (reportProblems.length > 0) return emptyCoverage(reportProblems);
 
   return {
     coveredPaths: new Set(SHARED_TOKEN_PATHS),

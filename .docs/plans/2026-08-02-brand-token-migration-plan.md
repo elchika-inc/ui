@@ -495,7 +495,7 @@ PROJECT_GOAL DoneCriteria 3、README Features / Architecture は、HTML 正本 �
 
 - [ ] **Step 6b: vendored 正本を Biome から除外する**
 
-`src/styles/design-system/` は承認済み外部正本の byte 一致を優先し、Biome の `files.includes` で directory 単位に force-ignore する。lint は自分たちのコードだけへ適用する。README には `build-tokens.mjs` の取り込み時 SHA と exact artifact comparison の承認済み差分を記録する。`design-tokens.html` で検出した a11y error は配布 CSS へ影響しないため今回は変更せず、Task 8 の最終レポートへ v1.8 側の改善候補として記録する。
+`src/styles/design-system/` は承認済み外部正本の byte 一致を優先し、Biome の `files.includes` で directory 単位に force-ignore する。lint は自分たちのコードだけへ適用する。README には `build-tokens.mjs` の取り込み時 SHA と exact artifact comparison の承認済み差分を記録する。`design-tokens.html` で検出した a11y error と Clipboard API の reject を空 handler で握りつぶす挙動は配布 CSS へ影響しないため今回は変更せず、Task 8 の最終レポートへ v1.8 側の改善候補として記録する。
 
 - [ ] **Step 7: token 層と consumer RED を確認する**
 
@@ -832,7 +832,7 @@ verified_impl_sha: VERIFIED_IMPL_SHAの40桁実値
 
 本文には route、theme、state、computed style、contrast、keyboard / pointer、console、画像 path、見た範囲 / 見ていない範囲を記録する。画像取得方法と `.jpg` 実体の一致を1行入れる。
 
-最終 report には、vendored `design-tokens.html` の spec page で Biome が検出した type 無し button と noninteractive `div[tabindex]` などの a11y error を、配布 CSS へ影響しない v1.8 側の改善候補として1行記録する。
+最終 report には、vendored `design-tokens.html` の spec page で Biome が検出した type 無し button と noninteractive `div[tabindex]` などの a11y error、および Clipboard API の reject を空 handler で握りつぶす挙動を、配布 CSS へ影響しない v1.8 側の改善候補として1行記録する。
 
 - [ ] **Step 6: shared aggregate report を作成する**
 

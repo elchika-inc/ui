@@ -108,3 +108,13 @@
 - impact: `focus-ring-opacity` の複数 fragment 関連付けに偽陰性・偽陽性が残り、信頼できない source が多数の独立分岐を追加すると CI 時間を消費しうる。単一 literal / 同一行の規定違反、arbitrary value、boolean `data-inset` の検査には影響しない。
 - mitigation: 生成 component は provenance と実差分を保持し、`npm run check:all` に加えて型検査、配布物 build、component ごとのレビューと実ブラウザ検証を通す。checker が対応しない class helper、computed union key、loose equality、mutation を伴う alias を `className` に導入する変更はレビューで個別確認する。現在の実ソースでは checker が完走し、standards 違反0件を確認済みである。
 - anchor: `scripts/check-standards.test.mjs` が対応済みの binding・condition・module resolution 境界を固定する。実ソースに上記未対応 pattern が導入されたとき、または候補解析が CI の時間制限へ近づいたときは、TypeScript / ESLint の既存 control-flow API で置換可能か再評価し、置換できなければ候補上限と fail-closed 診断を追加する。
+
+## RISK-013: vendored token 仕様ページが Clipboard API の失敗を表示しない
+
+- date: 2026-08-02
+- confidence: high
+- location: `src/styles/design-system/design-tokens.html` の token 名コピー処理
+- status: accepted
+- reason: デザインシステム v1.8 の仕様ページは承認済み外部正本を byte 一致で保持し、生成 token の唯一の正本として使う。`navigator.clipboard.writeText()` の reject handler は空で、コピー失敗を画面へ表示しないが、ここを単独修正すると上流同一性と生成物追跡の契約を壊す。影響は仕様ページ内の補助的なコピー操作に限定され、token 生成・registry 配布・利用者アプリの runtime には到達しないため、上流改善候補として受容する。
+- mitigation: 仕様ページの button semantics など既知の a11y error と同じく、Task 8 の最終レポートへ改善候補として記録する。token 値の参照と配布は Clipboard API に依存せず、`build-tokens.mjs --check` と registry の byte 一致検査を fail-closed で通す。
+- anchor: `src/styles/design-system/README.md` が取り込み元 SHA と承認済み generator 差分を固定する。上流 v1.8 source が更新されたときは、コピー失敗の表示が追加されたかを確認し、解消していれば本受容を閉じる。
