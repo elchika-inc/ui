@@ -41,6 +41,7 @@ function ToggleGroup<Value extends string = string>({
       data-size={size}
       data-spacing={spacing}
       data-orientation={orientation}
+      orientation={orientation}
       style={
         {
           "--toggle-group-gap": `calc(var(--spacing) * ${spacing})`,
