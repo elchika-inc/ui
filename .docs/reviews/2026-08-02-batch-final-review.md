@@ -1,11 +1,11 @@
 # バッチ4 最終群 最終レビュー
 
-verified_impl_sha: a65e1b4eac0d299b392b1553b03a6c700cb4699d
+verified_impl_sha: 854256797834433a14013869b70d6c85e876468b
 
 ## 結論
 
 - base: `e47382a78f0fb8d1726061a383b69c21d0f2ba61`
-- 最終実装SHA: `a65e1b4eac0d299b392b1553b03a6c700cb4699d`
+- 最終実装SHA: `854256797834433a14013869b70d6c85e876468b`
 - 最終判定: **非受容flag 0**
 - `ACCEPTED_RISKS`: `RISK-011`、`RISK-012`
 - mainへのmerge: 実施しない
@@ -26,10 +26,15 @@ verified_impl_sha: a65e1b4eac0d299b392b1553b03a6c700cb4699d
 - `f651d22`: 完全な抽象実行を行わない限界を`RISK-012`として明示受容
 - `3272c29`: comment内の規約例を除外し、JS/TS module graphを拡張
 - `a65e1b4`: template tailのcomment-like textを保持し、解析対象とCLI報告対象を統一
+- `8542567`: Node 22で実装元のChart serializerを検証し、CI失敗ログを常時表示
 
 `3272c29`のroundでは、TypeScript scannerがtemplate interpolation後のtail内にある`//` / `/*`を実commentと誤認するflagと、JS系sourceをmodule graphへ載せてもCLI報告対象から外すflagを検出した。`a65e1b4`でparser確定後のtoken境界からcomment rangeを収集し、単一の`SOURCE_GLOB`を解析・報告へ共有した。旧SHAでは対象testがRED、新SHAではGREENとなり、実CLIがMJS内の違反をexit 1で報告することを確認した。
 
 最終clean roundはCore Logic、Security、証跡・検証契約の3席で実施した。各席が開始・終了のHEADを`a65e1b4eac0d299b392b1553b03a6c700cb4699d`へ固定し、worktree cleanを確認した。全席の結果は`flag=0 optional=0`だった。
+
+PRの初回CIでは、Node 22.12.0がtestからの`.ts`直接importを`ERR_UNKNOWN_FILE_EXTENSION`で拒否した。ローカルNode 26では通っていたため、実装元`chart-style.ts`をTypeScript APIでES2022 ESMへtranspileし、Error diagnosticsをfail-closedに検査してからdata URL importする経路へ変更した。あわせてUnit tests stepはtestのexit codeを保存し、出力を常に表示してから元の成否を返すよう修正した。
+
+CI修正後はCore Logic、Security、証跡・検証契約の3席で再度clean roundを実施した。各席が開始・終了のHEADを`854256797834433a14013869b70d6c85e876468b`へ固定し、worktree cleanを確認した。全席の結果は`flag=0 optional=0`だった。Node 22.12.0/Linuxで対象test 2件と全testを実行し、失敗ログの表示と元exit codeの保持、0件空走guardも負のprobeで確認した。
 
 ## ACCEPTED_RISKS
 
@@ -45,7 +50,7 @@ standards checkerのclassName候補解析は、union computed key、helper引数
 
 ## 最終ゲート
 
-最終実装SHA `a65e1b4eac0d299b392b1553b03a6c700cb4699d` でfresh実行した。
+最終実装SHA `854256797834433a14013869b70d6c85e876468b` でfresh実行した。
 
 | gate | 結果 |
 |---|---|
@@ -54,6 +59,8 @@ standards checkerのclassName候補解析は、union computed key、helper引数
 | `npm run typecheck` | exit 0、0 errors / 0 warnings / 0 hints |
 | `node --test scripts/check-standards.test.mjs` | exit 0、全test pass |
 | `node --test scripts/*.test.mjs` | exit 0、全test pass |
+| Node 22.12.0/Linux `node --test scripts/chart-style.test.mjs` | exit 0、対象test pass |
+| Node 22.12.0/Linux `node --test scripts/*.test.mjs` | exit 0、全test pass |
 | `npm run build` | exit 0 |
 | `npm run build:lib` | exit 0 |
 | `npm run check:all` | exit 0、5 checkerを実行 |
@@ -65,7 +72,7 @@ standards checkerのclassName候補解析は、union computed key、helper引数
 
 各componentは実装commitを固定してからLight/Darkのisolated routeを実ブラウザで検証し、新規証跡commitを作成した。最終レビュー修正は`ab0623a80c20439574a74a1e8e9cf31e0571522f`で固定し、ChartとcatalogのLight/Darkを再検証して`.docs/reviews/recheck-ab0623a/2026-08-02-chart-preview.md`へ記録し、`968b497`で証跡をコミットした。
 
-`968b497`以降の変更はchecker、checker test、risk registry、レビュー文書に限定され、component・preview・route・catalogの製品pathは変更していない。このため最終clean roundではブラウザ操作を再実行せず、既存の固定SHA証跡とevidence gateを照合した。
+`968b497`以降の変更はchecker、checker test、CI workflow、risk registry、レビュー文書に限定され、component・preview・route・catalogの製品pathは変更していない。このため最終clean roundではブラウザ操作を再実行せず、既存の固定SHA証跡とevidence gateを照合した。
 
 ## optional
 
