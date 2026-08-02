@@ -301,6 +301,8 @@ export {
   DialogTitle,
   DialogTrigger,
 } from "./components/ui/dialog";
+export type { DirectionProviderProps } from "./components/ui/direction";
+export { DirectionProvider, useDirection } from "./components/ui/direction";
 export type {
   DrawerCloseProps,
   DrawerContentProps,

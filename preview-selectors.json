@@ -30,6 +30,7 @@
   "catalog": "[data-slot=\"verification-catalog\"]",
   "catalog-dark": "[data-slot=\"verification-catalog\"]",
   "dialog": "[data-slot=\"dialog-content\"]",
+  "direction": "[data-slot=\"direction-preview\"]",
   "drawer": "[data-slot=\"drawer-content\"]",
   "hover-card": "[data-slot=\"hover-card-content\"]",
   "empty": "[data-slot=\"empty-preview\"]",

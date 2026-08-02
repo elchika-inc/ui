@@ -1280,6 +1280,27 @@
       "license": "MIT",
       "modified": "全 PascalCase value export の Props 型公開、表示文言・コメント・accessible name とアイコンの読み上げを正規化、focus ring と値系 arbitrary utility を semantic token・CSS variable utility へ正規化、Tooltip を desktop collapsed 時だけ構築して mobile Sheet の Escape dismiss を維持、barrel export、desktop collapse・mobile sheet・keyboard shortcut・cookie side effect・focus の preview と light/dark route、hydration selector を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "direction": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/direction.json",
+      "registryPath": "registry/base-nova/ui/direction.tsx",
+      "registryContentSha256": "661ff5b9c0dc26edde1226bfedc0ab50976d84f8bae42ca83a38dc3b478fd4d4",
+      "generatedContentSha256": "ab76d53aee6608ca1465874e1565d36fde7c0d1642088f0428ab5f6342a1e863",
+      "addTarget": "@shadcn/direction",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/direction.tsx",
+      "upstreamPathSha": "38de7fddc257f04901e98a5fd7821cb8729d54bf",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-02",
+      "license": "MIT",
+      "modified": "DirectionProvider と useDirection を公開し、DirectionProviderProps 契約と LTR / RTL consumer preview を追加する",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }
