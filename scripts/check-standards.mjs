@@ -49,6 +49,23 @@ function classNameExpressions(path, source) {
     ts.ScriptKind.TSX,
   );
   const expressions = [];
+  const variableInitializers = new Map();
+  const collectVariables = (node) => {
+    if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer) {
+      const initializers = variableInitializers.get(node.name.text) ?? [];
+      initializers.push(node.initializer);
+      variableInitializers.set(node.name.text, initializers);
+    }
+    ts.forEachChild(node, collectVariables);
+  };
+  collectVariables(sourceFile);
+  const resolveExpression = (expression, seen = new Set()) => {
+    if (!ts.isIdentifier(expression) || seen.has(expression.text)) return expression;
+    const initializers = variableInitializers.get(expression.text) ?? [];
+    if (initializers.length !== 1) return expression;
+    const nextSeen = new Set(seen).add(expression.text);
+    return resolveExpression(initializers[0], nextSeen);
+  };
   const visit = (node) => {
     if (
       ts.isJsxAttribute(node) &&
@@ -59,9 +76,10 @@ function classNameExpressions(path, source) {
         ? node.initializer.expression
         : node.initializer;
       if (value) {
+        const resolvedValue = resolveExpression(value);
         expressions.push({
-          text: value.getText(sourceFile),
-          offset: Math.max(0, value.getStart(sourceFile) - prefix.length),
+          text: resolvedValue.getText(sourceFile),
+          offset: Math.max(0, resolvedValue.getStart(sourceFile) - prefix.length),
         });
       }
     }

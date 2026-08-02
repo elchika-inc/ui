@@ -130,6 +130,29 @@ test("配列joinで結合する状態ring幅と透明ring色を関連付ける",
   );
 });
 
+test("変数へ抽出したclass合成の状態ring幅と透明ring色を関連付ける", () => {
+  for (const initializer of [
+    `cn(
+      "focus-visible:ring-[3px]",
+      "ring-ring/50",
+    )`,
+    `[
+      "focus-visible:ring-[3px]",
+      "ring-ring/50",
+    ].join(" ")`,
+  ]) {
+    const { violations } = checkFile(
+      "a.tsx",
+      `const classes = ${initializer};
+      const View = () => <div className={classes} />;`,
+    );
+    assert.ok(
+      violations.some((violation) => violation.rule === "focus-ring-opacity"),
+      `変数へ抽出した透明なfocus ringが検出されない: ${initializer}`,
+    );
+  }
+});
+
 test("2 規定へ同時に違反するクラスは 2 診断とも出す", () => {
   // ring-[#f00]/50 は任意値であり、かつ透明度合成でもある。
   // focus-ring-opacity だけを assert すると、ARBITRARY 側が

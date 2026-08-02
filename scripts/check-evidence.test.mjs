@@ -128,6 +128,26 @@ test("component固有light画像の欠落を検出する", async (t) => {
   );
 });
 
+test("verified_impl_shaだけを新HEADへ書き換えた旧画像流用を検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  writeFileSync(join(root, "src/components/ui/button.tsx"), "button changed without capture\n");
+  git(root, ["add", "src/components/ui/button.tsx"]);
+  git(root, ["commit", "-m", "change button without capture"]);
+  const unverifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
+  writeFileSync(
+    join(root, ".docs/reviews/2026-08-01-button-preview.md"),
+    `verified_impl_sha: ${unverifiedSha}\nbutton-preview-light.jpg\nbutton-preview-dark.jpg\n`,
+  );
+
+  assert.ok(
+    checkEvidenceInRepo(root).problems.includes(
+      "2026-08-01-button-preview.md: verified_impl_sha が初回記録から変更されている",
+    ),
+  );
+});
+
 test("PNG/JPEG の拡張子と magic bytes の不一致を検出する", async () => {
   const { checkImage } = await loadModule();
   assert.equal(checkImage("light.png", png), undefined);

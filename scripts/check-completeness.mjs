@@ -27,6 +27,13 @@ const exportedNames = (dts, typeOnly) =>
 const exportedModulePaths = (source) =>
   new Set(
     exportDeclarations(source, "src/index.ts")
+      .filter(
+        (declaration) =>
+          !declaration.isTypeOnly &&
+          (!declaration.exportClause ||
+            !ts.isNamedExports(declaration.exportClause) ||
+            declaration.exportClause.elements.some((element) => !element.isTypeOnly)),
+      )
       .map((declaration) => declaration.moduleSpecifier)
       .filter((specifier) => specifier && ts.isStringLiteralLike(specifier))
       .map((specifier) => specifier.text),

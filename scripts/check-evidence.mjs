@@ -198,7 +198,7 @@ function inspectLatestComponentEvidence(repositoryRoot, verifications) {
   return problems;
 }
 
-function evidenceAdditionFiles(repositoryRoot, report) {
+function evidenceAddition(repositoryRoot, report) {
   const reportPath = `.docs/reviews/${report}`;
   const additionCommit = git(repositoryRoot, [
     "log",
@@ -211,17 +211,20 @@ function evidenceAdditionFiles(repositoryRoot, report) {
     .split("\n")
     .find(Boolean);
   if (additionCommit) {
-    return git(repositoryRoot, [
-      "diff-tree",
-      "--no-commit-id",
-      "--name-only",
-      "--diff-filter=A",
-      "-r",
-      additionCommit,
-    ])
-      .trim()
-      .split("\n")
-      .filter(Boolean);
+    return {
+      commit: additionCommit,
+      files: git(repositoryRoot, [
+        "diff-tree",
+        "--no-commit-id",
+        "--name-only",
+        "--diff-filter=A",
+        "-r",
+        additionCommit,
+      ])
+        .trim()
+        .split("\n")
+        .filter(Boolean),
+    };
   }
   const staged = git(repositoryRoot, [
     "diff",
@@ -242,7 +245,27 @@ function evidenceAdditionFiles(repositoryRoot, report) {
   ])
     .trim()
     .split("\n");
-  return [...new Set([...staged, ...untracked].filter(Boolean))];
+  return { commit: undefined, files: [...new Set([...staged, ...untracked].filter(Boolean))] };
+}
+
+function introducedVerificationSha(repositoryRoot, report) {
+  const reportPath = `.docs/reviews/${report}`;
+  const introductionCommit = git(repositoryRoot, [
+    "log",
+    "--reverse",
+    "-Sverified_impl_sha:",
+    "--format=%H",
+    "--",
+    reportPath,
+  ])
+    .trim()
+    .split("\n")
+    .find(Boolean);
+  if (!introductionCommit) return undefined;
+  const introduced = parseVerificationSha(
+    git(repositoryRoot, ["show", `${introductionCommit}:${reportPath}`]),
+  );
+  return introduced.sha;
 }
 
 function imageComponentAndTheme(path, components) {
@@ -278,8 +301,13 @@ function inspectComponentEvidenceCoverage(repositoryRoot, components, verificati
     );
     if (latest.length !== 1) continue;
     const [report] = latest;
+    const addition = evidenceAddition(repositoryRoot, report.file);
+    const introducedSha = introducedVerificationSha(repositoryRoot, report.file);
+    if (introducedSha && introducedSha !== report.sha) {
+      problems.push(`${report.file}: verified_impl_sha が初回記録から変更されている`);
+    }
     const addedImageStems = new Set(
-      evidenceAdditionFiles(repositoryRoot, report.file)
+      addition.files
         .filter((path) => path.startsWith(".docs/reviews/"))
         .map((path) => path.slice(".docs/reviews/".length))
         .filter((path) =>

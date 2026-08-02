@@ -53,6 +53,19 @@ test("コメント内のbarrel exportを実exportとして誤認しない", () =
   assert.deepEqual(problems, ["button: src/index.ts から export されていない"]);
 });
 
+test("type-onlyのbarrel exportをvalue exportとして誤認しない", () => {
+  const dts = [
+    'export type { DialogProps } from "./components/ui/dialog";',
+    'export { Dialog } from "./components/ui/dialog";',
+  ].join("\n");
+  const { problems } = checkCompleteness({
+    ...complete,
+    barrel: 'export type { ButtonProps } from "./components/ui/button"',
+    dts,
+  });
+  assert.deepEqual(problems, ["button: src/index.ts から export されていない"]);
+});
+
 test("Props 型の欠落を検出する", () => {
   const { problems } = checkCompleteness({
     ...complete,
