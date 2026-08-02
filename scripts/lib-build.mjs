@@ -1,9 +1,11 @@
-import { readdir, readFile, rm, writeFile } from "node:fs/promises";
+import { lstat, readdir, readFile, realpath, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
 import ts from "typescript";
 
 const ALIAS_PREFIX = "@/";
+const SCRIPT_PATH = await realpath(fileURLToPath(import.meta.url));
+export const REPO_LIB_DIR = path.resolve(path.dirname(SCRIPT_PATH), "../lib");
 
 const isInside = (root, target) => {
   const relative = path.relative(root, target);
@@ -112,17 +114,35 @@ const listDeclarations = async (directory) => {
 };
 
 export async function rewriteDeclarationTree(libDir) {
-  const declarations = await listDeclarations(libDir);
+  const rootStats = await lstat(libDir);
+  if (rootStats.isSymbolicLink() || !rootStats.isDirectory()) {
+    throw new Error(`${libDir}: lib rootはsymlinkでないdirectoryを要求する`);
+  }
+  const canonicalLibDir = await realpath(libDir);
+  const declarations = await listDeclarations(canonicalLibDir);
   if (declarations.length === 0) {
     throw new Error(`${libDir}: declarationが見つからない`);
   }
 
+  const rewrites = [];
   for (const declarationPath of declarations) {
     const source = await readFile(declarationPath, "utf8");
-    const rewritten = rewriteDeclarationSource({ declarationPath, libDir, source });
+    const rewritten = rewriteDeclarationSource({
+      declarationPath,
+      libDir: canonicalLibDir,
+      source,
+    });
     if (rewritten !== source) {
-      await writeFile(declarationPath, rewritten);
+      rewrites.push({ declarationPath, rewritten });
     }
+  }
+
+  for (const { declarationPath, rewritten } of rewrites) {
+    const canonicalDeclarationPath = await realpath(declarationPath);
+    if (!isInside(canonicalLibDir, canonicalDeclarationPath)) {
+      throw new Error(`${declarationPath}: declarationがlib外を参照している`);
+    }
+    await writeFile(canonicalDeclarationPath, rewritten);
   }
 }
 
@@ -132,20 +152,28 @@ export async function cleanLib(libDir) {
 
 const main = async () => {
   const command = process.argv[2];
-  const libDir = path.resolve("lib");
   if (command === "clean") {
-    await cleanLib(libDir);
+    await cleanLib(REPO_LIB_DIR);
     console.log("lib をcleanした");
     return;
   }
   if (command === "rewrite") {
-    await rewriteDeclarationTree(libDir);
+    await rewriteDeclarationTree(REPO_LIB_DIR);
     console.log("declaration aliasを相対pathへ書き換えた");
     return;
   }
   throw new Error("usage: node scripts/lib-build.mjs <clean|rewrite>");
 };
 
-if (process.argv[1] && pathToFileURL(path.resolve(process.argv[1])).href === import.meta.url) {
+const isDirectRun = async () => {
+  if (!process.argv[1]) return false;
+  try {
+    return (await realpath(process.argv[1])) === SCRIPT_PATH;
+  } catch {
+    return false;
+  }
+};
+
+if (await isDirectRun()) {
   await main();
 }
