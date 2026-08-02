@@ -1,0 +1,54 @@
+/* ============================================================
+   elchika inc. — Product hue reserve v1.8
+
+   GENERATED FILE — do not edit.
+   Source of truth: design-tokens.html
+
+   elchika inc. itself is always the blue. Nothing sets data-brand
+   by default; these are the pool a future product draws from.
+   Take them in the order documented in design-tokens.html.
+
+   WARNING: indigo sits only ΔE 7.4 from the corporate blue in the
+   worst case and is indistinguishable under protanopia. Needing a
+   sixth hue is a signal to stop identifying products by colour.
+   ============================================================ */
+
+[data-brand="indigo"] {
+  --brand-100: 234 232 252;
+  --brand-300: 170 164 247;
+  --brand-400: 144 137 243;
+  --brand-600: 92 83 217;
+  --brand-700: 47 38 180;
+}
+
+[data-brand="violet"] {
+  --brand-100: 241 231 252;
+  --brand-300: 197 155 246;
+  --brand-400: 179 124 241;
+  --brand-600: 133 63 213;
+  --brand-700: 87 32 151;
+}
+
+[data-brand="purple"] {
+  --brand-100: 248 228 251;
+  --brand-300: 231 139 245;
+  --brand-400: 220 99 239;
+  --brand-600: 167 41 187;
+  --brand-700: 108 25 121;
+}
+
+[data-brand="magenta"] {
+  --brand-100: 251 228 246;
+  --brand-300: 244 136 219;
+  --brand-400: 238 93 204;
+  --brand-600: 180 40 148;
+  --brand-700: 117 25 95;
+}
+
+[data-brand="rose"] {
+  --brand-100: 251 229 238;
+  --brand-300: 245 141 186;
+  --brand-400: 239 102 161;
+  --brand-600: 188 42 105;
+  --brand-700: 122 26 67;
+}

@@ -1,0 +1,324 @@
+/* ============================================================
+   elchika inc. — Design Tokens v1.8 (core)
+
+   GENERATED FILE — do not edit.
+   Source of truth: design-tokens.html
+   Rebuild with: node build-tokens.mjs
+   ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600&display=swap");
+
+:root {
+  /* ---------- COLOR: primitives ---------- */
+  /* ---------- LAYER 0: primitives ----------
+     --brand-* is the ONLY colour surface a product may override.
+     Everything downstream resolves from it, in both themes. */
+  --brand-100: 227 234 251;
+  --brand-300: 143 172 245;
+  --brand-400: 110 147 240;
+  --brand-600: 47 95 209;
+  --brand-700: 30 58 143;
+
+  /* Corporate-locked. Shared by every product — this is what makes them
+     look like one family rather than four unrelated tools. */
+  --accent-100: 252 241 210;
+  --accent-400: 245 208 101;
+  --accent-500: 242 194 48;
+  --accent-900: 74 58 5;
+  --accent-text: 133 105 10;
+
+  --color-success-500: 28 148 103;
+  --color-danger-500: 224 85 90;
+  /* Warning is orange, not yellow: yellow is the brand accent, and a
+     warning that looks like the brand highlight is unreadable as a signal. */
+  --color-warning-500: 194 97 12;
+
+  /* ---------- COLOR: semantic (light) ---------- */
+  --color-bg-canvas: 246 246 247;
+  --color-bg-surface: 255 255 255;
+  --color-bg-surface-raised: 237 238 240;
+  --color-border-default: 222 224 227;
+  --color-border-strong: 199 202 207;
+  /* Boundaries that identify a control must clear 3:1 (WCAG 1.4.11).
+     Decorative seams do not — hence two separate tokens. */
+  --color-border-control: 126 132 142;
+  --color-text-primary: 26 28 33;
+  --color-text-secondary: 91 95 104;
+  --color-text-muted: 99 103 111;
+  --color-brand-primary: var(--brand-600);
+  --color-brand-primary-hover: var(--brand-700);
+  --color-brand-subtle: var(--brand-100);
+  --color-accent-highlight: var(--accent-500);
+  --color-accent-highlight-bg: var(--accent-100);
+  --color-accent-highlight-text: var(--accent-text);
+  --color-status-success: var(--color-success-500);
+  --color-status-success-bg: 220 243 234;
+  --color-status-success-text: 20 108 74;
+  --color-status-danger: var(--color-danger-500);
+  --color-status-danger-bg: 251 227 228;
+  --color-status-danger-text: 178 51 56;
+  --color-status-warning: var(--color-warning-500);
+  --color-status-warning-bg: 252 233 214;
+  --color-status-warning-text: 143 70 8;
+  --color-status-info: var(--color-brand-primary);
+  --color-status-info-bg: var(--brand-100);
+  --color-status-info-text: var(--brand-700);
+
+  /* ---------- TYPOGRAPHY ---------- */
+  --font-display: "IBM Plex Sans JP", "IBM Plex Sans", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans JP", "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", "IBM Plex Sans JP", ui-monospace, monospace;
+
+  --text-3xs: 0.6875rem; --text-2xs: 0.75rem; --text-xs: 0.8125rem;
+  --text-sm: 0.875rem; --text-base: 1rem; --text-lg: 1.125rem;
+  --text-xl: 1.3125rem; --text-2xl: 1.5625rem; --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem; --text-5xl: 2.75rem; --text-6xl: 3.375rem;
+
+  --font-weight-regular: 400; --font-weight-medium: 500; --font-weight-semibold: 600;
+
+  --leading-none: 1; --leading-tight: 1.25; --leading-display: 1.35;
+  --leading-snug: 1.5; --leading-normal: 1.75; --leading-relaxed: 1.9;
+
+  --tracking-display: -0.02em; --tracking-heading: -0.01em;
+  --tracking-normal: 0.02em; --tracking-label: 0.08em;
+
+  --numeric-tabular: tabular-nums;
+  --numeric-proportional: proportional-nums;
+
+  /* ---------- SPACING ---------- */
+  --space-0: 0; --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem;
+  --space-4: 1rem; --space-5: 1.25rem; --space-6: 1.5rem; --space-8: 2rem;
+  --space-10: 2.5rem; --space-12: 3rem; --space-16: 4rem; --space-20: 5rem;
+  --space-24: 6rem; --space-32: 8rem; --space-40: 10rem;
+
+  --space-inline-tight: var(--space-2);
+  --space-inline: var(--space-3);
+  --space-stack-tight: var(--space-2);
+  --space-stack: var(--space-4);
+  --space-stack-loose: var(--space-8);
+  --space-section: var(--space-24);
+  --space-section-lg: var(--space-32);
+  --space-gutter: var(--space-5);
+  --space-gutter-lg: var(--space-12);
+
+  /* ---------- LAYOUT ---------- */
+  --container-prose: 68ch;
+  --container-content: 60rem;
+  --container-wide: 70rem;
+
+  /* ---------- RADIUS ---------- */
+  --radius-xs: 0.25rem; --radius-sm: 0.375rem; --radius-md: 0.5rem;
+  --radius-lg: 0.75rem; --radius-xl: 1rem; --radius-full: 9999px;
+
+  /* ---------- BORDER ---------- */
+  --border-hairline: 0.5px; --border-thin: 1px; --border-thick: 2px;
+
+  /* ---------- ELEVATION ---------- */
+  --shadow-xs: 0 1px 2px rgb(26 28 33 / 0.04);
+  --shadow-sm: 0 1px 3px rgb(26 28 33 / 0.06), 0 1px 2px rgb(26 28 33 / 0.04);
+  --shadow-md: 0 4px 12px rgb(26 28 33 / 0.08);
+  --shadow-lg: 0 12px 32px rgb(26 28 33 / 0.10);
+  --shadow-focus: 0 0 0 3px rgb(var(--brand-600) / 0.28);
+
+  /* ---------- MOTION ---------- */
+  --duration-instant: 0ms; --duration-fast: 120ms; --duration-base: 180ms;
+  --duration-slow: 260ms; --duration-slower: 400ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+
+  /* ---------- STATE ----------
+     States are tokenised once and shared, rather than redefined per
+     component. --state-tint is what gets mixed into a surface: it darkens
+     in light mode and lightens in dark mode, so one rule covers both. */
+  --state-tint: 26 28 33;
+  --state-hover-alpha: 0.05;
+  --state-press-alpha: 0.10;
+  --state-hover-bg: rgb(var(--state-tint) / var(--state-hover-alpha));
+  --state-press-bg: rgb(var(--state-tint) / var(--state-press-alpha));
+  --state-selected-bg: rgb(var(--color-brand-primary) / 0.10);
+  --state-selected-border: rgb(var(--color-brand-primary));
+  --state-focus-ring: var(--shadow-focus);
+  --state-disabled-opacity: var(--opacity-disabled);
+  --state-invalid-border: rgb(var(--color-status-danger));
+  --state-invalid-bg: rgb(var(--color-status-danger-bg));
+  --state-skeleton-bg: rgb(var(--color-bg-surface-raised));
+  --state-transition:
+    background var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
+
+  /* ---------- CONTROL ----------
+     Shared geometry so buttons, inputs and selects line up on one row.
+     lg is 44px: the smallest comfortable touch target. */
+  --control-height-sm: 1.75rem;
+  --control-height-md: 2.25rem;
+  --control-height-lg: 2.75rem;
+  --control-padding-x: var(--space-4);
+  --control-radius: var(--radius-md);
+  --control-border-width: var(--border-thin);
+
+
+  /* ---------- CHART ----------
+     Series colours are the verified product hues: five is the cap, and
+     they are paired with dash patterns so a chart survives greyscale,
+     colour-vision differences and a bad projector. */
+  --chart-series-1: 47 95 209;
+  --chart-series-2: 188 42 105;
+  --chart-series-3: 167 41 187;
+  --chart-series-4: 180 40 148;
+  --chart-series-5: 133 63 213;
+  --chart-dash-1: none;
+  --chart-dash-2: 6 3;
+  --chart-dash-3: 2 3;
+  --chart-dash-4: 10 4 2 4;
+  --chart-dash-5: 1 4;
+
+  /* Sequential — magnitude. Monotonic in L*, so it also reads correctly
+     in greyscale. Steps 4 and 5 need light text on them. */
+  --chart-seq-0: 236 241 252;
+  --chart-seq-1: 195 210 244;
+  --chart-seq-2: 150 176 236;
+  --chart-seq-3: 105 142 229;
+  --chart-seq-4: 55 105 220;
+  --chart-seq-5: 29 71 166;
+
+  /* Diverging — deviation from a baseline. Rose and blue rather than
+     red and green: those two carry status meaning. */
+  --chart-div-neg3: 172 40 98;
+  --chart-div-neg2: 222 95 150;
+  --chart-div-neg1: 242 173 203;
+  --chart-div-mid: 238 239 241;
+  --chart-div-pos1: 172 193 241;
+  --chart-div-pos2: 100 137 223;
+  --chart-div-pos3: 45 88 190;
+
+  --chart-grid: var(--color-border-default);
+  --chart-axis: var(--color-border-strong);
+  --chart-label: var(--color-text-muted);
+  --chart-baseline: var(--color-text-secondary);
+  --chart-band-alpha: 0.12;
+  --chart-series-width: 2px;
+  --chart-point-size: 3px;
+  --chart-tooltip-bg: var(--color-bg-surface);
+  --chart-tooltip-border: var(--color-border-strong);
+
+  /* ---------- DENSITY ----------
+     Density touches data-dense regions only — tables, lists, toolbars.
+     It must never reach prose or marketing pages, so it gets its own
+     tokens rather than rescaling --space-*, which would move layout. */
+  --density-row-height: 2.75rem;
+  --density-cell-py: var(--space-3);
+  --density-gap: var(--space-3);
+  --density-control-height: var(--control-height-md);
+  --density-font-size: var(--text-sm);
+
+  /* ---------- TYPOGRAPHY: JP features ----------
+     palt tightens the loose sidebearings on JP punctuation at display
+     sizes. Harmless for Latin, so it can be applied unconditionally. */
+  --font-feature-display: "palt" 1;
+
+  /* ---------- LAYER ---------- */
+  --z-base: 0; --z-dropdown: 1000; --z-sticky: 1100; --z-overlay: 1200;
+  --z-modal: 1300; --z-popover: 1400; --z-toast: 1500;
+
+  /* ---------- OPACITY ---------- */
+  --opacity-disabled: 0.4; --opacity-muted: 0.65; --opacity-overlay: 0.6;
+}
+
+[data-theme="dark"] {
+  --color-bg-canvas: 21 23 28;
+  --color-bg-surface: 28 31 38;
+  --color-bg-surface-raised: 38 42 51;
+  --color-border-default: 56 61 72;
+  --color-border-strong: 74 80 94;
+  --color-border-control: 118 125 140;
+  --color-text-primary: 246 246 247;
+  --color-text-secondary: 176 180 188;
+  --color-text-muted: 150 156 168;
+  --color-brand-primary: var(--brand-400);
+  --color-brand-primary-hover: var(--brand-300);
+  --color-brand-subtle: var(--brand-700);
+  --color-accent-highlight: var(--accent-400);
+  --color-accent-highlight-bg: var(--accent-900);
+  --color-accent-highlight-text: var(--accent-400);
+  --color-status-success: 52 192 138;
+  --color-status-success-bg: 20 61 46;
+  --color-status-success-text: 52 192 138;
+  --color-status-danger: 241 117 121;
+  --color-status-danger-bg: 61 26 27;
+  --color-status-danger-text: 241 117 121;
+  --color-status-warning: 232 148 62;
+  --color-status-warning-bg: 61 37 12;
+  --color-status-warning-text: 232 148 62;
+  --color-status-info: var(--color-brand-primary);
+  --color-status-info-bg: var(--brand-700);
+  --color-status-info-text: var(--brand-300);
+
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.30);
+  --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.40), 0 1px 2px rgb(0 0 0 / 0.30);
+  --shadow-md: 0 4px 12px rgb(0 0 0 / 0.45);
+  --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.55);
+  --shadow-focus: 0 0 0 3px rgb(var(--brand-400) / 0.36);
+
+  /* Tint lightens instead of darkening, and needs slightly more of it to
+     read on a dark surface. */
+  --state-tint: 246 246 247;
+  --state-hover-alpha: 0.07;
+  --state-press-alpha: 0.13;
+
+  /* Series lift to the 400 step so they hold up on the dark canvas. */
+  --chart-series-1: 110 147 240;
+  --chart-series-2: 239 102 161;
+  --chart-series-3: 220 99 239;
+  --chart-series-4: 238 93 204;
+  --chart-series-5: 179 124 241;
+
+}
+
+[data-density="compact"] {
+  --density-row-height: 2rem;
+  --density-cell-py: var(--space-1);
+  --density-gap: var(--space-2);
+  --density-control-height: var(--control-height-sm);
+  --density-font-size: var(--text-xs);
+}
+
+:lang(en) {
+  --font-display: "IBM Plex Sans", "IBM Plex Sans JP", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", "IBM Plex Sans JP", system-ui, sans-serif;
+  --leading-display: 1.2;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.75;
+  --tracking-normal: 0em;
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  letter-spacing: var(--tracking-normal);
+  color: rgb(var(--color-text-primary));
+  background: rgb(var(--color-bg-canvas));
+}
+
+/* Never remove the ring without replacing it. */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--state-focus-ring);
+  border-radius: var(--radius-xs);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

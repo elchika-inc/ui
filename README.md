@@ -11,7 +11,7 @@ Base UI と Tailwind CSS v4 で作った UI コンポーネント集。elchika-i
 ## Features
 
 - Base UI ベースのアクセシブルなコンポーネント
-- standards のデザイントークンを同梱（light / dark 対応）
+- HTML 正本から生成・検査するデザインシステム v1.8 と shadcn alias を同梱（light / dark 対応）
 - shadcn CLI でコピー取得できる registry 配布
 
 ## Getting Started
@@ -85,11 +85,16 @@ const tooltipId = "save-button-help";
 
 ## トークンの適用
 
-取り込むと `elchika-ui/tokens.css` が置かれる。**利用側に既存のトークン定義がある場合、registry はそれを上書きしない**（shadcn の仕様）。elchika の見た目を共有するには、自分の CSS から**最後に** import する。
+取り込むと shadcn alias の `elchika-ui/tokens.css` と、HTML 正本から生成した `elchika-ui/design-system/tokens.css` が置かれる。**利用側に既存のトークン定義がある場合、registry はそれを上書きしない**（shadcn の仕様）。elchika の見た目を共有するには、自分の CSS から generated token、alias CSS の順に**最後に** import する。
 
 ```css
+@import "./elchika-ui/design-system/tokens.css";
 @import "./elchika-ui/tokens.css";
 ```
+
+`src/styles/design-system/design-tokens.html` が Layer 0 / 1 token の正本で、`build-tokens.mjs` が `tokens.css` と将来利用する product hue reserve の `brands.css` を生成する。`global.css` は shadcn semantic alias だけを持ち、色値を再定義しない。token build は正本と生成物の byte 一致、consumer contrast sensor は alias を通った実利用配色を検査する。
+
+`src/styles/design-system/` は外部正本の byte 一致を優先するため Biome の対象外とし、repo lint は自分たちのコードだけへ適用する。`build-tokens.mjs` は取り込み時 SHA-256 `c9fe52008ca7df9af277f57a2b892d3e41741d9c6e842cf33afd43841fb6b5d7` を基点に、`--check` の exact artifact comparison だけを承認済み差分として追加している。
 
 ## Development
 
@@ -112,7 +117,8 @@ src/
   components/ui/   # 部品本体（registry で配布する正本）
   previews/        # 隔離プレビューの中身
   pages/           # Astro のルート（カタログとプレビュー）
-  styles/          # standards のデザイントークン
+  styles/          # generated design-system token と shadcn semantic alias
+    design-system/ # HTML 正本・generator・Layer 0 / 1 生成物
   index.ts         # ライブラリのバレル
 scripts/           # 来歴記録・standards 適合検知・配布物検査
 types/             # ビルド出力の props 契約を検査する型テスト

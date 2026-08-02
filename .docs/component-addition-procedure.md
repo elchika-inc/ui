@@ -25,7 +25,7 @@
 
 1. 生成コードを Base UI、semantic token、focus ring などリポジトリの規約へ合わせる。`node scripts/check-standards.mjs` の指摘ごとに、実装修正するか `.docs/risk-registry.md` へ明示受容するかを人が判断する。checker を通すためだけに規約を弱めない。shadcn/ui base-nova には、props を destructure したまま primitive へ転送し忘れる形のバグが複数ある。キーボード操作・focus 移動が期待どおりでないときは、まず props の転送を疑う。
 2. `src/index.ts` から値と `export type <Name>Props` を公開する。
-3. `src/previews/<name>.tsx` と light / dark の2 route を作る。Provider が必要な component は、その責務を library、preview、利用側のどこへ置くか人が決める。`direction` は描画を持たない `DirectionProvider` + `useDirection` なので、検証用 consumer と selector を人が設計する。Dialog など overlay は、初期 open にして描画を常時検証するか、操作後だけ開くかを人が決める。
+3. `src/previews/<name>.tsx` と light / dark の2 route を作る。isolated preview route は Layout を経由せず `<html>` を直書きする構造なので、light は `data-theme="light"`、dark は `class="dark" data-theme="dark"` を同じ要素へ必ず併記する。Provider が必要な component は、その責務を library、preview、利用側のどこへ置くか人が決める。`direction` は描画を持たない `DirectionProvider` + `useDirection` なので、検証用 consumer と selector を人が設計する。Dialog など overlay は、初期 open にして描画を常時検証するか、操作後だけ開くかを人が決める。
 4. hydrated 後に必ず1件以上存在する安定 selector を `preview-selectors.json` に追加する。Portal や操作後 DOM の selector でもよいが、実ブラウザで同じ操作を再現できるようにする。
    Context Menu は pointer 座標を anchor にするため、`defaultOpen` では位置検証が成立しない。閉じた preview で trigger の `contextmenu` を実行してから Portal content を検証する。
    focus return の期待値は開き方で決める。click / keyboard で trigger を操作した場合は trigger へ戻ること、pointer だけの右クリックでは閉じた content に focus が取り残されないこと、hover では focus が移動しないことを確認する。Context Menu の右クリックは trigger を focus しないため、Escape 後に返す先がなく `BODY` へ戻るのは正常である。

@@ -22,7 +22,7 @@ elchika-inc の各プロダクトが同じ見た目と操作性を共有でき�
 
 1. shadcn CLI の Astro + Base UI + Nova scaffold が成功し、`components.json` の `style` が `base-nova` である。
 2. `src/components/ui/button.tsx` が `@base-ui/react` を import し、生成直後の standards 違反が 0 件である。
-3. `src/styles/global.css` が standards の `templates/design-tokens.css` と同一で、和文フォールバック・`--success`・`prefers-reduced-motion` を含む。
+3. `src/styles/design-system/design-tokens.html` を正本として Layer 0 / 1 の `tokens.css` と `brands.css` を再生成・byte 検査でき、`src/styles/global.css` は色値を複製せず shadcn alias を定義し、registry は alias CSS と runtime 用 generated token の両方を配布する。token build は正本と生成物、consumer contrast は実利用 pair をそれぞれ検査する。
 4. `lib/index.d.ts` が `ButtonProps` を export し、その型が `variant` と `size` の契約を持つ。
 5. ローカル配信した registry URL から、リポジトリ外の別プロジェクトへ standards 適合済み Button をコピーできる。
 6. Button の隔離プレビューが light / dark の 2 静的ページとして存在し、dark 側ルート要素が `class="dark"` を持つ。

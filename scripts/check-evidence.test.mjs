@@ -17,6 +17,7 @@ const checkerUrl = new URL("./check-evidence.mjs", import.meta.url);
 const migrationUrl = new URL("./migrate-evidence-sha.mjs", import.meta.url);
 const png = Buffer.from("89504e470d0a1a0a", "hex");
 const jpeg = Buffer.from("ffd8ff", "hex");
+const sharedTokenPaths = ["src/styles/global.css", "src/styles/design-system/tokens.css"];
 const sharedTokenImageSubjects = [
   "attachment",
   "alert",
@@ -77,12 +78,14 @@ const createEvidenceRepo = () => {
     writeFileSync(join(root, `src/pages/preview/${name}-dark.astro`), `${name} dark\n`);
   }
   mkdirSync(join(root, "src/styles"), { recursive: true });
+  mkdirSync(join(root, "src/styles/design-system"), { recursive: true });
   mkdirSync(join(root, "src/catalog"), { recursive: true });
   mkdirSync(join(root, "src/layouts"), { recursive: true });
   mkdirSync(join(root, "src/lib"), { recursive: true });
   mkdirSync(join(root, "src/pages"), { recursive: true });
   mkdirSync(join(root, ".docs/reviews"), { recursive: true });
   writeFileSync(join(root, "src/styles/global.css"), "tokens\n");
+  writeFileSync(join(root, "src/styles/design-system/tokens.css"), "generated tokens\n");
   writeFileSync(join(root, "src/catalog/preview-manifest.mjs"), "manifest\n");
   writeFileSync(join(root, "src/catalog/previews.ts"), "previews\n");
   writeFileSync(join(root, "src/catalog/verification-catalog.tsx"), "catalog\n");
@@ -122,7 +125,8 @@ const createEvidenceRepo = () => {
 
 const commitSharedTokenChange = (root) => {
   writeFileSync(join(root, "src/styles/global.css"), "brand tokens\n");
-  git(root, ["add", "src/styles/global.css"]);
+  writeFileSync(join(root, "src/styles/design-system/tokens.css"), "generated brand tokens\n");
+  git(root, ["add", ...sharedTokenPaths]);
   git(root, ["commit", "-m", "change shared tokens"]);
   const globalTokenSha = git(root, ["rev-parse", "HEAD"]).trim();
   writeFileSync(join(root, "implementation.txt"), "implementation after tokens\n");
@@ -271,7 +275,7 @@ test("shared token report の構造化 field を一意に読む", async () => {
   );
 });
 
-test("有効な shared token report は global.css の historical stale を cover する", async (t) => {
+test("有効な shared token report は runtime token 2層の historical stale を cover する", async (t) => {
   const { root } = createEvidenceRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));
   const { implementationSha } = commitSharedTokenChange(root);
@@ -281,7 +285,7 @@ test("有効な shared token report は global.css の historical stale を cove
   const result = checkEvidenceInRepo(root);
 
   assert.deepEqual(result.problems, []);
-  assert.deepEqual([...result.coverage.coveredPaths], ["src/styles/global.css"]);
+  assert.deepEqual([...result.coverage.coveredPaths], sharedTokenPaths);
   assert.deepEqual(result.displayStale, []);
 });
 
@@ -355,35 +359,31 @@ test("verified_impl_sha が targeted_dynamic_sha の祖先でなければ cover 
   assert.ok(result.problems.some((problem) => problem.includes("動的検証 SHA の祖先ではない")));
 });
 
-test("targeted SHA 後の committed global.css 変更は coverage を失わせる", async (t) => {
-  const { root } = createEvidenceRepo();
-  t.after(() => rmSync(root, { recursive: true, force: true }));
-  const { implementationSha } = commitSharedTokenChange(root);
-  addSharedTokenEvidence(root, { verifiedSha: implementationSha, commit: true });
-  writeFileSync(join(root, "src/styles/global.css"), "changed after dynamic verification\n");
-  git(root, ["add", "src/styles/global.css"]);
-  git(root, ["commit", "-m", "change tokens after dynamic verification"]);
-  const { checkEvidenceInRepo } = await loadModule();
+for (const tokenPath of sharedTokenPaths) {
+  for (const state of ["committed", "staged", "unstaged"]) {
+    test(`targeted SHA 後の ${state} ${tokenPath} 変更は coverage を失わせる`, async (t) => {
+      const { root } = createEvidenceRepo();
+      t.after(() => rmSync(root, { recursive: true, force: true }));
+      const { implementationSha } = commitSharedTokenChange(root);
+      addSharedTokenEvidence(root, { verifiedSha: implementationSha, commit: true });
+      writeFileSync(join(root, tokenPath), `${state} change after dynamic verification\n`);
+      if (state !== "unstaged") git(root, ["add", tokenPath]);
+      if (state === "committed") {
+        git(root, ["commit", "-m", `change ${tokenPath} after dynamic verification`]);
+      }
+      const { checkEvidenceInRepo } = await loadModule();
 
-  const result = checkEvidenceInRepo(root);
+      const result = checkEvidenceInRepo(root);
 
-  assert.deepEqual([...result.coverage.coveredPaths], []);
-  assert.ok(result.problems.some((problem) => problem.includes("動的検証 SHA 以降")));
-});
-
-test("targeted SHA 後の uncommitted global.css 変更は coverage を失わせる", async (t) => {
-  const { root } = createEvidenceRepo();
-  t.after(() => rmSync(root, { recursive: true, force: true }));
-  const { implementationSha } = commitSharedTokenChange(root);
-  addSharedTokenEvidence(root, { verifiedSha: implementationSha, commit: true });
-  writeFileSync(join(root, "src/styles/global.css"), "uncommitted change after verification\n");
-  const { checkEvidenceInRepo } = await loadModule();
-
-  const result = checkEvidenceInRepo(root);
-
-  assert.deepEqual([...result.coverage.coveredPaths], []);
-  assert.ok(result.problems.some((problem) => problem.includes("動的検証 SHA 以降")));
-});
+      assert.deepEqual([...result.coverage.coveredPaths], []);
+      assert.ok(
+        result.problems.some(
+          (problem) => problem.includes("動的検証 SHA 以降") && problem.includes(tokenPath),
+        ),
+      );
+    });
+  }
+}
 
 test("shared coverage は component 固有 path の hard failure を解除しない", async (t) => {
   const { root } = createEvidenceRepo();
@@ -400,7 +400,7 @@ test("shared coverage は component 固有 path の hard failure を解除しな
       "2026-08-01-button-preview.md: 検証 SHA 以降に component 固有 path が変更されている",
     ),
   );
-  assert.deepEqual([...result.coverage.coveredPaths], ["src/styles/global.css"]);
+  assert.deepEqual([...result.coverage.coveredPaths], sharedTokenPaths);
 });
 
 test("untracked の単一 shared report と画像を commit 前でも検査する", async (t) => {
@@ -416,7 +416,7 @@ test("untracked の単一 shared report と画像を commit 前でも検査す�
   const result = checkEvidenceInRepo(root);
 
   assert.deepEqual(result.problems, []);
-  assert.deepEqual([...result.coverage.coveredPaths], ["src/styles/global.css"]);
+  assert.deepEqual([...result.coverage.coveredPaths], sharedTokenPaths);
 });
 
 test("shared report と同時追加する画像が欠ければ cover しない", async (t) => {
@@ -459,7 +459,7 @@ test("同じ verified_impl_sha の shared report は追加 commit が新しい�
   const result = checkEvidenceInRepo(root);
 
   assert.deepEqual(result.problems, []);
-  assert.deepEqual([...result.coverage.coveredPaths], ["src/styles/global.css"]);
+  assert.deepEqual([...result.coverage.coveredPaths], sharedTokenPaths);
   assert.equal(result.coverage.report, "brand-token-migration/report.md");
 });
 
@@ -473,7 +473,7 @@ test("staged の単一 shared report と画像を commit 前でも検査する",
   const result = checkEvidenceInRepo(root);
 
   assert.deepEqual(result.problems, []);
-  assert.deepEqual([...result.coverage.coveredPaths], ["src/styles/global.css"]);
+  assert.deepEqual([...result.coverage.coveredPaths], sharedTokenPaths);
 });
 
 test("working tree の shared report が複数あれば fail-closed にする", async (t) => {

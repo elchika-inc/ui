@@ -43,10 +43,10 @@
 ## RISK-006: light の warning ペアが WCAG AA を満たさない
 - date: 2026-07-31
 - confidence: high
-- location: `src/styles/global.css` の `--warning` / `--warning-foreground`
-- status: accepted
-- reason: standards の正本を byte 一致で取り込んだ状態で実計算したコントラスト比は 3.9190:1 であり、通常テキストに必要な 4.5:1 を満たさない。本サブプロジェクトの Button は warning ペアを使わないため #1 では実害がなく、standards 側の修正を待つ。warning 背景と foreground を使うコンポーネントを追加する前に再検討する。
-- anchor: standards の `.docs/actions/next-session-warning-foreground-contrast.md` が閉じられて `templates/design-tokens.css` の該当トークンが変更されること、および本リポジトリの `scripts/contrast.mjs` が `src/styles/global.css` の実値から PASS / FAIL を再計算すること。Task 10 の整合検査は PASS 後に本エントリが残る状態も拒否する。
+- location: `src/styles/design-system/design-tokens.html` の warning pair と `src/styles/global.css` の `--warning` / `--warning-foreground`
+- status: mitigated
+- reason: デザインシステム v1.8 の検査済み `--color-status-warning-bg` / `--color-status-warning-text` pair を、`--warning` / `--warning-foreground` へ値の複製なしで alias する。旧 light pair の 3.9190:1 は置き換えられ、通常テキストに必要な 4.5:1 以上を token build と実 consumer の両方で検査する。
+- anchor: `src/styles/design-system/build-tokens.mjs --check` が HTML 正本と生成 CSS の byte 一致および warning pair を検査し、`scripts/contrast.mjs` が生成 token と shadcn alias を結合して実 consumer の PASS / FAIL を再計算する。どちらかが失敗すれば配布へ進まない。
 
 ## RISK-007: 利用者の既存トークンを registry から上書きできない
 - date: 2026-07-31

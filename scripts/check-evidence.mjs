@@ -8,12 +8,13 @@ import { pathToFileURL } from "node:url";
 // preview 全体へ影響しうる共有面はここだけを育てる。
 export const SHARED_EVIDENCE_PATHS = [
   "src/styles/global.css",
+  "src/styles/design-system/tokens.css",
   "src/layouts/main.astro",
   "src/lib/utils.ts",
 ];
 
 const SHARED_TOKEN_SCOPE = "shared-token-migration";
-const SHARED_TOKEN_PATH = "src/styles/global.css";
+const SHARED_TOKEN_PATHS = ["src/styles/global.css", "src/styles/design-system/tokens.css"];
 const SHARED_TOKEN_IMAGE_SUBJECTS = [
   "disabled-controls",
   "alert-dialog",
@@ -381,23 +382,22 @@ export function inspectSharedTokenCoverage(repositoryRoot, reports) {
     ]);
   }
 
-  if (pathsChanged(repositoryRoot, targeted.value, [SHARED_TOKEN_PATH])) {
+  const changedTokenPaths = SHARED_TOKEN_PATHS.filter((path) =>
+    pathsChanged(repositoryRoot, targeted.value, [path]),
+  );
+  if (changedTokenPaths.length > 0) {
     return emptyCoverage([
-      `${report.file}: 動的検証 SHA 以降に ${SHARED_TOKEN_PATH} が変更されている`,
+      `${report.file}: 動的検証 SHA 以降に ${changedTokenPaths.join(", ")} が変更されている`,
     ]);
   }
 
-  const globalTokenSha = git(repositoryRoot, [
-    "log",
-    "-1",
-    "--format=%H",
-    "--",
-    SHARED_TOKEN_PATH,
-  ]).trim();
-  if (!globalTokenSha || !strictAncestor(repositoryRoot, globalTokenSha, report.sha)) {
-    return emptyCoverage([
-      `${report.file}: ${SHARED_TOKEN_PATH} の最終変更 commit は verified_impl_sha の厳密な祖先でなければならない`,
-    ]);
+  for (const tokenPath of SHARED_TOKEN_PATHS) {
+    const tokenSha = git(repositoryRoot, ["log", "-1", "--format=%H", "--", tokenPath]).trim();
+    if (!tokenSha || !strictAncestor(repositoryRoot, tokenSha, report.sha)) {
+      return emptyCoverage([
+        `${report.file}: ${tokenPath} の最終変更 commit は verified_impl_sha の厳密な祖先でなければならない`,
+      ]);
+    }
   }
   if (!commitIsAncestor(repositoryRoot, report.sha, targeted.value)) {
     return emptyCoverage([`${report.file}: verified_impl_sha が動的検証 SHA の祖先ではない`]);
@@ -420,7 +420,7 @@ export function inspectSharedTokenCoverage(repositoryRoot, reports) {
   }
 
   return {
-    coveredPaths: new Set([SHARED_TOKEN_PATH]),
+    coveredPaths: new Set(SHARED_TOKEN_PATHS),
     problems: [],
     report: report.file,
   };

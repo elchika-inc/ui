@@ -1,3 +1,4 @@
+@import "./design-system/tokens.css" layer(design-system);
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -28,6 +29,8 @@
     --color-border: var(--border);
     --color-destructive: var(--destructive);
     --color-destructive-foreground: var(--destructive-foreground);
+    --color-destructive-subtle: var(--destructive-subtle);
+    --color-destructive-subtle-foreground: var(--destructive-subtle-foreground);
     --color-success: var(--success);
     --color-success-foreground: var(--success-foreground);
     --color-warning: var(--warning);
@@ -40,6 +43,7 @@
     --color-secondary: var(--secondary);
     --color-primary-foreground: var(--primary-foreground);
     --color-primary: var(--primary);
+    --color-primary-hover: var(--primary-hover);
     --color-popover-foreground: var(--popover-foreground);
     --color-popover: var(--popover);
     --color-card-foreground: var(--card-foreground);
@@ -47,6 +51,9 @@
     --color-foreground: var(--foreground);
     --color-background: var(--background);
     --color-overlay: var(--overlay);
+    --color-state-hover: var(--state-hover-bg);
+    --color-state-press: var(--state-press-bg);
+    --color-state-selected: var(--state-selected-bg);
     --radius-sm: calc(var(--radius) * 0.6);
     --radius-md: calc(var(--radius) * 0.8);
     --radius-lg: var(--radius);
@@ -60,85 +67,92 @@
 
 :root {
     color-scheme: light;   /* ブラウザネイティブ UI（スクロールバー・select・autofill）もテーマに追従させる */
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
+    --background: rgb(var(--color-bg-canvas));
+    --foreground: rgb(var(--color-text-primary));
     --overlay: oklch(0 0 0 / 10%);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.54 0 0);   /* muted(0.97) 上でもテキスト 4.5:1 を満たす値 */
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.505 0.213 27.518);   /* red-700 相当（白 6.4:1・muted(0.97) 上でも 5.9:1） */
-    --destructive-foreground: oklch(0.985 0 0); /* 明色（destructive 背景塗り時の文字色） */
-    --success: oklch(0.527 0.154 150.069);   /* green-700 相当（白背景でテキスト 4.5:1 を満たす） */
-    --success-foreground: oklch(0.985 0 0);  /* 明色（success 背景塗り時の文字色） */
-    --warning: oklch(0.555 0.163 48.998);    /* amber-700 相当（白背景でテキスト 4.5:1 を満たす） */
-    --warning-foreground: oklch(0.145 0 0);  /* 暗色（amber は輝度が高いため暗色テキストが視認性よい） */
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.556 0 0);                /* light で 3:1 を満たすフォーカスリング */
-    --chart-1: oklch(0.556 0 0);
-    --chart-2: oklch(0.439 0 0);
-    --chart-3: oklch(0.371 0 0);
-    --chart-4: oklch(0.269 0 0);
-    --chart-5: oklch(0.205 0 0);
+    --card: rgb(var(--color-bg-surface));
+    --card-foreground: rgb(var(--color-text-primary));
+    --popover: rgb(var(--color-bg-surface));
+    --popover-foreground: rgb(var(--color-text-primary));
+    --primary: rgb(var(--color-brand-primary));
+    --primary-hover: rgb(var(--color-brand-primary-hover));
+    --primary-foreground: rgb(var(--color-bg-surface));
+    --secondary: rgb(var(--color-bg-surface-raised));
+    --secondary-foreground: rgb(var(--color-text-primary));
+    --muted: rgb(var(--color-bg-surface-raised));
+    --muted-foreground: rgb(var(--color-text-muted));
+    --accent: rgb(var(--color-brand-subtle));
+    --accent-foreground: rgb(var(--color-brand-primary-hover));
+    --destructive: rgb(var(--color-status-danger));
+    --destructive-foreground: rgb(var(--color-bg-surface));
+    --destructive-subtle: rgb(var(--color-status-danger-bg));
+    --destructive-subtle-foreground: rgb(var(--color-status-danger-text));
+    --success: rgb(var(--color-status-success-bg));
+    --success-foreground: rgb(var(--color-status-success-text));
+    --warning: rgb(var(--color-status-warning-bg));
+    --warning-foreground: rgb(var(--color-status-warning-text));
+    --border: rgb(var(--color-border-default));
+    --input: rgb(var(--color-border-control));
+    --ring: rgb(var(--color-brand-primary));
+    --chart-1: rgb(var(--chart-series-1));
+    --chart-2: rgb(var(--chart-series-2));
+    --chart-3: rgb(var(--chart-series-3));
+    --chart-4: rgb(var(--chart-series-4));
+    --chart-5: rgb(var(--chart-series-5));
     --radius: 0.625rem;
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.556 0 0);    /* --ring と同値（light で 3:1 を満たす） */
+    --sidebar: var(--card);
+    --sidebar-foreground: var(--foreground);
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: var(--muted);
+    --sidebar-accent-foreground: var(--foreground);
+    --sidebar-border: var(--border);
+    --sidebar-ring: var(--ring);
 }
 
 .dark {
     color-scheme: dark;
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
+    --background: rgb(var(--color-bg-canvas));
+    --foreground: rgb(var(--color-text-primary));
     --overlay: oklch(0 0 0 / 10%);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.704 0.191 22.216);
-    --destructive-foreground: oklch(0.145 0 0);  /* 暗色（dark の destructive は L=0.704 と明るいため暗色テキスト。白=2.77:1 NG→暗色=6.84:1） */
-    --success: oklch(0.723 0.219 149.579);   /* green-500 相当 */
-    --success-foreground: oklch(0.145 0 0);  /* 暗色（dark の success は明るめなので暗色テキスト） */
-    --warning: oklch(0.769 0.188 70.08);     /* amber-500 相当 */
-    --warning-foreground: oklch(0.145 0 0);  /* 暗色 */
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
-    --chart-1: oklch(0.87 0 0);              /* dark 用に明るい側へ反転したスケール */
-    --chart-2: oklch(0.78 0 0);
-    --chart-3: oklch(0.708 0 0);
-    --chart-4: oklch(0.62 0 0);
-    --chart-5: oklch(0.556 0 0);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.922 0 0);     /* light と対称の無彩色（shadcn デフォルトの青紫 leftover を除去） */
-    --sidebar-primary-foreground: oklch(0.205 0 0);   /* 明色 primary 上の濃色テキスト（dark の --primary-foreground と同値） */
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
+    --card: rgb(var(--color-bg-surface));
+    --card-foreground: rgb(var(--color-text-primary));
+    --popover: rgb(var(--color-bg-surface));
+    --popover-foreground: rgb(var(--color-text-primary));
+    --primary: rgb(var(--color-brand-primary));
+    --primary-hover: rgb(var(--color-brand-primary-hover));
+    --primary-foreground: rgb(var(--color-bg-surface));
+    --secondary: rgb(var(--color-bg-surface-raised));
+    --secondary-foreground: rgb(var(--color-text-primary));
+    --muted: rgb(var(--color-bg-surface-raised));
+    --muted-foreground: rgb(var(--color-text-muted));
+    --accent: rgb(var(--color-brand-subtle));
+    --accent-foreground: rgb(var(--color-brand-primary-hover));
+    --destructive: rgb(var(--color-status-danger));
+    --destructive-foreground: rgb(var(--color-bg-surface));
+    --destructive-subtle: rgb(var(--color-status-danger-bg));
+    --destructive-subtle-foreground: rgb(var(--color-status-danger-text));
+    --success: rgb(var(--color-status-success-bg));
+    --success-foreground: rgb(var(--color-status-success-text));
+    --warning: rgb(var(--color-status-warning-bg));
+    --warning-foreground: rgb(var(--color-status-warning-text));
+    --border: rgb(var(--color-border-default));
+    --input: rgb(var(--color-border-control));
+    --ring: rgb(var(--color-brand-primary));
+    --chart-1: rgb(var(--chart-series-1));
+    --chart-2: rgb(var(--chart-series-2));
+    --chart-3: rgb(var(--chart-series-3));
+    --chart-4: rgb(var(--chart-series-4));
+    --chart-5: rgb(var(--chart-series-5));
+    --radius: 0.625rem;
+    --sidebar: var(--card);
+    --sidebar-foreground: var(--foreground);
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: var(--muted);
+    --sidebar-accent-foreground: var(--foreground);
+    --sidebar-border: var(--border);
+    --sidebar-ring: var(--ring);
 }
 
 @layer base {

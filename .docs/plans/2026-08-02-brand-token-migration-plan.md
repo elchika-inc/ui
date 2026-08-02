@@ -410,7 +410,9 @@ git commit -m "test: 実利用配色のコントラスト検査を追加する"
 - Create: `scripts/design-tokens.test.mjs`
 - Modify: `src/styles/design-system/build-tokens.mjs`
 - Modify: `src/styles/global.css`
+- Modify: `biome.json`
 - Modify: `src/layouts/main.astro`
+- Modify: `src/pages/preview/*.astro`
 - Modify: `src/previews/preview-theme.ts`
 - Modify: `scripts/preview-theme.test.mjs`
 - Modify: `scripts/check-evidence.mjs`, `scripts/check-evidence.test.mjs`
@@ -477,9 +479,9 @@ Expected: test と実 source の check が exit 0。temp 上で生成物を壊�
 
 - [ ] **Step 5: `.dark` と `data-theme` を同期する RED→GREEN test を追加する**
 
-`main.astro` は light で `data-theme="light"`、dark で `class="dark" data-theme="dark"` を出す。`watchPreviewTheme` は class と data attribute の両方を監視し、不一致を callback の成功値として扱わず例外へ surface する。`preview-theme.test.mjs` に light / dark 一致、class のみ、data-theme のみ、未知値の test を追加し、先に RED を確認してから実装する。
+`main.astro` は light で `data-theme="light"`、dark で `class="dark" data-theme="dark"` を出す。isolated preview は61件の dark route を含む全 route が Layout を経由せず `<html>` を直書きしているため、全 light route へ `data-theme="light"`、全 dark route へ `data-theme="dark"` を機械追加する。`watchPreviewTheme` は class と data attribute の両方を監視し、不一致を callback の成功値として扱わず例外へ surface する。`preview-theme.test.mjs` に light / dark 一致、class のみ、data-theme のみ、未知値と、全 `.astro` source の class / data-theme 同期 test を追加し、先に RED を確認してから実装する。
 
-ブラウザから forced theme を切り替える手順は、必ず class と data attribute を同じ `evaluate` 内で更新する。片方だけの更新は禁止する。
+ブラウザから forced theme を切り替える手順は、必ず class と data attribute を同じ `evaluate` 内で更新する。片方だけの更新は禁止する。Task 8 では source test と別に、ビルド済み DOM の `html.dark` と `data-theme="dark"` の一致 assert を維持する。
 
 - [ ] **Step 5b: shared evidence coverage を生成 token まで拡張する**
 
@@ -490,6 +492,10 @@ Expected: test と実 source の check が exit 0。temp 上で生成物を壊�
 RISK-006 は `mitigated` とし、`--warning` / `--warning-foreground` が v1.8 の検査済み warning bg / text pair を alias すること、token build と consumer sensor の二重 anchor を記録する。chart defer の RISK-013 は追加せず、5系列を v1.8 から採用した判断を report に残す。
 
 PROJECT_GOAL DoneCriteria 3、README Features / Architecture は、HTML 正本 → generated Layer 0 / 1 → shadcn alias → registry の契約、token build と consumer contrast の分担へ更新する。
+
+- [ ] **Step 6b: vendored 正本を Biome から除外する**
+
+`src/styles/design-system/` は承認済み外部正本の byte 一致を優先し、Biome の `files.includes` で directory 単位に force-ignore する。lint は自分たちのコードだけへ適用する。README には `build-tokens.mjs` の取り込み時 SHA と exact artifact comparison の承認済み差分を記録する。`design-tokens.html` で検出した a11y error は配布 CSS へ影響しないため今回は変更せず、Task 8 の最終レポートへ v1.8 側の改善候補として記録する。
 
 - [ ] **Step 7: token 層と consumer RED を確認する**
 
@@ -825,6 +831,8 @@ verified_impl_sha: VERIFIED_IMPL_SHAの40桁実値
 ```
 
 本文には route、theme、state、computed style、contrast、keyboard / pointer、console、画像 path、見た範囲 / 見ていない範囲を記録する。画像取得方法と `.jpg` 実体の一致を1行入れる。
+
+最終 report には、vendored `design-tokens.html` の spec page で Biome が検出した type 無し button と noninteractive `div[tabindex]` などの a11y error を、配布 CSS へ影響しない v1.8 側の改善候補として1行記録する。
 
 - [ ] **Step 6: shared aggregate report を作成する**
 
