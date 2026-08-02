@@ -35,6 +35,41 @@ test(":root と dark selector のどちらかが欠けた CSS を拒否する", 
   assert.match(parseThemes(".dark { --foreground: 255 255 255; }").problems.join("\n"), /:root/);
 });
 
+test("CSS comment内のtheme blockとaliasを有効な宣言として扱わない", async () => {
+  const { inspectThemeAliasParity, parseThemes } = await loadContrast();
+  const commentedDark = `
+    :root { --foreground: 0 0 0; }
+    /* .dark { --foreground: 255 255 255; } */
+  `;
+
+  assert.match(parseThemes(commentedDark).problems.join("\n"), /dark selector/);
+  assert.match(inspectThemeAliasParity(commentedDark).join("\n"), /.dark alias block/);
+
+  const commentedAlias = `
+    :root { --foreground: 0 0 0; /* --muted: 1 1 1; */ }
+    .dark { --foreground: 0 0 0; --muted: 1 1 1; }
+  `;
+  assert.match(inspectThemeAliasParity(commentedAlias).join("\n"), /--muted: :root alias が無い/);
+});
+
+test("実theme block後のcommented duplicateと文字列内comment記号を無視する", async () => {
+  const { inspectThemeAliasParity, parseThemes } = await loadContrast();
+  const css = `
+    :root {
+      --foreground: 0 0 0;
+      --asset: url("data:text/plain,/*not-comment*/");
+    }
+    .dark {
+      --foreground: 0 0 0;
+      --asset: url("data:text/plain,/*not-comment*/");
+    }
+    /* .dark { --foreground: 255 255 255; --extra: 1 1 1; } */
+  `;
+
+  assert.deepEqual(parseThemes(css).problems, []);
+  assert.deepEqual(inspectThemeAliasParity(css), []);
+});
+
 test("data-theme dark を読み、同名の dark alias が食い違えば拒否する", async () => {
   const { parseThemes, resolveToken } = await loadContrast();
   const valid = parseThemes(

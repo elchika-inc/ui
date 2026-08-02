@@ -14,6 +14,7 @@ export const SHARED_EVIDENCE_PATHS = [
 ];
 
 const SHARED_TOKEN_SCOPE = "shared-token-migration";
+const REPORT_IMMUTABILITY_ENFORCEMENT_V1 = "REPORT_IMMUTABILITY_ENFORCEMENT_V1";
 const SHARED_TOKEN_PATHS = ["src/styles/global.css", "src/styles/design-system/tokens.css"];
 const SHARED_TOKEN_IMAGE_SUBJECTS = [
   "disabled-controls",
@@ -271,6 +272,7 @@ function inspectLatestComponentEvidence(repositoryRoot, verifications) {
 function evidenceAddition(repositoryRoot, report) {
   const reportPath = `.docs/reviews/${report}`;
   const additionCommit = git(repositoryRoot, [
+    "--literal-pathspecs",
     "log",
     "--diff-filter=A",
     "--format=%H",
@@ -320,6 +322,7 @@ function evidenceAddition(repositoryRoot, report) {
 
 function immutablePathBaseline(repositoryRoot, path) {
   const additionCommit = git(repositoryRoot, [
+    "--literal-pathspecs",
     "log",
     "--reverse",
     "--diff-filter=A",
@@ -335,6 +338,96 @@ function immutablePathBaseline(repositoryRoot, path) {
   return sensorBaseline && strictAncestor(repositoryRoot, additionCommit, sensorBaseline)
     ? sensorBaseline
     : additionCommit;
+}
+
+function reportImmutabilityEnforcement(repositoryRoot) {
+  return git(repositoryRoot, [
+    "log",
+    "--reverse",
+    `-S${REPORT_IMMUTABILITY_ENFORCEMENT_V1}`,
+    "--format=%H",
+    "--",
+    "scripts/check-evidence.mjs",
+  ])
+    .trim()
+    .split("\n")
+    .find(Boolean);
+}
+
+function enforcementParent(repositoryRoot, enforcement) {
+  const result = spawnSync("git", ["rev-parse", `${enforcement}^`], {
+    cwd: repositoryRoot,
+    encoding: "utf8",
+  });
+  return result.status === 0 ? result.stdout.trim() : enforcement;
+}
+
+function reportBaselineCommit(repositoryRoot, reportPath) {
+  const additionCommit = git(repositoryRoot, [
+    "--literal-pathspecs",
+    "log",
+    "--reverse",
+    "--diff-filter=A",
+    "--format=%H",
+    "--",
+    reportPath,
+  ])
+    .trim()
+    .split("\n")
+    .find(Boolean);
+  if (!additionCommit) return undefined;
+
+  const enforcement = reportImmutabilityEnforcement(repositoryRoot);
+  if (!enforcement) return undefined;
+  return strictAncestor(repositoryRoot, additionCommit, enforcement)
+    ? enforcementParent(repositoryRoot, enforcement)
+    : additionCommit;
+}
+
+function protectedEvidencePaths(repositoryRoot, enforcement) {
+  const baseline = enforcementParent(repositoryRoot, enforcement);
+  const atEnforcement = git(repositoryRoot, [
+    "ls-tree",
+    "-r",
+    "--name-only",
+    baseline,
+    "--",
+    ".docs/reviews",
+  ])
+    .trim()
+    .split("\n");
+  const addedAfterEnforcement = git(repositoryRoot, [
+    "log",
+    "--no-renames",
+    "--diff-filter=A",
+    "--name-only",
+    "--format=",
+    `${baseline}..HEAD`,
+    "--",
+    ".docs/reviews",
+  ])
+    .trim()
+    .split("\n");
+  return [...new Set([...atEnforcement, ...addedAfterEnforcement].filter(Boolean))];
+}
+
+function inspectEvidenceImmutability(repositoryRoot, currentFiles) {
+  const enforcement = reportImmutabilityEnforcement(repositoryRoot);
+  if (!enforcement) return [];
+  const current = new Set(currentFiles);
+  const problems = protectedEvidencePaths(repositoryRoot, enforcement)
+    .filter((path) => !current.has(path))
+    .map((path) => `${path.replace(/^\.docs\/reviews\//, "")}: 施行後の証跡は削除・renameできない`);
+
+  for (const path of currentFiles) {
+    const baseline = reportBaselineCommit(repositoryRoot, path);
+    if (baseline && pathsChanged(repositoryRoot, baseline, [path])) {
+      problems.push(
+        `${path.replace(/^\.docs\/reviews\//, "")}: 証跡が施行時baselineから変更されている`,
+      );
+    }
+  }
+  return problems;
 }
 
 const emptyCoverage = (problems = []) => ({
@@ -454,7 +547,11 @@ export function inspectSharedTokenCoverage(repositoryRoot, reports) {
 
 function introducedReportMarkdown(repositoryRoot, report) {
   const reportPath = `.docs/reviews/${report}`;
+  const reportBaseline = reportBaselineCommit(repositoryRoot, reportPath);
+  if (reportBaseline) return git(repositoryRoot, ["show", `${reportBaseline}:${reportPath}`]);
+
   const additionCommit = git(repositoryRoot, [
+    "--literal-pathspecs",
     "log",
     "--reverse",
     "--diff-filter=A",
@@ -470,6 +567,7 @@ function introducedReportMarkdown(repositoryRoot, report) {
   const introductionCommit =
     immutabilityBaseline && strictAncestor(repositoryRoot, additionCommit, immutabilityBaseline)
       ? git(repositoryRoot, [
+          "--literal-pathspecs",
           "log",
           "--reverse",
           "-Sverified_impl_sha:",
@@ -740,6 +838,12 @@ export function checkEvidenceInRepo(root) {
     left.path.localeCompare(right.path),
   );
   const files = entries.filter((entry) => entry.isFile).map((entry) => entry.path);
+  problems.push(
+    ...inspectEvidenceImmutability(
+      repositoryRoot,
+      files.map((file) => `.docs/reviews/${file}`),
+    ),
+  );
   const imageFiles = files.filter((file) => [".png", ".jpg", ".jpeg"].includes(extname(file)));
   const markdownFiles = files.filter((file) => extname(file) === ".md");
   const stale = [];

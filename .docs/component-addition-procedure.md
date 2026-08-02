@@ -60,6 +60,7 @@ npm run check:pre
 4. 検証 route、テーマ、操作、selector の件数、console 結果と、一意な`verified_impl_sha: <実装commitの40桁SHA>`を新規 Markdown に記録し、catalog 横断確認はバッチ末尾で実施することも記録する。
    component 追加ごとの恒常証跡は、結論 Markdown と light / dark screenshot だけを既定で commit する。console、DOM、Accessibility tree、network、server log は再実行時に生成する一時データとし、特定の correctness、security、明示要件を簡潔な証跡だけでは再現できない場合に限り、理由をレポートに書いて必要最小限を `.docs/reviews/` 配下に commit する。
 5. `node scripts/check-evidence.mjs` を実行する。同じcomponentを再検証したら新しい証跡を追加し、古い証跡は削除も書き換えもしない。component固有pathの鮮度hard gateはcomponentごとの最新証跡1件だけに適用し、その検証SHAより新しければ証跡を作り直す。古い証跡もSHAと画像形式など鮮度以外の検査対象には残る。catalog / index の集約証跡と shared surface の stale 一覧は自動失敗ではないが、証跡に書いた具体的な観測が再現しない場合は集約証跡を作り直す。`catalog-index-r2/report.md` は一度きりの深い検証として履歴に残し、以後の hard gate 対象にしない。過去の記録は書き換えない。
+   レビューを再実施した場合も既存文書のSHAや本文を更新せず、新しい文書を追加する。
 6. 証跡だけを明示パスで stage し、新しい証跡 commit を作る。
    証跡commit後は`npm run check:all`がexit 0であることを必須とする。
 

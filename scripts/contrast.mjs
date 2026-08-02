@@ -194,6 +194,14 @@ const declarations = (body) =>
     ]),
   );
 
+const CSS_STRING_OR_COMMENT =
+  /"(?:\\[\s\S]|[^"\\])*"|'(?:\\[\s\S]|[^'\\])*'|\/\*[\s\S]*?(?:\*\/|$)/g;
+
+const stripCssComments = (css) =>
+  css.replace(CSS_STRING_OR_COMMENT, (token) =>
+    token.startsWith("/*") ? token.replace(/[^\n]/g, "") : token,
+  );
+
 const blocks = (css, selector) =>
   [...css.matchAll(new RegExp(`${selector}\\s*\\{([^{}]*)\\}`, "g"))].map((match) =>
     declarations(match[1]),
@@ -207,9 +215,10 @@ const mergeBlocks = (target, sources) => {
 
 export function parseThemes(css) {
   const problems = [];
-  const rootBlocks = blocks(css, ":root");
-  const classDarkBlocks = blocks(css, "\\.dark");
-  const dataDarkBlocks = blocks(css, '\\[data-theme\\s*=\\s*["\\\x27]?dark["\\\x27]?\\]');
+  const source = stripCssComments(css);
+  const rootBlocks = blocks(source, ":root");
+  const classDarkBlocks = blocks(source, "\\.dark");
+  const dataDarkBlocks = blocks(source, '\\[data-theme\\s*=\\s*["\\\x27]?dark["\\\x27]?\\]');
   if (rootBlocks.length === 0) problems.push(":root block が無い");
   if (classDarkBlocks.length === 0 && dataDarkBlocks.length === 0) {
     problems.push("dark selector（.dark または [data-theme=dark]）が無い");
@@ -234,8 +243,9 @@ export function parseThemes(css) {
 }
 
 export function inspectThemeAliasParity(css) {
-  const rootBlocks = blocks(css, ":root");
-  const darkBlocks = blocks(css, "\\.dark");
+  const source = stripCssComments(css);
+  const rootBlocks = blocks(source, ":root");
+  const darkBlocks = blocks(source, "\\.dark");
   const root = new Map();
   const dark = new Map();
   mergeBlocks(root, rootBlocks);

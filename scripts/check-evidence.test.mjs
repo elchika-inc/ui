@@ -63,6 +63,17 @@ const addComponentEvidence = (root, report, verifiedSha) => {
   ]);
 };
 
+const introduceReportImmutabilitySensor = (root) => {
+  mkdirSync(join(root, "scripts"), { recursive: true });
+  writeFileSync(
+    join(root, "scripts/check-evidence.mjs"),
+    "const REPORT_IMMUTABILITY_ENFORCEMENT_V1 = true;\n",
+  );
+  git(root, ["add", "scripts/check-evidence.mjs"]);
+  git(root, ["commit", "-m", "introduce report immutability sensor"]);
+  return git(root, ["rev-parse", "HEAD"]).trim();
+};
+
 const createEvidenceRepo = () => {
   const root = mkdtempSync(join(tmpdir(), "elchika-evidence-test-"));
   git(root, ["init"]);
@@ -324,6 +335,7 @@ test("初回記録のverified_impl_shaが不正なら後から有効値へ直し
 test("report追加時にverified_impl_shaが無ければ後から全fieldを足しても検出する", async (t) => {
   const { root } = createEvidenceRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));
+  introduceReportImmutabilitySensor(root);
   const report = join(root, ".docs/reviews/2026-08-03-summary.md");
   writeFileSync(report, "# 初回は構造化fieldなし\n");
   git(root, ["add", ".docs/reviews/2026-08-03-summary.md"]);
@@ -399,6 +411,139 @@ test("immutability sensor導入前のlegacy reportは正式移行時をbaseline�
   assert.equal(
     result.problems.some((problem) => problem.includes("2026-07-30-legacy-summary.md")),
     false,
+  );
+});
+
+test("全report sensor施行前の正当な複数更新は施行直前blobをbaselineにする", async (t) => {
+  const { root, verifiedSha } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const relativeReport = ".docs/reviews/2026-08-02-batch-final-review.md";
+  const report = join(root, relativeReport);
+  writeFileSync(report, `verified_impl_sha: ${verifiedSha}\n初回レビュー\n`);
+  git(root, ["add", relativeReport]);
+  git(root, ["commit", "-m", "add final review"]);
+  for (const message of ["CI修正後レビュー", "配布型修正後レビュー"]) {
+    const implementationSha = git(root, ["rev-parse", "HEAD"]).trim();
+    writeFileSync(report, `verified_impl_sha: ${implementationSha}\n${message}\n`);
+    git(root, ["add", relativeReport]);
+    git(root, ["commit", "-m", message]);
+  }
+  introduceReportImmutabilitySensor(root);
+
+  const result = (await loadModule()).checkEvidenceInRepo(root);
+
+  assert.equal(
+    result.problems.some((problem) => problem.includes("2026-08-02-batch-final-review.md")),
+    false,
+  );
+});
+
+test("全report sensor施行後のverified_impl_sha書き換えを検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const sensorSha = introduceReportImmutabilitySensor(root);
+  const report = join(root, ".docs/reviews/2026-08-01-index-page.md");
+  writeFileSync(report, `verified_impl_sha: ${sensorSha}\n`);
+  git(root, ["add", ".docs/reviews/2026-08-01-index-page.md"]);
+  git(root, ["commit", "-m", "rewrite verified sha after sensor"]);
+  writeFileSync(join(root, "unrelated.txt"), "baselineを動かさない後続変更\n");
+  git(root, ["add", "unrelated.txt"]);
+  git(root, ["commit", "-m", "add unrelated follow-up"]);
+
+  const result = (await loadModule()).checkEvidenceInRepo(root);
+
+  assert.ok(
+    result.problems.some(
+      (problem) =>
+        problem.includes("2026-08-01-index-page.md") && problem.includes("baselineから変更"),
+    ),
+  );
+});
+
+for (const state of ["committed", "staged", "unstaged"]) {
+  test(`全report sensor施行後の本文${state}変更を検出する`, async (t) => {
+    const { root } = createEvidenceRepo();
+    t.after(() => rmSync(root, { recursive: true, force: true }));
+    introduceReportImmutabilitySensor(root);
+    const relativeReport = ".docs/reviews/2026-08-01-index-page.md";
+    const report = join(root, relativeReport);
+    const original = readFileSync(report, "utf8");
+    writeFileSync(report, `${original}本文を変更\n`);
+    if (state !== "unstaged") git(root, ["add", relativeReport]);
+    if (state === "committed") git(root, ["commit", "-m", "rewrite report body"]);
+
+    const result = (await loadModule()).checkEvidenceInRepo(root);
+
+    assert.ok(
+      result.problems.some(
+        (problem) =>
+          problem.includes("2026-08-01-index-page.md") && problem.includes("baselineから変更"),
+      ),
+    );
+  });
+}
+
+test("全report sensor施行後のrenameと同時書き換えを検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const sensorSha = introduceReportImmutabilitySensor(root);
+  const oldPath = ".docs/reviews/2026-08-01-index-page.md";
+  const newPath = ".docs/reviews/2026-08-03-renamed-index-page.md";
+  git(root, ["mv", oldPath, newPath]);
+  writeFileSync(join(root, newPath), `verified_impl_sha: ${sensorSha}\nrename後に変更\n`);
+  git(root, ["add", newPath]);
+  git(root, ["commit", "-m", "rename and rewrite report"]);
+
+  const result = (await loadModule()).checkEvidenceInRepo(root);
+
+  assert.ok(
+    result.problems.some(
+      (problem) => problem.includes("2026-08-01-index-page.md") && problem.includes("削除・rename"),
+    ),
+  );
+});
+
+test("pathspec magicを含むreportの施行後変更をliteral pathで検出する", async (t) => {
+  const { root, verifiedSha } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  introduceReportImmutabilitySensor(root);
+  const relativeReport = ".docs/reviews/[batch]/report.md";
+  mkdirSync(dirname(join(root, relativeReport)), { recursive: true });
+  writeFileSync(join(root, relativeReport), `verified_impl_sha: ${verifiedSha}\n初回\n`);
+  git(root, ["--literal-pathspecs", "add", relativeReport]);
+  git(root, ["commit", "-m", "add pathspec report"]);
+  writeFileSync(join(root, relativeReport), `verified_impl_sha: ${verifiedSha}\n変更後\n`);
+  git(root, ["--literal-pathspecs", "add", relativeReport]);
+  git(root, ["commit", "-m", "rewrite pathspec report"]);
+
+  const result = (await loadModule()).checkEvidenceInRepo(root);
+
+  assert.ok(
+    result.problems.some(
+      (problem) => problem.includes("[batch]/report.md") && problem.includes("baselineから変更"),
+    ),
+  );
+});
+
+test("pathspec magicを含む画像の施行後置換をliteral pathで検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  introduceReportImmutabilitySensor(root);
+  const image = ".docs/reviews/[batch]/capture*.jpg";
+  mkdirSync(dirname(join(root, image)), { recursive: true });
+  writeFileSync(join(root, image), jpeg);
+  git(root, ["--literal-pathspecs", "add", image]);
+  git(root, ["commit", "-m", "add pathspec image"]);
+  writeFileSync(join(root, image), Buffer.from("ffd8ff01", "hex"));
+  git(root, ["--literal-pathspecs", "add", image]);
+  git(root, ["commit", "-m", "replace pathspec image"]);
+
+  const result = (await loadModule()).checkEvidenceInRepo(root);
+
+  assert.ok(
+    result.problems.some(
+      (problem) => problem.includes("[batch]/capture*.jpg") && problem.includes("baselineから変更"),
+    ),
   );
 });
 
