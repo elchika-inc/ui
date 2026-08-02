@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { checkDistribution } from "./check-distribution.mjs";
+import * as distribution from "./check-distribution.mjs";
+
+const { checkDistribution } = distribution;
 
 const ORIGIN = { LICENSE: "MIT 本文", THIRD_PARTY_LICENSES: "上流の連結" };
 const entry = (target, content) => ({
@@ -61,4 +63,31 @@ test("揃っていて原本と一致すれば問題なし", () => {
     ],
   };
   assert.deepEqual(checkDistribution(item, ORIGIN).problems, []);
+});
+
+test("Button以外を含む全registry itemの法務ファイルを検査する", () => {
+  assert.equal(
+    typeof distribution.checkDistributionItems,
+    "function",
+    "全registry itemを検査する関数が無い",
+  );
+  const valid = {
+    files: [
+      entry("elchika-ui/LICENSE", "MIT 本文"),
+      entry("elchika-ui/THIRD_PARTY_LICENSES", "上流の連結"),
+    ],
+  };
+  const invalid = {
+    files: [entry("elchika-ui/LICENSE", "MIT 本文")],
+  };
+  assert.deepEqual(
+    distribution.checkDistributionItems(
+      [
+        { name: "button", item: valid },
+        { name: "calendar", item: invalid },
+      ],
+      ORIGIN,
+    ).problems,
+    ["calendar: THIRD_PARTY_LICENSES: registry item の files に無い（install されない）"],
+  );
 });

@@ -229,6 +229,40 @@ test("検証済みcomponentだけを変更すると落ち、別componentは落�
   );
 });
 
+test("registry itemが所有する補助sourceの変更もcomponent固有pathとして扱う", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  writeFileSync(
+    join(root, "registry.json"),
+    `${JSON.stringify(
+      {
+        items: [
+          {
+            name: "button",
+            files: [
+              { path: "src/components/ui/button.tsx", type: "registry:ui" },
+              { path: "src/components/ui/button-style.ts", type: "registry:ui" },
+              { path: "src/styles/global.css", type: "registry:file" },
+            ],
+          },
+        ],
+      },
+      null,
+      2,
+    )}\n`,
+  );
+  writeFileSync(join(root, "src/components/ui/button-style.ts"), "button helper\n");
+  git(root, ["add", "registry.json", "src/components/ui/button-style.ts"]);
+  git(root, ["commit", "-m", "add button helper after evidence"]);
+
+  assert.ok(
+    checkEvidenceInRepo(root).problems.includes(
+      "2026-08-01-button-preview.md: 検証 SHA 以降に component 固有 path が変更されている",
+    ),
+  );
+});
+
 test("同じcomponentの古い証跡を残し、最新証跡だけを鮮度判定する", async (t) => {
   const { root } = createEvidenceRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));

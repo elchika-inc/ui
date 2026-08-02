@@ -57,6 +57,23 @@ test("--modified が無ければ停止する", async () => {
   assert.throws(() => parseArgs(["calendar"]), /--modified/);
 });
 
+test("--modified の値が次のoptionなら停止する", async () => {
+  const { parseArgs } = await loadModule();
+  assert.throws(() => parseArgs(["calendar", "--modified", "--force"]), /--modified/);
+});
+
+test("同じoptionを重複指定したら停止する", async () => {
+  const { parseArgs } = await loadModule();
+  assert.throws(
+    () => parseArgs(["calendar", "--modified", "変更1", "--modified", "変更2"]),
+    /--modified.*1回/,
+  );
+  assert.throws(
+    () => parseArgs(["calendar", "--modified", "変更", "--force", "--force"]),
+    /--force.*1回/,
+  );
+});
+
 test("pin 済み CLI の add command を組み立てる", async () => {
   const { shadcnCommand } = await loadModule();
   assert.deepEqual(shadcnCommand("4.16.0", "calendar"), {

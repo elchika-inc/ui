@@ -37,6 +37,14 @@ test("barrel export の欠落を検出する", () => {
   assert.deepEqual(problems, ["button: src/index.ts から export されていない"]);
 });
 
+test("名前が前方一致する別componentをbarrel exportとして誤認しない", () => {
+  const { problems } = checkCompleteness({
+    ...complete,
+    barrel: 'export { ButtonGroup } from "./components/ui/button-group"',
+  });
+  assert.deepEqual(problems, ["button: src/index.ts から export されていない"]);
+});
+
 test("Props 型の欠落を検出する", () => {
   const { problems } = checkCompleteness({
     ...complete,

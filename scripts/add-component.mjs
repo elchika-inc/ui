@@ -58,11 +58,21 @@ export function parseArgs(argv) {
   for (let index = 0; index < options.length; index++) {
     const option = options[index];
     if (option === "--force") {
+      if (force) {
+        throw new Error("--force は1回だけ指定すること");
+      }
       force = true;
       continue;
     }
     if (option === "--modified") {
-      modified = options[index + 1];
+      if (modified !== undefined) {
+        throw new Error("--modified は1回だけ指定すること");
+      }
+      const value = options[index + 1];
+      if (!value || value.startsWith("--")) {
+        throw new Error('--modified "実際に行った変更" を必ず指定すること');
+      }
+      modified = value;
       index++;
       continue;
     }

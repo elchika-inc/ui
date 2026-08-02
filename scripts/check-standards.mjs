@@ -35,26 +35,71 @@ const ARBITRARY =
 const ALLOWED_ARBITRARY = new Set(["ring-[3px]"]);
 const BOOLEAN_DATA_INSET = /data-inset=\{inset\}/g;
 
-function ringTokens(line) {
-  const literals = [...line.matchAll(STRING_LITERAL)].map((match) => match[0].slice(1, -1));
-  return (literals.length ? literals : [line]).flatMap((literal) => literal.split(/\s+/));
+function findCallArguments(source, name) {
+  const calls = [];
+  const startPattern = new RegExp(`\\b${name}\\s*\\(`, "g");
+  for (const match of source.matchAll(startPattern)) {
+    const open = (match.index ?? 0) + match[0].length - 1;
+    let depth = 1;
+    let quote;
+    let escaped = false;
+    for (let index = open + 1; index < source.length; index++) {
+      const character = source[index];
+      if (quote) {
+        if (escaped) {
+          escaped = false;
+        } else if (character === "\\") {
+          escaped = true;
+        } else if (character === quote) {
+          quote = undefined;
+        }
+        continue;
+      }
+      if (character === '"' || character === "'" || character === "`") {
+        quote = character;
+      } else if (character === "(") {
+        depth++;
+      } else if (character === ")") {
+        depth--;
+        if (depth === 0) {
+          calls.push({ text: source.slice(open + 1, index), offset: open + 1 });
+          break;
+        }
+      }
+    }
+  }
+  return calls;
+}
+
+function statefulRingViolations(text, source, offset) {
+  const literalMatches = [...text.matchAll(STRING_LITERAL)];
+  const literals = literalMatches.length
+    ? literalMatches.map((match) => ({
+        text: match[0].slice(1, -1),
+        offset: (match.index ?? 0) + 1,
+      }))
+    : [{ text, offset: 0 }];
+  const tokens = literals.flatMap((literal) => literal.text.split(/\s+/));
+  if (!tokens.some((token) => STATEFUL_RING.test(token) && token.includes("ring-"))) {
+    return [];
+  }
+  return literals.flatMap((literal) =>
+    [...literal.text.matchAll(RING_OPACITY)].map((match) => ({
+      rule: "focus-ring-opacity",
+      line: source.slice(0, offset + literal.offset + (match.index ?? 0)).split("\n").length,
+      text: match[0],
+    })),
+  );
 }
 
 export function checkFile(path, source) {
   const violations = [];
+  let lineOffset = 0;
   source.split("\n").forEach((line, i) => {
+    const currentLineOffset = lineOffset;
+    lineOffset += line.length + 1;
     if (line.includes("@custom-variant dark")) return;
-    const tokens = ringTokens(line);
-    const hasStatefulRing = tokens.some(
-      (token) => STATEFUL_RING.test(token) && token.includes("ring-"),
-    );
-    if (hasStatefulRing) {
-      for (const token of tokens) {
-        for (const m of token.matchAll(RING_OPACITY)) {
-          violations.push({ rule: "focus-ring-opacity", line: i + 1, text: m[0] });
-        }
-      }
-    }
+    violations.push(...statefulRingViolations(line, source, currentLineOffset));
     for (const m of line.matchAll(ARBITRARY)) {
       if (ALLOWED_ARBITRARY.has(m[0])) continue;
       violations.push({ rule: "arbitrary-value", line: i + 1, text: m[0] });
@@ -63,7 +108,18 @@ export function checkFile(path, source) {
       violations.push({ rule: "boolean-data-inset", line: i + 1, text: m[0] });
     }
   });
-  return { violations };
+  for (const call of findCallArguments(source, "cn")) {
+    if (call.text.includes("\n")) {
+      violations.push(...statefulRingViolations(call.text, source, call.offset));
+    }
+  }
+  const unique = new Map(
+    violations.map((violation) => [
+      `${violation.rule}:${violation.line}:${violation.text}`,
+      violation,
+    ]),
+  );
+  return { violations: [...unique.values()] };
 }
 
 // pathToFileURL を使う。`file://${process.argv[1]}` の素朴な連結は

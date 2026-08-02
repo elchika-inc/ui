@@ -1,7 +1,7 @@
 // 実ブラウザ証跡の形式と、検証後に component 固有 path が変わっていないことを検査する。
 // 集約証跡と共有面の変更は全証跡を一律に失敗させず、陳腐化の可能性として一覧化する。
 import { execFileSync, spawnSync } from "node:child_process";
-import { lstatSync, readdirSync, readFileSync, realpathSync } from "node:fs";
+import { existsSync, lstatSync, readdirSync, readFileSync, realpathSync } from "node:fs";
 import { basename, extname, isAbsolute, join, relative } from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -46,13 +46,27 @@ function componentFromEvidence(path) {
   return basename(path).match(/^\d{4}-\d{2}-\d{2}-(.+)-preview\.md$/)?.[1];
 }
 
-function componentPaths(name) {
-  return [
+function componentPaths(repositoryRoot, name) {
+  const paths = [
     `src/components/ui/${name}.tsx`,
     `src/previews/${name}.tsx`,
     `src/pages/preview/${name}.astro`,
     `src/pages/preview/${name}-dark.astro`,
   ];
+  const registryPath = join(repositoryRoot, "registry.json");
+  if (!existsSync(registryPath)) return paths;
+  const registry = JSON.parse(readFileSync(registryPath, "utf8"));
+  const item = registry.items?.find((candidate) => candidate.name === name);
+  for (const file of item?.files ?? []) {
+    if (
+      typeof file.path === "string" &&
+      file.type !== "registry:file" &&
+      !SHARED_EVIDENCE_PATHS.includes(file.path)
+    ) {
+      paths.push(file.path);
+    }
+  }
+  return [...new Set(paths)];
 }
 
 function evidencePaths(file) {
@@ -176,7 +190,7 @@ function inspectLatestComponentEvidence(repositoryRoot, verifications) {
       continue;
     }
     const [{ file, sha }] = latest;
-    if (pathsChanged(repositoryRoot, sha, componentPaths(component))) {
+    if (pathsChanged(repositoryRoot, sha, componentPaths(repositoryRoot, component))) {
       problems.push(`${file}: 検証 SHA 以降に component 固有 path が変更されている`);
     }
   }

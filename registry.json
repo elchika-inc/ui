@@ -1558,6 +1558,10 @@
           "type": "registry:ui"
         },
         {
+          "path": "src/components/ui/chart-style.ts",
+          "type": "registry:ui"
+        },
+        {
           "path": "src/styles/global.css",
           "type": "registry:file",
           "target": "~/elchika-ui/tokens.css"

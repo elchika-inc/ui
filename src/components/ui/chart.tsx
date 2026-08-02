@@ -2,6 +2,7 @@ import * as React from "react";
 import type { TooltipValueType } from "recharts";
 import * as RechartsPrimitive from "recharts";
 
+import { serializeChartVariable } from "@/components/ui/chart-style";
 import { cn } from "@/lib/utils";
 
 // 形式: { THEME_NAME: CSS_SELECTOR }
@@ -106,7 +107,7 @@ ${prefix} [data-chart="${escapeCssString(id)}"] {
 ${colorConfig
   .map(([key, itemConfig]) => {
     const color = itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ?? itemConfig.color;
-    return color ? `  --color-${key}: ${color};` : null;
+    return color ? serializeChartVariable(key, color) : null;
   })
   .join("\n")}
 }

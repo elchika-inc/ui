@@ -34,13 +34,39 @@ export function checkDistribution(item, origin) {
   return { problems };
 }
 
+export function checkDistributionItems(entries, origin) {
+  const problems = [];
+  for (const { name, item } of entries) {
+    for (const problem of checkDistribution(item, origin).problems) {
+      problems.push(`${name}: ${problem}`);
+    }
+  }
+  return { problems };
+}
+
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const ITEM = "public/r/button.json";
-  if (!existsSync(ITEM)) {
-    console.error(`${ITEM} が無い（registry:build を先に実行する）`);
+  if (!existsSync("registry.json")) {
+    console.error("registry.json が無い");
     process.exit(1);
   }
-  const item = JSON.parse(readFileSync(ITEM, "utf8"));
+  const registry = JSON.parse(readFileSync("registry.json", "utf8"));
+  const entries = [];
+  for (const { name } of registry.items ?? []) {
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(name)) {
+      console.error(`registry item名が不正: ${name}`);
+      process.exit(1);
+    }
+    const itemPath = `public/r/${name}.json`;
+    if (!existsSync(itemPath)) {
+      console.error(`${itemPath} が無い（registry:build を先に実行する）`);
+      process.exit(1);
+    }
+    entries.push({ name, item: JSON.parse(readFileSync(itemPath, "utf8")) });
+  }
+  if (entries.length === 0) {
+    console.error("registry item が 0 件（走査が空走している）");
+    process.exit(1);
+  }
   const origin = {};
   for (const name of REQUIRED) {
     if (!existsSync(name)) {
@@ -49,7 +75,7 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     }
     origin[name] = readFileSync(name, "utf8");
   }
-  const { problems } = checkDistribution(item, origin);
+  const { problems } = checkDistributionItems(entries, origin);
   if (problems.length) {
     console.error(`配布物の検査に失敗:\n  ${problems.join("\n  ")}`);
     process.exit(1);

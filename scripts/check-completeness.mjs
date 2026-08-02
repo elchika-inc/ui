@@ -18,6 +18,13 @@ const exportedNames = (dts, typeOnly) => {
   return names;
 };
 
+const exportedModulePaths = (source) =>
+  new Set(
+    [...source.matchAll(/export\s+(?:type\s+)?\{[\s\S]*?\}\s*from\s*["']([^"']+)["']/g)].map(
+      (match) => match[1],
+    ),
+  );
+
 // registry / preview / provenance は配布ファイル単位だが、design-sync は .d.ts の
 // PascalCase value export を独立した component として扱う。そのため Props だけは
 // export 単位で検査し、各 public value に同名の <Name>Props を要求する。
@@ -69,8 +76,9 @@ export function checkCompleteness({
   provenance,
 }) {
   const problems = dtsContractProblems(dts);
+  const barrelPaths = exportedModulePaths(barrel);
   for (const name of components) {
-    if (!barrel.includes(`./components/ui/${name}`)) {
+    if (!barrelPaths.has(`./components/ui/${name}`)) {
       problems.push(`${name}: src/index.ts から export されていない`);
     }
     if (!registry.items.some((i) => i.name === name)) {

@@ -1005,7 +1005,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "全 PascalCase export の Props 型を追加し、コメント・エラー言語と arbitrary value を standards へ正規化。動的 CSS を dangerouslySetInnerHTML ではなく style の text child で描画し、公開 id を CSS 文字列として escape",
+      "modified": "全 PascalCase export の Props 型を追加し、コメント・エラー言語と arbitrary value を standards へ正規化。動的 CSS を dangerouslySetInnerHTML ではなく style の text child で描画し、公開 id を CSS 文字列として escape。ChartConfig の key と color を検証する serializer を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "field": {
