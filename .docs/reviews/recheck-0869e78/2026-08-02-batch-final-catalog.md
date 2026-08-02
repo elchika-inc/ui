@@ -16,7 +16,7 @@ verified_impl_sha: 0869e7814b30199387df5f135b19b037530b6d70
 - 検証対象: 上記の固定実装SHA
 - OS: Darwin arm64
 - Browser: Google Chrome 150.0.7871.187
-- viewport: 1440x900 CSS px
+- viewport: override要求は1440x900、採用6 runのページ内実測`innerWidth / innerHeight`は1512x772 CSS px
 - fresh build: 固定SHAの一時cloneで`npm run build` exit 0、125 pages生成
 - preview server: `npm run preview -- --host 127.0.0.1 --port 3016`
 - HTTP probe: `/catalog/`と`/catalog-dark/`が各200
