@@ -3,6 +3,7 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
+import { fileURLToPath } from "node:url";
 
 const contrastUrl = new URL("./contrast.mjs", import.meta.url);
 const casesUrl = new URL("./contrast-cases.mjs", import.meta.url);
@@ -189,6 +190,21 @@ test("全 consumer case は空でない reason と既知 gate を持つ", async 
     assert.ok(consumerCase.reason.trim(), consumerCase.label);
     assert.ok(gates.has(consumerCase.gate), consumerCase.label);
   }
+});
+
+test("必須consumer caseを1件除くとrepository checkがfail-closedになる", async () => {
+  const { checkContrastInRepo } = await loadContrast();
+  const { CONSUMER_CASES } = await loadCases();
+  const root = fileURLToPath(new URL("..", import.meta.url));
+  const withoutPrimary = CONSUMER_CASES.filter(({ label }) => label !== "primary solid");
+
+  const result = await checkContrastInRepo(root, withoutPrimary);
+
+  assert.ok(
+    result.problems.some(
+      (problem) => problem.includes("primary solid") && problem.includes("必須"),
+    ),
+  );
 });
 
 test("solid destructive と invalid 境界を v1.8 の非透明 token で gate する", async () => {

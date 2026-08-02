@@ -85,12 +85,13 @@ const tooltipId = "save-button-help";
 
 ## トークンの適用
 
-取り込むと shadcn alias の `elchika-ui/tokens.css` と、HTML 正本から生成した `elchika-ui/design-system/tokens.css` が置かれる。**利用側に既存のトークン定義がある場合、registry はそれを上書きしない**（shadcn の仕様）。elchika の見た目を共有するには、自分の CSS から generated token、alias CSS の順に**最後に** import する。
+取り込むと shadcn alias の `elchika-ui/tokens.css` と、HTML 正本から生成した `elchika-ui/design-system/tokens.css` が置かれる。**利用側に既存のトークン定義がある場合、registry はそれを上書きしない**（shadcn の仕様）。elchika の見た目を共有するには、自分の CSS から alias CSS だけを**最後に** import する。alias CSS が generated token を `layer(design-system)` 付きの相対 import で読み込むため、generated token を直接 import しない。
 
 ```css
-@import "./elchika-ui/design-system/tokens.css";
 @import "./elchika-ui/tokens.css";
 ```
+
+dark theme では同じ root element に `class="dark" data-theme="dark"` を設定し、light theme では両方を外して `data-theme="light"` にする。`.dark` は Tailwind dark variant と `color-scheme`、`data-theme="dark"` は generated token を切り替えるため、片方だけを変更しない。
 
 `src/styles/design-system/design-tokens.html` が Layer 0 / 1 token の正本で、`build-tokens.mjs` が `tokens.css` と将来利用する product hue reserve の `brands.css` を生成する。`global.css` は shadcn semantic alias だけを持ち、色値を再定義しない。token build は正本と生成物の byte 一致、consumer contrast sensor は alias を通った実利用配色を検査する。
 

@@ -213,6 +213,43 @@ test("verified_impl_shaだけを新HEADへ書き換えた旧画像流用を検�
   );
 });
 
+test("component外reportのverified_impl_sha書き換えを検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const originalSha = git(root, ["rev-parse", "HEAD"]).trim();
+  const report = join(root, ".docs/reviews/2026-08-01-index-page.md");
+  writeFileSync(report, `verified_impl_sha: ${originalSha}\n`);
+
+  const result = (await loadModule()).checkEvidenceInRepo(root);
+
+  assert.ok(
+    result.problems.includes(
+      "2026-08-01-index-page.md: verified_impl_sha が初回記録から変更されている",
+    ),
+  );
+});
+
+test("shared reportの構造化field書き換えを検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { implementationSha } = commitSharedTokenChange(root);
+  addSharedTokenEvidence(root, { verifiedSha: implementationSha, commit: true });
+  const report = join(root, ".docs/reviews/brand-token-migration/report.md");
+  const replacementSha = git(root, ["rev-parse", "HEAD"]).trim();
+  writeFileSync(
+    report,
+    `verified_impl_sha: ${implementationSha}\nevidence_scope: shared-token-migration\ntargeted_dynamic_sha: ${replacementSha}\n`,
+  );
+
+  const result = (await loadModule()).checkEvidenceInRepo(root);
+
+  assert.ok(
+    result.problems.includes(
+      "brand-token-migration/report.md: targeted_dynamic_sha が初回記録から変更されている",
+    ),
+  );
+});
+
 test("初回記録のverified_impl_shaが不正なら後から有効値へ直しても検出する", async (t) => {
   const { root } = createEvidenceRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));
@@ -436,6 +473,28 @@ test("shared report と同時追加する画像が欠ければ cover しない",
   assert.ok(result.problems.some((problem) => problem.includes("disabled-controls-light")));
   assert.ok(result.problems.some((problem) => problem.includes("disabled-controls-dark")));
 });
+
+for (const state of ["committed", "staged", "unstaged"]) {
+  test(`shared reportの画像を後から${state}削除するとcoverしない`, async (t) => {
+    const { root } = createEvidenceRepo();
+    t.after(() => rmSync(root, { recursive: true, force: true }));
+    const { implementationSha } = commitSharedTokenChange(root);
+    addSharedTokenEvidence(root, { verifiedSha: implementationSha, commit: true });
+    const image = ".docs/reviews/brand-token-migration/after-disabled-controls-light.jpg";
+    rmSync(join(root, image));
+    if (state !== "unstaged") git(root, ["add", image]);
+    if (state === "committed") git(root, ["commit", "-m", "delete shared image"]);
+
+    const result = (await loadModule()).checkEvidenceInRepo(root);
+
+    assert.deepEqual([...result.coverage.coveredPaths], []);
+    assert.ok(
+      result.problems.some(
+        (problem) => problem.includes("disabled-controls-light") && problem.includes("現在"),
+      ),
+    );
+  });
+}
 
 test("同じ verified_impl_sha の shared report は追加 commit が新しい方を採用する", async (t) => {
   const { root } = createEvidenceRepo();

@@ -821,6 +821,7 @@ Expected: 指定 port で preview が起動する。fallback したら停止す�
 - Tabs: inactive light / dark が opaque muted foreground、active は foreground。
 - Select comparison: light / dark の placeholder Select と Input が同じ opaque surface / control border へ解決される。before report の solid Select / alpha Input との差を記録する。
 - disabled controls: disabled state が描画され、AA exempt だが文字消失、背景欠落、cursor / disabled semantics の回帰がない。
+- disabled Select: pointer hover 前後で `background-image` が `none` のまま、NativeSelect は wrapper opacity 1 / control opacity `--opacity-disabled`、InputGroup は wrapper opacity `--opacity-disabled` / control opacity 1 で、状態 opacity が二重に合成されない。
 - AlertDialog / Dialog / Drawer / Sheet: overlay の computed color が black 10%、backdrop blur が有効、open content の focus / close が既存契約を維持する。
 - Chart: `--chart-1` から `--chart-5` が v1.8 `--chart-series-*` へ解決され、light / dark で5系列と dash pattern が識別できる。
 - catalog: light / dark で全 preview、console error なし、horizontal overflow なし。
@@ -964,6 +965,15 @@ Run: `npm run build`
 
 Expected: exit 0。build output CSS に `--color-bg-canvas`、`--state-hover-bg`、`--primary-hover` が含まれ、import 解決 error がない。
 
+build 後に候補 `4315 / 4325 / 4335 / 4345` から空き port を `PROBE_PORT` に固定して `npm run preview -- --host 127.0.0.1 --port "$PROBE_PORT"` を起動する。別 port へ fallback したら停止する。実ブラウザで同一 root と `background: var(--background)` の fixture を使い、次を同じ evaluate 内で順に実測する。
+
+- light: `.dark` なし、`data-theme="light"`
+- class only: `.dark` あり、`data-theme="light"`
+- data only: `.dark` なし、`data-theme="dark"`
+- synchronized dark: `.dark` あり、`data-theme="dark"`
+
+class only は `color-scheme` だけ dark、data only は generated token だけ dark になる不一致を確認し、synchronized dark では fixture の computed background が light と異なり `color-scheme: dark` になることを assertion する。確認後に probe preview を停止する。
+
 - [ ] **Step 6: probe 結果を新規 report へ記録する**
 
 `.docs/reviews/brand-token-migration/fresh-install.md`:
@@ -979,6 +989,7 @@ verified_impl_sha: VERIFIED_IMPL_SHAの40桁実値
 - alias / generated token の byte 一致と relative import 解決: 実測
 - legal file: test -s の実測
 - consumer build: command と exit code
+- theme selector: class only / data only の不一致と、同期した dark の computed background / color-scheme
 ```
 
 - [ ] **Step 7: 元 repoへ戻って probe を片付ける**

@@ -338,19 +338,25 @@ function sharedImageSubjectAndTheme(path) {
   return {};
 }
 
-function sharedTokenImageProblems(report) {
-  const addedImages = new Set(
-    report.additionFiles
-      .filter((path) => path.startsWith(".docs/reviews/"))
-      .map(sharedImageSubjectAndTheme)
-      .filter(({ subject, theme }) => subject && theme)
-      .map(({ subject, theme }) => `${subject}-${theme}`),
-  );
+function sharedTokenImageProblems(repositoryRoot, report) {
+  const addedImages = new Map();
+  for (const path of report.additionFiles.filter((candidate) =>
+    candidate.startsWith(".docs/reviews/"),
+  )) {
+    const { subject, theme } = sharedImageSubjectAndTheme(path);
+    if (subject && theme) addedImages.set(`${subject}-${theme}`, path);
+  }
   return SHARED_TOKEN_IMAGE_SUBJECTS.flatMap((subject) =>
     ["light", "dark"]
       .map((theme) => `${subject}-${theme}`)
-      .filter((key) => !addedImages.has(key))
-      .map((image) => `${report.file}: 同時追加画像 ${image} が無い`),
+      .flatMap((key) => {
+        const path = addedImages.get(key);
+        if (!path) return [`${report.file}: 同時追加画像 ${key} が無い`];
+        const status = lstatSync(join(repositoryRoot, path), { throwIfNoEntry: false });
+        if (!status?.isFile()) return [`${report.file}: 現在の画像 ${key} が無い`];
+        const imageProblem = checkImage(path, readFileSync(join(repositoryRoot, path)));
+        return imageProblem ? [`${report.file}: 現在の画像 ${key}: ${imageProblem}`] : [];
+      }),
   );
 }
 
@@ -385,7 +391,7 @@ function sharedTokenReportProblems(repositoryRoot, report) {
   if (!commitIsAncestor(repositoryRoot, report.sha, targeted.value)) {
     return [`${report.file}: verified_impl_sha が動的検証 SHA の祖先ではない`];
   }
-  return sharedTokenImageProblems(report);
+  return sharedTokenImageProblems(repositoryRoot, report);
 }
 
 export function inspectSharedTokenCoverage(repositoryRoot, reports) {
@@ -424,7 +430,7 @@ export function inspectSharedTokenCoverage(repositoryRoot, reports) {
   };
 }
 
-function introducedVerification(repositoryRoot, report) {
+function introducedReportMarkdown(repositoryRoot, report) {
   const reportPath = `.docs/reviews/${report}`;
   const introductionCommit = git(repositoryRoot, [
     "log",
@@ -438,7 +444,7 @@ function introducedVerification(repositoryRoot, report) {
     .split("\n")
     .find(Boolean);
   if (!introductionCommit) return undefined;
-  return parseVerificationSha(git(repositoryRoot, ["show", `${introductionCommit}:${reportPath}`]));
+  return git(repositoryRoot, ["show", `${introductionCommit}:${reportPath}`]);
 }
 
 function imageComponentAndTheme(path, components) {
@@ -454,17 +460,45 @@ function imageComponentAndTheme(path, components) {
   return { component, theme };
 }
 
-function inspectVerificationHistory(repositoryRoot, verifications) {
+function structuredFieldHistoryProblems(report, introducedMarkdown) {
   const problems = [];
-  for (const report of verifications) {
-    const introduced = introducedVerification(repositoryRoot, report.file);
-    if (introduced?.problem) {
-      problems.push(`${report.file}: 初回記録の ${introduced.problem}`);
-    } else if (introduced?.sha && introduced.sha !== report.sha) {
-      problems.push(`${report.file}: verified_impl_sha が初回記録から変更されている`);
+  if (!/^evidence_scope:/m.test(introducedMarkdown) && !/^evidence_scope:/m.test(report.markdown)) {
+    return problems;
+  }
+  for (const field of ["evidence_scope", "targeted_dynamic_sha"]) {
+    const fieldPattern = new RegExp(`^${field}:`, "m");
+    const existedInitially = fieldPattern.test(introducedMarkdown);
+    const existsCurrently = fieldPattern.test(report.markdown);
+    if (!existedInitially && !existsCurrently) continue;
+    const initial = parseSingleField(introducedMarkdown, field);
+    const current = parseSingleField(report.markdown, field);
+    if (initial.problem) {
+      problems.push(`${report.file}: 初回記録の ${initial.problem}`);
+    } else if (current.problem) {
+      problems.push(`${report.file}: ${current.problem}`);
+    } else if (initial.value !== current.value) {
+      problems.push(`${report.file}: ${field} が初回記録から変更されている`);
     }
   }
   return problems;
+}
+
+function reportHistoryProblems(repositoryRoot, report) {
+  const introducedMarkdown = introducedReportMarkdown(repositoryRoot, report.file);
+  if (introducedMarkdown === undefined) return [];
+  const problems = [];
+  const introduced = parseVerificationSha(introducedMarkdown);
+  if (introduced.problem) {
+    problems.push(`${report.file}: 初回記録の ${introduced.problem}`);
+  } else if (introduced.sha !== report.sha) {
+    problems.push(`${report.file}: verified_impl_sha が初回記録から変更されている`);
+  }
+  problems.push(...structuredFieldHistoryProblems(report, introducedMarkdown));
+  return problems;
+}
+
+function inspectVerificationHistory(repositoryRoot, verifications) {
+  return verifications.flatMap((report) => reportHistoryProblems(repositoryRoot, report));
 }
 
 function evidenceImmutabilityBaseline(repositoryRoot) {
@@ -695,7 +729,7 @@ export function checkEvidenceInRepo(root) {
     if (inspected.report) reports.push(inspected.report);
     if (inspected.verification) componentVerifications.push(inspected.verification);
   }
-  problems.push(...inspectVerificationHistory(repositoryRoot, componentVerifications));
+  problems.push(...inspectVerificationHistory(repositoryRoot, reports));
   problems.push(...inspectLatestComponentEvidence(repositoryRoot, componentVerifications));
   problems.push(
     ...inspectComponentEvidenceCoverage(

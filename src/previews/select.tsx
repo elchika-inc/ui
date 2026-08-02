@@ -24,7 +24,7 @@ const labels: Record<string, string> = {
 };
 
 export function SelectPreview({ mode = "isolated" }: PreviewProps) {
-  const [selectedValue, setSelectedValue] = useState("comfortable");
+  const [selectedValue, setSelectedValue] = useState("");
 
   return (
     <section data-slot="select-preview" className="flex max-w-xl flex-col gap-3 p-6">
@@ -36,7 +36,6 @@ export function SelectPreview({ mode = "isolated" }: PreviewProps) {
         <Input aria-label="表示密度の比較入力" placeholder="Input の placeholder" />
         <Select
           defaultOpen={mode === "isolated"}
-          defaultValue="comfortable"
           onValueChange={(value) => setSelectedValue(String(value))}
         >
           <SelectTrigger id="density-select" aria-label="表示密度" className="w-full min-w-40">
@@ -62,8 +61,16 @@ export function SelectPreview({ mode = "isolated" }: PreviewProps) {
           </SelectContent>
         </Select>
       </div>
+      <Select disabled defaultValue="comfortable">
+        <SelectTrigger data-slot="select-disabled-probe" aria-label="無効な表示密度">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="comfortable">Relaxed（ゆったり）</SelectItem>
+        </SelectContent>
+      </Select>
       <output data-slot="select-selected-value" className="text-sm text-muted-foreground">
-        選択値: {labels[selectedValue]}
+        選択値: {labels[selectedValue] ?? "未選択"}
       </output>
       <PreviewSentinel mode={mode} position="after" />
     </section>

@@ -42,7 +42,7 @@ npm run build:lib
 npm run check:pre
 ```
 
-`check:pre` は standards、completeness、distribution、preview selector 宣言の4検査を順に実行する。すべて通ったら component 実装だけを明示パスで stage して commit する。CIと証跡commit後の最終検査は、evidenceを含む`check:all`を維持する。
+`check:pre` は evidence を除く常設 checker を fail-fast で実行する。現行の構成と順序は `scripts/check-all.mjs` の `PRE_FLIGHT_CHECKS` を正本とする。すべて通ったら component 実装だけを明示パスで stage して commit する。CIと証跡commit後の最終検査は、evidenceを含む`check:all`を維持する。
 
 証跡の鮮度検査は、Markdown内に一意に置く`verified_impl_sha: <40桁SHA>`を正本とし、検証SHAが現在のHEADの祖先であることを確認してから、`git diff <検証SHA> -- <paths>`と`git ls-files --others --exclude-standard -- <paths>`で検証SHA、作業ツリー、未追跡ファイルを比較する。構造化欄の欠落・重複・実在しないcommit・HEAD非祖先commitは、古い証跡を含む全証跡でhard failureにする。同じcomponentに複数の証跡がある場合、他候補の祖先ではないGit DAG上のmaximal候補が一意なら、その1件だけをcomponent固有pathの鮮度hard gate対象とする。相互に比較不能なmaximal候補が複数残る場合は、HEADからのcommit距離で選ばずhard failureにする。
 

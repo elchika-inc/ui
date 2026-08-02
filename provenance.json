@@ -501,7 +501,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-01",
       "license": "MIT",
-      "modified": "native select の全 slot を semantic token、focus-visible ring、size・disabled・invalid 状態へ正規化し、全 PascalCase 値と Props 型、label 付き interactive preview、light/dark route、安定 selector を追加する。v1.8 state contract に合わせ、control / disabled / hover surface と invalid border を正規化する",
+      "modified": "native select の全 slot を semantic token、focus-visible ring、size・disabled・invalid 状態へ正規化し、全 PascalCase 値と Props 型、label 付き interactive preview、light/dark route、安定 selector を追加する。v1.8 state contract に合わせ、control / disabled / hover surface と invalid border を正規化し、wrapper と control の disabled opacity 二重適用を除去する",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "input-otp": {
@@ -858,7 +858,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "Base UI Selectを既存のsemantic tokenと非透明focus ringへ正規化し、全value/Props公開とisolated限定defaultOpenの対話preview、barrel、型契約、selector、registryを追加する。keyboard focus中のItemへ不透明3px ringを付与する。v1.8 state contract に合わせ、control / disabled / hover surface と invalid border を正規化する。",
+      "modified": "Base UI Selectを既存のsemantic tokenと非透明focus ringへ正規化し、全value/Props公開とisolated限定defaultOpenの対話preview、barrel、型契約、selector、registryを追加する。keyboard focus中のItemへ不透明3px ringを付与する。v1.8 state contract に合わせ、control / disabled / hover surface と invalid border を正規化し、disabled trigger の pointer hover tint を抑止する。",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "tooltip": {
@@ -1047,7 +1047,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "全 PascalCase export の Props 型公開、arbitrary margin・radius と focus / invalid ring の透明度を semantic utility へ正規化、汎用 group の role と補助 click を保持する局所 lint 理由、addon click を input / textarea 共通 control へ接続、barrel export、prefix・suffix・button・focus-visible の preview と light/dark route、hydration selector を追加。v1.8 state contract に合わせ、control / disabled surface と invalid border を opaque token へ正規化",
+      "modified": "全 PascalCase export の Props 型公開、arbitrary margin・radius と focus / invalid ring の透明度を semantic utility へ正規化、汎用 group の role と補助 click を保持する局所 lint 理由、addon click を input / textarea 共通 control へ接続、barrel export、prefix・suffix・button・focus-visible の preview と light/dark route、hydration selector を追加。v1.8 state contract に合わせ、control / disabled surface と invalid border を opaque token へ正規化し、wrapper と control の disabled opacity 二重適用を除去",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "item": {

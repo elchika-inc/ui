@@ -13,6 +13,121 @@ const GATES = new Map([
   ["decorative", null],
 ]);
 
+const REQUIRED_CONSUMER_CASES = [
+  { label: "Kbd tooltip light alpha surface", gate: "text-aa", themes: ["light"] },
+  { label: "Kbd tooltip dark alpha surface", gate: "text-aa", themes: ["dark"] },
+  {
+    label: "primary solid",
+    gate: "text-aa",
+    source: "src/components/ui/button.tsx",
+    classes: ["bg-primary", "text-primary-foreground"],
+  },
+  {
+    label: "primary hover",
+    gate: "text-aa",
+    source: "src/components/ui/button.tsx",
+    classes: ["hover:bg-primary-hover"],
+  },
+  { label: "selected surface", gate: "text-aa" },
+  { label: "selected surface hover", gate: "text-aa" },
+  {
+    label: "opaque control placeholder",
+    gate: "text-aa",
+    source: "src/components/ui/select.tsx",
+    classes: ["bg-card"],
+  },
+  {
+    label: "control state hover",
+    gate: "text-aa",
+    source: "src/components/ui/select.tsx",
+    classes: ["hover:state-hover-overlay"],
+  },
+  {
+    label: "disabled input surface",
+    gate: "disabled-exempt",
+    source: "src/components/ui/native-select.tsx",
+    classes: ["disabled:bg-muted", "disabled:opacity-disabled"],
+  },
+  {
+    label: "Tabs inactive on muted",
+    gate: "text-aa",
+    source: "src/components/ui/tabs.tsx",
+    classes: ["text-muted-foreground"],
+  },
+  { label: "Tabs inactive on background", gate: "text-aa" },
+  {
+    label: "destructive subtle",
+    gate: "text-aa",
+    source: "src/components/ui/button.tsx",
+    classes: ["bg-destructive-subtle", "text-destructive-subtle-foreground"],
+  },
+  { label: "destructive subtle hover", gate: "text-aa" },
+  {
+    label: "solid destructive menu focus",
+    gate: "text-aa",
+    source: "src/components/ui/dropdown-menu.tsx",
+    classes: [
+      "data-[variant=destructive]:focus-visible:bg-destructive",
+      "data-[variant=destructive]:focus-visible:text-destructive-foreground",
+    ],
+  },
+  {
+    label: "focus ring on background",
+    gate: "nontext-ui",
+    source: "src/components/ui/button.tsx",
+    classes: ["focus-visible:ring-ring"],
+  },
+  {
+    label: "invalid control boundary",
+    gate: "nontext-ui",
+    source: "src/components/ui/select.tsx",
+    classes: ["aria-invalid:border-destructive", "aria-invalid:ring-destructive"],
+  },
+  {
+    label: "Chart /50 grid stroke",
+    gate: "decorative",
+    source: "src/components/ui/chart.tsx",
+    classes: ["[&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50"],
+  },
+  {
+    label: "overlay token",
+    gate: "decorative",
+    source: "src/components/ui/dialog.tsx",
+    classes: ["bg-overlay"],
+  },
+  { label: "warning pair", gate: "text-aa" },
+];
+
+export function inspectRequiredConsumerCases(consumerCases) {
+  return REQUIRED_CONSUMER_CASES.flatMap((required) => {
+    const consumerCase = consumerCases.find(({ label }) => label === required.label);
+    if (!consumerCase) return [`${required.label}: 必須 consumer case が無い`];
+    return inspectRequiredConsumerCase(required, consumerCase);
+  });
+}
+
+function inspectRequiredConsumerCase(required, consumerCase) {
+  const problems = [];
+  if (consumerCase.gate !== required.gate) {
+    problems.push(`${required.label}: 必須 gate は ${required.gate}`);
+  }
+  const actualThemes = [...(consumerCase.themes ?? ["light", "dark"])].sort();
+  const requiredThemes = [...(required.themes ?? ["light", "dark"])].sort();
+  if (actualThemes.join("\0") !== requiredThemes.join("\0")) {
+    problems.push(`${required.label}: 必須 theme は ${requiredThemes.join(" / ")}`);
+  }
+  if (!required.source) return problems;
+  const sourceContract = consumerCase.sourceClasses?.find(
+    ({ source }) => source === required.source,
+  );
+  for (const className of required.classes) {
+    if (!sourceContract?.classes.includes(className)) {
+      problems.push(`${required.label}: 必須 source class ${required.source} ${className} が無い`);
+    }
+  }
+  return problems;
+}
+
 const clamp = (value) => Math.min(Math.max(value, 0), 1);
 
 const parseAlpha = (raw) => {
@@ -443,7 +558,7 @@ export function evaluateAcceptedRisks(results, markdown) {
   return { problems, accepted, acceptedRiskIds };
 }
 
-export async function checkContrastInRepo(root) {
+export async function checkContrastInRepo(root, consumerCases = CONSUMER_CASES) {
   const problems = [];
   const cssPaths = ["src/styles/design-system/tokens.css", "src/styles/global.css"];
   const cssSources = [];
@@ -459,7 +574,8 @@ export async function checkContrastInRepo(root) {
   const themes = parseThemes(cssSources.join("\n"));
   problems.push(...themes.problems);
 
-  const inspectedCases = CONSUMER_CASES.map((consumerCase) => ({
+  problems.push(...inspectRequiredConsumerCases(consumerCases));
+  const inspectedCases = consumerCases.map((consumerCase) => ({
     consumerCase,
     inspected: evaluateCase(consumerCase, themes),
   }));
@@ -480,7 +596,7 @@ export async function checkContrastInRepo(root) {
       problems.push(detail.message);
     }
   }
-  const coverage = await inspectSourceCoverage(root, CONSUMER_CASES);
+  const coverage = await inspectSourceCoverage(root, consumerCases);
   problems.push(...coverage.problems);
   return { problems, results, accepted: risks.accepted };
 }

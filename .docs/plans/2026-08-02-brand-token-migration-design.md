@@ -1,4 +1,6 @@
-# ブランドトークン移行と alpha 配色契約の設計
+# ブランドトークン移行と alpha 配色契約の旧検討記録
+
+> **Status: superseded.** この文書は v1.8 採用前の検討履歴であり、以下の token 値、consumer interface、chart 方針、evidence coverage、DoneCriteria は現行契約ではない。現行の正本は `.docs/plans/2026-08-02-brand-token-migration-plan.md` の Global Constraints、Interface consistency、Task 4〜10 と `src/styles/design-system/README.md` である。既存の `RISK-013` は Clipboard API の受容だけを指し、chart 用 risk として再利用しない。
 
 - **作成日**: 2026-08-02
 - **対象**: `elchika-inc/ui` の token、実 consumer、registry 配布、contrast sensor、実ブラウザ証跡

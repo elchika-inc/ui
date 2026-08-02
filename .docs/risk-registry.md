@@ -22,7 +22,7 @@
 - location: `.github/workflows/ci.yml`
 - status: accepted
 - reason: DOCS_OPS §6 の build-check のみという分担はローカル `vp check` と main push の Deploy job を前提とするが、このリポジトリは `vp` も #1 時点の deploy 先も持たない。人間のマージ判断前に lint・test・型検査・配布物検査を実行するため、PR CI をフルセットにする。代償として PR ごとの Actions 実行時間が増える。
-- anchor: GitHub Actions の PR run にある13個の名前付きステップと各 `conclusion` を Task 10 で API から読み、最終 head SHA と一致する run がすべて success であることを検査する。
+- anchor: GitHub Actions の PR run にある名前付きステップをすべて列挙して各 `conclusion` を Task 10 で API から読み、最終 head SHA と一致する run がすべて success であることを検査する。必須ステップとして `Design token build` と `Token contrast` の存在と success を個別に確認する。
 
 ## RISK-004: 検証スクリーンショットをリポジトリへコミットする
 - date: 2026-07-31
@@ -51,10 +51,10 @@
 ## RISK-007: 利用者の既存トークンを registry から上書きできない
 - date: 2026-07-31
 - confidence: high
-- location: `registry.json` の `cssVars` と `~/elchika-ui/tokens.css`
+- location: `registry.json` の `cssVars`、`~/elchika-ui/tokens.css`、`~/elchika-ui/design-system/tokens.css`
 - status: accepted
-- reason: shadcn の CSS 更新は `overwriteCssVars` が既定 `false` で、利用者側に同名の宣言が既にあれば何もしないため、registry からトークン値を強制適用できない。全トークンの正本を `~/elchika-ui/tokens.css` として配り、README で利用者自身の CSS から最後に `@import` するよう案内する。既定値を持たない `--success` / `--warning` とその foreground は `cssVars` で自動追加する。
-- anchor: 利用者側プロジェクトのビルド出力に elchika のトークン値が現れるかを、サブプロジェクト #2 以降で実際に取り込むときに確認する。
+- reason: shadcn の CSS 更新は `overwriteCssVars` が既定 `false` で、利用者側に同名の宣言が既にあれば何もしないため、registry からトークン値を強制適用できない。生成 token と shadcn alias を別 file で配り、README では alias 側 `~/elchika-ui/tokens.css` だけを最後に import するよう案内する。alias CSS の相対 `layer(design-system)` import が generated token へ到達し、GitHub raw ではなく `ui.elchika.dev` を配信の正本とする。既定値を持たない `--success` / `--warning` とその foreground は `cssVars` で自動追加する。
+- anchor: Task 9 の fresh install で2 file の byte 一致、alias の相対 import、利用側ビルドと light / dark の実 computed style を確認する。
 
 ## RISK-008: GitHub Actions を可変タグで参照する
 
