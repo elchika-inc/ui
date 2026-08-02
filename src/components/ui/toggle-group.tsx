@@ -32,6 +32,7 @@ function ToggleGroup<Value extends string = string>({
   spacing = 2,
   orientation = "horizontal",
   children,
+  style,
   ...props
 }: ToggleGroupProps<Value>) {
   return (
@@ -44,6 +45,7 @@ function ToggleGroup<Value extends string = string>({
       orientation={orientation}
       style={
         {
+          ...style,
           "--toggle-group-gap": `calc(var(--spacing) * ${spacing})`,
         } as React.CSSProperties & { "--toggle-group-gap": string }
       }

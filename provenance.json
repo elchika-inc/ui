@@ -1194,7 +1194,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "全 PascalCase export の Props 型公開、値系 arbitrary gap と small radius を semantic CSS variable utility・rounded-md へ正規化、上流の ToggleGroup が orientation を primitive へ渡さず vertical の矢印キー移動が機能しない欠陥を公開 props 経路で転送して修正（上流修正時は再評価して除去）、barrel export、single・multiple の pressed state と keyboard 到達を確認する preview と light/dark route、hydration selector を追加",
+      "modified": "全 PascalCase export の Props 型公開、値系 arbitrary gap と small radius を semantic CSS variable utility・rounded-md へ正規化、上流の ToggleGroup が orientation を primitive へ渡さず vertical の矢印キー移動が機能しない欠陥を公開 props 経路で転送して修正（上流修正時は再評価して除去）、公開 style と spacing の gap 変数を同時に保持、barrel export、single・multiple の pressed state と keyboard 到達を確認する preview と light/dark route、hydration selector を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "combobox": {
@@ -1278,7 +1278,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "全 PascalCase value export の Props 型公開、表示文言・コメント・accessible name とアイコンの読み上げを正規化、focus ring と値系 arbitrary utility を semantic token・CSS variable utility へ正規化、Tooltip を desktop collapsed 時だけ構築して mobile Sheet の Escape dismiss を維持、mobile Sheet の表示DOMへ公開div propsを転送してpreviewで検証、barrel export、desktop collapse・mobile sheet・keyboard shortcut・cookie side effect・focus の preview と light/dark route、hydration selector を追加",
+      "modified": "全 PascalCase value export の Props 型公開、表示文言・コメント・accessible name とアイコンの読み上げを正規化、focus ring と値系 arbitrary utility を semantic token・CSS variable utility へ正規化、Tooltip を desktop collapsed 時だけ構築して mobile Sheet の Escape dismiss を維持、mobile Sheet の表示DOMへ公開div propsを転送してpreviewで検証、公開 dir を全表示経路のDOMへ転送、barrel export、desktop collapse・mobile sheet・keyboard shortcut・cookie side effect・focus の preview と light/dark route、hydration selector を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "direction": {

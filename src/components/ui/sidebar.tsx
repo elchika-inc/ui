@@ -168,6 +168,7 @@ function Sidebar({
     return (
       <div
         data-slot="sidebar"
+        dir={dir}
         className={cn(
           "flex h-full w-(--sidebar-width) flex-col bg-sidebar text-sidebar-foreground",
           className,
@@ -235,6 +236,7 @@ function Sidebar({
       <div
         data-slot="sidebar-container"
         data-side={side}
+        dir={dir}
         className={cn(
           "fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear data-[side=left]:left-0 data-[side=left]:group-data-[collapsible=offcanvas]:left-(--sidebar-width-offcanvas) data-[side=right]:right-0 data-[side=right]:group-data-[collapsible=offcanvas]:right-(--sidebar-width-offcanvas) md:flex",
           // floating / inset variant の余白を幅へ含める。

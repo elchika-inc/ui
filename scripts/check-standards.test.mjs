@@ -220,3 +220,29 @@ test("mobile Sidebarは公開div propsを表示DOMへ渡す", () => {
   assert.match(mobile, /style=\{[\s\S]*?\.\.\.style[\s\S]*?\}/);
   assert.match(mobile, /<SheetContent[\s\S]*?\{\.\.\.props\}/);
 });
+
+test("ToggleGroupは公開styleとspacingのgap変数を両方保持する", () => {
+  const source = readSource("src/components/ui/toggle-group.tsx");
+  const start = source.indexOf("function ToggleGroup<");
+  const end = source.indexOf("export type ToggleGroupItemProps");
+  assert.notEqual(start, -1, "ToggleGroupが存在しない");
+  assert.notEqual(end, -1, "ToggleGroupの終端が見つからない");
+  const group = source.slice(start, end);
+  assert.match(group, /children,\s+style,\s+\.\.\.props/);
+  assert.match(group, /style=\{[\s\S]*?\.\.\.style,[\s\S]*?"--toggle-group-gap"/);
+});
+
+test("Sidebarはdirを全表示経路のDOMへ渡す", () => {
+  const source = readSource("src/components/ui/sidebar.tsx");
+  const start = source.indexOf("function Sidebar({");
+  const mobileStart = source.indexOf("if (isMobile)", start);
+  const desktopStart = source.indexOf('className="group peer hidden', mobileStart);
+  const end = source.indexOf("type SidebarTriggerProps", desktopStart);
+  assert.notEqual(start, -1, "Sidebarが存在しない");
+  assert.notEqual(mobileStart, -1, "mobile分岐が存在しない");
+  assert.notEqual(desktopStart, -1, "desktop分岐が存在しない");
+  assert.notEqual(end, -1, "Sidebarの終端が見つからない");
+  assert.match(source.slice(start, mobileStart), /<div[\s\S]*?dir=\{dir\}/);
+  assert.match(source.slice(mobileStart, desktopStart), /<SheetContent[\s\S]*?dir=\{dir\}/);
+  assert.match(source.slice(desktopStart, end), /data-slot="sidebar-container"[\s\S]*?dir=\{dir\}/);
+});
