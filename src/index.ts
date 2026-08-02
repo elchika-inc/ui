@@ -700,6 +700,8 @@ export {
 } from "./components/ui/toast";
 export type { ToggleProps } from "./components/ui/toggle";
 export { Toggle, toggleVariants } from "./components/ui/toggle";
+export type { ToggleGroupItemProps, ToggleGroupProps } from "./components/ui/toggle-group";
+export { ToggleGroup, ToggleGroupItem } from "./components/ui/toggle-group";
 export type {
   TooltipContentProps,
   TooltipProps,

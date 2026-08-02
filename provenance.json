@@ -1175,6 +1175,27 @@
       "license": "MIT",
       "modified": "全 PascalCase export の Props 型公開、IconPlaceholder を Lucide icon へ置換、close の accessible name を日本語化、透明 focus ring と値系 arbitrary z・height・easing を semantic token・CSS variable・utility へ正規化、sonner の Toaster と名前が衝突するため toast 側を ToastToaster へ alias、barrel export、live notification の追加・自動消滅・Action・Close・複数通知・hover pause・背景到達の preview と light/dark route、hydration selector を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "toggle-group": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/toggle-group.json",
+      "registryPath": "registry/base-nova/ui/toggle-group.tsx",
+      "registryContentSha256": "a4d6534abfafdf2c7d47b56c68ca69ba77c9df715aa81b7b95079c48edd8de30",
+      "generatedContentSha256": "f7776d68b06148d9742fe4f21df45f931b2a259592192d4bda16a7039f508d15",
+      "addTarget": "@shadcn/toggle-group",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/ui/toggle-group.tsx",
+      "upstreamPathSha": "c9930b7fdaedec8ae1f41b9090f7316b6a491745",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-02",
+      "license": "MIT",
+      "modified": "全 PascalCase export の Props 型公開、値系 arbitrary gap と small radius を semantic CSS variable utility・rounded-md へ正規化、barrel export、single・multiple の pressed state と keyboard 到達を確認する preview と light/dark route、hydration selector を追加",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }
