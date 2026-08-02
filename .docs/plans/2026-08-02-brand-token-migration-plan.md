@@ -1,6 +1,6 @@
 # ブランドトークン移行 Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Checkbox (`- [ ]`) は literal な実行順を定義する。進捗の正本は下記 Current checkpoint と Git 履歴であり、checkbox の更新有無では判定しない。
 
 **Goal:** デザインシステム v1.8 を生成正本から取り込み、shadcn alias、light / dark、実 consumer、registry 配布、strict contrast sensor、SHA 固定の実ブラウザ証跡まで一貫して移行する。
 
@@ -8,11 +8,13 @@
 
 **Tech Stack:** Node.js 22.12+、Astro 7、React 19、Base UI 1.6、Tailwind CSS v4、Biome 2、Node test runner、shadcn CLI 4.16、Chrome DevTools Protocol。
 
+**Current checkpoint:** Task 1〜6 は完了し、Task 7 の review remediation を実行中。完了 commit は Task 1 `e3b34d3`、Task 2 `d5744cd`、Task 3 `dcd81b9`、Task 4 `e4a079a`、Task 5 `564dfa8`、Task 6 `89c56d4`。完了 Task を再実行せず、Task 7 の clean round から再開する。
+
 ## Global Constraints
 
 - `standards` リポジトリは読み取り専用。書き込み、commit、push をしない。
 - 作業 branch は `feat/brand-tokens`。`main` へ直接 commit / push / merge しない。
-- この更新計画 SHA を Claude が確認するまで、Task 3 以降を実行しない。Task 1 / 2 は commit 済みで再実行しない。
+- 更新計画は Claude 確認済み。Task 1〜6 は commit 済みで再実行せず、Current checkpoint の Task 7 から再開する。
 - 指示、実装、実測のいずれかが矛盾したら推測で補わず Claude へ報告し、影響範囲を止める。
 - コミットメッセージ、PR 本文、文書、コメントは日本語で書く。
 - repo 内の text file は `apply_patch` で編集する。生成 command による mechanical rewrite は許可する。
@@ -37,7 +39,7 @@
 |---|---|
 | `scripts/check-evidence.mjs` | 全履歴の形式・immutability、component hard gate、shared aggregate coverage、stale 要約 |
 | `scripts/check-evidence.test.mjs` | coverage の祖先関係、uncommitted 差分、fail-closed、stale 要約の回帰 |
-| `scripts/contrast.mjs` | RGB triplet / alias / alpha parser、gamma sRGB 合成、gate 評価、CLI |
+| `scripts/contrast.mjs` | RGB triplet / alias / alpha parser、light / dark alias parity、gamma sRGB 合成、gate 評価、CLI |
 | `scripts/contrast-cases.mjs` | consumer と TypeScript AST 由来 utility の declarative contract |
 | `scripts/contrast.test.mjs` | gamma 合成、parser fail-closed、gate、AST source coverage の回帰 |
 | `src/styles/design-system/` | v1.8 の HTML 正本、generator、生成物、設計 README、参照 Tailwind mapping |

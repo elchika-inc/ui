@@ -3,7 +3,6 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
 
 const contrastUrl = new URL("./contrast.mjs", import.meta.url);
 const casesUrl = new URL("./contrast-cases.mjs", import.meta.url);
@@ -192,19 +191,52 @@ test("全 consumer case は空でない reason と既知 gate を持つ", async 
   }
 });
 
-test("必須consumer caseを1件除くとrepository checkがfail-closedになる", async () => {
-  const { checkContrastInRepo } = await loadContrast();
+test("全consumer caseを1件ずつ除くとrepository checkがfail-closedになる", async () => {
+  const { inspectRequiredConsumerCases } = await loadContrast();
   const { CONSUMER_CASES } = await loadCases();
-  const root = fileURLToPath(new URL("..", import.meta.url));
-  const withoutPrimary = CONSUMER_CASES.filter(({ label }) => label !== "primary solid");
+  for (const removed of CONSUMER_CASES) {
+    const cases = CONSUMER_CASES.filter(({ label }) => label !== removed.label);
+    assert.ok(
+      inspectRequiredConsumerCases(cases).some(
+        (problem) =>
+          problem.includes(removed.label) && problem.includes("必須 consumer case が無い"),
+      ),
+      removed.label,
+    );
+  }
+});
 
-  const result = await checkContrastInRepo(root, withoutPrimary);
+test("全consumer caseのgate・theme・代表source class変更を拒否する", async () => {
+  const { inspectRequiredConsumerCases } = await loadContrast();
+  const { CONSUMER_CASES } = await loadCases();
 
-  assert.ok(
-    result.problems.some(
-      (problem) => problem.includes("primary solid") && problem.includes("必須"),
-    ),
-  );
+  for (const target of CONSUMER_CASES) {
+    const cases = structuredClone(CONSUMER_CASES);
+    const changed = cases.find(({ label }) => label === target.label);
+    changed.gate = changed.gate === "text-aa" ? "decorative" : "text-aa";
+    assert.ok(inspectRequiredConsumerCases(cases).length > 0, `${target.label}: gate`);
+
+    changed.gate = target.gate;
+    changed.themes = ["light"];
+    if ((target.themes ?? ["light", "dark"]).join() === "light") changed.themes = ["dark"];
+    assert.ok(inspectRequiredConsumerCases(cases).length > 0, `${target.label}: theme`);
+
+    const representative = target.sourceClasses?.[0];
+    if (!representative?.classes[0]) continue;
+    changed.themes = target.themes;
+    changed.sourceClasses[0].classes[0] = `${representative.classes[0]}-changed`;
+    assert.ok(inspectRequiredConsumerCases(cases).length > 0, `${target.label}: source class`);
+  }
+});
+
+test("global.cssのlight/dark aliasが片側だけ変わると拒否する", async () => {
+  const { inspectThemeAliasParity } = await loadContrast();
+  const css = themeCss({
+    light: "--background: rgb(var(--color-bg-canvas)); --radius: 0.625rem;",
+    dark: "--background: rgb(var(--color-bg-canvas)); --radius: 1rem;",
+  });
+
+  assert.deepEqual(inspectThemeAliasParity(css), ["--radius: :root と .dark の値が一致しない"]);
 });
 
 test("solid destructive と invalid 境界を v1.8 の非透明 token で gate する", async () => {

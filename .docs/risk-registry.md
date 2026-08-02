@@ -53,7 +53,7 @@
 - confidence: high
 - location: `registry.json` の `cssVars`、`~/elchika-ui/tokens.css`、`~/elchika-ui/design-system/tokens.css`
 - status: accepted
-- reason: shadcn の CSS 更新は `overwriteCssVars` が既定 `false` で、利用者側に同名の宣言が既にあれば何もしないため、registry からトークン値を強制適用できない。生成 token と shadcn alias を別 file で配り、README では alias 側 `~/elchika-ui/tokens.css` だけを最後に import するよう案内する。alias CSS の相対 `layer(design-system)` import が generated token へ到達し、GitHub raw ではなく `ui.elchika.dev` を配信の正本とする。既定値を持たない `--success` / `--warning` とその foreground は `cssVars` で自動追加する。
+- reason: shadcn の CSS 更新は `overwriteCssVars` が既定 `false` で、利用者側に同名の宣言が既にあれば何もしないため、registry からトークン値を強制適用できない。生成 token と shadcn alias を別 file で配り、README では alias 側 `~/elchika-ui/tokens.css` だけを最後に import するよう案内する。alias CSS の相対 `layer(design-system)` import が generated token へ到達する。registry は現在未公開であり、サブプロジェクト #3 で公開した後の配信正本を GitHub raw ではなく `ui.elchika.dev` とする。既定値を持たない `--success` / `--warning` とその foreground は `cssVars` で自動追加する。
 - anchor: Task 9 の fresh install で2 file の byte 一致、alias の相対 import、利用側ビルドと light / dark の実 computed style を確認する。
 
 ## RISK-008: GitHub Actions を可変タグで参照する
@@ -117,4 +117,4 @@
 - status: accepted
 - reason: デザインシステム v1.8 の仕様ページは承認済み外部正本を byte 一致で保持し、生成 token の唯一の正本として使う。`navigator.clipboard.writeText()` の reject handler は空で、コピー失敗を画面へ表示しないが、ここを単独修正すると上流同一性と生成物追跡の契約を壊す。影響は仕様ページ内の補助的なコピー操作に限定され、token 生成・registry 配布・利用者アプリの runtime には到達しないため、上流改善候補として受容する。
 - mitigation: 仕様ページの button semantics など既知の a11y error と同じく、Task 8 の最終レポートへ改善候補として記録する。token 値の参照と配布は Clipboard API に依存せず、`build-tokens.mjs --check` と registry の byte 一致検査を fail-closed で通す。
-- anchor: `src/styles/design-system/README.md` が取り込み元 SHA と承認済み generator 差分を固定する。上流 v1.8 source が更新されたときは、コピー失敗の表示が追加されたかを確認し、解消していれば本受容を閉じる。
+- anchor: `README.md` の「トークンの適用」が取り込み元 SHA と承認済み generator 差分を固定する。上流 v1.8 source が更新されたときは、コピー失敗の表示が追加されたかを確認し、解消していれば本受容を閉じる。

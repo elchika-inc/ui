@@ -279,6 +279,26 @@ test("初回記録のverified_impl_shaが不正なら後から有効値へ直し
   );
 });
 
+test("report追加時にverified_impl_shaが無ければ後から全fieldを足しても検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const report = join(root, ".docs/reviews/2026-08-03-summary.md");
+  writeFileSync(report, "# 初回は構造化fieldなし\n");
+  git(root, ["add", ".docs/reviews/2026-08-03-summary.md"]);
+  git(root, ["commit", "-m", "add report without verification fields"]);
+  const verifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
+  writeFileSync(
+    report,
+    `verified_impl_sha: ${verifiedSha}\nevidence_scope: component\ntargeted_dynamic_sha: ${verifiedSha}\n`,
+  );
+  git(root, ["add", ".docs/reviews/2026-08-03-summary.md"]);
+  git(root, ["commit", "-m", "add verification fields later"]);
+
+  const result = (await loadModule()).checkEvidenceInRepo(root);
+
+  assert.ok(result.problems.includes("2026-08-03-summary.md: 初回記録の verified_impl_sha が無い"));
+});
+
 test("PNG/JPEG の拡張子と magic bytes の不一致を検出する", async () => {
   const { checkImage } = await loadModule();
   assert.equal(checkImage("light.png", png), undefined);
@@ -491,6 +511,29 @@ for (const state of ["committed", "staged", "unstaged"]) {
     assert.ok(
       result.problems.some(
         (problem) => problem.includes("disabled-controls-light") && problem.includes("現在"),
+      ),
+    );
+  });
+}
+
+for (const state of ["committed", "staged", "unstaged"]) {
+  test(`shared reportの画像を後から${state}置換するとcoverしない`, async (t) => {
+    const { root } = createEvidenceRepo();
+    t.after(() => rmSync(root, { recursive: true, force: true }));
+    const { implementationSha } = commitSharedTokenChange(root);
+    addSharedTokenEvidence(root, { verifiedSha: implementationSha, commit: true });
+    const image = ".docs/reviews/brand-token-migration/after-disabled-controls-light.jpg";
+    writeFileSync(join(root, image), Buffer.from("ffd8ff01", "hex"));
+    if (state !== "unstaged") git(root, ["add", image]);
+    if (state === "committed") git(root, ["commit", "-m", "replace shared image"]);
+
+    const result = (await loadModule()).checkEvidenceInRepo(root);
+
+    assert.deepEqual([...result.coverage.coveredPaths], []);
+    assert.ok(
+      result.problems.some(
+        (problem) =>
+          problem.includes("disabled-controls-light") && problem.includes("追加時から変更"),
       ),
     );
   });

@@ -7,8 +7,9 @@ elchika-inc の各プロダクトが同じ見た目と操作性を共有でき�
 ## 対象範囲
 
 - 対象: `elchika-inc/ui` のリポジトリ骨格と共有 UI コンポーネント。
-- サブプロジェクト #1 の成果物: Button 1 件について、法務・来歴・生成・standards 適合・ビルド・registry 配布・隔離プレビュー・CI の経路を端から端まで通す。
-- 非対象: 約 50 件のコンポーネント実装、docs サイトの本格構築、registry の公開、Claude Design への同期、standards 側の更新、既存 `@tools/ui` の移行。
+- 完了済みの初期基盤 #1: Button 1 件について、法務・来歴・生成・standards 適合・ビルド・registry 配布・隔離プレビュー・CI の経路を端から端まで通した。
+- 現行のブランドトークン移行: 登録済み全コンポーネントを、デザインシステム v1.8 の2層 token、shadcn alias、実 consumer contrast、SHA 固定証跡の契約へ移行する。新しいコンポーネント実装は追加しない。
+- 継続して非対象: docs サイトの本格構築、registry の公開、Claude Design への同期、standards 側の更新、既存 `@tools/ui` の移行。
 
 ## SuccessCriteria
 
@@ -18,11 +19,11 @@ elchika-inc の各プロダクトが同じ見た目と操作性を共有でき�
 4. コンポーネントの上流来歴とライセンスが機械可読かつ追跡可能である。
 5. 実ブラウザ検証と CI の結果が、検証対象の commit SHA に束縛されている。
 
-## DoneCriteria（サブプロジェクト #1）
+## DoneCriteria（初期基盤 #1、完了済み）
 
 1. shadcn CLI の Astro + Base UI + Nova scaffold が成功し、`components.json` の `style` が `base-nova` である。
 2. `src/components/ui/button.tsx` が `@base-ui/react` を import し、生成直後の standards 違反が 0 件である。
-3. `src/styles/design-system/design-tokens.html` を正本として Layer 0 / 1 の `tokens.css` と `brands.css` を再生成・byte 検査でき、`src/styles/global.css` は色値を複製せず shadcn alias を定義し、registry は alias CSS と runtime 用 generated token の両方を配布する。token build は正本と生成物、consumer contrast は実利用 pair をそれぞれ検査する。
+3. `src/styles/global.css` が standards の `templates/design-tokens.css` と同一で、和文フォールバック・`--success`・`prefers-reduced-motion` を含む。
 4. `lib/index.d.ts` が `ButtonProps` を export し、その型が `variant` と `size` の契約を持つ。
 5. ローカル配信した registry URL から、リポジトリ外の別プロジェクトへ standards 適合済み Button をコピーできる。
 6. Button の隔離プレビューが light / dark の 2 静的ページとして存在し、dark 側ルート要素が `class="dark"` を持つ。
@@ -33,9 +34,16 @@ elchika-inc の各プロダクトが同じ見た目と操作性を共有でき�
 11. `AGENTS.md` の `branch_policy` が `protected` で、GitHub 側の ruleset が実際に有効である。
 12. CI が緑で、lint・型検査・standards 適合検知・テスト・両ビルド・registry 出力・法務ファイル同梱検査を実行する。
 
+## DoneCriteria（現行ブランドトークン移行）
+
+1. `src/styles/design-system/design-tokens.html` を正本として Layer 0 / 1 の `tokens.css` と `brands.css` を再生成し、正本と生成物の byte 一致を常設 gate で検査する。
+2. `src/styles/global.css` は色値を複製せず shadcn alias を定義し、`color-scheme` を除く light / dark alias の key と式を完全一致させる。
+3. registry は alias CSS と runtime 用 generated token の両方を配布し、fresh install で source・token・法務ファイルの到達と利用側 build を確認する。
+4. consumer contrast sensor は全必須 case の gate・theme・source class 契約と実利用 pair を検査し、実ブラウザ証跡を不変な実装 SHA へ束縛する。
+
 ## 明示的な非目標
 
-- サブプロジェクト #2 以降の成果物を先取りしない。
+- 現行移行の対象外となる新しいコンポーネント実装を追加しない。
 - npm registry へ publish しない。
-- 配信ドメイン確定前に registry URL を利用者へ公開しない。
+- サブプロジェクト #3 で deployment・DNS・公開到達を確認する前に registry URL を利用者へ公開しない。
 - standards のルールやテンプレートをこのリポジトリから変更しない。

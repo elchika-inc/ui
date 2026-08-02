@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { existsSync } from "node:fs";
 import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
@@ -13,119 +14,85 @@ const GATES = new Map([
   ["decorative", null],
 ]);
 
-const REQUIRED_CONSUMER_CASES = [
-  { label: "Kbd tooltip light alpha surface", gate: "text-aa", themes: ["light"] },
-  { label: "Kbd tooltip dark alpha surface", gate: "text-aa", themes: ["dark"] },
-  {
-    label: "primary solid",
-    gate: "text-aa",
-    source: "src/components/ui/button.tsx",
-    classes: ["bg-primary", "text-primary-foreground"],
-  },
-  {
-    label: "primary hover",
-    gate: "text-aa",
-    source: "src/components/ui/button.tsx",
-    classes: ["hover:bg-primary-hover"],
-  },
-  { label: "selected surface", gate: "text-aa" },
-  { label: "selected surface hover", gate: "text-aa" },
-  {
-    label: "opaque control placeholder",
-    gate: "text-aa",
-    source: "src/components/ui/select.tsx",
-    classes: ["bg-card"],
-  },
-  {
-    label: "control state hover",
-    gate: "text-aa",
-    source: "src/components/ui/select.tsx",
-    classes: ["hover:state-hover-overlay"],
-  },
-  {
-    label: "disabled input surface",
-    gate: "disabled-exempt",
-    source: "src/components/ui/native-select.tsx",
-    classes: ["disabled:bg-muted", "disabled:opacity-disabled"],
-  },
-  {
-    label: "Tabs inactive on muted",
-    gate: "text-aa",
-    source: "src/components/ui/tabs.tsx",
-    classes: ["text-muted-foreground"],
-  },
-  { label: "Tabs inactive on background", gate: "text-aa" },
-  {
-    label: "destructive subtle",
-    gate: "text-aa",
-    source: "src/components/ui/button.tsx",
-    classes: ["bg-destructive-subtle", "text-destructive-subtle-foreground"],
-  },
-  { label: "destructive subtle hover", gate: "text-aa" },
-  {
-    label: "solid destructive menu focus",
-    gate: "text-aa",
-    source: "src/components/ui/dropdown-menu.tsx",
-    classes: [
-      "data-[variant=destructive]:focus-visible:bg-destructive",
-      "data-[variant=destructive]:focus-visible:text-destructive-foreground",
-    ],
-  },
-  {
-    label: "focus ring on background",
-    gate: "nontext-ui",
-    source: "src/components/ui/button.tsx",
-    classes: ["focus-visible:ring-ring"],
-  },
-  {
-    label: "invalid control boundary",
-    gate: "nontext-ui",
-    source: "src/components/ui/select.tsx",
-    classes: ["aria-invalid:border-destructive", "aria-invalid:ring-destructive"],
-  },
-  {
-    label: "Chart /50 grid stroke",
-    gate: "decorative",
-    source: "src/components/ui/chart.tsx",
-    classes: ["[&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50"],
-  },
-  {
-    label: "overlay token",
-    gate: "decorative",
-    source: "src/components/ui/dialog.tsx",
-    classes: ["bg-overlay"],
-  },
-  { label: "warning pair", gate: "text-aa" },
-];
+const REQUIRED_CONSUMER_CASE_DIGESTS = new Map([
+  [
+    "Kbd tooltip light alpha surface",
+    "0807a8a6e5b3c0d3a98063028a2a48083c67d8c6c1408fd88d9021a3c33ce32a",
+  ],
+  [
+    "Kbd tooltip dark alpha surface",
+    "a24f2bdb3e4fbc0737299eb5775d601f0d0ef8e3adb846eef04086224595a38b",
+  ],
+  ["primary solid", "aba53adab6e0b2eedd5eb4176b38ea399469c489ec5ae7b42c9f623a8fb380d9"],
+  ["primary hover", "e498d64a08888ca11902d2870fdbecfe486035fe9f0e7d3ddb147a73bd713d59"],
+  ["secondary state hover", "2748a2b6fc8dd0e6c9d62285b0ca11265b47bf6cc2921fb2790ac35c28a71334"],
+  ["selected surface", "ecb5d448dab2db08ffadf2d6c3201b296868462ae872277c38320be45259ab1c"],
+  ["selected surface hover", "5c7048e8a4f1bbc0734525e741a8e3005e4233719050093ed32677ed6674e4a3"],
+  ["state hover surface", "ed3147c790f9a19f41ae2ac9c5215944495c02ecdaf9afc2dd5d0c80eaa4a4d2"],
+  ["opaque muted surface", "cff27519ffbef099ad536200f584ab902a2698ba24043e5d3200c3b843ab892e"],
+  [
+    "opaque control placeholder",
+    "ac06366cb37c2113fbcef79d3daf491483392431619b85140a9c54af84829a55",
+  ],
+  ["control state hover", "7fce72b6531b3df164dab4f26b65f3b69d4c0c88e258a3558423699c3f5856bc"],
+  ["disabled input surface", "bcbc7738ce221a567a64cdc651269ae89ebb29a6e1f5b78aa4b55d51c12c4e18"],
+  ["Switch unchecked surface", "921c97bedf834f4343216832aaa170f2ceb329a35a5f97a00ed2c713de6ee946"],
+  ["Tabs inactive on muted", "dff7f58da6ce5de358807fe28877a361b95206766c3e1dd1f085d02800b32fb8"],
+  [
+    "Tabs inactive on background",
+    "92365e00aae3d2db8ba5c77b4106aa1ec9ee1aea043ad9d58a021330aaf7c534",
+  ],
+  ["Sidebar foreground", "9b3f128936b4768ababacec1f78bf9f23a679ec1fcd9608e9fbccf6fdd2af610"],
+  [
+    "Attachment destructive text",
+    "c721ddedfc41591cfb9e274c7d296f22d049d0bb13b5680ab044eeeaa0b2ddb3",
+  ],
+  ["Alert destructive text", "91c7a6e8e85ee312b6cedc9d2794568db72b92c8a137149d48a5ad68e81c8f12"],
+  ["destructive subtle", "44c27e99777c2298f3614b6177955384fb606b33359357aece078cd9d3c3d40a"],
+  ["destructive subtle hover", "b5f22a51e807fcdbc476d4a1d4e9a6379ffd1e95c75f4f26412f347e46c7690e"],
+  [
+    "solid destructive menu focus",
+    "c3ed13e050b1af18d2f9b5e3840e7c7b02942b4d74c7b6349b9efa07ce84ab1c",
+  ],
+  ["focus ring on background", "cf9c4bcb708e37788bda1c436e66c8340d9f6d37fa68f141b61c3df358be49e2"],
+  [
+    "foreground /10 container ring",
+    "dfcf4dd912bf06fbe8122f4a7fd30886700e7204184d4f7dba6639e7ae1ceb53",
+  ],
+  [
+    "input /30 decorative border",
+    "14463eab833ba0e52b102d528903337878f724297443675f1753ce2d6c4a2ff1",
+  ],
+  ["invalid control boundary", "a609e1de6550fa5c3045d189a1908d0d3f413748c759f622a87f0428d89ac3fd"],
+  [
+    "Attachment destructive /30 border",
+    "8acd78168fa00dd4675c334c77580a49fc8c1b3364e3e94aa871ca914a3b77d9",
+  ],
+  ["Field selected boundary", "4cfae05884dc9092c6eca8575af07540ed1339bbac502379dd414bba6c3fcc40"],
+  ["Chart /50 grid stroke", "021303c4c0bb21c212ba2518762a33f77c67e21f16d6af4a06eb6f8856685174"],
+  ["overlay token", "be420d6384f059778b9b18979b7ee19b55050ad45824a874ec32193413c35281"],
+  ["warning pair", "92365e00aae3d2db8ba5c77b4106aa1ec9ee1aea043ad9d58a021330aaf7c534"],
+]);
+
+const consumerCaseContractDigest = ({ gate, themes, sourceClasses }) => {
+  const contract = {
+    gate,
+    themes: [...(themes ?? ["light", "dark"])].sort(),
+    sourceClasses: [...(sourceClasses ?? [])]
+      .map(({ source, classes }) => ({ source, classes: [...classes].sort() }))
+      .sort((left, right) => left.source.localeCompare(right.source)),
+  };
+  return createHash("sha256").update(JSON.stringify(contract)).digest("hex");
+};
 
 export function inspectRequiredConsumerCases(consumerCases) {
-  return REQUIRED_CONSUMER_CASES.flatMap((required) => {
-    const consumerCase = consumerCases.find(({ label }) => label === required.label);
-    if (!consumerCase) return [`${required.label}: 必須 consumer case が無い`];
-    return inspectRequiredConsumerCase(required, consumerCase);
+  return [...REQUIRED_CONSUMER_CASE_DIGESTS].flatMap(([label, expectedDigest]) => {
+    const consumerCase = consumerCases.find((candidate) => candidate.label === label);
+    if (!consumerCase) return [`${label}: 必須 consumer case が無い`];
+    return consumerCaseContractDigest(consumerCase) === expectedDigest
+      ? []
+      : [`${label}: 必須 gate / theme / source class 契約が一致しない`];
   });
-}
-
-function inspectRequiredConsumerCase(required, consumerCase) {
-  const problems = [];
-  if (consumerCase.gate !== required.gate) {
-    problems.push(`${required.label}: 必須 gate は ${required.gate}`);
-  }
-  const actualThemes = [...(consumerCase.themes ?? ["light", "dark"])].sort();
-  const requiredThemes = [...(required.themes ?? ["light", "dark"])].sort();
-  if (actualThemes.join("\0") !== requiredThemes.join("\0")) {
-    problems.push(`${required.label}: 必須 theme は ${requiredThemes.join(" / ")}`);
-  }
-  if (!required.source) return problems;
-  const sourceContract = consumerCase.sourceClasses?.find(
-    ({ source }) => source === required.source,
-  );
-  for (const className of required.classes) {
-    if (!sourceContract?.classes.includes(className)) {
-      problems.push(`${required.label}: 必須 source class ${required.source} ${className} が無い`);
-    }
-  }
-  return problems;
 }
 
 const clamp = (value) => Math.min(Math.max(value, 0), 1);
@@ -263,6 +230,28 @@ export function parseThemes(css) {
   mergeBlocks(dark, classDarkBlocks);
   mergeBlocks(dark, dataDarkBlocks);
   return { light, dark, problems };
+}
+
+export function inspectThemeAliasParity(css) {
+  const rootBlocks = blocks(css, ":root");
+  const darkBlocks = blocks(css, "\\.dark");
+  const root = new Map();
+  const dark = new Map();
+  mergeBlocks(root, rootBlocks);
+  mergeBlocks(dark, darkBlocks);
+  const problems = [];
+  if (rootBlocks.length === 0) problems.push("global.css: :root alias block が無い");
+  if (darkBlocks.length === 0) problems.push("global.css: .dark alias block が無い");
+  for (const name of new Set([...root.keys(), ...dark.keys()])) {
+    if (!root.has(name)) {
+      problems.push(`--${name}: :root alias が無い`);
+    } else if (!dark.has(name)) {
+      problems.push(`--${name}: .dark alias が無い`);
+    } else if (root.get(name) !== dark.get(name)) {
+      problems.push(`--${name}: :root と .dark の値が一致しない`);
+    }
+  }
+  return problems;
 }
 
 const tokenName = (name) => name.replace(/^--/, "");
@@ -562,17 +551,21 @@ export async function checkContrastInRepo(root, consumerCases = CONSUMER_CASES) 
   const problems = [];
   const cssPaths = ["src/styles/design-system/tokens.css", "src/styles/global.css"];
   const cssSources = [];
+  let globalCss = "";
   for (const path of cssPaths) {
     const absolute = join(root, path);
     if (path.includes("design-system") && !existsSync(absolute)) continue;
     try {
-      cssSources.push(await readFile(absolute, "utf8"));
+      const source = await readFile(absolute, "utf8");
+      cssSources.push(source);
+      if (path === "src/styles/global.css") globalCss = source;
     } catch (error) {
       problems.push(`${path} を読めない: ${error.message}`);
     }
   }
   const themes = parseThemes(cssSources.join("\n"));
   problems.push(...themes.problems);
+  if (globalCss) problems.push(...inspectThemeAliasParity(globalCss));
 
   problems.push(...inspectRequiredConsumerCases(consumerCases));
   const inspectedCases = consumerCases.map((consumerCase) => ({

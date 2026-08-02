@@ -354,6 +354,9 @@ function sharedTokenImageProblems(repositoryRoot, report) {
         if (!path) return [`${report.file}: 同時追加画像 ${key} が無い`];
         const status = lstatSync(join(repositoryRoot, path), { throwIfNoEntry: false });
         if (!status?.isFile()) return [`${report.file}: 現在の画像 ${key} が無い`];
+        if (report.additionCommit && pathsChanged(repositoryRoot, report.additionCommit, [path])) {
+          return [`${report.file}: 現在の画像 ${key} が追加時から変更されている`];
+        }
         const imageProblem = checkImage(path, readFileSync(join(repositoryRoot, path)));
         return imageProblem ? [`${report.file}: 現在の画像 ${key}: ${imageProblem}`] : [];
       }),
@@ -435,7 +438,7 @@ function introducedReportMarkdown(repositoryRoot, report) {
   const introductionCommit = git(repositoryRoot, [
     "log",
     "--reverse",
-    "-Sverified_impl_sha:",
+    "--diff-filter=A",
     "--format=%H",
     "--",
     reportPath,
