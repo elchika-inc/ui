@@ -36,12 +36,86 @@ const ARBITRARY =
   /\b(?:w|h|size|p[trblxy]?|m[trblxy]?|text|gap|z|top|left|right|bottom|inset|rounded|duration|leading|tracking|ring|border|shadow|bg|fill|stroke)-\[[^\]]+\]/g;
 const ALLOWED_ARBITRARY = new Set(["ring-[3px]"]);
 const BOOLEAN_DATA_INSET = /data-inset=\{inset\}/g;
+const SCRIPT_PATH = /\.(?:[cm]?[jt]sx?)$/;
+
+const blankComment = (comment) => comment.replace(/[^\r\n]/g, " ");
+
+function sourceWithoutScriptComments(path, source) {
+  const languageVariant = /\.[jt]sx$/.test(path)
+    ? ts.LanguageVariant.JSX
+    : ts.LanguageVariant.Standard;
+  const scanner = ts.createScanner(ts.ScriptTarget.Latest, false, languageVariant, source);
+  const chunks = [];
+  let cursor = 0;
+  for (let token = scanner.scan(); token !== ts.SyntaxKind.EndOfFileToken; token = scanner.scan()) {
+    if (
+      token !== ts.SyntaxKind.SingleLineCommentTrivia &&
+      token !== ts.SyntaxKind.MultiLineCommentTrivia
+    ) {
+      continue;
+    }
+    const start = scanner.getTokenStart();
+    const end = scanner.getTokenEnd();
+    chunks.push(source.slice(cursor, start), blankComment(source.slice(start, end)));
+    cursor = end;
+  }
+  chunks.push(source.slice(cursor));
+  return chunks.join("");
+}
+
+function endOfQuotedCss(characters, start) {
+  const quote = characters[start];
+  for (let index = start + 1; index < characters.length; index++) {
+    if (characters[index] === "\\") index++;
+    else if (characters[index] === quote) return index;
+  }
+  return characters.length - 1;
+}
+
+function blankCssComment(characters, start) {
+  for (let index = start; index < characters.length; index++) {
+    const isEnd = characters[index] === "*" && characters[index + 1] === "/";
+    if (characters[index] !== "\n" && characters[index] !== "\r") {
+      characters[index] = " ";
+    }
+    if (isEnd) {
+      characters[index + 1] = " ";
+      return index + 1;
+    }
+  }
+  return characters.length - 1;
+}
+
+function sourceWithoutCssComments(source) {
+  const characters = [...source];
+  for (let index = 0; index < characters.length; index++) {
+    if (characters[index] === '"' || characters[index] === "'") {
+      index = endOfQuotedCss(characters, index);
+    } else if (characters[index] === "/" && characters[index + 1] === "*") {
+      index = blankCssComment(characters, index);
+    }
+  }
+  return characters.join("");
+}
+
+function sourceWithoutComments(path, source) {
+  if (path.endsWith(".css")) return sourceWithoutCssComments(source);
+  if (SCRIPT_PATH.test(path)) return sourceWithoutScriptComments(path, source);
+  return source;
+}
+
+function scriptKindForPath(path) {
+  if (path.endsWith(".tsx")) return ts.ScriptKind.TSX;
+  if (path.endsWith(".jsx")) return ts.ScriptKind.JSX;
+  if (/\.(?:[cm]?ts)$/.test(path)) return ts.ScriptKind.TS;
+  return ts.ScriptKind.JS;
+}
 
 function createClassAnalysis(sources) {
   const virtualRoot = "/__elchika_check__";
   const sourceEntries = new Map();
   for (const [path, source] of sources) {
-    if (!/\.[cm]?tsx?$/.test(path)) continue;
+    if (!SCRIPT_PATH.test(path)) continue;
     const normalizedPath = path.replace(/^\.\//, "");
     const isAttributeFragment = path.endsWith(".tsx") && /^\s*className\s*=/.test(source);
     const prefix = isAttributeFragment ? "<div " : "";
@@ -50,6 +124,7 @@ function createClassAnalysis(sources) {
     sourceEntries.set(virtualPath, { path, prefix, source, parsedSource });
   }
   const compilerOptions = {
+    allowJs: true,
     baseUrl: virtualRoot,
     jsx: ts.JsxEmit.Preserve,
     module: ts.ModuleKind.ESNext,
@@ -68,7 +143,7 @@ function createClassAnalysis(sources) {
       entry.parsedSource,
       ts.ScriptTarget.Latest,
       true,
-      fileName.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS,
+      scriptKindForPath(fileName),
     );
     sourceFiles.set(fileName, sourceFile);
     return sourceFile;
@@ -585,8 +660,9 @@ function statefulRingViolations(text, source, offset) {
 
 function checkFileWithAnalysis(path, source, analysis) {
   const violations = [];
+  const executableSource = sourceWithoutComments(path, source);
   let lineOffset = 0;
-  source.split("\n").forEach((line, i) => {
+  executableSource.split("\n").forEach((line, i) => {
     const currentLineOffset = lineOffset;
     lineOffset += line.length + 1;
     if (line.includes("@custom-variant dark")) return;
@@ -632,7 +708,10 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     process.exit(1);
   }
   const analysisFiles = new Map(
-    globSync("src/**/*.{ts,tsx,css}").map((file) => [file, readFileSync(file, "utf8")]),
+    globSync("src/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,css}").map((file) => [
+      file,
+      readFileSync(file, "utf8"),
+    ]),
   );
   const results = checkFiles(analysisFiles);
   let total = 0;

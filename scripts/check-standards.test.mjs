@@ -516,6 +516,55 @@ test("JavaScript拡張子importをTypeScript sourceへ解決する", () => {
   );
 });
 
+test("MJSからimportしたclass initializerを解決する", () => {
+  const results = checkFiles(
+    new Map([
+      [
+        "src/shared.mjs",
+        `export const invalidSharedClasses = cn(
+          "focus-visible:ring-[3px]",
+          "ring-ring/50",
+        );`,
+      ],
+      [
+        "src/view.tsx",
+        `import { invalidSharedClasses } from "./shared.mjs";
+        export const View = () => <div className={invalidSharedClasses} />;`,
+      ],
+    ]),
+  );
+  assert.ok(
+    results
+      .get("src/view.tsx")
+      .violations.some((violation) => violation.rule === "focus-ring-opacity"),
+    "MJS initializerで透明なfocus ringが隠れている",
+  );
+});
+
+test("TSXコメント内の規約例を違反として扱わない", () => {
+  const { violations } = checkFile(
+    "a.tsx",
+    `// focus-visible:ring-[3px] ring-ring/50
+    // rounded-[7px]
+    /* data-inset={inset} */
+    const View = () => <div className="text-sm" />;`,
+  );
+  assert.deepEqual(violations, []);
+});
+
+test("CSSコメント内の規約例を違反として扱わない", () => {
+  const { violations } = checkFile(
+    "a.css",
+    `/*
+     * focus-visible:ring-[3px] ring-ring/50
+     * rounded-[7px]
+     * data-inset={inset}
+     */
+    .safe { color: red; }`,
+  );
+  assert.deepEqual(violations, []);
+});
+
 test("同一referenceの異なるliteral等値条件を同時適用と誤認しない", () => {
   for (const [type, first, second] of [
     ["boolean", "true", "false"],
