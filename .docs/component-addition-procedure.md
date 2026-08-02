@@ -46,7 +46,7 @@ npm run check:pre
 
 証跡の鮮度検査は、Markdown内に一意に置く`verified_impl_sha: <40桁SHA>`を正本とし、検証SHAが現在のHEADの祖先であることを確認してから、`git diff <検証SHA> -- <paths>`と`git ls-files --others --exclude-standard -- <paths>`で検証SHA、作業ツリー、未追跡ファイルを比較する。構造化欄の欠落・重複・実在しないcommit・HEAD非祖先commitは、古い証跡を含む全証跡でhard failureにする。同じcomponentに複数の証跡がある場合、他候補の祖先ではないGit DAG上のmaximal候補が一意なら、その1件だけをcomponent固有pathの鮮度hard gate対象とする。相互に比較不能なmaximal候補が複数残る場合は、HEADからのcommit距離で選ばずhard failureにする。
 
-集約証跡の陳腐化には2種類ある。共有面が変わって単に古くなった場合はadvisoryとして一覧に出し、証跡に書いた具体的な観測が現在の実装でも再現するかを確認する。要素名・属性・挙動・数値など、記述内容が現在の実装と食い違う場合はadvisoryで済ませず、最終実装SHAで集約証跡を作り直す。
+集約証跡の鮮度はhard gateにせずadvisoryとして一覧に出す。ただし、catalog / indexページ自身の表示内容を変更した場合は、gateが成功しても最終実装SHAで集約証跡を作り直す。共有面が変わって単に古くなった場合は、証跡に書いた具体的な観測が現在の実装でも再現するかを確認する。要素名・属性・挙動・数値など、記述内容が現在の実装と食い違う場合もadvisoryで済ませず、最終実装SHAで集約証跡を作り直す。
 
 ## 4. 実ブラウザ検証と証跡 commit
 
