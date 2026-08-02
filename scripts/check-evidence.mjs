@@ -127,6 +127,12 @@ function pathsChanged(root, sha, paths) {
   return untracked.stdout.trim().length > 0;
 }
 
+function commitsSinceVerification(root, sha) {
+  const count = git(root, ["rev-list", "--count", `${sha}..HEAD`]).trim();
+  if (!/^\d+$/.test(count)) throw new Error(`git rev-list の件数が不正: ${sha}..HEAD`);
+  return Number(count);
+}
+
 function inspectMarkdown(repositoryRoot, reviewsRoot, file) {
   const problems = [];
   const stale = [];
@@ -144,9 +150,6 @@ function inspectMarkdown(repositoryRoot, reviewsRoot, file) {
   }
 
   const component = componentFromEvidence(file);
-  if (component && pathsChanged(repositoryRoot, sha, componentPaths(component))) {
-    problems.push(`${file}: 検証 SHA 以降に component 固有 path が変更されている`);
-  }
   const changedAggregate = evidencePaths(file).filter((path) =>
     pathsChanged(repositoryRoot, sha, [path]),
   );
@@ -155,7 +158,33 @@ function inspectMarkdown(repositoryRoot, reviewsRoot, file) {
   );
   const changedAdvisory = [...new Set([...changedAggregate, ...changedShared])];
   if (changedAdvisory.length) stale.push(`${file}: ${changedAdvisory.join(", ")}`);
-  return { problems, stale };
+  return { problems, stale, verification: component ? { component, file, sha } : undefined };
+}
+
+function inspectLatestComponentEvidence(repositoryRoot, verifications) {
+  const problems = [];
+  const byComponent = Map.groupBy(verifications, ({ component }) => component);
+
+  for (const [component, candidates] of byComponent) {
+    const withDistance = candidates.map((candidate) => ({
+      ...candidate,
+      distance: commitsSinceVerification(repositoryRoot, candidate.sha),
+    }));
+    const nearestDistance = Math.min(...withDistance.map(({ distance }) => distance));
+    const latest = withDistance.filter(({ distance }) => distance === nearestDistance);
+    if (latest.length !== 1) {
+      problems.push(
+        `${component}: 最新証跡が一意に決まらない (${latest.map(({ file }) => file).join(", ")})`,
+      );
+      continue;
+    }
+    const [{ file, sha }] = latest;
+    if (pathsChanged(repositoryRoot, sha, componentPaths(component))) {
+      problems.push(`${file}: 検証 SHA 以降に component 固有 path が変更されている`);
+    }
+  }
+
+  return problems;
 }
 
 export function checkEvidenceInRepo(root) {
@@ -187,6 +216,7 @@ export function checkEvidenceInRepo(root) {
   const imageFiles = files.filter((file) => [".png", ".jpg", ".jpeg"].includes(extname(file)));
   const markdownFiles = files.filter((file) => extname(file) === ".md");
   const stale = [];
+  const componentVerifications = [];
 
   for (const entry of entries.filter((candidate) => !candidate.isFile)) {
     problems.push(`${entry.path}: 通常ファイルではないため証跡として検査できない`);
@@ -204,7 +234,9 @@ export function checkEvidenceInRepo(root) {
     const inspected = inspectMarkdown(repositoryRoot, reviewsRoot, file);
     problems.push(...inspected.problems);
     stale.push(...inspected.stale);
+    if (inspected.verification) componentVerifications.push(inspected.verification);
   }
+  problems.push(...inspectLatestComponentEvidence(repositoryRoot, componentVerifications));
 
   return { problems, stale };
 }

@@ -229,6 +229,78 @@ test("検証済みcomponentだけを変更すると落ち、別componentは落�
   );
 });
 
+test("同じcomponentの古い証跡を残し、最新証跡だけを鮮度判定する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  writeFileSync(join(root, "src/components/ui/button.tsx"), "button reverified\n");
+  git(root, ["add", "src/components/ui/button.tsx"]);
+  git(root, ["commit", "-m", "change button before reverification"]);
+  const latestVerifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
+  writeFileSync(
+    join(root, ".docs/reviews/2026-08-02-button-preview.md"),
+    `verified_impl_sha: ${latestVerifiedSha}\n`,
+  );
+  git(root, ["add", ".docs/reviews/2026-08-02-button-preview.md"]);
+  git(root, ["commit", "-m", "add latest button evidence"]);
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual(result.problems, []);
+});
+
+test("同じcomponentの最新証跡より後の変更は hard failure にする", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  writeFileSync(join(root, "src/components/ui/button.tsx"), "button reverified\n");
+  git(root, ["add", "src/components/ui/button.tsx"]);
+  git(root, ["commit", "-m", "change button before reverification"]);
+  const latestVerifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
+  writeFileSync(
+    join(root, ".docs/reviews/2026-08-02-button-preview.md"),
+    `verified_impl_sha: ${latestVerifiedSha}\n`,
+  );
+  git(root, ["add", ".docs/reviews/2026-08-02-button-preview.md"]);
+  git(root, ["commit", "-m", "add latest button evidence"]);
+  writeFileSync(join(root, "src/previews/button.tsx"), "button changed after evidence\n");
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual(result.problems, [
+    "2026-08-02-button-preview.md: 検証 SHA 以降に component 固有 path が変更されている",
+  ]);
+});
+
+test("同じcomponentの古い証跡もSHA構造検査の対象に残す", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  writeFileSync(join(root, "src/components/ui/button.tsx"), "button reverified\n");
+  git(root, ["add", "src/components/ui/button.tsx"]);
+  git(root, ["commit", "-m", "change button before reverification"]);
+  const latestVerifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
+  writeFileSync(
+    join(root, ".docs/reviews/2026-08-02-button-preview.md"),
+    `verified_impl_sha: ${latestVerifiedSha}\n`,
+  );
+  git(root, ["add", ".docs/reviews/2026-08-02-button-preview.md"]);
+  git(root, ["commit", "-m", "add latest button evidence"]);
+  const missingCommit = "f".repeat(40);
+  writeFileSync(
+    join(root, ".docs/reviews/2026-08-01-button-preview.md"),
+    `verified_impl_sha: ${missingCommit}\n`,
+  );
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.ok(
+    result.problems.includes(
+      `2026-08-01-button-preview.md: 検証 SHA ${missingCommit} が commit として存在しない`,
+    ),
+  );
+});
+
 test("検証済みcomponentの未コミット変更も hard failure にする", async (t) => {
   const { root } = createEvidenceRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));
