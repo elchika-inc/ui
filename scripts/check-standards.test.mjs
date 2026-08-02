@@ -359,6 +359,23 @@ test("element accessとshorthand propertyのinitializerを解決する", () => {
   }
 });
 
+test("literal型のcomputed keyからproperty initializerを解決する", () => {
+  const { violations } = checkFile(
+    "a.tsx",
+    `const ring = cn(
+      "focus-visible:ring-[3px]",
+      "ring-ring/50",
+    );
+    const styles = { ring };
+    const key = "ring";
+    const View = () => <div className={styles[key]} />;`,
+  );
+  assert.ok(
+    violations.some((violation) => violation.rule === "focus-ring-opacity"),
+    "computed keyで透明なfocus ringが隠れている",
+  );
+});
+
 test("論理fallbackとtemplate interpolationの候補を解析する", () => {
   const templateInterpolation = ["`", "$", "{classes}", "`"].join("");
   for (const classExpression of ['classes || ""', 'classes ?? ""', templateInterpolation]) {
@@ -402,6 +419,53 @@ test("引数なしlocal helperの静的returnを解析する", () => {
   }
 });
 
+test("引数付きhelperと複数returnの静的候補を解析する", () => {
+  const { violations } = checkFile(
+    "a.tsx",
+    `function unsafeClasses(active: boolean) {
+      if (active) {
+        return cn(
+          "focus-visible:ring-[3px]",
+          "ring-ring/50",
+        );
+      }
+      return "text-sm";
+    }
+    const View = ({ active }: { active: boolean }) => (
+      <div className={unsafeClasses(active)} />
+    );`,
+  );
+  assert.ok(
+    violations.some((violation) => violation.rule === "focus-ring-opacity"),
+    "引数付きhelperの複数returnで透明なfocus ringが隠れている",
+  );
+});
+
+test("object methodとfunction propertyの静的returnを解析する", () => {
+  for (const member of [
+    `unsafeClasses() {
+      return cn(
+        "focus-visible:ring-[3px]",
+        "ring-ring/50",
+      );
+    }`,
+    `unsafeClasses: () => cn(
+      "focus-visible:ring-[3px]",
+      "ring-ring/50",
+    )`,
+  ]) {
+    const { violations } = checkFile(
+      "a.tsx",
+      `const helpers = { ${member} };
+      const View = () => <div className={helpers.unsafeClasses()} />;`,
+    );
+    assert.ok(
+      violations.some((violation) => violation.rule === "focus-ring-opacity"),
+      "object helperのreturnで透明なfocus ringが隠れている",
+    );
+  }
+});
+
 test("別fileからimportしたclass initializerを解決する", () => {
   const results = checkFiles(
     new Map([
@@ -425,6 +489,69 @@ test("別fileからimportしたclass initializerを解決する", () => {
       .violations.some((violation) => violation.rule === "focus-ring-opacity"),
     "importしたinitializerで透明なfocus ringが隠れている",
   );
+});
+
+test("JavaScript拡張子importをTypeScript sourceへ解決する", () => {
+  const results = checkFiles(
+    new Map([
+      [
+        "src/shared.ts",
+        `export const invalidSharedClasses = cn(
+          "focus-visible:ring-[3px]",
+          "ring-ring/50",
+        );`,
+      ],
+      [
+        "src/view.tsx",
+        `import { invalidSharedClasses } from "./shared.js";
+        export const View = () => <div className={invalidSharedClasses} />;`,
+      ],
+    ]),
+  );
+  assert.ok(
+    results
+      .get("src/view.tsx")
+      .violations.some((violation) => violation.rule === "focus-ring-opacity"),
+    "拡張子substitution後のinitializerで透明なfocus ringが隠れている",
+  );
+});
+
+test("同一referenceの異なるliteral等値条件を同時適用と誤認しない", () => {
+  for (const [type, first, second] of [
+    ["boolean", "true", "false"],
+    ['"focus" | "color"', '"focus"', '"color"'],
+  ]) {
+    const { violations } = checkFile(
+      "a.tsx",
+      `const View = ({ mode }: { mode: ${type} }) => (
+        <div
+          className={cn(
+            mode === ${first} && "focus-visible:ring-[3px]",
+            mode === ${second} && "ring-ring/50",
+          )}
+        />
+      );`,
+    );
+    assert.deepEqual(violations, [], `${first} / ${second}`);
+  }
+});
+
+test("immutableな条件aliasを元bindingと同じ条件として扱う", () => {
+  const { violations } = checkFile(
+    "a.tsx",
+    `const View = ({ active }: { active: boolean }) => {
+      const enabled = active;
+      return (
+        <div
+          className={cn(
+            enabled && "focus-visible:ring-[3px]",
+            !active && "ring-ring/50",
+          )}
+        />
+      );
+    };`,
+  );
+  assert.deepEqual(violations, []);
 });
 
 test("2 規定へ同時に違反するクラスは 2 診断とも出す", () => {

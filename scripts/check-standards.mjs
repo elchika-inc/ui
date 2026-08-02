@@ -50,10 +50,12 @@ function createClassAnalysis(sources) {
     sourceEntries.set(virtualPath, { path, prefix, source, parsedSource });
   }
   const compilerOptions = {
+    baseUrl: virtualRoot,
     jsx: ts.JsxEmit.Preserve,
     module: ts.ModuleKind.ESNext,
     moduleResolution: ts.ModuleResolutionKind.Bundler,
     noLib: true,
+    paths: { "@/*": ["src/*"] },
     target: ts.ScriptTarget.Latest,
   };
   const sourceFiles = new Map();
@@ -71,29 +73,18 @@ function createClassAnalysis(sources) {
     sourceFiles.set(fileName, sourceFile);
     return sourceFile;
   };
-  const resolveModule = (moduleName, containingFile) => {
-    let unresolvedPath;
-    if (moduleName.startsWith(".")) {
-      unresolvedPath = posix.resolve(posix.dirname(containingFile), moduleName);
-    } else if (moduleName.startsWith("@/")) {
-      unresolvedPath = posix.join(virtualRoot, "src", moduleName.slice(2));
-    } else {
-      return undefined;
-    }
-    const candidates = [
-      unresolvedPath,
-      `${unresolvedPath}.ts`,
-      `${unresolvedPath}.tsx`,
-      posix.join(unresolvedPath, "index.ts"),
-      posix.join(unresolvedPath, "index.tsx"),
-    ];
-    const resolvedFileName = candidates.find((candidate) => sourceEntries.has(candidate));
-    if (!resolvedFileName) return undefined;
-    return {
-      extension: resolvedFileName.endsWith(".tsx") ? ts.Extension.Tsx : ts.Extension.Ts,
-      resolvedFileName,
-    };
+  const directoryExists = (directory) =>
+    [...sourceEntries.keys()].some((fileName) => fileName.startsWith(`${directory}/`));
+  const resolutionHost = {
+    directoryExists,
+    fileExists: (fileName) => sourceEntries.has(fileName),
+    getCurrentDirectory: () => "/",
+    getDirectories: () => [],
+    readFile: (fileName) => sourceEntries.get(fileName)?.parsedSource,
   };
+  const resolveModule = (moduleName, containingFile) =>
+    ts.resolveModuleName(moduleName, containingFile, compilerOptions, resolutionHost)
+      .resolvedModule;
   const host = {
     fileExists: (fileName) => sourceEntries.has(fileName),
     getCanonicalFileName: (fileName) => fileName,
@@ -137,38 +128,85 @@ function classNameExpressions(path, analysis) {
     if (!symbolKeys.has(canonical)) symbolKeys.set(canonical, nextSymbolKey++);
     return symbolKeys.get(canonical);
   };
+  const elementPropertyName = (argument) => {
+    if (ts.isStringLiteral(argument) || ts.isNumericLiteral(argument)) {
+      return argument.text;
+    }
+    const type = checker.getTypeAtLocation(argument);
+    if (type.flags & ts.TypeFlags.StringLiteral) return type.value;
+    if (type.flags & ts.TypeFlags.NumberLiteral) return `${type.value}`;
+    return undefined;
+  };
   const propertySymbol = (expression) => {
     if (ts.isPropertyAccessExpression(expression)) {
       return checker.getSymbolAtLocation(expression.name);
     }
     if (ts.isElementAccessExpression(expression) && expression.argumentExpression) {
-      const direct = checker.getSymbolAtLocation(expression.argumentExpression);
-      if (direct) return direct;
+      const propertyName = elementPropertyName(expression.argumentExpression);
+      return propertyName
+        ? checker.getTypeAtLocation(expression.expression).getProperty(propertyName)
+        : undefined;
+    }
+    return undefined;
+  };
+  const simpleReference = (expression) => {
+    let current = expression;
+    while (
+      ts.isParenthesizedExpression(current) ||
+      ts.isAsExpression(current) ||
+      ts.isSatisfiesExpression(current) ||
+      ts.isNonNullExpression(current)
+    ) {
+      current = current.expression;
+    }
+    return ts.isIdentifier(current) ||
+      ts.isPropertyAccessExpression(current) ||
+      ts.isElementAccessExpression(current)
+      ? current
+      : undefined;
+  };
+  const immutableAliasInitializer = (symbol) => {
+    for (const declaration of canonicalSymbol(symbol).declarations ?? []) {
       if (
-        ts.isStringLiteral(expression.argumentExpression) ||
-        ts.isNumericLiteral(expression.argumentExpression)
+        ts.isVariableDeclaration(declaration) &&
+        ts.isVariableDeclarationList(declaration.parent) &&
+        declaration.parent.flags & ts.NodeFlags.Const &&
+        declaration.initializer
       ) {
-        return checker
-          .getTypeAtLocation(expression.expression)
-          .getProperty(expression.argumentExpression.text);
+        const reference = simpleReference(declaration.initializer);
+        if (reference) return reference;
       }
     }
     return undefined;
   };
-  const referenceIdentity = (expression) => {
-    let current = expression;
-    while (ts.isParenthesizedExpression(current)) current = current.expression;
-    if (current.kind === ts.SyntaxKind.ThisKeyword) return "this";
-    if (ts.isPropertyAccessExpression(current) || ts.isElementAccessExpression(current)) {
-      const receiver = referenceIdentity(current.expression);
-      const property = propertySymbol(current);
-      const name = ts.isPropertyAccessExpression(current)
-        ? current.name.text
-        : current.argumentExpression?.getText(current.getSourceFile());
-      return `property:${receiver}:${property ? `symbol:${symbolKey(property)}` : name}`;
+  const accessIdentity = (expression, resolving) => {
+    if (!ts.isPropertyAccessExpression(expression) && !ts.isElementAccessExpression(expression)) {
+      return undefined;
     }
-    const symbol = checker.getSymbolAtLocation(current);
-    if (symbol) return `symbol:${symbolKey(symbol)}`;
+    const receiver = referenceIdentity(expression.expression, resolving);
+    const property = propertySymbol(expression);
+    const name = ts.isPropertyAccessExpression(expression)
+      ? expression.name.text
+      : expression.argumentExpression?.getText(expression.getSourceFile());
+    return `property:${receiver}:${property ? `symbol:${symbolKey(property)}` : name}`;
+  };
+  const symbolIdentity = (expression, resolving) => {
+    const symbol = checker.getSymbolAtLocation(expression);
+    if (!symbol) return undefined;
+    const canonical = canonicalSymbol(symbol);
+    if (!resolving.has(canonical)) {
+      const alias = immutableAliasInitializer(canonical);
+      if (alias) return referenceIdentity(alias, new Set(resolving).add(canonical));
+    }
+    return `symbol:${symbolKey(canonical)}`;
+  };
+  const referenceIdentity = (expression, resolving = new Set()) => {
+    const current = simpleReference(expression) ?? expression;
+    if (current.kind === ts.SyntaxKind.ThisKeyword) return "this";
+    const access = accessIdentity(current, resolving);
+    if (access) return access;
+    const identity = symbolIdentity(current, resolving);
+    if (identity) return identity;
     return `expression:${current.getSourceFile().fileName}:${current.getStart()}:${current.getText()}`;
   };
   const literalIdentity = (expression) => {
@@ -222,24 +260,29 @@ function classNameExpressions(path, analysis) {
     if ((leftLiteral === undefined) === (rightLiteral === undefined)) return undefined;
     const literal = leftLiteral ?? rightLiteral;
     const reference = leftLiteral === undefined ? expression.left : expression.right;
-    return {
-      key: `equality:${referenceIdentity(reference)}:${literal}`,
-      required: kind === "not-equal" ? !required : required,
-    };
+    const identity = referenceIdentity(reference);
+    const isEqual = kind === "not-equal" ? !required : required;
+    const requirements = [{ key: `equality:${identity}:${literal}`, required: isEqual }];
+    if (isEqual) {
+      requirements.push({ key: `equality-value:${identity}`, required: literal });
+    }
+    return requirements;
   };
   const unwrapCondition = (expression, truthy) => {
     const { current, required } = unwrapBooleanOperand(expression, truthy);
     const equality = equalityRequirement(current, required);
     if (equality) return equality;
-    return { key: referenceIdentity(current), required };
+    return [{ key: referenceIdentity(current), required }];
   };
 
-  const withRequirement = (candidates, requirement) =>
+  const withRequirement = (candidates, requirementsToAdd) =>
     candidates.flatMap((candidate) => {
-      const existing = candidate.requirements.get(requirement.key);
-      if (existing !== undefined && existing !== requirement.required) return [];
       const requirements = new Map(candidate.requirements);
-      requirements.set(requirement.key, requirement.required);
+      for (const requirement of requirementsToAdd) {
+        const existing = requirements.get(requirement.key);
+        if (existing !== undefined && existing !== requirement.required) return [];
+        requirements.set(requirement.key, requirement.required);
+      }
       return [{ ...candidate, requirements }];
     });
 
@@ -311,25 +354,35 @@ function classNameExpressions(path, analysis) {
       ts.forEachChild(node, visit);
     };
     visit(body);
-    return returns.length === 1 ? returns : [];
+    return returns;
+  };
+
+  const functionBody = (declaration) => {
+    if (
+      (ts.isFunctionDeclaration(declaration) || ts.isMethodDeclaration(declaration)) &&
+      declaration.body
+    ) {
+      return declaration.body;
+    }
+    if (
+      (ts.isVariableDeclaration(declaration) ||
+        ts.isPropertyAssignment(declaration) ||
+        ts.isPropertyDeclaration(declaration)) &&
+      declaration.initializer &&
+      (ts.isArrowFunction(declaration.initializer) ||
+        ts.isFunctionExpression(declaration.initializer))
+    ) {
+      return declaration.initializer.body;
+    }
+    return undefined;
   };
 
   const staticReturnExpressions = (expression) => {
     const symbol = symbolForExpression(expression);
     if (!symbol) return {};
     const returns = (symbol.declarations ?? []).flatMap((declaration) => {
-      if (ts.isFunctionDeclaration(declaration) && declaration.body) {
-        return directReturnExpressions(declaration.body);
-      }
-      if (
-        ts.isVariableDeclaration(declaration) &&
-        declaration.initializer &&
-        (ts.isArrowFunction(declaration.initializer) ||
-          ts.isFunctionExpression(declaration.initializer))
-      ) {
-        return directReturnExpressions(declaration.initializer.body);
-      }
-      return [];
+      const body = functionBody(declaration);
+      return body ? directReturnExpressions(body) : [];
     });
     return { symbol, returns };
   };
@@ -383,16 +436,18 @@ function classNameExpressions(path, analysis) {
     ) {
       return candidatesForExpression(expression.expression.expression, resolving);
     }
-    if (expression.arguments.length === 0) {
-      const { symbol, returns = [] } = staticReturnExpressions(expression.expression);
-      if (symbol && returns.length && !resolving.has(symbol)) {
-        const nextResolving = new Set(resolving).add(symbol);
-        return returns.flatMap((returned) => candidatesForExpression(returned, nextResolving));
-      }
-    }
-    return combineCandidateSets(
+    const argumentCandidates = combineCandidateSets(
       expression.arguments.map((argument) => candidatesForExpression(argument, resolving)),
     );
+    const { symbol, returns = [] } = staticReturnExpressions(expression.expression);
+    if (symbol && returns.length && !resolving.has(symbol)) {
+      const nextResolving = new Set(resolving).add(symbol);
+      const returnCandidates = returns.flatMap((returned) =>
+        candidatesForExpression(returned, nextResolving),
+      );
+      return [...returnCandidates, ...argumentCandidates];
+    }
+    return argumentCandidates;
   };
 
   const candidatesForTemplateExpression = (expression, resolving) =>
@@ -417,45 +472,54 @@ function classNameExpressions(path, analysis) {
     ts.isPropertyAccessExpression(expression) ||
     ts.isElementAccessExpression(expression);
 
+  const candidatesForConditionalExpression = (expression, resolving) => [
+    ...withRequirement(
+      candidatesForExpression(expression.whenTrue, resolving),
+      unwrapCondition(expression.condition, true),
+    ),
+    ...withRequirement(
+      candidatesForExpression(expression.whenFalse, resolving),
+      unwrapCondition(expression.condition, false),
+    ),
+  ];
+
+  const candidatesForArrayExpression = (expression, resolving) =>
+    combineCandidateSets(
+      expression.elements.map((element) => candidatesForExpression(element, resolving)),
+    );
+
+  const candidatesForReferenceExpression = (expression, resolving) => {
+    const { symbol, initializers = [] } = declarationInitializers(expression);
+    if (!symbol || !initializers.length || resolving.has(symbol)) return undefined;
+    const nextResolving = new Set(resolving).add(symbol);
+    return initializers.flatMap((initializer) =>
+      candidatesForExpression(initializer, nextResolving),
+    );
+  };
+
+  const expressionCandidateHandlers = [
+    [ts.isConditionalExpression, candidatesForConditionalExpression],
+    [ts.isBinaryExpression, candidatesForBinaryExpression],
+    [ts.isCallExpression, candidatesForCallExpression],
+    [ts.isArrayLiteralExpression, candidatesForArrayExpression],
+    [ts.isTemplateExpression, candidatesForTemplateExpression],
+    [isResolvableReference, candidatesForReferenceExpression],
+  ];
+
+  const candidatesForKnownExpression = (expression, resolving) => {
+    for (const [matches, resolve] of expressionCandidateHandlers) {
+      if (!matches(expression)) continue;
+      const candidates = resolve(expression, resolving);
+      if (candidates) return candidates;
+    }
+    return undefined;
+  };
+
   const candidatesForExpression = (expression, resolving = new Set()) => {
     const transparent = transparentExpression(expression);
     if (transparent) return candidatesForExpression(transparent, resolving);
-    if (ts.isConditionalExpression(expression)) {
-      return [
-        ...withRequirement(
-          candidatesForExpression(expression.whenTrue, resolving),
-          unwrapCondition(expression.condition, true),
-        ),
-        ...withRequirement(
-          candidatesForExpression(expression.whenFalse, resolving),
-          unwrapCondition(expression.condition, false),
-        ),
-      ];
-    }
-    if (ts.isBinaryExpression(expression)) {
-      const candidates = candidatesForBinaryExpression(expression, resolving);
-      if (candidates) return candidates;
-    }
-    if (ts.isCallExpression(expression)) {
-      return candidatesForCallExpression(expression, resolving);
-    }
-    if (ts.isArrayLiteralExpression(expression)) {
-      return combineCandidateSets(
-        expression.elements.map((element) => candidatesForExpression(element, resolving)),
-      );
-    }
-    if (ts.isTemplateExpression(expression)) {
-      return candidatesForTemplateExpression(expression, resolving);
-    }
-    if (isResolvableReference(expression)) {
-      const { symbol, initializers = [] } = declarationInitializers(expression);
-      if (symbol && initializers.length && !resolving.has(symbol)) {
-        const nextResolving = new Set(resolving).add(symbol);
-        return initializers.flatMap((initializer) =>
-          candidatesForExpression(initializer, nextResolving),
-        );
-      }
-    }
+    const candidates = candidatesForKnownExpression(expression, resolving);
+    if (candidates) return candidates;
     return [nodeCandidate(expression)];
   };
 
