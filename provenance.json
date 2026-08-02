@@ -1236,7 +1236,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "全 PascalCase export の Props 型公開、IconPlaceholder を Lucide SearchIcon・CheckIcon へ置換、dialog の既定 title・description を日本語化、barrel export、inline と dialog の filter・keyboard selection・empty state の preview と light/dark route、hydration selector を追加",
+      "modified": "全 PascalCase export の Props 型公開、IconPlaceholder を Lucide SearchIcon・CheckIcon へ置換、dialog の既定 title・description を日本語化、CommandInput の focus ring を不透明3pxへ正規化、barrel export、inline と dialog の filter・keyboard selection・empty state の preview と light/dark route、hydration selector を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
