@@ -900,7 +900,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "全 PascalCase export の Props 型を追加し、生の overlay 色を semantic token へ置換",
+      "modified": "全 PascalCase export の Props 型を追加し、生の overlay 色を semantic token へ置換、Action を Close primitive 経由へ変更",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "attachment": {
@@ -1152,7 +1152,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "全 PascalCase export の Props 型公開、IconPlaceholder を Lucide XIcon へ置換、close の accessible name を日本語化、font と値系 arbitrary translate を semantic utility へ正規化、barrel export、modal open・close・dismiss・focus・背景 inert の preview と light/dark route、hydration selector を追加",
+      "modified": "全 PascalCase export の Props 型公開、IconPlaceholder を Lucide XIcon へ置換、close の accessible name を日本語化、font・値系 arbitrary translate・overlay 色を semantic utility へ正規化、barrel export、modal open・close・dismiss・focus・背景 inert の preview と light/dark route、hydration selector を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "toast": {
@@ -1278,7 +1278,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "全 PascalCase value export の Props 型公開、表示文言・コメント・accessible name とアイコンの読み上げを正規化、focus ring と値系 arbitrary utility を semantic token・CSS variable utility へ正規化、Tooltip を desktop collapsed 時だけ構築して mobile Sheet の Escape dismiss を維持、barrel export、desktop collapse・mobile sheet・keyboard shortcut・cookie side effect・focus の preview と light/dark route、hydration selector を追加",
+      "modified": "全 PascalCase value export の Props 型公開、表示文言・コメント・accessible name とアイコンの読み上げを正規化、focus ring と値系 arbitrary utility を semantic token・CSS variable utility へ正規化、Tooltip を desktop collapsed 時だけ構築して mobile Sheet の Escape dismiss を維持、mobile Sheet の表示DOMへ公開div propsを転送してpreviewで検証、barrel export、desktop collapse・mobile sheet・keyboard shortcut・cookie side effect・focus の preview と light/dark route、hydration selector を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "direction": {

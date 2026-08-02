@@ -53,7 +53,13 @@ export function SidebarPreview({ mode = "isolated" }: PreviewProps) {
     >
       <TooltipProvider>
         <SidebarProvider defaultOpen className={catalog ? "min-h-80" : undefined}>
-          <Sidebar collapsible={catalog ? "none" : "icon"}>
+          <Sidebar
+            id="sidebar-preview-props"
+            data-preview-props="forwarded"
+            className="sidebar-preview-props"
+            style={{ touchAction: "manipulation" }}
+            collapsible={catalog ? "none" : "icon"}
+          >
             <SidebarHeader>
               <SidebarInput aria-label="サイドバーを検索" placeholder="検索" />
             </SidebarHeader>

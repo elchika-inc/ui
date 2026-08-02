@@ -75,6 +75,14 @@ test("無条件の装飾リングはフォーカスリング違反にしない",
   }
 });
 
+test("別の文字列引数にある装飾リングを状態リングと誤認しない", () => {
+  const { violations } = checkFile(
+    "a.tsx",
+    `className={cn("focus-visible:outline-none","ring-foreground/10")}`,
+  );
+  assert.deepEqual(violations, []);
+});
+
 test("2 規定へ同時に違反するクラスは 2 診断とも出す", () => {
   // ring-[#f00]/50 は任意値であり、かつ透明度合成でもある。
   // focus-ring-opacity だけを assert すると、ARBITRARY 側が
@@ -174,4 +182,41 @@ test("Select itemはkeyboard focusを不透明3px ringで示す", () => {
   assert.notEqual(end, -1, "SelectItemの終端が見つからない");
   const selectItem = source.slice(start, end);
   assert.match(selectItem, /focus-visible:ring-3 focus-visible:ring-ring/);
+});
+
+test("Alert Dialog actionはClose primitiveを経由する", () => {
+  const source = readSource("src/components/ui/alert-dialog.tsx");
+  const start = source.indexOf("function AlertDialogAction(");
+  const end = source.indexOf("function AlertDialogCancel(");
+  assert.notEqual(start, -1, "AlertDialogActionが存在しない");
+  assert.notEqual(end, -1, "AlertDialogActionの終端が見つからない");
+  const action = source.slice(start, end);
+  assert.match(action, /<AlertDialogPrimitive\.Close/);
+  assert.match(action, /render=\{<Button/);
+});
+
+test("Sheet overlayはsemantic tokenを使う", () => {
+  const source = readSource("src/components/ui/sheet.tsx");
+  const start = source.indexOf("function SheetOverlay(");
+  const end = source.indexOf("type SheetContentProps");
+  assert.notEqual(start, -1, "SheetOverlayが存在しない");
+  assert.notEqual(end, -1, "SheetOverlayの終端が見つからない");
+  const overlay = source.slice(start, end);
+  assert.match(overlay, /bg-overlay/);
+  assert.doesNotMatch(overlay, /bg-black\/10/);
+});
+
+test("mobile Sidebarは公開div propsを表示DOMへ渡す", () => {
+  const source = readSource("src/components/ui/sidebar.tsx");
+  const start = source.indexOf("if (isMobile)");
+  const end = source.indexOf('className="group peer hidden');
+  assert.notEqual(start, -1, "mobile分岐が存在しない");
+  assert.notEqual(end, -1, "desktop分岐が見つからない");
+  const mobile = source.slice(start, end);
+  const sheetRoot = mobile.match(/<Sheet\b[^>]*>/)?.[0];
+  assert.ok(sheetRoot, "Sheet Rootの開始タグが見つからない");
+  assert.doesNotMatch(sheetRoot, /\.\.\.props/);
+  assert.match(mobile, /<SheetContent[\s\S]*?className=\{cn\([\s\S]*?className/);
+  assert.match(mobile, /style=\{[\s\S]*?\.\.\.style[\s\S]*?\}/);
+  assert.match(mobile, /<SheetContent[\s\S]*?\{\.\.\.props\}/);
 });

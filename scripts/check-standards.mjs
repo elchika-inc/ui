@@ -24,6 +24,7 @@ import { pathToFileURL } from "node:url";
 const STATEFUL_RING = /(?:focus|invalid)/;
 const RING_OPACITY =
   /ring-(?:ring|[a-z0-9-]+|\([^)]+\)|\[[^\]]+\])\/(?:\d+(?:\.\d+)?%?|\[[^\]]+\]|\([^)]+\))/g;
+const STRING_LITERAL = /"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`/g;
 
 // 値系ユーティリティだけを対象にする。プレフィックスの列挙は AUDIT.md の
 // arbitrary value 検査コマンドから逐語で写した。
@@ -34,11 +35,16 @@ const ARBITRARY =
 const ALLOWED_ARBITRARY = new Set(["ring-[3px]"]);
 const BOOLEAN_DATA_INSET = /data-inset=\{inset\}/g;
 
+function ringTokens(line) {
+  const literals = [...line.matchAll(STRING_LITERAL)].map((match) => match[0].slice(1, -1));
+  return (literals.length ? literals : [line]).flatMap((literal) => literal.split(/\s+/));
+}
+
 export function checkFile(path, source) {
   const violations = [];
   source.split("\n").forEach((line, i) => {
     if (line.includes("@custom-variant dark")) return;
-    for (const token of line.split(/\s+/)) {
+    for (const token of ringTokens(line)) {
       if (!STATEFUL_RING.test(token)) continue;
       for (const m of token.matchAll(RING_OPACITY)) {
         violations.push({ rule: "focus-ring-opacity", line: i + 1, text: m[0] });

@@ -16,7 +16,8 @@ export type AlertDialogFooterProps = React.ComponentProps<"div">;
 export type AlertDialogMediaProps = React.ComponentProps<"div">;
 export type AlertDialogTitleProps = AlertDialogPrimitive.Title.Props;
 export type AlertDialogDescriptionProps = AlertDialogPrimitive.Description.Props;
-export type AlertDialogActionProps = React.ComponentProps<typeof Button>;
+export type AlertDialogActionProps = AlertDialogPrimitive.Close.Props &
+  Pick<React.ComponentProps<typeof Button>, "variant" | "size">;
 export type AlertDialogCancelProps = AlertDialogPrimitive.Close.Props &
   Pick<React.ComponentProps<typeof Button>, "variant" | "size">;
 
@@ -127,8 +128,20 @@ function AlertDialogDescription({ className, ...props }: AlertDialogDescriptionP
   );
 }
 
-function AlertDialogAction({ className, ...props }: AlertDialogActionProps) {
-  return <Button data-slot="alert-dialog-action" className={cn(className)} {...props} />;
+function AlertDialogAction({
+  className,
+  variant = "default",
+  size = "default",
+  ...props
+}: AlertDialogActionProps) {
+  return (
+    <AlertDialogPrimitive.Close
+      data-slot="alert-dialog-action"
+      className={cn(className)}
+      render={<Button variant={variant} size={size} />}
+      {...props}
+    />
+  );
 }
 
 function AlertDialogCancel({
