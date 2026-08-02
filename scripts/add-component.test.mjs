@@ -164,6 +164,36 @@ test("registry:hook の target path を追加対象として分類する", async
   );
 });
 
+test("sidebar が更新した既存 registry hook 依存を復元する", async (t) => {
+  const root = createRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { reconcileAddChanges, trackedFiles } = await loadModule();
+  mkdirSync(join(root, "src/hooks"), { recursive: true });
+  writeFileSync(join(root, "src/hooks/use-mobile.ts"), "hook original\n");
+  git(root, ["add", "src/hooks/use-mobile.ts"]);
+  git(root, ["commit", "-m", "hook fixture"]);
+  const packageBefore = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
+  const trackedBefore = trackedFiles(root);
+
+  writeFileSync(join(root, "src/components/ui/sidebar.tsx"), "sidebar generated\n");
+  writeFileSync(join(root, "src/hooks/use-mobile.ts"), "hook overwritten\n");
+
+  const result = reconcileAddChanges({
+    root,
+    name: "sidebar",
+    targetPath: "src/components/ui/sidebar.tsx",
+    packageBefore,
+    trackedBefore,
+  });
+
+  assert.deepEqual(result.restored, ["src/hooks/use-mobile.ts"]);
+  assert.equal(
+    readFileSync(join(root, "src/components/ui/sidebar.tsx"), "utf8"),
+    "sidebar generated\n",
+  );
+  assert.equal(readFileSync(join(root, "src/hooks/use-mobile.ts"), "utf8"), "hook original\n");
+});
+
 test("registry item type と一次 path から target を決める", async () => {
   const { resolveRegistryTarget } = await loadModule();
 

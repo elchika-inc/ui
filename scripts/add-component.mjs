@@ -16,7 +16,8 @@ const DEPENDENCY_SECTIONS = [
 // add 後の変更分類はここだけを育てる。どのルールにも一致しないパスは fail-closed。
 export const CHANGE_CLASSIFICATION_RULES = [
   { kind: "target", matcher: "target-item" },
-  { kind: "other-component", matcher: "tracked-component" },
+  { kind: "other-registry-item", matcher: "tracked-component" },
+  { kind: "other-registry-item", matcher: "tracked-hook" },
   { kind: "dependency-manifest", paths: ["package.json", "package-lock.json"] },
 ];
 
@@ -109,6 +110,14 @@ function classifyPath(path, targetPath, trackedBefore) {
     ) {
       return rule.kind;
     }
+    if (
+      rule.matcher === "tracked-hook" &&
+      path.startsWith("src/hooks/") &&
+      path.endsWith(".ts") &&
+      trackedBefore.has(path)
+    ) {
+      return rule.kind;
+    }
     if (rule.paths?.includes(path)) return rule.kind;
   }
   return "unknown";
@@ -173,7 +182,7 @@ export function reconcileAddChanges({
   }
 
   const restored = classified
-    .filter(({ kind }) => kind === "other-component")
+    .filter(({ kind }) => kind === "other-registry-item")
     .map(({ path }) => path);
   if (restored.length) {
     git(root, ["checkout", "HEAD", "--", ...restored]);
