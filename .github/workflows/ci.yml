@@ -78,7 +78,7 @@ jobs:
         run: npm run build:lib
 
       - name: Props contract
-        run: npx tsc --noEmit --ignoreConfig --strict --module esnext --moduleResolution bundler --target es2022 --jsx react-jsx types/dts-contract.ts
+        run: npm run check:props
 
       # lib/index.d.ts を読むので Build library の後ろに置く。
       - name: Completeness check

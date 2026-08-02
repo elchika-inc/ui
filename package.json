@@ -18,7 +18,7 @@
     "dev": "astro dev",
     "build": "npm run build:lib && npm run registry:build && npm run registry:legal && npm run build:site",
     "build:site": "astro build",
-    "build:lib": "tsup && tsc -p tsconfig.lib.json",
+    "build:lib": "node scripts/lib-build.mjs clean && tsup && tsc -p tsconfig.lib.json && node scripts/lib-build.mjs rewrite",
     "registry:tokens": "node scripts/sync-registry-tokens.mjs && biome format --write registry.json",
     "registry:build": "npm run registry:tokens && shadcn build --output public/r",
     "registry:legal": "cp LICENSE THIRD_PARTY_LICENSES public/r/",
@@ -28,7 +28,8 @@
     "format": "biome check --write .",
     "typecheck": "astro check",
     "check:all": "node scripts/check-all.mjs",
-    "check:pre": "node scripts/check-all.mjs --pre"
+    "check:pre": "node scripts/check-all.mjs --pre",
+    "check:props": "tsc --noEmit --ignoreConfig --strict --module esnext --moduleResolution bundler --target es2022 --jsx react-jsx types/dts-contract.ts"
   },
   "dependencies": {
     "@astrojs/react": "^5",

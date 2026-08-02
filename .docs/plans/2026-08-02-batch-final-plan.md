@@ -308,6 +308,7 @@ npm run typecheck
 node --test scripts/*.test.mjs
 npm run build
 npm run build:lib
+npm run check:props
 npm run check:all
 git diff --check e47382a..HEAD
 git status --short
