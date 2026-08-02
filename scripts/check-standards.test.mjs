@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
-import { checkFile } from "./check-standards.mjs";
+import { checkFile, checkFiles } from "./check-standards.mjs";
 
 function readSource(path) {
   return readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
@@ -300,6 +300,131 @@ test("相反するboolean条件のclassを同時適用と誤認しない", () =>
     );`,
   );
   assert.deepEqual(violations, []);
+});
+
+test("別receiverの同名property条件を相反条件と誤認しない", () => {
+  const { violations } = checkFile(
+    "a.tsx",
+    `type State = { active: boolean };
+    const View = ({ a, b }: { a: State; b: State }) => (
+      <div
+        className={cn(
+          a.active && "focus-visible:ring-[3px]",
+          !b.active && "ring-ring/50",
+        )}
+      />
+    );`,
+  );
+  assert.ok(
+    violations.some((violation) => violation.rule === "focus-ring-opacity"),
+    "別receiverで同時成立できる透明なfocus ringが隠れている",
+  );
+});
+
+test("literalとの比較を相反条件として正規化する", () => {
+  for (const [name, type, condition, inverse] of [
+    ["active", "boolean", "active === true", "active !== true"],
+    ["mode", '"focus" | "rest"', 'mode === "focus"', 'mode !== "focus"'],
+  ]) {
+    const { violations } = checkFile(
+      "a.tsx",
+      `const View = ({ ${name} }: { ${name}: ${type} }) => (
+        <div
+          className={cn(
+            ${condition} && "focus-visible:ring-[3px]",
+            ${inverse} && "ring-ring/50",
+          )}
+        />
+      );`,
+    );
+    assert.deepEqual(violations, [], `${condition} / ${inverse}`);
+  }
+});
+
+test("element accessとshorthand propertyのinitializerを解決する", () => {
+  for (const classExpression of ['styles["ring"]', "styles.ring"]) {
+    const { violations } = checkFile(
+      "a.tsx",
+      `const ring = cn(
+        "focus-visible:ring-[3px]",
+        "ring-ring/50",
+      );
+      const styles = { ring };
+      const View = () => <div className={${classExpression}} />;`,
+    );
+    assert.ok(
+      violations.some((violation) => violation.rule === "focus-ring-opacity"),
+      `${classExpression} で透明なfocus ringが隠れている`,
+    );
+  }
+});
+
+test("論理fallbackとtemplate interpolationの候補を解析する", () => {
+  const templateInterpolation = ["`", "$", "{classes}", "`"].join("");
+  for (const classExpression of ['classes || ""', 'classes ?? ""', templateInterpolation]) {
+    const { violations } = checkFile(
+      "a.tsx",
+      `const classes = cn(
+        "focus-visible:ring-[3px]",
+        "ring-ring/50",
+      );
+      const View = () => <div className={${classExpression}} />;`,
+    );
+    assert.ok(
+      violations.some((violation) => violation.rule === "focus-ring-opacity"),
+      `${classExpression} で透明なfocus ringが隠れている`,
+    );
+  }
+});
+
+test("引数なしlocal helperの静的returnを解析する", () => {
+  for (const helper of [
+    `function unsafeClasses() {
+      return cn(
+        "focus-visible:ring-[3px]",
+        "ring-ring/50",
+      );
+    }`,
+    `const unsafeClasses = () => cn(
+      "focus-visible:ring-[3px]",
+      "ring-ring/50",
+    );`,
+  ]) {
+    const { violations } = checkFile(
+      "a.tsx",
+      `${helper}
+      const View = () => <div className={unsafeClasses()} />;`,
+    );
+    assert.ok(
+      violations.some((violation) => violation.rule === "focus-ring-opacity"),
+      "local helperのreturnで透明なfocus ringが隠れている",
+    );
+  }
+});
+
+test("別fileからimportしたclass initializerを解決する", () => {
+  const results = checkFiles(
+    new Map([
+      [
+        "src/shared.tsx",
+        `export const invalidSharedClasses = cn(
+          "focus-visible:ring-[3px]",
+          "ring-ring/50",
+        );`,
+      ],
+      [
+        "src/view.tsx",
+        `import { invalidSharedClasses } from "./shared";
+        export const View = () => <div className={invalidSharedClasses} />;`,
+      ],
+    ]),
+  );
+  assert.ok(
+    results
+      .get("src/view.tsx")
+      .violations.some((violation) => violation.rule === "focus-ring-opacity"),
+    "importしたinitializerで透明なfocus ringが隠れている",
+  );
 });
 
 test("2 規定へ同時に違反するクラスは 2 診断とも出す", () => {
