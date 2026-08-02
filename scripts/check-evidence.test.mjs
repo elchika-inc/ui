@@ -193,6 +193,48 @@ test("component固有light画像の欠落を検出する", async (t) => {
   );
 });
 
+for (const state of ["committed", "staged", "unstaged"]) {
+  test(`component固有画像を後から${state}置換すると検出する`, async (t) => {
+    const { root } = createEvidenceRepo();
+    t.after(() => rmSync(root, { recursive: true, force: true }));
+    const image = ".docs/reviews/button-preview-light.jpg";
+    writeFileSync(join(root, image), Buffer.from("ffd8ff01", "hex"));
+    if (state !== "unstaged") git(root, ["add", image]);
+    if (state === "committed") git(root, ["commit", "-m", "replace component image"]);
+
+    const result = (await loadModule()).checkEvidenceInRepo(root);
+
+    assert.ok(
+      result.problems.includes(
+        "2026-08-01-button-preview.md: 対応する light 証跡画像が追加時から変更されている",
+      ),
+    );
+  });
+}
+
+test("immutability sensor導入前のcomponent画像置換はbaseline時のblobを固定する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const image = ".docs/reviews/button-preview-light.jpg";
+  writeFileSync(join(root, image), Buffer.from("ffd8ff01", "hex"));
+  git(root, ["add", image]);
+  git(root, ["commit", "-m", "replace component image before sensor"]);
+  mkdirSync(join(root, "scripts"));
+  writeFileSync(
+    join(root, "scripts/check-evidence.mjs"),
+    "const introducedVerificationSha = true;\n",
+  );
+  git(root, ["add", "scripts/check-evidence.mjs"]);
+  git(root, ["commit", "-m", "introduce evidence immutability sensor"]);
+
+  const result = (await loadModule()).checkEvidenceInRepo(root);
+
+  assert.equal(
+    result.problems.some((problem) => problem.includes("証跡画像が追加時から変更")),
+    false,
+  );
+});
+
 test("verified_impl_shaだけを新HEADへ書き換えた旧画像流用を検出する", async (t) => {
   const { root } = createEvidenceRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));
@@ -329,6 +371,34 @@ test("shared token report の構造化 field を一意に読む", async () => {
     parseSingleField("targeted_dynamic_sha: a\ntargeted_dynamic_sha: b\n", "targeted_dynamic_sha")
       .problem,
     /複数/,
+  );
+});
+
+test("immutability sensor導入前のlegacy reportは正式移行時をbaselineにする", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const relativeReport = ".docs/reviews/2026-07-30-legacy-summary.md";
+  const report = join(root, relativeReport);
+  writeFileSync(report, "# legacy report\n");
+  git(root, ["add", relativeReport]);
+  git(root, ["commit", "-m", "add legacy report before sensor"]);
+  mkdirSync(join(root, "scripts"));
+  writeFileSync(
+    join(root, "scripts/check-evidence.mjs"),
+    "const introducedVerificationSha = true;\n",
+  );
+  git(root, ["add", "scripts/check-evidence.mjs"]);
+  git(root, ["commit", "-m", "introduce evidence immutability sensor"]);
+  const verifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
+  writeFileSync(report, `verified_impl_sha: ${verifiedSha}\n`);
+  git(root, ["add", relativeReport]);
+  git(root, ["commit", "-m", "migrate legacy report"]);
+
+  const result = (await loadModule()).checkEvidenceInRepo(root);
+
+  assert.equal(
+    result.problems.some((problem) => problem.includes("2026-07-30-legacy-summary.md")),
+    false,
   );
 });
 

@@ -791,6 +791,21 @@ test("公開手順はalias CSSだけをimportしdark selector同期を要求す�
   assert.match(section, /data-theme="dark"/);
 });
 
+test("配信文書は未公開状態と公開後の正本ドメインを区別する", () => {
+  const readme = readSource("README.md");
+  const action = readSource(".docs/actions/manual-subproject-3-domain.md");
+  const risks = readSource(".docs/risk-registry.md");
+  for (const [path, source] of [
+    ["README.md", readme],
+    ["manual-subproject-3-domain.md", action],
+    ["risk-registry.md", risks],
+  ]) {
+    assert.match(source, /未公開/, path);
+    assert.match(source, /ui\.elchika\.dev/, path);
+  }
+  assert.match(readme, /deployment・DNS・公開到達/);
+});
+
 test("恒久手順とrisk anchorは可変checker件数を固定しない", () => {
   const procedure = readSource(".docs/component-addition-procedure.md");
   const riskRegistry = readSource(".docs/risk-registry.md");

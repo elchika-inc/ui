@@ -206,7 +206,7 @@ test("全consumer caseを1件ずつ除くとrepository checkがfail-closedにな
   }
 });
 
-test("全consumer caseのgate・theme・代表source class変更を拒否する", async () => {
+test("全consumer caseのgate・theme・paint・代表source class変更を拒否する", async () => {
   const { inspectRequiredConsumerCases } = await loadContrast();
   const { CONSUMER_CASES } = await loadCases();
 
@@ -221,9 +221,17 @@ test("全consumer caseのgate・theme・代表source class変更を拒否する"
     if ((target.themes ?? ["light", "dark"]).join() === "light") changed.themes = ["dark"];
     assert.ok(inspectRequiredConsumerCases(cases).length > 0, `${target.label}: theme`);
 
+    changed.themes = target.themes;
+    changed.background = { token: "changed-background" };
+    assert.ok(inspectRequiredConsumerCases(cases).length > 0, `${target.label}: background`);
+
+    changed.background = structuredClone(target.background);
+    changed.foreground = { token: "changed-foreground" };
+    assert.ok(inspectRequiredConsumerCases(cases).length > 0, `${target.label}: foreground`);
+
+    changed.foreground = structuredClone(target.foreground);
     const representative = target.sourceClasses?.[0];
     if (!representative?.classes[0]) continue;
-    changed.themes = target.themes;
     changed.sourceClasses[0].classes[0] = `${representative.classes[0]}-changed`;
     assert.ok(inspectRequiredConsumerCases(cases).length > 0, `${target.label}: source class`);
   }

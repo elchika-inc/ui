@@ -318,6 +318,25 @@ function evidenceAddition(repositoryRoot, report) {
   return { commit: undefined, files: [...new Set([...staged, ...untracked].filter(Boolean))] };
 }
 
+function immutablePathBaseline(repositoryRoot, path) {
+  const additionCommit = git(repositoryRoot, [
+    "log",
+    "--reverse",
+    "--diff-filter=A",
+    "--format=%H",
+    "--",
+    path,
+  ])
+    .trim()
+    .split("\n")
+    .find(Boolean);
+  if (!additionCommit) return undefined;
+  const sensorBaseline = evidenceImmutabilityBaseline(repositoryRoot);
+  return sensorBaseline && strictAncestor(repositoryRoot, additionCommit, sensorBaseline)
+    ? sensorBaseline
+    : additionCommit;
+}
+
 const emptyCoverage = (problems = []) => ({
   coveredPaths: new Set(),
   problems,
@@ -435,7 +454,7 @@ export function inspectSharedTokenCoverage(repositoryRoot, reports) {
 
 function introducedReportMarkdown(repositoryRoot, report) {
   const reportPath = `.docs/reviews/${report}`;
-  const introductionCommit = git(repositoryRoot, [
+  const additionCommit = git(repositoryRoot, [
     "log",
     "--reverse",
     "--diff-filter=A",
@@ -446,6 +465,22 @@ function introducedReportMarkdown(repositoryRoot, report) {
     .trim()
     .split("\n")
     .find(Boolean);
+  if (!additionCommit) return undefined;
+  const immutabilityBaseline = evidenceImmutabilityBaseline(repositoryRoot);
+  const introductionCommit =
+    immutabilityBaseline && strictAncestor(repositoryRoot, additionCommit, immutabilityBaseline)
+      ? git(repositoryRoot, [
+          "log",
+          "--reverse",
+          "-Sverified_impl_sha:",
+          "--format=%H",
+          "--",
+          reportPath,
+        ])
+          .trim()
+          .split("\n")
+          .find(Boolean)
+      : additionCommit;
   if (!introductionCommit) return undefined;
   return git(repositoryRoot, ["show", `${introductionCommit}:${reportPath}`]);
 }
@@ -557,6 +592,18 @@ function deletedComponentEvidence(repositoryRoot, components) {
     );
 }
 
+function componentImageProblems(repositoryRoot, reportFile, addedImages) {
+  return ["light", "dark"].flatMap((theme) => {
+    const image = addedImages.find((candidate) => candidate.theme === theme);
+    if (!image) return [`${reportFile}: 対応する ${theme} 証跡画像が無い`];
+    const imagePath = `.docs/reviews/${image.path}`;
+    const imageBaseline = immutablePathBaseline(repositoryRoot, imagePath);
+    return imageBaseline && pathsChanged(repositoryRoot, imageBaseline, [imagePath])
+      ? [`${reportFile}: 対応する ${theme} 証跡画像が追加時から変更されている`]
+      : [];
+  });
+}
+
 function inspectComponentEvidenceCoverage(repositoryRoot, components, verifications, imageFiles) {
   const problems = [];
   const byComponent = Map.groupBy(verifications, ({ component }) => component);
@@ -589,13 +636,9 @@ function inspectComponentEvidenceCoverage(repositoryRoot, components, verificati
     );
     const addedImages = imageFiles
       .filter((path) => addedImageStems.has(path.slice(0, -extname(path).length)))
-      .map((path) => imageComponentAndTheme(path, components))
+      .map((path) => ({ path, ...imageComponentAndTheme(path, components) }))
       .filter((image) => image.component === component);
-    for (const theme of ["light", "dark"]) {
-      if (!addedImages.some((image) => image.theme === theme)) {
-        problems.push(`${report.file}: 対応する ${theme} 証跡画像が無い`);
-      }
-    }
+    problems.push(...componentImageProblems(repositoryRoot, report.file, addedImages));
   }
   return problems;
 }

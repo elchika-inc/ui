@@ -14,85 +14,86 @@ const GATES = new Map([
   ["decorative", null],
 ]);
 
-const REQUIRED_CONSUMER_CASE_DIGESTS = new Map([
-  [
-    "Kbd tooltip light alpha surface",
-    "0807a8a6e5b3c0d3a98063028a2a48083c67d8c6c1408fd88d9021a3c33ce32a",
-  ],
-  [
-    "Kbd tooltip dark alpha surface",
-    "a24f2bdb3e4fbc0737299eb5775d601f0d0ef8e3adb846eef04086224595a38b",
-  ],
-  ["primary solid", "aba53adab6e0b2eedd5eb4176b38ea399469c489ec5ae7b42c9f623a8fb380d9"],
-  ["primary hover", "e498d64a08888ca11902d2870fdbecfe486035fe9f0e7d3ddb147a73bd713d59"],
-  ["secondary state hover", "2748a2b6fc8dd0e6c9d62285b0ca11265b47bf6cc2921fb2790ac35c28a71334"],
-  ["selected surface", "ecb5d448dab2db08ffadf2d6c3201b296868462ae872277c38320be45259ab1c"],
-  ["selected surface hover", "5c7048e8a4f1bbc0734525e741a8e3005e4233719050093ed32677ed6674e4a3"],
-  ["state hover surface", "ed3147c790f9a19f41ae2ac9c5215944495c02ecdaf9afc2dd5d0c80eaa4a4d2"],
-  ["opaque muted surface", "cff27519ffbef099ad536200f584ab902a2698ba24043e5d3200c3b843ab892e"],
-  [
-    "opaque control placeholder",
-    "ac06366cb37c2113fbcef79d3daf491483392431619b85140a9c54af84829a55",
-  ],
-  ["control state hover", "7fce72b6531b3df164dab4f26b65f3b69d4c0c88e258a3558423699c3f5856bc"],
-  ["disabled input surface", "bcbc7738ce221a567a64cdc651269ae89ebb29a6e1f5b78aa4b55d51c12c4e18"],
-  ["Switch unchecked surface", "921c97bedf834f4343216832aaa170f2ceb329a35a5f97a00ed2c713de6ee946"],
-  ["Tabs inactive on muted", "dff7f58da6ce5de358807fe28877a361b95206766c3e1dd1f085d02800b32fb8"],
-  [
-    "Tabs inactive on background",
-    "92365e00aae3d2db8ba5c77b4106aa1ec9ee1aea043ad9d58a021330aaf7c534",
-  ],
-  ["Sidebar foreground", "9b3f128936b4768ababacec1f78bf9f23a679ec1fcd9608e9fbccf6fdd2af610"],
-  [
-    "Attachment destructive text",
-    "c721ddedfc41591cfb9e274c7d296f22d049d0bb13b5680ab044eeeaa0b2ddb3",
-  ],
-  ["Alert destructive text", "91c7a6e8e85ee312b6cedc9d2794568db72b92c8a137149d48a5ad68e81c8f12"],
-  ["destructive subtle", "44c27e99777c2298f3614b6177955384fb606b33359357aece078cd9d3c3d40a"],
-  ["destructive subtle hover", "b5f22a51e807fcdbc476d4a1d4e9a6379ffd1e95c75f4f26412f347e46c7690e"],
-  [
-    "solid destructive menu focus",
-    "c3ed13e050b1af18d2f9b5e3840e7c7b02942b4d74c7b6349b9efa07ce84ab1c",
-  ],
-  ["focus ring on background", "cf9c4bcb708e37788bda1c436e66c8340d9f6d37fa68f141b61c3df358be49e2"],
-  [
-    "foreground /10 container ring",
-    "dfcf4dd912bf06fbe8122f4a7fd30886700e7204184d4f7dba6639e7ae1ceb53",
-  ],
-  [
-    "input /30 decorative border",
-    "14463eab833ba0e52b102d528903337878f724297443675f1753ce2d6c4a2ff1",
-  ],
-  ["invalid control boundary", "a609e1de6550fa5c3045d189a1908d0d3f413748c759f622a87f0428d89ac3fd"],
-  [
-    "Attachment destructive /30 border",
-    "8acd78168fa00dd4675c334c77580a49fc8c1b3364e3e94aa871ca914a3b77d9",
-  ],
-  ["Field selected boundary", "4cfae05884dc9092c6eca8575af07540ed1339bbac502379dd414bba6c3fcc40"],
-  ["Chart /50 grid stroke", "021303c4c0bb21c212ba2518762a33f77c67e21f16d6af4a06eb6f8856685174"],
-  ["overlay token", "be420d6384f059778b9b18979b7ee19b55050ad45824a874ec32193413c35281"],
-  ["warning pair", "92365e00aae3d2db8ba5c77b4106aa1ec9ee1aea043ad9d58a021330aaf7c534"],
+const REQUIRED_CONSUMER_CASE_LABELS = new Set([
+  "Kbd tooltip light alpha surface",
+  "Kbd tooltip dark alpha surface",
+  "primary solid",
+  "primary hover",
+  "secondary state hover",
+  "selected surface",
+  "selected surface hover",
+  "state hover surface",
+  "opaque muted surface",
+  "opaque control placeholder",
+  "control state hover",
+  "disabled input surface",
+  "Switch unchecked surface",
+  "Tabs inactive on muted",
+  "Tabs inactive on background",
+  "Sidebar foreground",
+  "Attachment destructive text",
+  "Alert destructive text",
+  "destructive subtle",
+  "destructive subtle hover",
+  "solid destructive menu focus",
+  "focus ring on background",
+  "foreground /10 container ring",
+  "input /30 decorative border",
+  "invalid control boundary",
+  "Attachment destructive /30 border",
+  "Field selected boundary",
+  "Chart /50 grid stroke",
+  "overlay token",
+  "warning pair",
 ]);
+const REQUIRED_CONSUMER_CONTRACT_DIGEST =
+  "fdfb48b0122bb0dd5ecaa3b07bb2facbc40ea7d95855a9d139383a14d92cee24";
 
-const consumerCaseContractDigest = ({ gate, themes, sourceClasses }) => {
-  const contract = {
-    gate,
-    themes: [...(themes ?? ["light", "dark"])].sort(),
-    sourceClasses: [...(sourceClasses ?? [])]
-      .map(({ source, classes }) => ({ source, classes: [...classes].sort() }))
-      .sort((left, right) => left.source.localeCompare(right.source)),
-  };
-  return createHash("sha256").update(JSON.stringify(contract)).digest("hex");
+const stableValue = (value) => {
+  if (Array.isArray(value)) return value.map(stableValue);
+  if (!value || typeof value !== "object") return value;
+  return Object.fromEntries(
+    Object.entries(value)
+      .sort(([left], [right]) => left.localeCompare(right))
+      .map(([key, entry]) => [key, stableValue(entry)]),
+  );
 };
 
+const consumerCaseContract = ({
+  background,
+  foreground,
+  gate,
+  label,
+  risk,
+  themes,
+  sourceClasses,
+}) => ({
+  background: stableValue(background),
+  foreground: stableValue(foreground),
+  gate,
+  label,
+  risk: risk ?? null,
+  themes: [...(themes ?? ["light", "dark"])].sort(),
+  sourceClasses: [...(sourceClasses ?? [])]
+    .map(({ source, classes }) => ({ source, classes: [...classes].sort() }))
+    .sort((left, right) => left.source.localeCompare(right.source)),
+});
+
 export function inspectRequiredConsumerCases(consumerCases) {
-  return [...REQUIRED_CONSUMER_CASE_DIGESTS].flatMap(([label, expectedDigest]) => {
-    const consumerCase = consumerCases.find((candidate) => candidate.label === label);
-    if (!consumerCase) return [`${label}: 必須 consumer case が無い`];
-    return consumerCaseContractDigest(consumerCase) === expectedDigest
-      ? []
-      : [`${label}: 必須 gate / theme / source class 契約が一致しない`];
-  });
+  const problems = [...REQUIRED_CONSUMER_CASE_LABELS]
+    .filter((label) => !consumerCases.some((consumerCase) => consumerCase.label === label))
+    .map((label) => `${label}: 必須 consumer case が無い`);
+  if (problems.length > 0) return problems;
+  const contract = consumerCases
+    .map(consumerCaseContract)
+    .sort((left, right) => left.label.localeCompare(right.label));
+  const digest = createHash("sha256").update(JSON.stringify(contract)).digest("hex");
+  if (digest !== REQUIRED_CONSUMER_CONTRACT_DIGEST) {
+    problems.push(
+      "必須 consumer case の gate / theme / paint / source class / risk 契約が一致しない",
+    );
+  }
+  return problems;
 }
 
 const clamp = (value) => Math.min(Math.max(value, 0), 1);
