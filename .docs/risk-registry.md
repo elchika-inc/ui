@@ -82,3 +82,12 @@
 - status: accepted
 - reason: `@elchika/sonner` は `next-themes` の `ThemeProvider` を前提とする。Provider が無い環境では `useTheme()` が `undefined` となり、Sonner は OS の `prefers-color-scheme` に従うため、`html.dark` によるテーマ切替と乖離する。サブプロジェクト #1〜#2 では、DESIGN.md §5 の standards 正規化と公開型の追加に範囲を限定し、上流 component のテーマ契約は変更せずそのまま配る。registry の dependencies には `next-themes` を含め、README で Provider の前提を案内する。本リポジトリのプレビューだけは、専用 wrapper が `html` の class を監視して `theme` prop へ明示的に渡す。
 - anchor: 利用者が `@elchika/sonner` を実際に取り込んだとき、そのプロジェクトのテーマ切替で toast が追従するかを確認する。プレビューでは `.docs/reviews/2026-08-01-sonner-preview.md` の 2 route × 2 theme 実測が、toast の `data-sonner-theme` と `html.dark` の一致を固定する。
+
+## RISK-011: Calendar の上流由来レイアウトが 80 実行行を超える
+
+- date: 2026-08-02
+- confidence: high
+- location: `src/components/ui/calendar.tsx` の `Calendar`
+- status: accepted
+- reason: Sentinel の `oversized-function` レンズを、空行・コメント・区切り行・JSX 終了タグだけの行を除外する物理 SLOC で実測すると 80 行を超える。一方、このリポジトリに 80 行制限はなく、correctness・security・明示要件への影響も検出されていない。shadcn/ui の上流レイアウトを関数分割すると、表示クラスと React DayPicker の slot 対応が分散し、上流更新への追従差分を増やすため、保守性上の low finding を受容して現状を維持する。
+- anchor: `provenance.json` の `calendar.upstreamPathSha` と `modified` が上流との差分を固定する。`scripts/check-standards.test.mjs`、型検査、配布物 build、および Calendar の Light / Dark 実ブラウザ証跡が、上流追従時の機能回帰を検知する。
