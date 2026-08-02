@@ -30,6 +30,7 @@ export function ToggleGroupPreview() {
           onValueChange={setSingleValue}
           variant="outline"
           spacing={0}
+          style={{ touchAction: "manipulation" }}
         >
           <ToggleGroupItem value="left">左揃え</ToggleGroupItem>
           <ToggleGroupItem value="center">中央揃え</ToggleGroupItem>

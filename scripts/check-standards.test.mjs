@@ -230,6 +230,8 @@ test("ToggleGroupは公開styleとspacingのgap変数を両方保持する", () 
   const group = source.slice(start, end);
   assert.match(group, /children,\s+style,\s+\.\.\.props/);
   assert.match(group, /style=\{[\s\S]*?\.\.\.style,[\s\S]*?"--toggle-group-gap"/);
+  const preview = readSource("src/previews/toggle-group.tsx");
+  assert.match(preview, /spacing=\{0\}[\s\S]*?style=\{\{ touchAction: "manipulation" \}\}/);
 });
 
 test("Sidebarはdirを全表示経路のDOMへ渡す", () => {
@@ -245,4 +247,6 @@ test("Sidebarはdirを全表示経路のDOMへ渡す", () => {
   assert.match(source.slice(start, mobileStart), /<div[\s\S]*?dir=\{dir\}/);
   assert.match(source.slice(mobileStart, desktopStart), /<SheetContent[\s\S]*?dir=\{dir\}/);
   assert.match(source.slice(desktopStart, end), /data-slot="sidebar-container"[\s\S]*?dir=\{dir\}/);
+  const preview = readSource("src/previews/sidebar.tsx");
+  assert.match(preview, /data-preview-props="forwarded"[\s\S]*?dir="ltr"/);
 });

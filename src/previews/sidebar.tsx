@@ -56,6 +56,7 @@ export function SidebarPreview({ mode = "isolated" }: PreviewProps) {
           <Sidebar
             id="sidebar-preview-props"
             data-preview-props="forwarded"
+            dir="ltr"
             className="sidebar-preview-props"
             style={{ touchAction: "manipulation" }}
             collapsible={catalog ? "none" : "icon"}
