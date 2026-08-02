@@ -1238,6 +1238,27 @@
       "license": "MIT",
       "modified": "全 PascalCase export の Props 型公開、IconPlaceholder を Lucide SearchIcon・CheckIcon へ置換、dialog の既定 title・description を日本語化、CommandInput の focus ring を不透明3pxへ正規化、barrel export、inline と dialog の filter・keyboard selection・empty state の preview と light/dark route、hydration selector を追加",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "use-mobile": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/use-mobile.json",
+      "registryPath": "registry/base-nova/hooks/use-mobile.ts",
+      "registryContentSha256": "ad0936f84f1df79d3697bfbff9c18f8ad58431c1cbaf2359c6a853b0fcc9f28b",
+      "generatedContentSha256": "ad0936f84f1df79d3697bfbff9c18f8ad58431c1cbaf2359c6a853b0fcc9f28b",
+      "addTarget": "@shadcn/use-mobile",
+      "upstreamRepo": "shadcn-ui/ui",
+      "upstreamPath": "apps/v4/registry/bases/base/hooks/use-mobile.ts",
+      "upstreamPathSha": "46bf4a0f061b794e43fab19f5972c21e08746ad9",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-02",
+      "license": "MIT",
+      "modified": "shadcn 生成物は未変更、registry:hook の独立 item として配布し hooks path の来歴を記録",
+      "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
   }
 }
