@@ -6,6 +6,14 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@utility state-hover-overlay {
+  background-image: linear-gradient(var(--state-hover-bg), var(--state-hover-bg));
+}
+
+@utility opacity-disabled {
+  opacity: var(--opacity-disabled);
+}
+
 @theme inline {
     /* ブランドノブ: 見出しフォントは次の行を直接編集する（@theme inline のため :root 上書きでは効かない） */
     --font-heading: var(--font-sans);
@@ -65,6 +73,7 @@
     --spacing-tabs-trigger: calc(100% - 1px);
 }
 
+/* solid destructive の AA を満たす濃色。status danger は subtle / indicator で引き続き使う。 */
 :root {
     color-scheme: light;   /* ブラウザネイティブ UI（スクロールバー・select・autofill）もテーマに追従させる */
     --background: rgb(var(--color-bg-canvas));
@@ -83,7 +92,7 @@
     --muted-foreground: rgb(var(--color-text-muted));
     --accent: rgb(var(--color-brand-subtle));
     --accent-foreground: rgb(var(--color-brand-primary-hover));
-    --destructive: rgb(var(--color-status-danger));
+    --destructive: rgb(var(--color-status-danger-text));
     --destructive-foreground: rgb(var(--color-bg-surface));
     --destructive-subtle: rgb(var(--color-status-danger-bg));
     --destructive-subtle-foreground: rgb(var(--color-status-danger-text));
@@ -128,7 +137,7 @@
     --muted-foreground: rgb(var(--color-text-muted));
     --accent: rgb(var(--color-brand-subtle));
     --accent-foreground: rgb(var(--color-brand-primary-hover));
-    --destructive: rgb(var(--color-status-danger));
+    --destructive: rgb(var(--color-status-danger-text));
     --destructive-foreground: rgb(var(--color-bg-surface));
     --destructive-subtle: rgb(var(--color-status-danger-bg));
     --destructive-subtle-foreground: rgb(var(--color-status-danger-text));

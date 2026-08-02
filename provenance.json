@@ -18,7 +18,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-07-31",
       "license": "MIT",
-      "modified": "DESIGN.md §5 適合のため focus ring の透明度合成と値系 arbitrary value を除去し、BadgeProps を追加",
+      "modified": "DESIGN.md §5 適合のため focus ring の透明度合成と値系 arbitrary value を除去し、BadgeProps を追加。v1.8 state contract に合わせ、primary / secondary / destructive / ghost の hover と surface を正規化",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。generatedContentSha256 は CLI 生成直後ではなく standards 正規化を適用したあとの現行ファイルのハッシュである。正規化では DESIGN.md §5 適合のためフォーカスリングの透明度合成と値系 arbitrary value を除去した。この機構を dialog の時点で導入したため、先行コンポーネントの生成直後の値は遡って記録できない。2026-07-31: modified の固定文言を実態に合わせて訂正した。ハッシュは変更していない。"
     },
     "button": {
@@ -39,7 +39,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-07-31",
       "license": "MIT",
-      "modified": "DESIGN.md §5 適合のため focus ring の透明度合成と値系 arbitrary value を除去し、ButtonProps を追加",
+      "modified": "DESIGN.md §5 適合のため focus ring の透明度合成と値系 arbitrary value を除去し、ButtonProps を追加。v1.8 state contract に合わせ、primary / secondary / destructive / outline / ghost の hover と surface を正規化",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。generatedContentSha256 は CLI 生成直後ではなく standards 正規化を適用したあとの現行ファイルのハッシュである。正規化では DESIGN.md §5 適合のためフォーカスリングの透明度合成と値系 arbitrary value を除去した。この機構を dialog の時点で導入したため、先行コンポーネントの生成直後の値は遡って記録できない。2026-07-31: modified の固定文言を実態に合わせて訂正した。ハッシュは変更していない。"
     },
     "dialog": {
@@ -60,7 +60,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-07-31",
       "license": "MIT",
-      "modified": "DESIGN.md §5 適合のため値系 arbitrary value を theme token へ移行し、全 public export の Props 型を追加",
+      "modified": "DESIGN.md §5 適合のため値系 arbitrary value を theme token へ移行し、全 public export の Props 型を追加。v1.8 state contract に合わせ、overlay と footer surface を semantic token へ正規化",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。2026-07-31: modified の固定文言を実態に合わせて訂正した。ハッシュは変更していない。"
     },
     "input": {
@@ -81,7 +81,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-07-31",
       "license": "MIT",
-      "modified": "DESIGN.md §5 適合のため focus ring の透明度合成と値系 arbitrary value を除去し、InputProps を追加",
+      "modified": "DESIGN.md §5 適合のため focus ring の透明度合成と値系 arbitrary value を除去し、InputProps を追加。v1.8 state contract に合わせ、control / disabled surface・invalid border・disabled opacity を正規化",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。generatedContentSha256 は CLI 生成直後ではなく standards 正規化を適用したあとの現行ファイルのハッシュである。正規化では DESIGN.md §5 適合のためフォーカスリングの透明度合成と値系 arbitrary value を除去した。この機構を dialog の時点で導入したため、先行コンポーネントの生成直後の値は遡って記録できない。2026-07-31: modified の固定文言を実態に合わせて訂正した。ハッシュは変更していない。"
     },
     "tabs": {
@@ -102,7 +102,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-07-31",
       "license": "MIT",
-      "modified": "DESIGN.md §5 適合のため focus ring の透明度合成と値系 arbitrary value を除去し、全 public export の Props 型を追加",
+      "modified": "DESIGN.md §5 適合のため focus ring の透明度合成と値系 arbitrary value を除去し、全 public export の Props 型を追加。v1.8 state contract に合わせ、inactive text と active surface を opaque token へ正規化",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。2026-07-31: modified の固定文言を実態に合わせて訂正した。ハッシュは変更していない。"
     },
     "sonner": {
@@ -186,7 +186,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-01",
       "license": "MIT",
-      "modified": "Card 系7 exportの Props 型を追加",
+      "modified": "Card 系7 exportの Props 型を追加。v1.8 state contract に合わせ、footer surface を opaque muted へ正規化",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "skeleton": {
@@ -228,7 +228,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-01",
       "license": "MIT",
-      "modified": "Alert 系4 exportの Props 型を追加",
+      "modified": "Alert 系4 exportの Props 型を追加。v1.8 state contract に合わせ、destructive text を alpha なしの subtle foreground へ正規化",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "aspect-ratio": {
@@ -312,7 +312,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-01",
       "license": "MIT",
-      "modified": "DESIGN.md §5 適合のため arbitrary value と focus ring の透明度合成を semantic token / fixed utility へ正規化し、全公開 value export の Props 型、chat 文脈の全 slot/variant を観測する最小 preview、light/dark route、安定 selector を追加",
+      "modified": "DESIGN.md §5 適合のため arbitrary value と focus ring の透明度合成を semantic token / fixed utility へ正規化し、全公開 value export の Props 型、chat 文脈の全 slot/variant を観測する最小 preview、light/dark route、安定 selector を追加。v1.8 state contract に合わせ、primary / selected / destructive / hover surface を正規化",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "empty": {
@@ -459,7 +459,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-01",
       "license": "MIT",
-      "modified": "native table slots の Props 型を明示し、semantic token・border・overflow・native semantics を維持して全 slot の値と型を公開する",
+      "modified": "native table slots の Props 型を明示し、semantic token・border・overflow・native semantics を維持して全 slot の値と型を公開する。v1.8 state contract に合わせ、footer / row state surface を opaque muted / state hover へ正規化する",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "checkbox": {
@@ -480,7 +480,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-01",
       "license": "MIT",
-      "modified": "Base UI Checkbox を semantic token、focus-visible ring、状態属性へ正規化し、Checkbox 値と CheckboxProps を公開して、label 付き4状態の interactive preview と light / dark route、安定 selector を追加する",
+      "modified": "Base UI Checkbox を semantic token、focus-visible ring、状態属性へ正規化し、Checkbox 値と CheckboxProps を公開して、label 付き4状態の interactive preview と light / dark route、安定 selector を追加する。v1.8 state contract に合わせ、control surface・invalid border・disabled opacity を正規化",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "native-select": {
@@ -501,7 +501,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-01",
       "license": "MIT",
-      "modified": "native select の全 slot を semantic token、focus-visible ring、size・disabled・invalid 状態へ正規化し、全 PascalCase 値と Props 型、label 付き interactive preview、light/dark route、安定 selector を追加する",
+      "modified": "native select の全 slot を semantic token、focus-visible ring、size・disabled・invalid 状態へ正規化し、全 PascalCase 値と Props 型、label 付き interactive preview、light/dark route、安定 selector を追加する。v1.8 state contract に合わせ、control / disabled / hover surface と invalid border を正規化する",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "input-otp": {
@@ -522,7 +522,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-01",
       "license": "MIT",
-      "modified": "単一の実フォーカス、semantic token と data-active によるOTPスロット、native hr separator、全 PascalCase Props 型、6桁interactive preview、light/dark route、安定selectorへ正規化する",
+      "modified": "単一の実フォーカス、semantic token と data-active によるOTPスロット、native hr separator、全 PascalCase Props 型、6桁interactive preview、light/dark route、安定selectorへ正規化する。v1.8 state contract に合わせ、control surface を opaque card へ正規化する",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "radio-group": {
@@ -543,7 +543,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-01",
       "license": "MIT",
-      "modified": "semantic token と Base UI の状態属性、全 Props 型、label付きinteractive previewへ正規化する",
+      "modified": "semantic token と Base UI の状態属性、全 Props 型、label付きinteractive previewへ正規化する。v1.8 state contract に合わせ、control surface・invalid border・disabled opacity を正規化する",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "slider": {
@@ -585,7 +585,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-01",
       "license": "MIT",
-      "modified": "semantic token・Base UI 状態属性・非透明 focus ring へ正規化し、SwitchProps 公開と controlled / disabled preview、light / dark route、selector を追加する",
+      "modified": "semantic token・Base UI 状態属性・非透明 focus ring へ正規化し、SwitchProps 公開と controlled / disabled preview、light / dark route、selector を追加する。v1.8 state contract に合わせ、invalid border と disabled opacity を正規化し、decorative unchecked alpha は維持する",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "textarea": {
@@ -606,7 +606,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-01",
       "license": "MIT",
-      "modified": "非透明 focus ring・semantic token・全 Props 型へ正規化し、controlled / disabled / readOnly preview、light / dark route、selector を追加する",
+      "modified": "非透明 focus ring・semantic token・全 Props 型へ正規化し、controlled / disabled / readOnly preview、light / dark route、selector を追加する。v1.8 state contract に合わせ、control / disabled surface・invalid border・disabled opacity を正規化する",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "toggle": {
@@ -774,7 +774,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-01",
       "license": "MIT",
-      "modified": "既存の@base-ui/react Drawerで全slotを実装し、生成時の値系arbitrary valueをsemantic tokenと標準durationへ正規化する。全PascalCase exportのProps、barrel、isolated限定defaultOpenのlight/dark preview、selector、registry型契約を追加する。",
+      "modified": "既存の@base-ui/react Drawerで全slotを実装し、生成時の値系arbitrary valueをsemantic tokenと標準durationへ正規化する。全PascalCase exportのProps、barrel、isolated限定defaultOpenのlight/dark preview、selector、registry型契約を追加する。v1.8 state contract に合わせ、overlay を semantic token へ正規化する。",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "hover-card": {
@@ -816,7 +816,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-01",
       "license": "MIT",
-      "modified": "Base UI Navigation Menu を基底に、semantic token と非透明フォーカスリングへ正規化し、公開契約と隔離プレビューを追加する。Content配下でもLink自身の3px focus ringを保持する。",
+      "modified": "Base UI Navigation Menu を基底に、semantic token と非透明フォーカスリングへ正規化し、公開契約と隔離プレビューを追加する。Content配下でもLink自身の3px focus ringを保持する。v1.8 state contract に合わせ、open / active surface を state hover token へ正規化する。",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "popover": {
@@ -858,7 +858,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "Base UI Selectを既存のsemantic tokenと非透明focus ringへ正規化し、全value/Props公開とisolated限定defaultOpenの対話preview、barrel、型契約、selector、registryを追加する。keyboard focus中のItemへ不透明3px ringを付与する。",
+      "modified": "Base UI Selectを既存のsemantic tokenと非透明focus ringへ正規化し、全value/Props公開とisolated限定defaultOpenの対話preview、barrel、型契約、selector、registryを追加する。keyboard focus中のItemへ不透明3px ringを付与する。v1.8 state contract に合わせ、control / disabled / hover surface と invalid border を正規化する。",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "tooltip": {
@@ -900,7 +900,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "全 PascalCase export の Props 型を追加し、生の overlay 色を semantic token へ置換、Action を Close primitive 経由へ変更",
+      "modified": "全 PascalCase export の Props 型を追加し、生の overlay 色を semantic token へ置換、Action を Close primitive 経由へ変更。v1.8 state contract に合わせ、footer surface を opaque muted へ正規化",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "attachment": {
@@ -921,7 +921,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "全 PascalCase export の Props 型を追加し、focus-within ring を不透明3pxへ正規化",
+      "modified": "全 PascalCase export の Props 型を追加し、focus-within ring を不透明3pxへ正規化。v1.8 state contract に合わせ、hover と error surface / text を state / destructive subtle token へ正規化",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "button-group": {
@@ -1026,7 +1026,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "全 PascalCase export の Props 型公開、厳密比較と安定 key、汎用 Field の role=group を保持する局所 lint 理由、barrel export、正常・エラー・disabled の preview と light/dark route、hydration selector を追加",
+      "modified": "全 PascalCase export の Props 型公開、厳密比較と安定 key、汎用 Field の role=group を保持する局所 lint 理由、barrel export、正常・エラー・disabled の preview と light/dark route、hydration selector を追加。v1.8 state contract に合わせ、selected surface / border と disabled opacity を正規化",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "input-group": {
@@ -1047,7 +1047,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "全 PascalCase export の Props 型公開、arbitrary margin・radius と focus / invalid ring の透明度を semantic utility へ正規化、汎用 group の role と補助 click を保持する局所 lint 理由、addon click を input / textarea 共通 control へ接続、barrel export、prefix・suffix・button・focus-visible の preview と light/dark route、hydration selector を追加",
+      "modified": "全 PascalCase export の Props 型公開、arbitrary margin・radius と focus / invalid ring の透明度を semantic utility へ正規化、汎用 group の role と補助 click を保持する局所 lint 理由、addon click を input / textarea 共通 control へ接続、barrel export、prefix・suffix・button・focus-visible の preview と light/dark route、hydration selector を追加。v1.8 state contract に合わせ、control / disabled surface と invalid border を opaque token へ正規化",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "item": {
@@ -1068,7 +1068,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "全 PascalCase export の Props 型公開、focus ring の透明度を除去、ItemGroup の div props と role=list を保持する局所 lint 理由、barrel export、media・content・actions・separator の preview と light/dark route、hydration selector を追加",
+      "modified": "全 PascalCase export の Props 型公開、focus ring の透明度を除去、ItemGroup の div props と role=list を保持する局所 lint 理由、barrel export、media・content・actions・separator の preview と light/dark route、hydration selector を追加。v1.8 state contract に合わせ、muted variant を opaque surface へ正規化",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "menubar": {
@@ -1089,7 +1089,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "全 PascalCase export の Props 型公開、IconPlaceholder を Lucide icon へ置換、arbitrary spacing と boolean data-inset を正規化、CheckboxItem と RadioItem を standards 適合済み DropdownMenu wrapper へ委譲、不透明な focus ring、barrel export、menu・submenu・keyboard・focus return の preview と light/dark route、hydration selector を追加",
+      "modified": "全 PascalCase export の Props 型公開、IconPlaceholder を Lucide icon へ置換、arbitrary spacing と boolean data-inset を正規化、CheckboxItem と RadioItem を standards 適合済み DropdownMenu wrapper へ委譲、不透明な focus ring、barrel export、menu・submenu・keyboard・focus return の preview と light/dark route、hydration selector を追加。v1.8 state contract に合わせ、destructive focus surface / text と disabled opacity を正規化",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "message-scroller": {
@@ -1215,7 +1215,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "全 PascalCase export の Props 型公開、IconPlaceholder を Lucide icon へ置換、trigger・clear・chip remove の accessible name を日本語化、透明 focus ring と値系 arbitrary width・height を semantic token・CSS variable utility へ正規化、barrel export、option open・filter・keyboard selection・clear・focus return の preview と light/dark route、hydration selector を追加",
+      "modified": "全 PascalCase export の Props 型公開、IconPlaceholder を Lucide icon へ置換、trigger・clear・chip remove の accessible name を日本語化、透明 focus ring と値系 arbitrary width・height を semantic token・CSS variable utility へ正規化、barrel export、option open・filter・keyboard selection・clear・focus return の preview と light/dark route、hydration selector を追加。v1.8 state contract に合わせ、control surface と invalid border を opaque token へ正規化",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "command": {
@@ -1236,7 +1236,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "全 PascalCase export の Props 型公開、IconPlaceholder を Lucide SearchIcon・CheckIcon へ置換、dialog の既定 title・description を日本語化、CommandInput の focus ring を不透明3pxへ正規化、barrel export、inline と dialog の filter・keyboard selection・empty state の preview と light/dark route、hydration selector を追加",
+      "modified": "全 PascalCase export の Props 型公開、IconPlaceholder を Lucide SearchIcon・CheckIcon へ置換、dialog の既定 title・description を日本語化、CommandInput の focus ring を不透明3pxへ正規化、barrel export、inline と dialog の filter・keyboard selection・empty state の preview と light/dark route、hydration selector を追加。v1.8 state contract に合わせ、InputGroup surface を opaque card へ正規化",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "use-mobile": {
@@ -1278,7 +1278,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "全 PascalCase value export の Props 型公開、表示文言・コメント・accessible name とアイコンの読み上げを正規化、focus ring と値系 arbitrary utility を semantic token・CSS variable utility へ正規化、Tooltip を desktop collapsed 時だけ構築して mobile Sheet の Escape dismiss を維持、mobile Sheet の表示DOMへ公開div propsを転送してpreviewで検証、公開 dir を全表示経路のDOMへ転送、SidebarMenuSkeleton の幅をSSRとhydrationで決定的に固定、barrel export、desktop collapse・mobile sheet・keyboard shortcut・cookie side effect・focus の preview と light/dark route、hydration selector を追加",
+      "modified": "全 PascalCase value export の Props 型公開、表示文言・コメント・accessible name とアイコンの読み上げを正規化、focus ring と値系 arbitrary utility を semantic token・CSS variable utility へ正規化、Tooltip を desktop collapsed 時だけ構築して mobile Sheet の Escape dismiss を維持、mobile Sheet の表示DOMへ公開div propsを転送してpreviewで検証、公開 dir を全表示経路のDOMへ転送、SidebarMenuSkeleton の幅をSSRとhydrationで決定的に固定、barrel export、desktop collapse・mobile sheet・keyboard shortcut・cookie side effect・focus の preview と light/dark route、hydration selector を追加。v1.8 state contract に合わせ、補助 text を opaque sidebar foreground へ正規化",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "direction": {

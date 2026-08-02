@@ -335,6 +335,21 @@ test("wrapper が pin add から2つの hash・来歴・registryまで記録し�
   const registry = JSON.parse(readFileSync(join(root, "registry.json"), "utf8"));
   assert.deepEqual(registry.items[0].registryDependencies, ["@elchika/button"]);
   assert.deepEqual(registry.items[0].dependencies, ["@base-ui/react", "date-fns"]);
+  assert.deepEqual(
+    registry.items[0].files.filter(({ target }) => target?.endsWith("tokens.css")),
+    [
+      {
+        path: "src/styles/global.css",
+        type: "registry:file",
+        target: "~/elchika-ui/tokens.css",
+      },
+      {
+        path: "src/styles/design-system/tokens.css",
+        type: "registry:file",
+        target: "~/elchika-ui/design-system/tokens.css",
+      },
+    ],
+  );
   assert.ok(logs.includes("復元: src/components/ui/input.tsx"));
   assert.ok(logs.includes("追加依存: dependencies: date-fns@^4.1.0"));
 

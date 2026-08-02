@@ -250,11 +250,17 @@ const resolvePaint = (specification, themes, theme, fallbackUnderlay) => {
     alpha: resolved.alpha * (specification.alpha ?? 1),
   };
   if (color.alpha >= 1) return color;
-  const underlayName = specification.underlay ?? fallbackUnderlay;
-  if (!underlayName) {
+  const underlaySpecification = specification.underlay ?? fallbackUnderlay;
+  if (!underlaySpecification) {
     return { problem: `${specification.token}: alpha 合成先が無い` };
   }
-  const underlay = resolveToken(themes, theme, underlayName);
+  const underlay = resolvePaint(
+    typeof underlaySpecification === "string"
+      ? { token: underlaySpecification }
+      : underlaySpecification,
+    themes,
+    theme,
+  );
   if (underlay.problem) return underlay;
   return composite(color, underlay);
 };

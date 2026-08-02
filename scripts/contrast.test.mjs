@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
@@ -90,6 +90,49 @@ test("multi-hop alias と rgb(var() / var()) を解決する", async () => {
   assert.equal(resolveToken(themes, "dark", "alias").alpha, 0.13);
 });
 
+test("hover tint を selected tint と canvas の順に3層合成する", async () => {
+  const { composite, contrastRatio, evaluateCase, parseThemes, resolveToken } =
+    await loadContrast();
+  const themes = parseThemes(
+    themeCss({
+      light: `
+        --foreground: 20 20 20;
+        --background: 255 255 255;
+        --brand: 47 95 209;
+        --black: 0 0 0;
+        --selected-alpha: 0.10;
+        --hover-alpha: 0.07;
+        --selected: rgb(var(--brand) / var(--selected-alpha));
+        --hover: rgb(var(--black) / var(--hover-alpha));`,
+      dark: "  --placeholder: 0 0 0;",
+    }),
+  );
+  const inspected = evaluateCase(
+    {
+      label: "3層 fixture",
+      themes: ["light"],
+      gate: "text-aa",
+      reason: "実際の background-image と background-color の合成順を固定する",
+      foreground: { token: "foreground" },
+      background: {
+        token: "hover",
+        underlay: { token: "selected", underlay: "background" },
+      },
+      sourceClasses: [],
+    },
+    themes,
+  );
+  const selected = composite(
+    resolveToken(themes, "light", "selected"),
+    resolveToken(themes, "light", "background"),
+  );
+  const hovered = composite(resolveToken(themes, "light", "hover"), selected);
+  const expected = contrastRatio(resolveToken(themes, "light", "foreground"), hovered);
+
+  assert.deepEqual(inspected.problems, []);
+  assert.ok(Math.abs(inspected.results[0].ratio - expected) < 0.000001);
+});
+
 test("missing alias、cycle、未知形式、範囲外 channel を fail-closed にする", async () => {
   const { parseThemes, resolveToken } = await loadContrast();
   const themes = parseThemes(
@@ -146,6 +189,24 @@ test("全 consumer case は空でない reason と既知 gate を持つ", async 
     assert.ok(consumerCase.reason.trim(), consumerCase.label);
     assert.ok(gates.has(consumerCase.gate), consumerCase.label);
   }
+});
+
+test("solid destructive と invalid 境界を v1.8 の非透明 token で gate する", async () => {
+  const { evaluateCase, parseThemes } = await loadContrast();
+  const { CONSUMER_CASES } = await loadCases();
+  const css = await Promise.all([
+    readFile(new URL("../src/styles/design-system/tokens.css", import.meta.url), "utf8"),
+    readFile(new URL("../src/styles/global.css", import.meta.url), "utf8"),
+  ]);
+  const themes = parseThemes(css.join("\n"));
+  const solid = CONSUMER_CASES.find(({ label }) => label === "solid destructive menu focus");
+  const invalid = CONSUMER_CASES.find(({ label }) => label === "invalid control boundary");
+
+  assert.ok(solid, "solid destructive case が無い");
+  assert.ok(invalid, "invalid control boundary case が無い");
+  assert.equal(invalid.gate, "nontext-ui");
+  assert.deepEqual(evaluateCase(solid, themes).problems, []);
+  assert.deepEqual(evaluateCase(invalid, themes).problems, []);
 });
 
 test("AST は opening quote 直後の class を拾い arbitrary variant 内 quote を壊さない", async () => {
