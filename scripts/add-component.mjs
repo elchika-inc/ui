@@ -15,8 +15,9 @@ const DEPENDENCY_SECTIONS = [
 
 // add 後の変更分類はここだけを育てる。どのルールにも一致しないパスは fail-closed。
 export const CHANGE_CLASSIFICATION_RULES = [
-  { kind: "target", matcher: "target-component" },
-  { kind: "other-component", matcher: "tracked-component" },
+  { kind: "target", matcher: "target-item" },
+  { kind: "other-registry-item", matcher: "tracked-component" },
+  { kind: "other-registry-item", matcher: "tracked-hook" },
   { kind: "dependency-manifest", paths: ["package.json", "package-lock.json"] },
 ];
 
@@ -57,11 +58,21 @@ export function parseArgs(argv) {
   for (let index = 0; index < options.length; index++) {
     const option = options[index];
     if (option === "--force") {
+      if (force) {
+        throw new Error("--force は1回だけ指定すること");
+      }
       force = true;
       continue;
     }
     if (option === "--modified") {
-      modified = options[index + 1];
+      if (modified !== undefined) {
+        throw new Error("--modified は1回だけ指定すること");
+      }
+      const value = options[index + 1];
+      if (!value || value.startsWith("--")) {
+        throw new Error('--modified "実際に行った変更" を必ず指定すること');
+      }
+      modified = value;
       index++;
       continue;
     }
@@ -98,14 +109,21 @@ function changedPaths(root) {
   return [...new Set([...tracked, ...untracked])].sort();
 }
 
-function classifyPath(path, name, trackedBefore) {
-  const target = `src/components/ui/${name}.tsx`;
+function classifyPath(path, targetPath, trackedBefore) {
   for (const rule of CHANGE_CLASSIFICATION_RULES) {
-    if (rule.matcher === "target-component" && path === target) return rule.kind;
+    if (rule.matcher === "target-item" && path === targetPath) return rule.kind;
     if (
       rule.matcher === "tracked-component" &&
       path.startsWith("src/components/ui/") &&
       path.endsWith(".tsx") &&
+      trackedBefore.has(path)
+    ) {
+      return rule.kind;
+    }
+    if (
+      rule.matcher === "tracked-hook" &&
+      path.startsWith("src/hooks/") &&
+      path.endsWith(".ts") &&
       trackedBefore.has(path)
     ) {
       return rule.kind;
@@ -150,11 +168,17 @@ function compareDependencies(before, after) {
   return { added: added.sort(), changed: changed.sort() };
 }
 
-export function reconcileAddChanges({ root, name, packageBefore, trackedBefore }) {
+export function reconcileAddChanges({
+  root,
+  name,
+  targetPath = `src/components/ui/${name}.tsx`,
+  packageBefore,
+  trackedBefore,
+}) {
   const paths = changedPaths(root);
   const classified = paths.map((path) => ({
     path,
-    kind: classifyPath(path, name, trackedBefore),
+    kind: classifyPath(path, targetPath, trackedBefore),
   }));
   const unknown = classified.filter(({ kind }) => kind === "unknown").map(({ path }) => path);
   if (unknown.length) {
@@ -168,7 +192,7 @@ export function reconcileAddChanges({ root, name, packageBefore, trackedBefore }
   }
 
   const restored = classified
-    .filter(({ kind }) => kind === "other-component")
+    .filter(({ kind }) => kind === "other-registry-item")
     .map(({ path }) => path);
   if (restored.length) {
     git(root, ["checkout", "HEAD", "--", ...restored]);
@@ -219,7 +243,36 @@ function externalImports(source) {
   return packages;
 }
 
-export function buildRegistryItem(name, upstreamItem, generatedSource) {
+export function resolveRegistryTarget(name, upstreamItem) {
+  const definitions = {
+    "registry:ui": {
+      registryPath: `registry/base-nova/ui/${name}.tsx`,
+      targetPath: `src/components/ui/${name}.tsx`,
+    },
+    "registry:hook": {
+      registryPath: `registry/base-nova/hooks/${name}.ts`,
+      targetPath: `src/hooks/${name}.ts`,
+    },
+  };
+  const definition = definitions[upstreamItem.type];
+  if (!definition) {
+    throw new Error(`${name}: 未対応の registry item type: ${upstreamItem.type ?? "なし"}`);
+  }
+  const primaryFiles = (upstreamItem.files ?? []).filter((file) => file.type === upstreamItem.type);
+  if (primaryFiles.length !== 1 || primaryFiles[0].path !== definition.registryPath) {
+    throw new Error(
+      `${name}: ${upstreamItem.type} の一次 file path が想定外: ${primaryFiles.map(({ path }) => path).join(", ") || "なし"}`,
+    );
+  }
+  return {
+    itemType: upstreamItem.type,
+    registryPath: definition.registryPath,
+    targetPath: definition.targetPath,
+    upstreamPath: `apps/v4/registry/bases/base/${definition.registryPath.replace("registry/base-nova/", "")}`,
+  };
+}
+
+export function buildRegistryItem(name, upstreamItem, generatedSource, target) {
   const dependenciesByName = new Map();
   for (const dependency of upstreamItem.dependencies ?? []) {
     dependenciesByName.set(dependencyName(dependency), dependency);
@@ -231,16 +284,13 @@ export function buildRegistryItem(name, upstreamItem, generatedSource) {
   const item = {
     $schema: "https://ui.shadcn.com/schema/registry-item.json",
     name,
-    type: "registry:ui",
+    type: target.itemType,
     title: name
       .split("-")
       .map((part) => `${part[0].toUpperCase()}${part.slice(1)}`)
       .join(" "),
-    description: `${name} component.`,
-    files: [
-      { path: `src/components/ui/${name}.tsx`, type: "registry:ui" },
-      ...SHARED_REGISTRY_FILES,
-    ],
+    description: `${name} ${target.itemType === "registry:hook" ? "hook" : "component"}.`,
+    files: [{ path: target.targetPath, type: target.itemType }, ...SHARED_REGISTRY_FILES],
   };
   if (dependenciesByName.size) {
     item.dependencies = [...dependenciesByName.values()].sort();
@@ -270,11 +320,12 @@ async function provenanceEntry({
   cliVersion,
   generatedSource,
   upstreamItem,
+  target,
   registryUrl,
   fetchImpl,
 }) {
   const upstreamRepo = "shadcn-ui/ui";
-  const upstreamPath = `apps/v4/registry/bases/base/ui/${name}.tsx`;
+  const upstreamPath = target.upstreamPath;
   await fetchJson(
     `https://api.github.com/repos/${upstreamRepo}/contents/${upstreamPath}`,
     fetchImpl,
@@ -288,10 +339,8 @@ async function provenanceEntry({
     throw new Error(`${name}: 元テンプレートの commit SHA を特定できない`);
   }
 
-  const servedFile = upstreamItem.files?.find(
-    (file) => file.type === "registry:ui" && file.path?.endsWith(`/${name}.tsx`),
-  );
-  if (!servedFile?.content) throw new Error(`${name}: registry 応答に component content が無い`);
+  const servedFile = upstreamItem.files?.find((file) => file.path === target.registryPath);
+  if (!servedFile?.content) throw new Error(`${name}: registry 応答に primary content が無い`);
   const pkg = readJson(root, "package.json");
   const shadcnRange = pkg.dependencies?.shadcn ?? pkg.devDependencies?.shadcn;
   if (!shadcnRange) throw new Error("package.json に shadcn の版が無い");
@@ -344,12 +393,16 @@ export async function runAddComponent({
   const packageBefore = readJson(repositoryRoot, "package.json");
   const trackedBefore = trackedFiles(repositoryRoot);
   const cliVersion = readFileSync(join(repositoryRoot, ".shadcn-cli-version"), "utf8").trim();
+  const registryUrl = `https://ui.shadcn.com/r/styles/base-nova/${name}.json`;
+  const upstreamItem = await fetchJson(registryUrl, fetchImpl);
+  const target = resolveRegistryTarget(name, upstreamItem);
   const command = shadcnCommand(cliVersion, name);
   runCommand(command.command, command.args, { cwd: repositoryRoot, stdio: "inherit" });
 
   const reconciled = reconcileAddChanges({
     root: repositoryRoot,
     name,
+    targetPath: target.targetPath,
     packageBefore,
     trackedBefore,
   });
@@ -357,13 +410,11 @@ export async function runAddComponent({
   for (const dependency of reconciled.addedDependencies) log(`追加依存: ${dependency}`);
   for (const path of reconciled.keptManifests) log(`依存 manifest を保持: ${path}`);
 
-  const targetPath = `src/components/ui/${name}.tsx`;
+  const targetPath = target.targetPath;
   if (!existsSync(join(repositoryRoot, targetPath))) {
     throw new Error(`${targetPath} が生成されなかった`);
   }
   const generatedSource = readFileSync(join(repositoryRoot, targetPath), "utf8");
-  const registryUrl = `https://ui.shadcn.com/r/styles/base-nova/${name}.json`;
-  const upstreamItem = await fetchJson(registryUrl, fetchImpl);
   const entry = await provenanceEntry({
     root: repositoryRoot,
     name,
@@ -371,6 +422,7 @@ export async function runAddComponent({
     cliVersion,
     generatedSource,
     upstreamItem,
+    target,
     registryUrl,
     fetchImpl,
   });
@@ -378,7 +430,7 @@ export async function runAddComponent({
   provenance.components ??= {};
   provenance.components[name] = entry;
   const registry = readJson(repositoryRoot, "registry.json");
-  const registryItem = buildRegistryItem(name, upstreamItem, generatedSource);
+  const registryItem = buildRegistryItem(name, upstreamItem, generatedSource, target);
   const existingIndex = registry.items.findIndex((item) => item.name === name);
   if (existingIndex === -1) registry.items.push(registryItem);
   else registry.items[existingIndex] = registryItem;

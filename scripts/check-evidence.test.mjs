@@ -30,6 +30,22 @@ const loadMigration = async () => {
   return import(migrationUrl);
 };
 
+const addComponentEvidence = (root, report, verifiedSha) => {
+  const stem = report.replace(/\.md$/, "");
+  writeFileSync(
+    join(root, ".docs/reviews", report),
+    `verified_impl_sha: ${verifiedSha}\n${stem}-light.jpg\n${stem}-dark.jpg\n`,
+  );
+  writeFileSync(join(root, ".docs/reviews", `${stem}-light.jpg`), jpeg);
+  writeFileSync(join(root, ".docs/reviews", `${stem}-dark.jpg`), jpeg);
+  git(root, [
+    "add",
+    `.docs/reviews/${report}`,
+    `.docs/reviews/${stem}-light.jpg`,
+    `.docs/reviews/${stem}-dark.jpg`,
+  ]);
+};
+
 const createEvidenceRepo = () => {
   const root = mkdtempSync(join(tmpdir(), "elchika-evidence-test-"));
   git(root, ["init"]);
@@ -60,17 +76,20 @@ const createEvidenceRepo = () => {
   writeFileSync(join(root, "src/pages/catalog-dark.astro"), "catalog dark\n");
   writeFileSync(join(root, "src/pages/index.astro"), "index\n");
   writeFileSync(join(root, ".docs/reviews/button.png"), png);
-  writeFileSync(join(root, ".docs/reviews/input.jpg"), jpeg);
   git(root, ["add", "."]);
   git(root, ["commit", "-m", "source"]);
   const verifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
+  for (const name of ["button", "input"]) {
+    writeFileSync(join(root, `.docs/reviews/${name}-preview-light.jpg`), jpeg);
+    writeFileSync(join(root, `.docs/reviews/${name}-preview-dark.jpg`), jpeg);
+  }
   writeFileSync(
     join(root, ".docs/reviews/2026-08-01-button-preview.md"),
-    `verified_impl_sha: ${verifiedSha}\n`,
+    `verified_impl_sha: ${verifiedSha}\nbutton-preview-light.jpg\nbutton-preview-dark.jpg\n`,
   );
   writeFileSync(
     join(root, ".docs/reviews/2026-08-01-input-preview.md"),
-    `verified_impl_sha: ${verifiedSha}\n`,
+    `verified_impl_sha: ${verifiedSha}\ninput-preview-light.jpg\ninput-preview-dark.jpg\n`,
   );
   writeFileSync(
     join(root, ".docs/reviews/2026-08-01-index-page.md"),
@@ -84,6 +103,79 @@ const createEvidenceRepo = () => {
   git(root, ["commit", "-m", "evidence"]);
   return { root, verifiedSha };
 };
+
+test("component固有Markdownの欠落を検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  rmSync(join(root, ".docs/reviews/2026-08-01-input-preview.md"));
+
+  assert.ok(
+    checkEvidenceInRepo(root).problems.includes("input: component 固有の証跡 Markdown が無い"),
+  );
+});
+
+test("component固有light画像の欠落を検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  rmSync(join(root, ".docs/reviews/button-preview-light.jpg"));
+
+  assert.ok(
+    checkEvidenceInRepo(root).problems.includes(
+      "2026-08-01-button-preview.md: 対応する light 証跡画像が無い",
+    ),
+  );
+});
+
+test("verified_impl_shaだけを新HEADへ書き換えた旧画像流用を検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  writeFileSync(join(root, "src/components/ui/button.tsx"), "button changed without capture\n");
+  git(root, ["add", "src/components/ui/button.tsx"]);
+  git(root, ["commit", "-m", "change button without capture"]);
+  const unverifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
+  writeFileSync(
+    join(root, ".docs/reviews/2026-08-01-button-preview.md"),
+    `verified_impl_sha: ${unverifiedSha}\nbutton-preview-light.jpg\nbutton-preview-dark.jpg\n`,
+  );
+
+  assert.ok(
+    checkEvidenceInRepo(root).problems.includes(
+      "2026-08-01-button-preview.md: verified_impl_sha が初回記録から変更されている",
+    ),
+  );
+});
+
+test("初回記録のverified_impl_shaが不正なら後から有効値へ直しても検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  for (const path of [
+    "src/components/ui/new-widget.tsx",
+    "src/previews/new-widget.tsx",
+    "src/pages/preview/new-widget.astro",
+    "src/pages/preview/new-widget-dark.astro",
+  ]) {
+    writeFileSync(join(root, path), `${path}\n`);
+  }
+  git(root, ["add", "src"]);
+  git(root, ["commit", "-m", "add new widget"]);
+  const verifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
+  addComponentEvidence(root, "2026-08-02-new-widget-preview.md", "invalid");
+  git(root, ["commit", "-m", "add invalid new widget evidence"]);
+  writeFileSync(
+    join(root, ".docs/reviews/2026-08-02-new-widget-preview.md"),
+    `verified_impl_sha: ${verifiedSha}\n2026-08-02-new-widget-preview-light.jpg\n2026-08-02-new-widget-preview-dark.jpg\n`,
+  );
+
+  assert.ok(
+    checkEvidenceInRepo(root).problems.includes(
+      "2026-08-02-new-widget-preview.md: 初回記録の verified_impl_sha は40桁の小文字SHAでなければならない",
+    ),
+  );
+});
 
 test("PNG/JPEG の拡張子と magic bytes の不一致を検出する", async () => {
   const { checkImage } = await loadModule();
@@ -226,6 +318,265 @@ test("検証済みcomponentだけを変更すると落ち、別componentは落�
   assert.ok(
     !result.problems.some((problem) => problem.includes("input-preview")),
     "別componentの変更で input 証跡を落としてはならない",
+  );
+});
+
+test("registry itemが所有する補助sourceの変更もcomponent固有pathとして扱う", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  writeFileSync(
+    join(root, "registry.json"),
+    `${JSON.stringify(
+      {
+        items: [
+          {
+            name: "button",
+            files: [
+              { path: "src/components/ui/button.tsx", type: "registry:ui" },
+              { path: "src/components/ui/button-style.ts", type: "registry:ui" },
+              { path: "src/styles/global.css", type: "registry:file" },
+            ],
+          },
+        ],
+      },
+      null,
+      2,
+    )}\n`,
+  );
+  writeFileSync(join(root, "src/components/ui/button-style.ts"), "button helper\n");
+  git(root, ["add", "registry.json", "src/components/ui/button-style.ts"]);
+  git(root, ["commit", "-m", "add button helper after evidence"]);
+
+  assert.ok(
+    checkEvidenceInRepo(root).problems.includes(
+      "2026-08-01-button-preview.md: 検証 SHA 以降に component 固有 path が変更されている",
+    ),
+  );
+});
+
+test("registry pathのGit pathspec magicでcomponent固有pathを除外できない", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  writeFileSync(
+    join(root, "registry.json"),
+    `${JSON.stringify(
+      {
+        items: [
+          {
+            name: "button",
+            files: [
+              {
+                path: ":(exclude)src/components/ui/button.tsx",
+                type: "registry:ui",
+              },
+            ],
+          },
+        ],
+      },
+      null,
+      2,
+    )}\n`,
+  );
+  writeFileSync(join(root, "src/components/ui/button.tsx"), "button changed\n");
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.ok(
+    result.problems.includes(
+      "button: registry path :(exclude)src/components/ui/button.tsx はrepo内の通常相対pathでなければならない",
+    ),
+  );
+  assert.ok(
+    result.problems.includes(
+      "2026-08-01-button-preview.md: 検証 SHA 以降に component 固有 path が変更されている",
+    ),
+  );
+});
+
+test("同じcomponentの古い証跡を残し、最新証跡だけを鮮度判定する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  writeFileSync(join(root, "src/components/ui/button.tsx"), "button reverified\n");
+  git(root, ["add", "src/components/ui/button.tsx"]);
+  git(root, ["commit", "-m", "change button before reverification"]);
+  const latestVerifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
+  addComponentEvidence(root, "2026-08-02-button-preview.md", latestVerifiedSha);
+  git(root, ["commit", "-m", "add latest button evidence"]);
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual(result.problems, []);
+});
+
+test("同じcomponentの古い証跡でもverified_impl_shaの改変を検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  const replacementSha = git(root, ["rev-parse", "HEAD"]).trim();
+  writeFileSync(join(root, "src/components/ui/button.tsx"), "button reverified\n");
+  git(root, ["add", "src/components/ui/button.tsx"]);
+  git(root, ["commit", "-m", "change button before reverification"]);
+  const latestVerifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
+  addComponentEvidence(root, "2026-08-02-button-preview.md", latestVerifiedSha);
+  git(root, ["commit", "-m", "add latest button evidence"]);
+  writeFileSync(
+    join(root, ".docs/reviews/2026-08-01-button-preview.md"),
+    `verified_impl_sha: ${replacementSha}\nbutton-preview-light.jpg\nbutton-preview-dark.jpg\n`,
+  );
+
+  assert.ok(
+    checkEvidenceInRepo(root).problems.includes(
+      "2026-08-01-button-preview.md: verified_impl_sha が初回記録から変更されている",
+    ),
+  );
+});
+
+test("既存component証跡をrenameしてSHAを書き換えても削除として検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  writeFileSync(join(root, "src/components/ui/button.tsx"), "button changed without capture\n");
+  git(root, ["add", "src/components/ui/button.tsx"]);
+  git(root, ["commit", "-m", "change button without capture"]);
+  const unverifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
+  git(root, [
+    "mv",
+    ".docs/reviews/2026-08-01-button-preview.md",
+    ".docs/reviews/2026-08-02-button-preview.md",
+  ]);
+  git(root, [
+    "mv",
+    ".docs/reviews/button-preview-light.jpg",
+    ".docs/reviews/2026-08-02-button-preview-light.jpg",
+  ]);
+  git(root, [
+    "mv",
+    ".docs/reviews/button-preview-dark.jpg",
+    ".docs/reviews/2026-08-02-button-preview-dark.jpg",
+  ]);
+  writeFileSync(
+    join(root, ".docs/reviews/2026-08-02-button-preview.md"),
+    `verified_impl_sha: ${unverifiedSha}\n2026-08-02-button-preview-light.jpg\n2026-08-02-button-preview-dark.jpg\n`,
+  );
+  git(root, ["add", ".docs/reviews"]);
+  git(root, ["commit", "-m", "rename evidence and rewrite sha"]);
+
+  assert.ok(
+    checkEvidenceInRepo(root).problems.includes(
+      "2026-08-01-button-preview.md: 過去のcomponent証跡は削除・renameできない",
+    ),
+  );
+});
+
+test("既存component証跡fileを同名directoryへ置換しても削除として検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  writeFileSync(join(root, "src/components/ui/button.tsx"), "button reverified\n");
+  git(root, ["add", "src/components/ui/button.tsx"]);
+  git(root, ["commit", "-m", "change button before reverification"]);
+  const latestVerifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
+  addComponentEvidence(root, "2026-08-02-button-preview.md", latestVerifiedSha);
+  git(root, ["commit", "-m", "add latest button evidence"]);
+  git(root, ["rm", ".docs/reviews/2026-08-01-button-preview.md"]);
+  mkdirSync(join(root, ".docs/reviews/2026-08-01-button-preview.md"));
+  writeFileSync(
+    join(root, ".docs/reviews/2026-08-01-button-preview.md/note.txt"),
+    "旧証跡を置換\n",
+  );
+  git(root, ["add", ".docs/reviews/2026-08-01-button-preview.md/note.txt"]);
+  git(root, ["commit", "-m", "replace old evidence file with directory"]);
+
+  assert.ok(
+    checkEvidenceInRepo(root).problems.includes(
+      "2026-08-01-button-preview.md: 過去のcomponent証跡は削除・renameできない",
+    ),
+  );
+});
+
+test("分岐した証跡SHAが複数あればcommit件数にかかわらずfail-closedにする", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  const trunk = git(root, ["branch", "--show-current"]).trim();
+  const forkBase = git(root, ["rev-parse", "HEAD"]).trim();
+
+  git(root, ["switch", "-c", "candidate-a"]);
+  writeFileSync(join(root, "candidate-a-prelude.txt"), "prelude\n");
+  git(root, ["add", "candidate-a-prelude.txt"]);
+  git(root, ["commit", "-m", "candidate a prelude"]);
+  writeFileSync(join(root, "src/components/ui/button.tsx"), "button candidate a\n");
+  git(root, ["add", "src/components/ui/button.tsx"]);
+  git(root, ["commit", "-m", "candidate a implementation"]);
+  const candidateA = git(root, ["rev-parse", "HEAD"]).trim();
+  addComponentEvidence(root, "2026-08-02-button-preview.md", candidateA);
+  git(root, ["commit", "-m", "candidate a evidence"]);
+
+  git(root, ["switch", "-c", "candidate-b", forkBase]);
+  writeFileSync(join(root, "candidate-b.txt"), "candidate b\n");
+  git(root, ["add", "candidate-b.txt"]);
+  git(root, ["commit", "-m", "candidate b implementation"]);
+  const candidateB = git(root, ["rev-parse", "HEAD"]).trim();
+  addComponentEvidence(root, "2026-08-03-button-preview.md", candidateB);
+  git(root, ["commit", "-m", "candidate b evidence"]);
+
+  git(root, ["switch", trunk]);
+  git(root, ["merge", "--no-ff", "candidate-a", "-m", "merge candidate a"]);
+  git(root, ["merge", "--no-ff", "candidate-b", "-m", "merge candidate b"]);
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.ok(
+    result.problems.includes(
+      "button: 最新証跡が一意に決まらない (2026-08-02-button-preview.md, 2026-08-03-button-preview.md)",
+    ),
+  );
+});
+
+test("同じcomponentの最新証跡より後の変更は hard failure にする", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  writeFileSync(join(root, "src/components/ui/button.tsx"), "button reverified\n");
+  git(root, ["add", "src/components/ui/button.tsx"]);
+  git(root, ["commit", "-m", "change button before reverification"]);
+  const latestVerifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
+  addComponentEvidence(root, "2026-08-02-button-preview.md", latestVerifiedSha);
+  git(root, ["commit", "-m", "add latest button evidence"]);
+  writeFileSync(join(root, "src/previews/button.tsx"), "button changed after evidence\n");
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual(result.problems, [
+    "2026-08-02-button-preview.md: 検証 SHA 以降に component 固有 path が変更されている",
+  ]);
+});
+
+test("同じcomponentの古い証跡もSHA構造検査の対象に残す", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  writeFileSync(join(root, "src/components/ui/button.tsx"), "button reverified\n");
+  git(root, ["add", "src/components/ui/button.tsx"]);
+  git(root, ["commit", "-m", "change button before reverification"]);
+  const latestVerifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
+  addComponentEvidence(root, "2026-08-02-button-preview.md", latestVerifiedSha);
+  git(root, ["commit", "-m", "add latest button evidence"]);
+  const missingCommit = "f".repeat(40);
+  writeFileSync(
+    join(root, ".docs/reviews/2026-08-01-button-preview.md"),
+    `verified_impl_sha: ${missingCommit}\n`,
+  );
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.ok(
+    result.problems.includes(
+      `2026-08-01-button-preview.md: 検証 SHA ${missingCommit} が commit として存在しない`,
+    ),
   );
 });
 

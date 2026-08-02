@@ -11,7 +11,8 @@ export function AvatarPreview() {
         <AvatarFallback delay={0}>NK</AvatarFallback>
       </Avatar>
       <Avatar aria-label="プロフィール画像のフォールバック" size="lg">
-        <AvatarImage src="/avatar-missing.png" alt="" />
+        {/* 上流が定義する「画像未提供」の fallback 経路を検証する。読み込み失敗の経路ではない。 */}
+        <AvatarImage alt="" />
         <AvatarFallback delay={0}>UI</AvatarFallback>
       </Avatar>
     </div>

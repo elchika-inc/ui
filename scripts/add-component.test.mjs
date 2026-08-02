@@ -57,6 +57,23 @@ test("--modified が無ければ停止する", async () => {
   assert.throws(() => parseArgs(["calendar"]), /--modified/);
 });
 
+test("--modified の値が次のoptionなら停止する", async () => {
+  const { parseArgs } = await loadModule();
+  assert.throws(() => parseArgs(["calendar", "--modified", "--force"]), /--modified/);
+});
+
+test("同じoptionを重複指定したら停止する", async () => {
+  const { parseArgs } = await loadModule();
+  assert.throws(
+    () => parseArgs(["calendar", "--modified", "変更1", "--modified", "変更2"]),
+    /--modified.*1回/,
+  );
+  assert.throws(
+    () => parseArgs(["calendar", "--modified", "変更", "--force", "--force"]),
+    /--force.*1回/,
+  );
+});
+
 test("pin 済み CLI の add command を組み立てる", async () => {
   const { shadcnCommand } = await loadModule();
   assert.deepEqual(shadcnCommand("4.16.0", "calendar"), {
@@ -140,6 +157,94 @@ test("想定外パスの変更があれば復元せず停止する", async (t) =
   );
 });
 
+test("registry:hook の target path を追加対象として分類する", async (t) => {
+  const root = createRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { reconcileAddChanges, trackedFiles } = await loadModule();
+  const packageBefore = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
+  const trackedBefore = trackedFiles(root);
+  mkdirSync(join(root, "src/hooks"), { recursive: true });
+  writeFileSync(join(root, "src/hooks/use-mobile.ts"), "export const useMobile = () => false;\n");
+
+  const result = reconcileAddChanges({
+    root,
+    name: "use-mobile",
+    targetPath: "src/hooks/use-mobile.ts",
+    packageBefore,
+    trackedBefore,
+  });
+
+  assert.deepEqual(result.restored, []);
+  assert.equal(
+    readFileSync(join(root, "src/hooks/use-mobile.ts"), "utf8"),
+    "export const useMobile = () => false;\n",
+  );
+});
+
+test("sidebar が更新した既存 registry hook 依存を復元する", async (t) => {
+  const root = createRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { reconcileAddChanges, trackedFiles } = await loadModule();
+  mkdirSync(join(root, "src/hooks"), { recursive: true });
+  writeFileSync(join(root, "src/hooks/use-mobile.ts"), "hook original\n");
+  git(root, ["add", "src/hooks/use-mobile.ts"]);
+  git(root, ["commit", "-m", "hook fixture"]);
+  const packageBefore = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
+  const trackedBefore = trackedFiles(root);
+
+  writeFileSync(join(root, "src/components/ui/sidebar.tsx"), "sidebar generated\n");
+  writeFileSync(join(root, "src/hooks/use-mobile.ts"), "hook overwritten\n");
+
+  const result = reconcileAddChanges({
+    root,
+    name: "sidebar",
+    targetPath: "src/components/ui/sidebar.tsx",
+    packageBefore,
+    trackedBefore,
+  });
+
+  assert.deepEqual(result.restored, ["src/hooks/use-mobile.ts"]);
+  assert.equal(
+    readFileSync(join(root, "src/components/ui/sidebar.tsx"), "utf8"),
+    "sidebar generated\n",
+  );
+  assert.equal(readFileSync(join(root, "src/hooks/use-mobile.ts"), "utf8"), "hook original\n");
+});
+
+test("registry item type と一次 path から target を決める", async () => {
+  const { resolveRegistryTarget } = await loadModule();
+
+  assert.deepEqual(
+    resolveRegistryTarget("use-mobile", {
+      type: "registry:hook",
+      files: [{ type: "registry:hook", path: "registry/base-nova/hooks/use-mobile.ts" }],
+    }),
+    {
+      itemType: "registry:hook",
+      registryPath: "registry/base-nova/hooks/use-mobile.ts",
+      targetPath: "src/hooks/use-mobile.ts",
+      upstreamPath: "apps/v4/registry/bases/base/hooks/use-mobile.ts",
+    },
+  );
+});
+
+test("未対応 type と type に合わない一次 path は停止する", async () => {
+  const { resolveRegistryTarget } = await loadModule();
+
+  assert.throws(
+    () => resolveRegistryTarget("example", { type: "registry:block", files: [] }),
+    /未対応の registry item type/,
+  );
+  assert.throws(
+    () =>
+      resolveRegistryTarget("use-mobile", {
+        type: "registry:hook",
+        files: [{ type: "registry:hook", path: "registry/base-nova/ui/use-mobile.ts" }],
+      }),
+    /一次 file path が想定外/,
+  );
+});
+
 test("裸の registry dependency だけを @elchika namespace へ付け替える", async () => {
   const { normalizeRegistryDependencies } = await loadModule();
   assert.deepEqual(
@@ -170,6 +275,7 @@ test("wrapper が pin add から2つの hash・来歴・registryまで記録し�
   ].join("\n");
   const served = "registry calendar source\n";
   const upstreamItem = {
+    type: "registry:ui",
     dependencies: ["date-fns"],
     registryDependencies: ["button"],
     files: [
@@ -250,6 +356,53 @@ test("wrapper が pin add から2つの hash・来歴・registryまで記録し�
   assert.deepEqual(rerun, { skipped: true });
   assert.equal(reran, false);
   assert.deepEqual(rerunLogs, ["calendar: 既に記録済み（--force で上書き可能）"]);
+});
+
+test("wrapper が registry:hook を独立 item と来歴へ記録する", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+  const generated =
+    'import * as React from "react";\nexport const useIsMobile = () => React.useState(false)[0];\n';
+  const served = "registry hook source\n";
+  const upstreamItem = {
+    type: "registry:hook",
+    files: [
+      {
+        type: "registry:hook",
+        path: "registry/base-nova/hooks/use-mobile.ts",
+        content: served,
+      },
+    ],
+  };
+  const runCommand = () => {
+    mkdirSync(join(root, "src/hooks"), { recursive: true });
+    writeFileSync(join(root, "src/hooks/use-mobile.ts"), generated);
+  };
+  const fetchImpl = async (url) => {
+    let body;
+    if (url.includes("ui.shadcn.com")) body = upstreamItem;
+    else if (url.includes("/commits?")) body = [{ sha: "b".repeat(40) }];
+    else body = { path: "apps/v4/registry/bases/base/hooks/use-mobile.ts" };
+    return { ok: true, status: 200, json: async () => body };
+  };
+
+  const result = await runAddComponent({
+    argv: ["use-mobile", "--modified", "hook target を追加"],
+    root,
+    fetchImpl,
+    runCommand,
+    log: () => {},
+  });
+
+  assert.equal(result.registryItem.type, "registry:hook");
+  assert.deepEqual(result.registryItem.files[0], {
+    path: "src/hooks/use-mobile.ts",
+    type: "registry:hook",
+  });
+  assert.equal(result.entry.registryPath, "registry/base-nova/hooks/use-mobile.ts");
+  assert.equal(result.entry.upstreamPath, "apps/v4/registry/bases/base/hooks/use-mobile.ts");
+  assert.equal(existsSync(join(root, "src/components/ui/use-mobile.tsx")), false);
 });
 
 test("汚れた worktree では add を実行する前に停止する", async (t) => {

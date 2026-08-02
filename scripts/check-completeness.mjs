@@ -3,29 +3,53 @@
 // Button 固定の検査を一般化したもので、#2 で 50 件足すときの安全網になる。
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
+import ts from "typescript";
 
-const exportedNames = (dts, typeOnly) => {
-  const prefix = typeOnly ? "type\\s*" : "(?!type\\b)";
-  const re = new RegExp(`export\\s+${prefix}\\{([\\s\\S]*?)\\}\\s*from\\s*["'][^"']+["']`, "g");
-  const names = [];
-  for (const match of dts.matchAll(re)) {
-    for (const item of match[1].split(",")) {
-      const parts = item.trim().split(/\s+as\s+/);
-      const publicName = parts.at(-1)?.trim();
-      if (publicName) names.push(publicName);
-    }
-  }
-  return names;
+const exportDeclarations = (source, fileName) => {
+  const sourceFile = ts.createSourceFile(
+    fileName,
+    source,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TS,
+  );
+  return sourceFile.statements.filter(ts.isExportDeclaration);
 };
+
+const exportedNames = (dts, typeOnly) =>
+  exportDeclarations(dts, "lib/index.d.ts").flatMap((declaration) => {
+    if (!declaration.exportClause || !ts.isNamedExports(declaration.exportClause)) return [];
+    return declaration.exportClause.elements
+      .filter((element) => (declaration.isTypeOnly || element.isTypeOnly) === typeOnly)
+      .map((element) => element.name.text);
+  });
+
+const isComponentValueName = (name) =>
+  /^[A-Z]/.test(name) && !name.endsWith("Props") && !/^[A-Z][A-Z0-9_]+$/.test(name);
+
+const exportedModulePaths = (source) =>
+  new Set(
+    exportDeclarations(source, "src/index.ts")
+      .filter(
+        (declaration) =>
+          !declaration.isTypeOnly &&
+          declaration.exportClause &&
+          ts.isNamedExports(declaration.exportClause) &&
+          declaration.exportClause.elements.some(
+            (element) => !element.isTypeOnly && isComponentValueName(element.name.text),
+          ),
+      )
+      .map((declaration) => declaration.moduleSpecifier)
+      .filter((specifier) => specifier && ts.isStringLiteralLike(specifier))
+      .map((specifier) => specifier.text),
+  );
 
 // registry / preview / provenance は配布ファイル単位だが、design-sync は .d.ts の
 // PascalCase value export を独立した component として扱う。そのため Props だけは
 // export 単位で検査し、各 public value に同名の <Name>Props を要求する。
 const dtsContractProblems = (dts) => {
   const typeExports = new Set(exportedNames(dts, true));
-  const componentExports = exportedNames(dts, false).filter(
-    (name) => /^[A-Z]/.test(name) && !name.endsWith("Props") && !/^[A-Z][A-Z0-9_]+$/.test(name),
-  );
+  const componentExports = exportedNames(dts, false).filter(isComponentValueName);
   if (componentExports.length === 0) {
     return ["lib/index.d.ts の PascalCase value export が 0 件（走査が空走している）"];
   }
@@ -69,8 +93,9 @@ export function checkCompleteness({
   provenance,
 }) {
   const problems = dtsContractProblems(dts);
+  const barrelPaths = exportedModulePaths(barrel);
   for (const name of components) {
-    if (!barrel.includes(`./components/ui/${name}`)) {
+    if (!barrelPaths.has(`./components/ui/${name}`)) {
       problems.push(`${name}: src/index.ts から export されていない`);
     }
     if (!registry.items.some((i) => i.name === name)) {

@@ -44,11 +44,18 @@ jobs:
       # **ファイル数を定数で書かない** — テストを 1 本足すたびにここがずれ、
       # 実際にずれた（round 13 で check-completeness.test.mjs を足したとき）。
       # 出力から読めば、本数が増えても減っても正しく判定できる。
-      # GitHub Actions の run は bash -e なので、前段が失敗すればステップごと落ちる。
+      # bash -e のまま直接実行すると失敗時に cat へ到達せず、診断が消える。
+      # exit code を保存し、出力を表示してから同じ成否を返す。
       - name: Unit tests
         run: |
+          set +e
           node --test "scripts/*.test.mjs" > /tmp/ui-tests.txt 2>&1
+          test_exit=$?
+          set -e
           cat /tmp/ui-tests.txt
+          if [ "$test_exit" -ne 0 ]; then
+            exit "$test_exit"
+          fi
           grep -qE '^. tests [1-9]' /tmp/ui-tests.txt
 
       - name: Standards check
@@ -71,7 +78,7 @@ jobs:
         run: npm run build:lib
 
       - name: Props contract
-        run: npx tsc --noEmit --ignoreConfig --strict --module esnext --moduleResolution bundler --target es2022 --jsx react-jsx types/dts-contract.ts
+        run: npm run check:props
 
       # lib/index.d.ts を読むので Build library の後ろに置く。
       - name: Completeness check

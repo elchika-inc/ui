@@ -56,6 +56,10 @@ npx shadcn@latest add --overwrite http://127.0.0.1:3011/r/button.json
 
 `sonner` は `next-themes` の `ThemeProvider` を前提とする。
 
+`Toaster`（sonner ベース）と `ToastToaster`（Base UI Toast ベース）は別系統。どちらか一方を使う。
+
+`DirectionProvider` は Base UI の文字方向 context だけを設定し、HTML / CSS の文字方向は変更しない。RTL にする領域では、利用側が `dir="rtl"` または CSS の `direction: rtl` も設定する。
+
 ### Tooltip のアクセシビリティ
 
 `TooltipContent` は `role="tooltip"` を固定する。利用側は content に一意な `id` を付け、同じ値を trigger の `aria-describedby` に渡す。

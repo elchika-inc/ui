@@ -9,7 +9,7 @@ export function VerificationCatalog() {
       <div className="mx-auto flex max-w-7xl flex-col gap-8">
         <header className="flex flex-col gap-3">
           <p className="text-sm font-medium text-primary">elchika-inc/ui</p>
-          <h1 className="text-3xl font-semibold tracking-tight">検証用カタログ</h1>
+          <h1 className="text-3xl font-semibold tracking-tight">カタログ</h1>
           <p className="max-w-3xl text-muted-foreground">
             静的な見た目を横断比較するため、すべての component preview を同じページに描画します。
             overlay はトリガーのみを表示し、開いた状態は隔離プレビューで検証します。
