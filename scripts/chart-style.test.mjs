@@ -1,9 +1,26 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import { test } from "node:test";
+import ts from "typescript";
 
 const loadSerializer = async () => {
   try {
-    return await import("../src/components/ui/chart-style.ts");
+    const path = new URL("../src/components/ui/chart-style.ts", import.meta.url);
+    const source = await readFile(path, "utf8");
+    const { diagnostics, outputText } = ts.transpileModule(source, {
+      compilerOptions: {
+        module: ts.ModuleKind.ESNext,
+        target: ts.ScriptTarget.ES2022,
+      },
+      fileName: path.pathname,
+      reportDiagnostics: true,
+    });
+    const errors = diagnostics?.filter(
+      (diagnostic) => diagnostic.category === ts.DiagnosticCategory.Error,
+    );
+    assert.deepEqual(errors, [], "Chart CSS serializerのtranspileに失敗した");
+    const moduleUrl = `data:text/javascript;base64,${Buffer.from(outputText).toString("base64")}`;
+    return await import(moduleUrl);
   } catch (error) {
     assert.fail(`Chart CSS serializerが読み込めない: ${error}`);
   }
