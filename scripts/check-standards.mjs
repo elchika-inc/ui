@@ -49,22 +49,57 @@ function classNameExpressions(path, source) {
     ts.ScriptKind.TSX,
   );
   const expressions = [];
-  const variableInitializers = new Map();
+  const variableDeclarations = new Map();
   const collectVariables = (node) => {
     if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer) {
-      const initializers = variableInitializers.get(node.name.text) ?? [];
-      initializers.push(node.initializer);
-      variableInitializers.set(node.name.text, initializers);
+      const declarations = variableDeclarations.get(node.name.text) ?? [];
+      declarations.push(node);
+      variableDeclarations.set(node.name.text, declarations);
     }
     ts.forEachChild(node, collectVariables);
   };
   collectVariables(sourceFile);
-  const resolveExpression = (expression, seen = new Set()) => {
-    if (!ts.isIdentifier(expression) || seen.has(expression.text)) return expression;
-    const initializers = variableInitializers.get(expression.text) ?? [];
-    if (initializers.length !== 1) return expression;
-    const nextSeen = new Set(seen).add(expression.text);
-    return resolveExpression(initializers[0], nextSeen);
+  const isLexicalScope = (node) =>
+    ts.isSourceFile(node) ||
+    ts.isBlock(node) ||
+    ts.isCaseBlock(node) ||
+    ts.isForStatement(node) ||
+    ts.isForInStatement(node) ||
+    ts.isForOfStatement(node) ||
+    ts.isCatchClause(node);
+  const lexicalScope = (node) => {
+    for (let current = node.parent; current; current = current.parent) {
+      if (isLexicalScope(current)) return current;
+    }
+    return sourceFile;
+  };
+  const containsNode = (ancestor, node) => {
+    for (let current = node; current; current = current.parent) {
+      if (current === ancestor) return true;
+    }
+    return false;
+  };
+  const resolveExpression = (expression, useNode = expression, seen = new Set()) => {
+    if (!ts.isIdentifier(expression)) return expression;
+    const declarations = (variableDeclarations.get(expression.text) ?? [])
+      .filter(
+        (declaration) =>
+          declaration.getStart(sourceFile) < useNode.getStart(sourceFile) &&
+          containsNode(lexicalScope(declaration), useNode),
+      )
+      .toSorted((left, right) => {
+        const leftScope = lexicalScope(left);
+        const rightScope = lexicalScope(right);
+        const spanDifference =
+          leftScope.getEnd() -
+          leftScope.getStart(sourceFile) -
+          (rightScope.getEnd() - rightScope.getStart(sourceFile));
+        return spanDifference || right.getStart(sourceFile) - left.getStart(sourceFile);
+      });
+    const declaration = declarations[0];
+    if (!declaration || seen.has(declaration)) return expression;
+    const nextSeen = new Set(seen).add(declaration);
+    return resolveExpression(declaration.initializer, declaration, nextSeen);
   };
   const visit = (node) => {
     if (

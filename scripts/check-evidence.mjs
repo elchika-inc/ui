@@ -248,7 +248,7 @@ function evidenceAddition(repositoryRoot, report) {
   return { commit: undefined, files: [...new Set([...staged, ...untracked].filter(Boolean))] };
 }
 
-function introducedVerificationSha(repositoryRoot, report) {
+function introducedVerification(repositoryRoot, report) {
   const reportPath = `.docs/reviews/${report}`;
   const introductionCommit = git(repositoryRoot, [
     "log",
@@ -262,10 +262,7 @@ function introducedVerificationSha(repositoryRoot, report) {
     .split("\n")
     .find(Boolean);
   if (!introductionCommit) return undefined;
-  const introduced = parseVerificationSha(
-    git(repositoryRoot, ["show", `${introductionCommit}:${reportPath}`]),
-  );
-  return introduced.sha;
+  return parseVerificationSha(git(repositoryRoot, ["show", `${introductionCommit}:${reportPath}`]));
 }
 
 function imageComponentAndTheme(path, components) {
@@ -279,6 +276,19 @@ function imageComponentAndTheme(path, components) {
     .split("-")
     .find((part) => part === "light" || part === "dark");
   return { component, theme };
+}
+
+function inspectVerificationHistory(repositoryRoot, verifications) {
+  const problems = [];
+  for (const report of verifications) {
+    const introduced = introducedVerification(repositoryRoot, report.file);
+    if (introduced?.problem) {
+      problems.push(`${report.file}: 初回記録の ${introduced.problem}`);
+    } else if (introduced?.sha && introduced.sha !== report.sha) {
+      problems.push(`${report.file}: verified_impl_sha が初回記録から変更されている`);
+    }
+  }
+  return problems;
 }
 
 function inspectComponentEvidenceCoverage(repositoryRoot, components, verifications, imageFiles) {
@@ -302,10 +312,6 @@ function inspectComponentEvidenceCoverage(repositoryRoot, components, verificati
     if (latest.length !== 1) continue;
     const [report] = latest;
     const addition = evidenceAddition(repositoryRoot, report.file);
-    const introducedSha = introducedVerificationSha(repositoryRoot, report.file);
-    if (introducedSha && introducedSha !== report.sha) {
-      problems.push(`${report.file}: verified_impl_sha が初回記録から変更されている`);
-    }
     const addedImageStems = new Set(
       addition.files
         .filter((path) => path.startsWith(".docs/reviews/"))
@@ -383,6 +389,7 @@ export function checkEvidenceInRepo(root) {
     stale.push(...inspected.stale);
     if (inspected.verification) componentVerifications.push(inspected.verification);
   }
+  problems.push(...inspectVerificationHistory(repositoryRoot, componentVerifications));
   problems.push(...inspectLatestComponentEvidence(repositoryRoot, componentVerifications));
   problems.push(
     ...inspectComponentEvidenceCoverage(

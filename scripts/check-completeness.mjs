@@ -30,9 +30,11 @@ const exportedModulePaths = (source) =>
       .filter(
         (declaration) =>
           !declaration.isTypeOnly &&
-          (!declaration.exportClause ||
-            !ts.isNamedExports(declaration.exportClause) ||
-            declaration.exportClause.elements.some((element) => !element.isTypeOnly)),
+          declaration.exportClause &&
+          ts.isNamedExports(declaration.exportClause) &&
+          declaration.exportClause.elements.some(
+            (element) => !element.isTypeOnly && /^[A-Z]/.test(element.name.text),
+          ),
       )
       .map((declaration) => declaration.moduleSpecifier)
       .filter((specifier) => specifier && ts.isStringLiteralLike(specifier))

@@ -153,6 +153,27 @@ test("変数へ抽出したclass合成の状態ring幅と透明ring色を関連�
   }
 });
 
+test("別scopeの同名変数があってもclassNameの最近傍initializerを解決する", () => {
+  const { violations } = checkFile(
+    "a.tsx",
+    `function InvalidView() {
+      const classes = cn(
+        "focus-visible:ring-[3px]",
+        "ring-ring/50",
+      );
+      return <div className={classes} />;
+    }
+    function ValidView() {
+      const classes = "text-sm";
+      return <div className={classes} />;
+    }`,
+  );
+  assert.ok(
+    violations.some((violation) => violation.rule === "focus-ring-opacity"),
+    "別scopeの同名変数で透明なfocus ringが隠れている",
+  );
+});
+
 test("2 規定へ同時に違反するクラスは 2 診断とも出す", () => {
   // ring-[#f00]/50 は任意値であり、かつ透明度合成でもある。
   // focus-ring-opacity だけを assert すると、ARBITRARY 側が

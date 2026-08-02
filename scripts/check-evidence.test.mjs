@@ -148,6 +148,35 @@ test("verified_impl_shaだけを新HEADへ書き換えた旧画像流用を検�
   );
 });
 
+test("初回記録のverified_impl_shaが不正なら後から有効値へ直しても検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  for (const path of [
+    "src/components/ui/new-widget.tsx",
+    "src/previews/new-widget.tsx",
+    "src/pages/preview/new-widget.astro",
+    "src/pages/preview/new-widget-dark.astro",
+  ]) {
+    writeFileSync(join(root, path), `${path}\n`);
+  }
+  git(root, ["add", "src"]);
+  git(root, ["commit", "-m", "add new widget"]);
+  const verifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
+  addComponentEvidence(root, "2026-08-02-new-widget-preview.md", "invalid");
+  git(root, ["commit", "-m", "add invalid new widget evidence"]);
+  writeFileSync(
+    join(root, ".docs/reviews/2026-08-02-new-widget-preview.md"),
+    `verified_impl_sha: ${verifiedSha}\n2026-08-02-new-widget-preview-light.jpg\n2026-08-02-new-widget-preview-dark.jpg\n`,
+  );
+
+  assert.ok(
+    checkEvidenceInRepo(root).problems.includes(
+      "2026-08-02-new-widget-preview.md: 初回記録の verified_impl_sha は40桁の小文字SHAでなければならない",
+    ),
+  );
+});
+
 test("PNG/JPEG の拡張子と magic bytes の不一致を検出する", async () => {
   const { checkImage } = await loadModule();
   assert.equal(checkImage("light.png", png), undefined);
@@ -340,6 +369,29 @@ test("同じcomponentの古い証跡を残し、最新証跡だけを鮮度判�
   const result = checkEvidenceInRepo(root);
 
   assert.deepEqual(result.problems, []);
+});
+
+test("同じcomponentの古い証跡でもverified_impl_shaの改変を検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  const replacementSha = git(root, ["rev-parse", "HEAD"]).trim();
+  writeFileSync(join(root, "src/components/ui/button.tsx"), "button reverified\n");
+  git(root, ["add", "src/components/ui/button.tsx"]);
+  git(root, ["commit", "-m", "change button before reverification"]);
+  const latestVerifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
+  addComponentEvidence(root, "2026-08-02-button-preview.md", latestVerifiedSha);
+  git(root, ["commit", "-m", "add latest button evidence"]);
+  writeFileSync(
+    join(root, ".docs/reviews/2026-08-01-button-preview.md"),
+    `verified_impl_sha: ${replacementSha}\nbutton-preview-light.jpg\nbutton-preview-dark.jpg\n`,
+  );
+
+  assert.ok(
+    checkEvidenceInRepo(root).problems.includes(
+      "2026-08-01-button-preview.md: verified_impl_sha が初回記録から変更されている",
+    ),
+  );
 });
 
 test("分岐した証跡SHAが複数あればcommit件数にかかわらずfail-closedにする", async (t) => {
