@@ -186,12 +186,21 @@ export function latestByAddition(root, reports) {
 }
 
 function pathsChanged(root, sha, paths) {
-  const result = spawnSync("git", ["--literal-pathspecs", "diff", "--quiet", sha, "--", ...paths], {
-    cwd: root,
-    stdio: "ignore",
-  });
-  if (result.status === 1) return true;
-  if (result.status !== 0) throw new Error(`git diff に失敗: ${sha} -- ${paths.join(" ")}`);
+  const comparisons = [
+    ["committed", ["diff", "--quiet", sha, "HEAD", "--", ...paths]],
+    ["staged", ["diff", "--cached", "--quiet", "HEAD", "--", ...paths]],
+    ["unstaged", ["diff", "--quiet", "--", ...paths]],
+  ];
+  for (const [layer, args] of comparisons) {
+    const result = spawnSync("git", ["--literal-pathspecs", ...args], {
+      cwd: root,
+      stdio: "ignore",
+    });
+    if (result.status === 1) return true;
+    if (result.status !== 0) {
+      throw new Error(`git diff (${layer}) に失敗: ${sha} -- ${paths.join(" ")}`);
+    }
+  }
 
   const untracked = spawnSync(
     "git",

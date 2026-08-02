@@ -109,12 +109,13 @@
     --chart-4: rgb(var(--chart-series-4));
     --chart-5: rgb(var(--chart-series-5));
     --radius: 0.625rem;
+    /* 面の alias とペアを保つ */
     --sidebar: var(--card);
-    --sidebar-foreground: var(--foreground);
+    --sidebar-foreground: var(--card-foreground);
     --sidebar-primary: var(--primary);
     --sidebar-primary-foreground: var(--primary-foreground);
     --sidebar-accent: var(--muted);
-    --sidebar-accent-foreground: var(--foreground);
+    --sidebar-accent-foreground: var(--secondary-foreground);
     --sidebar-border: var(--border);
     --sidebar-ring: var(--ring);
 }
@@ -155,11 +156,11 @@
     --chart-5: rgb(var(--chart-series-5));
     --radius: 0.625rem;
     --sidebar: var(--card);
-    --sidebar-foreground: var(--foreground);
+    --sidebar-foreground: var(--card-foreground);
     --sidebar-primary: var(--primary);
     --sidebar-primary-foreground: var(--primary-foreground);
     --sidebar-accent: var(--muted);
-    --sidebar-accent-foreground: var(--foreground);
+    --sidebar-accent-foreground: var(--secondary-foreground);
     --sidebar-border: var(--border);
     --sidebar-ring: var(--ring);
 }

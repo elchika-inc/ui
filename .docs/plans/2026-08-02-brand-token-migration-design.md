@@ -155,7 +155,7 @@ Tabs の light `text-foreground/60` を opaque `text-muted-foreground` へ変更
 
 ### 5.1 計算モデル
 
-`scripts/contrast.mjs` は `src/styles/global.css` の `:root` と `.dark` を直接読む。手写しした定数を計算しない。
+`scripts/contrast.mjs` は生成済み `src/styles/design-system/tokens.css` と alias 層の `src/styles/global.css` をこの順に読み、宣言をmergeする。light は `:root`、dark は `.dark` と `[data-theme="dark"]` を読み、両dark selectorの同名宣言が食い違えばfail-closedにする。CSS comment内のselectorや宣言は解析対象にせず、文字列内のcomment記号は保持する。手写しした定数を計算しない。
 
 1. `oklch()` を linear sRGB へ変換する。
 2. sRGB transfer function で gamma-encoded sRGB へ変換する。
@@ -163,7 +163,7 @@ Tabs の light `text-foreground/60` を opaque `text-muted-foreground` へ変更
 4. 合成後の各色を linear sRGB へ戻して相対輝度を求める。
 5. `(L1 + 0.05) / (L2 + 0.05)` を計算する。
 
-alias は再帰解決し、missing token、cycle、解釈不能値は fail-closed にする。`:root` だけでなく `.dark` を必須とする。
+alias は再帰解決し、missing token、cycle、解釈不能値は fail-closed にする。`:root` と、`.dark` または `[data-theme="dark"]` のdark selectorを必須とする。`global.css` の `.dark` aliasは`:root`とkey・式が完全一致しなければならない。
 
 ### 5.2 consumer case
 
@@ -171,17 +171,26 @@ alias は再帰解決し、missing token、cycle、解釈不能値は fail-close
 
 ```js
 {
-  id: "button-primary-hover-light",
-  theme: "light",
+  label: "selected surface hover",
+  themes: ["light", "dark"],
   gate: "text-aa",
-  reason: "通常サイズの Button label",
-  source: "src/components/ui/button.tsx",
-  sourceClasses: ["hover:bg-primary-hover", "text-primary-foreground"],
-  foreground: { token: "primary-foreground" },
-  background: { token: "primary-hover" },
-  underlays: ["background", "card", "muted"],
+  reason: "brand tint hover surface 上でも本文を読める必要がある",
+  sourceClasses: [
+    {
+      source: "src/components/ui/bubble.tsx",
+      classes: ["[&>[data-slot=bubble-content]:is(button,a):hover]:state-hover-overlay"],
+    },
+  ],
+  foreground: { token: "foreground" },
+  background: {
+    token: "state-hover-bg",
+    underlay: { token: "state-selected-bg", underlay: "background" },
+  },
+  risk: undefined,
 }
 ```
+
+`themes` を省略したcaseはlight / darkの両方を検査する。paintは`token`、任意の`alpha`、再帰的な`underlay`を持てる。`risk` は対応するaccepted riskの遷移を検査するcaseだけに置く。必須case集合に加え、`label`、`themes`、`gate`、foreground / background paint、全`sourceClasses`、`risk`をcanonicalizeしたfull contract digestを固定し、caseの削除や契約の書き換えをfail-closedにする。
 
 gate は次の4種類だけを許可する。
 
@@ -233,13 +242,13 @@ evidence_scope: shared-token-migration
 targeted_dynamic_sha: <40桁の動的検証SHA>
 ```
 
-`src/styles/global.css` の stale を covered とする条件はすべて必須とする。
+runtime CSS 2 path（`src/styles/global.css` と `src/styles/design-system/tokens.css`）の stale を covered とする条件はすべて必須とする。
 
 1. `evidence_scope: shared-token-migration` を持つ最新 report が一意に決まる。最新性は `verified_impl_sha` ではなく report 自身の追加 commit の祖先関係で判定する。staged / untracked report は working tree 上の最新候補とし、複数あれば coverage 不成立にする。
 2. report の `verified_impl_sha` と `targeted_dynamic_sha` が実在し、HEAD の祖先である。
-3. `global.css` の最終変更 commit が `verified_impl_sha` の厳密な祖先である。同じ SHA は「変更後」とみなさない。
+3. runtime CSS 2 pathそれぞれの最終変更 commit が `verified_impl_sha` の厳密な祖先である。同じ SHA は「変更後」とみなさない。
 4. `verified_impl_sha` が `targeted_dynamic_sha` と同一または祖先である。
-5. `targeted_dynamic_sha` 以降に `global.css` が変更されていない。
+5. `targeted_dynamic_sha` 以降にruntime CSS 2 pathのどちらも変更されていない。
 6. report と同じ追加 commit、または commit 前なら同じ staged / untracked 追加集合に catalog、対象 component、targeted route の画像が存在し、magic bytes が拡張子と一致する。
 
 判定不能、複数の incomparable report、field 欠落は coverage 不成立として stale を残す。`src/layouts/main.astro` と `src/lib/utils.ts` はこの token aggregate の coverage 対象にしない。
@@ -252,7 +261,7 @@ targeted_dynamic_sha: <40桁の動的検証SHA>
 - index / catalog scope ごとの最新 aggregate 証跡
 - 過去履歴の stale は件数要約1行
 
-有効な shared token coverage がある場合、`global.css` だけを理由とする historical stale は一覧から除く。他の shared path または aggregate path の stale は残す。
+有効な shared token coverage がある場合、runtime CSS 2 pathだけを理由とする historical stale は一覧から除く。`src/layouts/main.astro`、`src/lib/utils.ts`、component固有path、aggregate pathの stale は残す。
 
 ## 7. registry と provenance
 
@@ -307,7 +316,7 @@ targeted 検証では次を確認する。
 6. `npm run registry:build` 後の `registry.json` と `public/r` が `global.css` の token と一致する。
 7. fresh install probe へ source、token、法務ファイルが届き、consumer build が成功する。
 8. 変更 component の最新 evidence が最終実装 SHA を指し、component 固有 hard gate が通る。
-9. shared aggregate coverage が `global.css` stale を安全に cover し、全履歴の形式・immutability 検査は維持される。
+9. shared aggregate coverage がruntime CSS 2 pathの stale を安全に cover し、全履歴の形式・immutability 検査は維持される。
 10. catalog、targeted route、4 overlay、disabled state の light / dark 実ブラウザ検証に flag がない。
 11. format、lint、unit test、typecheck、props、build、distribution、preview、evidence の全 gate が通る。
 12. review cycle が flag 0 で終了し、PR の最終 head に対する CI が成功する。
@@ -318,4 +327,4 @@ targeted 検証では次を確認する。
 - border / input の decorative contrast は standards `DESIGN.md` §8 に従い 3:1 を保証しない。active text と focus ring は別 gate で検査する。
 - disabled text は WCAG 1.4.3 の対象外だが、見た目と source contract を検証しない理由にはしない。
 - registry の既存 CSS variable は shadcn の `overwriteCssVars: false` により自動上書きされない。`tokens.css` を最後に import する利用契約は維持する。
-- shared aggregate coverage は `global.css` だけを cover する。component 固有変更や他 shared path を誤って green にしない。
+- shared aggregate coverage はruntime CSS 2 pathだけを coverする。component固有変更、`src/layouts/main.astro`、`src/lib/utils.ts`、aggregate pathを誤ってgreenにしない。

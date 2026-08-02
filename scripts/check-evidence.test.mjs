@@ -556,6 +556,47 @@ test("pathspec magicを含むreportの施行後変更をliteral pathで検出す
   );
 });
 
+test("pathspec reportのstaged改変をworking tree復元で相殺できない", async (t) => {
+  const { root, verifiedSha } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  introduceReportImmutabilitySensor(root);
+  const report = ".docs/reviews/[batch]/report.md";
+  mkdirSync(dirname(join(root, report)), { recursive: true });
+  const original = `verified_impl_sha: ${verifiedSha}\n初回\n`;
+  writeFileSync(join(root, report), original);
+  git(root, ["--literal-pathspecs", "add", report]);
+  git(root, ["commit", "-m", "add pathspec report"]);
+  writeFileSync(join(root, report), `${original}staged改変\n`);
+  git(root, ["--literal-pathspecs", "add", report]);
+  writeFileSync(join(root, report), original);
+
+  const result = (await loadModule()).checkEvidenceInRepo(root);
+
+  assert.ok(
+    result.problems.some(
+      (problem) => problem.includes("[batch]/report.md") && problem.includes("baselineから変更"),
+    ),
+  );
+});
+
+test("component sourceのstaged改変をworking tree復元で相殺できない", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const source = "src/components/ui/button.tsx";
+  const original = readFileSync(join(root, source));
+  writeFileSync(join(root, source), "staged component改変\n");
+  git(root, ["add", source]);
+  writeFileSync(join(root, source), original);
+
+  const result = (await loadModule()).checkEvidenceInRepo(root);
+
+  assert.ok(
+    result.problems.includes(
+      "2026-08-01-button-preview.md: 検証 SHA 以降に component 固有 path が変更されている",
+    ),
+  );
+});
+
 test("pathspec magicを含む画像の施行後置換をliteral pathで検出する", async (t) => {
   const { root } = createEvidenceRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));

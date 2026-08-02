@@ -791,6 +791,19 @@ test("公開手順はalias CSSだけをimportしdark selector同期を要求す�
   assert.match(section, /data-theme="dark"/);
 });
 
+test("Sidebarのforeground aliasは面のaliasとペアを保つ", () => {
+  const source = readSource("src/styles/global.css");
+  assert.equal(
+    [...source.matchAll(/--sidebar-foreground:\s*var\(--card-foreground\);/g)].length,
+    2,
+  );
+  assert.equal(
+    [...source.matchAll(/--sidebar-accent-foreground:\s*var\(--secondary-foreground\);/g)].length,
+    2,
+  );
+  assert.match(source, /面の alias とペアを保つ/);
+});
+
 test("配信文書は未公開状態と公開後の正本ドメインを区別する", () => {
   const readme = readSource("README.md");
   const action = readSource(".docs/actions/manual-subproject-3-domain.md");
