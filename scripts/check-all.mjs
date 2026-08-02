@@ -4,6 +4,12 @@ import { pathToFileURL } from "node:url";
 
 export const CHECKS = [
   { name: "standards", command: process.execPath, args: ["scripts/check-standards.mjs"] },
+  {
+    name: "design tokens",
+    command: process.execPath,
+    args: ["src/styles/design-system/build-tokens.mjs", "--check"],
+  },
+  { name: "contrast", command: process.execPath, args: ["scripts/contrast.mjs"] },
   { name: "completeness", command: process.execPath, args: ["scripts/check-completeness.mjs"] },
   { name: "distribution", command: process.execPath, args: ["scripts/check-distribution.mjs"] },
   { name: "preview render", command: process.execPath, args: ["scripts/check-preview-render.mjs"] },

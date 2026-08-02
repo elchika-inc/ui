@@ -58,6 +58,12 @@ jobs:
           fi
           grep -qE '^. tests [1-9]' /tmp/ui-tests.txt
 
+      - name: Design token build
+        run: npm run check:design-tokens
+
+      - name: Token contrast
+        run: npm run check:contrast
+
       - name: Standards check
         run: node scripts/check-standards.mjs
 
