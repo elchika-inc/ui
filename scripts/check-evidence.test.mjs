@@ -10,13 +10,29 @@ import {
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { test } from "node:test";
 
 const checkerUrl = new URL("./check-evidence.mjs", import.meta.url);
 const migrationUrl = new URL("./migrate-evidence-sha.mjs", import.meta.url);
 const png = Buffer.from("89504e470d0a1a0a", "hex");
 const jpeg = Buffer.from("ffd8ff", "hex");
+const sharedTokenImageSubjects = [
+  "attachment",
+  "alert",
+  "badge",
+  "button",
+  "bubble",
+  "dialog",
+  "drawer",
+  "menubar",
+  "select",
+  "tabs",
+  "catalog",
+  "alert-dialog",
+  "sheet",
+  "disabled-controls",
+];
 
 const git = (root, args) => execFileSync("git", args, { cwd: root, encoding: "utf8" });
 
@@ -102,6 +118,51 @@ const createEvidenceRepo = () => {
   git(root, ["add", ".docs/reviews"]);
   git(root, ["commit", "-m", "evidence"]);
   return { root, verifiedSha };
+};
+
+const commitSharedTokenChange = (root) => {
+  writeFileSync(join(root, "src/styles/global.css"), "brand tokens\n");
+  git(root, ["add", "src/styles/global.css"]);
+  git(root, ["commit", "-m", "change shared tokens"]);
+  const globalTokenSha = git(root, ["rev-parse", "HEAD"]).trim();
+  writeFileSync(join(root, "implementation.txt"), "implementation after tokens\n");
+  git(root, ["add", "implementation.txt"]);
+  git(root, ["commit", "-m", "implementation after tokens"]);
+  const implementationSha = git(root, ["rev-parse", "HEAD"]).trim();
+  return { globalTokenSha, implementationSha };
+};
+
+const addSharedTokenEvidence = (
+  root,
+  {
+    report = "brand-token-migration/report.md",
+    verifiedSha,
+    targetedSha = verifiedSha,
+    prefix = "after",
+    omitField,
+    omitSubject,
+    stage = true,
+    commit = false,
+  },
+) => {
+  const reviewsRoot = join(root, ".docs/reviews");
+  const reportPath = join(reviewsRoot, report);
+  const reportDirectory = dirname(reportPath);
+  mkdirSync(reportDirectory, { recursive: true });
+  const lines = [`verified_impl_sha: ${verifiedSha}`];
+  if (omitField !== "evidence_scope") lines.push("evidence_scope: shared-token-migration");
+  if (omitField !== "targeted_dynamic_sha") lines.push(`targeted_dynamic_sha: ${targetedSha}`);
+  writeFileSync(reportPath, `${lines.join("\n")}\n`);
+  for (const subject of sharedTokenImageSubjects) {
+    if (subject === omitSubject) continue;
+    for (const theme of ["light", "dark"]) {
+      writeFileSync(join(reportDirectory, `${prefix}-${subject}-${theme}.jpg`), jpeg);
+    }
+  }
+  if (stage) git(root, ["add", `.docs/reviews/${report.split("/")[0]}`]);
+  if (!commit) return undefined;
+  git(root, ["commit", "-m", `add ${prefix} shared token evidence`]);
+  return git(root, ["rev-parse", "HEAD"]).trim();
 };
 
 test("component固有Markdownの欠落を検出する", async (t) => {
@@ -195,6 +256,338 @@ test("verified_impl_shaを一意な構造化欄として読む", async () => {
   assert.deepEqual(parseVerificationSha(`verified_impl_sha: ${sha}\nverified_impl_sha: ${sha}\n`), {
     problem: "verified_impl_sha が複数ある",
   });
+});
+
+test("shared token report の構造化 field を一意に読む", async () => {
+  const { parseSingleField } = await loadModule();
+
+  assert.deepEqual(parseSingleField("evidence_scope: shared-token-migration\n", "evidence_scope"), {
+    value: "shared-token-migration",
+  });
+  assert.match(
+    parseSingleField("targeted_dynamic_sha: a\ntargeted_dynamic_sha: b\n", "targeted_dynamic_sha")
+      .problem,
+    /複数/,
+  );
+});
+
+test("有効な shared token report は global.css の historical stale を cover する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { implementationSha } = commitSharedTokenChange(root);
+  addSharedTokenEvidence(root, { verifiedSha: implementationSha, commit: true });
+  const { checkEvidenceInRepo } = await loadModule();
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual(result.problems, []);
+  assert.deepEqual([...result.coverage.coveredPaths], ["src/styles/global.css"]);
+  assert.deepEqual(result.displayStale, []);
+});
+
+test("verified_impl_sha が global.css 変更 commit と同一なら cover しない", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { globalTokenSha } = commitSharedTokenChange(root);
+  addSharedTokenEvidence(root, { verifiedSha: globalTokenSha, commit: true });
+  const { checkEvidenceInRepo } = await loadModule();
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual([...result.coverage.coveredPaths], []);
+  assert.ok(result.problems.some((problem) => problem.includes("厳密な祖先")));
+  assert.ok(result.displayStale.some((entry) => entry.includes("src/styles/global.css")));
+});
+
+test("targeted_dynamic_sha が欠落した report は fail-closed にする", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { implementationSha } = commitSharedTokenChange(root);
+  addSharedTokenEvidence(root, {
+    verifiedSha: implementationSha,
+    omitField: "targeted_dynamic_sha",
+    commit: true,
+  });
+  const { checkEvidenceInRepo } = await loadModule();
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual([...result.coverage.coveredPaths], []);
+  assert.ok(result.problems.some((problem) => problem.includes("targeted_dynamic_sha が無い")));
+});
+
+test("targeted_dynamic_sha が存在しない commit なら fail-closed にする", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { implementationSha } = commitSharedTokenChange(root);
+  const missingCommit = "f".repeat(40);
+  addSharedTokenEvidence(root, {
+    verifiedSha: implementationSha,
+    targetedSha: missingCommit,
+    commit: true,
+  });
+  const { checkEvidenceInRepo } = await loadModule();
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual([...result.coverage.coveredPaths], []);
+  assert.ok(
+    result.problems.some((problem) =>
+      problem.includes(`targeted_dynamic_sha ${missingCommit} が commit として存在しない`),
+    ),
+  );
+});
+
+test("verified_impl_sha が targeted_dynamic_sha の祖先でなければ cover しない", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { globalTokenSha, implementationSha } = commitSharedTokenChange(root);
+  addSharedTokenEvidence(root, {
+    verifiedSha: implementationSha,
+    targetedSha: globalTokenSha,
+    commit: true,
+  });
+  const { checkEvidenceInRepo } = await loadModule();
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual([...result.coverage.coveredPaths], []);
+  assert.ok(result.problems.some((problem) => problem.includes("動的検証 SHA の祖先ではない")));
+});
+
+test("targeted SHA 後の committed global.css 変更は coverage を失わせる", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { implementationSha } = commitSharedTokenChange(root);
+  addSharedTokenEvidence(root, { verifiedSha: implementationSha, commit: true });
+  writeFileSync(join(root, "src/styles/global.css"), "changed after dynamic verification\n");
+  git(root, ["add", "src/styles/global.css"]);
+  git(root, ["commit", "-m", "change tokens after dynamic verification"]);
+  const { checkEvidenceInRepo } = await loadModule();
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual([...result.coverage.coveredPaths], []);
+  assert.ok(result.problems.some((problem) => problem.includes("動的検証 SHA 以降")));
+});
+
+test("targeted SHA 後の uncommitted global.css 変更は coverage を失わせる", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { implementationSha } = commitSharedTokenChange(root);
+  addSharedTokenEvidence(root, { verifiedSha: implementationSha, commit: true });
+  writeFileSync(join(root, "src/styles/global.css"), "uncommitted change after verification\n");
+  const { checkEvidenceInRepo } = await loadModule();
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual([...result.coverage.coveredPaths], []);
+  assert.ok(result.problems.some((problem) => problem.includes("動的検証 SHA 以降")));
+});
+
+test("shared coverage は component 固有 path の hard failure を解除しない", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { implementationSha } = commitSharedTokenChange(root);
+  addSharedTokenEvidence(root, { verifiedSha: implementationSha, commit: true });
+  writeFileSync(join(root, "src/components/ui/button.tsx"), "uncommitted component change\n");
+  const { checkEvidenceInRepo } = await loadModule();
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.ok(
+    result.problems.includes(
+      "2026-08-01-button-preview.md: 検証 SHA 以降に component 固有 path が変更されている",
+    ),
+  );
+  assert.deepEqual([...result.coverage.coveredPaths], ["src/styles/global.css"]);
+});
+
+test("untracked の単一 shared report と画像を commit 前でも検査する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { implementationSha } = commitSharedTokenChange(root);
+  addSharedTokenEvidence(root, {
+    verifiedSha: implementationSha,
+    stage: false,
+  });
+  const { checkEvidenceInRepo } = await loadModule();
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual(result.problems, []);
+  assert.deepEqual([...result.coverage.coveredPaths], ["src/styles/global.css"]);
+});
+
+test("shared report と同時追加する画像が欠ければ cover しない", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { implementationSha } = commitSharedTokenChange(root);
+  addSharedTokenEvidence(root, {
+    verifiedSha: implementationSha,
+    omitSubject: "disabled-controls",
+    commit: true,
+  });
+  const { checkEvidenceInRepo } = await loadModule();
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual([...result.coverage.coveredPaths], []);
+  assert.ok(result.problems.some((problem) => problem.includes("disabled-controls-light")));
+  assert.ok(result.problems.some((problem) => problem.includes("disabled-controls-dark")));
+});
+
+test("同じ verified_impl_sha の shared report は追加 commit が新しい方を採用する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { implementationSha } = commitSharedTokenChange(root);
+  addSharedTokenEvidence(root, {
+    report: "brand-token-migration/report-old.md",
+    verifiedSha: implementationSha,
+    prefix: "2026-08-02",
+    omitField: "targeted_dynamic_sha",
+    commit: true,
+  });
+  addSharedTokenEvidence(root, {
+    report: "brand-token-migration/report.md",
+    verifiedSha: implementationSha,
+    prefix: "2026-08-03",
+    commit: true,
+  });
+  const { checkEvidenceInRepo } = await loadModule();
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual(result.problems, []);
+  assert.deepEqual([...result.coverage.coveredPaths], ["src/styles/global.css"]);
+  assert.equal(result.coverage.report, "brand-token-migration/report.md");
+});
+
+test("staged の単一 shared report と画像を commit 前でも検査する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { implementationSha } = commitSharedTokenChange(root);
+  addSharedTokenEvidence(root, { verifiedSha: implementationSha });
+  const { checkEvidenceInRepo } = await loadModule();
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual(result.problems, []);
+  assert.deepEqual([...result.coverage.coveredPaths], ["src/styles/global.css"]);
+});
+
+test("working tree の shared report が複数あれば fail-closed にする", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { implementationSha } = commitSharedTokenChange(root);
+  addSharedTokenEvidence(root, {
+    report: "brand-token-a/report.md",
+    verifiedSha: implementationSha,
+    prefix: "2026-08-02",
+    stage: false,
+  });
+  addSharedTokenEvidence(root, {
+    report: "brand-token-b/report.md",
+    verifiedSha: implementationSha,
+    prefix: "2026-08-03",
+    stage: false,
+  });
+  const { checkEvidenceInRepo } = await loadModule();
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual([...result.coverage.coveredPaths], []);
+  assert.ok(result.problems.some((problem) => problem.includes("最新証跡が一意に決まらない")));
+});
+
+test("追加 commit が分岐した shared report は fail-closed にする", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { implementationSha } = commitSharedTokenChange(root);
+  const trunk = git(root, ["branch", "--show-current"]).trim();
+
+  git(root, ["switch", "-c", "shared-a"]);
+  addSharedTokenEvidence(root, {
+    report: "brand-token-a/report.md",
+    verifiedSha: implementationSha,
+    prefix: "2026-08-02",
+    commit: true,
+  });
+
+  git(root, ["switch", "-c", "shared-b", implementationSha]);
+  addSharedTokenEvidence(root, {
+    report: "brand-token-b/report.md",
+    verifiedSha: implementationSha,
+    prefix: "2026-08-03",
+    commit: true,
+  });
+
+  git(root, ["switch", trunk]);
+  git(root, ["merge", "--no-ff", "shared-a", "-m", "merge shared a"]);
+  git(root, ["merge", "--no-ff", "shared-b", "-m", "merge shared b"]);
+  const { checkEvidenceInRepo } = await loadModule();
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual([...result.coverage.coveredPaths], []);
+  assert.ok(result.problems.some((problem) => problem.includes("最新証跡が一意に決まらない")));
+});
+
+test("targeted_dynamic_sha が HEAD の祖先でなければ fail-closed にする", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { implementationSha } = commitSharedTokenChange(root);
+  const trunk = git(root, ["branch", "--show-current"]).trim();
+  git(root, ["switch", "-c", "dynamic-sibling", implementationSha]);
+  writeFileSync(join(root, "dynamic-sibling.txt"), "sibling verification\n");
+  git(root, ["add", "dynamic-sibling.txt"]);
+  git(root, ["commit", "-m", "dynamic sibling"]);
+  const siblingSha = git(root, ["rev-parse", "HEAD"]).trim();
+  git(root, ["switch", trunk]);
+  addSharedTokenEvidence(root, {
+    verifiedSha: implementationSha,
+    targetedSha: siblingSha,
+    commit: true,
+  });
+  const { checkEvidenceInRepo } = await loadModule();
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual([...result.coverage.coveredPaths], []);
+  assert.ok(result.problems.some((problem) => problem.includes("現在のHEADの祖先ではない")));
+});
+
+test("human stale は最新 component と最新 aggregate を残し過去履歴を要約する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  writeFileSync(join(root, "src/components/ui/button.tsx"), "button reverified\n");
+  git(root, ["add", "src/components/ui/button.tsx"]);
+  git(root, ["commit", "-m", "change button before reverification"]);
+  const latestVerifiedSha = git(root, ["rev-parse", "HEAD"]).trim();
+  addComponentEvidence(root, "2026-08-02-button-preview.md", latestVerifiedSha);
+  git(root, ["commit", "-m", "add latest button evidence"]);
+  for (const report of ["2026-08-02-index-page.md", "2026-08-02-batch-new-catalog.md"]) {
+    writeFileSync(join(root, ".docs/reviews", report), `verified_impl_sha: ${latestVerifiedSha}\n`);
+    git(root, ["add", `.docs/reviews/${report}`]);
+    git(root, ["commit", "-m", `add ${report}`]);
+  }
+  writeFileSync(join(root, "src/styles/global.css"), "shared token changed after evidence\n");
+  git(root, ["add", "src/styles/global.css"]);
+  git(root, ["commit", "-m", "change shared token after all evidence"]);
+  const { checkEvidenceInRepo } = await loadModule();
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual(result.problems, []);
+  assert.ok(result.displayStale.includes("2026-08-02-button-preview.md: src/styles/global.css"));
+  assert.ok(result.displayStale.includes("2026-08-01-input-preview.md: src/styles/global.css"));
+  assert.ok(result.displayStale.includes("2026-08-02-index-page.md: src/styles/global.css"));
+  assert.ok(result.displayStale.includes("2026-08-02-batch-new-catalog.md: src/styles/global.css"));
+  assert.ok(
+    result.displayStale.includes(
+      "過去履歴の shared stale: 3 件（形式・immutability は全件検査済み）",
+    ),
+  );
 });
 
 test("verified_impl_shaの欠落・重複・存在しないcommitをfail-closedにする", async (t) => {

@@ -12,6 +12,25 @@ export const SHARED_EVIDENCE_PATHS = [
   "src/lib/utils.ts",
 ];
 
+const SHARED_TOKEN_SCOPE = "shared-token-migration";
+const SHARED_TOKEN_PATH = "src/styles/global.css";
+const SHARED_TOKEN_IMAGE_SUBJECTS = [
+  "disabled-controls",
+  "alert-dialog",
+  "attachment",
+  "catalog",
+  "menubar",
+  "select",
+  "button",
+  "bubble",
+  "dialog",
+  "drawer",
+  "badge",
+  "alert",
+  "sheet",
+  "tabs",
+];
+
 const IMAGE_SIGNATURES = [
   { type: "PNG", extensions: [".png"], magic: Buffer.from("89504e470d0a1a0a", "hex") },
   { type: "JPEG", extensions: [".jpg", ".jpeg"], magic: Buffer.from("ffd8ff", "hex") },
@@ -40,6 +59,15 @@ export function parseVerificationSha(markdown) {
   const matched = fields[0].match(/^verified_impl_sha:\s*([0-9a-f]{40})\s*$/);
   if (!matched) return { problem: "verified_impl_sha は40桁の小文字SHAでなければならない" };
   return { sha: matched[1] };
+}
+
+export function parseSingleField(markdown, field) {
+  const escaped = field.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const fields = markdown.match(new RegExp(`^${escaped}:.*$`, "gm")) ?? [];
+  if (fields.length === 0) return { problem: `${field} が無い` };
+  if (fields.length > 1) return { problem: `${field} が複数ある` };
+  const value = fields[0].slice(fields[0].indexOf(":") + 1).trim();
+  return value ? { value } : { problem: `${field} が空` };
 }
 
 function componentFromEvidence(path) {
@@ -138,6 +166,23 @@ function commitIsAncestor(root, ancestor, descendant = "HEAD") {
   throw new Error(`git merge-base に失敗: ${ancestor} ${descendant}`);
 }
 
+const strictAncestor = (root, ancestor, descendant) =>
+  ancestor !== descendant && commitIsAncestor(root, ancestor, descendant);
+
+export function latestByAddition(root, reports) {
+  const workingTreeReports = reports.filter((report) => report.additionCommit === undefined);
+  if (workingTreeReports.length > 0) return workingTreeReports;
+  return reports.filter(
+    (candidate) =>
+      !reports.some(
+        (other) =>
+          candidate.file !== other.file &&
+          candidate.additionCommit !== other.additionCommit &&
+          commitIsAncestor(root, candidate.additionCommit, other.additionCommit),
+      ),
+  );
+}
+
 function pathsChanged(root, sha, paths) {
   const result = spawnSync("git", ["--literal-pathspecs", "diff", "--quiet", sha, "--", ...paths], {
     cwd: root,
@@ -160,7 +205,8 @@ function pathsChanged(root, sha, paths) {
 function inspectMarkdown(repositoryRoot, reviewsRoot, file) {
   const problems = [];
   const stale = [];
-  const parsed = parseVerificationSha(readFileSync(join(reviewsRoot, file), "utf8"));
+  const markdown = readFileSync(join(reviewsRoot, file), "utf8");
+  const parsed = parseVerificationSha(markdown);
   if (parsed.problem) return { problems: [`${file}: ${parsed.problem}`], stale };
   const sha = parsed.sha;
   if (!commitExists(repositoryRoot, sha)) {
@@ -182,7 +228,12 @@ function inspectMarkdown(repositoryRoot, reviewsRoot, file) {
   );
   const changedAdvisory = [...new Set([...changedAggregate, ...changedShared])];
   if (changedAdvisory.length) stale.push(`${file}: ${changedAdvisory.join(", ")}`);
-  return { problems, stale, verification: component ? { component, file, sha } : undefined };
+  return {
+    problems,
+    stale,
+    report: { file, markdown, sha },
+    verification: component ? { component, file, sha } : undefined,
+  };
 }
 
 function inspectLatestComponentEvidence(repositoryRoot, verifications) {
@@ -264,6 +315,115 @@ function evidenceAddition(repositoryRoot, report) {
     .trim()
     .split("\n");
   return { commit: undefined, files: [...new Set([...staged, ...untracked].filter(Boolean))] };
+}
+
+const emptyCoverage = (problems = []) => ({
+  coveredPaths: new Set(),
+  problems,
+});
+
+function sharedImageSubjectAndTheme(path) {
+  const extension = extname(path).toLowerCase();
+  if (!IMAGE_SIGNATURES.some(({ extensions }) => extensions.includes(extension))) return {};
+  const stem = basename(path, extension).replace(/^\d{4}-\d{2}-\d{2}-/, "");
+  for (const subject of SHARED_TOKEN_IMAGE_SUBJECTS) {
+    for (const theme of ["light", "dark"]) {
+      const endings = [`${subject}-${theme}`, `${subject}-preview-${theme}`];
+      if (endings.some((ending) => stem === ending || stem.endsWith(`-${ending}`))) {
+        return { subject, theme };
+      }
+    }
+  }
+  return {};
+}
+
+export function inspectSharedTokenCoverage(repositoryRoot, reports) {
+  const problems = [];
+  const candidates = [];
+  for (const report of reports) {
+    if (!/^evidence_scope:/m.test(report.markdown)) continue;
+    const scope = parseSingleField(report.markdown, "evidence_scope");
+    if (scope.problem) {
+      problems.push(`${report.file}: ${scope.problem}`);
+      continue;
+    }
+    if (scope.value !== SHARED_TOKEN_SCOPE) continue;
+    const addition = evidenceAddition(repositoryRoot, report.file);
+    candidates.push({ ...report, additionCommit: addition.commit, additionFiles: addition.files });
+  }
+  if (problems.length > 0) return emptyCoverage(problems);
+  if (candidates.length === 0) return emptyCoverage();
+
+  const latest = latestByAddition(repositoryRoot, candidates);
+  if (latest.length !== 1) {
+    return emptyCoverage([
+      `shared-token-migration: 最新証跡が一意に決まらない (${latest
+        .map(({ file }) => file)
+        .join(", ")})`,
+    ]);
+  }
+  const [report] = latest;
+  const targeted = parseSingleField(report.markdown, "targeted_dynamic_sha");
+  if (targeted.problem) return emptyCoverage([`${report.file}: ${targeted.problem}`]);
+  if (!/^[0-9a-f]{40}$/.test(targeted.value)) {
+    return emptyCoverage([
+      `${report.file}: targeted_dynamic_sha は40桁の小文字SHAでなければならない`,
+    ]);
+  }
+  if (!commitExists(repositoryRoot, targeted.value)) {
+    return emptyCoverage([
+      `${report.file}: targeted_dynamic_sha ${targeted.value} が commit として存在しない`,
+    ]);
+  }
+  if (!commitIsAncestor(repositoryRoot, targeted.value)) {
+    return emptyCoverage([
+      `${report.file}: targeted_dynamic_sha ${targeted.value} が現在のHEADの祖先ではない`,
+    ]);
+  }
+
+  if (pathsChanged(repositoryRoot, targeted.value, [SHARED_TOKEN_PATH])) {
+    return emptyCoverage([
+      `${report.file}: 動的検証 SHA 以降に ${SHARED_TOKEN_PATH} が変更されている`,
+    ]);
+  }
+
+  const globalTokenSha = git(repositoryRoot, [
+    "log",
+    "-1",
+    "--format=%H",
+    "--",
+    SHARED_TOKEN_PATH,
+  ]).trim();
+  if (!globalTokenSha || !strictAncestor(repositoryRoot, globalTokenSha, report.sha)) {
+    return emptyCoverage([
+      `${report.file}: ${SHARED_TOKEN_PATH} の最終変更 commit は verified_impl_sha の厳密な祖先でなければならない`,
+    ]);
+  }
+  if (!commitIsAncestor(repositoryRoot, report.sha, targeted.value)) {
+    return emptyCoverage([`${report.file}: verified_impl_sha が動的検証 SHA の祖先ではない`]);
+  }
+
+  const addedImages = new Set(
+    report.additionFiles
+      .filter((path) => path.startsWith(".docs/reviews/"))
+      .map(sharedImageSubjectAndTheme)
+      .filter(({ subject, theme }) => subject && theme)
+      .map(({ subject, theme }) => `${subject}-${theme}`),
+  );
+  const missingImages = SHARED_TOKEN_IMAGE_SUBJECTS.flatMap((subject) =>
+    ["light", "dark"].map((theme) => `${subject}-${theme}`).filter((key) => !addedImages.has(key)),
+  );
+  if (missingImages.length > 0) {
+    return emptyCoverage(
+      missingImages.map((image) => `${report.file}: 同時追加画像 ${image} が無い`),
+    );
+  }
+
+  return {
+    coveredPaths: new Set([SHARED_TOKEN_PATH]),
+    problems: [],
+    report: report.file,
+  };
 }
 
 function introducedVerification(repositoryRoot, report) {
@@ -405,6 +565,75 @@ function inspectComponentEvidenceCoverage(repositoryRoot, components, verificati
   return problems;
 }
 
+function aggregateEvidenceScope(file) {
+  if (
+    /^\d{4}-\d{2}-\d{2}-index-page\.md$/.test(basename(file)) ||
+    file === "catalog-index-r2/report.md"
+  ) {
+    return "index";
+  }
+  if (/^\d{4}-\d{2}-\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*-catalog\.md$/.test(basename(file))) {
+    return "catalog";
+  }
+  return undefined;
+}
+
+function latestByVerificationSha(repositoryRoot, reports) {
+  return reports.filter(
+    (candidate) =>
+      !reports.some(
+        (other) =>
+          candidate.file !== other.file &&
+          candidate.sha !== other.sha &&
+          commitIsAncestor(repositoryRoot, candidate.sha, other.sha),
+      ),
+  );
+}
+
+export function summarizeStale(repositoryRoot, stale, reports, coverage) {
+  const coveredPaths = coverage?.coveredPaths ?? new Set();
+  const filtered = stale.flatMap((entry) => {
+    const separator = entry.indexOf(": ");
+    if (separator < 0) return [{ entry, file: entry, paths: [] }];
+    const file = entry.slice(0, separator);
+    const paths = entry
+      .slice(separator + 2)
+      .split(", ")
+      .filter((path) => !coveredPaths.has(path));
+    return paths.length > 0 ? [{ entry: `${file}: ${paths.join(", ")}`, file, paths }] : [];
+  });
+
+  const detailedFiles = new Set();
+  for (const componentReports of Map.groupBy(
+    reports.filter(({ file }) => componentFromEvidence(file)),
+    ({ file }) => componentFromEvidence(file),
+  ).values()) {
+    const latest = latestByVerificationSha(repositoryRoot, componentReports);
+    if (latest.length === 1) detailedFiles.add(latest[0].file);
+  }
+
+  const aggregateReports = reports
+    .map((report) => ({ ...report, scope: aggregateEvidenceScope(report.file) }))
+    .filter(({ scope }) => scope);
+  for (const scopedReports of Map.groupBy(aggregateReports, ({ scope }) => scope).values()) {
+    const withAddition = scopedReports.map((report) => ({
+      ...report,
+      additionCommit: evidenceAddition(repositoryRoot, report.file).commit,
+    }));
+    const latest = latestByAddition(repositoryRoot, withAddition);
+    if (latest.length === 1) detailedFiles.add(latest[0].file);
+  }
+
+  const detailed = filtered.filter(({ file }) => detailedFiles.has(file)).map(({ entry }) => entry);
+  const historicalCount = filtered.length - detailed.length;
+  if (historicalCount > 0) {
+    detailed.push(
+      `過去履歴の shared stale: ${historicalCount} 件（形式・immutability は全件検査済み）`,
+    );
+  }
+  return detailed;
+}
+
 export function checkEvidenceInRepo(root) {
   const repositoryRoot = git(root, ["rev-parse", "--show-toplevel"]).trim();
   const reviewsRoot = join(repositoryRoot, ".docs/reviews");
@@ -415,7 +644,8 @@ export function checkEvidenceInRepo(root) {
   const reviewsStatus = lstatSync(reviewsRoot, { throwIfNoEntry: false });
   if (!reviewsStatus) {
     problems.push(".docs/reviews が無い");
-    return { problems, stale: [] };
+    const coverage = emptyCoverage();
+    return { problems, stale: [], displayStale: [], coverage };
   }
   const reviewsRelativePath = relative(repositoryRoot, realpathSync(reviewsRoot));
   if (
@@ -424,7 +654,8 @@ export function checkEvidenceInRepo(root) {
     isAbsolute(reviewsRelativePath)
   ) {
     problems.push(".docs/reviews は repo 内の通常ディレクトリでなければならない");
-    return { problems, stale: [] };
+    const coverage = emptyCoverage();
+    return { problems, stale: [], displayStale: [], coverage };
   }
 
   const entries = reviewEntries(reviewsRoot).sort((left, right) =>
@@ -435,6 +666,7 @@ export function checkEvidenceInRepo(root) {
   const markdownFiles = files.filter((file) => extname(file) === ".md");
   const stale = [];
   const componentVerifications = [];
+  const reports = [];
   const componentsRoot = join(repositoryRoot, "src/components/ui");
   const components = existsSync(componentsRoot)
     ? readdirSync(componentsRoot)
@@ -462,6 +694,7 @@ export function checkEvidenceInRepo(root) {
     const inspected = inspectMarkdown(repositoryRoot, reviewsRoot, file);
     problems.push(...inspected.problems);
     stale.push(...inspected.stale);
+    if (inspected.report) reports.push(inspected.report);
     if (inspected.verification) componentVerifications.push(inspected.verification);
   }
   problems.push(...inspectVerificationHistory(repositoryRoot, componentVerifications));
@@ -475,11 +708,15 @@ export function checkEvidenceInRepo(root) {
     ),
   );
 
-  return { problems, stale };
+  const coverage = inspectSharedTokenCoverage(repositoryRoot, reports);
+  problems.push(...coverage.problems);
+  const displayStale = summarizeStale(repositoryRoot, stale, reports, coverage);
+
+  return { problems, stale, displayStale, coverage };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const { problems, stale } = checkEvidenceInRepo(process.cwd());
+  const { problems, displayStale: stale } = checkEvidenceInRepo(process.cwd());
   if (stale.length) {
     console.warn(`${stale.length} 件の証跡が共有面の変更より古い:\n  ${stale.join("\n  ")}`);
   } else {
