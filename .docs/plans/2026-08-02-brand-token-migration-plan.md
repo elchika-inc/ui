@@ -595,7 +595,7 @@ Expected: 全 command exit 0。CLI の全 `text-aa` / `nontext-ui` case は PASS
 
 - [ ] **Step 7: format / lint / source diff を確認して commit する**
 
-`npm run format`、`npm run lint`、`git diff --check` を通し、実差分 path と生成 `public/r` を明示 stage して `fix: 配色の実利用契約を v1.8 へ揃える` で commit する。commit SHA は `GLOBAL_TOKEN_SHA` の strict descendant とする。
+`npm run format`、`npm run lint`、`git diff --check` を通し、実差分 path を明示 stage して `fix: 配色の実利用契約を v1.8 へ揃える` で commit する。`public/r` は `registry:build` の生成物であり `.gitignore` どおり stage しない。生成物の正しさは `check-distribution` と Task 9 の fresh install probe で担保する。commit SHA は `GLOBAL_TOKEN_SHA` の strict descendant とする。
 
 ---
 
