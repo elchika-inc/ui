@@ -1,10 +1,11 @@
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
+import { CartesianGrid, LineChart, XAxis } from "recharts";
 import type { PreviewProps } from "@/catalog/preview-types";
 import {
   type ChartConfig,
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
+  ChartLine,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
@@ -63,7 +64,7 @@ export function ChartPreview(_props: PreviewProps) {
           <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
           <ChartLegend content={<ChartLegendContent />} />
           {series.map(({ key, dash }) => (
-            <Line
+            <ChartLine
               key={key}
               dataKey={key}
               type="monotone"

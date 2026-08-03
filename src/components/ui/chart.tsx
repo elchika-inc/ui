@@ -122,6 +122,18 @@ export type ChartTooltipProps = React.ComponentProps<typeof RechartsPrimitive.To
 
 const ChartTooltip = RechartsPrimitive.Tooltip;
 
+export type ChartLineProps = React.ComponentProps<typeof RechartsPrimitive.Line>;
+
+function ChartLine({ strokeDasharray, isAnimationActive, ...props }: ChartLineProps) {
+  return (
+    <RechartsPrimitive.Line
+      {...props}
+      strokeDasharray={strokeDasharray}
+      isAnimationActive={strokeDasharray == null ? isAnimationActive : false}
+    />
+  );
+}
+
 export type ChartTooltipContentProps = ChartTooltipProps &
   React.ComponentProps<"div"> & {
     hideLabel?: boolean;
@@ -352,6 +364,7 @@ export {
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
+  ChartLine,
   ChartStyle,
   ChartTooltip,
   ChartTooltipContent,

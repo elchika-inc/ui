@@ -903,6 +903,23 @@ test("ChartStyleはcustom idを引用済みCSS文字列としてselectorへ埋�
   assert.doesNotMatch(source, /\[data-chart=\$\{id\}\]/);
 });
 
+test("ChartLineはdash指定系列だけanimationを無効化する", () => {
+  const component = readSource("src/components/ui/chart.tsx");
+  const preview = readSource("src/previews/chart.tsx");
+  const barrel = readSource("src/index.ts");
+  assert.match(component, /export type ChartLineProps/);
+  assert.match(component, /function ChartLine\(/);
+  assert.match(
+    component,
+    /isAnimationActive=\{strokeDasharray == null \? isAnimationActive : false\}/,
+  );
+  assert.match(preview, /ChartLine/);
+  assert.match(preview, /\{ key: "desktop", dash: "var\(--chart-dash-1\)" \}/);
+  assert.doesNotMatch(preview, /import \{[^}]*\bLine\b[^}]*\} from "recharts"/s);
+  assert.match(barrel, /ChartLineProps/);
+  assert.match(barrel, /ChartLine/);
+});
+
 test("InputGroup addonはinputとtextarea共通のcontrolをfocusする", () => {
   const source = readSource("src/components/ui/input-group.tsx");
   const start = source.indexOf("function InputGroupAddon(");
