@@ -916,8 +916,11 @@ test("ChartLineはdash指定系列だけanimationを無効化する", () => {
   assert.match(preview, /ChartLine/);
   assert.match(preview, /\{ key: "desktop", dash: "var\(--chart-dash-1\)" \}/);
   assert.doesNotMatch(preview, /import \{[^}]*\bLine\b[^}]*\} from "recharts"/s);
-  assert.match(barrel, /ChartLineProps/);
-  assert.match(barrel, /ChartLine/);
+  assert.match(
+    barrel,
+    /export type \{[^}]*\bChartLineProps,?[^}]*\} from "\.\/components\/ui\/chart";/s,
+  );
+  assert.match(barrel, /export \{[^}]*\bChartLine,?[^}]*\} from "\.\/components\/ui\/chart";/s);
 });
 
 test("InputGroup addonはinputとtextarea共通のcontrolをfocusする", () => {
