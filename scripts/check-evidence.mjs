@@ -218,7 +218,19 @@ function inspectMarkdown(repositoryRoot, reviewsRoot, file) {
   const stale = [];
   const markdown = readFileSync(join(reviewsRoot, file), "utf8");
   const parsed = parseVerificationSha(markdown);
-  if (parsed.problem) return { problems: [`${file}: ${parsed.problem}`], stale };
+  if (parsed.problem) {
+    const additionCommit = evidenceAddition(repositoryRoot, file).commit;
+    const enforcement = reportImmutabilityEnforcement(repositoryRoot);
+    const isHistoricalWithoutVerificationSha =
+      parsed.problem === "verified_impl_sha が無い" &&
+      additionCommit &&
+      enforcement &&
+      strictAncestor(repositoryRoot, additionCommit, enforcement);
+    return {
+      problems: isHistoricalWithoutVerificationSha ? problems : [`${file}: ${parsed.problem}`],
+      stale,
+    };
+  }
   const sha = parsed.sha;
   if (!commitExists(repositoryRoot, sha)) {
     return { problems: [`${file}: 検証 SHA ${sha} が commit として存在しない`], stale };

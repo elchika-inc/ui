@@ -384,6 +384,23 @@ test("report追加時にverified_impl_shaが無ければ後から全fieldを足�
   assert.ok(result.problems.includes("2026-08-03-summary.md: 初回記録の verified_impl_sha が無い"));
 });
 
+test("全report sensor施行前から欄が無い歴史的文書は不遡及で受理する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const relativeReport = ".docs/reviews/implementation-review.md";
+  writeFileSync(join(root, relativeReport), "# 実装レビュー\n\nflag: 0\n");
+  git(root, ["add", relativeReport]);
+  git(root, ["commit", "-m", "add historical implementation review"]);
+  introduceReportImmutabilitySensor(root);
+
+  const result = (await loadModule()).checkEvidenceInRepo(root);
+
+  assert.equal(
+    result.problems.some((problem) => problem.includes("implementation-review.md")),
+    false,
+  );
+});
+
 test("PNG/JPEG の拡張子と magic bytes の不一致を検出する", async () => {
   const { checkImage } = await loadModule();
   assert.equal(checkImage("light.png", png), undefined);

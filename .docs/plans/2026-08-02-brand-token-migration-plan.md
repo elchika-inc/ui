@@ -768,8 +768,8 @@ Expected: ancestor check exit 0、SHA は異なる。
 ### Task 8: component 固有 evidence と shared aggregate を追加する
 
 **Files:**
-- Create: `GLOBAL_TOKEN_SHA..VERIFIED_IMPL_SHA` で変更された全 component の `.docs/reviews/brand-token-migration/2026-08-02-<name>-preview.md`
-- Create: 変更された全 component に対応する `*-light.jpg` / `*-dark.jpg`
+- Create: evidence checker が component 固有 path の変更で stale と判定する全 component の `.docs/reviews/brand-token-migration/2026-08-02-<name>-preview.md`
+- Create: stale と判定された全 component に対応する `*-light.jpg` / `*-dark.jpg`
 - Create: `.docs/reviews/brand-token-migration/catalog-light.jpg`
 - Create: `.docs/reviews/brand-token-migration/catalog-dark.jpg`
 - Create: `.docs/reviews/brand-token-migration/alert-dialog-{light,dark}.jpg`
@@ -801,11 +801,11 @@ npx astro preview --host 127.0.0.1 --port "$PREVIEW_PORT"
 
 Expected: 指定 port で preview が起動する。fallback したら停止する。
 
-- [ ] **Step 2: changed component を両 theme で検証する**
+- [ ] **Step 2: 鮮度 gate が要求する component を両 theme で検証する**
 
 次の route を light / dark で開く。
 
-- `git diff --name-only "$GLOBAL_TOKEN_SHA".."$VERIFIED_IMPL_SHA" -- src/components/ui` から導出した全 changed component route。0件なら空走として停止する。
+- `node scripts/check-evidence.mjs` が component 固有 path の変更で stale と判定する全 component route。保存の要否を視覚差分で選ばず、gate が stale とする全件を対象にする。0件なら空走として停止する。
 - alert-dialog、sheet
 - input、textarea、native-select、input-group
 - chart
@@ -866,7 +866,7 @@ npm run check:all
 git diff --quiet "$VERIFIED_IMPL_SHA" -- src/components/ui src/previews src/styles src/layouts scripts/preview-theme.test.mjs
 ```
 
-Expected: 全て exit 0。`global.css` と design-system token の stale は valid aggregate で covered、changed component の最新 evidence は新 report、implementation source は verified SHA 以降の committed / staged / unstaged 差分がない。
+Expected: 全て exit 0。`global.css` と design-system token の stale は valid aggregate で covered、鮮度 gate が要求した全 component の最新 evidence は新 report、implementation source は verified SHA 以降の committed / staged / unstaged 差分がない。
 
 - [ ] **Step 8: evidence を commit する**
 
