@@ -1,6 +1,15 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { before, test } from "node:test";
 import { fileURLToPath } from "node:url";
@@ -13,7 +22,6 @@ before(() => {
     mkdirSync(staleDirectory, { recursive: true });
     writeFileSync(join(staleDirectory, "stale.d.ts"), "export type Stale = true;\n");
   }
-  writeFileSync(join(root, "public/r/index.json"), '{"stale":true}\n');
   execFileSync("npm", ["run", "build"], { cwd: root, stdio: "pipe" });
 });
 
@@ -87,9 +95,20 @@ test("library build が site 専用 declaration を残さない", () => {
   }
 });
 
-test("registry buildがstaleなindexを全itemの一覧へ置換する", () => {
+test("registry index生成がstaleなindexを全itemの一覧へ置換する", (t) => {
+  const generatedRoot = mkdtempSync(join(tmpdir(), "elchika-catalog-registry-"));
+  t.after(() => rmSync(generatedRoot, { recursive: true, force: true }));
+  const indexPath = join(generatedRoot, "public/r/index.json");
+  mkdirSync(dirname(indexPath), { recursive: true });
+  writeFileSync(indexPath, '{"stale":true}\n');
+  execFileSync(
+    "node",
+    [join(root, "scripts/registry-index.mjs"), join(root, "registry.json"), indexPath],
+    { cwd: root, stdio: "pipe" },
+  );
+
   const registry = JSON.parse(readFileSync(join(root, "registry.json"), "utf8"));
-  const index = JSON.parse(readFileSync(join(root, "public/r/index.json"), "utf8"));
+  const index = JSON.parse(readFileSync(indexPath, "utf8"));
   assert.ok(Array.isArray(index), "index.jsonは配列");
   assert.notEqual(index.length, 0, "index走査が空走している");
   assert.deepEqual(
