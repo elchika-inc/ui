@@ -1,0 +1,10 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "elchika-ui",
+  "compatibility_date": "2026-08-03",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "none",
+    "html_handling": "auto-trailing-slash"
+  }
+}

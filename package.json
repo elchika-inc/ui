@@ -20,7 +20,7 @@
     "build:site": "astro build",
     "build:lib": "node scripts/lib-build.mjs clean && tsup && tsc -p tsconfig.lib.json && node scripts/lib-build.mjs rewrite",
     "registry:tokens": "node scripts/sync-registry-tokens.mjs && biome format --write registry.json",
-    "registry:build": "npm run registry:tokens && shadcn build --output public/r",
+    "registry:build": "npm run registry:tokens && shadcn build --output public/r && node scripts/registry-index.mjs",
     "registry:legal": "cp LICENSE THIRD_PARTY_LICENSES public/r/",
     "preview": "astro preview",
     "astro": "astro",
@@ -65,6 +65,7 @@
     "@astrojs/check": "^0.9",
     "@biomejs/biome": "^2.5.6",
     "tsup": "^8.5.1",
-    "typescript": "~6"
+    "typescript": "~6",
+    "wrangler": "^4.118.0"
   }
 }

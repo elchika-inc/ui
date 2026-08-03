@@ -13,6 +13,7 @@ before(() => {
     mkdirSync(staleDirectory, { recursive: true });
     writeFileSync(join(staleDirectory, "stale.d.ts"), "export type Stale = true;\n");
   }
+  writeFileSync(join(root, "public/r/index.json"), '{"stale":true}\n');
   execFileSync("npm", ["run", "build"], { cwd: root, stdio: "pipe" });
 });
 
@@ -67,4 +68,15 @@ test("library build が site 専用 declaration を残さない", () => {
       : [];
     assert.deepEqual(declarations, [], `${directory}: site 専用 declaration が残っている`);
   }
+});
+
+test("registry buildがstaleなindexを全itemの一覧へ置換する", () => {
+  const registry = JSON.parse(readFileSync(join(root, "registry.json"), "utf8"));
+  const index = JSON.parse(readFileSync(join(root, "public/r/index.json"), "utf8"));
+  assert.ok(Array.isArray(index), "index.jsonは配列");
+  assert.notEqual(index.length, 0, "index走査が空走している");
+  assert.deepEqual(
+    index.map(({ name }) => name),
+    registry.items.map(({ name }) => name).sort((a, b) => a.localeCompare(b)),
+  );
 });
