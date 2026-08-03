@@ -51,10 +51,14 @@ test("light / dark catalog が全 preview を単一 island に描画する", () 
 
 test("index と個別 route が全 preview のcomponentページを列挙する", () => {
   const html = builtPage("");
+  assert.match(html, /href="#main-content"/);
+  assert.match(html, /<main[^>]*id="main-content"/);
 
   for (const name of previewNames()) {
     assert.match(html, new RegExp(`href="/components/${name}/"`), `${name}: component link`);
     const componentHtml = builtPage(`components/${name}`);
+    assert.match(componentHtml, /href="#main-content"/);
+    assert.match(componentHtml, /<main[^>]*id="main-content"/);
     assert.match(componentHtml, new RegExp(`data-component-preview="${name}"`));
     assert.match(componentHtml, new RegExp(`aria-current="page"[^>]*href="/components/${name}/"`));
     assert.match(

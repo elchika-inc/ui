@@ -92,7 +92,7 @@ export function ComponentDocumentation({ categories, name, title }: ComponentDoc
           <SidebarRail />
         </Sidebar>
 
-        <SidebarInset>
+        <SidebarInset id="main-content" tabIndex={-1}>
           <header className="sticky top-0 z-20 flex h-14 items-center gap-3 border-b border-border bg-background/95 px-4 backdrop-blur sm:px-6">
             <SidebarTrigger />
             <a
