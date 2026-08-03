@@ -53,7 +53,7 @@ npm run check:pre
 ### 4.1 component 固有の light / dark 検証
 
 1. 実装 commit の SHA を固定して preview site を起動する。空きポートを明示的に選び、起動ログと実際の URL が一致することを確認する。
-2. component 固有の light route と dark route を実ブラウザで開く。各 route で console error がなく、`preview-selectors.json` の selector が hydrated 後に1件以上存在することを確認する。Provider と overlay の設計に応じた操作も行う。
+2. component 固有の light route と dark route を実ブラウザで開く。console 検証の listener は navigation 前に登録する。操作後の log 取得だけでは hydration 時例外を見逃す。各 route で console error がなく、`preview-selectors.json` の selector が hydrated 後に1件以上存在することを確認する。Provider と overlay の設計に応じた操作も行う。
 3. light / dark をそれぞれ撮影する。取得API名から形式を推測せず、指定した`format`、返却bytesのmagic、拡張子が一致することを検査し、既存証跡を上書きせず `.docs/reviews/` に新規保存する。`format`を省略したAPIでは返却bytesのmagicを正本にする。
    サブエージェントへ証跡の保存先を指定するときも`.docs/reviews/<slug>/`を使い、別の証跡レイヤーを作らない。
    長寿命のサブエージェント席は起動時点の定義を保持する。skill / エージェント定義を更新しても既に走っている席には反映されないため、重要な指定は呼び出しごとに明示するか、席を作り直す。

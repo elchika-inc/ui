@@ -127,5 +127,5 @@
 - status: accepted
 - reason: `/preview/slider/`と`/preview/slider-dark/`のfresh loadでReact minified error #418を1件ずつ検出した。見た目、selector、theme同期、focus、overflowは正常だが、ReactがSSR出力をclient側で再生成して不一致を隠している。既存Slider証跡の検証SHA `cf2542b675ad78804c8af239b866b6c290e69bdb`を当時のlockfileから再buildし、navigation前からRuntimeを監視しても同じ#418が再現したため、デザイントークン移行が開けた欠陥ではなく移行前からのlatent defectと判断した。今回PRはブランドトークン移行にscopeを限定し、Slider sourceの原因調査と修正は別作業へ分離する。
 - impact: hydration時にclient re-renderが発生し、初期DOM identity・state・event timingへ影響する可能性がある。現在のpreviewでは操作可能なSliderとvalue表示が残るが、console clean契約は満たさない。
-- mitigation: 新しいSlider証跡は#418を正直に記録し、navigation前にRuntime listenerを登録する再現手順をanchorにする。別作業ではSSR HTMLとclient初回DOMのtext差分を開発buildで特定し、RED/GREENのbrowser回帰検査を追加する。
+- mitigation: 新しいSlider証跡は#418を正直に記録し、navigation前にRuntime listenerを登録する再現手順をanchorにする。同じ新runnerで64 routeを再監査し、Slider以外の63 routeはconsole 0だったため、旧手法が見逃したlatent例外はSliderだけと実測した。別作業ではSSR HTMLとclient初回DOMのtext差分を開発buildで特定し、RED/GREENのbrowser回帰検査を追加する。
 - anchor: `.docs/reviews/brand-token-migration/2026-08-03-slider-preview.md`のlight/dark実測と、旧SHA `cf2542b675ad78804c8af239b866b6c290e69bdb`での再現結果。
