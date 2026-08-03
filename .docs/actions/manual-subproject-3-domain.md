@@ -8,6 +8,8 @@ autonomy: manual
 
 この手順は Phase A の PR が main へ merge された後に、Cloudflare と GitHub の管理権限を持つユーザーが1回だけ実行する。API token の値はリポジトリ、Issue、PR、workflow log へ書かない。
 
+Phase A 完了時点では `ui.elchika.dev` は未公開である。deployment・DNS・公開到達は、この手順の完了後に初めて確認済みとなる。
+
 ## 事前条件
 
 - Phase A の PR が `elchika-inc/ui` の main に merge 済み

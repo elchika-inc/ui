@@ -38,7 +38,7 @@ npm run dev
 
 ## 利用方法
 
-registry とドキュメントサイトの配信正本は `https://ui.elchika.dev`。component は次の3経路で取り込める。
+registry とドキュメントサイトの配信正本は `https://ui.elchika.dev`。現時点では Phase B の deployment・DNS・公開到達が未実施のため未公開であり、次のコマンドは公開後に利用する。component は次の3経路で取り込める。
 
 ### 直接 URL
 
