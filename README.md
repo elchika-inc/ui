@@ -85,11 +85,13 @@ const tooltipId = "save-button-help";
 
 ## トークンの適用
 
-取り込むと shadcn alias の `elchika-ui/tokens.css` と、HTML 正本から生成した `elchika-ui/design-system/tokens.css` が置かれる。**利用側に既存のトークン定義がある場合、registry はそれを上書きしない**（shadcn の仕様）。elchika の見た目を共有するには、自分の CSS から alias CSS だけを**最後に** import する。alias CSS が generated token を `layer(design-system)` 付きの相対 import で読み込むため、generated token を直接 import しない。
+取り込むと shadcn alias の `elchika-ui/tokens.css` と、HTML 正本から生成した `elchika-ui/design-system/tokens.css` が置かれる。elchika の見た目を共有するには、利用側 CSS の import 群へ alias CSS だけを追加し、shadcn が生成した `:root` / `.dark` の色 alias 定義を削除して `tokens.css` に一本化する。alias CSS が generated token を `layer(design-system)` 付きの相対 import で読み込むため、generated token を直接 import しない。
 
 ```css
 @import "./elchika-ui/tokens.css";
 ```
+
+削除が必要なのは、CSS の `@import` は通常 rule より前にしか置けず、shadcn の `overwriteCssVars: false` が既存 alias を残すため、併存させると後続の利用側 `:root` / `.dark` が配布 alias に必ず勝つからである。独自変数を同じ block に置いている場合は保持し、shadcn が生成した色 alias declaration だけを削除する。別 component を `shadcn add` すると registry の `cssVars` から alias 定義が再追記されるため、追加後も同じ定義を削除して import 一本へ戻す。
 
 dark theme では同じ root element に `class="dark" data-theme="dark"` を設定し、light theme では両方を外して `data-theme="light"` にする。`.dark` は Tailwind dark variant と `color-scheme`、`data-theme="dark"` は generated token を切り替えるため、片方だけを変更しない。
 

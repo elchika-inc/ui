@@ -955,9 +955,9 @@ for (const name of [
 
 Expected: 2 file の bytes、alias key set と全 valueが一致し exit 0。global alias の relative import が `./design-system/tokens.css` であり、自己 import でないことも assert する。
 
-- [ ] **Step 5: consumer CSS import と build を確認する**
+- [ ] **Step 5: consumer CSS を配布 token へ置換し build を確認する**
 
-probe の `src/index.css` の既存 import 後へ次を `apply_patch` で追加する。
+probe の `src/index.css` の既存 import 後へ次を `apply_patch` で追加し、shadcn が生成した `:root` / `.dark` の色 alias declaration を削除する。独自 declaration が同じ block にある場合は保持する。CSS の `@import` は通常 rule より前にしか置けず、`overwriteCssVars: false` が既存 alias を残すため、併存させず import 一本へ置換する。
 
 ```css
 @import "../elchika-ui/tokens.css";
@@ -965,7 +965,7 @@ probe の `src/index.css` の既存 import 後へ次を `apply_patch` で追加�
 
 Run: `npm run build`
 
-Expected: exit 0。build output CSS に `--color-bg-canvas`、`--state-hover-bg`、`--primary-hover` が含まれ、import 解決 error がない。
+Expected: exit 0。build output CSS に `--color-bg-canvas`、`--state-hover-bg`、`--primary-hover` が含まれ、import 解決 error がない。consumer source の shadcn 生成 alias block は0件である。
 
 build 後に候補 `4315 / 4325 / 4335 / 4345` から空き port を `PROBE_PORT` に固定して `npm run preview -- --host 127.0.0.1 --port "$PROBE_PORT"` を起動する。別 port へ fallback したら停止する。実ブラウザで同一 root と `background: var(--background)` の fixture を使い、次を同じ evaluate 内で順に実測する。
 
@@ -974,7 +974,9 @@ build 後に候補 `4315 / 4325 / 4335 / 4345` から空き port を `PROBE_PORT
 - data only: `.dark` なし、`data-theme="dark"`
 - synchronized dark: `.dark` あり、`data-theme="dark"`
 
-class only は `color-scheme` だけ dark、data only は generated token だけ dark になる不一致を確認し、synchronized dark では fixture の computed background が light と異なり `color-scheme: dark` になることを assertion する。確認後に probe preview を停止する。
+各状態で fixture の computed background が、その状態の `--color-bg-canvas` を解決した `rgb(...)` と一致することを assertion する。class only は brand light と `color-scheme: dark`、data only は brand dark と `color-scheme: light` になる不一致を確認し、synchronized dark では brand dark と `color-scheme: dark` になることを assertion する。
+
+確認後、未導入の別 component を同じ registry から `shadcn add --overwrite` し、`src/index.css` へ registry `cssVars` の `:root` / `.dark` alias が再追記されることを確認する。再追記された shadcn 生成 alias declaration を削除して import 一本へ戻し、build と4状態の実効値 assertion を再実行する。確認後に probe preview を停止する。
 
 - [ ] **Step 6: probe 結果を新規 report へ記録する**
 
@@ -991,7 +993,8 @@ verified_impl_sha: VERIFIED_IMPL_SHAの40桁実値
 - alias / generated token の byte 一致と relative import 解決: 実測
 - legal file: test -s の実測
 - consumer build: command と exit code
-- theme selector: class only / data only の不一致と、同期した dark の computed background / color-scheme
+- theme selector: 4状態の generated canvas / computed background / color-scheme とブランド実効値 assertion
+- component 追加後の alias 再追記と、再削除後の build / browser 再検証
 ```
 
 - [ ] **Step 7: 元 repoへ戻って probe を片付ける**

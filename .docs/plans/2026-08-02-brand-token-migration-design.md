@@ -276,6 +276,10 @@ consumer source を変更する component は `provenance.json` の `modified` �
 - 新 token と sidebar alias が consumer CSS へ届く。
 - probe の build が成功する。
 
+利用側は `tokens.css` の import と shadcn 生成 alias を併存させず、shadcn が生成した `:root` / `.dark` の色 alias declaration を削除して import 一本へ置換する。CSS の `@import` は通常 rule より前にしか置けず、`overwriteCssVars: false` が既存 alias を残すため、併存では後続の利用側 alias が source order で必ず勝つ。詳細度を上げて配布 alias を勝たせる方式は、利用者の意図的 override まで阻害するため採らない。別 component の `shadcn add` は registry `cssVars` から alias を再追記するため、追加後も再削除して一本化する。
+
+probe は selector の有無だけでなく、light / class only / data only / synchronized dark の各状態で fixture の computed background が `--color-bg-canvas` の実効 `rgb(...)` と一致することを assert する。class only は brand light と dark `color-scheme`、data only は brand dark と light `color-scheme`、synchronized dark は brand dark と dark `color-scheme` を実測する。
+
 ## 8. 実ブラウザ証跡
 
 token 変更前に Select と他 form control の dark 背景差を画像と computed style で記録する。変更後は同じ viewport と route で比較する。
@@ -326,5 +330,5 @@ targeted 検証では次を確認する。
 - chart palette はブランド化しない。`RISK-013` として別設計へ送る。
 - border / input の decorative contrast は standards `DESIGN.md` §8 に従い 3:1 を保証しない。active text と focus ring は別 gate で検査する。
 - disabled text は WCAG 1.4.3 の対象外だが、見た目と source contract を検証しない理由にはしない。
-- registry の既存 CSS variable は shadcn の `overwriteCssVars: false` により自動上書きされない。`tokens.css` を最後に import する利用契約は維持する。
+- registry の既存 CSS variable は shadcn の `overwriteCssVars: false` により自動上書きされず、別 component 追加時には alias が再追記される。利用側は shadcn 生成の色 alias declaration を削除し、`tokens.css` の import 一本へ置換する。
 - shared aggregate coverage はruntime CSS 2 pathだけを coverする。component固有変更、`src/layouts/main.astro`、`src/lib/utils.ts`、aggregate pathを誤ってgreenにしない。
