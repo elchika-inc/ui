@@ -29,6 +29,8 @@
     "typecheck": "astro check",
     "check:all": "node scripts/check-all.mjs",
     "check:pre": "node scripts/check-all.mjs --pre",
+    "check:design-tokens": "node src/styles/design-system/build-tokens.mjs --check",
+    "check:contrast": "node scripts/contrast.mjs",
     "check:props": "tsc --noEmit --ignoreConfig --strict --module esnext --moduleResolution bundler --target es2022 --jsx react-jsx types/dts-contract.ts"
   },
   "dependencies": {

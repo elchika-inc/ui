@@ -4,20 +4,37 @@ import * as distribution from "./check-distribution.mjs";
 
 const { checkDistribution } = distribution;
 
-const ORIGIN = { LICENSE: "MIT 本文", THIRD_PARTY_LICENSES: "上流の連結" };
-const entry = (target, content) => ({
-  path: target.split("/").pop(),
+const ORIGIN = {
+  "src/styles/global.css": "alias CSS",
+  "src/styles/design-system/tokens.css": "生成 token",
+  LICENSE: "MIT 本文",
+  THIRD_PARTY_LICENSES: "上流の連結",
+};
+const entry = (path, target, content) => ({
+  path,
   type: "registry:file",
   target,
   content,
 });
+const validFiles = () => [
+  entry("src/styles/global.css", "~/elchika-ui/tokens.css", "alias CSS"),
+  entry(
+    "src/styles/design-system/tokens.css",
+    "~/elchika-ui/design-system/tokens.css",
+    "生成 token",
+  ),
+  entry("LICENSE", "~/elchika-ui/LICENSE", "MIT 本文"),
+  entry("THIRD_PARTY_LICENSES", "~/elchika-ui/THIRD_PARTY_LICENSES", "上流の連結"),
+];
 
-test("files に法務ファイルが無ければ検出する", () => {
+test("files に token と法務ファイルが無ければ検出する", () => {
   const { problems } = checkDistribution(
     { files: [{ path: "b.tsx", type: "registry:ui" }] },
     ORIGIN,
   );
   assert.deepEqual(problems, [
+    "alias CSS: registry item の files に無い（install されない）",
+    "design-system token: registry item の files に無い（install されない）",
     "LICENSE: registry item の files に無い（install されない）",
     "THIRD_PARTY_LICENSES: registry item の files に無い（install されない）",
   ]);
@@ -25,60 +42,57 @@ test("files に法務ファイルが無ければ検出する", () => {
 
 test("content が空なら同梱扱いにしない", () => {
   const item = {
-    files: [
-      entry("elchika-ui/LICENSE", ""),
-      entry("elchika-ui/THIRD_PARTY_LICENSES", "上流の連結"),
-    ],
+    files: validFiles().map((file) =>
+      file.target === "~/elchika-ui/design-system/tokens.css" ? { ...file, content: "" } : file,
+    ),
   };
   const { problems } = checkDistribution(item, ORIGIN);
-  assert.deepEqual(problems, ["LICENSE: content が空"]);
+  assert.deepEqual(problems, ["design-system token: content が空"]);
 });
 
 test("原本と内容が違えば検出する", () => {
   const item = {
-    files: [
-      entry("elchika-ui/LICENSE", "MIT 本文"),
-      entry("elchika-ui/THIRD_PARTY_LICENSES", "改ざん"),
-    ],
+    files: validFiles().map((file) =>
+      file.target === "~/elchika-ui/design-system/tokens.css"
+        ? { ...file, content: "改ざん" }
+        : file,
+    ),
   };
   const { problems } = checkDistribution(item, ORIGIN);
-  assert.deepEqual(problems, ["THIRD_PARTY_LICENSES: 原本と内容が一致しない"]);
+  assert.deepEqual(problems, ["design-system token: 原本と内容が一致しない"]);
 });
 
 test("type が registry:file でなければ検出する", () => {
-  const bad = { ...entry("elchika-ui/LICENSE", "MIT 本文"), type: "registry:ui" };
   const item = {
-    files: [bad, entry("elchika-ui/THIRD_PARTY_LICENSES", "上流の連結")],
+    files: validFiles().map((file) =>
+      file.target === "~/elchika-ui/design-system/tokens.css"
+        ? { ...file, type: "registry:ui" }
+        : file,
+    ),
   };
   const { problems } = checkDistribution(item, ORIGIN);
-  assert.deepEqual(problems, ["LICENSE: type が registry:file でない"]);
+  assert.deepEqual(problems, ["design-system token: type が registry:file でない"]);
 });
 
 test("揃っていて原本と一致すれば問題なし", () => {
   const item = {
     files: [
       { path: "src/components/ui/button.tsx", type: "registry:ui", content: "..." },
-      entry("elchika-ui/LICENSE", "MIT 本文"),
-      entry("elchika-ui/THIRD_PARTY_LICENSES", "上流の連結"),
+      ...validFiles(),
     ],
   };
   assert.deepEqual(checkDistribution(item, ORIGIN).problems, []);
 });
 
-test("Button以外を含む全registry itemの法務ファイルを検査する", () => {
+test("Button以外を含む全registry itemのtokenと法務ファイルを検査する", () => {
   assert.equal(
     typeof distribution.checkDistributionItems,
     "function",
     "全registry itemを検査する関数が無い",
   );
-  const valid = {
-    files: [
-      entry("elchika-ui/LICENSE", "MIT 本文"),
-      entry("elchika-ui/THIRD_PARTY_LICENSES", "上流の連結"),
-    ],
-  };
+  const valid = { files: validFiles() };
   const invalid = {
-    files: [entry("elchika-ui/LICENSE", "MIT 本文")],
+    files: validFiles().filter(({ target }) => target !== "~/elchika-ui/design-system/tokens.css"),
   };
   assert.deepEqual(
     distribution.checkDistributionItems(
@@ -88,6 +102,6 @@ test("Button以外を含む全registry itemの法務ファイルを検査する"
       ],
       ORIGIN,
     ).problems,
-    ["calendar: THIRD_PARTY_LICENSES: registry item の files に無い（install されない）"],
+    ["calendar: design-system token: registry item の files に無い（install されない）"],
   );
 });

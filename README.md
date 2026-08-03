@@ -11,7 +11,7 @@ Base UI と Tailwind CSS v4 で作った UI コンポーネント集。elchika-i
 ## Features
 
 - Base UI ベースのアクセシブルなコンポーネント
-- standards のデザイントークンを同梱（light / dark 対応）
+- HTML 正本から生成・検査するデザインシステム v1.8 と shadcn alias を同梱（light / dark 対応）
 - shadcn CLI でコピー取得できる registry 配布
 
 ## Getting Started
@@ -38,7 +38,7 @@ npm run dev
 
 ## 利用方法
 
-registry はまだ公開していない。配信 URL はサブプロジェクト #3 でドメインを確定してから、このセクションに追記する。
+registry は現在未公開である。公開後の配信正本は `ui.elchika.dev` と決定しているが、deployment・DNS・公開到達は未確認である。サブプロジェクト #3 で公開到達を確認してから、このセクションに利用者向け URL を追記する。
 
 貢献者がローカルで取り込みを確かめる場合は、このリポジトリで registry を生成してから配信する。
 
@@ -85,11 +85,19 @@ const tooltipId = "save-button-help";
 
 ## トークンの適用
 
-取り込むと `elchika-ui/tokens.css` が置かれる。**利用側に既存のトークン定義がある場合、registry はそれを上書きしない**（shadcn の仕様）。elchika の見た目を共有するには、自分の CSS から**最後に** import する。
+取り込むと shadcn alias の `elchika-ui/tokens.css` と、HTML 正本から生成した `elchika-ui/design-system/tokens.css` が置かれる。elchika の見た目を共有するには、利用側 CSS の import 群へ alias CSS だけを追加し、shadcn が生成した `:root` / `.dark` の色 alias 定義を削除して `tokens.css` に一本化する。alias CSS が generated token を `layer(design-system)` 付きの相対 import で読み込むため、generated token を直接 import しない。
 
 ```css
 @import "./elchika-ui/tokens.css";
 ```
+
+削除が必要なのは、CSS の `@import` は通常 rule より前にしか置けず、shadcn の `overwriteCssVars: false` が既存 alias を残すため、併存させると後続の利用側 `:root` / `.dark` が配布 alias に必ず勝つからである。独自変数を同じ block に置いている場合は保持し、shadcn が生成した色 alias declaration だけを削除する。別 component を `shadcn add` すると registry の `cssVars` から alias 定義が再追記されるため、追加後も同じ定義を削除して import 一本へ戻す。
+
+dark theme では同じ root element に `class="dark" data-theme="dark"` を設定し、light theme では両方を外して `data-theme="light"` にする。`.dark` は Tailwind dark variant と `color-scheme`、`data-theme="dark"` は generated token を切り替えるため、片方だけを変更しない。
+
+`src/styles/design-system/design-tokens.html` が Layer 0 / 1 token の正本で、`build-tokens.mjs` が `tokens.css` と将来利用する product hue reserve の `brands.css` を生成する。`global.css` は shadcn semantic alias だけを持ち、色値を再定義しない。token build は正本と生成物の byte 一致、consumer contrast sensor は alias を通った実利用配色を検査する。
+
+`src/styles/design-system/` は外部正本の byte 一致を優先するため Biome の対象外とし、repo lint は自分たちのコードだけへ適用する。`build-tokens.mjs` は取り込み時 SHA-256 `c9fe52008ca7df9af277f57a2b892d3e41741d9c6e842cf33afd43841fb6b5d7` を基点に、`--check` の exact artifact comparison だけを承認済み差分として追加している。
 
 ## Development
 
@@ -112,7 +120,8 @@ src/
   components/ui/   # 部品本体（registry で配布する正本）
   previews/        # 隔離プレビューの中身
   pages/           # Astro のルート（カタログとプレビュー）
-  styles/          # standards のデザイントークン
+  styles/          # generated design-system token と shadcn semantic alias
+    design-system/ # HTML 正本・generator・Layer 0 / 1 生成物
   index.ts         # ライブラリのバレル
 scripts/           # 来歴記録・standards 適合検知・配布物検査
 types/             # ビルド出力の props 契約を検査する型テスト

@@ -9,6 +9,7 @@
     "ignoreUnknown": false,
     "includes": [
       "src/**",
+      "!!src/styles/design-system",
       "apps/**",
       "packages/**",
       "tests/**",

@@ -1,19 +1,20 @@
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { CartesianGrid, LineChart, XAxis } from "recharts";
 import type { PreviewProps } from "@/catalog/preview-types";
 import {
   type ChartConfig,
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
+  ChartLine,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
 const chartData = [
-  { month: "5月", desktop: 186, mobile: 80 },
-  { month: "6月", desktop: 305, mobile: 200 },
-  { month: "7月", desktop: 237, mobile: 120 },
-  { month: "8月", desktop: 273, mobile: 190 },
+  { month: "5月", desktop: 186, mobile: 80, tablet: 112, api: 62, automation: 42 },
+  { month: "6月", desktop: 305, mobile: 200, tablet: 164, api: 98, automation: 71 },
+  { month: "7月", desktop: 237, mobile: 120, tablet: 149, api: 85, automation: 63 },
+  { month: "8月", desktop: 273, mobile: 190, tablet: 178, api: 114, automation: 92 },
 ];
 
 const chartConfig = {
@@ -25,7 +26,27 @@ const chartConfig = {
     label: "モバイル",
     color: "var(--chart-2)",
   },
+  tablet: {
+    label: "タブレット",
+    color: "var(--chart-3)",
+  },
+  api: {
+    label: "API",
+    color: "var(--chart-4)",
+  },
+  automation: {
+    label: "自動化",
+    color: "var(--chart-5)",
+  },
 } satisfies ChartConfig;
+
+const series = [
+  { key: "desktop", dash: "var(--chart-dash-1)" },
+  { key: "mobile", dash: "var(--chart-dash-2)" },
+  { key: "tablet", dash: "var(--chart-dash-3)" },
+  { key: "api", dash: "var(--chart-dash-4)" },
+  { key: "automation", dash: "var(--chart-dash-5)" },
+] as const;
 
 export function ChartPreview(_props: PreviewProps) {
   return (
@@ -37,14 +58,23 @@ export function ChartPreview(_props: PreviewProps) {
         config={chartConfig}
         className="min-h-64 w-full"
       >
-        <BarChart accessibilityLayer data={chartData}>
+        <LineChart accessibilityLayer data={chartData}>
           <CartesianGrid vertical={false} />
           <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
           <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
           <ChartLegend content={<ChartLegendContent />} />
-          <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-          <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
-        </BarChart>
+          {series.map(({ key, dash }) => (
+            <ChartLine
+              key={key}
+              dataKey={key}
+              type="monotone"
+              stroke={`var(--color-${key})`}
+              strokeDasharray={dash}
+              strokeWidth={2}
+              dot={false}
+            />
+          ))}
+        </LineChart>
       </ChartContainer>
     </div>
   );

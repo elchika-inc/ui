@@ -6,29 +6,47 @@
 import { existsSync, readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 
-const REQUIRED = ["LICENSE", "THIRD_PARTY_LICENSES"];
+const REQUIRED = [
+  {
+    label: "alias CSS",
+    source: "src/styles/global.css",
+    target: "~/elchika-ui/tokens.css",
+  },
+  {
+    label: "design-system token",
+    source: "src/styles/design-system/tokens.css",
+    target: "~/elchika-ui/design-system/tokens.css",
+  },
+  { label: "LICENSE", source: "LICENSE", target: "~/elchika-ui/LICENSE" },
+  {
+    label: "THIRD_PARTY_LICENSES",
+    source: "THIRD_PARTY_LICENSES",
+    target: "~/elchika-ui/THIRD_PARTY_LICENSES",
+  },
+];
 
 // item:   shadcn build が出力した registry item（public/r/<name>.json をパースしたもの）
-// origin: リポジトリ直下の原本の { ファイル名: 内容 }
+// origin: リポジトリ内の原本の { source path: 内容 }
 export function checkDistribution(item, origin) {
   const problems = [];
   const files = item?.files ?? [];
-  for (const name of REQUIRED) {
-    const e = files.find((f) => f.target === name || f.target?.endsWith(`/${name}`));
+  for (const required of REQUIRED) {
+    const { label, source, target } = required;
+    const e = files.find((file) => file.target === target);
     if (!e) {
-      problems.push(`${name}: registry item の files に無い（install されない）`);
+      problems.push(`${label}: registry item の files に無い（install されない）`);
       continue;
     }
     if (e.type !== "registry:file") {
-      problems.push(`${name}: type が registry:file でない`);
+      problems.push(`${label}: type が registry:file でない`);
       continue;
     }
     if (!e.content) {
-      problems.push(`${name}: content が空`);
+      problems.push(`${label}: content が空`);
       continue;
     }
-    if (e.content !== origin[name]) {
-      problems.push(`${name}: 原本と内容が一致しない`);
+    if (e.content !== origin[source]) {
+      problems.push(`${label}: 原本と内容が一致しない`);
     }
   }
   return { problems };
@@ -68,12 +86,12 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     process.exit(1);
   }
   const origin = {};
-  for (const name of REQUIRED) {
-    if (!existsSync(name)) {
-      console.error(`原本 ${name} がリポジトリ直下に無い`);
+  for (const { source } of REQUIRED) {
+    if (!existsSync(source)) {
+      console.error(`原本 ${source} が無い`);
       process.exit(1);
     }
-    origin[name] = readFileSync(name, "utf8");
+    origin[source] = readFileSync(source, "utf8");
   }
   const { problems } = checkDistributionItems(entries, origin);
   if (problems.length) {
@@ -81,5 +99,5 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     process.exit(1);
   }
   // 件数を出力に含めない。files が増えるたびに Expected とずれ、実際に 5 回ずれた。
-  console.log(`配布物 OK（${REQUIRED.join(" / ")} が原本と一致）`);
+  console.log(`配布物 OK（${REQUIRED.map(({ label }) => label).join(" / ")} が原本と一致）`);
 }

@@ -744,6 +744,91 @@ test("Select itemはkeyboard focusを不透明3px ringで示す", () => {
   assert.match(selectItem, /focus-visible:ring-3 focus-visible:ring-ring/);
 });
 
+test("disabled controlは状態opacityを一度だけ適用しhover tintを出さない", () => {
+  const selectSource = readSource("src/components/ui/select.tsx");
+  const selectStart = selectSource.indexOf("function SelectTrigger(");
+  const selectEnd = selectSource.indexOf("function SelectContent(", selectStart);
+  const selectTrigger = selectSource.slice(selectStart, selectEnd);
+  assert.match(selectTrigger, /disabled:pointer-events-none/);
+
+  const nativeSelect = readSource("src/components/ui/native-select.tsx");
+  assert.doesNotMatch(nativeSelect, /has-\[select:disabled\]:opacity-(?:50|disabled)/);
+  assert.match(nativeSelect, /disabled:opacity-disabled/);
+
+  const inputGroup = readSource("src/components/ui/input-group.tsx");
+  const inputStart = inputGroup.indexOf("function InputGroupInput(");
+  const textareaStart = inputGroup.indexOf("function InputGroupTextarea(", inputStart);
+  const exportStart = inputGroup.indexOf("export {", textareaStart);
+  assert.match(inputGroup.slice(inputStart, textareaStart), /disabled:opacity-100/);
+  assert.match(inputGroup.slice(textareaStart, exportStart), /disabled:opacity-100/);
+});
+
+test("Select比較previewは未選択placeholderを実測できる", () => {
+  const source = readSource("src/previews/select.tsx");
+  const comparisonStart = source.indexOf('data-slot="select-input-comparison"');
+  const comparisonEnd = source.indexOf("</div>", comparisonStart);
+  const comparison = source.slice(comparisonStart, comparisonEnd);
+  assert.doesNotMatch(comparison, /defaultValue=/);
+  assert.match(comparison, /選択してください/);
+});
+
+test("Chart previewは5系列の色とdash tokenを実描画する", () => {
+  const source = readSource("src/previews/chart.tsx");
+  for (const index of [1, 2, 3, 4, 5]) {
+    assert.match(source, new RegExp(`var\\(--chart-${index}\\)`));
+    assert.match(source, new RegExp(`var\\(--chart-dash-${index}\\)`));
+  }
+});
+
+test("公開手順はalias CSSだけをimportしdark selector同期を要求する", () => {
+  const readme = readSource("README.md");
+  const start = readme.indexOf("## トークンの適用");
+  const end = readme.indexOf("## Development", start);
+  const section = readme.slice(start, end);
+  assert.match(section, /@import "\.\/elchika-ui\/tokens\.css";/);
+  assert.doesNotMatch(section, /@import "\.\/elchika-ui\/design-system\/tokens\.css";/);
+  assert.match(section, /class="dark"/);
+  assert.match(section, /data-theme="dark"/);
+});
+
+test("Sidebarのforeground aliasは面のaliasとペアを保つ", () => {
+  const source = readSource("src/styles/global.css");
+  assert.equal(
+    [...source.matchAll(/--sidebar-foreground:\s*var\(--card-foreground\);/g)].length,
+    2,
+  );
+  assert.equal(
+    [...source.matchAll(/--sidebar-accent-foreground:\s*var\(--secondary-foreground\);/g)].length,
+    2,
+  );
+  assert.match(source, /面の alias とペアを保つ/);
+});
+
+test("配信文書は未公開状態と公開後の正本ドメインを区別する", () => {
+  const readme = readSource("README.md");
+  const action = readSource(".docs/actions/manual-subproject-3-domain.md");
+  const risks = readSource(".docs/risk-registry.md");
+  for (const [path, source] of [
+    ["README.md", readme],
+    ["manual-subproject-3-domain.md", action],
+    ["risk-registry.md", risks],
+  ]) {
+    assert.match(source, /未公開/, path);
+    assert.match(source, /ui\.elchika\.dev/, path);
+  }
+  assert.match(readme, /deployment・DNS・公開到達/);
+});
+
+test("恒久手順とrisk anchorは可変checker件数を固定しない", () => {
+  const procedure = readSource(".docs/component-addition-procedure.md");
+  const riskRegistry = readSource(".docs/risk-registry.md");
+  assert.doesNotMatch(procedure, /check:pre[^\n]*4検査/);
+  assert.match(procedure, /scripts\/check-all\.mjs/);
+  assert.doesNotMatch(riskRegistry, /13個の名前付きステップ/);
+  assert.match(riskRegistry, /Design token build/);
+  assert.match(riskRegistry, /Token contrast/);
+});
+
 test("Alert Dialog actionはClose primitiveを経由する", () => {
   const source = readSource("src/components/ui/alert-dialog.tsx");
   const start = source.indexOf("function AlertDialogAction(");
@@ -816,6 +901,26 @@ test("ChartStyleはcustom idを引用済みCSS文字列としてselectorへ埋�
   assert.match(source, /function escapeCssString\(/);
   assert.match(source, /\[data-chart="\$\{escapeCssString\(id\)\}"\]/);
   assert.doesNotMatch(source, /\[data-chart=\$\{id\}\]/);
+});
+
+test("ChartLineはdash指定系列だけanimationを無効化する", () => {
+  const component = readSource("src/components/ui/chart.tsx");
+  const preview = readSource("src/previews/chart.tsx");
+  const barrel = readSource("src/index.ts");
+  assert.match(component, /export type ChartLineProps/);
+  assert.match(component, /function ChartLine\(/);
+  assert.match(
+    component,
+    /isAnimationActive=\{strokeDasharray == null \? isAnimationActive : false\}/,
+  );
+  assert.match(preview, /ChartLine/);
+  assert.match(preview, /\{ key: "desktop", dash: "var\(--chart-dash-1\)" \}/);
+  assert.doesNotMatch(preview, /import \{[^}]*\bLine\b[^}]*\} from "recharts"/s);
+  assert.match(
+    barrel,
+    /export type \{[^}]*\bChartLineProps\b,?[^}]*\} from "\.\/components\/ui\/chart";/s,
+  );
+  assert.match(barrel, /export \{[^}]*\bChartLine\b,?[^}]*\} from "\.\/components\/ui\/chart";/s);
 });
 
 test("InputGroup addonはinputとtextarea共通のcontrolをfocusする", () => {

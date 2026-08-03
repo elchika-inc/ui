@@ -1,0 +1,2029 @@
+<!DOCTYPE html>
+<!--
+  elchika inc. — Design Tokens. THIS FILE IS THE SOURCE OF TRUTH.
+
+  tokens.css and brands.css are generated from the <style> block below.
+  Do not edit those; edit here and run:   node build-tokens.mjs
+
+  Start with README.md — it maps the files, states the invariants that
+  must not be broken, and lists what is still open.
+-->
+<html lang="ja" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>elchika inc. — Design Tokens v1.8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   elchika inc. — Design Tokens v1.8
+   This file is the source of truth for the spec page. The shipped
+   values live in tokens.css / tailwind.config.js and must match.
+   ============================================================ */
+:root {
+  /* ---------- COLOR: primitives ---------- */
+  /* ---------- LAYER 0: primitives ----------
+     --brand-* is the ONLY colour surface a product may override.
+     Everything downstream resolves from it, in both themes. */
+  --brand-100: 227 234 251;
+  --brand-300: 143 172 245;
+  --brand-400: 110 147 240;
+  --brand-600: 47 95 209;
+  --brand-700: 30 58 143;
+
+  /* Corporate-locked. Shared by every product — this is what makes them
+     look like one family rather than four unrelated tools. */
+  --accent-100: 252 241 210;
+  --accent-400: 245 208 101;
+  --accent-500: 242 194 48;
+  --accent-900: 74 58 5;
+  --accent-text: 133 105 10;
+
+  --color-success-500: 28 148 103;
+  --color-danger-500: 224 85 90;
+  /* Warning is orange, not yellow: yellow is the brand accent, and a
+     warning that looks like the brand highlight is unreadable as a signal. */
+  --color-warning-500: 194 97 12;
+
+  /* ---------- COLOR: semantic (light) ---------- */
+  --color-bg-canvas: 246 246 247;
+  --color-bg-surface: 255 255 255;
+  --color-bg-surface-raised: 237 238 240;
+  --color-border-default: 222 224 227;
+  --color-border-strong: 199 202 207;
+  /* Boundaries that identify a control must clear 3:1 (WCAG 1.4.11).
+     Decorative seams do not — hence two separate tokens. */
+  --color-border-control: 126 132 142;
+  --color-text-primary: 26 28 33;
+  --color-text-secondary: 91 95 104;
+  --color-text-muted: 99 103 111;
+  --color-brand-primary: var(--brand-600);
+  --color-brand-primary-hover: var(--brand-700);
+  --color-brand-subtle: var(--brand-100);
+  --color-accent-highlight: var(--accent-500);
+  --color-accent-highlight-bg: var(--accent-100);
+  --color-accent-highlight-text: var(--accent-text);
+  --color-status-success: var(--color-success-500);
+  --color-status-success-bg: 220 243 234;
+  --color-status-success-text: 20 108 74;
+  --color-status-danger: var(--color-danger-500);
+  --color-status-danger-bg: 251 227 228;
+  --color-status-danger-text: 178 51 56;
+  --color-status-warning: var(--color-warning-500);
+  --color-status-warning-bg: 252 233 214;
+  --color-status-warning-text: 143 70 8;
+  --color-status-info: var(--color-brand-primary);
+  --color-status-info-bg: var(--brand-100);
+  --color-status-info-text: var(--brand-700);
+
+  /* ---------- TYPOGRAPHY ---------- */
+  --font-display: "IBM Plex Sans JP", "IBM Plex Sans", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans JP", "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", "IBM Plex Sans JP", ui-monospace, monospace;
+
+  --text-3xs: 0.6875rem; --text-2xs: 0.75rem; --text-xs: 0.8125rem;
+  --text-sm: 0.875rem; --text-base: 1rem; --text-lg: 1.125rem;
+  --text-xl: 1.3125rem; --text-2xl: 1.5625rem; --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem; --text-5xl: 2.75rem; --text-6xl: 3.375rem;
+
+  --font-weight-regular: 400; --font-weight-medium: 500; --font-weight-semibold: 600;
+
+  --leading-none: 1; --leading-tight: 1.25; --leading-display: 1.35;
+  --leading-snug: 1.5; --leading-normal: 1.75; --leading-relaxed: 1.9;
+
+  --tracking-display: -0.02em; --tracking-heading: -0.01em;
+  --tracking-normal: 0.02em; --tracking-label: 0.08em;
+
+  --numeric-tabular: tabular-nums;
+  --numeric-proportional: proportional-nums;
+
+  /* ---------- SPACING ---------- */
+  --space-0: 0; --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem;
+  --space-4: 1rem; --space-5: 1.25rem; --space-6: 1.5rem; --space-8: 2rem;
+  --space-10: 2.5rem; --space-12: 3rem; --space-16: 4rem; --space-20: 5rem;
+  --space-24: 6rem; --space-32: 8rem; --space-40: 10rem;
+
+  --space-inline-tight: var(--space-2);
+  --space-inline: var(--space-3);
+  --space-stack-tight: var(--space-2);
+  --space-stack: var(--space-4);
+  --space-stack-loose: var(--space-8);
+  --space-section: var(--space-24);
+  --space-section-lg: var(--space-32);
+  --space-gutter: var(--space-5);
+  --space-gutter-lg: var(--space-12);
+
+  /* ---------- LAYOUT ---------- */
+  --container-prose: 68ch;
+  --container-content: 60rem;
+  --container-wide: 70rem;
+
+  /* ---------- RADIUS ---------- */
+  --radius-xs: 0.25rem; --radius-sm: 0.375rem; --radius-md: 0.5rem;
+  --radius-lg: 0.75rem; --radius-xl: 1rem; --radius-full: 9999px;
+
+  /* ---------- BORDER ---------- */
+  --border-hairline: 0.5px; --border-thin: 1px; --border-thick: 2px;
+
+  /* ---------- ELEVATION ---------- */
+  --shadow-xs: 0 1px 2px rgb(26 28 33 / 0.04);
+  --shadow-sm: 0 1px 3px rgb(26 28 33 / 0.06), 0 1px 2px rgb(26 28 33 / 0.04);
+  --shadow-md: 0 4px 12px rgb(26 28 33 / 0.08);
+  --shadow-lg: 0 12px 32px rgb(26 28 33 / 0.10);
+  --shadow-focus: 0 0 0 3px rgb(var(--brand-600) / 0.28);
+
+  /* ---------- MOTION ---------- */
+  --duration-instant: 0ms; --duration-fast: 120ms; --duration-base: 180ms;
+  --duration-slow: 260ms; --duration-slower: 400ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+
+  /* ---------- STATE ----------
+     States are tokenised once and shared, rather than redefined per
+     component. --state-tint is what gets mixed into a surface: it darkens
+     in light mode and lightens in dark mode, so one rule covers both. */
+  --state-tint: 26 28 33;
+  --state-hover-alpha: 0.05;
+  --state-press-alpha: 0.10;
+  --state-hover-bg: rgb(var(--state-tint) / var(--state-hover-alpha));
+  --state-press-bg: rgb(var(--state-tint) / var(--state-press-alpha));
+  --state-selected-bg: rgb(var(--color-brand-primary) / 0.10);
+  --state-selected-border: rgb(var(--color-brand-primary));
+  --state-focus-ring: var(--shadow-focus);
+  --state-disabled-opacity: var(--opacity-disabled);
+  --state-invalid-border: rgb(var(--color-status-danger));
+  --state-invalid-bg: rgb(var(--color-status-danger-bg));
+  --state-skeleton-bg: rgb(var(--color-bg-surface-raised));
+  --state-transition:
+    background var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
+
+  /* ---------- CONTROL ----------
+     Shared geometry so buttons, inputs and selects line up on one row.
+     lg is 44px: the smallest comfortable touch target. */
+  --control-height-sm: 1.75rem;
+  --control-height-md: 2.25rem;
+  --control-height-lg: 2.75rem;
+  --control-padding-x: var(--space-4);
+  --control-radius: var(--radius-md);
+  --control-border-width: var(--border-thin);
+
+
+  /* ---------- CHART ----------
+     Series colours are the verified product hues: five is the cap, and
+     they are paired with dash patterns so a chart survives greyscale,
+     colour-vision differences and a bad projector. */
+  --chart-series-1: 47 95 209;
+  --chart-series-2: 188 42 105;
+  --chart-series-3: 167 41 187;
+  --chart-series-4: 180 40 148;
+  --chart-series-5: 133 63 213;
+  --chart-dash-1: none;
+  --chart-dash-2: 6 3;
+  --chart-dash-3: 2 3;
+  --chart-dash-4: 10 4 2 4;
+  --chart-dash-5: 1 4;
+
+  /* Sequential — magnitude. Monotonic in L*, so it also reads correctly
+     in greyscale. Steps 4 and 5 need light text on them. */
+  --chart-seq-0: 236 241 252;
+  --chart-seq-1: 195 210 244;
+  --chart-seq-2: 150 176 236;
+  --chart-seq-3: 105 142 229;
+  --chart-seq-4: 55 105 220;
+  --chart-seq-5: 29 71 166;
+
+  /* Diverging — deviation from a baseline. Rose and blue rather than
+     red and green: those two carry status meaning. */
+  --chart-div-neg3: 172 40 98;
+  --chart-div-neg2: 222 95 150;
+  --chart-div-neg1: 242 173 203;
+  --chart-div-mid: 238 239 241;
+  --chart-div-pos1: 172 193 241;
+  --chart-div-pos2: 100 137 223;
+  --chart-div-pos3: 45 88 190;
+
+  --chart-grid: var(--color-border-default);
+  --chart-axis: var(--color-border-strong);
+  --chart-label: var(--color-text-muted);
+  --chart-baseline: var(--color-text-secondary);
+  --chart-band-alpha: 0.12;
+  --chart-series-width: 2px;
+  --chart-point-size: 3px;
+  --chart-tooltip-bg: var(--color-bg-surface);
+  --chart-tooltip-border: var(--color-border-strong);
+
+  /* ---------- DENSITY ----------
+     Density touches data-dense regions only — tables, lists, toolbars.
+     It must never reach prose or marketing pages, so it gets its own
+     tokens rather than rescaling --space-*, which would move layout. */
+  --density-row-height: 2.75rem;
+  --density-cell-py: var(--space-3);
+  --density-gap: var(--space-3);
+  --density-control-height: var(--control-height-md);
+  --density-font-size: var(--text-sm);
+
+  /* ---------- TYPOGRAPHY: JP features ----------
+     palt tightens the loose sidebearings on JP punctuation at display
+     sizes. Harmless for Latin, so it can be applied unconditionally. */
+  --font-feature-display: "palt" 1;
+
+  /* ---------- LAYER ---------- */
+  --z-base: 0; --z-dropdown: 1000; --z-sticky: 1100; --z-overlay: 1200;
+  --z-modal: 1300; --z-popover: 1400; --z-toast: 1500;
+
+  /* ---------- OPACITY ---------- */
+  --opacity-disabled: 0.4; --opacity-muted: 0.65; --opacity-overlay: 0.6;
+}
+
+[data-theme="dark"] {
+  --color-bg-canvas: 21 23 28;
+  --color-bg-surface: 28 31 38;
+  --color-bg-surface-raised: 38 42 51;
+  --color-border-default: 56 61 72;
+  --color-border-strong: 74 80 94;
+  --color-border-control: 118 125 140;
+  --color-text-primary: 246 246 247;
+  --color-text-secondary: 176 180 188;
+  --color-text-muted: 150 156 168;
+  --color-brand-primary: var(--brand-400);
+  --color-brand-primary-hover: var(--brand-300);
+  --color-brand-subtle: var(--brand-700);
+  --color-accent-highlight: var(--accent-400);
+  --color-accent-highlight-bg: var(--accent-900);
+  --color-accent-highlight-text: var(--accent-400);
+  --color-status-success: 52 192 138;
+  --color-status-success-bg: 20 61 46;
+  --color-status-success-text: 52 192 138;
+  --color-status-danger: 241 117 121;
+  --color-status-danger-bg: 61 26 27;
+  --color-status-danger-text: 241 117 121;
+  --color-status-warning: 232 148 62;
+  --color-status-warning-bg: 61 37 12;
+  --color-status-warning-text: 232 148 62;
+  --color-status-info: var(--color-brand-primary);
+  --color-status-info-bg: var(--brand-700);
+  --color-status-info-text: var(--brand-300);
+
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.30);
+  --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.40), 0 1px 2px rgb(0 0 0 / 0.30);
+  --shadow-md: 0 4px 12px rgb(0 0 0 / 0.45);
+  --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.55);
+  --shadow-focus: 0 0 0 3px rgb(var(--brand-400) / 0.36);
+
+  /* Tint lightens instead of darkening, and needs slightly more of it to
+     read on a dark surface. */
+  --state-tint: 246 246 247;
+  --state-hover-alpha: 0.07;
+  --state-press-alpha: 0.13;
+
+  /* Series lift to the 400 step so they hold up on the dark canvas. */
+  --chart-series-1: 110 147 240;
+  --chart-series-2: 239 102 161;
+  --chart-series-3: 220 99 239;
+  --chart-series-4: 238 93 204;
+  --chart-series-5: 179 124 241;
+
+}
+
+/* ============================================================
+   DENSITY
+   ============================================================ */
+[data-density="compact"] {
+  --density-row-height: 2rem;
+  --density-cell-py: var(--space-1);
+  --density-gap: var(--space-2);
+  --density-control-height: var(--control-height-sm);
+  --density-font-size: var(--text-xs);
+}
+
+/* ============================================================
+   LANGUAGE
+   The type scale is tuned for Japanese. Latin needs less leading and
+   none of the extra tracking, so switching :lang re-tunes it rather
+   than forcing one compromise value on both.
+   ============================================================ */
+:lang(en) {
+  --font-display: "IBM Plex Sans", "IBM Plex Sans JP", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", "IBM Plex Sans JP", system-ui, sans-serif;
+  --leading-display: 1.2;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.75;
+  --tracking-normal: 0em;
+}
+
+/* ============================================================
+   PRODUCT HUE RESERVE
+   elchika inc. itself is always the blue. The ramps below are the
+   pool a future product draws from.
+
+   Every hue sits on the cool arc (222°–334°). Warm hues are
+   reserved for status meaning: success green, danger red, warning
+   orange and the brand's yellow accent already occupy that side of
+   the wheel, and a product colour there would read as a signal.
+
+   Each ramp is solved to the same contrast profile as the
+   corporate blue, so any product inherits identical legibility:
+   600 = 5.7:1 on white, 400 = 5.6:1 on the dark surface,
+   700 = 10.2:1 on white.
+   ============================================================ */
+[data-brand="indigo"] {
+  --brand-100: 234 232 252;
+  --brand-300: 170 164 247;
+  --brand-400: 144 137 243;
+  --brand-600: 92 83 217;
+  --brand-700: 47 38 180;
+}
+[data-brand="violet"] {
+  --brand-100: 241 231 252;
+  --brand-300: 197 155 246;
+  --brand-400: 179 124 241;
+  --brand-600: 133 63 213;
+  --brand-700: 87 32 151;
+}
+[data-brand="purple"] {
+  --brand-100: 248 228 251;
+  --brand-300: 231 139 245;
+  --brand-400: 220 99 239;
+  --brand-600: 167 41 187;
+  --brand-700: 108 25 121;
+}
+[data-brand="magenta"] {
+  --brand-100: 251 228 246;
+  --brand-300: 244 136 219;
+  --brand-400: 238 93 204;
+  --brand-600: 180 40 148;
+  --brand-700: 117 25 95;
+}
+[data-brand="rose"] {
+  --brand-100: 251 229 238;
+  --brand-300: 245 141 186;
+  --brand-400: 239 102 161;
+  --brand-600: 188 42 105;
+  --brand-700: 122 26 67;
+}
+
+/* ============================================================
+   PAGE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  letter-spacing: var(--tracking-normal);
+  color: rgb(var(--color-text-primary));
+  background: rgb(var(--color-bg-canvas));
+  -webkit-font-smoothing: antialiased;
+  transition: background var(--duration-slow) var(--ease-standard),
+              color var(--duration-slow) var(--ease-standard);
+}
+:focus-visible { outline: none; box-shadow: var(--shadow-focus); border-radius: var(--radius-xs); }
+
+.shell { max-width: var(--container-wide); margin: 0 auto; padding: 0 var(--space-5) var(--space-32); }
+@media (min-width: 1024px) { .shell { padding: 0 var(--space-12) var(--space-40); } }
+
+.masthead {
+  position: sticky; top: 0; z-index: var(--z-sticky);
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);
+  padding: var(--space-4) 0;
+  background: rgb(var(--color-bg-canvas) / 0.88);
+  backdrop-filter: blur(12px);
+  border-bottom: var(--border-hairline) solid rgb(var(--color-border-default));
+}
+.brandline { display: flex; align-items: baseline; gap: var(--space-3); }
+.wordmark { font-size: var(--text-base); font-weight: var(--font-weight-semibold); letter-spacing: var(--tracking-heading); }
+.wordmark span { color: rgb(var(--color-brand-primary)); }
+.ver { font-family: var(--font-mono); font-size: var(--text-3xs); letter-spacing: var(--tracking-label); text-transform: uppercase; color: rgb(var(--color-text-muted)); }
+
+.ctl {
+  font-family: var(--font-mono); font-size: var(--text-3xs);
+  letter-spacing: var(--tracking-label); text-transform: uppercase;
+  color: rgb(var(--color-text-secondary)); background: transparent;
+  border: var(--border-hairline) solid rgb(var(--color-border-strong));
+  border-radius: var(--radius-full); padding: var(--space-2) var(--space-4); cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-standard),
+              border-color var(--duration-fast) var(--ease-standard);
+}
+.ctl:hover { color: rgb(var(--color-text-primary)); border-color: rgb(var(--color-text-muted)); }
+
+/* nav */
+.subnav {
+  position: sticky; top: 57px; z-index: var(--z-dropdown);
+  display: flex; gap: var(--space-4); overflow-x: auto;
+  padding: var(--space-3) 0; margin-bottom: var(--space-16);
+  background: rgb(var(--color-bg-canvas) / 0.88);
+  backdrop-filter: blur(12px);
+  border-bottom: var(--border-hairline) solid rgb(var(--color-border-default));
+  scrollbar-width: none;
+}
+.subnav::-webkit-scrollbar { display: none; }
+.subnav a {
+  font-family: var(--font-mono); font-size: var(--text-3xs);
+  letter-spacing: var(--tracking-label); text-transform: uppercase;
+  color: rgb(var(--color-text-muted)); text-decoration: none; white-space: nowrap;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+.subnav a:hover { color: rgb(var(--color-brand-primary)); }
+
+/* hero */
+.hero { padding: var(--space-6) 0 var(--space-20); }
+.hero h1 {
+  font-family: var(--font-display);
+  font-feature-settings: var(--font-feature-display); font-size: var(--text-4xl);
+  font-weight: var(--font-weight-semibold); letter-spacing: var(--tracking-display);
+  line-height: var(--leading-display); margin: 0 0 var(--space-5); max-width: 22ch;
+}
+@media (min-width: 768px) { .hero h1 { font-size: var(--text-5xl); } }
+.hero p { font-size: var(--text-lg); color: rgb(var(--color-text-secondary)); line-height: var(--leading-relaxed); margin: 0; max-width: 46ch; }
+
+/* sections */
+.band { padding-top: var(--space-24); scroll-margin-top: 110px; }
+.eyebrow {
+  font-family: var(--font-mono); font-size: var(--text-3xs); font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-label); text-transform: uppercase;
+  color: rgb(var(--color-accent-highlight-text)); display: block; margin-bottom: var(--space-3);
+}
+.band > h2 { font-size: var(--text-2xl); font-weight: var(--font-weight-semibold); letter-spacing: var(--tracking-heading); line-height: var(--leading-display); margin: 0 0 var(--space-2); }
+.band > .lede { font-size: var(--text-sm); color: rgb(var(--color-text-secondary)); margin: 0 0 var(--space-8); max-width: 62ch; }
+h3.sub { font-size: var(--text-base); font-weight: var(--font-weight-semibold); letter-spacing: var(--tracking-heading); margin: var(--space-10) 0 var(--space-4); }
+.token { font-family: var(--font-mono); font-size: var(--text-3xs); letter-spacing: 0; color: rgb(var(--color-text-muted)); }
+
+/* copyable chips */
+.copy {
+  font-family: var(--font-mono); font-size: var(--text-3xs); letter-spacing: 0;
+  color: rgb(var(--color-text-secondary)); background: rgb(var(--color-bg-surface-raised));
+  border: 0; border-radius: var(--radius-xs); padding: 2px 6px; cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-standard), background var(--duration-fast) var(--ease-standard);
+}
+.copy:hover { color: rgb(var(--color-brand-primary)); }
+.copy.done { background: rgb(var(--color-status-success-bg)); color: rgb(var(--color-status-success-text)); }
+
+/* tables */
+.tbl { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+.tbl th, .tbl td { text-align: left; padding: var(--space-3) var(--space-3); border-bottom: var(--border-hairline) solid rgb(var(--color-border-default)); vertical-align: middle; }
+.tbl th { font-family: var(--font-mono); font-size: var(--text-3xs); letter-spacing: var(--tracking-label); text-transform: uppercase; color: rgb(var(--color-text-muted)); font-weight: var(--font-weight-medium); }
+.tbl td.mono { font-family: var(--font-mono); font-size: var(--text-2xs); letter-spacing: 0; }
+.tbl-wrap { overflow-x: auto; border: var(--border-hairline) solid rgb(var(--color-border-default)); border-radius: var(--radius-lg); background: rgb(var(--color-bg-surface)); padding: 0 var(--space-4); }
+.dot { width: 22px; height: 22px; border-radius: var(--radius-sm); display: inline-block; vertical-align: middle; box-shadow: inset 0 0 0 0.5px rgb(var(--color-border-strong)); }
+
+/* color swatches */
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-3); }
+.swatch { border-radius: var(--radius-lg); overflow: hidden; border: var(--border-hairline) solid rgb(var(--color-border-default)); }
+.swatch .chip { height: 64px; }
+.swatch .meta { padding: var(--space-3); background: rgb(var(--color-bg-surface)); }
+.swatch .nm { font-size: var(--text-xs); font-weight: var(--font-weight-medium); display: block; margin-bottom: 2px; }
+
+/* type specimen */
+.spec { display: grid; gap: var(--space-6); }
+.spec-row { display: grid; gap: var(--space-2); padding-bottom: var(--space-6); border-bottom: var(--border-hairline) solid rgb(var(--color-border-default)); }
+.spec-row:last-child { border-bottom: 0; padding-bottom: 0; }
+.s-6xl { font-feature-settings: var(--font-feature-display); font-family: var(--font-display); font-size: var(--text-6xl); font-weight: var(--font-weight-semibold); letter-spacing: var(--tracking-display); line-height: var(--leading-tight); }
+.s-4xl { font-feature-settings: var(--font-feature-display); font-family: var(--font-display); font-size: var(--text-4xl); font-weight: var(--font-weight-semibold); letter-spacing: var(--tracking-display); line-height: var(--leading-display); }
+.s-2xl { font-size: var(--text-2xl); font-weight: var(--font-weight-semibold); letter-spacing: var(--tracking-heading); line-height: var(--leading-display); }
+.s-lg  { font-size: var(--text-lg); line-height: var(--leading-relaxed); color: rgb(var(--color-text-secondary)); max-width: 48ch; }
+.s-base{ font-size: var(--text-base); line-height: var(--leading-normal); color: rgb(var(--color-text-secondary)); max-width: 52ch; }
+.s-mono{ font-family: var(--font-mono); font-size: var(--text-3xs); font-weight: var(--font-weight-medium); letter-spacing: var(--tracking-label); text-transform: uppercase; color: rgb(var(--color-text-secondary)); }
+
+/* leading compare */
+.compare { display: grid; gap: var(--space-4); grid-template-columns: 1fr; }
+@media (min-width: 768px) { .compare { grid-template-columns: 1fr 1fr; } }
+.compare .cell { padding: var(--space-5); border-radius: var(--radius-lg); border: var(--border-hairline) solid rgb(var(--color-border-default)); background: rgb(var(--color-bg-surface)); }
+.compare .cell p { margin: var(--space-3) 0 0; font-size: var(--text-sm); color: rgb(var(--color-text-secondary)); }
+.compare .bad p { line-height: 1.5; }
+.compare .good p { line-height: var(--leading-normal); }
+
+/* metrics */
+.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--space-6); padding: var(--space-6); border-radius: var(--radius-lg); border: var(--border-hairline) solid rgb(var(--color-border-default)); background: rgb(var(--color-bg-surface)); }
+.metric .k { font-family: var(--font-mono); font-size: var(--text-3xs); letter-spacing: var(--tracking-label); text-transform: uppercase; color: rgb(var(--color-text-muted)); display: block; margin-bottom: var(--space-2); }
+.metric .v { font-family: var(--font-mono); font-variant-numeric: var(--numeric-tabular); font-size: var(--text-2xl); font-weight: var(--font-weight-medium); }
+.metric .v.brand { color: rgb(var(--color-brand-primary)); }
+
+/* spacing ruler */
+.ruler { display: flex; align-items: flex-end; gap: var(--space-3); flex-wrap: wrap; }
+.ruler .u { text-align: center; }
+.ruler .bar { background: rgb(var(--color-brand-primary)); border-radius: var(--radius-xs); }
+.ruler .lb { font-family: var(--font-mono); font-size: var(--text-3xs); color: rgb(var(--color-text-muted)); margin-top: var(--space-2); }
+
+/* tiles */
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--space-4); }
+.tile { background: rgb(var(--color-bg-surface)); border: var(--border-hairline) solid rgb(var(--color-border-default)); padding: var(--space-4); text-align: center; }
+.tile .box { height: 52px; background: rgb(var(--color-brand-primary) / 0.12); border: var(--border-thin) solid rgb(var(--color-brand-primary)); margin-bottom: var(--space-3); }
+.tile .lb { font-size: var(--text-xs); font-weight: var(--font-weight-medium); display: block; }
+
+.lifts { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--space-6); }
+.lift { background: rgb(var(--color-bg-surface)); border-radius: var(--radius-lg); padding: var(--space-6) var(--space-4); text-align: center; border: var(--border-hairline) solid rgb(var(--color-border-default)); }
+.lift .lb { font-size: var(--text-xs); font-weight: var(--font-weight-medium); display: block; margin-bottom: var(--space-1); }
+
+/* motion */
+.motion { display: grid; gap: var(--space-4); }
+.track { display: grid; gap: var(--space-2); padding: var(--space-4) var(--space-5); border-radius: var(--radius-lg); border: var(--border-hairline) solid rgb(var(--color-border-default)); background: rgb(var(--color-bg-surface)); cursor: pointer; }
+.track .rail { position: relative; height: 6px; background: rgb(var(--color-bg-surface-raised)); border-radius: var(--radius-full); }
+.track .dot2 { position: absolute; top: -3px; left: 0; width: 12px; height: 12px; border-radius: var(--radius-full); background: rgb(var(--color-brand-primary)); transition-property: left; }
+.track:hover .dot2, .track:focus-visible .dot2 { left: calc(100% - 12px); }
+.track.fast .dot2 { transition-duration: var(--duration-fast); transition-timing-function: var(--ease-standard); }
+.track.base .dot2 { transition-duration: var(--duration-base); transition-timing-function: var(--ease-standard); }
+.track.entr .dot2 { transition-duration: var(--duration-slow); transition-timing-function: var(--ease-entrance); }
+.track.exit .dot2 { transition-duration: var(--duration-slower); transition-timing-function: var(--ease-exit); }
+.track .cap { display: flex; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
+
+/* components */
+.demo { display: grid; grid-template-columns: 1fr; gap: var(--space-4); }
+@media (min-width: 768px) { .demo { grid-template-columns: 1fr 1fr; } }
+.card { background: rgb(var(--color-bg-surface)); border: var(--border-hairline) solid rgb(var(--color-border-default)); border-radius: var(--radius-lg); padding: var(--space-5); box-shadow: var(--shadow-xs); }
+.card h3 { margin: 0; font-size: var(--text-lg); font-weight: var(--font-weight-semibold); letter-spacing: var(--tracking-heading); }
+.card p { margin: 0 0 var(--space-5); font-size: var(--text-sm); color: rgb(var(--color-text-secondary)); }
+.row { display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: center; }
+
+.btn { font-family: var(--font-body); font-size: var(--text-sm); font-weight: var(--font-weight-medium); letter-spacing: var(--tracking-normal); border-radius: var(--radius-md); padding: var(--space-2) var(--space-4); cursor: pointer; border: var(--border-hairline) solid transparent; transition: background var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard); }
+.btn.primary { background: rgb(var(--color-brand-primary)); color: rgb(var(--color-bg-surface)); }
+[data-theme="dark"] .btn.primary { color: rgb(var(--color-bg-canvas)); }
+.btn.primary:hover { background: rgb(var(--color-brand-primary-hover)); }
+.btn.quiet { background: transparent; color: rgb(var(--color-text-primary)); border-color: rgb(var(--color-border-strong)); }
+.btn.quiet:hover { border-color: rgb(var(--color-text-muted)); }
+.btn:disabled { opacity: var(--opacity-disabled); cursor: not-allowed; }
+
+.pill { display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--text-2xs); border-radius: var(--radius-full); padding: var(--space-1) var(--space-3); }
+.pill .led { width: 6px; height: 6px; border-radius: var(--radius-full); }
+.pill.idea { background: rgb(var(--color-accent-highlight-bg)); color: rgb(var(--color-accent-highlight-text)); }
+.pill.idea .led { background: rgb(var(--color-accent-highlight)); }
+[data-theme="dark"] .pill.idea .led { background: rgb(var(--accent-400)); }
+.pill.ok { background: rgb(var(--color-status-success-bg)); color: rgb(var(--color-status-success-text)); border-radius: var(--radius-sm); }
+.pill.ng { background: rgb(var(--color-status-danger-bg)); color: rgb(var(--color-status-danger-text)); border-radius: var(--radius-sm); }
+
+/* theming */
+.brandbar { display: flex; gap: var(--space-2); flex-wrap: wrap; align-items: center; margin-bottom: var(--space-6); }
+.brandbar .lbl { font-family: var(--font-mono); font-size: var(--text-3xs); letter-spacing: var(--tracking-label); text-transform: uppercase; color: rgb(var(--color-text-muted)); margin-right: var(--space-2); }
+.bchip {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  font-family: var(--font-mono); font-size: var(--text-3xs); letter-spacing: var(--tracking-label); text-transform: uppercase;
+  color: rgb(var(--color-text-secondary)); background: transparent;
+  border: var(--border-hairline) solid rgb(var(--color-border-strong));
+  border-radius: var(--radius-full); padding: var(--space-2) var(--space-4); cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard);
+}
+.bchip .seed { width: 10px; height: 10px; border-radius: var(--radius-full); }
+.bchip[aria-pressed="true"] { color: rgb(var(--color-text-primary)); border-color: rgb(var(--color-text-muted)); }
+
+.layers { display: grid; gap: var(--space-3); margin-bottom: var(--space-8); }
+.layer { display: grid; gap: var(--space-1); padding: var(--space-4) var(--space-5); border-radius: var(--radius-lg); background: rgb(var(--color-bg-surface)); border: var(--border-hairline) solid rgb(var(--color-border-default)); border-left: var(--border-thick) solid rgb(var(--color-border-strong)); }
+.layer.open { border-left-color: rgb(var(--color-brand-primary)); }
+.layer .lh { display: flex; gap: var(--space-3); align-items: baseline; flex-wrap: wrap; }
+.layer .ln { font-size: var(--text-sm); font-weight: var(--font-weight-semibold); }
+.layer .ld { font-size: var(--text-sm); color: rgb(var(--color-text-secondary)); margin: 0; max-width: 60ch; }
+
+.codeblock {
+  font-family: var(--font-mono); font-size: var(--text-2xs); letter-spacing: 0;
+  line-height: var(--leading-snug); color: rgb(var(--color-text-secondary));
+  background: rgb(var(--color-bg-surface)); border: var(--border-hairline) solid rgb(var(--color-border-default));
+  border-radius: var(--radius-lg); padding: var(--space-5); overflow-x: auto; margin: 0;
+  white-space: pre;
+}
+.codeblock b { color: rgb(var(--color-brand-primary)); font-weight: var(--font-weight-medium); }
+
+.reserve {
+  margin-top: var(--space-8);
+  padding: var(--space-5) var(--space-5) var(--space-6);
+  border: var(--border-hairline) dashed rgb(var(--color-border-strong));
+  border-radius: var(--radius-lg);
+  background: rgb(var(--color-bg-surface) / 0.5);
+}
+.reserve .tag {
+  font-family: var(--font-mono); font-size: var(--text-3xs);
+  letter-spacing: var(--tracking-label); text-transform: uppercase;
+  color: rgb(var(--color-text-muted)); display: block; margin-bottom: var(--space-2);
+}
+.reserve h4 { margin: 0 0 var(--space-2); font-size: var(--text-base); font-weight: var(--font-weight-semibold); letter-spacing: var(--tracking-heading); }
+.reserve > p { font-size: var(--text-sm); color: rgb(var(--color-text-secondary)); margin: 0 0 var(--space-5); max-width: 60ch; }
+
+/* ============================================================
+   STATES
+   Every interactive rule is written twice: once for the real
+   pseudo-class, once for an .is-* class. The .is-* variants let
+   the matrix below show all states at once without interaction.
+   ============================================================ */
+.btn { transition: var(--state-transition); min-height: var(--control-height-md); }
+.btn.primary:hover, .btn.primary.is-hover { background: rgb(var(--color-brand-primary-hover)); }
+.btn.primary:active, .btn.primary.is-press { background: rgb(var(--color-brand-primary-hover)); box-shadow: inset 0 0 0 999px var(--state-press-bg); }
+.btn.quiet:hover, .btn.quiet.is-hover { background: var(--state-hover-bg); border-color: rgb(var(--color-text-muted)); }
+.btn.quiet:active, .btn.quiet.is-press { background: var(--state-press-bg); border-color: rgb(var(--color-text-muted)); }
+.btn.is-focus { box-shadow: var(--state-focus-ring); }
+.btn.is-disabled { opacity: var(--state-disabled-opacity); cursor: not-allowed; }
+.btn.is-loading { position: relative; color: transparent; pointer-events: none; }
+.btn.is-loading::after {
+  content: ""; position: absolute; inset: 0; margin: auto;
+  width: 14px; height: 14px; border-radius: var(--radius-full);
+  border: 2px solid currentColor; border-top-color: transparent;
+  color: rgb(var(--color-bg-surface));
+  animation: spin 700ms linear infinite;
+}
+.btn.quiet.is-loading::after { color: rgb(var(--color-text-secondary)); }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.field {
+  font-family: var(--font-body); font-size: var(--text-sm);
+  letter-spacing: var(--tracking-normal);
+  min-height: var(--control-height-md);
+  padding: var(--space-2) var(--control-padding-x);
+  color: rgb(var(--color-text-primary));
+  background: rgb(var(--color-bg-surface));
+  border: var(--control-border-width) solid rgb(var(--color-border-control));
+  border-radius: var(--control-radius);
+  transition: var(--state-transition);
+  width: 100%; max-width: 180px;
+}
+.field::placeholder { color: rgb(var(--color-text-muted)); }
+.field:hover, .field.is-hover { border-color: rgb(var(--color-text-muted)); }
+.field:focus, .field.is-focus { outline: none; border-color: rgb(var(--state-selected-border)); box-shadow: var(--state-focus-ring); }
+.field.is-disabled { opacity: var(--state-disabled-opacity); background: rgb(var(--color-bg-surface-raised)); cursor: not-allowed; }
+.field.is-error { border-color: var(--state-invalid-border); background: var(--state-invalid-bg); }
+
+.listrow {
+  display: flex; align-items: center; gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  border: var(--border-hairline) solid transparent;
+  border-radius: var(--radius-md);
+  background: rgb(var(--color-bg-surface));
+  transition: var(--state-transition);
+  cursor: pointer; white-space: nowrap;
+}
+.listrow:hover, .listrow.is-hover { background: var(--state-hover-bg); }
+.listrow.is-press { background: var(--state-press-bg); }
+.listrow.is-focus { box-shadow: var(--state-focus-ring); }
+.listrow.is-selected { background: var(--state-selected-bg); border-color: rgb(var(--state-selected-border)); }
+.listrow.is-disabled { opacity: var(--state-disabled-opacity); cursor: not-allowed; }
+
+.skel { background: var(--state-skeleton-bg); border-radius: var(--radius-xs); height: 10px; animation: pulse 1400ms var(--ease-standard) infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+/* state matrix */
+.matrix-wrap { overflow-x: auto; border: var(--border-hairline) solid rgb(var(--color-border-default)); border-radius: var(--radius-lg); background: rgb(var(--color-bg-surface)); }
+.matrix { border-collapse: collapse; min-width: 760px; width: 100%; }
+.matrix th, .matrix td { padding: var(--space-4); border-bottom: var(--border-hairline) solid rgb(var(--color-border-default)); text-align: left; vertical-align: middle; }
+.matrix tr:last-child td { border-bottom: 0; }
+.matrix th {
+  font-family: var(--font-mono); font-size: var(--text-3xs); font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-label); text-transform: uppercase; color: rgb(var(--color-text-muted));
+  position: sticky; top: 0; background: rgb(var(--color-bg-surface)); z-index: 1;
+}
+.matrix td.rowname { font-family: var(--font-mono); font-size: var(--text-2xs); letter-spacing: 0; color: rgb(var(--color-text-secondary)); white-space: nowrap; }
+.matrix td.na { color: rgb(var(--color-text-muted)); font-family: var(--font-mono); font-size: var(--text-2xs); }
+
+/* ============================================================
+   ACCESSIBILITY
+   ============================================================ */
+.audit-wrap { overflow-x: auto; border: var(--border-hairline) solid rgb(var(--color-border-default)); border-radius: var(--radius-lg); background: rgb(var(--color-bg-surface)); }
+.audit { border-collapse: collapse; width: 100%; min-width: 600px; }
+.audit th, .audit td { padding: var(--space-3) var(--space-4); border-bottom: var(--border-hairline) solid rgb(var(--color-border-default)); text-align: left; }
+.audit tr:last-child td { border-bottom: 0; }
+.audit th { font-family: var(--font-mono); font-size: var(--text-3xs); font-weight: var(--font-weight-medium); letter-spacing: var(--tracking-label); text-transform: uppercase; color: rgb(var(--color-text-muted)); }
+.audit td.pair { font-family: var(--font-mono); font-size: var(--text-2xs); letter-spacing: 0; }
+.audit td.ratio { font-family: var(--font-mono); font-variant-numeric: var(--numeric-tabular); font-size: var(--text-sm); font-weight: var(--font-weight-medium); }
+.verdict { font-family: var(--font-mono); font-size: var(--text-3xs); letter-spacing: var(--tracking-label); text-transform: uppercase; padding: 2px 8px; border-radius: var(--radius-sm); white-space: nowrap; }
+.verdict.pass { background: rgb(var(--color-status-success-bg)); color: rgb(var(--color-status-success-text)); }
+.verdict.fail { background: rgb(var(--color-status-danger-bg)); color: rgb(var(--color-status-danger-text)); }
+.sample-cell { padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm); font-size: var(--text-sm); white-space: nowrap; }
+
+/* status with a non-colour cue */
+.statusline { display: flex; flex-direction: column; gap: var(--space-3); }
+.sig { display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--text-sm); padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm); width: fit-content; }
+.sig .glyph { font-family: var(--font-mono); font-size: var(--text-2xs); font-weight: var(--font-weight-semibold); width: 16px; height: 16px; display: grid; place-items: center; border-radius: var(--radius-full); flex: none; }
+.sig.ok { background: rgb(var(--color-status-success-bg)); color: rgb(var(--color-status-success-text)); }
+.sig.ok .glyph { background: rgb(var(--color-status-success)); color: rgb(var(--color-bg-surface)); }
+.sig.warn { background: rgb(var(--color-status-warning-bg)); color: rgb(var(--color-status-warning-text)); }
+.sig.warn .glyph { background: rgb(var(--color-status-warning)); color: rgb(var(--color-bg-surface)); border-radius: var(--radius-xs); }
+.sig.ng { background: rgb(var(--color-status-danger-bg)); color: rgb(var(--color-status-danger-text)); }
+.sig.ng .glyph { background: rgb(var(--color-status-danger)); color: rgb(var(--color-bg-surface)); border-radius: 2px; transform: rotate(45deg); }
+.sig.ng .glyph span { transform: rotate(-45deg); }
+.sig.info { background: rgb(var(--color-status-info-bg)); color: rgb(var(--color-status-info-text)); }
+.sig.info .glyph { background: rgb(var(--color-status-info)); color: rgb(var(--color-bg-surface)); }
+[data-theme="dark"] .sig .glyph { color: rgb(var(--color-bg-canvas)); }
+
+.cvd { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-bottom: var(--space-5); align-items: center; }
+.cvdstage { padding: var(--space-5); border-radius: var(--radius-lg); border: var(--border-hairline) solid rgb(var(--color-border-default)); background: rgb(var(--color-bg-surface)); }
+.cvdstage.p { filter: url(#protanopia); }
+.cvdstage.d { filter: url(#deuteranopia); }
+.cvdstage.t { filter: url(#tritanopia); }
+.cvdstage.g { filter: url(#greyscale); }
+
+.checklist { display: grid; gap: var(--space-3); }
+.check { display: grid; gap: var(--space-1); padding: var(--space-4) var(--space-5); border-radius: var(--radius-lg); background: rgb(var(--color-bg-surface)); border: var(--border-hairline) solid rgb(var(--color-border-default)); border-left: var(--border-thick) solid rgb(var(--color-status-success)); }
+.check .ch { font-size: var(--text-sm); font-weight: var(--font-weight-semibold); }
+.check .cd { font-size: var(--text-sm); color: rgb(var(--color-text-secondary)); margin: 0; max-width: 62ch; }
+.check.todo { border-left-color: rgb(var(--color-status-warning)); }
+
+/* hue reserve */
+.huerow { display: grid; grid-template-columns: 1fr; gap: var(--space-2); padding: var(--space-4) var(--space-5); border-bottom: var(--border-hairline) solid rgb(var(--color-border-default)); }
+@media (min-width: 700px) { .huerow { grid-template-columns: 140px 1fr; align-items: center; gap: var(--space-5); } }
+.huerow:last-child { border-bottom: 0; }
+.huerow.hue-caution { background: rgb(var(--color-status-warning) / 0.06); }
+.huename { font-family: var(--font-mono); font-size: var(--text-2xs); letter-spacing: 0; }
+.hsteps { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-2); }
+.hstep { padding: var(--space-3) var(--space-2); border-radius: var(--radius-sm); display: grid; gap: 2px; font-family: var(--font-mono); font-size: var(--text-3xs); color: rgb(26 28 33 / 0.75); text-align: center; }
+.hstep .hx { opacity: 0.65; }
+.hstep:nth-child(4), .hstep:nth-child(5) { color: rgb(255 255 255 / 0.9); }
+.huewrap { border: var(--border-hairline) solid rgb(var(--color-border-default)); border-radius: var(--radius-lg); background: rgb(var(--color-bg-surface)); overflow: hidden; }
+.hdot { width: 14px; height: 14px; border-radius: var(--radius-full); display: inline-block; vertical-align: middle; margin-right: var(--space-2); }
+
+/* charts */
+.chartbox { padding: var(--space-5); border-radius: var(--radius-lg); border: var(--border-hairline) solid rgb(var(--color-border-default)); background: rgb(var(--color-bg-surface)); }
+.legend { display: flex; gap: var(--space-5); flex-wrap: wrap; margin-top: var(--space-4); padding-top: var(--space-4); border-top: var(--border-hairline) solid rgb(var(--color-border-default)); }
+.lg { display: inline-flex; align-items: center; gap: var(--space-2); }
+.strip { display: flex; gap: 2px; margin-bottom: var(--space-3); }
+.strip .cell { flex: 1; height: 40px; border-radius: 2px; }
+.strip .cell.wide { display: grid; place-items: center; font-family: var(--font-mono); font-size: var(--text-3xs); color: rgb(26 28 33 / 0.8); }
+.strip .cell.wide:first-child span, .strip .cell.wide:last-child span { color: rgb(255 255 255 / 0.92); }
+.scalebar { display: flex; gap: 2px; }
+.scalebar .sw { flex: 1; height: 52px; border-radius: 2px; display: grid; place-items: end center; padding-bottom: var(--space-2); font-family: var(--font-mono); font-size: var(--text-3xs); }
+
+/* density demo */
+.dtable { width: 100%; border-collapse: collapse; font-size: var(--density-font-size); }
+.dtable th, .dtable td { text-align: left; padding: var(--density-cell-py) var(--space-4); border-bottom: var(--border-hairline) solid rgb(var(--color-border-default)); height: var(--density-row-height); }
+.dtable th { font-family: var(--font-mono); font-size: var(--text-3xs); letter-spacing: var(--tracking-label); text-transform: uppercase; color: rgb(var(--color-text-muted)); }
+.dtable td.n { font-family: var(--font-mono); font-variant-numeric: var(--numeric-tabular); }
+.dwrap { border: var(--border-hairline) solid rgb(var(--color-border-default)); border-radius: var(--radius-lg); background: rgb(var(--color-bg-surface)); overflow: hidden; }
+.dtoolbar { display: flex; gap: var(--density-gap); padding: var(--density-cell-py) var(--space-4); border-bottom: var(--border-hairline) solid rgb(var(--color-border-default)); align-items: center; }
+.dtoolbar .btn { min-height: var(--density-control-height); font-size: var(--density-font-size); }
+
+/* language demo */
+.langgrid { display: grid; gap: var(--space-4); grid-template-columns: 1fr; }
+@media (min-width: 768px) { .langgrid { grid-template-columns: 1fr 1fr; } }
+.langcell { padding: var(--space-5); border-radius: var(--radius-lg); border: var(--border-hairline) solid rgb(var(--color-border-default)); background: rgb(var(--color-bg-surface)); }
+.langcell h4 { font-size: var(--text-xl); font-weight: var(--font-weight-semibold); letter-spacing: var(--tracking-display); line-height: var(--leading-display); font-feature-settings: var(--font-feature-display); margin: var(--space-3) 0 var(--space-3); }
+.langcell p { font-size: var(--text-base); line-height: var(--leading-normal); letter-spacing: var(--tracking-normal); color: rgb(var(--color-text-secondary)); margin: 0; }
+
+/* voice */
+.voice { display: grid; gap: var(--space-3); }
+.vrow { display: grid; gap: var(--space-2); padding: var(--space-4) var(--space-5); border-radius: var(--radius-lg); background: rgb(var(--color-bg-surface)); border: var(--border-hairline) solid rgb(var(--color-border-default)); }
+@media (min-width: 800px) { .vrow { grid-template-columns: 1fr 1fr; gap: var(--space-5); } }
+.vbad, .vgood { font-size: var(--text-sm); display: grid; gap: var(--space-1); }
+.vbad .tagx, .vgood .tagx { font-family: var(--font-mono); font-size: var(--text-3xs); letter-spacing: var(--tracking-label); text-transform: uppercase; }
+.vbad .tagx { color: rgb(var(--color-status-danger-text)); }
+.vgood .tagx { color: rgb(var(--color-status-success-text)); }
+.vbad .txt { color: rgb(var(--color-text-muted)); text-decoration: line-through; text-decoration-thickness: 1px; }
+.vwhy { grid-column: 1/-1; font-size: var(--text-sm); color: rgb(var(--color-text-secondary)); margin: 0; padding-top: var(--space-3); border-top: var(--border-hairline) solid rgb(var(--color-border-default)); }
+
+/* decisions */
+.log { display: grid; gap: var(--space-4); }
+.entry { padding: var(--space-5); border-left: var(--border-thick) solid rgb(var(--color-brand-primary)); background: rgb(var(--color-bg-surface)); border-radius: 0 var(--radius-lg) var(--radius-lg) 0; }
+.entry h4 { margin: 0 0 var(--space-2); font-size: var(--text-base); font-weight: var(--font-weight-semibold); letter-spacing: var(--tracking-heading); }
+.entry p { margin: 0; font-size: var(--text-sm); color: rgb(var(--color-text-secondary)); max-width: 62ch; }
+.entry.rejected { border-left-color: rgb(var(--color-border-strong)); }
+
+.foot { margin-top: var(--space-24); padding-top: var(--space-5); border-top: var(--border-hairline) solid rgb(var(--color-border-default)); display: flex; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
+.fontstate { font-family: var(--font-mono); font-size: var(--text-3xs); letter-spacing: var(--tracking-label); text-transform: uppercase; color: rgb(var(--color-text-muted)); }
+.fontstate.ok { color: rgb(var(--color-status-success-text)); }
+.fontstate.ng { color: rgb(var(--color-status-danger-text)); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+<svg aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0">
+  <filter id="protanopia" color-interpolation-filters="linearRGB">
+    <feColorMatrix type="matrix" values="0.567 0.433 0 0 0  0.558 0.442 0 0 0  0 0.242 0.758 0 0  0 0 0 1 0"/>
+  </filter>
+  <filter id="deuteranopia" color-interpolation-filters="linearRGB">
+    <feColorMatrix type="matrix" values="0.625 0.375 0 0 0  0.7 0.3 0 0 0  0 0.3 0.7 0 0  0 0 0 1 0"/>
+  </filter>
+  <filter id="greyscale" color-interpolation-filters="linearRGB">
+    <feColorMatrix type="saturate" values="0"/>
+  </filter>
+  <filter id="tritanopia" color-interpolation-filters="linearRGB">
+    <feColorMatrix type="matrix" values="0.95 0.05 0 0 0  0 0.433 0.567 0 0  0 0.475 0.525 0 0  0 0 0 1 0"/>
+  </filter>
+</svg>
+
+<div class="shell">
+
+  <header class="masthead">
+    <div class="brandline">
+      <span class="wordmark">elchika<span>.</span>inc</span>
+      <span class="ver">Design tokens v1.8</span>
+    </div>
+    <button class="ctl" id="themeToggle" type="button">Dark</button>
+  </header>
+
+  <nav class="subnav">
+    <a href="#color">Color</a>
+    <a href="#type">Typography</a>
+    <a href="#space">Spacing</a>
+    <a href="#layout">Layout</a>
+    <a href="#shape">Radius &amp; Border</a>
+    <a href="#elevation">Elevation</a>
+    <a href="#motion">Motion</a>
+    <a href="#layer">Layer &amp; Opacity</a>
+    <a href="#states">States</a>
+    <a href="#a11y">A11y</a>
+    <a href="#hues">Hues</a>
+    <a href="#dataviz">Charts</a>
+    <a href="#density">Density</a>
+    <a href="#lang">Language</a>
+    <a href="#voice">Voice</a>
+    <a href="#use">In use</a>
+    <a href="#theming">Theming</a>
+    <a href="#decisions">Decisions</a>
+  </nav>
+
+  <section class="hero">
+    <h1>見る、届ける、見せる。その手触りを決める値。</h1>
+    <p>elchika inc. のコーポレートブランドと、そのプロダクト群が共有する定義。すべて CSS カスタムプロパティとして一箇所で管理されます。</p>
+  </section>
+
+  <!-- COLOR -->
+  <section class="band" id="color">
+    <span class="eyebrow">--color-*</span>
+    <h2>Color</h2>
+    <p class="lede">青が構造をつくり、黄色は発見の瞬間だけ灯る。補色関係で強く出るぶん、黄色は面積を絞って使います。値をクリックするとトークン名がコピーされます。</p>
+
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:rgb(var(--color-brand-primary))"></div><div class="meta"><span class="nm">brand / primary</span><button class="copy" data-copy="--color-brand-primary">--color-brand-primary</button></div></div>
+      <div class="swatch"><div class="chip" style="background:rgb(var(--color-accent-highlight))"></div><div class="meta"><span class="nm">accent / highlight</span><button class="copy" data-copy="--color-accent-highlight">--color-accent-highlight</button></div></div>
+      <div class="swatch"><div class="chip" style="background:rgb(var(--color-bg-canvas));box-shadow:inset 0 0 0 0.5px rgb(var(--color-border-default))"></div><div class="meta"><span class="nm">bg / canvas</span><button class="copy" data-copy="--color-bg-canvas">--color-bg-canvas</button></div></div>
+      <div class="swatch"><div class="chip" style="background:rgb(var(--color-bg-surface));box-shadow:inset 0 0 0 0.5px rgb(var(--color-border-default))"></div><div class="meta"><span class="nm">bg / surface</span><button class="copy" data-copy="--color-bg-surface">--color-bg-surface</button></div></div>
+      <div class="swatch"><div class="chip" style="background:rgb(var(--color-text-primary))"></div><div class="meta"><span class="nm">text / primary</span><button class="copy" data-copy="--color-text-primary">--color-text-primary</button></div></div>
+      <div class="swatch"><div class="chip" style="background:rgb(var(--color-text-secondary))"></div><div class="meta"><span class="nm">text / secondary</span><button class="copy" data-copy="--color-text-secondary">--color-text-secondary</button></div></div>
+      <div class="swatch"><div class="chip" style="background:rgb(var(--color-status-success))"></div><div class="meta"><span class="nm">status / success</span><button class="copy" data-copy="--color-status-success">--color-status-success</button></div></div>
+      <div class="swatch"><div class="chip" style="background:rgb(var(--color-status-danger))"></div><div class="meta"><span class="nm">status / danger</span><button class="copy" data-copy="--color-status-danger">--color-status-danger</button></div></div>
+    </div>
+
+    <h3 class="sub">ライト / ダークの対応表</h3>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th></th><th>Token</th><th>Light</th><th>Dark</th></tr></thead>
+        <tbody>
+          <tr><td><span class="dot" style="background:rgb(var(--color-bg-canvas))"></span></td><td class="mono">bg / canvas</td><td class="mono">#F6F6F7</td><td class="mono">#15171C</td></tr>
+          <tr><td><span class="dot" style="background:rgb(var(--color-bg-surface))"></span></td><td class="mono">bg / surface</td><td class="mono">#FFFFFF</td><td class="mono">#1C1F26</td></tr>
+          <tr><td><span class="dot" style="background:rgb(var(--color-bg-surface-raised))"></span></td><td class="mono">bg / surface-raised</td><td class="mono">#EDEEF0</td><td class="mono">#262A33</td></tr>
+          <tr><td><span class="dot" style="background:rgb(var(--color-border-default))"></span></td><td class="mono">border / default</td><td class="mono">#DEE0E3</td><td class="mono">#383D48</td></tr>
+          <tr><td><span class="dot" style="background:rgb(var(--color-border-strong))"></span></td><td class="mono">border / strong</td><td class="mono">#C7CACF</td><td class="mono">#4A505E</td></tr>
+          <tr><td><span class="dot" style="background:rgb(var(--color-text-primary))"></span></td><td class="mono">text / primary</td><td class="mono">#1A1C21</td><td class="mono">#F6F6F7</td></tr>
+          <tr><td><span class="dot" style="background:rgb(var(--color-text-secondary))"></span></td><td class="mono">text / secondary</td><td class="mono">#5B5F68</td><td class="mono">#B0B4BC</td></tr>
+          <tr><td><span class="dot" style="background:rgb(var(--color-text-muted))"></span></td><td class="mono">text / muted</td><td class="mono">#63676F</td><td class="mono">#969CA8</td></tr>
+          <tr><td><span class="dot" style="background:rgb(var(--color-brand-primary))"></span></td><td class="mono">brand / primary</td><td class="mono">#2F5FD1</td><td class="mono">#6E93F0</td></tr>
+          <tr><td><span class="dot" style="background:rgb(var(--color-accent-highlight))"></span></td><td class="mono">accent / highlight</td><td class="mono">#F2C230</td><td class="mono">#F5D065</td></tr>
+          <tr><td><span class="dot" style="background:rgb(var(--color-status-success))"></span></td><td class="mono">status / success</td><td class="mono">#1C9467</td><td class="mono">#34C08A</td></tr>
+          <tr><td><span class="dot" style="background:rgb(var(--color-status-danger))"></span></td><td class="mono">status / danger</td><td class="mono">#E0555A</td><td class="mono">#F17579</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- TYPE -->
+  <section class="band" id="type">
+    <span class="eyebrow">--font-* / --text-*</span>
+    <h2>Typography</h2>
+    <p class="lede">IBM Plex スーパーファミリーの3つの声。和文と欧文が同じ設計思想で揃い、Mono がラベルと数値を担当します。</p>
+
+    <div class="tbl-wrap" style="margin-bottom:var(--space-10)">
+      <table class="tbl">
+        <thead><tr><th>Role</th><th>Token</th><th>Family</th></tr></thead>
+        <tbody>
+          <tr><td>見出し</td><td class="mono">--font-display</td><td class="mono">IBM Plex Sans JP</td></tr>
+          <tr><td>本文</td><td class="mono">--font-body</td><td class="mono">IBM Plex Sans JP</td></tr>
+          <tr><td>ラベル・数値</td><td class="mono">--font-mono</td><td class="mono">IBM Plex Mono</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="spec">
+      <div class="spec-row"><div class="s-6xl">観測する</div><span class="token">--text-6xl · 54px / 600 / -0.02em / 1.25</span></div>
+      <div class="spec-row"><div class="s-4xl">インフラを、静かに観測する</div><span class="token">--text-4xl · 36px / 600 / -0.02em / 1.35</span></div>
+      <div class="spec-row"><div class="s-2xl">すべての変化に、根拠を持たせる</div><span class="token">--text-2xl · 25px / 600 / -0.01em / 1.35</span></div>
+      <div class="spec-row"><div class="s-lg">プロダクトは道具であり、道具は静かであるべきだと考えています。必要なときだけ前に出て、それ以外は背景に退く。</div><span class="token">--text-lg · 18px / 400 / 1.9</span></div>
+      <div class="spec-row"><div class="s-base">日本語の本文は欧文より行間を必要とします。1.5では漢字とかなが詰まって見えるため、本文は1.75を基準に置いています。字間もわずかに開けて 0.02em。</div><span class="token">--text-base · 16px / 400 / +0.02em / 1.75</span></div>
+      <div class="spec-row"><div class="s-mono">Status · Region · Last checked</div><span class="token">--text-3xs + --font-mono · 11px / 500 / +0.08em / uppercase</span></div>
+    </div>
+
+    <h3 class="sub">スケール一覧</h3>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Token</th><th>Size</th><th>用途</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">--text-3xs</td><td class="mono">11px</td><td>Mono ラベル、eyebrow</td></tr>
+          <tr><td class="mono">--text-2xs</td><td class="mono">12px</td><td>バッジ、注釈</td></tr>
+          <tr><td class="mono">--text-xs</td><td class="mono">13px</td><td>密度の高いUI</td></tr>
+          <tr><td class="mono">--text-sm</td><td class="mono">14px</td><td>ボタン、補助テキスト</td></tr>
+          <tr><td class="mono">--text-base</td><td class="mono">16px</td><td>本文（和文の基準）</td></tr>
+          <tr><td class="mono">--text-lg</td><td class="mono">18px</td><td>リード文</td></tr>
+          <tr><td class="mono">--text-xl</td><td class="mono">21px</td><td>小見出し</td></tr>
+          <tr><td class="mono">--text-2xl</td><td class="mono">25px</td><td>セクション見出し</td></tr>
+          <tr><td class="mono">--text-3xl</td><td class="mono">30px</td><td>見出し</td></tr>
+          <tr><td class="mono">--text-4xl</td><td class="mono">36px</td><td>ページ見出し</td></tr>
+          <tr><td class="mono">--text-5xl</td><td class="mono">44px</td><td>ヒーロー</td></tr>
+          <tr><td class="mono">--text-6xl</td><td class="mono">54px</td><td>ヒーロー（大）</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub">行間と字間</h3>
+    <div class="tbl-wrap" style="margin-bottom:var(--space-6)">
+      <table class="tbl">
+        <thead><tr><th>Token</th><th>Value</th><th>用途</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">--leading-tight</td><td class="mono">1.25</td><td>欧文の大見出しのみ</td></tr>
+          <tr><td class="mono">--leading-display</td><td class="mono">1.35</td><td>和文見出し</td></tr>
+          <tr><td class="mono">--leading-snug</td><td class="mono">1.5</td><td>密度の高いUI</td></tr>
+          <tr><td class="mono">--leading-normal</td><td class="mono">1.75</td><td>和文本文</td></tr>
+          <tr><td class="mono">--leading-relaxed</td><td class="mono">1.9</td><td>長文</td></tr>
+          <tr><td class="mono">--tracking-display</td><td class="mono">-0.02em</td><td>見出し（全角の緩さを締める）</td></tr>
+          <tr><td class="mono">--tracking-normal</td><td class="mono">+0.02em</td><td>本文（小さい和文は開く）</td></tr>
+          <tr><td class="mono">--tracking-label</td><td class="mono">+0.08em</td><td>Mono ラベル</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="compare">
+      <div class="cell bad">
+        <span class="token">1.5 — 欧文の既定値</span>
+        <p>プロダクトは道具であり、道具は静かであるべきだと考えています。必要なときだけ前に出て、それ以外は背景に退く。監視も配信も、うまくいっている限り気づかれないのが理想です。</p>
+      </div>
+      <div class="cell good">
+        <span class="token">1.75 — --leading-normal</span>
+        <p>プロダクトは道具であり、道具は静かであるべきだと考えています。必要なときだけ前に出て、それ以外は背景に退く。監視も配信も、うまくいっている限り気づかれないのが理想です。</p>
+      </div>
+    </div>
+
+    <h3 class="sub">数値</h3>
+    <p class="lede">その場で更新される値は等幅数字（<span class="token">--numeric-tabular</span>）で組みます。桁ごとの幅が揃うので、更新のたびに数字が横滑りしません。</p>
+    <div class="metrics">
+      <div class="metric"><span class="k">Uptime</span><span class="v brand" data-live="uptime">99.982%</span></div>
+      <div class="metric"><span class="k">Checks / min</span><span class="v" data-live="checks">14,308</span></div>
+      <div class="metric"><span class="k">Last seen</span><span class="v" data-live="clock">00:11:04</span></div>
+    </div>
+  </section>
+
+  <!-- SPACING -->
+  <section class="band" id="space">
+    <span class="eyebrow">--space-*</span>
+    <h2>Spacing</h2>
+    <p class="lede">4px を基準にした段階。ミニマルは余白の精度で決まるので、中間値を足さず段階だけで組み立てます。</p>
+    <div class="ruler">
+      <div class="u"><div class="bar" style="width:4px;height:4px"></div><div class="lb">1</div></div>
+      <div class="u"><div class="bar" style="width:8px;height:8px"></div><div class="lb">2</div></div>
+      <div class="u"><div class="bar" style="width:12px;height:12px"></div><div class="lb">3</div></div>
+      <div class="u"><div class="bar" style="width:16px;height:16px"></div><div class="lb">4</div></div>
+      <div class="u"><div class="bar" style="width:20px;height:20px"></div><div class="lb">5</div></div>
+      <div class="u"><div class="bar" style="width:24px;height:24px"></div><div class="lb">6</div></div>
+      <div class="u"><div class="bar" style="width:32px;height:32px"></div><div class="lb">8</div></div>
+      <div class="u"><div class="bar" style="width:48px;height:48px"></div><div class="lb">12</div></div>
+      <div class="u"><div class="bar" style="width:64px;height:64px"></div><div class="lb">16</div></div>
+      <div class="u"><div class="bar" style="width:96px;height:96px"></div><div class="lb">24</div></div>
+    </div>
+
+    <h3 class="sub">意味づけされた余白</h3>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Token</th><th>Value</th><th>用途</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">--space-inline-tight</td><td class="mono">8px</td><td>アイコン ↔ ラベル</td></tr>
+          <tr><td class="mono">--space-inline</td><td class="mono">12px</td><td>ボタン ↔ ボタン</td></tr>
+          <tr><td class="mono">--space-stack-tight</td><td class="mono">8px</td><td>ラベル ↔ 入力欄</td></tr>
+          <tr><td class="mono">--space-stack</td><td class="mono">16px</td><td>段落のリズム</td></tr>
+          <tr><td class="mono">--space-stack-loose</td><td class="mono">32px</td><td>ブロック ↔ ブロック</td></tr>
+          <tr><td class="mono">--space-section</td><td class="mono">96px</td><td>セクション余白（モバイル）</td></tr>
+          <tr><td class="mono">--space-section-lg</td><td class="mono">128px</td><td>セクション余白（デスクトップ）</td></tr>
+          <tr><td class="mono">--space-gutter</td><td class="mono">20px</td><td>画面左右（モバイル）</td></tr>
+          <tr><td class="mono">--space-gutter-lg</td><td class="mono">48px</td><td>画面左右（デスクトップ）</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- LAYOUT -->
+  <section class="band" id="layout">
+    <span class="eyebrow">--container-* / screens</span>
+    <h2>Layout</h2>
+    <p class="lede">横幅の上限とブレークポイント。</p>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Token</th><th>Value</th><th>用途</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">--container-prose</td><td class="mono">68ch</td><td>長文の一段組み</td></tr>
+          <tr><td class="mono">--container-content</td><td class="mono">960px</td><td>標準のコンテンツ幅</td></tr>
+          <tr><td class="mono">--container-wide</td><td class="mono">1120px</td><td>広めのレイアウト</td></tr>
+          <tr><td class="mono">sm</td><td class="mono">640px</td><td rowspan="5">Tailwind のブレークポイント</td></tr>
+          <tr><td class="mono">md</td><td class="mono">768px</td></tr>
+          <tr><td class="mono">lg</td><td class="mono">1024px</td></tr>
+          <tr><td class="mono">xl</td><td class="mono">1280px</td></tr>
+          <tr><td class="mono">2xl</td><td class="mono">1536px</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SHAPE -->
+  <section class="band" id="shape">
+    <span class="eyebrow">--radius-* / --border-*</span>
+    <h2>Radius &amp; Border</h2>
+    <p class="lede">ミニマルは「柔らかい」ではなく「シャープ」に振るため、16px より大きい角丸は用意しません。罫線は 0.5px を既定に置き、1px より一段静かにしています。</p>
+    <div class="tiles">
+      <div class="tile" style="border-radius:var(--radius-xs)"><div class="box" style="border-radius:var(--radius-xs)"></div><span class="lb">xs · 4px</span><span class="token">入力欄・タグ</span></div>
+      <div class="tile" style="border-radius:var(--radius-sm)"><div class="box" style="border-radius:var(--radius-sm)"></div><span class="lb">sm · 6px</span><span class="token">ステータスチップ</span></div>
+      <div class="tile" style="border-radius:var(--radius-md)"><div class="box" style="border-radius:var(--radius-md)"></div><span class="lb">md · 8px</span><span class="token">ボタン</span></div>
+      <div class="tile" style="border-radius:var(--radius-lg)"><div class="box" style="border-radius:var(--radius-lg)"></div><span class="lb">lg · 12px</span><span class="token">カード</span></div>
+      <div class="tile" style="border-radius:var(--radius-xl)"><div class="box" style="border-radius:var(--radius-xl)"></div><span class="lb">xl · 16px</span><span class="token">モーダル</span></div>
+      <div class="tile" style="border-radius:var(--radius-full)"><div class="box" style="border-radius:var(--radius-full)"></div><span class="lb">full</span><span class="token">ピル・アバター</span></div>
+    </div>
+
+    <h3 class="sub">罫線の太さ</h3>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Token</th><th>Value</th><th>用途</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">--border-hairline</td><td class="mono">0.5px</td><td>既定の境界線</td></tr>
+          <tr><td class="mono">--border-thin</td><td class="mono">1px</td><td>強調したい区切り</td></tr>
+          <tr><td class="mono">--border-thick</td><td class="mono">2px</td><td>フォーカス、選択中のタブ</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ELEVATION -->
+  <section class="band" id="elevation">
+    <span class="eyebrow">--shadow-*</span>
+    <h2>Elevation</h2>
+    <p class="lede">構造は基本ボーダーが担当し、影は本当に浮くものだけに使います。ダークモードでは影がほぼ見えないため、不透明度を上げた別セットに切り替わります。</p>
+    <div class="lifts">
+      <div class="lift" style="box-shadow:var(--shadow-xs)"><span class="lb">xs</span><span class="token">カード</span></div>
+      <div class="lift" style="box-shadow:var(--shadow-sm)"><span class="lb">sm</span><span class="token">ホバー</span></div>
+      <div class="lift" style="box-shadow:var(--shadow-md)"><span class="lb">md</span><span class="token">ドロップダウン</span></div>
+      <div class="lift" style="box-shadow:var(--shadow-lg)"><span class="lb">lg</span><span class="token">モーダル</span></div>
+      <div class="lift" style="box-shadow:var(--shadow-focus)"><span class="lb">focus</span><span class="token">フォーカスリング</span></div>
+    </div>
+  </section>
+
+  <!-- MOTION -->
+  <section class="band" id="motion">
+    <span class="eyebrow">--duration-* / --ease-*</span>
+    <h2>Motion</h2>
+    <p class="lede">カーソルを重ねると実際の速度と曲線が確かめられます。標準は立ち上がりが速く減速する曲線で、キビキビした操作感になります。</p>
+    <div class="motion">
+      <div class="track fast" tabindex="0"><div class="cap"><span class="token">--duration-fast · 120ms</span><span class="token">--ease-standard</span></div><div class="rail"><div class="dot2"></div></div></div>
+      <div class="track base" tabindex="0"><div class="cap"><span class="token">--duration-base · 180ms</span><span class="token">--ease-standard</span></div><div class="rail"><div class="dot2"></div></div></div>
+      <div class="track entr" tabindex="0"><div class="cap"><span class="token">--duration-slow · 260ms</span><span class="token">--ease-entrance</span></div><div class="rail"><div class="dot2"></div></div></div>
+      <div class="track exit" tabindex="0"><div class="cap"><span class="token">--duration-slower · 400ms</span><span class="token">--ease-exit</span></div><div class="rail"><div class="dot2"></div></div></div>
+    </div>
+  </section>
+
+  <!-- LAYER -->
+  <section class="band" id="layer">
+    <span class="eyebrow">--z-* / --opacity-*</span>
+    <h2>Layer &amp; Opacity</h2>
+    <p class="lede">重なり順は名前で管理します。<span class="token">z-index: 9999</span> の乱発を防ぐためです。</p>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Token</th><th>Value</th><th>用途</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">--z-dropdown</td><td class="mono">1000</td><td>ドロップダウン</td></tr>
+          <tr><td class="mono">--z-sticky</td><td class="mono">1100</td><td>固定ヘッダー</td></tr>
+          <tr><td class="mono">--z-overlay</td><td class="mono">1200</td><td>背景の覆い</td></tr>
+          <tr><td class="mono">--z-modal</td><td class="mono">1300</td><td>モーダル</td></tr>
+          <tr><td class="mono">--z-popover</td><td class="mono">1400</td><td>ポップオーバー</td></tr>
+          <tr><td class="mono">--z-toast</td><td class="mono">1500</td><td>トースト</td></tr>
+          <tr><td class="mono">--opacity-disabled</td><td class="mono">0.4</td><td>無効状態</td></tr>
+          <tr><td class="mono">--opacity-muted</td><td class="mono">0.65</td><td>控えめな要素</td></tr>
+          <tr><td class="mono">--opacity-overlay</td><td class="mono">0.6</td><td>モーダル背景</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- IN USE -->
+  <section class="band" id="use">
+    <span class="eyebrow">In use</span>
+    <h2>組み合わせた状態</h2>
+    <p class="lede">すべてのトークンが同時に効いている状態。ヘッダーの切り替えでライト／ダーク両方を確認できます。</p>
+    <div class="demo">
+      <div class="card">
+        <div class="row" style="justify-content:space-between;margin-bottom:var(--space-3)">
+          <h3>Manako</h3>
+          <span class="pill idea"><span class="led"></span>New idea</span>
+        </div>
+        <p>エンドポイントの応答を継続的に観測し、変化があったときだけ知らせます。</p>
+        <div class="row">
+          <button class="btn primary" type="button">監視を開始</button>
+          <button class="btn quiet" type="button">設定</button>
+          <button class="btn quiet" type="button" disabled>停止中</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="row" style="justify-content:space-between;margin-bottom:var(--space-3)">
+          <h3>Todoke</h3>
+          <span class="token">3 endpoints</span>
+        </div>
+        <p>通知の配信状況。失敗したものだけが赤く残ります。</p>
+        <div class="row">
+          <span class="pill ok">正常 2</span>
+          <span class="pill ng">エラー 1</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATES -->
+  <section class="band" id="states">
+    <span class="eyebrow">--state-* / --control-*</span>
+    <h2>状態とコントロール</h2>
+    <p class="lede">状態はコンポーネントごとに定義せず、一度だけトークン化して共有します。重ね色 <span class="token">--state-tint</span> はライトで暗く、ダークで明るく反転するので、1つの記述で両モードに対応します。以下は実際のコンポーネントで、全状態を同時に表示しています。</p>
+
+    <div class="matrix-wrap">
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th>Component</th><th>Rest</th><th>Hover</th><th>Press</th><th>Focus</th><th>Selected</th><th>Disabled</th><th>Loading</th><th>Error</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="rowname">button / primary</td>
+            <td><span class="btn primary">保存</span></td>
+            <td><span class="btn primary is-hover">保存</span></td>
+            <td><span class="btn primary is-press">保存</span></td>
+            <td><span class="btn primary is-focus">保存</span></td>
+            <td class="na">—</td>
+            <td><span class="btn primary is-disabled">保存</span></td>
+            <td><span class="btn primary is-loading">保存</span></td>
+            <td class="na">—</td>
+          </tr>
+          <tr>
+            <td class="rowname">button / quiet</td>
+            <td><span class="btn quiet">設定</span></td>
+            <td><span class="btn quiet is-hover">設定</span></td>
+            <td><span class="btn quiet is-press">設定</span></td>
+            <td><span class="btn quiet is-focus">設定</span></td>
+            <td class="na">—</td>
+            <td><span class="btn quiet is-disabled">設定</span></td>
+            <td><span class="btn quiet is-loading">設定</span></td>
+            <td class="na">—</td>
+          </tr>
+          <tr>
+            <td class="rowname">input</td>
+            <td><input class="field" value="example.com" readonly></td>
+            <td><input class="field is-hover" value="example.com" readonly></td>
+            <td class="na">—</td>
+            <td><input class="field is-focus" value="example.com" readonly></td>
+            <td class="na">—</td>
+            <td><input class="field is-disabled" value="example.com" readonly></td>
+            <td><div class="skel" style="max-width:180px"></div></td>
+            <td><input class="field is-error" value="example..com" readonly></td>
+          </tr>
+          <tr>
+            <td class="rowname">list row</td>
+            <td><span class="listrow">api.example.com</span></td>
+            <td><span class="listrow is-hover">api.example.com</span></td>
+            <td><span class="listrow is-press">api.example.com</span></td>
+            <td><span class="listrow is-focus">api.example.com</span></td>
+            <td><span class="listrow is-selected">api.example.com</span></td>
+            <td><span class="listrow is-disabled">api.example.com</span></td>
+            <td><div class="skel" style="width:140px"></div></td>
+            <td class="na">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub">状態トークン</h3>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Token</th><th>Light</th><th>Dark</th><th>使いどころ</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">--state-tint</td><td class="mono">#1A1C21</td><td class="mono">#F6F6F7</td><td>面に重ねる色。明暗が反転する</td></tr>
+          <tr><td class="mono">--state-hover-alpha</td><td class="mono">0.05</td><td class="mono">0.07</td><td>ホバーの濃さ</td></tr>
+          <tr><td class="mono">--state-press-alpha</td><td class="mono">0.10</td><td class="mono">0.13</td><td>押下の濃さ</td></tr>
+          <tr><td class="mono">--state-selected-bg</td><td class="mono" colspan="2">brand / 10%</td><td>選択中の行やタブ</td></tr>
+          <tr><td class="mono">--state-focus-ring</td><td class="mono" colspan="2">--shadow-focus</td><td>キーボード操作時のみ表示</td></tr>
+          <tr><td class="mono">--state-disabled-opacity</td><td class="mono" colspan="2">0.4</td><td>無効状態</td></tr>
+          <tr><td class="mono">--state-invalid-border</td><td class="mono" colspan="2">status / danger</td><td>入力エラー</td></tr>
+          <tr><td class="mono">--state-skeleton-bg</td><td class="mono" colspan="2">bg / surface-raised</td><td>読み込み中のプレースホルダ</td></tr>
+          <tr><td class="mono">--state-transition</td><td class="mono" colspan="2">120ms / ease-standard</td><td>状態変化の共通トランジション</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub">コントロールの寸法</h3>
+    <p class="lede">ボタン・入力欄・セレクトが同じ行に並んだとき、高さが揃わないのは最も目につく崩れです。ここだけは共通の値を持たせます。</p>
+    <div class="row" style="align-items:center;margin-bottom:var(--space-6)">
+      <span class="btn quiet" style="min-height:var(--control-height-sm);padding-block:0">sm · 28px</span>
+      <span class="btn quiet" style="min-height:var(--control-height-md);padding-block:0">md · 36px</span>
+      <span class="btn quiet" style="min-height:var(--control-height-lg);padding-block:0">lg · 44px</span>
+      <input class="field" style="min-height:var(--control-height-md);max-width:150px" value="md で揃う" readonly>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Token</th><th>Value</th><th>用途</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">--control-height-sm</td><td class="mono">28px</td><td>密度の高い表やツールバー</td></tr>
+          <tr><td class="mono">--control-height-md</td><td class="mono">36px</td><td>既定</td></tr>
+          <tr><td class="mono">--control-height-lg</td><td class="mono">44px</td><td>タッチ操作の最小快適サイズ</td></tr>
+          <tr><td class="mono">--control-padding-x</td><td class="mono">16px</td><td>左右の内側余白</td></tr>
+          <tr><td class="mono">--control-radius</td><td class="mono">8px</td><td>= --radius-md</td></tr>
+          <tr><td class="mono">--control-border-width</td><td class="mono">1px</td><td>入力欄の枠（面の境界より一段強く）</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ACCESSIBILITY -->
+  <section class="band" id="a11y">
+    <span class="eyebrow">Accessibility</span>
+    <h2>アクセシビリティ</h2>
+    <p class="lede">目視ではなく計算で確かめます。以下の比率はページに実際に適用されている値から算出しているので、テーマを切り替えると再計算されます。トークンを変更したら、ここが赤くならないか確認してください。</p>
+
+    <div class="audit-wrap">
+      <table class="audit">
+        <thead><tr><th>組み合わせ</th><th>見本</th><th>比率</th><th>基準</th><th>判定</th></tr></thead>
+        <tbody id="auditBody"></tbody>
+      </table>
+    </div>
+
+    <h3 class="sub">色だけに意味を持たせない</h3>
+    <p class="lede">緑と赤は、色覚特性のある方にとって最も見分けにくい組み合わせです。ステータスには必ず色以外の手がかり——記号と形——を併用します。下のフィルタで実際の見え方を確認できます。</p>
+
+    <div class="cvd" id="cvdbar">
+      <span class="token" style="margin-right:var(--space-2)">SIMULATION</span>
+      <button class="bchip" type="button" data-cvd="" aria-pressed="true">通常</button>
+      <button class="bchip" type="button" data-cvd="p" aria-pressed="false">1型 · 赤</button>
+      <button class="bchip" type="button" data-cvd="d" aria-pressed="false">2型 · 緑</button>
+      <button class="bchip" type="button" data-cvd="t" aria-pressed="false">3型 · 青</button>
+    </div>
+
+    <div class="cvdstage" id="cvdstage">
+      <div class="statusline">
+        <span class="sig ok"><span class="glyph">✓</span>正常 · 12 endpoints</span>
+        <span class="sig warn"><span class="glyph">!</span>遅延 · 応答が 800ms を超えています</span>
+        <span class="sig ng"><span class="glyph"><span>×</span></span>停止 · api.example.com に接続できません</span>
+        <span class="sig info"><span class="glyph">i</span>設定を更新しました</span>
+      </div>
+      <p class="token" style="margin-top:var(--space-5)">記号は丸・角丸・菱形・丸と形も変えてあります。色が失われても、記号と形と文言で判別できます。</p>
+    </div>
+
+    <h3 class="sub">ステータス色</h3>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Token</th><th>記号</th><th>形</th><th>備考</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">--color-status-success</td><td>✓</td><td>円</td><td>—</td></tr>
+          <tr><td class="mono">--color-status-warning</td><td>!</td><td>角丸四角</td><td>黄ではなく橙。黄はブランドのアクセント色なので、警告に使うと信号として読めなくなる</td></tr>
+          <tr><td class="mono">--color-status-danger</td><td>×</td><td>菱形</td><td>—</td></tr>
+          <tr><td class="mono">--color-status-info</td><td>i</td><td>円</td><td>ブランドの青を流用。意味とブランドが重なる点は許容</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub">トークンで担保していること</h3>
+    <div class="checklist">
+      <div class="check">
+        <span class="ch">フォーカスの可視化</span>
+        <p class="cd"><span class="token">--state-focus-ring</span> を 3px で全操作要素に適用。<span class="token">:focus-visible</span> を使うのでマウス操作では出ず、キーボード操作時のみ表示されます。<span class="token">outline: none</span> だけを書くことは禁止です。</p>
+      </div>
+      <div class="check">
+        <span class="ch">タッチ対象の大きさ</span>
+        <p class="cd"><span class="token">--control-height-lg</span> が 44px。タッチ操作する要素はこれを下回らないこと。隣接する対象の間隔は <span class="token">--space-2</span>（8px）以上空けます。</p>
+      </div>
+      <div class="check">
+        <span class="ch">動きの抑制</span>
+        <p class="cd"><span class="token">prefers-reduced-motion</span> を CSS 側で処理済み。前庭障害のある方に配慮し、アニメーションとトランジションが無効化されます。</p>
+      </div>
+      <div class="check">
+        <span class="ch">拡大への耐性</span>
+        <p class="cd">文字サイズは全て rem 基準なので、ブラウザの文字サイズ設定と 200% 拡大に追従します。px 固定のフォントサイズは使いません。</p>
+      </div>
+      <div class="check">
+        <span class="ch">操作部品の境界</span>
+        <p class="cd"><span class="token">--color-border-control</span> を新設し 3:1 を確保。装飾的な区切り線（<span class="token">--color-border-default</span>）とは別トークンです。入力欄の枠は「そこに部品がある」ことを示す情報なので、基準が異なります。</p>
+      </div>
+      <div class="check">
+        <span class="ch">行長の上限</span>
+        <p class="cd"><span class="token">--container-prose</span> が 68ch。一行が長すぎると次の行の頭を見失いやすく、読字障害のある方に特に影響します。</p>
+      </div>
+      <div class="check todo">
+        <span class="ch">実装側で担保すること（トークンでは守れない）</span>
+        <p class="cd">見出しレベルの順序、ランドマーク要素、フォームのラベルとエラーの関連付け（<span class="token">aria-describedby</span>）、ステータス更新の読み上げ（<span class="token">aria-live</span>）、キーボードのみでの操作完遂。特に監視系プロダクトでは、画面が自動更新される値を <span class="token">aria-live="polite"</span> で伝える設計が要ります。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HUE RESERVE -->
+  <section class="band" id="hues">
+    <span class="eyebrow">Product hue reserve</span>
+    <h2>プロダクト用の色相</h2>
+    <p class="lede">elchika inc. 自身は常に青です。以下は将来のプロダクトが選ぶための在庫で、すべて寒色弧（222°〜334°）に置いています。暖色はステータスの意味に予約されているためです——success の緑、danger の赤、warning の橙、そしてブランドの黄がすでにその側を占めており、プロダクト色をそこに置くと信号として読まれます。</p>
+    <p class="lede">各ランプは青と同じコントラスト特性になるよう数値を解いています。どの色相を選んでも可読性は変わりません（600 = 白に対し 5.7:1、400 = 暗い面に対し 5.6:1、700 = 白に対し 10.2:1）。</p>
+
+    <div class="huewrap">
+<div class="huerow"><div class="huename">blue<span class="token"> · 222°</span></div><div class="hsteps"><div class="hstep" style="background:#E3EAFB"><span>100</span><span class="hx">#E3EAFB</span></div><div class="hstep" style="background:#8FACF5"><span>300</span><span class="hx">#8FACF5</span></div><div class="hstep" style="background:#6E93F0"><span>400</span><span class="hx">#6E93F0</span></div><div class="hstep" style="background:#2F5FD1"><span>600</span><span class="hx">#2F5FD1</span></div><div class="hstep" style="background:#1E3A8F"><span>700</span><span class="hx">#1E3A8F</span></div></div></div>
+<div class="huerow hue-caution"><div class="huename">indigo<span class="token"> · 244°</span></div><div class="hsteps"><div class="hstep" style="background:#EAE8FC"><span>100</span><span class="hx">#EAE8FC</span></div><div class="hstep" style="background:#AAA4F7"><span>300</span><span class="hx">#AAA4F7</span></div><div class="hstep" style="background:#9089F3"><span>400</span><span class="hx">#9089F3</span></div><div class="hstep" style="background:#5C53D9"><span>600</span><span class="hx">#5C53D9</span></div><div class="hstep" style="background:#2F26B4"><span>700</span><span class="hx">#2F26B4</span></div></div></div>
+<div class="huerow"><div class="huename">violet<span class="token"> · 268°</span></div><div class="hsteps"><div class="hstep" style="background:#F1E7FC"><span>100</span><span class="hx">#F1E7FC</span></div><div class="hstep" style="background:#C59BF6"><span>300</span><span class="hx">#C59BF6</span></div><div class="hstep" style="background:#B37CF1"><span>400</span><span class="hx">#B37CF1</span></div><div class="hstep" style="background:#853FD5"><span>600</span><span class="hx">#853FD5</span></div><div class="hstep" style="background:#572097"><span>700</span><span class="hx">#572097</span></div></div></div>
+<div class="huerow"><div class="huename">purple<span class="token"> · 292°</span></div><div class="hsteps"><div class="hstep" style="background:#F8E4FB"><span>100</span><span class="hx">#F8E4FB</span></div><div class="hstep" style="background:#E78BF5"><span>300</span><span class="hx">#E78BF5</span></div><div class="hstep" style="background:#DC63EF"><span>400</span><span class="hx">#DC63EF</span></div><div class="hstep" style="background:#A729BB"><span>600</span><span class="hx">#A729BB</span></div><div class="hstep" style="background:#6C1979"><span>700</span><span class="hx">#6C1979</span></div></div></div>
+<div class="huerow"><div class="huename">magenta<span class="token"> · 314°</span></div><div class="hsteps"><div class="hstep" style="background:#FBE4F6"><span>100</span><span class="hx">#FBE4F6</span></div><div class="hstep" style="background:#F488DB"><span>300</span><span class="hx">#F488DB</span></div><div class="hstep" style="background:#EE5DCC"><span>400</span><span class="hx">#EE5DCC</span></div><div class="hstep" style="background:#B42894"><span>600</span><span class="hx">#B42894</span></div><div class="hstep" style="background:#75195F"><span>700</span><span class="hx">#75195F</span></div></div></div>
+<div class="huerow"><div class="huename">rose<span class="token"> · 334°</span></div><div class="hsteps"><div class="hstep" style="background:#FBE5EE"><span>100</span><span class="hx">#FBE5EE</span></div><div class="hstep" style="background:#F58DBA"><span>300</span><span class="hx">#F58DBA</span></div><div class="hstep" style="background:#EF66A1"><span>400</span><span class="hx">#EF66A1</span></div><div class="hstep" style="background:#BC2A69"><span>600</span><span class="hx">#BC2A69</span></div><div class="hstep" style="background:#7A1A43"><span>700</span><span class="hx">#7A1A43</span></div></div></div>
+    </div>
+
+    <h3 class="sub">割り当ての順番</h3>
+    <p class="lede">色覚シミュレーション（1型・2型・3型）を通した最悪ケースの色差 ΔE で評価し、識別性が最大になる順に並べています。プロダクトが増えるときは上から順に取ってください。</p>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>順</th><th>色相</th><th>600</th><th>既割当との最悪ΔE</th><th>備考</th></tr></thead>
+        <tbody>
+<tr><td class="mono">0</td><td><span class="hdot" style="background:#2F5FD1"></span> <span class="mono">blue</span></td><td class="mono">#2F5FD1</td><td class="mono">—</td><td>elchika inc. — 固定</td></tr>
+<tr><td class="mono">1</td><td><span class="hdot" style="background:#BC2A69"></span> <span class="mono">rose</span></td><td class="mono">#BC2A69</td><td class="mono">72.8</td><td></td></tr>
+<tr><td class="mono">2</td><td><span class="hdot" style="background:#A729BB"></span> <span class="mono">purple</span></td><td class="mono">#A729BB</td><td class="mono">40.5</td><td></td></tr>
+<tr><td class="mono">3</td><td><span class="hdot" style="background:#B42894"></span> <span class="mono">magenta</span></td><td class="mono">#B42894</td><td class="mono">20.1</td><td></td></tr>
+<tr><td class="mono">4</td><td><span class="hdot" style="background:#853FD5"></span> <span class="mono">violet</span></td><td class="mono">#853FD5</td><td class="mono">18.1</td><td></td></tr>
+<tr><td class="mono">5</td><td><span class="hdot" style="background:#5C53D9"></span> <span class="mono">indigo</span></td><td class="mono">#5C53D9</td><td class="mono">7.4</td><td class="na">青と隣り合わせない。実質最後の手段</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub">見え方の確認</h3>
+    <p class="lede">下のボタンで色覚特性のシミュレーションを切り替えられます。indigo と blue が区別できないことが確認できるはずです。</p>
+    <div class="cvd" id="cvdbar2">
+      <button class="bchip" type="button" data-cvd2="" aria-pressed="true">通常</button>
+      <button class="bchip" type="button" data-cvd2="p" aria-pressed="false">1型 · 赤</button>
+      <button class="bchip" type="button" data-cvd2="d" aria-pressed="false">2型 · 緑</button>
+      <button class="bchip" type="button" data-cvd2="t" aria-pressed="false">3型 · 青</button>
+    </div>
+    <div class="cvdstage" id="cvdstage2">
+      <div class="row" id="hueChips"></div>
+    </div>
+
+    <h3 class="sub">使うときの規則</h3>
+    <div class="checklist">
+      <div class="check"><span class="ch">上から順に取る</span><p class="cd">好みで選ばず、表の順番で割り当てます。3つ目までは ΔE 20 以上あるので安全です。</p></div>
+      <div class="check todo"><span class="ch">indigo は最後の手段</span><p class="cd">青との最悪ケースが ΔE 7.4 で、1型・3型では実質見分けがつきません。elchika 本体と並ぶ場面があるなら使わないでください。6色目が必要になった時点で、色による識別自体を見直すほうが健全です。</p></div>
+      <div class="check"><span class="ch">上書きするのは5個だけ</span><p class="cd">プロダクトは <span class="token">--brand-*</span> のみを差し替えます。ステータス色・ニュートラル・書体・余白はコーポレート固定のままです。</p></div>
+      <div class="check"><span class="ch">色は補助であって主役ではない</span><p class="cd">色相を割り当てても、プロダクトの識別をそれだけに頼らないこと。ワードマークとプロダクトマークが主で、色は補強です。</p></div>
+    </div>
+  </section>
+
+  <!-- DATAVIZ -->
+  <section class="band" id="dataviz">
+    <span class="eyebrow">--chart-*</span>
+    <h2>データビジュアライゼーション</h2>
+    <p class="lede">グラフの色はブランドカラーとは別の要求を持ちます。線は細く、複数が同時に並び、値の大小を表す必要がある。ここでは3種類のスケールを定義します。</p>
+
+    <h3 class="sub">系列色 — 上限は5つ</h3>
+    <p class="lede">検証済みの色相在庫から5つを使います。6つ目は青と indigo が判別できなくなるため用意していません。5系列を超えたら色を増やすのではなく、凡例をやめて線に直接ラベルを置いてください。あわせて<strong>破線パターンを併用</strong>しているので、グレースケールでも色覚特性下でも判別できます。</p>
+
+    <div class="cvd" id="cvdbar3">
+      <span class="token" style="margin-right:var(--space-2)">SIMULATION</span>
+      <button class="bchip" type="button" data-cvd3="" aria-pressed="true">通常</button>
+      <button class="bchip" type="button" data-cvd3="p" aria-pressed="false">1型 · 赤</button>
+      <button class="bchip" type="button" data-cvd3="d" aria-pressed="false">2型 · 緑</button>
+      <button class="bchip" type="button" data-cvd3="t" aria-pressed="false">3型 · 青</button>
+      <button class="bchip" type="button" data-cvd3="g" aria-pressed="false">グレースケール</button>
+    </div>
+
+    <div class="cvdstage" id="cvdstage3">
+      <div class="chartbox" style="border:0;padding:0;background:transparent">
+        <svg viewBox="0 0 680 240" width="100%" role="img" aria-label="5系列の応答時間チャート"><rect x="44" y="16" width="624" height="39.2" fill="rgb(var(--color-status-danger) / var(--chart-band-alpha))"/><line x1="44" y1="16.0" x2="668" y2="16.0" stroke="rgb(var(--chart-grid))" stroke-width="1"/><line x1="44" y1="65.0" x2="668" y2="65.0" stroke="rgb(var(--chart-grid))" stroke-width="1"/><line x1="44" y1="114.0" x2="668" y2="114.0" stroke="rgb(var(--chart-grid))" stroke-width="1"/><line x1="44" y1="163.0" x2="668" y2="163.0" stroke="rgb(var(--chart-grid))" stroke-width="1"/><line x1="44" y1="212.0" x2="668" y2="212.0" stroke="rgb(var(--chart-grid))" stroke-width="1"/><text x="36" y="20.0" text-anchor="end" fill="rgb(var(--chart-label))" font-size="10" font-family="var(--font-mono)">100</text><text x="36" y="69.0" text-anchor="end" fill="rgb(var(--chart-label))" font-size="10" font-family="var(--font-mono)">75</text><text x="36" y="118.0" text-anchor="end" fill="rgb(var(--chart-label))" font-size="10" font-family="var(--font-mono)">50</text><text x="36" y="167.0" text-anchor="end" fill="rgb(var(--chart-label))" font-size="10" font-family="var(--font-mono)">25</text><text x="36" y="216.0" text-anchor="end" fill="rgb(var(--chart-label))" font-size="10" font-family="var(--font-mono)">0</text><line x1="44" y1="212" x2="668" y2="212" stroke="rgb(var(--chart-axis))" stroke-width="1"/><text x="44.0" y="228" text-anchor="middle" fill="rgb(var(--chart-label))" font-size="10" font-family="var(--font-mono)">00:00</text><text x="200.0" y="228" text-anchor="middle" fill="rgb(var(--chart-label))" font-size="10" font-family="var(--font-mono)">06:00</text><text x="356.0" y="228" text-anchor="middle" fill="rgb(var(--chart-label))" font-size="10" font-family="var(--font-mono)">12:00</text><text x="512.0" y="228" text-anchor="middle" fill="rgb(var(--chart-label))" font-size="10" font-family="var(--font-mono)">18:00</text><text x="668.0" y="228" text-anchor="middle" fill="rgb(var(--chart-label))" font-size="10" font-family="var(--font-mono)">24:00</text><path d="M 44.0 65.6 L 64.1 67.0 L 84.3 65.4 L 104.4 71.2 L 124.5 65.0 L 144.6 58.7 L 164.8 55.7 L 184.9 62.4 L 205.0 61.9 L 225.2 65.3 L 245.3 70.2 L 265.4 61.3 L 285.5 51.6 L 305.7 60.5 L 325.8 53.5 L 345.9 51.5 L 366.1 53.8 L 386.2 58.0 L 406.3 54.6 L 426.5 55.4 L 446.6 51.8 L 466.7 48.6 L 486.8 55.8 L 507.0 50.6 L 527.1 41.1 L 547.2 31.9 L 567.4 29.7 L 587.5 38.6 L 607.6 48.3 L 627.7 55.5 L 647.9 46.9 L 668.0 50.7" fill="none" stroke="rgb(var(--chart-series-1))" stroke-width="var(--chart-series-width)" stroke-linejoin="round" stroke-linecap="round"/><path d="M 44.0 99.4 L 64.1 98.0 L 84.3 88.1 L 104.4 88.9 L 124.5 88.7 L 144.6 86.6 L 164.8 94.0 L 184.9 93.8 L 205.0 90.7 L 225.2 83.8 L 245.3 93.4 L 265.4 98.0 L 285.5 107.6 L 305.7 100.3 L 325.8 95.8 L 345.9 106.6 L 366.1 95.2 L 386.2 84.3 L 406.3 80.7 L 426.5 77.9 L 446.6 86.0 L 466.7 97.4 L 486.8 96.7 L 507.0 107.1 L 527.1 114.4 L 547.2 120.5 L 567.4 131.5 L 587.5 132.4 L 607.6 133.8 L 627.7 125.7 L 647.9 125.3 L 668.0 122.0" fill="none" stroke="rgb(var(--chart-series-2))" stroke-width="var(--chart-series-width)" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="var(--chart-dash-2)"/><path d="M 44.0 126.2 L 64.1 123.7 L 84.3 121.1 L 104.4 126.7 L 124.5 134.4 L 144.6 136.3 L 164.8 139.9 L 184.9 135.0 L 205.0 132.0 L 225.2 130.4 L 245.3 129.5 L 265.4 127.0 L 285.5 132.5 L 305.7 133.5 L 325.8 138.8 L 345.9 132.4 L 366.1 139.3 L 386.2 134.3 L 406.3 141.0 L 426.5 138.1 L 446.6 140.6 L 466.7 142.1 L 486.8 136.7 L 507.0 144.3 L 527.1 151.2 L 547.2 144.7 L 567.4 144.5 L 587.5 150.9 L 607.6 143.3 L 627.7 136.3 L 647.9 142.4 L 668.0 143.6" fill="none" stroke="rgb(var(--chart-series-3))" stroke-width="var(--chart-series-width)" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="var(--chart-dash-3)"/><path d="M 44.0 157.9 L 64.1 154.3 L 84.3 150.7 L 104.4 143.8 L 124.5 150.0 L 144.6 155.3 L 164.8 162.2 L 184.9 167.6 L 205.0 163.0 L 225.2 170.2 L 245.3 169.6 L 265.4 175.2 L 285.5 179.3 L 305.7 180.6 L 325.8 174.0 L 345.9 171.9 L 366.1 181.4 L 386.2 185.8 L 406.3 192.7 L 426.5 185.4 L 446.6 179.3 L 466.7 173.3 L 486.8 167.0 L 507.0 162.2 L 527.1 153.3 L 547.2 147.6 L 567.4 152.4 L 587.5 145.5 L 607.6 145.8 L 627.7 140.8 L 647.9 139.5 L 668.0 140.9" fill="none" stroke="rgb(var(--chart-series-4))" stroke-width="var(--chart-series-width)" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="var(--chart-dash-4)"/><path d="M 44.0 49.6 L 64.1 46.4 L 84.3 44.0 L 104.4 37.1 L 124.5 40.7 L 144.6 44.6 L 164.8 40.9 L 184.9 38.4 L 205.0 41.5 L 225.2 38.6 L 245.3 40.2 L 265.4 35.9 L 285.5 41.9 L 305.7 46.2 L 325.8 39.9 L 345.9 42.1 L 366.1 45.9 L 386.2 41.1 L 406.3 39.0 L 426.5 44.5 L 446.6 43.7 L 466.7 41.2 L 486.8 46.4 L 507.0 44.0 L 527.1 49.9 L 547.2 52.5 L 567.4 59.0 L 587.5 63.7 L 607.6 56.2 L 627.7 57.7 L 647.9 50.0 L 668.0 51.0" fill="none" stroke="rgb(var(--chart-series-5))" stroke-width="var(--chart-series-width)" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="var(--chart-dash-5)"/><text x="662" y="29" text-anchor="end" fill="rgb(var(--color-status-danger-text))" font-size="10" font-family="var(--font-mono)">SLA 上限</text></svg>
+        <div class="legend"><span class="lg"><svg width="26" height="10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="rgb(var(--chart-series-1))" stroke-width="2" stroke-linecap="round"/></svg><span class="token">api.example.com</span></span><span class="lg"><svg width="26" height="10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="rgb(var(--chart-series-2))" stroke-width="2" stroke-linecap="round" stroke-dasharray="var(--chart-dash-2)"/></svg><span class="token">cdn.example.com</span></span><span class="lg"><svg width="26" height="10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="rgb(var(--chart-series-3))" stroke-width="2" stroke-linecap="round" stroke-dasharray="var(--chart-dash-3)"/></svg><span class="token">db.example.com</span></span><span class="lg"><svg width="26" height="10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="rgb(var(--chart-series-4))" stroke-width="2" stroke-linecap="round" stroke-dasharray="var(--chart-dash-4)"/></svg><span class="token">queue.example.com</span></span><span class="lg"><svg width="26" height="10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="rgb(var(--chart-series-5))" stroke-width="2" stroke-linecap="round" stroke-dasharray="var(--chart-dash-5)"/></svg><span class="token">auth.example.com</span></span></div>
+      </div>
+    </div>
+
+    <h3 class="sub">連続スケール — 量の大小</h3>
+    <p class="lede">ヒートマップなど、値の大きさを表すもの。明度が単調に変化するので、グレースケールに落としても順序が保たれます。虹色スケールは順序が読めないため使いません。</p>
+    <div class="scalebar" style="margin-bottom:var(--space-3)">
+      <div class="sw" style="background:rgb(var(--chart-seq-0));color:#1A1C21">0</div>
+      <div class="sw" style="background:rgb(var(--chart-seq-1));color:#1A1C21">1</div>
+      <div class="sw" style="background:rgb(var(--chart-seq-2));color:#1A1C21">2</div>
+      <div class="sw" style="background:rgb(var(--chart-seq-3));color:#1A1C21">3</div>
+      <div class="sw" style="background:rgb(var(--chart-seq-4));color:#FFFFFF">4</div>
+      <div class="sw" style="background:rgb(var(--chart-seq-5));color:#FFFFFF">5</div>
+    </div>
+    <p class="token">step 4 以降は文字色を反転させること。0〜3 は黒、4〜5 は白で 4.5:1 を満たします。</p>
+
+    <div class="chartbox" style="margin-top:var(--space-5)">
+      <span class="token">24時間の応答時間（例）</span>
+      <div class="strip" style="margin-top:var(--space-3)"><div class="cell" style="background:rgb(var(--chart-seq-3))"></div><div class="cell" style="background:rgb(var(--chart-seq-4))"></div><div class="cell" style="background:rgb(var(--chart-seq-5))"></div><div class="cell" style="background:rgb(var(--chart-seq-0))"></div><div class="cell" style="background:rgb(var(--chart-seq-1))"></div><div class="cell" style="background:rgb(var(--chart-seq-2))"></div><div class="cell" style="background:rgb(var(--chart-seq-3))"></div><div class="cell" style="background:rgb(var(--chart-seq-4))"></div><div class="cell" style="background:rgb(var(--chart-seq-5))"></div><div class="cell" style="background:rgb(var(--chart-seq-0))"></div><div class="cell" style="background:rgb(var(--chart-seq-1))"></div><div class="cell" style="background:rgb(var(--chart-seq-2))"></div><div class="cell" style="background:rgb(var(--chart-seq-3))"></div><div class="cell" style="background:rgb(var(--chart-seq-4))"></div><div class="cell" style="background:rgb(var(--chart-seq-5))"></div><div class="cell" style="background:rgb(var(--chart-seq-0))"></div><div class="cell" style="background:rgb(var(--chart-seq-1))"></div><div class="cell" style="background:rgb(var(--chart-seq-2))"></div><div class="cell" style="background:rgb(var(--chart-seq-3))"></div><div class="cell" style="background:rgb(var(--chart-seq-4))"></div><div class="cell" style="background:rgb(var(--chart-seq-5))"></div><div class="cell" style="background:rgb(var(--chart-seq-0))"></div><div class="cell" style="background:rgb(var(--chart-seq-1))"></div><div class="cell" style="background:rgb(var(--chart-seq-2))"></div></div>
+    </div>
+
+    <h3 class="sub">発散スケール — 基準からのずれ</h3>
+    <p class="lede">SLA との差分のように、中央を基準に正負へ開くもの。赤と緑ではなく rose と blue を使います。赤緑はステータスの意味を持っているためです。</p>
+    <div class="strip"><div class="cell wide" style="background:rgb(var(--chart-div-neg3))"><span>-3</span></div><div class="cell wide" style="background:rgb(var(--chart-div-neg2))"><span>-2</span></div><div class="cell wide" style="background:rgb(var(--chart-div-neg1))"><span>-1</span></div><div class="cell wide" style="background:rgb(var(--chart-div-mid))"><span>0</span></div><div class="cell wide" style="background:rgb(var(--chart-div-pos1))"><span>+1</span></div><div class="cell wide" style="background:rgb(var(--chart-div-pos2))"><span>+2</span></div><div class="cell wide" style="background:rgb(var(--chart-div-pos3))"><span>+3</span></div></div>
+
+    <h3 class="sub">しきい値 — 意味のある区切り</h3>
+    <p class="lede">正常・警告・停止のように意味が飛び飛びのものは、ステータス色をそのまま使います。ただし<strong>線ではなく帯や背景に適用</strong>してください。系列の線に赤を使うと、その系列が「エラー」に見えます。上のチャートの赤い帯がその例です。</p>
+
+    <h3 class="sub">チャートの下地</h3>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Token</th><th>参照先</th><th>用途</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">--chart-grid</td><td class="mono">border / default</td><td>目盛りの線。読み取りの補助であって主役ではない</td></tr>
+          <tr><td class="mono">--chart-axis</td><td class="mono">border / strong</td><td>軸の線</td></tr>
+          <tr><td class="mono">--chart-label</td><td class="mono">text / muted</td><td>軸のラベル（4.5:1 を満たす）</td></tr>
+          <tr><td class="mono">--chart-baseline</td><td class="mono">text / secondary</td><td>ゼロ線・基準線。目盛りより強く</td></tr>
+          <tr><td class="mono">--chart-band-alpha</td><td class="mono">0.12</td><td>しきい値の帯の不透明度</td></tr>
+          <tr><td class="mono">--chart-series-width</td><td class="mono">2px</td><td>系列の線幅</td></tr>
+          <tr><td class="mono">--chart-dash-1〜5</td><td class="mono">—</td><td>系列ごとの破線パターン</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub">規則</h3>
+    <div class="checklist">
+      <div class="check"><span class="ch">系列は5つまで</span><p class="cd">超えたら色を足さず、凡例をやめて線に直接ラベルを置きます。人が同時に照合できる凡例の数には限界があります。</p></div>
+      <div class="check"><span class="ch">色と破線を必ずセットで使う</span><p class="cd">系列1は実線、2以降はそれぞれ固有の破線。色が失われても順序と区別が残ります。</p></div>
+      <div class="check"><span class="ch">ステータス色は帯にだけ使う</span><p class="cd">系列の線に赤や緑を使わないこと。データの識別子と状態の信号が混ざります。</p></div>
+      <div class="check"><span class="ch">連続スケールは明度を単調にする</span><p class="cd">虹色スケールは値の順序が読めず、色覚特性下では破綻します。</p></div>
+      <div class="check todo"><span class="ch">実装側で担保すること</span><p class="cd">グラフには <span class="token">role="img"</span> と説明を付け、データは表としても取得できるようにすること。グラフだけが唯一の経路になっていると、読み上げ環境では情報がゼロになります。</p></div>
+    </div>
+  </section>
+
+  <!-- DENSITY -->
+  <section class="band" id="density">
+    <span class="eyebrow">--density-*</span>
+    <h2>密度</h2>
+    <p class="lede">監視画面のように行数が多い場面では、既定の余白は贅沢すぎます。ただし <span class="token">--space-*</span> を丸ごと縮めるとレイアウト全体が動くので、密度は専用のトークンに閉じ込めます。適用範囲は表・一覧・ツールバーだけで、文章や LP には効きません。</p>
+
+    <div class="brandbar" id="densbar">
+      <span class="lbl">Density</span>
+      <button class="bchip" type="button" data-dens="" aria-pressed="true">comfortable（既定）</button>
+      <button class="bchip" type="button" data-dens="compact" aria-pressed="false">compact</button>
+    </div>
+
+    <div class="dwrap" id="densdemo">
+      <div class="dtoolbar">
+        <button class="btn quiet" type="button">絞り込み</button>
+        <button class="btn quiet" type="button">並び替え</button>
+      </div>
+      <table class="dtable">
+        <thead><tr><th>Endpoint</th><th>Status</th><th>Latency</th><th>Checked</th></tr></thead>
+        <tbody>
+          <tr><td>api.example.com</td><td><span class="sig ok" style="padding:2px 8px"><span class="glyph">✓</span>正常</span></td><td class="n">142ms</td><td class="n">00:00:12</td></tr>
+          <tr><td>cdn.example.com</td><td><span class="sig ok" style="padding:2px 8px"><span class="glyph">✓</span>正常</span></td><td class="n">88ms</td><td class="n">00:00:09</td></tr>
+          <tr><td>db.example.com</td><td><span class="sig warn" style="padding:2px 8px"><span class="glyph">!</span>遅延</span></td><td class="n">834ms</td><td class="n">00:00:14</td></tr>
+          <tr><td>auth.example.com</td><td><span class="sig ng" style="padding:2px 8px"><span class="glyph"><span>×</span></span>停止</span></td><td class="n">—</td><td class="n">00:04:31</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tbl-wrap" style="margin-top:var(--space-6)">
+      <table class="tbl">
+        <thead><tr><th>Token</th><th>comfortable</th><th>compact</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">--density-row-height</td><td class="mono">44px</td><td class="mono">32px</td></tr>
+          <tr><td class="mono">--density-cell-py</td><td class="mono">12px</td><td class="mono">4px</td></tr>
+          <tr><td class="mono">--density-gap</td><td class="mono">12px</td><td class="mono">8px</td></tr>
+          <tr><td class="mono">--density-control-height</td><td class="mono">36px</td><td class="mono">28px</td></tr>
+          <tr><td class="mono">--density-font-size</td><td class="mono">14px</td><td class="mono">13px</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="checklist" style="margin-top:var(--space-5)">
+      <div class="check todo"><span class="ch">compact はタッチ環境で使わない</span><p class="cd">行の高さ 32px はタッチ対象の最小 44px を下回ります。ポインタ環境に限定するか、<span class="token">pointer: coarse</span> で自動的に comfortable に戻してください。</p></div>
+    </div>
+  </section>
+
+  <!-- LANGUAGE -->
+  <section class="band" id="lang">
+    <span class="eyebrow">:lang()</span>
+    <h2>和欧混植と多言語</h2>
+    <p class="lede">これまでの組版は日本語向けに調整してあります。同じ値を英語に当てると行間が広すぎ、字間も無用に開きます。<span class="token">:lang(en)</span> で組版側だけを切り替え、色や余白はそのまま共有します。</p>
+
+    <div class="langgrid">
+      <div class="langcell" lang="ja">
+        <span class="token">lang="ja" — 1.75 / +0.02em</span>
+        <h4>インフラを、静かに観測する</h4>
+        <p>エンドポイントの応答を継続的に観測し、変化があったときだけ知らせます。正常な状態では、何も起こりません。</p>
+      </div>
+      <div class="langcell" lang="en">
+        <span class="token">lang="en" — 1.6 / 0em</span>
+        <h4>Watch quietly. Report only what changed.</h4>
+        <p>Endpoints are checked continuously and you hear from us only when something moves. On a normal day, nothing happens at all.</p>
+      </div>
+    </div>
+
+    <div class="tbl-wrap" style="margin-top:var(--space-6)">
+      <table class="tbl">
+        <thead><tr><th>Token</th><th>ja</th><th>en</th><th>理由</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">--leading-normal</td><td class="mono">1.75</td><td class="mono">1.6</td><td>和文は字面が大きく行間を要する</td></tr>
+          <tr><td class="mono">--leading-display</td><td class="mono">1.35</td><td class="mono">1.2</td><td>欧文の見出しは詰めたほうが締まる</td></tr>
+          <tr><td class="mono">--tracking-normal</td><td class="mono">+0.02em</td><td class="mono">0</td><td>欧文は既に字間が設計されている</td></tr>
+          <tr><td class="mono">--font-body</td><td class="mono">Plex Sans JP →</td><td class="mono">Plex Sans →</td><td>欧文は Plex Sans を先に置くほうが字幅が素直</td></tr>
+          <tr><td class="mono">--font-feature-display</td><td class="mono" colspan="2">"palt" 1</td><td>和文約物の余白を詰める。欧文には無害なので共通</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="checklist" style="margin-top:var(--space-5)">
+      <div class="check"><span class="ch">和欧の間に手でスペースを入れない</span><p class="cd">「Cloudflare Workers で動く」のような混植で半角スペースを手入力すると、翻訳・検索・読み上げが壊れます。四分アキは組版側の仕事です。</p></div>
+      <div class="check todo"><span class="ch">実装側で担保すること</span><p class="cd">要素に正しい <span class="token">lang</span> 属性を付けること。読み上げの言語切り替えと、ブラウザの行分割規則の両方がこれに依存します。</p></div>
+    </div>
+  </section>
+
+  <!-- VOICE -->
+  <section class="band" id="voice">
+    <span class="eyebrow">Voice &amp; tone</span>
+    <h2>言葉づかい</h2>
+    <p class="lede">文言は色や余白と同じ設計材料です。ここも決めて記録しておかないと、書く人ごとに揺れます。</p>
+
+    <div class="voice">
+      <div class="vrow">
+        <div class="vbad"><span class="tagx">Avoid</span><span class="txt">申し訳ございません。エラーが発生しました。</span></div>
+        <div class="vgood"><span class="tagx">Prefer</span><span class="txt">api.example.com に接続できません。URL を確認するか、5分後に再試行してください。</span></div>
+        <p class="vwhy">エラーは謝らない。何が起きたかと、次に何をすればいいかを書きます。謝罪は情報量がゼロで、対処が遅れるだけです。</p>
+      </div>
+      <div class="vrow">
+        <div class="vbad"><span class="tagx">Avoid</span><span class="txt">Webhook エンドポイントを設定</span></div>
+        <div class="vgood"><span class="tagx">Prefer</span><span class="txt">通知の送り先を追加</span></div>
+        <p class="vwhy">実装の都合ではなく、利用者が操作している対象の名前で呼びます。</p>
+      </div>
+      <div class="vrow">
+        <div class="vbad"><span class="tagx">Avoid</span><span class="txt">「送信」→ 完了通知「処理が正常に終了しました」</span></div>
+        <div class="vgood"><span class="tagx">Prefer</span><span class="txt">「監視を開始」→ 完了通知「監視を開始しました」</span></div>
+        <p class="vwhy">ボタンの動詞と結果の文言を一致させます。操作の前後で語が変わると、何が起きたのか確信が持てません。</p>
+      </div>
+      <div class="vrow">
+        <div class="vbad"><span class="tagx">Avoid</span><span class="txt">データがありません</span></div>
+        <div class="vgood"><span class="tagx">Prefer</span><span class="txt">まだ監視対象がありません。URL をひとつ追加すると計測が始まります。</span></div>
+        <p class="vwhy">空の画面は行き止まりではなく、次の一手を示す場所です。</p>
+      </div>
+    </div>
+
+    <h3 class="sub">表記の規則</h3>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>対象</th><th>規則</th><th>例</th></tr></thead>
+        <tbody>
+          <tr><td>文体</td><td>です・ます。体言止めは見出しのみ</td><td class="mono">監視を開始しました</td></tr>
+          <tr><td>数値と単位</td><td>半角数字、単位との間は空けない</td><td class="mono">180ms / 99.98% / 12件</td></tr>
+          <tr><td>大きな数</td><td>3桁区切り、等幅数字で組む</td><td class="mono">14,308</td></tr>
+          <tr><td>日時</td><td>相対表記を優先し、絶対値は補助に</td><td class="mono">3分前（12:04）</td></tr>
+          <tr><td>和欧の間</td><td>手動スペース禁止。組版に任せる</td><td class="mono">Cloudflare Workersで動く</td></tr>
+          <tr><td>括弧</td><td>和文中は全角、欧文中は半角</td><td class="mono">（補足） / (note)</td></tr>
+          <tr><td>ボタン</td><td>動詞。「送信」「実行」のような汎用語は避ける</td><td class="mono">監視を開始 / 通知先を追加</td></tr>
+          <tr><td>固有名</td><td>プロダクト名は英字表記で統一</td><td class="mono">Manako / Todoke / Miseru</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- THEMING -->
+  <section class="band" id="theming">
+    <span class="eyebrow">--brand-*</span>
+    <h2>プロダクトへの継承</h2>
+    <p class="lede">全プロダクトがコーポレートの青を継承します。プロダクトごとに色相を振り分けると、「青がメイン、黄色がサブ」という軸そのものが薄まるためです。プロダクトの区別はワードマークとプロダクトマークが担当します。</p>
+
+    <div class="reserve">
+      <span class="tag">Reserve · 未採用</span>
+      <h4>予備案：プロダクトごとに色相を振る</h4>
+      <p>現時点では採用していませんが、色相の在庫は検証済みで用意してあります（下の Hues を参照）。押すとページ全体が追従します。上書きしているのは原色5個だけで、ライト・ダーク・ホバー・控えめな背景・フォーカスリングはすべてそこから自動的に解決されます。CSSの追加記述はゼロです。</p>
+      <div class="brandbar" id="brandbar" style="margin-bottom:0">
+        <button class="bchip" type="button" data-brand-set="" aria-pressed="true"><span class="seed" style="background:#2F5FD1"></span>blue（elchika）</button>
+        <button class="bchip" type="button" data-brand-set="rose" aria-pressed="false"><span class="seed" style="background:#BC2A69"></span>rose</button>
+        <button class="bchip" type="button" data-brand-set="purple" aria-pressed="false"><span class="seed" style="background:#A729BB"></span>purple</button>
+        <button class="bchip" type="button" data-brand-set="magenta" aria-pressed="false"><span class="seed" style="background:#B42894"></span>magenta</button>
+        <button class="bchip" type="button" data-brand-set="violet" aria-pressed="false"><span class="seed" style="background:#853FD5"></span>violet</button>
+      </div>
+    </div>
+
+    <h3 class="sub">3つの層と、それぞれの権限</h3>
+    <div class="layers">
+      <div class="layer open">
+        <div class="lh"><span class="ln">Layer 0 — プリミティブ</span><span class="token">--brand-100 / 300 / 400 / 600 / 700</span></div>
+        <p class="ld">上書きしてよい唯一の層。ただし現在、上書きしているプロダクトはありません。将来の例外に備えて面だけ残しています。</p>
+      </div>
+      <div class="layer">
+        <div class="lh"><span class="ln">Layer 1 — セマンティック</span><span class="token">--color-* / --space-* / --text-* …</span></div>
+        <p class="ld">意味づけの層。ここがプロダクト間の契約なので、上書き禁止です。Layer 0 を参照する形でのみ値が決まります。</p>
+      </div>
+      <div class="layer">
+        <div class="lh"><span class="ln">Layer 2 — コンポーネント</span><span class="token">--button-* / --card-* …（今後）</span></div>
+        <p class="ld">用途単位の層。Layer 1 だけを参照し、Layer 0 を直接見てはいけません。</p>
+      </div>
+    </div>
+
+    <h3 class="sub">プロダクトの扱い</h3>
+    <pre class="codeblock">/* プロダクト側に色の定義ファイルは要りません */
+&lt;html <b>data-theme</b>="dark"&gt;
+
+/* 例外が必要になった場合だけ、5個の上書きで足ります */
+[data-brand="…"] {
+  <b>--brand-100</b>: … ;
+  <b>--brand-300</b>: … ;
+  <b>--brand-400</b>: … ;
+  <b>--brand-600</b>: … ;
+  <b>--brand-700</b>: … ;
+}</pre>
+
+    <h3 class="sub">固定と可変</h3>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>対象</th><th>扱い</th><th>理由</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">--brand-*</td><td>面は用意・既定は不使用</td><td>プロダクトの区別は色ではなくマークが担う（予備案は残置）</td></tr>
+          <tr><td class="mono">--accent-*（黄）</td><td>コーポレート固定</td><td>全プロダクトで共有することが家族らしさの要になる</td></tr>
+          <tr><td class="mono">--color-status-*</td><td>固定</td><td>緑と赤の意味がプロダクトごとに変わると事故になる</td></tr>
+          <tr><td class="mono">--color-bg-* / text-* / border-*</td><td>固定</td><td>ニュートラルが揺れると同じ会社に見えなくなる</td></tr>
+          <tr><td class="mono">--text-* / --leading-* / --font-*</td><td>固定</td><td>書体と組版は elchika inc. の声そのもの</td></tr>
+          <tr><td class="mono">--space-* / --radius-* / --duration-*</td><td>固定</td><td>手触りの一貫性。ここを緩めると系が崩れる</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub">読み込み方</h3>
+    <pre class="codeblock">&lt;html data-theme="dark"&gt;
+
+&lt;link rel="stylesheet" href="tokens/core.css"&gt;</pre>
+    <p class="lede" style="margin-top:var(--space-4)">Tailwind の設定はプロダクト間で共通です。config が参照しているのはセマンティック層だけなので、プロダクトごとに分ける必要はありません。</p>
+  </section>
+
+  <!-- DECISIONS -->
+  <section class="band" id="decisions">
+    <span class="eyebrow">Decisions</span>
+    <h2>決めたことと、その理由</h2>
+    <p class="lede">後から「なぜこうしたか」を辿れるように残します。トークンを更新するときは、ここに追記してください。</p>
+    <pre class="codeblock" style="margin-bottom:var(--space-8)"># このページを編集したら
+<b>node build-tokens.mjs</b>          # tokens.css と brands.css を生成し検証
+<b>node build-tokens.mjs --check</b>  # 検証のみ（CI 用・不合格なら exit 1）</pre>
+    <div class="log">
+      <div class="entry">
+        <h4>ブランドカラーは青がメイン、黄色がサブ</h4>
+        <p>「知的で好奇心旺盛」という方向から。青が構造を担い、黄色は発見の一点にだけ灯す。補色関係でコントラストが強く出るため、黄色は面積を絞って使います。</p>
+      </div>
+      <div class="entry">
+        <h4>黄色の背景に青文字は使わない</h4>
+        <p>バッジのような小面積では違和感が出るため、黄色の背景には黄系の濃色を乗せて同系色でまとめます。青は構造側（ボタンなど）に留めます。</p>
+      </div>
+      <div class="entry">
+        <h4>書体は IBM Plex スーパーファミリー</h4>
+        <p>和文・欧文・等幅が同じ設計思想で揃うこと、そして研究機関・技術文書の血統を持つことから。Mono を「ラベルと数値」の専用レイヤーに割り当て、これをブランドの署名的な装置とします。</p>
+      </div>
+      <div class="entry rejected">
+        <h4>検討したが不採用：他の和文書体</h4>
+        <p>Zen Kaku Gothic New / Murecho / M PLUS 2 / BIZ UDPGothic / Noto Sans JP を比較。実測すると字幅は異なるものの、和文ゴシックというカテゴリ内では知覚できるほどの差が出ないと判断。明朝見出し（Zen Old Mincho）はカテゴリ外で差は出るが、プロダクトUIで浮くため見送り。</p>
+      </div>
+      <div class="entry">
+        <h4>和文の行間は 1.75、本文は 16px</h4>
+        <p>欧文の既定値 1.5 は和文では詰まって見えるため。本文サイズも 15px では漢字が潰れるので 16px を基準に置きます。小さい和文は字間をわずかに開けて +0.02em。</p>
+      </div>
+      <div class="entry">
+        <h4>更新される数値は等幅数字で組む</h4>
+        <p>Manako のような監視系プロダクトでは値がその場で書き換わるため、桁幅が揃わないと数字が横滑りします。実利のある決定です。</p>
+      </div>
+      <div class="entry">
+        <h4>Tailwind では spacing / fontWeight / screens を上書きする</h4>
+        <p>extend ではなく上書きにすることで、<span class="token">p-7</span> や <span class="token">font-bold</span> のような系外の値が書けなくなります。デフォルトを残すとトークンが形骸化するためです。</p>
+      </div>
+      <div class="entry">
+        <h4>プロダクトはプリミティブだけを上書きする</h4>
+        <p>セマンティック層を各プロダクトが直接上書きすると、ライト・ダーク・状態の組み合わせで定義が増え続けて破綻します。上書き可能な面を <span class="token">--brand-*</span> の5個に限定し、セマンティック層はその参照だけで値が決まる構造にしました。1プロダクト＝5行で済みます。</p>
+      </div>
+      <div class="entry">
+        <h4>黄色のアクセントはコーポレート固定</h4>
+        <p>青の色相だけがプロダクトごとに変わり、黄色・書体・余白・ニュートラルは共有されます。「別プロダクトだと分かるが、同じ会社に見える」状態を作るのが狙いです。</p>
+      </div>
+      <div class="entry">
+        <h4>ステータス色は上書き禁止</h4>
+        <p>緑と赤の意味がプロダクトごとに変わると、監視・配信という文脈では実害が出ます。ブランド表現ではなく、安全に関わる語彙として扱います。</p>
+      </div>
+      <div class="entry">
+        <h4>スペックページを唯一の正とし、CSSは生成する</h4>
+        <p>これまで design-tokens.html / tokens.css / brands.css / tailwind.config.js を手で同期させていましたが、実際に一度ズレました。<span class="token">build-tokens.mjs</span> がスペックページからCSSを生成し、未定義トークンの参照とコントラスト基準を検証します。不合格なら終了コード1で落ちるので、CIに載せればそのままマージを止められます。生成物は直接編集しないでください。</p>
+      </div>
+      <div class="entry">
+        <h4>密度は専用トークンに閉じ込める</h4>
+        <p><span class="token">--space-*</span> を丸ごと縮めるとレイアウト全体が動きます。密度が触るのは行の高さ・セルの余白・コントロールの高さだけで、適用範囲も表・一覧・ツールバーに限定しました。文章や LP には効きません。compact の行高 32px はタッチ対象の最小 44px を下回るので、ポインタ環境限定です。</p>
+      </div>
+      <div class="entry">
+        <h4>組版は言語ごとに切り替え、色と余白は共有する</h4>
+        <p>和文向けに調整した行間1.75と字間+0.02emを英語に当てると、間延びします。<span class="token">:lang(en)</span> で組版側だけを再調整しました。和欧の間の四分アキは組版の仕事なので、文言に手動でスペースを入れることは禁止です。</p>
+      </div>
+      <div class="entry">
+        <h4>文言も設計材料として記録する</h4>
+        <p>エラーは謝らず、何が起きたかと次の一手を書く。ボタンの動詞と結果の文言を一致させる。実装の都合ではなく利用者の語彙で呼ぶ。この3つを軸にしました。決めておかないと書く人ごとに揺れます。</p>
+      </div>
+      <div class="entry">
+        <h4>グラフの系列は5つを上限にする</h4>
+        <p>6つ目は青と indigo が判別できなくなるため用意していません。系列が増えたら色を足すのではなく、凡例をやめて線に直接ラベルを置きます。人が同時に照合できる凡例の数には限界があるので、これは色の問題であると同時に読み取りの問題です。</p>
+      </div>
+      <div class="entry">
+        <h4>系列は色と破線をセットで使う</h4>
+        <p>ステータスに記号と形を併用したのと同じ考え方です。色が失われても区別が残るようにしました。グレースケールのシミュレーションを入れてあるのは、色覚特性だけでなく、プロジェクタや印刷でも同じ問題が起きるからです。</p>
+      </div>
+      <div class="entry">
+        <h4>ステータス色は帯にだけ使い、線には使わない</h4>
+        <p>系列の線に赤を使うと、その系列自体が「エラー」に見えます。データの識別子と状態の信号は、適用する場所で分けました。</p>
+      </div>
+      <div class="entry">
+        <h4>発散スケールは赤緑ではなく rose と blue にする</h4>
+        <p>一般的な発散スケールは赤↔緑ですが、この2色はステータスの意味を持つうえ、色覚特性下で最も見分けにくい組み合わせです。ブランドの色相在庫から2色を取りました。</p>
+      </div>
+      <div class="entry">
+        <h4>プロダクト色相は寒色弧に限定する</h4>
+        <p>暖色域は success の緑・danger の赤・warning の橙・ブランドの黄がすでに占有しており、そこにプロダクト色を置くと信号として読まれます。222°〜334° の寒色弧に限定しました。制約の副作用として、どのプロダクトもコーポレートの青の親戚に見えます。</p>
+      </div>
+      <div class="entry">
+        <h4>色相は目視でなく色差の計算で選んだ</h4>
+        <p>候補を色覚シミュレーション（1型・2型・3型）に通し、相互の色差とステータス色との色差を計算して選定しました。最初に用意した8色相のうち teal と azure は success の緑と ΔE 3.1 まで接近しており、目視では気づけない衝突でした。除外しています。</p>
+      </div>
+      <div class="entry todo">
+        <h4>indigo は在庫に含めるが、実質使えない</h4>
+        <p>青との最悪ケースが ΔE 7.4 で、1型・3型では見分けがつきません。6色目が必要になった時点で、色による識別自体を見直すべきというサインとして残しています。</p>
+      </div>
+      <div class="entry">
+        <h4>全色相を同一のコントラスト特性で生成する</h4>
+        <p>各段の明度を、コーポレートの青と同じコントラスト比になるよう数値的に解いて決めました。どの色相を選んでも可読性が変わらないため、プロダクトごとにアクセシビリティを再検証する必要がありません。</p>
+      </div>
+      <div class="entry">
+        <h4>コントラストは実測して不合格を修正した</h4>
+        <p>目視で判断せず全組み合わせを計算したところ、4件の実際の不合格が見つかりました。text-muted（3.04）、accent-text（4.37）、そして入力欄の枠として使っていた border 系の2件です。それぞれ色相を保ったまま基準を満たす値に修正しています。</p>
+      </div>
+      <div class="entry">
+        <h4>装飾の罫線と、部品を示す枠は別トークンにする</h4>
+        <p>カードの区切り線は装飾なので 3:1 は不要ですが、入力欄の枠は「そこに部品がある」ことを示す情報なので 3:1 が要ります。同じ「線」でも基準が違うため、<span class="token">--color-border-control</span> を分けました。1本の値で両方を満たそうとすると、装飾線が濃すぎるか、部品の枠が薄すぎるかのどちらかになります。</p>
+      </div>
+      <div class="entry">
+        <h4>warning は黄ではなく橙にする</h4>
+        <p>黄はブランドのアクセント色なので、警告に同じ色を使うと「これはブランドの強調か、警告か」が判別できなくなります。橙に分離しました。ブランドカラーを持つ以上、ステータス色は避けて設計する必要があります。</p>
+      </div>
+      <div class="entry">
+        <h4>ステータスは色・記号・形の3重で伝える</h4>
+        <p>緑と赤は色覚特性のある方に最も見分けにくい組み合わせです。記号（✓ ! × i）と形（円・角丸・菱形）を併用し、色が失われても判別できる状態にしました。監視・通知系のプロダクトを持つ以上、ここは実利に直結します。</p>
+      </div>
+      <div class="entry">
+        <h4>状態はコンポーネントごとではなく一度だけ定義する</h4>
+        <p>コンポーネント×状態でトークンを切ると、コンポーネントが増えるたびに定義が掛け算で膨らみます。重ね色・押下・選択・無効・エラーを <span class="token">--state-*</span> として共有し、各コンポーネントはそれとセマンティック層を参照する形にしました。監視ダッシュボードのように状態表示が多い画面ほど効きます。</p>
+      </div>
+      <div class="entry">
+        <h4>重ね色は明暗を反転させる1つのトークンにまとめる</h4>
+        <p>ライトでは暗く、ダークでは明るく重ねる必要がありますが、<span class="token">--state-tint</span> の値を切り替えることで記述は1つで済みます。ダークはやや濃いめ（0.07 / 0.13）にしないと知覚できません。</p>
+      </div>
+      <div class="entry">
+        <h4>例外としてコントロールの寸法だけはトークン化する</h4>
+        <p>ボタンと入力欄の高さが揃わないのは最も目につく崩れです。粗い粒度の方針の中で、ここだけは共通の値を持たせます。lg の44pxはタッチ操作の最小快適サイズです。</p>
+      </div>
+      <div class="entry">
+        <h4>全プロダクトがコーポレートの青を継承する</h4>
+        <p>プロダクトごとに色相を振り分ける案を検討しましたが、「青がメイン、黄色がサブ」という当初の軸そのものが薄まるため不採用にしました。プロダクトの区別はワードマークとプロダクトマークが担当します。家族感は最大化される一方、色による識別は効かなくなるので、マーク側の設計が重要になります。</p>
+      </div>
+      <div class="entry">
+        <h4>上書きの面と予備案を残す</h4>
+        <p><span class="token">--brand-*</span> の上書き構造に加え、プロダクトごとの色相案（teal / violet / rose）も参考として残しました。色による識別が必要になったときに、構造から作り直さずに済ませるためです。使わないことと、使えないことは違います。なお Miseru の rose は danger の赤と系統が近いため、採用する場合はエラー表示と並べた確認が必要です。</p>
+      </div>
+      <div class="entry">
+        <h4>既存プロダクトの現行テーマは参照しない</h4>
+        <p>Manako などのLPにすでに配色がありますが、それに引きずられるとブランドの軸が後追いになります。トークン側を正とし、プロダクト側を寄せていきます。</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">
+    <span class="token">elchika inc. — design tokens v1.8 · 2026-08-02</span>
+    <span class="fontstate" id="fontstate">Font check…</span>
+  </div>
+</div>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var btn = document.getElementById("themeToggle");
+
+  if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    root.setAttribute("data-theme", "dark");
+  }
+  function sync() { btn.textContent = root.getAttribute("data-theme") === "dark" ? "Light" : "Dark"; }
+  sync();
+  btn.addEventListener("click", function () {
+    root.setAttribute("data-theme", root.getAttribute("data-theme") === "dark" ? "light" : "dark");
+    sync();
+  });
+
+  // ---- Live contrast audit ----
+  // Reads the values actually applied to the page, so the table stays honest
+  // when a token changes or the theme flips.
+  // 前景は3つの面すべてに載りうる。surface だけを見ると、いちばん多い
+  // 「ページ背景の上の文字」を見落とす。白の上で 4.5:1 を満たす色が、
+  // 一段上げた面では 3.9:1 に落ちることがある。build-tokens.mjs と同じ組。
+  var SURFACES = [
+    ["bg / canvas", "--color-bg-canvas"],
+    ["bg / surface", "--color-bg-surface"],
+    ["bg / raised", "--color-bg-surface-raised"]
+  ];
+  var ON_EVERY_SURFACE = [
+    ["text / primary", "--color-text-primary", 4.5, "本文"],
+    ["text / secondary", "--color-text-secondary", 4.5, "補助テキスト"],
+    ["text / muted", "--color-text-muted", 4.5, "注釈・ラベル"],
+    ["brand / primary", "--color-brand-primary", 4.5, "リンク・強調"],
+    ["border / control", "--color-border-control", 3.0, "入力欄の枠"],
+    ["status / success", "--color-status-success", 3.0, "インジケータ"],
+    ["status / danger", "--color-status-danger", 3.0, "インジケータ"]
+  ];
+  var FIXED_PAIRS = [
+    ["bg / surface", "brand / primary", "--color-bg-surface", "--color-brand-primary", 4.5, "ボタンの文字"],
+    ["accent / text", "accent / bg", "--color-accent-highlight-text", "--color-accent-highlight-bg", 4.5, "バッジ"],
+    ["success / text", "success / bg", "--color-status-success-text", "--color-status-success-bg", 4.5, "正常"],
+    ["warning / text", "warning / bg", "--color-status-warning-text", "--color-status-warning-bg", 4.5, "警告"],
+    ["danger / text", "danger / bg", "--color-status-danger-text", "--color-status-danger-bg", 4.5, "エラー"]
+  ];
+  var AUDIT = [];
+  ON_EVERY_SURFACE.forEach(function (f) {
+    SURFACES.forEach(function (s) {
+      AUDIT.push([f[0], s[0], f[1], s[1], f[2], f[3]]);
+    });
+  });
+  FIXED_PAIRS.forEach(function (p) { AUDIT.push(p); });
+
+  function triplet(name) {
+    var v = getComputedStyle(root).getPropertyValue(name).trim();
+    var m = v.match(/(\d+)\s+(\d+)\s+(\d+)/);
+    return m ? [+m[1], +m[2], +m[3]] : null;
+  }
+  function relLum(rgb) {
+    var c = rgb.map(function (x) {
+      x = x / 255;
+      return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+  }
+  function ratio(a, b) {
+    var la = relLum(a), lb = relLum(b);
+    return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+  }
+  function hex(rgb) {
+    return "#" + rgb.map(function (x) { return ("0" + x.toString(16)).slice(-2); }).join("").toUpperCase();
+  }
+
+  var auditBody = document.getElementById("auditBody");
+  function runAudit() {
+    auditBody.innerHTML = "";
+    AUDIT.forEach(function (row) {
+      var fg = triplet(row[2]), bg = triplet(row[3]);
+      if (!fg || !bg) return;
+      var r = ratio(fg, bg);
+      var pass = r >= row[4];
+      var tr = document.createElement("tr");
+      tr.innerHTML =
+        '<td class="pair">' + row[0] + " on " + row[1] + '<br><span class="token">' + hex(fg) + " / " + hex(bg) + '</span></td>' +
+        '<td><span class="sample-cell" style="color:rgb(' + fg.join(" ") + ');background:rgb(' + bg.join(" ") + ')">' + row[5] + '</span></td>' +
+        '<td class="ratio">' + r.toFixed(2) + '</td>' +
+        '<td class="token">' + row[4].toFixed(1) + '</td>' +
+        '<td><span class="verdict ' + (pass ? "pass" : "fail") + '">' + (pass ? "Pass" : "Fail") + "</span></td>";
+      auditBody.appendChild(tr);
+    });
+  }
+  runAudit();
+  btn.addEventListener("click", function () { setTimeout(runAudit, 0); });
+
+  // ---- Colour-vision simulation ----
+  var cvdbar = document.getElementById("cvdbar");
+  var cvdstage = document.getElementById("cvdstage");
+  cvdbar.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-cvd]");
+    if (!b) return;
+    cvdstage.className = "cvdstage " + b.getAttribute("data-cvd");
+    Array.prototype.forEach.call(cvdbar.querySelectorAll("[data-cvd]"), function (x) {
+      x.setAttribute("aria-pressed", x === b ? "true" : "false");
+    });
+  });
+
+  // ---- Hue reserve chips + its own simulation toggle ----
+  var HUES = [
+    ["blue", "#2F5FD1"], ["indigo", "#5C53D9"], ["violet", "#853FD5"],
+    ["purple", "#A729BB"], ["magenta", "#B42894"], ["rose", "#BC2A69"]
+  ];
+  var hueChips = document.getElementById("hueChips");
+  HUES.forEach(function (h) {
+    var el = document.createElement("span");
+    el.className = "btn";
+    el.style.cssText = "background:" + h[1] + ";color:#fff;cursor:default";
+    el.textContent = h[0];
+    hueChips.appendChild(el);
+  });
+
+  var cvdbar2 = document.getElementById("cvdbar2");
+  var cvdstage2 = document.getElementById("cvdstage2");
+  cvdbar2.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-cvd2]");
+    if (!b) return;
+    cvdstage2.className = "cvdstage " + b.getAttribute("data-cvd2");
+    Array.prototype.forEach.call(cvdbar2.querySelectorAll("[data-cvd2]"), function (x) {
+      x.setAttribute("aria-pressed", x === b ? "true" : "false");
+    });
+  });
+
+  // Density switching — scoped to the demo so the spec page itself stays
+  // readable while you compare.
+  var densbar = document.getElementById("densbar");
+  var densdemo = document.getElementById("densdemo");
+  densbar.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-dens]");
+    if (!b) return;
+    var v = b.getAttribute("data-dens");
+    if (v) { densdemo.setAttribute("data-density", v); } else { densdemo.removeAttribute("data-density"); }
+    Array.prototype.forEach.call(densbar.querySelectorAll("[data-dens]"), function (x) {
+      x.setAttribute("aria-pressed", x === b ? "true" : "false");
+    });
+  });
+
+  // Chart simulation — greyscale included, because a chart that only works
+  // in colour is a chart that fails on a projector and in print too.
+  var cvdbar3 = document.getElementById("cvdbar3");
+  var cvdstage3 = document.getElementById("cvdstage3");
+  cvdbar3.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-cvd3]");
+    if (!b) return;
+    cvdstage3.className = "cvdstage " + b.getAttribute("data-cvd3");
+    Array.prototype.forEach.call(cvdbar3.querySelectorAll("[data-cvd3]"), function (x) {
+      x.setAttribute("aria-pressed", x === b ? "true" : "false");
+    });
+  });
+
+  // Brand switching — flips one attribute; every --color-* resolves from it.
+  var brandbar = document.getElementById("brandbar");
+  brandbar.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-brand-set]");
+    if (!b) return;
+    var v = b.getAttribute("data-brand-set");
+    if (v) { root.setAttribute("data-brand", v); } else { root.removeAttribute("data-brand"); }
+    Array.prototype.forEach.call(brandbar.querySelectorAll("[data-brand-set]"), function (x) {
+      x.setAttribute("aria-pressed", x === b ? "true" : "false");
+    });
+  });
+
+  // Click a token name to copy it.
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-copy]");
+    if (!b) return;
+    var text = b.getAttribute("data-copy");
+    var done = function () {
+      var prev = b.textContent;
+      b.textContent = "Copied";
+      b.classList.add("done");
+      setTimeout(function () { b.textContent = prev; b.classList.remove("done"); }, 900);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () {});
+    }
+  });
+
+  // Live figures — the point of tabular numerals is that these never shift width.
+  var uptime = document.querySelector('[data-live="uptime"]');
+  var checks = document.querySelector('[data-live="checks"]');
+  var clock = document.querySelector('[data-live="clock"]');
+  var secs = 664;
+  function pad(n) { return String(n).padStart(2, "0"); }
+  setInterval(function () {
+    secs += 1;
+    clock.textContent = pad(Math.floor(secs / 3600)) + ":" + pad(Math.floor(secs / 60) % 60) + ":" + pad(secs % 60);
+    checks.textContent = (14000 + Math.floor(Math.random() * 900)).toLocaleString("en-US");
+    uptime.textContent = (99.9 + Math.random() * 0.099).toFixed(3) + "%";
+  }, 1000);
+
+  // Quiet confirmation that the webfonts actually arrived, kept in the footer
+  // so it stays available on a fresh machine without cluttering the spec.
+  var PROBE = "観測と配信の設計あアg0";
+  var state = document.getElementById("fontstate");
+  var ruler = document.createElement("span");
+  ruler.setAttribute("aria-hidden", "true");
+  ruler.style.cssText = "position:absolute;left:-9999px;top:0;white-space:nowrap;font-size:64px;line-height:1;";
+  ruler.textContent = PROBE;
+  document.body.appendChild(ruler);
+
+  function widthWith(stack) { ruler.style.fontFamily = stack; return ruler.getBoundingClientRect().width; }
+
+  function report() {
+    var base = widthWith("system-ui, sans-serif");
+    var families = ["IBM Plex Sans JP", "IBM Plex Sans", "IBM Plex Mono"];
+    var missing = families.filter(function (f) {
+      var applied = Math.abs(widthWith('"' + f + '", system-ui, sans-serif') - base) > 0.5;
+      if (!applied && document.fonts && document.fonts.check) {
+        applied = document.fonts.check('16px "' + f + '"', PROBE);
+      }
+      return !applied;
+    });
+    if (missing.length === 0) {
+      state.textContent = "Fonts OK";
+      state.className = "fontstate ok";
+    } else {
+      state.textContent = "Fallback: " + missing.join(", ");
+      state.className = "fontstate ng";
+    }
+  }
+
+  function check() {
+    if (!document.fonts || !document.fonts.load) { report(); return; }
+    Promise.all(["IBM Plex Sans JP", "IBM Plex Sans", "IBM Plex Mono"].map(function (f) {
+      return document.fonts.load('400 16px "' + f + '"', PROBE).catch(function () { return []; });
+    })).then(function () { setTimeout(report, 120); });
+  }
+  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(check); }
+  else { window.addEventListener("load", check); }
+})();
+</script>
+</body>
+</html>
