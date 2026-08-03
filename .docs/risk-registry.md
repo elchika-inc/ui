@@ -30,7 +30,7 @@
 - location: `.docs/reviews/`
 - status: accepted
 - reason: AI_FIRST §2 が正本とする GitHub の直接添付は Web UI 経由でしか作成できず、CLI で作業するエージェントから実行できない。public リポジトリへ機微情報を含まない画像をコミットし、画像を含む commit SHA 固定の permalink を PR 本文から参照する。
-- anchor: GitHub 上の PR 本文に6本の `blob/<40桁SHA>/.docs/reviews/*.png` URL が存在し、ブランチ名を含む URL が 0 件であることを、Task 10 でリモート本文を読み戻して検査する。
+- anchor: GitHub 上の PR 本文に計画が要求する証跡への `blob/<40桁SHA>/.docs/reviews/` permalink が存在し、ブランチ名を含む URL が 0 件であることを、Task 10 でリモート本文から読み戻す。画像は取得時の `format`、返却 bytes の magic、拡張子が一致することを各証跡で確認し、件数と拡張子を anchor へ固定しない。
 
 ## RISK-005: 実ブラウザ検証を別 worktree で行わない
 - date: 2026-07-31
