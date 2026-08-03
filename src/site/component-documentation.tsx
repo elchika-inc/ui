@@ -1,4 +1,5 @@
 import { ExternalLinkIcon } from "lucide-react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -42,6 +43,7 @@ function CommandBlock({ children }: { children: string }) {
 
 export function ComponentDocumentation({ categories, name, title }: ComponentDocumentationProps) {
   const [theme, setTheme] = useSiteTheme();
+  const [previewLoaded, setPreviewLoaded] = useState(false);
   const previewRoute = `/preview/${name}${theme === "dark" ? "-dark" : ""}/`;
 
   return (
@@ -147,12 +149,28 @@ export function ComponentDocumentation({ categories, name, title }: ComponentDoc
                 data-component-preview={name}
                 className="overflow-hidden rounded-xl border border-border bg-card shadow-sm"
               >
-                <iframe
-                  key={previewRoute}
-                  src={previewRoute}
-                  title={`${title} の隔離プレビュー`}
-                  className="h-136 w-full bg-background"
-                />
+                {previewLoaded ? (
+                  <iframe
+                    key={previewRoute}
+                    src={previewRoute}
+                    title={`${title} の隔離プレビュー`}
+                    className="h-136 w-full bg-background"
+                  />
+                ) : (
+                  <div className="grid min-h-72 place-items-center p-8 text-center">
+                    <div className="flex max-w-md flex-col items-center gap-4">
+                      <div>
+                        <h3 className="font-heading text-lg font-semibold">隔離プレビューを開始</h3>
+                        <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                          Dialog などの focus trap をこのページから分離した状態で読み込みます。
+                        </p>
+                      </div>
+                      <Button type="button" onClick={() => setPreviewLoaded(true)}>
+                        プレビューを読み込む
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
             </section>
 

@@ -59,6 +59,8 @@ test("index と個別 route が全 preview のcomponentページを列挙する"
     const componentHtml = builtPage(`components/${name}`);
     assert.match(componentHtml, /href="#main-content"/);
     assert.match(componentHtml, /<main[^>]*id="main-content"/);
+    assert.match(componentHtml, /プレビューを読み込む/);
+    assert.doesNotMatch(componentHtml, /<iframe\b/, `${name}: previewを初期mountしない`);
     assert.match(componentHtml, new RegExp(`data-component-preview="${name}"`));
     assert.match(componentHtml, new RegExp(`aria-current="page"[^>]*href="/components/${name}/"`));
     assert.match(
