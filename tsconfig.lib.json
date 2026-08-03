@@ -15,5 +15,11 @@
     "paths": { "@/*": ["./src/*"] }
   },
   "include": ["src/**/*"],
-  "exclude": ["src/catalog/**/*", "src/layouts/**/*", "src/pages/**/*", "src/previews/**/*"]
+  "exclude": [
+    "src/catalog/**/*",
+    "src/layouts/**/*",
+    "src/pages/**/*",
+    "src/previews/**/*",
+    "src/site/**/*"
+  ]
 }

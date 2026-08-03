@@ -1,6 +1,15 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { before, test } from "node:test";
 import { fileURLToPath } from "node:url";
@@ -8,7 +17,7 @@ import { fileURLToPath } from "node:url";
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 
 before(() => {
-  for (const directory of ["catalog", "previews"]) {
+  for (const directory of ["catalog", "previews", "site"]) {
     const staleDirectory = join(root, "lib", directory);
     mkdirSync(staleDirectory, { recursive: true });
     writeFileSync(join(staleDirectory, "stale.d.ts"), "export type Stale = true;\n");
@@ -48,23 +57,62 @@ test("light / dark catalog が全 preview を単一 island に描画する", () 
   assert.match(builtPage("catalog-dark"), /<html[^>]*class="dark"/);
 });
 
-test("index と個別 route が全 preview の light / dark を列挙する", () => {
+test("index と個別 route が全 preview のcomponentページを列挙する", () => {
   const html = builtPage("");
+  assert.match(html, /href="#main-content"/);
+  assert.match(html, /<main[^>]*id="main-content"/);
 
   for (const name of previewNames()) {
-    assert.match(html, new RegExp(`href="/preview/${name}/"`), `${name}: light link`);
-    assert.match(html, new RegExp(`href="/preview/${name}-dark/"`), `${name}: dark link`);
+    assert.match(html, new RegExp(`href="/components/${name}/"`), `${name}: component link`);
+    const componentHtml = builtPage(`components/${name}`);
+    assert.match(componentHtml, /href="#main-content"/);
+    assert.match(componentHtml, /<main[^>]*id="main-content"/);
+    assert.match(componentHtml, /プレビューを読み込む/);
+    assert.doesNotMatch(componentHtml, /<iframe\b/, `${name}: previewを初期mountしない`);
+    assert.match(componentHtml, new RegExp(`data-component-preview="${name}"`));
+    assert.match(componentHtml, new RegExp(`aria-current="page"[^>]*href="/components/${name}/"`));
+    assert.match(
+      componentHtml,
+      new RegExp(`npx shadcn@latest add https://ui\\.elchika\\.dev/r/${name}\\.json`),
+    );
+    assert.match(componentHtml, new RegExp(`npx shadcn@latest add @elchika/${name}`));
+    assert.match(componentHtml, /Props一覧は次段で追加します/);
+  }
+
+  for (const name of previewNames()) {
     builtPage(`preview/${name}`);
     builtPage(`preview/${name}-dark`);
   }
 });
 
 test("library build が site 専用 declaration を残さない", () => {
-  for (const directory of ["catalog", "previews"]) {
+  for (const directory of ["catalog", "previews", "site"]) {
     const path = join(root, "lib", directory);
     const declarations = existsSync(path)
       ? readdirSync(path, { recursive: true }).filter((file) => file.endsWith(".d.ts"))
       : [];
     assert.deepEqual(declarations, [], `${directory}: site 専用 declaration が残っている`);
   }
+});
+
+test("registry index生成がstaleなindexを全itemの一覧へ置換する", (t) => {
+  const generatedRoot = mkdtempSync(join(tmpdir(), "elchika-catalog-registry-"));
+  t.after(() => rmSync(generatedRoot, { recursive: true, force: true }));
+  const indexPath = join(generatedRoot, "public/r/index.json");
+  mkdirSync(dirname(indexPath), { recursive: true });
+  writeFileSync(indexPath, '{"stale":true}\n');
+  execFileSync(
+    "node",
+    [join(root, "scripts/registry-index.mjs"), join(root, "registry.json"), indexPath],
+    { cwd: root, stdio: "pipe" },
+  );
+
+  const registry = JSON.parse(readFileSync(join(root, "registry.json"), "utf8"));
+  const index = JSON.parse(readFileSync(indexPath, "utf8"));
+  assert.ok(Array.isArray(index), "index.jsonは配列");
+  assert.notEqual(index.length, 0, "index走査が空走している");
+  assert.deepEqual(
+    index.map(({ name }) => name),
+    registry.items.map(({ name }) => name).sort((a, b) => a.localeCompare(b)),
+  );
 });

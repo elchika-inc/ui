@@ -1,0 +1,38 @@
+---
+import "@/styles/global.css";
+
+interface Props {
+  description?: string;
+  title?: string;
+}
+---
+
+<html lang="ja" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta
+      name="description"
+      content={Astro.props.description ?? "elchika-inc の共有 UI コンポーネント"}
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{Astro.props.title ?? "elchika-inc/ui"}</title>
+    <script is:inline>
+      (() => {
+        const saved = localStorage.getItem("elchika-ui-theme");
+        const dark = saved === "dark" || (!saved && matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.classList.toggle("dark", dark);
+        document.documentElement.dataset.theme = dark ? "dark" : "light";
+      })();
+    </script>
+  </head>
+  <body>
+    <a
+      href="#main-content"
+      class="fixed top-2 left-2 z-50 -translate-y-16 rounded-md bg-background px-3 py-2 text-sm font-medium text-foreground shadow-sm ring-1 ring-border focus:translate-y-0 focus-visible:ring-3 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      本文へ移動
+    </a>
+    <slot />
+  </body>
+</html>
