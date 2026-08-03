@@ -15,6 +15,7 @@ export const SHARED_EVIDENCE_PATHS = [
 
 const SHARED_TOKEN_SCOPE = "shared-token-migration";
 const REPORT_IMMUTABILITY_ENFORCEMENT_V1 = "REPORT_IMMUTABILITY_ENFORCEMENT_V1";
+const VERIFICATION_SHA_FIELD_ENFORCEMENT_V1 = "VERIFICATION_SHA_FIELD_ENFORCEMENT_V1";
 const SHARED_TOKEN_PATHS = ["src/styles/global.css", "src/styles/design-system/tokens.css"];
 const SHARED_TOKEN_IMAGE_SUBJECTS = [
   "disabled-controls",
@@ -220,7 +221,7 @@ function inspectMarkdown(repositoryRoot, reviewsRoot, file) {
   const parsed = parseVerificationSha(markdown);
   if (parsed.problem) {
     const additionCommit = evidenceAddition(repositoryRoot, file).commit;
-    const enforcement = reportImmutabilityEnforcement(repositoryRoot);
+    const enforcement = verificationShaFieldEnforcement(repositoryRoot);
     const isHistoricalWithoutVerificationSha =
       parsed.problem === "verified_impl_sha が無い" &&
       additionCommit &&
@@ -372,6 +373,20 @@ function reportImmutabilityEnforcement(repositoryRoot) {
     "log",
     "--reverse",
     `-S${REPORT_IMMUTABILITY_ENFORCEMENT_V1}`,
+    "--format=%H",
+    "--",
+    "scripts/check-evidence.mjs",
+  ])
+    .trim()
+    .split("\n")
+    .find(Boolean);
+}
+
+function verificationShaFieldEnforcement(repositoryRoot) {
+  return git(repositoryRoot, [
+    "log",
+    "--reverse",
+    `-S${VERIFICATION_SHA_FIELD_ENFORCEMENT_V1}`,
     "--format=%H",
     "--",
     "scripts/check-evidence.mjs",

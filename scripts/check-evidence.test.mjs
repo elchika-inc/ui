@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import {
+  appendFileSync,
   existsSync,
   mkdirSync,
   mkdtempSync,
@@ -71,6 +72,14 @@ const introduceReportImmutabilitySensor = (root) => {
   );
   git(root, ["add", "scripts/check-evidence.mjs"]);
   git(root, ["commit", "-m", "introduce report immutability sensor"]);
+  return git(root, ["rev-parse", "HEAD"]).trim();
+};
+
+const introduceVerificationShaFieldSensor = (root) => {
+  const script = join(root, "scripts/check-evidence.mjs");
+  appendFileSync(script, "const VERIFICATION_SHA_FIELD_ENFORCEMENT_V1 = true;\n");
+  git(root, ["add", "scripts/check-evidence.mjs"]);
+  git(root, ["commit", "-m", "introduce verification sha field sensor"]);
   return git(root, ["rev-parse", "HEAD"]).trim();
 };
 
@@ -367,6 +376,7 @@ test("report追加時にverified_impl_shaが無ければ後から全fieldを足�
   const { root } = createEvidenceRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));
   introduceReportImmutabilitySensor(root);
+  introduceVerificationShaFieldSensor(root);
   const report = join(root, ".docs/reviews/2026-08-03-summary.md");
   writeFileSync(report, "# 初回は構造化fieldなし\n");
   git(root, ["add", ".docs/reviews/2026-08-03-summary.md"]);
@@ -387,11 +397,12 @@ test("report追加時にverified_impl_shaが無ければ後から全fieldを足�
 test("全report sensor施行前から欄が無い歴史的文書は不遡及で受理する", async (t) => {
   const { root } = createEvidenceRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));
+  introduceReportImmutabilitySensor(root);
   const relativeReport = ".docs/reviews/implementation-review.md";
   writeFileSync(join(root, relativeReport), "# 実装レビュー\n\nflag: 0\n");
   git(root, ["add", relativeReport]);
   git(root, ["commit", "-m", "add historical implementation review"]);
-  introduceReportImmutabilitySensor(root);
+  introduceVerificationShaFieldSensor(root);
 
   const result = (await loadModule()).checkEvidenceInRepo(root);
 
