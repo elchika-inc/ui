@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 
 before(() => {
-  for (const directory of ["catalog", "previews"]) {
+  for (const directory of ["catalog", "previews", "site"]) {
     const staleDirectory = join(root, "lib", directory);
     mkdirSync(staleDirectory, { recursive: true });
     writeFileSync(join(staleDirectory, "stale.d.ts"), "export type Stale = true;\n");
@@ -49,19 +49,30 @@ test("light / dark catalog が全 preview を単一 island に描画する", () 
   assert.match(builtPage("catalog-dark"), /<html[^>]*class="dark"/);
 });
 
-test("index と個別 route が全 preview の light / dark を列挙する", () => {
+test("index と個別 route が全 preview のcomponentページを列挙する", () => {
   const html = builtPage("");
 
   for (const name of previewNames()) {
-    assert.match(html, new RegExp(`href="/preview/${name}/"`), `${name}: light link`);
-    assert.match(html, new RegExp(`href="/preview/${name}-dark/"`), `${name}: dark link`);
+    assert.match(html, new RegExp(`href="/components/${name}/"`), `${name}: component link`);
+    const componentHtml = builtPage(`components/${name}`);
+    assert.match(componentHtml, new RegExp(`data-component-preview="${name}"`));
+    assert.match(componentHtml, new RegExp(`aria-current="page"[^>]*href="/components/${name}/"`));
+    assert.match(
+      componentHtml,
+      new RegExp(`npx shadcn@latest add https://ui\\.elchika\\.dev/r/${name}\\.json`),
+    );
+    assert.match(componentHtml, new RegExp(`npx shadcn@latest add @elchika/${name}`));
+    assert.match(componentHtml, /Props一覧は次段で追加します/);
+  }
+
+  for (const name of previewNames()) {
     builtPage(`preview/${name}`);
     builtPage(`preview/${name}-dark`);
   }
 });
 
 test("library build が site 専用 declaration を残さない", () => {
-  for (const directory of ["catalog", "previews"]) {
+  for (const directory of ["catalog", "previews", "site"]) {
     const path = join(root, "lib", directory);
     const declarations = existsSync(path)
       ? readdirSync(path, { recursive: true }).filter((file) => file.endsWith(".d.ts"))

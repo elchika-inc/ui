@@ -8,8 +8,9 @@ elchika-inc の各プロダクトが同じ見た目と操作性を共有でき�
 
 - 対象: `elchika-inc/ui` のリポジトリ骨格と共有 UI コンポーネント。
 - 完了済みの初期基盤 #1: Button 1 件について、法務・来歴・生成・standards 適合・ビルド・registry 配布・隔離プレビュー・CI の経路を端から端まで通した。
-- 現行のブランドトークン移行: 登録済み全コンポーネントを、デザインシステム v1.8 の2層 token、shadcn alias、実 consumer contrast、SHA 固定証跡の契約へ移行する。新しいコンポーネント実装は追加しない。
-- 継続して非対象: docs サイトの本格構築、registry の公開、Claude Design への同期、standards 側の更新、既存 `@tools/ui` の移行。
+- 完了済みのブランドトークン移行: 登録済み全コンポーネントを、デザインシステム v1.8 の2層 token、shadcn alias、実 consumer contrast、SHA 固定証跡の契約へ移行した。
+- 現行のサイト配信 Phase A: registry index、利用者向け docs、Workers Assets と deploy workflow、Phase B の手動公開手順を repo 内へ実装する。
+- 継続して非対象: Phase B の Cloudflare token 発行・GitHub secrets 登録・custom domain 操作、Claude Design への同期、standards 側の更新、既存 `@tools/ui` の移行。
 
 ## SuccessCriteria
 
@@ -41,9 +42,19 @@ elchika-inc の各プロダクトが同じ見た目と操作性を共有でき�
 3. registry は alias CSS と runtime 用 generated token の両方を配布し、fresh install で source・token・法務ファイルの到達と利用側 build を確認する。
 4. consumer contrast sensor は全必須 case の gate・theme・source class 契約と実利用 pair を検査し、実ブラウザ証跡を不変な実装 SHA へ束縛する。
 
+## DoneCriteria（サイト配信 Phase A）
+
+1. `registry:build` が上流互換の非空 JSON 配列を `public/r/index.json` へ生成し、registry item と同じ集合を持つ。
+2. トップページが直接 URL、`@elchika` 名前空間、shadcn MCP の3経路と token alias の再削除を案内する。
+3. 実在する preview 集合から `/components/<name>` を静的生成し、単一カテゴリ正本の未分類・重複・未知が0である。
+4. component ページが配布 `Sidebar`、`aria-current`、isolated preview、直接 URL と名前空間の install command を持ち、light / dark を切り替えられる。
+5. Workers Assets が `dist/` を SPA fallback なしで配信し、main push と `workflow_dispatch` の deploy workflow が build 後に Wrangler を実行する。
+6. README が `https://ui.elchika.dev` の実手順へ更新され、Phase B の user 操作が1枚の manual action として再現可能に記録される。
+7. 既存 `/catalog/`、`/preview/*`、`.github/workflows/ci.yml` を変更せず、既存 gate と新規の機械検査がすべて exit 0 になる。
+
 ## 明示的な非目標
 
 - 現行移行の対象外となる新しいコンポーネント実装を追加しない。
 - npm registry へ publish しない。
-- サブプロジェクト #3 で deployment・DNS・公開到達を確認する前に registry URL を利用者へ公開しない。
+- Phase A から Cloudflare token 発行、GitHub secrets 登録、custom domain 操作を行わない。
 - standards のルールやテンプレートをこのリポジトリから変更しない。

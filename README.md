@@ -38,9 +38,39 @@ npm run dev
 
 ## 利用方法
 
-registry は現在未公開である。公開後の配信正本は `ui.elchika.dev` と決定しているが、deployment・DNS・公開到達は未確認である。サブプロジェクト #3 で公開到達を確認してから、このセクションに利用者向け URL を追記する。
+registry とドキュメントサイトの配信正本は `https://ui.elchika.dev`。component は次の3経路で取り込める。
 
-貢献者がローカルで取り込みを確かめる場合は、このリポジトリで registry を生成してから配信する。
+### 直接 URL
+
+```bash
+npx shadcn@latest add https://ui.elchika.dev/r/button.json
+```
+
+### @elchika 名前空間
+
+利用側の `components.json` に registry を追加する。
+
+```json
+{
+  "registries": {
+    "@elchika": "https://ui.elchika.dev/r/{name}.json"
+  }
+}
+```
+
+```bash
+npx shadcn@latest add @elchika/button
+```
+
+### shadcn MCP
+
+shadcn CLI 同梱の MCP を初期化する。生成された `.mcp.json` を有効にするため、初期化後に Claude を再起動する。MCP server の自前実装は不要で、`components.json` の `registries` が探索対象になる。
+
+```bash
+npx shadcn@latest mcp init --client claude
+```
+
+### 貢献者向けローカル確認
 
 ```bash
 npm ci
@@ -48,7 +78,7 @@ npm run build
 npx serve public -l 3011
 ```
 
-別のプロジェクトから取り込む（`serve` が表示したポートに読み替える）。
+別のプロジェクトから取り込む場合は、`serve` が表示した port に読み替える。
 
 ```bash
 npx shadcn@latest add --overwrite http://127.0.0.1:3011/r/button.json
@@ -91,7 +121,7 @@ const tooltipId = "save-button-help";
 @import "./elchika-ui/tokens.css";
 ```
 
-削除が必要なのは、CSS の `@import` は通常 rule より前にしか置けず、shadcn の `overwriteCssVars: false` が既存 alias を残すため、併存させると後続の利用側 `:root` / `.dark` が配布 alias に必ず勝つからである。独自変数を同じ block に置いている場合は保持し、shadcn が生成した色 alias declaration だけを削除する。別 component を `shadcn add` すると registry の `cssVars` から alias 定義が再追記されるため、追加後も同じ定義を削除して import 一本へ戻す。
+削除が必要なのは、CSS の `@import` は通常 rule より前にしか置けず、shadcn の `overwriteCssVars: false` が既存 alias を残すため、併存させると後続の利用側 `:root` / `.dark` が配布 alias に必ず勝つからである。独自変数を同じ block に置いている場合は保持し、shadcn が生成した色 alias declaration だけを削除する。別 component を `shadcn add` すると registry の `cssVars` から alias block が再追記されるため、**add のたびに色 alias を再削除**して import 一本へ戻す。
 
 dark theme では同じ root element に `class="dark" data-theme="dark"` を設定し、light theme では両方を外して `data-theme="light"` にする。`.dark` は Tailwind dark variant と `color-scheme`、`data-theme="dark"` は generated token を切り替えるため、片方だけを変更しない。
 
@@ -127,6 +157,8 @@ scripts/           # 来歴記録・standards 適合検知・配布物検査
 types/             # ビルド出力の props 契約を検査する型テスト
 public/r/          # shadcn build の出力（registry の配信物）
 ```
+
+本番公開の初期設定は [Phase B: ui.elchika.dev 公開手順](.docs/actions/manual-subproject-3-domain.md) を参照する。
 
 ## Contributing
 

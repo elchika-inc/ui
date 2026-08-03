@@ -6,7 +6,7 @@ elchika-inc の共有 UI コンポーネント。Base UI + Tailwind CSS v4。sha
 
 ## Tech Stack
 
-- スタック: Astro 7 + React 19 の単一ルート。パッケージマネージャは npm。配布は shadcn registry（npm publish しない）。
+- スタック: Astro 7 + React 19 の静的サイト。パッケージマネージャは npm。配布は shadcn registry（npm publish しない）。
 - Astro 7 / React 19 / TypeScript / Base UI (@base-ui/react) / Tailwind CSS v4 / Biome。パッケージマネージャは npm。
 - standards_version: 2026-07-29 (rev.46)。
 - branch_policy: `protected`（PR 必須で、直 push の bypass を設けない）。
@@ -16,7 +16,7 @@ elchika-inc の共有 UI コンポーネント。Base UI + Tailwind CSS v4。sha
 - dev: `npm run dev` → `http://localhost:4321/`。
 - test: `node --test "scripts/*.test.mjs"`。
 - check: `npm run lint` + `npm run typecheck`。
-- deploy: `N/A（配信先はサブプロジェクト #3 で決まる。#1 の時点でデプロイ対象を持たない）`。
+- deploy: `npm run build && npx wrangler deploy`。GitHub Actions は main push または手動実行で Workers Assets へ deploy する。
 
 ## Architecture
 
@@ -36,6 +36,8 @@ elchika-inc の共有 UI コンポーネント。Base UI + Tailwind CSS v4。sha
 | `src/styles/global.css` | トークン |
 | `src/previews/*.tsx` | 隔離プレビューの中身 |
 | `src/pages/preview/*.astro` | 隔離プレビューのルート（light / dark で別ページ） |
+| `src/pages/components/[name].astro` | 公開 component ページの静的生成ルート |
+| `src/site/` | 公開サイトの導入情報・テーマ切替・Sidebar shell |
 | `registry.json` | registry の定義 |
 | `tsup.config.ts` | ライブラリビルド（出力先 `lib/`） |
 | `biome.json` | lint / format |
@@ -60,6 +62,8 @@ elchika-inc の共有 UI コンポーネント。Base UI + Tailwind CSS v4。sha
 
 - dev-data-safety: local。
 - routes:
-  - `/` — カタログトップ。
+  - `/` — 利用者向け導入手順と component 索引。
+  - `/components/button/` — Button の公開 component ページ。
+  - `/catalog/` — 横断検証カタログ（既存証跡の対象）。
   - `/preview/button/` — Button の隔離プレビュー（light）。
   - `/preview/button-dark/` — Button の隔離プレビュー（dark）。
