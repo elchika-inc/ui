@@ -45,6 +45,7 @@ elchika-inc の共有 UI コンポーネント。Base UI + Tailwind CSS v4。sha
 | `.docs/reviews/` | 実ブラウザ検証の証跡と DoneCriteria の通し記録 |
 | `CONTRIBUTING.md` / `SECURITY.md` / `.github/ISSUE_TEMPLATE/config.yml` | 貢献規約と脆弱性報告の導線 |
 | `AGENTS.md` / `CLAUDE.md` / `README.md` | エージェント契約と人間向け入口 |
+| `DESIGN.md` | 各プロダクトが継承するハウススタイル（standards §12 の「既定の意図の置き場所」）。意図の正本は `src/styles/design-system/design-tokens.html` で、こちらはポインタと再検討トリガーのみ |
 
 - Base UI を基底層に採用し、アクセシビリティの土台を共有する。
 - Storybook は置かず、Astro の隔離プレビューで代替する。
