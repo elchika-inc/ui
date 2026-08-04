@@ -3,7 +3,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -16,10 +15,11 @@
 }
 
 @theme inline {
-    /* ブランドノブ: 見出しフォントは次の行を直接編集する（@theme inline のため :root 上書きでは効かない） */
-    --font-heading: var(--font-sans);
-    /* 和文フォールバックを明示する: Geist は Latin 専用のため、未指定だと日本語が OS 依存でばらける */
-    --font-sans: 'Geist Variable', 'Hiragino Sans', 'Noto Sans JP', 'Yu Gothic UI', sans-serif;
+    /* design system 層の書体へ接続する。ブランドノブとして見出しだけ差し替えたい場合は
+       利用側 CSS の :root で --font-display を上書きする（@theme inline は値を展開するため
+       --font-heading の :root 上書きでは効かない）。 */
+    --font-heading: var(--font-display);
+    --font-sans: var(--font-body);
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);

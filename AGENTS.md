@@ -52,6 +52,7 @@ elchika-inc の共有 UI コンポーネント。Base UI + Tailwind CSS v4。sha
 ## 重要な設計原則（What NOT to Do）
 
 - `main` へ直接コミットしない。
+- **PR は squash ではなく merge commit でマージする**。証跡（`.docs/reviews/`）は `verified_impl_sha` で検証時点の commit を固定し、その値は immutable（書き換えも削除も `check-evidence` が弾く）。squash は PR ブランチの commit を捨てるため、マージした瞬間に証跡の SHA が履歴から消えて祖先判定を通らなくなる（実際に PR #16 で発生し、`-s ours` の空マージで履歴を接続して復旧した）。
 - コミットメッセージ・PR 本文・ドキュメント・コード内コメントは日本語（技術用語と識別子は原語のまま）。
 - 生の色指定と値系 arbitrary value を使わない。
 - フォーカスリングに透明度合成を使わない。

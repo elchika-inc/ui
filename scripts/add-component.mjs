@@ -21,6 +21,10 @@ export const CHANGE_CLASSIFICATION_RULES = [
   { kind: "dependency-manifest", paths: ["package.json", "package-lock.json"] },
 ];
 
+// 配布した tokens.css が @import する npm パッケージ。これが consumer の package.json に
+// 入らないと `@tailwindcss/cli` が "Can't resolve" で落ちる（実測）。
+const SHARED_DEPENDENCIES = ["tw-animate-css", "shadcn"];
+
 const SHARED_REGISTRY_FILES = [
   {
     path: "src/styles/global.css",
@@ -288,6 +292,9 @@ export function buildRegistryItem(name, upstreamItem, generatedSource, target) {
     dependenciesByName.set(dependencyName(dependency), dependency);
   }
   for (const dependency of externalImports(generatedSource)) {
+    if (!dependenciesByName.has(dependency)) dependenciesByName.set(dependency, dependency);
+  }
+  for (const dependency of SHARED_DEPENDENCIES) {
     if (!dependenciesByName.has(dependency)) dependenciesByName.set(dependency, dependency);
   }
 
