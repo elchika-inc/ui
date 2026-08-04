@@ -23,3 +23,12 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# design-sync（claude.ai/design への同期）: 生成物・ステージされたスクリプト・機械状態。
+# .design-sync/config.json は同期先を固定する durable set なのでコミットする。
+.ds-sync/
+ds-bundle/
+.design-sync/.cache/
+.design-sync/learnings/
+.design-sync/previews/
+.design-sync/node_modules
