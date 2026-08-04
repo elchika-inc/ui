@@ -83,6 +83,9 @@
   --font-display: "IBM Plex Sans JP", "IBM Plex Sans", system-ui, sans-serif;
   --font-body: "IBM Plex Sans JP", "IBM Plex Sans", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", "IBM Plex Sans JP", ui-monospace, monospace;
+  /* Tailwind の @theme が同名の --font-mono を持ち cascade layer 順で勝つため、
+     alias 層から参照するための別名を出す（衝突しない名前であることが要件）。 */
+  --font-code: "IBM Plex Mono", "IBM Plex Sans JP", ui-monospace, monospace;
 
   --text-3xs: 0.6875rem; --text-2xs: 0.75rem; --text-xs: 0.8125rem;
   --text-sm: 0.875rem; --text-base: 1rem; --text-lg: 1.125rem;
