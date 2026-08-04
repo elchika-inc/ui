@@ -1,5 +1,6 @@
 {
   "shape": "package",
   "cssEntry": "src/styles/global.css",
-  "projectId": "937f6779-85d0-4b7e-b4bb-9ec8d0660b4f"
+  "projectId": "937f6779-85d0-4b7e-b4bb-9ec8d0660b4f",
+  "guidelinesGlob": ["DESIGN.md"]
 }
