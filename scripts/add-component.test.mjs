@@ -334,7 +334,12 @@ test("wrapper が pin add から2つの hash・来歴・registryまで記録し�
   assert.equal(provenance.components.calendar.modified, "Props 型を追加");
   const registry = JSON.parse(readFileSync(join(root, "registry.json"), "utf8"));
   assert.deepEqual(registry.items[0].registryDependencies, ["@elchika/button"]);
-  assert.deepEqual(registry.items[0].dependencies, ["@base-ui/react", "date-fns"]);
+  assert.deepEqual(registry.items[0].dependencies, [
+    "@base-ui/react",
+    "date-fns",
+    "shadcn",
+    "tw-animate-css",
+  ]);
   assert.deepEqual(
     registry.items[0].files.filter(({ target }) => target?.endsWith("tokens.css")),
     [
