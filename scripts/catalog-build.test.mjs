@@ -85,6 +85,50 @@ test("index と個別 route が全 preview のcomponentページを列挙する"
   }
 });
 
+test("トップとcomponentページが同じdocs shellとサイドバー導線を使う", () => {
+  const homeHtml = builtPage("");
+  const componentHtml = builtPage("components/button");
+
+  for (const html of [homeHtml, componentHtml]) {
+    assert.match(html, /data-docs-shell="true"/);
+    assert.match(html, /aria-label="ドキュメントナビゲーション"/);
+    assert.match(html, /href="\/"[^>]*><span>はじめに<\/span>/);
+  }
+
+  assert.match(homeHtml, /aria-current="page"[^>]*href="\/"/);
+  assert.doesNotMatch(componentHtml, /aria-current="page"[^>]*href="\/"/);
+});
+
+test("トップがLP要素なしで3経路とtoken置換を順に案内する", () => {
+  const html = builtPage("");
+  const sections = [
+    "elchika-inc/ui",
+    "導入手順",
+    "1. 直接 URL",
+    "2. @elchika 名前空間",
+    "3. shadcn MCP",
+    "トークン置換の注意",
+  ];
+
+  let previousIndex = -1;
+  for (const section of sections) {
+    const index = html.indexOf(section);
+    assert.ok(index > previousIndex, `${section}: 文書順序が正しい`);
+    previousIndex = index;
+  }
+
+  assert.match(html, /Base UI[^<]*Tailwind CSS v4/);
+  assert.match(html, /shadcn registry[^<]*ソース/);
+  assert.match(html, /npx shadcn@latest add https:\/\/ui\.elchika\.dev\/r\/button\.json/);
+  assert.match(html, /npx shadcn@latest add @elchika\/button/);
+  assert.match(html, /npx shadcn@latest mcp init --client claude/);
+  assert.match(html, /add するたびに[^<]*再削除/);
+  assert.match(html, /href="\/components\/button\/"/);
+  assert.doesNotMatch(html, /Shared interface registry/i);
+  assert.doesNotMatch(html, /Components を見る/);
+  assert.doesNotMatch(html, />Installation</);
+});
+
 test("library build が site 専用 declaration を残さない", () => {
   for (const directory of ["catalog", "previews", "site"]) {
     const path = join(root, "lib", directory);
