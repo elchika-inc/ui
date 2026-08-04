@@ -4,6 +4,15 @@
 
 elchika-inc の共有 UI コンポーネント。Base UI + Tailwind CSS v4。shadcn registry で配布する。
 
+当リポジトリは4リポジトリ体制の**デザインシステムの正本**にあたる。
+
+| リポジトリ | 持つもの | 当リポジトリとの関係 |
+|---|---|---|
+| [standards](https://github.com/elchika-inc/standards) | ルール | 読んで従う。**このリポジトリからは変更しない**（read-only） |
+| [templates](https://github.com/elchika-inc/templates) | コピーして使う実体（共通契約・biome.json・legal/ 等） | UI とトークンは持たない（rev.55 で当リポジトリへ移管済み） |
+| **ui**（このリポジトリ） | コンポーネント実体・トークン3ファイル・ハウススタイルの意図 | registry で配布する |
+| [agent-toolkit](https://github.com/elchika-inc/agent-toolkit) | エージェントの道具（skills / plugins / hooks） | 直接の依存なし |
+
 ## Tech Stack
 
 - スタック: Astro 7 + React 19 の静的サイト。パッケージマネージャは npm。配布は shadcn registry（npm publish しない）。
@@ -24,7 +33,7 @@ elchika-inc の共有 UI コンポーネント。Base UI + Tailwind CSS v4。sha
 |---|---|
 | `scripts/fetch-third-party-licenses.mjs` | 上流ライセンスの取得 |
 | `scripts/record-provenance.mjs` | コンポーネント来歴の記録 |
-| `scripts/check-standards.mjs` | DESIGN.md §5 違反の機械検知 |
+| `scripts/check-standards.mjs` | standards `DESIGN.md` §3（色トークン）・§5（arbitrary value / focus ring）違反の機械検知。当リポジトリの `DESIGN.md` ではない |
 | `scripts/check-distribution.mjs` | registry item への法務ファイル同梱検査 |
 | `scripts/contrast.mjs` | トークンのコントラストを oklch から実計算する |
 | `provenance.json` | コンポーネント単位の来歴（機械可読） |
