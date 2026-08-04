@@ -32,6 +32,11 @@ const SHARED_REGISTRY_FILES = [
     type: "registry:file",
     target: "~/elchika-ui/design-system/tokens.css",
   },
+  {
+    path: "src/styles/design-system/brands.css",
+    type: "registry:file",
+    target: "~/elchika-ui/design-system/brands.css",
+  },
   { path: "LICENSE", type: "registry:file", target: "~/elchika-ui/LICENSE" },
   {
     path: "THIRD_PARTY_LICENSES",

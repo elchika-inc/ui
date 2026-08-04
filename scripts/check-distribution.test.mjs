@@ -7,6 +7,7 @@ const { checkDistribution } = distribution;
 const ORIGIN = {
   "src/styles/global.css": "alias CSS",
   "src/styles/design-system/tokens.css": "生成 token",
+  "src/styles/design-system/brands.css": "hue reserve",
   LICENSE: "MIT 本文",
   THIRD_PARTY_LICENSES: "上流の連結",
 };
@@ -23,6 +24,11 @@ const validFiles = () => [
     "~/elchika-ui/design-system/tokens.css",
     "生成 token",
   ),
+  entry(
+    "src/styles/design-system/brands.css",
+    "~/elchika-ui/design-system/brands.css",
+    "hue reserve",
+  ),
   entry("LICENSE", "~/elchika-ui/LICENSE", "MIT 本文"),
   entry("THIRD_PARTY_LICENSES", "~/elchika-ui/THIRD_PARTY_LICENSES", "上流の連結"),
 ];
@@ -35,6 +41,7 @@ test("files に token と法務ファイルが無ければ検出する", () => {
   assert.deepEqual(problems, [
     "alias CSS: registry item の files に無い（install されない）",
     "design-system token: registry item の files に無い（install されない）",
+    "design-system brands: registry item の files に無い（install されない）",
     "LICENSE: registry item の files に無い（install されない）",
     "THIRD_PARTY_LICENSES: registry item の files に無い（install されない）",
   ]);

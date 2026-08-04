@@ -17,6 +17,11 @@ const REQUIRED = [
     source: "src/styles/design-system/tokens.css",
     target: "~/elchika-ui/design-system/tokens.css",
   },
+  {
+    label: "design-system brands",
+    source: "src/styles/design-system/brands.css",
+    target: "~/elchika-ui/design-system/brands.css",
+  },
   { label: "LICENSE", source: "LICENSE", target: "~/elchika-ui/LICENSE" },
   {
     label: "THIRD_PARTY_LICENSES",

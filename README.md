@@ -125,7 +125,7 @@ const tooltipId = "save-button-help";
 
 dark theme では同じ root element に `class="dark" data-theme="dark"` を設定し、light theme では両方を外して `data-theme="light"` にする。`.dark` は Tailwind dark variant と `color-scheme`、`data-theme="dark"` は generated token を切り替えるため、片方だけを変更しない。
 
-`src/styles/design-system/design-tokens.html` が Layer 0 / 1 token の正本で、`build-tokens.mjs` が `tokens.css` と将来利用する product hue reserve の `brands.css` を生成する。`global.css` は shadcn semantic alias だけを持ち、色値を再定義しない。token build は正本と生成物の byte 一致、consumer contrast sensor は alias を通った実利用配色を検査する。
+`src/styles/design-system/design-tokens.html` が Layer 0 / 1 token の正本で、`build-tokens.mjs` が `tokens.css` と product hue reserve の `brands.css`（registry で配布され、`data-brand` 属性でプロダクト色を選ぶ）を生成する。`global.css` は shadcn semantic alias だけを持ち、色値を再定義しない。token build は正本と生成物の byte 一致、consumer contrast sensor は alias を通った実利用配色を検査する。
 
 `src/styles/design-system/` は外部正本の byte 一致を優先するため Biome の対象外とし、repo lint は自分たちのコードだけへ適用する。`build-tokens.mjs` は取り込み時 SHA-256 `c9fe52008ca7df9af277f57a2b892d3e41741d9c6e842cf33afd43841fb6b5d7` を基点に、`--check` の exact artifact comparison だけを承認済み差分として追加している。
 

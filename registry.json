@@ -25,6 +25,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -147,6 +152,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -267,6 +277,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -392,6 +407,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -511,6 +531,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -636,6 +661,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -756,6 +786,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -880,6 +915,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -1000,6 +1040,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -1124,6 +1169,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -1244,6 +1294,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -1369,6 +1424,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -1492,6 +1552,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -1611,6 +1676,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -1740,6 +1810,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -1861,6 +1936,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -1985,6 +2065,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -2105,6 +2190,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -2230,6 +2320,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -2353,6 +2448,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -2473,6 +2573,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -2598,6 +2703,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -2718,6 +2828,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -2842,6 +2957,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -2964,6 +3084,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -3084,6 +3209,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -3209,6 +3339,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -3331,6 +3466,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -3451,6 +3591,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -3576,6 +3721,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -3696,6 +3846,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -3821,6 +3976,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -3940,6 +4100,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -4063,6 +4228,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -4183,6 +4353,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -4308,6 +4483,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -4427,6 +4607,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -4552,6 +4737,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -4674,6 +4864,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -4794,6 +4989,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -4919,6 +5119,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -5039,6 +5244,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -5163,6 +5373,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -5283,6 +5498,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -5407,6 +5627,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -5527,6 +5752,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -5651,6 +5881,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -5771,6 +6006,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -5894,6 +6134,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -6027,6 +6272,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -6146,6 +6396,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -6270,6 +6525,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -6390,6 +6650,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -6514,6 +6779,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -6636,6 +6906,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -6755,6 +7030,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -6879,6 +7159,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -6998,6 +7283,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -7123,6 +7413,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -7243,6 +7538,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
@@ -7368,6 +7668,11 @@
           "target": "~/elchika-ui/design-system/tokens.css"
         },
         {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
           "path": "LICENSE",
           "type": "registry:file",
           "target": "~/elchika-ui/LICENSE"
@@ -7488,6 +7793,11 @@
           "path": "src/styles/design-system/tokens.css",
           "type": "registry:file",
           "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
         },
         {
           "path": "LICENSE",
