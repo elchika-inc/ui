@@ -30,5 +30,4 @@ pnpm-debug.log*
 ds-bundle/
 .design-sync/.cache/
 .design-sync/learnings/
-.design-sync/previews/
 .design-sync/node_modules

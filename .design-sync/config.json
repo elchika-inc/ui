@@ -1,6 +1,70 @@
 {
   "shape": "package",
-  "cssEntry": "src/styles/global.css",
+  "pkg": "ui-scaffold",
+  "globalName": "ElchikaUI",
   "projectId": "937f6779-85d0-4b7e-b4bb-9ec8d0660b4f",
-  "guidelinesGlob": ["DESIGN.md"]
+  "buildCmd": "npm run build",
+  "cssEntry": "dist/_astro/global.Cs8Ft9hd.css",
+  "tsconfig": "tsconfig.json",
+  "guidelinesGlob": [
+    "DESIGN.md"
+  ],
+  "readmeHeader": ".design-sync/conventions.md",
+  "overrides": {
+    "Dialog": {
+      "cardMode": "single",
+      "viewport": "760x440"
+    },
+    "AlertDialog": {
+      "cardMode": "single",
+      "primaryStory": "Overview"
+    },
+    "Drawer": {
+      "cardMode": "single",
+      "primaryStory": "Overview"
+    },
+    "DropdownMenu": {
+      "cardMode": "single",
+      "primaryStory": "Overview"
+    },
+    "HoverCard": {
+      "cardMode": "single",
+      "primaryStory": "Overview"
+    },
+    "Menubar": {
+      "cardMode": "single",
+      "primaryStory": "Overview"
+    },
+    "NavigationMenu": {
+      "cardMode": "single",
+      "primaryStory": "Overview"
+    },
+    "Popover": {
+      "cardMode": "single",
+      "primaryStory": "Overview"
+    },
+    "Progress": {
+      "cardMode": "single",
+      "primaryStory": "Overview"
+    },
+    "Select": {
+      "cardMode": "single",
+      "primaryStory": "Overview"
+    },
+    "Sheet": {
+      "cardMode": "single",
+      "primaryStory": "Overview"
+    },
+    "Sidebar": {
+      "cardMode": "single",
+      "primaryStory": "Overview"
+    },
+    "Tooltip": {
+      "cardMode": "single",
+      "primaryStory": "Overview"
+    },
+    "Table": {
+      "cardMode": "column"
+    }
+  }
 }
