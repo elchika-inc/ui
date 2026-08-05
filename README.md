@@ -3,7 +3,7 @@
 > elchika-inc の共有 UI コンポーネントライブラリ
 
 [![CI](https://github.com/elchika-inc/ui/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/elchika-inc/ui/actions/workflows/ci.yml)
-[![standards](https://img.shields.io/badge/standards-2026--07--29_(rev.46)-blue)](https://github.com/elchika-inc/standards/blob/main/CHANGELOG.md)
+[![standards](https://img.shields.io/badge/standards-2026--08--05_(rev.60)-blue)](https://github.com/elchika-inc/standards/blob/main/CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Base UI と Tailwind CSS v4 で作った UI コンポーネント集。elchika-inc の各プロダクトが同じ見た目と操作性を共有するための正本。npm publish はせず shadcn の custom registry で配布し、利用側はソースをコピーして所有する。
@@ -13,6 +13,19 @@ Base UI と Tailwind CSS v4 で作った UI コンポーネント集。elchika-i
 - Base UI ベースのアクセシブルなコンポーネント
 - HTML 正本から生成・検査するデザインシステム v1.8 と shadcn alias を同梱（light / dark 対応）
 - shadcn CLI でコピー取得できる registry 配布
+
+## Tech Stack
+
+| 領域 | 採用 |
+|---|---|
+| サイト | Astro 7（静的サイト） |
+| コンポーネント | React 19 + Base UI（`@base-ui/react`） |
+| スタイル | Tailwind CSS v4 + elchika inc. design system v1.8 |
+| 言語・ツール | TypeScript / Biome |
+| 配布 | shadcn custom registry（npm publish しない） |
+| ホスティング | Cloudflare Workers Assets |
+
+パッケージマネージャは npm（`package-lock.json` が正本）。standards `PROJECT_RULES` の pnpm は SHOULD で、当リポジトリは shadcn CLI との相性を優先して npm を採る。
 
 ## Getting Started
 
@@ -145,7 +158,7 @@ dark theme では同じ root element に `class="dark" data-theme="dark"` を設
 | `npm run build:lib` | ライブラリビルド |
 | `npm run check:all` | component の全 checker を順次実行 |
 
-### Architecture
+## Architecture
 
 ```
 src/
