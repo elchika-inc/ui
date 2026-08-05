@@ -17,7 +17,7 @@ elchika-inc の共有 UI コンポーネント。Base UI + Tailwind CSS v4。sha
 
 - スタック: Astro 7 + React 19 の静的サイト。パッケージマネージャは npm。配布は shadcn registry（npm publish しない）。
 - Astro 7 / React 19 / TypeScript / Base UI (@base-ui/react) / Tailwind CSS v4 / Biome。パッケージマネージャは npm。
-- standards_version: 2026-07-29 (rev.46)。
+- standards_version: 2026-08-05 (rev.60)。
 - branch_policy: `protected`（PR 必須で、直 push の bypass を設けない）。
 
 ## Key Commands
@@ -53,7 +53,7 @@ elchika-inc の共有 UI コンポーネント。Base UI + Tailwind CSS v4。sha
 | `.docs/PROJECT_GOAL.md` / `.docs/risk-registry.md` / `.docs/actions/` / `.docs/plans/` | 作業ドキュメント（DOCS_OPS §1・§3 の MUST） |
 | `.docs/reviews/` | 実ブラウザ検証の証跡と DoneCriteria の通し記録 |
 | `CONTRIBUTING.md` / `SECURITY.md` / `.github/ISSUE_TEMPLATE/config.yml` | 貢献規約と脆弱性報告の導線 |
-| `AGENTS.md` / `CLAUDE.md` / `README.md` | エージェント契約と人間向け入口 |
+| `AGENTS.md` / `README.md` | エージェント契約と人間向け入口（エージェント別アダプターは共通契約に混在させない — DOCS_OPS §2） |
 | `DESIGN.md` | 各プロダクトが継承するハウススタイル（standards §12 の「既定の意図の置き場所」）。意図の正本は `src/styles/design-system/design-tokens.html` で、こちらはポインタと再検討トリガーのみ |
 
 - Base UI を基底層に採用し、アクセシビリティの土台を共有する。

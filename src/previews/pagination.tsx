@@ -13,13 +13,15 @@ import {
 
 const pages = [1, 2, 3] as const;
 const lastPage = 8;
+// noUncheckedIndexedAccess のもとでは pages[pages.length - 1] が number | undefined
+// になる。実行時は as const の3要素タプルなので undefined にならないが、型の側で
+// それを表現できないため末尾要素を明示的に取り出す。
+const lastVisiblePage: number = pages[pages.length - 1] ?? pages[0];
 
 export function PaginationPreview(_props: PreviewProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const visiblePages =
-    currentPage > pages[pages.length - 1] && currentPage < lastPage
-      ? [...pages, currentPage]
-      : pages;
+    currentPage > lastVisiblePage && currentPage < lastPage ? [...pages, currentPage] : pages;
 
   const selectPage = (page: number) => (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
