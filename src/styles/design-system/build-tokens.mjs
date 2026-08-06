@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * elchika inc. — token build
+ * elchika — token build
  *
  * design-tokens.html is the single source of truth. This script extracts the
  * token blocks from it, writes tokens.css and brands.css, and then verifies
@@ -68,7 +68,7 @@ const brands = brandNames.map((n) => ({ name: n, body: block(`[data-brand="${n}"
  * ------------------------------------------------------------------ */
 
 const tokensCss = `/* ============================================================
-   elchika inc. — Design Tokens ${version} (core)
+   elchika — Design Tokens ${version} (core)
 
    GENERATED FILE — do not edit.
    Source of truth: design-tokens.html
@@ -120,12 +120,12 @@ body {
 `;
 
 const brandsCss = `/* ============================================================
-   elchika inc. — Product hue reserve ${version}
+   elchika — Product hue reserve ${version}
 
    GENERATED FILE — do not edit.
    Source of truth: design-tokens.html
 
-   elchika inc. itself is always the blue. Nothing sets data-brand
+   elchika itself is always the blue. Nothing sets data-brand
    by default; these are the pool a future product draws from.
    Take them in the order documented in design-tokens.html.
 

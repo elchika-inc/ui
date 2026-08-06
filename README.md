@@ -20,7 +20,7 @@ Base UI と Tailwind CSS v4 で作った UI コンポーネント集。elchika-i
 |---|---|
 | サイト | Astro 7（静的サイト） |
 | コンポーネント | React 19 + Base UI（`@base-ui/react`） |
-| スタイル | Tailwind CSS v4 + elchika inc. design system v1.8 |
+| スタイル | Tailwind CSS v4 + elchika design system v1.8 |
 | 言語・ツール | TypeScript / Biome |
 | 配布 | shadcn custom registry（npm publish しない） |
 | ホスティング | Cloudflare Workers Assets |

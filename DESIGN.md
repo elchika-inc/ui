@@ -1,4 +1,4 @@
-# DESIGN — elchika inc. design system のブランド性格
+# DESIGN — elchika design system のブランド性格
 
 standards の [`DESIGN.md`](https://github.com/elchika-inc/standards/blob/main/DESIGN.md) が正本。このファイルは standards §12 が定める **「既定の意図の置き場所」** として、各プロダクトが継承するハウススタイルを記録する。
 
