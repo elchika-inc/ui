@@ -1,4 +1,4 @@
-# elchika inc. — Design Tokens
+# elchika — Design Tokens
 
 Read this first. It maps the files, states what must not be broken, and lists
 what is still open.

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-  elchika inc. — Design Tokens. THIS FILE IS THE SOURCE OF TRUTH.
+  elchika — Design Tokens. THIS FILE IS THE SOURCE OF TRUTH.
 
   tokens.css and brands.css are generated from the <style> block below.
   Do not edit those; edit here and run:   node build-tokens.mjs
@@ -12,14 +12,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>elchika inc. — Design Tokens v1.8</title>
+<title>elchika — Design Tokens v1.8</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   elchika inc. — Design Tokens v1.8
+   elchika — Design Tokens v1.8
    This file is the source of truth for the spec page. The shipped
    values live in tokens.css / tailwind.config.js and must match.
    ============================================================ */
@@ -323,7 +323,7 @@
 
 /* ============================================================
    PRODUCT HUE RESERVE
-   elchika inc. itself is always the blue. The ramps below are the
+   elchika itself is always the blue. The ramps below are the
    pool a future product draws from.
 
    Every hue sits on the cool arc (222°–334°). Warm hues are
@@ -841,7 +841,7 @@ h3.sub { font-size: var(--text-base); font-weight: var(--font-weight-semibold); 
 
   <section class="hero">
     <h1>見る、届ける、見せる。その手触りを決める値。</h1>
-    <p>elchika inc. のコーポレートブランドと、そのプロダクト群が共有する定義。すべて CSS カスタムプロパティとして一箇所で管理されます。</p>
+    <p>elchika のコーポレートブランドと、そのプロダクト群が共有する定義。すべて CSS カスタムプロパティとして一箇所で管理されます。</p>
   </section>
 
   <!-- COLOR -->
@@ -1322,7 +1322,7 @@ h3.sub { font-size: var(--text-base); font-weight: var(--font-weight-semibold); 
   <section class="band" id="hues">
     <span class="eyebrow">Product hue reserve</span>
     <h2>プロダクト用の色相</h2>
-    <p class="lede">elchika inc. 自身は常に青です。以下は将来のプロダクトが選ぶための在庫で、すべて寒色弧（222°〜334°）に置いています。暖色はステータスの意味に予約されているためです——success の緑、danger の赤、warning の橙、そしてブランドの黄がすでにその側を占めており、プロダクト色をそこに置くと信号として読まれます。</p>
+    <p class="lede">elchika 自身は常に青です。以下は将来のプロダクトが選ぶための在庫で、すべて寒色弧（222°〜334°）に置いています。暖色はステータスの意味に予約されているためです——success の緑、danger の赤、warning の橙、そしてブランドの黄がすでにその側を占めており、プロダクト色をそこに置くと信号として読まれます。</p>
     <p class="lede">各ランプは青と同じコントラスト特性になるよう数値を解いています。どの色相を選んでも可読性は変わりません（600 = 白に対し 5.7:1、400 = 暗い面に対し 5.6:1、700 = 白に対し 10.2:1）。</p>
 
     <div class="huewrap">
@@ -1340,7 +1340,7 @@ h3.sub { font-size: var(--text-base); font-weight: var(--font-weight-semibold); 
       <table class="tbl">
         <thead><tr><th>順</th><th>色相</th><th>600</th><th>既割当との最悪ΔE</th><th>備考</th></tr></thead>
         <tbody>
-<tr><td class="mono">0</td><td><span class="hdot" style="background:#2F5FD1"></span> <span class="mono">blue</span></td><td class="mono">#2F5FD1</td><td class="mono">—</td><td>elchika inc. — 固定</td></tr>
+<tr><td class="mono">0</td><td><span class="hdot" style="background:#2F5FD1"></span> <span class="mono">blue</span></td><td class="mono">#2F5FD1</td><td class="mono">—</td><td>elchika — 固定</td></tr>
 <tr><td class="mono">1</td><td><span class="hdot" style="background:#BC2A69"></span> <span class="mono">rose</span></td><td class="mono">#BC2A69</td><td class="mono">72.8</td><td></td></tr>
 <tr><td class="mono">2</td><td><span class="hdot" style="background:#A729BB"></span> <span class="mono">purple</span></td><td class="mono">#A729BB</td><td class="mono">40.5</td><td></td></tr>
 <tr><td class="mono">3</td><td><span class="hdot" style="background:#B42894"></span> <span class="mono">magenta</span></td><td class="mono">#B42894</td><td class="mono">20.1</td><td></td></tr>
@@ -1632,7 +1632,7 @@ h3.sub { font-size: var(--text-base); font-weight: var(--font-weight-semibold); 
           <tr><td class="mono">--accent-*（黄）</td><td>コーポレート固定</td><td>全プロダクトで共有することが家族らしさの要になる</td></tr>
           <tr><td class="mono">--color-status-*</td><td>固定</td><td>緑と赤の意味がプロダクトごとに変わると事故になる</td></tr>
           <tr><td class="mono">--color-bg-* / text-* / border-*</td><td>固定</td><td>ニュートラルが揺れると同じ会社に見えなくなる</td></tr>
-          <tr><td class="mono">--text-* / --leading-* / --font-*</td><td>固定</td><td>書体と組版は elchika inc. の声そのもの</td></tr>
+          <tr><td class="mono">--text-* / --leading-* / --font-*</td><td>固定</td><td>書体と組版は elchika の声そのもの</td></tr>
           <tr><td class="mono">--space-* / --radius-* / --duration-*</td><td>固定</td><td>手触りの一貫性。ここを緩めると系が崩れる</td></tr>
         </tbody>
       </table>
@@ -1786,7 +1786,7 @@ h3.sub { font-size: var(--text-base); font-weight: var(--font-weight-semibold); 
   </section>
 
   <div class="foot">
-    <span class="token">elchika inc. — design tokens v1.8 · 2026-08-02</span>
+    <span class="token">elchika — design tokens v1.8 · 2026-08-02</span>
     <span class="fontstate" id="fontstate">Font check…</span>
   </div>
 </div>
