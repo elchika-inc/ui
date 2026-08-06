@@ -62,7 +62,7 @@ elchika-inc の共有 UI コンポーネント。Base UI + Tailwind CSS v4。sha
 ## 重要な設計原則（What NOT to Do）
 
 - `main` へ直接コミットしない。
-- **名乗りに `inc.` を付けない。** elchika は法人化しておらず、会社であると誤認されるおそれのある文字を名称に用いることは会社法 7 条が禁じている。当リポジトリは registry で配布する正本なので、ここに入った表記は `public/r/*.json` を経由して全利用者へ配られる（2026-08-06 に 186 箇所を除去した）。**`tokens.css` / `brands.css` のヘッダは `design-tokens.html` ではなく `build-tokens.mjs` のテンプレートリテラルが持つ** — 正本が `design-tokens.html` なのは「トークンの値」についてで、生成ファイルのヘッダ文言は生成側にある。HTML だけ直しても再生成で元に戻る。
+- **名乗りに `inc.` を付けない（法人化までの暫定措置）。** elchika は法人化しておらず、会社であると誤認されるおそれのある文字を名称に用いることは会社法 7 条が禁じている。当リポジトリは registry で配布する正本なので、ここに入った表記は `public/r/*.json` を経由して全利用者へ配られる（2026-08-06 に 186 箇所を除去した）。**ブランド上の忌避ではなく、将来的には `inc.` を名乗る意向がある**（2026-08-06 確認）— 登記が完了したら禁止は解除されるので、この行を恒久ルールとして扱わない。復帰させるときは以下 2 点が同じ落とし穴になる。**`tokens.css` / `brands.css` のヘッダは `design-tokens.html` ではなく `build-tokens.mjs` のテンプレートリテラルが持つ** — 正本が `design-tokens.html` なのは「トークンの値」についてで、生成ファイルのヘッダ文言は生成側にある。HTML だけ直しても再生成で元に戻る。
 - **共有トークン（`src/styles/global.css` / `src/styles/design-system/tokens.css`）を変えたら共有面の証跡を撮り直す。** `check-evidence` は内容ベースなので、コメント 1 行の変更でも既存証跡を stale と判定する（意味的な差分を判定できるゲートは、それ自体がバグりうるので安全側に倒してある）。撮り直しは 14 subject × light/dark = 28 枚で、`.docs/reviews/<新規>/report.md` に `verified_impl_sha` / `evidence_scope: shared-token-migration` / `targeted_dynamic_sha` を付けて同時追加する。**`verified_impl_sha` はトークン変更コミットより後でなければならない**（`strictAncestor` 判定のため、トークン変更コミット自身を指すと通らない）。
 - **PR は squash ではなく merge commit でマージする**。証跡（`.docs/reviews/`）は `verified_impl_sha` で検証時点の commit を固定し、その値は immutable（書き換えも削除も `check-evidence` が弾く）。squash は PR ブランチの commit を捨てるため、マージした瞬間に証跡の SHA が履歴から消えて祖先判定を通らなくなる（実際に PR #16 で発生し、`-s ours` の空マージで履歴を接続して復旧した）。
 - コミットメッセージ・PR 本文・ドキュメント・コード内コメントは日本語（技術用語と識別子は原語のまま）。
