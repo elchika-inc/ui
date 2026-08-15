@@ -17,7 +17,7 @@ elchika-inc の共有 UI コンポーネント。Base UI + Tailwind CSS v4。sha
 
 - スタック: Astro 7 + React 19 の静的サイト。パッケージマネージャは npm。配布は shadcn registry（npm publish しない）。
 - Astro 7 / React 19 / TypeScript / Base UI (@base-ui/react) / Tailwind CSS v4 / Biome。パッケージマネージャは npm。
-- standards_version: 2026-08-05 (rev.60)。
+- standards_version: 2026-08-15 (rev.71)。
 - branch_policy: `protected`（PR 必須で、直 push の bypass を設けない）。
 
 ## Key Commands
