@@ -5,7 +5,11 @@ import { pathToFileURL } from "node:url";
 
 const CATALOG_PREVIEW_NAMES = ["catalog", "catalog-dark"];
 
-export const requiredPreviewNames = (components) => [...components, ...CATALOG_PREVIEW_NAMES];
+export const requiredPreviewNames = (components, blocks = []) => [
+  ...components,
+  ...blocks,
+  ...CATALOG_PREVIEW_NAMES,
+];
 
 export function checkPreviewRender(components, selectors) {
   const problems = [];
@@ -48,8 +52,16 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     process.exit(1);
   }
 
+  // 走査根が src/components/ui 固定のままだと block の preview selector が
+  // 未宣言でも緑になり、ゲートを掛けたつもりで掛かっていない状態になる。
+  const blocks = existsSync("src/blocks")
+    ? readdirSync("src/blocks", { withFileTypes: true })
+        .filter((entry) => entry.isDirectory())
+        .map((entry) => entry.name)
+    : [];
+
   const selectors = JSON.parse(readFileSync(manifestPath, "utf8"));
-  const { problems } = checkPreviewRender(requiredPreviewNames(components), selectors);
+  const { problems } = checkPreviewRender(requiredPreviewNames(components, blocks), selectors);
   if (problems.length) {
     console.error(`preview selector の検査に失敗:\n  ${problems.join("\n  ")}`);
     process.exit(1);
