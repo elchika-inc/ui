@@ -2,8 +2,8 @@
 
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
+import { basename, dirname, join } from "node:path";
 import { pathToFileURL } from "node:url";
 
 const DEPENDENCY_SECTIONS = [
@@ -238,8 +238,41 @@ export function normalizeRegistryDependencies(dependencies = []) {
   });
 }
 
-export function shouldSkipRecorded(provenance, name, force) {
-  return Boolean(provenance.components?.[name]) && !force;
+export function shouldSkipRecorded(provenance, name, force, kind = "component") {
+  const section = kind === "block" ? provenance.blocks : provenance.components;
+  return Boolean(section?.[name]) && !force;
+}
+
+// shadcn CLI は上流 registry の path ではなく components.json の aliases で配置先を決める。
+// 実測（CLI 4.16.0）では registry:block の registry:component は aliases.components 直下へ
+// フラットに落ちる（src/components/login-form.tsx）。src/blocks/<name>/ 配下へ置く経路は
+// alias に無い（4.16.0 の aliases スキーマは components / utils / ui / lib / hooks のみ）ため、
+// add 後に移設する。写像は名前の推測ではなく target.files の registryPath から決定的に作る。
+export function blockRelocationPlan(target) {
+  const seen = new Set();
+  return target.files.map((file) => {
+    const base = basename(file.registryPath);
+    // CLI がフラット化する以上、同一 block 内で basename が衝突すると移設先を一意に決められない。
+    // 実測では衝突しないが、上流の将来変更で静かに取り違えるより止める。
+    if (seen.has(base)) {
+      throw new Error(`${file.targetPath}: 移設元の basename が重複: ${base}`);
+    }
+    seen.add(base);
+    return { from: `src/components/${base}`, to: file.targetPath };
+  });
+}
+
+// reconcile より前に呼ぶ。移設を後にすると src/components/<basename> が
+// 変更パスとして残り、どのルールにも一致せず fail-closed で止まる。
+function relocateBlockFiles(root, target, log) {
+  for (const { from, to } of blockRelocationPlan(target)) {
+    const fromPath = join(root, from);
+    // 生成されなかった場合はここで止めず、後段の生成確認に一本化する。
+    if (!existsSync(fromPath)) continue;
+    mkdirSync(dirname(join(root, to)), { recursive: true });
+    renameSync(fromPath, join(root, to));
+    log(`移設: ${from} -> ${to}`);
+  }
 }
 
 function dependencyName(specifier) {
@@ -384,6 +417,15 @@ async function fetchJson(url, fetchImpl) {
   return response.json();
 }
 
+// registryContentSha256 は「受け取った配信物」の錨なので、パース済みオブジェクトから
+// 再シリアライズしたテキストでは値がずれる。生テキストを保持して両方返す。
+async function fetchJsonWithText(url, fetchImpl) {
+  const response = await fetchImpl(url, { headers: { accept: "application/json" } });
+  if (!response.ok) throw new Error(`取得に失敗: ${url} (${response.status})`);
+  const text = await response.text();
+  return { json: JSON.parse(text), text };
+}
+
 async function provenanceEntry({
   root,
   name,
@@ -444,6 +486,113 @@ async function provenanceEntry({
   };
 }
 
+async function upstreamCommitSha(upstreamRepo, upstreamPath, fetchImpl, name) {
+  const commits = await fetchJson(
+    `https://api.github.com/repos/${upstreamRepo}/commits?path=${encodeURIComponent(upstreamPath)}&per_page=1`,
+    fetchImpl,
+  );
+  const sha = commits?.[0]?.sha;
+  if (!/^[0-9a-f]{40}$/.test(sha ?? "")) {
+    throw new Error(`${name}: ${upstreamPath} の commit SHA を特定できない`);
+  }
+  return sha;
+}
+
+async function blockProvenanceEntry({
+  root,
+  name,
+  modified,
+  cliVersion,
+  upstreamText,
+  target,
+  registryUrl,
+  fetchImpl,
+}) {
+  const upstreamRepo = "shadcn-ui/ui";
+  const files = [];
+
+  for (const file of target.files) {
+    files.push({
+      path: file.targetPath,
+      upstreamPath: file.upstreamPath,
+      upstreamPathSha: await upstreamCommitSha(upstreamRepo, file.upstreamPath, fetchImpl, name),
+      generatedContentSha256: sha256(readFileSync(join(root, file.targetPath), "utf8")),
+    });
+  }
+  // 配布しない page も残す。記録しないと、上流に page が無かったのか
+  // 意図的に落としたのかを後から区別できない。
+  for (const file of target.droppedFiles) {
+    files.push({
+      dropped: true,
+      upstreamPath: file.upstreamPath,
+      upstreamPathSha: await upstreamCommitSha(upstreamRepo, file.upstreamPath, fetchImpl, name),
+    });
+  }
+
+  const pkg = readJson(root, "package.json");
+  const shadcnRange = pkg.dependencies?.shadcn ?? pkg.devDependencies?.shadcn;
+  if (!shadcnRange) throw new Error("package.json に shadcn の版が無い");
+
+  return {
+    origin: "shadcn/ui registry",
+    sourceUrl: `https://github.com/${upstreamRepo}`,
+    registry: "https://ui.shadcn.com",
+    registryUrl,
+    registryContentSha256: sha256(upstreamText),
+    addTarget: `@shadcn/${name}`,
+    upstreamRepo,
+    style: "base-nova",
+    shadcnCliVersion: cliVersion,
+    shadcnVersion: readJson(root, "node_modules/shadcn/package.json").version,
+    shadcnRange,
+    fetchedAt:
+      process.env.PROVENANCE_DATE ??
+      new Intl.DateTimeFormat("sv-SE", { timeZone: "Asia/Tokyo" }).format(new Date()),
+    license: "MIT",
+    modified,
+    files,
+    notes:
+      "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は standards 正規化を適用したあとの現行ファイルのハッシュであり、CLI 生成直後の値とは一致しない。" +
+      "dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。" +
+      "CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。",
+  };
+}
+
+// 生成確認は block / component で対象の数が違うだけで、失敗の意味は同じ。
+// メッセージの発生源を 1 箇所に保つため分岐せず配列で受ける。
+function ensureGenerated(root, target, isBlock) {
+  const expectedPaths = isBlock
+    ? target.files.map(({ targetPath }) => targetPath)
+    : [target.targetPath];
+  for (const path of expectedPaths) {
+    if (!existsSync(join(root, path))) {
+      throw new Error(`${path} が生成されなかった`);
+    }
+  }
+}
+
+// 配布しない page が落ちていたら消す。実測（rsc: false）では CLI は作らないが、
+// 設定や CLI 版が変われば作りうるので防御として残す。
+// ここが発火しないことを「page を配布していない証拠」として扱わない。
+// 配布していないことは registry item の files と作業ツリーの実体で確かめる。
+function removeDroppedPages(root, target, upstreamItem, log) {
+  for (const file of target.droppedFiles ?? []) {
+    const droppedTarget = upstreamItem.files.find((f) => f.path === file.registryPath)?.target;
+    if (droppedTarget && existsSync(join(root, droppedTarget))) {
+      rmSync(join(root, droppedTarget));
+      log(`配布しない page を削除: ${droppedTarget}`);
+    }
+  }
+}
+
+function createProvenanceEntry({ isBlock, upstreamText, ...rest }) {
+  if (isBlock) {
+    const { generatedSource: _generatedSource, upstreamItem: _upstreamItem, ...blockArgs } = rest;
+    return blockProvenanceEntry({ ...blockArgs, upstreamText });
+  }
+  return provenanceEntry(rest);
+}
+
 export async function runAddComponent({
   argv = process.argv.slice(2),
   root = process.cwd(),
@@ -456,6 +605,8 @@ export async function runAddComponent({
   ensureClean(repositoryRoot);
 
   const provenance = readJson(repositoryRoot, "provenance.json");
+  // component の記録済み判定は fetch より前に置く。記録済みの再実行で通信しないことを
+  // 既存 61 件が保証として持っている。block は種別が target 確定まで分からないので後段で見る。
   if (shouldSkipRecorded(provenance, name, force)) {
     log(`${name}: 既に記録済み（--force で上書き可能）`);
     return { skipped: true };
@@ -465,15 +616,27 @@ export async function runAddComponent({
   const trackedBefore = trackedFiles(repositoryRoot);
   const cliVersion = readFileSync(join(repositoryRoot, ".shadcn-cli-version"), "utf8").trim();
   const registryUrl = `https://ui.shadcn.com/r/styles/base-nova/${name}.json`;
-  const upstreamItem = await fetchJson(registryUrl, fetchImpl);
+  const { json: upstreamItem, text: upstreamText } = await fetchJsonWithText(
+    registryUrl,
+    fetchImpl,
+  );
   const target = resolveRegistryTarget(name, upstreamItem);
+  const isBlock = target.itemType === "registry:block";
+
+  if (isBlock && shouldSkipRecorded(provenance, name, force, "block")) {
+    log(`${name}: 既に記録済み（--force で上書き可能）`);
+    return { skipped: true };
+  }
+
   const command = shadcnCommand(cliVersion, name);
   runCommand(command.command, command.args, { cwd: repositoryRoot, stdio: "inherit" });
+
+  if (isBlock) relocateBlockFiles(repositoryRoot, target, log);
 
   const reconciled = reconcileAddChanges({
     root: repositoryRoot,
     name,
-    targetPath: target.targetPath,
+    targetPath: isBlock ? `src/blocks/${name}` : target.targetPath,
     packageBefore,
     trackedBefore,
   });
@@ -481,25 +644,33 @@ export async function runAddComponent({
   for (const dependency of reconciled.addedDependencies) log(`追加依存: ${dependency}`);
   for (const path of reconciled.keptManifests) log(`依存 manifest を保持: ${path}`);
 
-  const targetPath = target.targetPath;
-  if (!existsSync(join(repositoryRoot, targetPath))) {
-    throw new Error(`${targetPath} が生成されなかった`);
-  }
-  const generatedSource = readFileSync(join(repositoryRoot, targetPath), "utf8");
-  const entry = await provenanceEntry({
+  ensureGenerated(repositoryRoot, target, isBlock);
+  removeDroppedPages(repositoryRoot, target, upstreamItem, log);
+
+  const generatedSource = isBlock
+    ? ""
+    : readFileSync(join(repositoryRoot, target.targetPath), "utf8");
+  const entry = await createProvenanceEntry({
     root: repositoryRoot,
+    isBlock,
     name,
     modified,
     cliVersion,
     generatedSource,
     upstreamItem,
+    upstreamText,
     target,
     registryUrl,
     fetchImpl,
   });
 
-  provenance.components ??= {};
-  provenance.components[name] = entry;
+  if (isBlock) {
+    provenance.blocks ??= {};
+    provenance.blocks[name] = entry;
+  } else {
+    provenance.components ??= {};
+    provenance.components[name] = entry;
+  }
   const registry = readJson(repositoryRoot, "registry.json");
   const registryItem = buildRegistryItem(name, upstreamItem, generatedSource, target);
   const existingIndex = registry.items.findIndex((item) => item.name === name);
@@ -509,7 +680,12 @@ export async function runAddComponent({
 
   writeJson(repositoryRoot, "provenance.json", provenance);
   writeJson(repositoryRoot, "registry.json", registry);
-  log(`生成直後 SHA-256: ${entry.generatedContentSha256}`);
+  if (isBlock) {
+    log(`配布ファイル: ${entry.files.filter((f) => !f.dropped).length} 件`);
+    log(`配布しない page: ${entry.files.filter((f) => f.dropped).length} 件`);
+  } else {
+    log(`生成直後 SHA-256: ${entry.generatedContentSha256}`);
+  }
   log(`registry SHA-256: ${entry.registryContentSha256}`);
   return { skipped: false, entry, registryItem, reconciled };
 }

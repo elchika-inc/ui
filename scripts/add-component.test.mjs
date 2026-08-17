@@ -303,12 +303,19 @@ test("wrapper が pin add から2つの hash・来歴・registryまで記録し�
     writeJson(join(root, "package.json"), pkg);
     writeJson(join(root, "package-lock.json"), { lockfileVersion: 3, packages: { dateFns: {} } });
   };
+  // registry 応答は生テキストからも読む（registryContentSha256 の錨が再シリアライズでずれるため）。
+  // 実 Response は json / text の両方を持つので、スタブも両方を持たせる。
   const fetchImpl = async (url) => {
     let body;
     if (url.includes("ui.shadcn.com")) body = upstreamItem;
     else if (url.includes("/commits?")) body = [{ sha: "a".repeat(40) }];
     else body = { path: "apps/v4/registry/bases/base/ui/calendar.tsx" };
-    return { ok: true, status: 200, json: async () => body };
+    return {
+      ok: true,
+      status: 200,
+      json: async () => body,
+      text: async () => JSON.stringify(body),
+    };
   };
 
   const result = await runAddComponent({
@@ -410,7 +417,12 @@ test("wrapper が registry:hook を独立 item と来歴へ記録する", async 
     if (url.includes("ui.shadcn.com")) body = upstreamItem;
     else if (url.includes("/commits?")) body = [{ sha: "b".repeat(40) }];
     else body = { path: "apps/v4/registry/bases/base/hooks/use-mobile.ts" };
-    return { ok: true, status: 200, json: async () => body };
+    return {
+      ok: true,
+      status: 200,
+      json: async () => body,
+      text: async () => JSON.stringify(body),
+    };
   };
 
   const result = await runAddComponent({
@@ -565,4 +577,211 @@ test("block の registry item は配布ファイルだけを files に載せる"
     "@elchika/label",
     "@elchika/field",
   ]);
+});
+
+test("block の記録済み判定は provenance.blocks を見る", async () => {
+  const { shouldSkipRecorded } = await loadModule();
+  const provenance = { components: {}, blocks: { "login-01": { license: "MIT" } } };
+  assert.equal(shouldSkipRecorded(provenance, "login-01", false, "block"), true);
+  assert.equal(shouldSkipRecorded(provenance, "login-02", false, "block"), false);
+  assert.equal(shouldSkipRecorded(provenance, "login-01", true, "block"), false);
+});
+
+test("component の記録済み判定は従来どおり provenance.components を見る", async () => {
+  const { shouldSkipRecorded } = await loadModule();
+  const provenance = { components: { badge: { license: "MIT" } }, blocks: {} };
+  assert.equal(shouldSkipRecorded(provenance, "badge", false), true);
+  assert.equal(shouldSkipRecorded(provenance, "badge", true), false);
+});
+
+test("CLI がフラット配置した block ファイルの移設先を basename で決定的に対応付ける", async () => {
+  const { blockRelocationPlan, resolveRegistryTarget } = await loadModule();
+  const target = resolveRegistryTarget("login-01", loginUpstream);
+  assert.deepEqual(blockRelocationPlan(target), [
+    {
+      from: "src/components/login-form.tsx",
+      to: "src/blocks/login-01/components/login-form.tsx",
+    },
+  ]);
+});
+
+test("上流の兄弟ファイルが複数あっても移設先を全件対応付ける", async () => {
+  const { blockRelocationPlan, resolveRegistryTarget } = await loadModule();
+  const target = resolveRegistryTarget("sidebar-07", {
+    name: "sidebar-07",
+    type: "registry:block",
+    files: [
+      {
+        path: "registry/base-nova/blocks/sidebar-07/page.tsx",
+        type: "registry:page",
+        target: "app/dashboard/page.tsx",
+      },
+      {
+        path: "registry/base-nova/blocks/sidebar-07/components/app-sidebar.tsx",
+        type: "registry:component",
+      },
+      {
+        path: "registry/base-nova/blocks/sidebar-07/components/nav-main.tsx",
+        type: "registry:component",
+      },
+    ],
+  });
+  assert.deepEqual(blockRelocationPlan(target), [
+    {
+      from: "src/components/app-sidebar.tsx",
+      to: "src/blocks/sidebar-07/components/app-sidebar.tsx",
+    },
+    { from: "src/components/nav-main.tsx", to: "src/blocks/sidebar-07/components/nav-main.tsx" },
+  ]);
+});
+
+test("同一 block 内で basename が重複したら移設せず停止する", async () => {
+  const { blockRelocationPlan, resolveRegistryTarget } = await loadModule();
+  const target = resolveRegistryTarget("broken-01", {
+    name: "broken-01",
+    type: "registry:block",
+    files: [
+      {
+        path: "registry/base-nova/blocks/broken-01/components/form.tsx",
+        type: "registry:component",
+      },
+      {
+        path: "registry/base-nova/blocks/broken-01/widgets/form.tsx",
+        type: "registry:component",
+      },
+    ],
+  });
+  assert.throws(() => blockRelocationPlan(target), /basename が重複/);
+});
+
+const blockFetch = (upstreamText) => async (url) => {
+  if (url.includes("ui.shadcn.com")) {
+    return { ok: true, status: 200, text: async () => upstreamText };
+  }
+  if (url.includes("/commits?")) {
+    return { ok: true, status: 200, json: async () => [{ sha: "0".repeat(40) }] };
+  }
+  throw new Error(`想定外の fetch: ${url}`);
+};
+
+test("block を add すると移設してから reconcile し provenance.blocks へ書く", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+  const generated =
+    'import { Button } from "@/components/ui/button";\nexport const LoginForm = Button;\n';
+  const logs = [];
+
+  const result = await runAddComponent({
+    argv: ["login-01", "--modified", "registry:page を配布から除外"],
+    root,
+    fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+    // CLI は components alias 直下へフラットに落とす（実測）。既存の tracked component も上書きする。
+    runCommand: () => {
+      writeFileSync(join(root, "src/components/login-form.tsx"), generated);
+      writeFileSync(join(root, "src/components/ui/button.tsx"), "button overwritten\n");
+    },
+    log: (message) => logs.push(message),
+  });
+
+  assert.equal(result.skipped, false);
+  // 移設が済んでいる
+  assert.equal(existsSync(join(root, "src/components/login-form.tsx")), false);
+  assert.equal(
+    readFileSync(join(root, "src/blocks/login-01/components/login-form.tsx"), "utf8"),
+    generated,
+  );
+  // 移設を reconcile より前に置いたので、上書きされた既存 component は復元される
+  assert.deepEqual(result.reconciled.restored, ["src/components/ui/button.tsx"]);
+  assert.equal(
+    readFileSync(join(root, "src/components/ui/button.tsx"), "utf8"),
+    "button original\n",
+  );
+
+  const provenance = JSON.parse(readFileSync(join(root, "provenance.json"), "utf8"));
+  assert.ok(provenance.blocks["login-01"]);
+  assert.equal(provenance.components["login-01"], undefined);
+  assert.equal(provenance.blocks["login-01"].files.filter((f) => f.dropped).length, 1);
+  assert.equal(provenance.blocks["login-01"].files.filter((f) => !f.dropped).length, 1);
+  assert.equal(
+    provenance.blocks["login-01"].files.find((f) => !f.dropped).generatedContentSha256,
+    createHash("sha256").update(generated).digest("hex"),
+  );
+  // registryContentSha256 は受け取った配信物 JSON 全体の錨
+  assert.equal(
+    provenance.blocks["login-01"].registryContentSha256,
+    createHash("sha256").update(JSON.stringify(loginUpstream)).digest("hex"),
+  );
+
+  const registry = JSON.parse(readFileSync(join(root, "registry.json"), "utf8"));
+  const item = registry.items.find((i) => i.name === "login-01");
+  assert.equal(item.type, "registry:block");
+  assert.equal(
+    item.files.some((file) => file.type === "registry:page"),
+    false,
+  );
+});
+
+test("block の配布ファイルが移設先に無ければ停止する", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+
+  await assert.rejects(
+    runAddComponent({
+      argv: ["login-01", "--modified", "registry:page を配布から除外"],
+      root,
+      fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+      runCommand: () => {},
+      log: () => {},
+    }),
+    /が生成されなかった/,
+  );
+});
+
+test("記録済み component の再実行は fetch せずに skip する", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+  writeJson(join(root, "provenance.json"), { components: { badge: { license: "MIT" } } });
+  git(root, ["add", "."]);
+  git(root, ["commit", "-m", "badge fixture"]);
+
+  const rerun = await runAddComponent({
+    argv: ["badge", "--modified", "同じ変更"],
+    root,
+    fetchImpl: async () => {
+      throw new Error("fetch してはならない");
+    },
+    runCommand: () => {
+      throw new Error("CLI を実行してはならない");
+    },
+    log: () => {},
+  });
+  assert.deepEqual(rerun, { skipped: true });
+});
+
+test("記録済み block の再実行は skip する", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+  writeJson(join(root, "provenance.json"), {
+    components: {},
+    blocks: { "login-01": { license: "MIT" } },
+  });
+  git(root, ["add", "."]);
+  git(root, ["commit", "-m", "block fixture"]);
+  let reran = false;
+
+  const rerun = await runAddComponent({
+    argv: ["login-01", "--modified", "同じ変更"],
+    root,
+    fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+    runCommand: () => {
+      reran = true;
+    },
+    log: () => {},
+  });
+  assert.deepEqual(rerun, { skipped: true });
+  assert.equal(reran, false);
 });
