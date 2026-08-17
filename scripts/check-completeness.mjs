@@ -1,10 +1,13 @@
 // src/components/ui/*.tsx を正本として、各コンポーネントが
 // 消費側の 5 経路すべてに載っていることを検査する。
 // Button 固定の検査を一般化したもので、#2 で 50 件足すときの安全網になる。
+import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import ts from "typescript";
 import { listBlockFiles, scanBlockNames } from "./block-scan.mjs";
+
+const sha256 = (content) => createHash("sha256").update(content, "utf8").digest("hex");
 
 const exportDeclarations = (source, fileName) => {
   const sourceFile = ts.createSourceFile(
@@ -128,7 +131,7 @@ function blockFileProblems(name, file, index) {
 
 // block は barrel export と <Name>Props を要求しない。registry 経由で copy-and-edit
 // する雛形であり、ライブラリの公開 API ではないため（設計 §3-1 の要件マトリクス）。
-function blockProblems(name, registry, previewFiles, previewSources, provenance, onDisk) {
+function blockProblems(name, registry, previewFiles, previewSources, provenance, onDisk, sources) {
   const problems = [];
   if (!registry.items.some((i) => i.name === name)) {
     problems.push(`${name}: registry.json に item が無い`);
@@ -154,7 +157,7 @@ function blockProblems(name, registry, previewFiles, previewSources, provenance,
   return [
     ...problems,
     ...p.files.flatMap((file, index) => blockFileProblems(name, file, index)),
-    ...blockFileSetProblems(name, registry, p.files, onDisk),
+    ...blockFileSetProblems(name, registry, p.files, onDisk, sources),
   ];
 }
 
@@ -166,7 +169,47 @@ function blockProblems(name, registry, previewFiles, previewSources, provenance,
 // 「両方に載っていないファイル」＝ディスクにだけ在るファイルが永久に緑になる。
 // このとき配布物には import 先を欠いた tsx が入り、壊れているのは配布物だけなので
 // 手元の typecheck も build も通ってしまう（実測で確認済みの失敗モード）。
-function blockFileSetProblems(name, registry, files, onDisk) {
+// 配布ファイルの中身から確かめられること 2 つ。sources を渡さない呼び出しは飛ばす。
+//
+// 1. 内部依存: 配布ファイルが import する @/components/ui/<X> は、利用者側で <X> が
+//    install されなければ解決できない。上流の registryDependencies 宣言をそのまま
+//    転記しているだけなので、宣言が漏れると壊れた配布物が出る（実測: @elchika/field を
+//    落としても全ゲート緑のまま、field を install しない配布物が生成された）。
+//    npm 依存については add 側で import から拾い直す安全網があるが、内部依存には無かった。
+// 2. 来歴のハッシュ: generatedContentSha256 は「記録時点の手元のファイル」の錨で、
+//    形式（64 桁）しか見ないと正規化後にずれたまま緑になる。
+const INTERNAL_IMPORT = /["']@\/components\/ui\/([\w-]+)["']/g;
+
+function blockSourceProblems(name, item, files, sources) {
+  if (sources === undefined) return [];
+  const problems = [];
+  const declared = new Set(
+    (item.registryDependencies ?? []).map((dependency) => dependency.replace(/^@elchika\//, "")),
+  );
+  const ownFiles = new Set(
+    (item.files ?? []).filter((file) => file.target === undefined).map((file) => file.path),
+  );
+
+  for (const file of files.filter((entry) => entry.dropped !== true)) {
+    const source = sources[file.path];
+    if (source === undefined) continue;
+    if (sha256(source) !== file.generatedContentSha256) {
+      problems.push(`${name}: ${file.path} の generatedContentSha256 が実体と一致しない`);
+    }
+    for (const [, dependency] of source.matchAll(INTERNAL_IMPORT)) {
+      // 自 item が配る部品なら宣言は要らない。
+      if (ownFiles.has(`src/components/ui/${dependency}.tsx`)) continue;
+      if (!declared.has(dependency)) {
+        problems.push(
+          `${name}: ${file.path} が import する @/components/ui/${dependency} が registryDependencies に無い`,
+        );
+      }
+    }
+  }
+  return problems;
+}
+
+function blockFileSetProblems(name, registry, files, onDisk, sources) {
   const problems = [];
   const item = registry.items.find((i) => i.name === name);
   // item が無いことは別途 problem 済み。ここで二重に鳴らさない。
@@ -213,6 +256,8 @@ function blockFileSetProblems(name, registry, files, onDisk) {
       }
     }
   }
+
+  problems.push(...blockSourceProblems(name, item, files, sources));
 
   // 落とした分はローカルに実体が無いため、実体との突合ができない。
   // 上流 block は必ず registry:page を持ち、それを配布しないのが設計 §1 の決定なので、
@@ -274,6 +319,9 @@ export function checkCompleteness({
   // block ごとのディスク実体（{ "login-01": ["src/blocks/login-01/..."] }）。
   // 省略した block はディスク突合を行わない（既存の呼び出しを壊さないため）。
   blockFiles = {},
+  // block ごとの配布ファイルの中身（{ "src/blocks/login-01/...": "..." }）。
+  // 省略した block は内容検査（内部依存の突合・ハッシュの実体照合）を行わない。
+  blockSources = {},
   barrel,
   dts,
   registry,
@@ -297,6 +345,7 @@ export function checkCompleteness({
         previewSources,
         provenance,
         blockFiles[name]?.slice().sort(),
+        blockSources[name],
       ),
     );
   }
@@ -316,19 +365,29 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     process.exit(1);
   }
   const provenance = JSON.parse(readFileSync("provenance.json", "utf8"));
+  const registry = JSON.parse(readFileSync("registry.json", "utf8"));
   // block レーンは後から生えるので、ディレクトリが無い状態を正常として扱う
-  // （scanBlockNames が両方の走査根が空なら空配列を返す）。
-  const blocks = scanBlockNames("src/blocks", provenance);
-  const blockFiles = Object.fromEntries(
-    blocks.map((name) => [name, listBlockFiles("src/blocks", name)]),
+  // （scanBlockNames は 3 つの走査根がすべて空なら空配列を返す）。
+  const blocks = scanBlockNames("src/blocks", provenance, registry);
+  const blockFiles = Object.fromEntries(blocks.map((name) => [name, listBlockFiles(".", name)]));
+  const blockSources = Object.fromEntries(
+    blocks.map((name) => [
+      name,
+      Object.fromEntries(
+        blockFiles[name]
+          .filter((path) => existsSync(path))
+          .map((path) => [path, readFileSync(path, "utf8")]),
+      ),
+    ]),
   );
   const { problems } = checkCompleteness({
     components,
     blocks,
     blockFiles,
+    blockSources,
     barrel: readFileSync("src/index.ts", "utf8"),
     dts: readFileSync("lib/index.d.ts", "utf8"),
-    registry: JSON.parse(readFileSync("registry.json", "utf8")),
+    registry,
     previewFiles: readdirSync("src/pages/preview"),
     previewSources: readdirSync("src/previews"),
     provenance,

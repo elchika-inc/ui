@@ -914,13 +914,17 @@ export function checkEvidenceInRepo(root) {
   const provenance = existsSync(provenancePath)
     ? JSON.parse(readFileSync(provenancePath, "utf8"))
     : {};
+  const registryPathForBlocks = join(repositoryRoot, "registry.json");
+  const registryForBlocks = existsSync(registryPathForBlocks)
+    ? JSON.parse(readFileSync(registryPathForBlocks, "utf8"))
+    : {};
   const components = [
     ...(existsSync(componentsRoot)
       ? readdirSync(componentsRoot)
           .filter((file) => file.endsWith(".tsx"))
           .map((file) => file.replace(/\.tsx$/, ""))
       : []),
-    ...scanBlockNames(join(repositoryRoot, "src/blocks"), provenance),
+    ...scanBlockNames(join(repositoryRoot, "src/blocks"), provenance, registryForBlocks),
   ];
 
   for (const entry of entries.filter((candidate) => !candidate.isFile)) {

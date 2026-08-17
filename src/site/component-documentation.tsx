@@ -124,7 +124,7 @@ export function ComponentDocumentation({
                 <article className="flex flex-col gap-3 rounded-xl border border-border p-5">
                   <h3 className="font-medium">直接 URL</h3>
                   <p className="text-sm text-muted-foreground">
-                    設定を追加せず、この component を取得します。
+                    設定を追加せず、{isBlock ? "このブロック" : "この component"}を取得します。
                   </p>
                   <CommandBlock>{directInstallCommand(name)}</CommandBlock>
                 </article>
@@ -138,15 +138,20 @@ export function ComponentDocumentation({
               </div>
             </section>
 
-            <section
-              aria-labelledby="props-heading"
-              className="rounded-xl border border-dashed border-border p-6"
-            >
-              <h2 id="props-heading" className="font-heading text-2xl font-semibold">
-                Props
-              </h2>
-              <p className="mt-2 text-muted-foreground">Props一覧は次段で追加します。</p>
-            </section>
+            {/* block は barrel に載せず <Name>Props も作らない（設計 §1）。
+                props 契約が設計上存在しないので、Props の枠を出すと利用者へ
+                存在しない API を予告することになる。 */}
+            {!isBlock && (
+              <section
+                aria-labelledby="props-heading"
+                className="rounded-xl border border-dashed border-border p-6"
+              >
+                <h2 id="props-heading" className="font-heading text-2xl font-semibold">
+                  Props
+                </h2>
+                <p className="mt-2 text-muted-foreground">Props一覧は次段で追加します。</p>
+              </section>
+            )}
           </>
         );
       }}

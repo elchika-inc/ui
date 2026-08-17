@@ -3,7 +3,7 @@
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
-import { basename, dirname, join } from "node:path";
+import { basename, dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
 
 const DEPENDENCY_SECTIONS = [
@@ -315,10 +315,13 @@ const upstreamPathOf = (registryPath) => {
 
 // 上流 block が持ちうる file type のうち、この機構が正しく扱えると実証済みのもの。
 // 「registry:page 以外は全部配布」にすると未知の type を黙って配布側へ流す。
-// registry:file（dashboard-01 の data.json）は CLI が item の target へ書くため
-// components alias 直下からの移設が成立せず、registry item も target を要求する。
+//
+// registry:component だけに絞る。blockRelocationPlan の移設元は components alias 直下の
+// 固定で、CLI は type ごとに別 alias へ落とす（registry:ui → aliases.ui、
+// registry:hook → aliases.hooks）ため、その 2 種は移設元が一致せず扱えない。
+// registry:file（dashboard-01 の data.json）は CLI が item の target へ書くため同様。
 // 扱えるようになるまで fail-closed で止める。
-const SUPPORTED_BLOCK_FILE_TYPES = new Set(["registry:component", "registry:ui", "registry:hook"]);
+const SUPPORTED_BLOCK_FILE_TYPES = new Set(["registry:component"]);
 
 // block は「利用者が 1 つ選んでコピーする雛形」なので、page.tsx は 27 件すべてが同名で衝突する。
 // standards が Next.js を標準スタック外としているため target: app/<name>/page.tsx も配れない。
@@ -529,23 +532,28 @@ async function blockProvenanceEntry({
   fetchImpl,
 }) {
   const upstreamRepo = "shadcn-ui/ui";
-  const files = [];
 
-  for (const file of target.files) {
-    files.push({
-      path: file.targetPath,
-      upstreamPath: file.upstreamPath,
-      upstreamPathSha: await upstreamCommitSha(upstreamRepo, file.upstreamPath, fetchImpl, name),
-      generatedContentSha256: sha256(readFileSync(join(root, file.targetPath), "utf8")),
-    });
-  }
+  // block ディレクトリ単位で 1 コールに畳む。ファイルごとに叩くと未認証の GitHub API
+  // （60 req/h）を 27 件 × 平均 4 ファイルで確実に超え、しかも 403 は shadcn CLI が
+  // 作業ツリーを書き換えた後に起きるので、次回実行が ensureClean で止まる。
+  // 意味は「このファイルを最後に変えた commit」から「この block を最後に変えた commit」
+  // へ広がる（login-01 は配布分と page が同一 SHA で、実測上の差は無かった）。
+  const blockUpstreamDir = `${UPSTREAM_PREFIX}blocks/${name}`;
+  const upstreamPathSha = await upstreamCommitSha(upstreamRepo, blockUpstreamDir, fetchImpl, name);
+
+  const files = target.files.map((file) => ({
+    path: file.targetPath,
+    upstreamPath: file.upstreamPath,
+    upstreamPathSha,
+    generatedContentSha256: sha256(readFileSync(join(root, file.targetPath), "utf8")),
+  }));
   // 配布しない page も残す。記録しないと、上流に page が無かったのか
   // 意図的に落としたのかを後から区別できない。
   for (const file of target.droppedFiles) {
     files.push({
       dropped: true,
       upstreamPath: file.upstreamPath,
-      upstreamPathSha: await upstreamCommitSha(upstreamRepo, file.upstreamPath, fetchImpl, name),
+      upstreamPathSha,
     });
   }
 
@@ -572,7 +580,9 @@ async function blockProvenanceEntry({
     modified,
     files,
     notes:
-      "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は standards 正規化を適用したあとの現行ファイルのハッシュであり、CLI 生成直後の値とは一致しない。" +
+      "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。" +
+      "files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --force で再実行して取り直す。check-completeness がディスク実体と突合するため、ずれたままにはできない。" +
+      "upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。" +
       "dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。" +
       "CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。",
   };
@@ -598,7 +608,21 @@ function ensureGenerated(root, target, isBlock) {
 function removeDroppedPages(root, target, upstreamItem, log) {
   for (const file of target.droppedFiles ?? []) {
     const droppedTarget = upstreamItem.files.find((f) => f.path === file.registryPath)?.target;
-    if (droppedTarget && existsSync(join(root, droppedTarget))) {
+    if (!droppedTarget) continue;
+    // target は上流 registry の応答に含まれる文字列で、rmSync へ直接流す値。
+    // 封じ込めを検査してから消す（check-evidence の registry path 検査と同じ形）。
+    // reconcile の fail-closed ゲートより前に走るので、ここが最後の砦になる。
+    const normalized = relative(root, resolve(root, droppedTarget));
+    if (
+      isAbsolute(droppedTarget) ||
+      !normalized ||
+      normalized === ".." ||
+      normalized.startsWith(`..${sep}`) ||
+      normalized !== droppedTarget
+    ) {
+      throw new Error(`registry:page の target が repo 内の通常相対 path でない: ${droppedTarget}`);
+    }
+    if (existsSync(join(root, droppedTarget))) {
       rmSync(join(root, droppedTarget));
       log(`配布しない page を削除: ${droppedTarget}`);
     }

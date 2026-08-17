@@ -59,7 +59,10 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   const provenance = existsSync("provenance.json")
     ? JSON.parse(readFileSync("provenance.json", "utf8"))
     : {};
-  const blocks = scanBlockNames("src/blocks", provenance);
+  const registry = existsSync("registry.json")
+    ? JSON.parse(readFileSync("registry.json", "utf8"))
+    : {};
+  const blocks = scanBlockNames("src/blocks", provenance, registry);
 
   const selectors = JSON.parse(readFileSync(manifestPath, "utf8"));
   const { problems } = checkPreviewRender(requiredPreviewNames(components, blocks), selectors);

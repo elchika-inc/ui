@@ -1,16 +1,19 @@
 ---
-import { readFileSync } from "node:fs";
-
 import { categorizePreviewItems } from "@/catalog/component-categories.mjs";
 import { previewItems } from "@/catalog/previews";
 import DocsLayout from "@/layouts/docs.astro";
 import { ComponentDocumentation } from "@/site/component-documentation";
+import registry from "../../../registry.json";
 
 // registry item の type を kind の正本にする。preview を足すだけで公開ページが
 // 自動生成されるため、kind を渡さないと block も registry:ui 前提のテンプレートで描画され、
 // ソースリンクが src/components/ui/<name>.tsx を指して 404 になる。
-const registry = JSON.parse(readFileSync("registry.json", "utf8"));
-const itemTypes = new Map(registry.items.map((item) => [item.name, item.type]));
+//
+// node:fs でなく Vite の JSON import を使う。frontmatter は TS として型検査されるため
+// node:fs は @types/node が無いと astro check が落ち、cwd 依存にもなる（実測: exit 1）。
+const itemTypes = new Map<string, string>(
+  registry.items.map((item: { name: string; type: string }) => [item.name, item.type]),
+);
 
 export function getStaticPaths() {
   return previewItems.map(({ name, title }) => ({
