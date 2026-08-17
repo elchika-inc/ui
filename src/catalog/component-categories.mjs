@@ -68,6 +68,11 @@ export const componentCategories = [
     name: "レイアウト",
     items: ["accordion", "collapsible", "direction", "resizable", "scroll-area", "separator"],
   },
+  // block は部品でなく組み立て済みの雛形なので、部品のカテゴリとは分けて並べる。
+  {
+    name: "認証",
+    items: ["login-01"],
+  },
 ];
 
 export function checkComponentCategories(previewNames, categories = componentCategories) {

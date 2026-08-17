@@ -150,7 +150,49 @@ function blockProblems(name, registry, previewFiles, previewSources, provenance)
     problems.push(`${name}: provenance の files が 0 件`);
     return problems;
   }
-  return [...problems, ...p.files.flatMap((file, index) => blockFileProblems(name, file, index))];
+  return [
+    ...problems,
+    ...p.files.flatMap((file, index) => blockFileProblems(name, file, index)),
+    ...blockFileSetProblems(name, registry, p.files),
+  ];
+}
+
+// files[] の「形」だけを見ると、エントリを 1 件消しても残りが正しい限り緑になる。
+// 実際に mutation で緑のまま通り抜けた。期待される集合と突き合わせる。
+function blockFileSetProblems(name, registry, files) {
+  const problems = [];
+  const item = registry.items.find((i) => i.name === name);
+  // item が無いことは別途 problem 済み。ここで二重に鳴らさない。
+  if (!item) return problems;
+
+  // 配布分の正解は registry item。法務ファイル（registry:file）は全 item 共通なので除く。
+  const distributed = (item.files ?? [])
+    .filter((file) => file.type !== "registry:file")
+    .map((file) => file.path)
+    .sort();
+  const recorded = files
+    .filter((file) => file.dropped !== true)
+    .map((file) => file.path)
+    .sort();
+  for (const path of distributed) {
+    if (!recorded.includes(path)) {
+      problems.push(`${name}: registry item の ${path} が provenance の files に無い`);
+    }
+  }
+  for (const path of recorded) {
+    if (!distributed.includes(path)) {
+      problems.push(`${name}: provenance の files の ${path} が registry item に無い`);
+    }
+  }
+
+  // 落とした分はローカルに実体が無いため、実体との突合ができない。
+  // 上流 block は必ず registry:page を持ち、それを配布しないのが設計 §1 の決定なので、
+  // 「1 件以上の dropped がある」ことを要求する。上流が page を持たない block を
+  // 出してきたら赤くなるが、その時は決定の見直しが要るので止まる方が正しい。
+  if (!files.some((file) => file.dropped === true)) {
+    problems.push(`${name}: 配布しない registry:page の来歴（dropped: true）が無い`);
+  }
+  return problems;
 }
 
 // 共通メタの形式検査。component と block で spec が違うだけで手順は同じなので、

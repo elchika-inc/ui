@@ -243,10 +243,18 @@ test("5 経路が揃っていれば問題なし", () => {
   assert.deepEqual(checkCompleteness(complete).problems, []);
 });
 
+const blockRegistryItem = {
+  name: "login-01",
+  files: [
+    { path: "src/blocks/login-01/components/login-form.tsx", type: "registry:component" },
+    { path: "LICENSE", type: "registry:file", target: "~/elchika-ui/LICENSE" },
+  ],
+};
+
 const completeBlock = {
   ...complete,
   blocks: ["login-01"],
-  registry: { items: [{ name: "button" }, { name: "login-01" }] },
+  registry: { items: [{ name: "button" }, blockRegistryItem] },
   previewFiles: ["button.astro", "button-dark.astro", "login-01.astro", "login-01-dark.astro"],
   previewSources: ["button.tsx", "login-01.tsx"],
   provenance: {
@@ -379,7 +387,12 @@ test("配布ファイルの path が src/blocks/<name>/ 配下でなければ検
   const provenance = structuredClone(completeBlock.provenance);
   provenance.blocks["login-01"].files[0].path = "src/components/ui/login-form.tsx";
   const { problems } = checkCompleteness({ ...completeBlock, provenance });
-  assert.deepEqual(problems, ["login-01: files[0] の path が src/blocks/login-01/ 配下でない"]);
+  // path の形と registry item との集合差は独立した検出器なので、同じ違反で両方鳴る。
+  assert.deepEqual(problems, [
+    "login-01: files[0] の path が src/blocks/login-01/ 配下でない",
+    "login-01: registry item の src/blocks/login-01/components/login-form.tsx が provenance の files に無い",
+    "login-01: provenance の files の src/components/ui/login-form.tsx が registry item に無い",
+  ]);
 });
 
 test("来歴の upstreamPathSha が 40 桁の小文字 SHA でなければ検出する", () => {
@@ -391,4 +404,50 @@ test("来歴の upstreamPathSha が 40 桁の小文字 SHA でなければ検出
 
 test("blocks を渡さなければ既存の呼び出しを壊さない", () => {
   assert.deepEqual(checkCompleteness(complete).problems, []);
+});
+
+// mutation test で「files[] のエントリを 1 件消しても緑のまま」が実際に起きた。
+// 形の検査だけでは集合の欠落を捕まえられないため、期待される集合との突合を固定する。
+test("配布しない page の来歴を消したら検出する", () => {
+  const provenance = structuredClone(completeBlock.provenance);
+  provenance.blocks["login-01"].files = provenance.blocks["login-01"].files.filter(
+    (file) => !file.dropped,
+  );
+  const { problems } = checkCompleteness({ ...completeBlock, provenance });
+  assert.deepEqual(problems, ["login-01: 配布しない registry:page の来歴（dropped: true）が無い"]);
+});
+
+test("配布ファイルの来歴を消したら registry item との差として検出する", () => {
+  const provenance = structuredClone(completeBlock.provenance);
+  provenance.blocks["login-01"].files = provenance.blocks["login-01"].files.filter(
+    (file) => file.dropped,
+  );
+  const { problems } = checkCompleteness({ ...completeBlock, provenance });
+  assert.deepEqual(problems, [
+    "login-01: registry item の src/blocks/login-01/components/login-form.tsx が provenance の files に無い",
+  ]);
+});
+
+test("registry item に無い配布ファイルが来歴にあれば検出する", () => {
+  const provenance = structuredClone(completeBlock.provenance);
+  provenance.blocks["login-01"].files.push({
+    path: "src/blocks/login-01/components/extra.tsx",
+    upstreamPath: "apps/v4/registry/bases/base/blocks/login-01/components/extra.tsx",
+    upstreamPathSha: "0123456789abcdef0123456789abcdef01234567",
+    generatedContentSha256: "f".repeat(64),
+  });
+  const { problems } = checkCompleteness({ ...completeBlock, provenance });
+  assert.deepEqual(problems, [
+    "login-01: provenance の files の src/blocks/login-01/components/extra.tsx が registry item に無い",
+  ]);
+});
+
+test("法務ファイルは配布分の突合対象に含めない", () => {
+  const registry = structuredClone(completeBlock.registry);
+  registry.items[1].files.push({
+    path: "THIRD_PARTY_LICENSES",
+    type: "registry:file",
+    target: "~/elchika-ui/THIRD_PARTY_LICENSES",
+  });
+  assert.deepEqual(checkCompleteness({ ...completeBlock, registry }).problems, []);
 });

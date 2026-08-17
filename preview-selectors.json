@@ -41,6 +41,7 @@
   "item": "[data-slot=\"item-preview\"]",
   "kbd": "[data-slot=\"kbd-preview\"]",
   "label": "[data-slot=\"label\"]",
+  "login-01": "[data-slot=\"login-01-preview\"]",
   "marker": "[data-slot=\"marker-preview\"]",
   "menubar": "[data-slot=\"menubar-content\"]",
   "message": "[data-slot=\"message-preview\"]",
