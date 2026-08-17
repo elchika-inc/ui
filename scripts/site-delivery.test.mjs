@@ -18,7 +18,7 @@ test("Workers Assetsがdistの静的ページをfallback無しで配信する", 
   assert.equal(config.site, undefined, "legacy site設定を使わない");
 });
 
-test("deploy workflowがmain pushと手動実行でbuild後にWranglerを実行する", () => {
+test("deploy workflowがmain pushと手動実行で型検査・テスト・build後にWranglerを実行する", () => {
   const workflowPath = join(root, ".github/workflows/deploy.yml");
   assert.ok(existsSync(workflowPath), "deploy.ymlがまだ無い");
   const workflow = readFileSync(workflowPath, "utf8");
@@ -27,7 +27,13 @@ test("deploy workflowがmain pushと手動実行でbuild後にWranglerを実行�
   assert.match(workflow, /workflow_dispatch:/);
   assert.match(workflow, /CLOUDFLARE_ACCOUNT_ID:\s*\$\{\{ secrets\.CLOUDFLARE_ACCOUNT_ID \}\}/);
   assert.match(workflow, /CLOUDFLARE_API_TOKEN:\s*\$\{\{ secrets\.CLOUDFLARE_API_TOKEN \}\}/);
-  assert.match(workflow, /run: npm ci[\s\S]*run: npm run build[\s\S]*run: npx wrangler deploy/);
+  // DOCS_OPS §6 のジョブ構成（main push = 型検査 → ユニットテスト → build → deploy）を
+  // 順序ごと検査する。ステップの存在だけを見ると、型検査が build の後ろへ回った状態を
+  // 検出できない（§6 は型検査を build より前に置くことを MUST としている）。
+  assert.match(
+    workflow,
+    /run: npm ci[\s\S]*run: npm run typecheck[\s\S]*node --test "scripts\/\*\.test\.mjs"[\s\S]*run: npm run build[\s\S]*run: npx wrangler deploy/,
+  );
 });
 
 test("Wranglerのローカル状態をversion管理へ入れない", () => {
