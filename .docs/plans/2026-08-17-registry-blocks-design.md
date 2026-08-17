@@ -53,13 +53,32 @@
 
 3 箇所目は fail-closed が正しく働いた結果として停止するため、塞ぎ忘れると「なぜか毎回停止する」形で現れる。
 
+### 3-2-2. `check-all` の 7 検査が `src/blocks/` を見るか
+
+「ゲートの掛からないレーンを作らない」（§5-3）が成立するかは、走査根を持つ検査すべてが block を拾うかで決まる。7 検査すべてについて実測した。
+
+| 検査 | 走査根 | block の扱い | 改修 |
+|---|---|---|---|
+| standards | `src/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,css}`（glob） | **自動で拾う** | 不要（実測で確認） |
+| completeness | `src/components/ui/*.tsx`（固定） | 拾わない | 必要（§3-1） |
+| preview render | `readdirSync("src/components/ui")`（固定） | **拾わない** | **必要** |
+| distribution | registry item 起点 | 自動で拾う | 不要 |
+| design tokens / contrast | トークンファイルのみ | 対象外 | 不要 |
+| evidence | `.docs/reviews/` 起点 | 自動で拾う | 不要 |
+
+preview render の走査根拡張は当初の設計に含まれておらず、この実測で追加された。ここを見落とすと、**block の preview が壊れていても緑になる**状態で「ゲートを掛けた」と主張することになる。
+
 ### 3-3. `provenance.json` に `blocks` セクションを新設する
 
 現行の `PROVENANCE_SPEC` は単一ファイル前提で、`upstreamPath: /^\S+\.tsx$/` と各 SHA を 1 つずつしか持てない。block は複数ファイルで、`dashboard-01/data.json` は `.tsx` の正規表現に一致しない。
 
 `components` と同列に `blocks` を置き、共通メタ（`registryUrl` / `registryContentSha256` / `addTarget` / `shadcnCliVersion` / `fetchedAt` / `license` / `modified`）に加えて **`files[]` 配列**（`path` / `upstreamPath` / `upstreamPathSha` / `generatedContentSha256`）を持たせる。
 
-103 ファイルの来歴を一次ファイル 1 個分しか記録しない設計では、PROJECT_GOAL の DoneCriteria 8（来歴をコンポーネントごとに機械可読で記録）が実質空洞化する。
+一次ファイル 1 個分しか記録しない設計では、PROJECT_GOAL の DoneCriteria 8（来歴をコンポーネントごとに機械可読で記録）が実質空洞化する。
+
+**配布しない `page.tsx` も `files[]` に記録する。** 上流から受け取ったファイルは 103 個で、うち 27 個の `page.tsx` は §1 の決定により配布しない。落としたエントリには `dropped: true` を付け、手元に実体がないため `generatedContentSha256` を持たせず `upstreamPath` / `upstreamPathSha` のみを記録する。
+
+「落とした」こと自体が上流からの改変であり、`modified` の文章による主張を機械可読に裏付ける。配布分 76 件だけを記録すると、来歴からは page が最初から存在しなかったのか意図的に落としたのかを区別できない。
 
 ### 3-4. preview とカテゴリ
 
@@ -95,7 +114,9 @@
 
 ### 5-1. `src/components/ui/` へ既存コンポーネントと同列に配置する
 
-**不採用。物理的に成立しない。** 配布ファイル 103 個のうち、ファイル名 26 種の **16 種が衝突**する（実測 §6-3）。`page.tsx` は 27 件全部が同名、`login-form.tsx` は login-01〜05 が同名。
+**不採用。物理的に成立しない。** 上流から受け取る 103 ファイルのうち、ファイル名 26 種の **16 種が衝突**する（実測 §6-3）。`page.tsx` は 27 件全部が同名、`login-form.tsx` は login-01〜05 が同名。
+
+`page.tsx` を配布しない決定（§1）は**この衝突を解消しない**。page を除いても `app-sidebar.tsx` が 15 件、`nav-main.tsx` と `nav-user.tsx` が各 7 件で衝突するため、per-block ディレクトリは配布分 76 ファイルだけを見ても依然として必須である。
 
 プレフィックスで回避しても `login-01-login-form.tsx` のような名前が 61 件の部品リストに 27 件混ざり、`component-categories.mjs` の分類も破綻する。
 
@@ -107,7 +128,7 @@ registry を per-item ファイルへ分割すれば並列化できるが、今�
 
 ### 5-3. `src/blocks/` へ置くがゲートは拡張しない
 
-**不採用。** 最も安いが、ゲートの掛からないレーンができる。当リポジトリは `check-all.mjs` が 7 検査を fail-closed で並べ、`add-component.mjs` は分類不能なパスを見たら「復元せず停止」する設計思想を持つ。そこへ未検査の 27 件・103 ファイルを足すのは思想への逆行であり、この機構拡張こそが block 導入コストの本体である。
+**不採用。** 最も安いが、ゲートの掛からないレーンができる。当リポジトリは `check-all.mjs` が 7 検査を fail-closed で並べ、`add-component.mjs` は分類不能なパスを見たら「復元せず停止」する設計思想を持つ。そこへ未検査の 27 件・配布 76 ファイルを足すのは思想への逆行であり、この機構拡張こそが block 導入コストの本体である。
 
 ## 6. 実測
 
@@ -129,7 +150,7 @@ npm 依存の不足は **dashboard-01 のみ**で 6 件（`@dnd-kit/core` / `@dn
 
 ### 6-3. ファイル名の衝突
 
-配布ファイル総数 **103 個**、ファイル名 26 種のうち **16 種が衝突**。
+上流から受け取るファイル総数 **103 個**（うち配布するのは `page.tsx` 27 個を除いた **76 個**）、ファイル名 26 種のうち **16 種が衝突**。
 
 | 衝突数 | ファイル名 |
 |---|---|
@@ -156,7 +177,15 @@ npm 依存の不足は **dashboard-01 のみ**で 6 件（`@dnd-kit/core` / `@dn
 
 上流 block の `registry:page` は `target: app/login/page.tsx` を持ち、これは Next.js App Router のファイルベースルーティング規約である。標準スタック外の規約を配布物へ焼き込むことになるため配布しない。
 
-### 6-5. login-01 の page.tsx の中身
+### 6-5. サンプル文言の `Acme Inc.`
+
+27 件のうち **14 件**（dashboard-01 / login-02〜05 / signup-02,03,05 / sidebar-07,08,09,10,15,16）が、サンプルデータに `Acme Inc.` `Acme Inc` `Acme Corp.` を含む。
+
+**そのまま残す。** AGENTS.md の禁止は elchika 自身の名乗りに `inc.` を用いないことであり（法人化までの暫定措置）、架空の第三者名を示すサンプル文言はこれに当たらない。UI 文言は上流の英語のままとする決定（§1）とも整合する。
+
+リポジトリ内に `inc.` を検出する機械 probe は存在しないため（実測）、CI が偽陽性で赤くなることもない。
+
+### 6-6. login-01 の page.tsx の中身
 
 配布しない判断の影響範囲を測るため中身を確認した。レイアウト枠のみで、308 文字。
 
@@ -170,8 +199,16 @@ npm 依存の不足は **dashboard-01 のみ**で 6 件（`@dnd-kit/core` / `@dn
 
 ## 7. DoneCriteria
 
-1. `npm run check:all` の 7 検査すべてが exit 0 で、`check-completeness` が block を kind 別要件で検査していること。**block を 1 件わざと壊して赤くなることを確認する**（緑であることは検査が働いている証拠にならない）
-2. `provenance.json` の `blocks` に 27 件分の来歴があり、103 ファイルすべてが `files[]` に SHA 付きで載っていること
+1. `npm run check:all` の 7 検査すべてが exit 0 であること。加えて、**拡張した各ゲートについて 1 つずつ意図的な違反を仕込み、対応する検査が赤くなることを確認する**（緑であることは検査が働いている証拠にならない）。
+
+   | 仕込む違反 | 赤くなるべき検査 |
+   |---|---|
+   | block の tsx に生の色指定を 1 箇所入れる | standards |
+   | block の preview astro を 1 枚消す | completeness |
+   | block の preview tsx で存在しない export を import する | preview render |
+   | block の provenance から `files[]` の 1 エントリを消す | completeness |
+
+2. `provenance.json` の `blocks` に 27 件分の来歴があり、**上流から受け取った 103 ファイルすべて**が `files[]` に載っていること。配布する 76 件は `generatedContentSha256` を持ち、配布しない 27 件の `page.tsx` は `dropped: true` と `upstreamPathSha` を持つ（§3-3）
 3. 全 block の preview が light / dark の 2 ページで存在し、dark 側ルート要素が `class="dark"` を持つこと
 4. **リポジトリ外の別プロジェクトへ実際に `shadcn add` して描画されること** — React + Vite の scratch アプリで `@elchika/login-01` を導入し、ビルドと描画まで到達する
 5. 配布 registry item に法務ファイル（`LICENSE` / `THIRD_PARTY_LICENSES` / トークン 3 ファイル）が同梱され、`check-distribution` を通ること
