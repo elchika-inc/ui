@@ -936,11 +936,12 @@ import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 
 実際の HTTP と CLI を叩かずに `runAddComponent` の分岐を検査する。`fetchImpl` と `runCommand` を差し替える。
 
+**一時リポジトリは既存の `createRepo()` ヘルパ（`scripts/add-component.test.mjs:15`）を使う。** `runAddComponent` を注入テストする既存パターン（同ファイル 269 行以降）に倣うこと。新しいヘルパを書かない。
+
 ```js
 test("block を add すると provenance.blocks へ書き、components を汚さない", async () => {
-  // 一時 worktree を作り、CLI の代わりに手でファイルを置く
-  const root = mkdtempSync(join(tmpdir(), "add-block-"));
-  // ... リポジトリ初期化と registry.json / provenance.json / package.json の用意
+  const root = createRepo();
+  const { runAddComponent } = await loadModule();
   const result = await runAddComponent({
     argv: ["login-01", "--modified", "page を除外"],
     root,
@@ -958,7 +959,7 @@ test("block を add すると provenance.blocks へ書き、components を汚さ
 });
 ```
 
-既存の `add-component.test.mjs` に一時リポジトリを用意するヘルパがあればそれを使う。無ければこのテストは Task 5 の実 add で代替し、その旨をコミットメッセージに書く（**省略する場合は必ず log に残す** — 黙って落とすと「テスト済み」と読める）。
+`fakeFetch` は registry JSON と GitHub API の 2 種類の URL に応答する必要がある。既存テストの fetch スタブに倣い、`https://ui.shadcn.com/r/styles/base-nova/login-01.json` には Task 3 の `loginUpstream` を（`content` 付きで）、`https://api.github.com/repos/shadcn-ui/ui/commits?...` には `[{ sha: "0".repeat(40) }]` を返す。
 
 - [ ] **Step 9: テストを実行して通ることを確認する**
 
@@ -1067,6 +1068,9 @@ Expected: exit 0。落ちたら該当検査のメッセージに従って直す�
 ```bash
 # 1. standards — block の tsx に生の色指定を入れる
 sed -i '' 's/className={cn("flex flex-col gap-6"/className={cn("flex flex-col gap-6 text-[#ff0000]"/' src/blocks/login-01/components/login-form.tsx
+# 置換が実際に入ったことを先に確認する。sed は不一致でも exit 0 で 0 件置換するため、
+# ここを飛ばすと「違反を仕込んでいないのに緑」を「検査が通った」と誤読する。
+grep -c 'text-\[#ff0000\]' src/blocks/login-01/components/login-form.tsx   # 期待: 1 以上
 node scripts/check-standards.mjs   # 期待: exit 1
 git checkout -- src/blocks/login-01/components/login-form.tsx
 
@@ -1114,9 +1118,15 @@ npx shadcn@4.16.0 add http://localhost:5555/login-01.json
 npm run build
 ```
 
-Expected: `src/blocks/login-01/components/login-form.tsx` 相当が配置され、`app/login/page.tsx` は**作られない**。`npm run build` が exit 0。
+**この Step の検証対象は 3 つあり、切り分けて判定する。**
 
-`src/App.tsx` で `LoginForm` を描画し `npm run dev` で表示を確認する。結果を `.docs/reviews/` の report に追記する。
+1. `src/blocks/login-01/components/login-form.tsx` 相当が配置される
+2. `app/login/page.tsx` が**作られない**
+3. README の導入手順（トークンの `@import` 一本化、shadcn が生成した色 alias declaration の削除）を通した後に `npm run build` が exit 0
+
+**1 と 2 が通って 3 で落ちる場合、原因は block ではなく consumer 側の Tailwind / alias 配線を疑う。** `npx shadcn init` は Tailwind 設定と `components.json` を対話で要求し、elchika registry は `~/elchika-ui/` 配下へトークンと法務ファイルを落とすため、初回は README の手順を踏まないとビルドが通らない。ここを切り分けずに「block が壊れている」と判断すると、健全な配布物を直しに行くことになる。
+
+3 まで通ったら `src/App.tsx` で `LoginForm` を描画し `npm run dev` で表示を確認する。結果を `.docs/reviews/` の report に、1・2・3 のどこまで到達したかを明記して追記する。
 
 - [ ] **Step 11: コミット**
 
@@ -1158,6 +1168,10 @@ node scripts/add-component.mjs login-02 --modified "registry:page を配布か�
 - [ ] **Step 2: preview を 25 件書く**
 
 Task 5 Step 4 の形式に従う。上流 `page.tsx` のレイアウト枠は block ごとに異なるため、**各 block の `page.tsx` の content を上流 JSON から読んで写す**。
+
+**「レイアウト枠」はルート要素の div だけでなく、`page.tsx` が持つ JSX 構造の全体を指す。** sidebar 系 16 件は `SidebarProvider` / `SidebarInset` / `SidebarTrigger` のラップと、`Breadcrumb` `Separator` を使った header を **`page.tsx` 側が持っている**（実測: sidebar-01 と sidebar-07 で確認）。div だけ写して Provider を落とすと context が無いまま描画されて壊れる。
+
+このため **registry item の `registryDependencies` は上流のまま残す**。`page.tsx` を配布しないと `breadcrumb` や `separator` を使うコードが配布物から消えるが、利用側は page 相当を自分で書く時にまさにその依存を必要とする。上流の依存表は「この block を成立させるのに要る部品」の宣言であって、「配布ファイルが import している部品」の一覧ではない。
 
 ```bash
 curl -s https://ui.shadcn.com/r/styles/base-nova/sidebar-07.json | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{const j=JSON.parse(s);console.log(j.files.find(f=>f.type==='registry:page').content)})"
