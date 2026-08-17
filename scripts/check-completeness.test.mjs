@@ -242,3 +242,153 @@ test("shadcn CLI の版は SemVer 2.0.0 の境界に従う", () => {
 test("5 経路が揃っていれば問題なし", () => {
   assert.deepEqual(checkCompleteness(complete).problems, []);
 });
+
+const completeBlock = {
+  ...complete,
+  blocks: ["login-01"],
+  registry: { items: [{ name: "button" }, { name: "login-01" }] },
+  previewFiles: ["button.astro", "button-dark.astro", "login-01.astro", "login-01-dark.astro"],
+  previewSources: ["button.tsx", "login-01.tsx"],
+  provenance: {
+    ...complete.provenance,
+    blocks: {
+      "login-01": {
+        registryUrl: "https://ui.shadcn.com/r/styles/base-nova/login-01.json",
+        registryContentSha256: "c".repeat(64),
+        addTarget: "@shadcn/login-01",
+        shadcnCliVersion: "4.16.0",
+        fetchedAt: "2026-08-17",
+        license: "MIT",
+        modified: "registry:page を配布から除外した",
+        files: [
+          {
+            path: "src/blocks/login-01/components/login-form.tsx",
+            upstreamPath: "apps/v4/registry/bases/base/blocks/login-01/components/login-form.tsx",
+            upstreamPathSha: "0123456789abcdef0123456789abcdef01234567",
+            generatedContentSha256: "d".repeat(64),
+          },
+          {
+            dropped: true,
+            upstreamPath: "apps/v4/registry/bases/base/blocks/login-01/page.tsx",
+            upstreamPathSha: "89abcdef0123456789abcdef0123456789abcdef",
+          },
+        ],
+      },
+    },
+  },
+};
+
+test("block が全経路に載っていれば問題を返さない", () => {
+  const { problems } = checkCompleteness(completeBlock);
+  assert.deepEqual(problems, []);
+});
+
+test("block の registry item 欠落を検出する", () => {
+  const { problems } = checkCompleteness({
+    ...completeBlock,
+    registry: { items: [{ name: "button" }] },
+  });
+  assert.deepEqual(problems, ["login-01: registry.json に item が無い"]);
+});
+
+test("block の preview 実装欠落を検出する", () => {
+  const { problems } = checkCompleteness({
+    ...completeBlock,
+    previewSources: ["button.tsx"],
+  });
+  assert.deepEqual(problems, ["login-01: src/previews/login-01.tsx が無い"]);
+});
+
+test("block の dark プレビュー欠落を検出する", () => {
+  const { problems } = checkCompleteness({
+    ...completeBlock,
+    previewFiles: ["button.astro", "button-dark.astro", "login-01.astro"],
+  });
+  assert.deepEqual(problems, ["login-01: プレビュー login-01-dark.astro が無い"]);
+});
+
+test("block に barrel export と Props 型を要求しない", () => {
+  const { problems } = checkCompleteness({
+    ...completeBlock,
+    barrel: 'export { Button } from "./components/ui/button"',
+  });
+  assert.deepEqual(problems, []);
+});
+
+test("block の来歴欠落を検出する", () => {
+  const { problems } = checkCompleteness({
+    ...completeBlock,
+    provenance: { ...completeBlock.provenance, blocks: {} },
+  });
+  assert.deepEqual(problems, ["login-01: provenance.json に来歴が無い"]);
+});
+
+test("block の来歴の必須キーが空なら検出する", () => {
+  for (const key of Object.keys(completeBlock.provenance.blocks["login-01"])) {
+    if (key === "files") continue;
+    const provenance = structuredClone(completeBlock.provenance);
+    provenance.blocks["login-01"][key] = "";
+    const { problems } = checkCompleteness({ ...completeBlock, provenance });
+    assert.deepEqual(problems, [`login-01: provenance の ${key} が無い`], key);
+  }
+});
+
+test("block の来歴の全キーが x なら形式違反を検出する", () => {
+  const provenance = structuredClone(completeBlock.provenance);
+  for (const key of Object.keys(provenance.blocks["login-01"])) {
+    if (key === "files") continue;
+    provenance.blocks["login-01"][key] = "x";
+  }
+  const { problems } = checkCompleteness({ ...completeBlock, provenance });
+  assert.notDeepEqual(problems, []);
+});
+
+test("block の files が空なら検出する", () => {
+  const provenance = structuredClone(completeBlock.provenance);
+  provenance.blocks["login-01"].files = [];
+  const { problems } = checkCompleteness({ ...completeBlock, provenance });
+  assert.deepEqual(problems, ["login-01: provenance の files が 0 件"]);
+});
+
+test("配布ファイルの generatedContentSha256 欠落を検出する", () => {
+  const provenance = structuredClone(completeBlock.provenance);
+  provenance.blocks["login-01"].files[0].generatedContentSha256 = undefined;
+  const { problems } = checkCompleteness({ ...completeBlock, provenance });
+  assert.deepEqual(problems, [
+    "login-01: files[0] の generatedContentSha256 が64桁の小文字ハッシュでない",
+  ]);
+});
+
+test("dropped なファイルに generatedContentSha256 があれば検出する", () => {
+  const provenance = structuredClone(completeBlock.provenance);
+  provenance.blocks["login-01"].files[1].generatedContentSha256 = "e".repeat(64);
+  const { problems } = checkCompleteness({ ...completeBlock, provenance });
+  assert.deepEqual(problems, [
+    "login-01: files[1] は dropped なので generatedContentSha256 を持たない",
+  ]);
+});
+
+test("dropped なファイルに path があれば検出する", () => {
+  const provenance = structuredClone(completeBlock.provenance);
+  provenance.blocks["login-01"].files[1].path = "src/blocks/login-01/page.tsx";
+  const { problems } = checkCompleteness({ ...completeBlock, provenance });
+  assert.deepEqual(problems, ["login-01: files[1] は dropped なので path を持たない"]);
+});
+
+test("配布ファイルの path が src/blocks/<name>/ 配下でなければ検出する", () => {
+  const provenance = structuredClone(completeBlock.provenance);
+  provenance.blocks["login-01"].files[0].path = "src/components/ui/login-form.tsx";
+  const { problems } = checkCompleteness({ ...completeBlock, provenance });
+  assert.deepEqual(problems, ["login-01: files[0] の path が src/blocks/login-01/ 配下でない"]);
+});
+
+test("来歴の upstreamPathSha が 40 桁の小文字 SHA でなければ検出する", () => {
+  const provenance = structuredClone(completeBlock.provenance);
+  provenance.blocks["login-01"].files[0].upstreamPathSha = "A".repeat(40);
+  const { problems } = checkCompleteness({ ...completeBlock, provenance });
+  assert.deepEqual(problems, ["login-01: files[0] の upstreamPathSha が40桁の小文字SHAでない"]);
+});
+
+test("blocks を渡さなければ既存の呼び出しを壊さない", () => {
+  assert.deepEqual(checkCompleteness(complete).problems, []);
+});

@@ -83,8 +83,123 @@ const PROVENANCE_SPEC = {
   modified: /\S/,
 };
 
+// block の来歴。component と違い配布ファイルが複数あるため、共通メタと files[] を分けて検査する。
+// 単一ファイル前提の PROVENANCE_SPEC を流用すると、dashboard-01 の data.json が
+// upstreamPath の `\.tsx$` に一致せず、正しい来歴を誤って弾く。
+const BLOCK_PROVENANCE_SPEC = {
+  registryUrl: /^https:\/\/\S+$/,
+  registryContentSha256: /^[0-9a-f]{64}$/,
+  addTarget: /^@[\w-]+\/[\w-]+$/,
+  shadcnCliVersion: PROVENANCE_SPEC.shadcnCliVersion,
+  fetchedAt: /^\d{4}-\d{2}-\d{2}$/,
+  license: /^\S+$/,
+  modified: /\S/,
+};
+
+// 配布しない registry:page も来歴には残す。dropped を「記録しない」で表現すると、
+// 上流に page が無かったのか意図的に落としたのかを後から区別できない。
+function blockFileProblems(name, file, index) {
+  const label = `${name}: files[${index}]`;
+  const problems = [];
+  if (!/^\S+$/.test(String(file.upstreamPath ?? ""))) {
+    problems.push(`${label} の upstreamPath が無い`);
+  }
+  if (!/^[0-9a-f]{40}$/.test(String(file.upstreamPathSha ?? ""))) {
+    problems.push(`${label} の upstreamPathSha が40桁の小文字SHAでない`);
+  }
+  if (file.dropped === true) {
+    if (file.path !== undefined) {
+      problems.push(`${label} は dropped なので path を持たない`);
+    }
+    if (file.generatedContentSha256 !== undefined) {
+      problems.push(`${label} は dropped なので generatedContentSha256 を持たない`);
+    }
+    return problems;
+  }
+  if (!String(file.path ?? "").startsWith(`src/blocks/${name}/`)) {
+    problems.push(`${label} の path が src/blocks/${name}/ 配下でない`);
+  }
+  if (!/^[0-9a-f]{64}$/.test(String(file.generatedContentSha256 ?? ""))) {
+    problems.push(`${label} の generatedContentSha256 が64桁の小文字ハッシュでない`);
+  }
+  return problems;
+}
+
+// block は barrel export と <Name>Props を要求しない。registry 経由で copy-and-edit
+// する雛形であり、ライブラリの公開 API ではないため（設計 §3-1 の要件マトリクス）。
+function blockProblems(name, registry, previewFiles, previewSources, provenance) {
+  const problems = [];
+  if (!registry.items.some((i) => i.name === name)) {
+    problems.push(`${name}: registry.json に item が無い`);
+  }
+  if (!previewSources.includes(`${name}.tsx`)) {
+    problems.push(`${name}: src/previews/${name}.tsx が無い`);
+  }
+  for (const suffix of ["", "-dark"]) {
+    if (!previewFiles.includes(`${name}${suffix}.astro`)) {
+      problems.push(`${name}: プレビュー ${name}${suffix}.astro が無い`);
+    }
+  }
+  const p = provenance.blocks?.[name];
+  if (!p) {
+    problems.push(`${name}: provenance.json に来歴が無い`);
+    return problems;
+  }
+  problems.push(...provenanceMetaProblems(name, p, BLOCK_PROVENANCE_SPEC));
+  if (!Array.isArray(p.files) || p.files.length === 0) {
+    problems.push(`${name}: provenance の files が 0 件`);
+    return problems;
+  }
+  return [...problems, ...p.files.flatMap((file, index) => blockFileProblems(name, file, index))];
+}
+
+// 共通メタの形式検査。component と block で spec が違うだけで手順は同じなので、
+// 2 箇所に同じループを置かない（片方だけ直して乖離するのを防ぐ）。
+function provenanceMetaProblems(name, entry, spec) {
+  const problems = [];
+  for (const [k, re] of Object.entries(spec)) {
+    if (!entry[k]) {
+      problems.push(`${name}: provenance の ${k} が無い`);
+      continue;
+    }
+    if (!re.test(String(entry[k]))) {
+      problems.push(`${name}: provenance の ${k} が形式に合わない: ${entry[k]}`);
+    }
+  }
+  return problems;
+}
+
+function componentProblems(name, barrelPaths, registry, previewFiles, previewSources, provenance) {
+  const problems = [];
+  if (!barrelPaths.has(`./components/ui/${name}`)) {
+    problems.push(`${name}: src/index.ts から export されていない`);
+  }
+  if (!registry.items.some((i) => i.name === name)) {
+    problems.push(`${name}: registry.json に item が無い`);
+  }
+  // ルート（.astro）だけでなく中身（src/previews/<name>.tsx）も見る。
+  // ルートだけ在って中身が無いと、誤った import でもビルドが通りうる。
+  if (!previewSources.includes(`${name}.tsx`)) {
+    problems.push(`${name}: src/previews/${name}.tsx が無い`);
+  }
+  for (const suffix of ["", "-dark"]) {
+    if (!previewFiles.includes(`${name}${suffix}.astro`)) {
+      problems.push(`${name}: プレビュー ${name}${suffix}.astro が無い`);
+    }
+  }
+  // CONTRIBUTING が挙げる 5 項目の 1 つ。DoneCriteria 8 もコンポーネントごとの
+  // 来歴を要求するため、ここを見ないと 2 件目以降の欠落を CI が見逃す。
+  const p = provenance.components?.[name];
+  if (!p) {
+    problems.push(`${name}: provenance.json に来歴が無い`);
+    return problems;
+  }
+  return [...problems, ...provenanceMetaProblems(name, p, PROVENANCE_SPEC)];
+}
+
 export function checkCompleteness({
   components,
+  blocks = [],
   barrel,
   dts,
   registry,
@@ -95,38 +210,12 @@ export function checkCompleteness({
   const problems = dtsContractProblems(dts);
   const barrelPaths = exportedModulePaths(barrel);
   for (const name of components) {
-    if (!barrelPaths.has(`./components/ui/${name}`)) {
-      problems.push(`${name}: src/index.ts から export されていない`);
-    }
-    if (!registry.items.some((i) => i.name === name)) {
-      problems.push(`${name}: registry.json に item が無い`);
-    }
-    // ルート（.astro）だけでなく中身（src/previews/<name>.tsx）も見る。
-    // ルートだけ在って中身が無いと、誤った import でもビルドが通りうる。
-    if (!previewSources.includes(`${name}.tsx`)) {
-      problems.push(`${name}: src/previews/${name}.tsx が無い`);
-    }
-    for (const suffix of ["", "-dark"]) {
-      if (!previewFiles.includes(`${name}${suffix}.astro`)) {
-        problems.push(`${name}: プレビュー ${name}${suffix}.astro が無い`);
-      }
-    }
-    // CONTRIBUTING が挙げる 5 項目の 1 つ。DoneCriteria 8 もコンポーネントごとの
-    // 来歴を要求するため、ここを見ないと 2 件目以降の欠落を CI が見逃す。
-    const p = provenance.components?.[name];
-    if (!p) {
-      problems.push(`${name}: provenance.json に来歴が無い`);
-      continue;
-    }
-    for (const [k, re] of Object.entries(PROVENANCE_SPEC)) {
-      if (!p[k]) {
-        problems.push(`${name}: provenance の ${k} が無い`);
-        continue;
-      }
-      if (!re.test(String(p[k]))) {
-        problems.push(`${name}: provenance の ${k} が形式に合わない: ${p[k]}`);
-      }
-    }
+    problems.push(
+      ...componentProblems(name, barrelPaths, registry, previewFiles, previewSources, provenance),
+    );
+  }
+  for (const name of blocks) {
+    problems.push(...blockProblems(name, registry, previewFiles, previewSources, provenance));
   }
   return { problems };
 }
@@ -139,12 +228,20 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     console.error("コンポーネントが 0 件（走査対象が壊れている）");
     process.exit(1);
   }
+  // block レーンは後から生えるので、ディレクトリが無い状態を正常として扱う。
+  // ここを fail-closed にすると block 導入前のリポジトリが赤くなる。
+  const blocks = existsSync("src/blocks")
+    ? readdirSync("src/blocks", { withFileTypes: true })
+        .filter((entry) => entry.isDirectory())
+        .map((entry) => entry.name)
+    : [];
   if (!existsSync("lib/index.d.ts")) {
     console.error("lib/index.d.ts が無い（build:lib を先に実行する）");
     process.exit(1);
   }
   const { problems } = checkCompleteness({
     components,
+    blocks,
     barrel: readFileSync("src/index.ts", "utf8"),
     dts: readFileSync("lib/index.d.ts", "utf8"),
     registry: JSON.parse(readFileSync("registry.json", "utf8")),
@@ -156,5 +253,7 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     console.error(`欠落:\n  ${problems.join("\n  ")}`);
     process.exit(1);
   }
-  console.log(`${components.length} 件のコンポーネントが 5 経路すべてに載っている`);
+  console.log(
+    `${components.length} 件のコンポーネントと ${blocks.length} 件の block が全経路に載っている`,
+  );
 }
