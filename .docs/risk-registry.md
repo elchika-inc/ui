@@ -129,3 +129,12 @@
 - impact: hydration時にclient re-renderが発生し、初期DOM identity・state・event timingへ影響する可能性がある。現在のpreviewでは操作可能なSliderとvalue表示が残るが、console clean契約は満たさない。
 - mitigation: 新しいSlider証跡は#418を正直に記録し、navigation前にRuntime listenerを登録する再現手順をanchorにする。同じ新runnerで64 routeを再監査し、Slider以外の63 routeはconsole 0だったため、旧手法が見逃したlatent例外はSliderだけと実測した。別作業ではSSR HTMLとclient初回DOMのtext差分を開発buildで特定し、RED/GREENのbrowser回帰検査を追加する。
 - anchor: `.docs/reviews/brand-token-migration/2026-08-03-slider-preview.md`のlight/dark実測と、旧SHA `cf2542b675ad78804c8af239b866b6c290e69bdb`での再現結果。
+
+## RISK-015: `merge_policy: auto-on-green` の採用で配信が人間の確認を経ずに起動する
+
+- date: 2026-08-17
+- confidence: high
+- location: `AGENTS.md` の `merge_policy` / `.github/workflows/deploy.yml`
+- status: accepted
+- reason: DOCS_OPS §5 は「`auto-on-green` は auto-deploy を意味する」と明記する。当リポジトリは main push を起点に `npx wrangler deploy` が走るため、前提条件が揃った後はエージェントのマージがそのまま配信を起動する。配布物は registry を経由して全利用者へ届くので誤配信の影響範囲は広い。それでも受容するのは、配信物が静的アセットのみで巻き戻しが再 deploy で足りること、および §5 の前提条件（required status check の green・レビューサイクル収束・ブラウザ検証証跡）が配信前のゲートとして機能するためである。緩和として deploy job へ型検査とユニットテストを build より前に追加し、CI が赤のまま配信される経路を塞いだ — 従来 deploy job は同じ main push で並行に走る CI workflow の成否を待っておらず、CI が赤でも配信が完了しえた。
+- anchor: `scripts/site-delivery.test.mjs` の「deploy workflowがmain pushと手動実行で型検査・テスト・build後にWranglerを実行する」が deploy.yml のステップ順序を `npm ci → npm run typecheck → node --test → npm run build → npx wrangler deploy` の順で検査する。型検査またはユニットテストのステップが消える場合も、build より後ろへ回った場合も赤になる。

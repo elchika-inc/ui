@@ -28,6 +28,33 @@ jobs:
       - name: 依存関係をインストール
         run: npm ci
 
+      # DOCS_OPS §6 のジョブ構成は main push を「型検査 → ユニットテスト → build → deploy」
+      # と定める。ci.yml も main push で走るが別 workflow であり、deploy job はその成否を
+      # 待たない。deploy 側に置かないと CI が赤でも配信が実行される。
+      # 型検査は build より前に置く（§6 の MUST）。順序が規範側で固定されているのは、
+      # 検証ビルドが生成した dist/ を型検査が走査して落ちる既知問題があるためである
+      # （standards 側の実測に基づく規定。当リポジトリの astro check で再現確認はしていない）。
+      - name: 型検査
+        run: npm run typecheck
+
+      # ci.yml と同じ罠を踏まないようにする。node --test に裸のディレクトリを渡すと
+      # glob pattern として解釈されて必ず失敗し、かつ glob が 0 件一致でも
+      # tests 0 / exit 0 になる（実測）。「テストが実際に走ったか」を出力の件数で確かめる。
+      # ファイル数を定数で書かない — テストを 1 本足すたびにずれる。
+      # bash -e のまま直接実行すると失敗時に cat へ到達せず診断が消えるので、
+      # exit code を保存し、出力を表示してから同じ成否を返す。
+      - name: ユニットテスト
+        run: |
+          set +e
+          node --test "scripts/*.test.mjs" > /tmp/ui-tests.txt 2>&1
+          test_exit=$?
+          set -e
+          cat /tmp/ui-tests.txt
+          if [ "$test_exit" -ne 0 ]; then
+            exit "$test_exit"
+          fi
+          grep -qE '^. tests [1-9]' /tmp/ui-tests.txt
+
       - name: 配信物をビルド
         run: npm run build
 
