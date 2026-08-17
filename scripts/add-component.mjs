@@ -16,6 +16,7 @@ const DEPENDENCY_SECTIONS = [
 // add 後の変更分類はここだけを育てる。どのルールにも一致しないパスは fail-closed。
 export const CHANGE_CLASSIFICATION_RULES = [
   { kind: "target", matcher: "target-item" },
+  { kind: "target", matcher: "target-block-dir" },
   { kind: "other-registry-item", matcher: "tracked-component" },
   { kind: "other-registry-item", matcher: "tracked-hook" },
   { kind: "dependency-manifest", paths: ["package.json", "package-lock.json"] },
@@ -123,9 +124,18 @@ function changedPaths(root) {
   return [...new Set([...tracked, ...untracked])].sort();
 }
 
-function classifyPath(path, targetPath, trackedBefore) {
+export function classifyPath(path, targetPath, trackedBefore) {
   for (const rule of CHANGE_CLASSIFICATION_RULES) {
     if (rule.matcher === "target-item" && path === targetPath) return rule.kind;
+    // block は複数ファイルなので targetPath をディレクトリとして受ける。
+    // 別 block のディレクトリは掴まないよう、targetPath 直下に限定する。
+    if (
+      rule.matcher === "target-block-dir" &&
+      targetPath.startsWith("src/blocks/") &&
+      path.startsWith(`${targetPath}/`)
+    ) {
+      return rule.kind;
+    }
     if (
       rule.matcher === "tracked-component" &&
       path.startsWith("src/components/ui/") &&
@@ -257,7 +267,44 @@ function externalImports(source) {
   return packages;
 }
 
+const UPSTREAM_PREFIX = "apps/v4/registry/bases/base/";
+
+const upstreamPathOf = (registryPath) =>
+  `${UPSTREAM_PREFIX}${registryPath.replace("registry/base-nova/", "")}`;
+
+// block は「利用者が 1 つ選んでコピーする雛形」なので、page.tsx は 27 件すべてが同名で衝突する。
+// standards が Next.js を標準スタック外としているため target: app/<name>/page.tsx も配れない。
+// 配布から外すが、来歴には dropped として残す。
+function resolveBlockTarget(name, upstreamItem) {
+  const files = [];
+  const droppedFiles = [];
+  for (const file of upstreamItem.files ?? []) {
+    const registryPath = file.path;
+    if (file.type === "registry:page") {
+      droppedFiles.push({ registryPath, upstreamPath: upstreamPathOf(registryPath) });
+      continue;
+    }
+    const relative = registryPath.replace(`registry/base-nova/blocks/${name}/`, "");
+    if (relative === registryPath) {
+      throw new Error(`${name}: block の file path が想定外: ${registryPath}`);
+    }
+    files.push({
+      registryPath,
+      targetPath: `src/blocks/${name}/${relative}`,
+      upstreamPath: upstreamPathOf(registryPath),
+      fileType: file.type,
+    });
+  }
+  if (files.length === 0) {
+    throw new Error(`${name}: 配布対象のファイルが 0 件`);
+  }
+  return { itemType: "registry:block", files, droppedFiles };
+}
+
 export function resolveRegistryTarget(name, upstreamItem) {
+  if (upstreamItem.type === "registry:block") {
+    return resolveBlockTarget(name, upstreamItem);
+  }
   const definitions = {
     "registry:ui": {
       registryPath: `registry/base-nova/ui/${name}.tsx`,
@@ -282,7 +329,7 @@ export function resolveRegistryTarget(name, upstreamItem) {
     itemType: upstreamItem.type,
     registryPath: definition.registryPath,
     targetPath: definition.targetPath,
-    upstreamPath: `apps/v4/registry/bases/base/${definition.registryPath.replace("registry/base-nova/", "")}`,
+    upstreamPath: upstreamPathOf(definition.registryPath),
   };
 }
 
@@ -298,6 +345,13 @@ export function buildRegistryItem(name, upstreamItem, generatedSource, target) {
     if (!dependenciesByName.has(dependency)) dependenciesByName.set(dependency, dependency);
   }
 
+  // block は配布ファイルが複数あり、上流の type（registry:component 等）をそのまま使う。
+  // registry:page は resolveRegistryTarget が droppedFiles へ振り分け済みなのでここには来ない。
+  const itemFiles =
+    target.itemType === "registry:block"
+      ? target.files.map(({ targetPath, fileType }) => ({ path: targetPath, type: fileType }))
+      : [{ path: target.targetPath, type: target.itemType }];
+
   const item = {
     $schema: "https://ui.shadcn.com/schema/registry-item.json",
     name,
@@ -307,7 +361,7 @@ export function buildRegistryItem(name, upstreamItem, generatedSource, target) {
       .map((part) => `${part[0].toUpperCase()}${part.slice(1)}`)
       .join(" "),
     description: `${name} ${target.itemType === "registry:hook" ? "hook" : "component"}.`,
-    files: [{ path: target.targetPath, type: target.itemType }, ...SHARED_REGISTRY_FILES],
+    files: [...itemFiles, ...SHARED_REGISTRY_FILES],
   };
   if (dependenciesByName.size) {
     item.dependencies = [...dependenciesByName.values()].sort();

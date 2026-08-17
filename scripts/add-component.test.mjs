@@ -231,9 +231,15 @@ test("registry item type と一次 path から target を決める", async () =>
 test("未対応 type と type に合わない一次 path は停止する", async () => {
   const { resolveRegistryTarget } = await loadModule();
 
+  // registry:block は対応済みなので、未対応 type の網羅は実際に未対応な type で保つ。
+  // ここを registry:block のままにすると、block 対応の追加でこの検査が空振りする。
   assert.throws(
-    () => resolveRegistryTarget("example", { type: "registry:block", files: [] }),
+    () => resolveRegistryTarget("example", { type: "registry:style", files: [] }),
     /未対応の registry item type/,
+  );
+  assert.throws(
+    () => resolveRegistryTarget("example", { files: [] }),
+    /未対応の registry item type: なし/,
   );
   assert.throws(
     () =>
@@ -443,4 +449,120 @@ test("汚れた worktree では add を実行する前に停止する", async (t
     /worktree が汚れている/,
   );
   assert.equal(called, false);
+});
+
+const loginUpstream = {
+  name: "login-01",
+  type: "registry:block",
+  files: [
+    {
+      path: "registry/base-nova/blocks/login-01/page.tsx",
+      type: "registry:page",
+      target: "app/login/page.tsx",
+    },
+    {
+      path: "registry/base-nova/blocks/login-01/components/login-form.tsx",
+      type: "registry:component",
+    },
+  ],
+  registryDependencies: ["button", "card", "input", "label", "field"],
+};
+
+test("registry:block の配布ファイルを src/blocks/<name>/ へ解決する", async () => {
+  const { resolveRegistryTarget } = await loadModule();
+  const target = resolveRegistryTarget("login-01", loginUpstream);
+  assert.equal(target.itemType, "registry:block");
+  assert.deepEqual(target.files, [
+    {
+      registryPath: "registry/base-nova/blocks/login-01/components/login-form.tsx",
+      targetPath: "src/blocks/login-01/components/login-form.tsx",
+      upstreamPath: "apps/v4/registry/bases/base/blocks/login-01/components/login-form.tsx",
+      fileType: "registry:component",
+    },
+  ]);
+});
+
+test("registry:page を配布対象から外し droppedFiles へ振り分ける", async () => {
+  const { resolveRegistryTarget } = await loadModule();
+  const target = resolveRegistryTarget("login-01", loginUpstream);
+  assert.deepEqual(target.droppedFiles, [
+    {
+      registryPath: "registry/base-nova/blocks/login-01/page.tsx",
+      upstreamPath: "apps/v4/registry/bases/base/blocks/login-01/page.tsx",
+    },
+  ]);
+});
+
+test("registry:block の配布ファイルが 0 件なら停止する", async () => {
+  const { resolveRegistryTarget } = await loadModule();
+  assert.throws(
+    () =>
+      resolveRegistryTarget("login-01", {
+        ...loginUpstream,
+        files: [loginUpstream.files[0]],
+      }),
+    /配布対象のファイルが 0 件/,
+  );
+});
+
+test("block の file path が block ディレクトリ配下でなければ停止する", async () => {
+  const { resolveRegistryTarget } = await loadModule();
+  assert.throws(
+    () =>
+      resolveRegistryTarget("login-01", {
+        ...loginUpstream,
+        files: [{ path: "registry/base-nova/ui/login-form.tsx", type: "registry:component" }],
+      }),
+    /block の file path が想定外/,
+  );
+});
+
+test("registry:ui の戻り値は従来どおり単一ファイルの形を保つ", async () => {
+  const { resolveRegistryTarget } = await loadModule();
+  const target = resolveRegistryTarget("badge", {
+    name: "badge",
+    type: "registry:ui",
+    files: [{ path: "registry/base-nova/ui/badge.tsx", type: "registry:ui" }],
+  });
+  assert.equal(target.targetPath, "src/components/ui/badge.tsx");
+  assert.equal(target.files, undefined);
+});
+
+test("src/blocks/ 配下の変更を target として分類する", async () => {
+  const { classifyPath } = await loadModule();
+  assert.equal(
+    classifyPath("src/blocks/login-01/components/login-form.tsx", "src/blocks/login-01", new Set()),
+    "target",
+  );
+});
+
+test("別 block ディレクトリの変更は target として分類しない", async () => {
+  const { classifyPath } = await loadModule();
+  assert.equal(
+    classifyPath("src/blocks/login-02/components/login-form.tsx", "src/blocks/login-01", new Set()),
+    "unknown",
+  );
+});
+
+test("block の registry item は配布ファイルだけを files に載せる", async () => {
+  const { buildRegistryItem, resolveRegistryTarget } = await loadModule();
+  const target = resolveRegistryTarget("login-01", loginUpstream);
+  const item = buildRegistryItem("login-01", loginUpstream, "", target);
+  assert.equal(item.type, "registry:block");
+  assert.equal(item.title, "Login 01");
+  assert.deepEqual(
+    item.files.filter((file) => file.type !== "registry:file"),
+    [{ path: "src/blocks/login-01/components/login-form.tsx", type: "registry:component" }],
+  );
+  assert.equal(
+    item.files.some((file) => file.type === "registry:page"),
+    false,
+  );
+  assert.deepEqual(item.registryDependencies, [
+    "@elchika/button",
+    "@elchika/card",
+    "@elchika/input",
+    "@elchika/label",
+    "@elchika/field",
+  ]);
 });
