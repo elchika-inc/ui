@@ -9,14 +9,30 @@ import {
 } from "@/site/documentation-shell";
 import { directInstallCommand, namespaceInstallCommand } from "@/site/installation.mjs";
 
+export type ComponentKind = "component" | "block";
+
 type ComponentDocumentationProps = {
   categories: NavigationCategory[];
   name: string;
   title: string;
+  kind?: ComponentKind;
 };
 
-export function ComponentDocumentation({ categories, name, title }: ComponentDocumentationProps) {
+// block は 1 item = N ファイルなので <name>.tsx という 1 対 1 の仮定が成立しない。
+// ディレクトリを指す tree URL を使う。
+const sourceHref = (kind: ComponentKind, name: string) =>
+  kind === "block"
+    ? `https://github.com/elchika-inc/ui/tree/main/src/blocks/${name}`
+    : `https://github.com/elchika-inc/ui/blob/main/src/components/ui/${name}.tsx`;
+
+export function ComponentDocumentation({
+  categories,
+  name,
+  title,
+  kind = "component",
+}: ComponentDocumentationProps) {
   const [previewLoaded, setPreviewLoaded] = useState(false);
+  const isBlock = kind === "block";
 
   return (
     <DocumentationShell
@@ -26,9 +42,7 @@ export function ComponentDocumentation({ categories, name, title }: ComponentDoc
         <Button
           variant="ghost"
           size="icon"
-          render={
-            <a href={`https://github.com/elchika-inc/ui/blob/main/src/components/ui/${name}.tsx`} />
-          }
+          render={<a href={sourceHref(kind, name)} />}
           aria-label={`${title} のソースをGitHubで開く`}
           title="GitHubでソースを見る"
         >
@@ -43,11 +57,13 @@ export function ComponentDocumentation({ categories, name, title }: ComponentDoc
           <>
             <header className="flex flex-col gap-3 border-b border-border pb-8">
               <p className="font-mono text-xs font-medium tracking-wider text-primary uppercase">
-                Component
+                {isBlock ? "Block" : "Component"}
               </p>
               <h1 className="font-heading text-4xl font-semibold tracking-tight">{title}</h1>
               <p className="max-w-2xl text-muted-foreground">
-                配布 component の実装と同じ isolated preview を表示します。
+                {isBlock
+                  ? "組み立て済みの雛形です。コピーして自分のアプリで編集する前提のため、ライブラリからは export しません。"
+                  : "配布 component の実装と同じ isolated preview を表示します。"}
               </p>
             </header>
 

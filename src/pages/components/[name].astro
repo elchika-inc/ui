@@ -1,8 +1,16 @@
 ---
+import { readFileSync } from "node:fs";
+
 import { categorizePreviewItems } from "@/catalog/component-categories.mjs";
 import { previewItems } from "@/catalog/previews";
 import DocsLayout from "@/layouts/docs.astro";
 import { ComponentDocumentation } from "@/site/component-documentation";
+
+// registry item の type を kind の正本にする。preview を足すだけで公開ページが
+// 自動生成されるため、kind を渡さないと block も registry:ui 前提のテンプレートで描画され、
+// ソースリンクが src/components/ui/<name>.tsx を指して 404 になる。
+const registry = JSON.parse(readFileSync("registry.json", "utf8"));
+const itemTypes = new Map(registry.items.map((item) => [item.name, item.type]));
 
 export function getStaticPaths() {
   return previewItems.map(({ name, title }) => ({
@@ -14,6 +22,8 @@ export function getStaticPaths() {
 // biome-ignore lint/correctness/noUnusedVariables: Astro template から参照する値。
 const { name, title } = Astro.props;
 // biome-ignore lint/correctness/noUnusedVariables: Astro template から参照する値。
+const kind = itemTypes.get(name) === "registry:block" ? "block" : "component";
+// biome-ignore lint/correctness/noUnusedVariables: Astro template から参照する値。
 const categories = categorizePreviewItems(previewItems).map((category) => ({
   name: category.name,
   items: category.items.map((item) => ({ name: item.name, title: item.title })),
@@ -21,5 +31,11 @@ const categories = categorizePreviewItems(previewItems).map((category) => ({
 ---
 
 <DocsLayout title={`${title} - elchika-inc/ui`} description={`${title} の導入手順とプレビュー`}>
-  <ComponentDocumentation categories={categories} name={name} title={title} client:load />
+  <ComponentDocumentation
+    categories={categories}
+    name={name}
+    title={title}
+    kind={kind}
+    client:load
+  />
 </DocsLayout>

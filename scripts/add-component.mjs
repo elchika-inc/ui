@@ -301,9 +301,24 @@ function externalImports(source) {
 }
 
 const UPSTREAM_PREFIX = "apps/v4/registry/bases/base/";
+const REGISTRY_PREFIX = "registry/base-nova/";
 
-const upstreamPathOf = (registryPath) =>
-  `${UPSTREAM_PREFIX}${registryPath.replace("registry/base-nova/", "")}`;
+// 文字列引数の replace は先頭アンカーを持たず「最初に現れた出現位置」を消すため、
+// prefix が先頭以外にあるパス（vendor/registry/base-nova/...）を黙って別物へ変換する。
+// 前方一致を検査してから slice する。
+const upstreamPathOf = (registryPath) => {
+  if (!registryPath.startsWith(REGISTRY_PREFIX)) {
+    throw new Error(`registry path が想定外: ${registryPath}`);
+  }
+  return `${UPSTREAM_PREFIX}${registryPath.slice(REGISTRY_PREFIX.length)}`;
+};
+
+// 上流 block が持ちうる file type のうち、この機構が正しく扱えると実証済みのもの。
+// 「registry:page 以外は全部配布」にすると未知の type を黙って配布側へ流す。
+// registry:file（dashboard-01 の data.json）は CLI が item の target へ書くため
+// components alias 直下からの移設が成立せず、registry item も target を要求する。
+// 扱えるようになるまで fail-closed で止める。
+const SUPPORTED_BLOCK_FILE_TYPES = new Set(["registry:component", "registry:ui", "registry:hook"]);
 
 // block は「利用者が 1 つ選んでコピーする雛形」なので、page.tsx は 27 件すべてが同名で衝突する。
 // standards が Next.js を標準スタック外としているため target: app/<name>/page.tsx も配れない。
@@ -311,19 +326,24 @@ const upstreamPathOf = (registryPath) =>
 function resolveBlockTarget(name, upstreamItem) {
   const files = [];
   const droppedFiles = [];
+  const blockPrefix = `${REGISTRY_PREFIX}blocks/${name}/`;
   for (const file of upstreamItem.files ?? []) {
     const registryPath = file.path;
     if (file.type === "registry:page") {
       droppedFiles.push({ registryPath, upstreamPath: upstreamPathOf(registryPath) });
       continue;
     }
-    const relative = registryPath.replace(`registry/base-nova/blocks/${name}/`, "");
-    if (relative === registryPath) {
+    if (!SUPPORTED_BLOCK_FILE_TYPES.has(file.type)) {
+      throw new Error(
+        `${name}: block の file type が未対応: ${file.type ?? "なし"} (${registryPath})`,
+      );
+    }
+    if (!registryPath.startsWith(blockPrefix)) {
       throw new Error(`${name}: block の file path が想定外: ${registryPath}`);
     }
     files.push({
       registryPath,
-      targetPath: `src/blocks/${name}/${relative}`,
+      targetPath: `src/blocks/${name}/${registryPath.slice(blockPrefix.length)}`,
       upstreamPath: upstreamPathOf(registryPath),
       fileType: file.type,
     });
@@ -632,6 +652,9 @@ export async function runAddComponent({
   runCommand(command.command, command.args, { cwd: repositoryRoot, stdio: "inherit" });
 
   if (isBlock) relocateBlockFiles(repositoryRoot, target, log);
+  // reconcile より前に呼ぶ。後にすると、CLI が作った app/<name>/page.tsx が
+  // どの分類ルールにも一致せず reconcile が先に停止し、この防御へ到達しない。
+  removeDroppedPages(repositoryRoot, target, upstreamItem, log);
 
   const reconciled = reconcileAddChanges({
     root: repositoryRoot,
@@ -645,10 +668,16 @@ export async function runAddComponent({
   for (const path of reconciled.keptManifests) log(`依存 manifest を保持: ${path}`);
 
   ensureGenerated(repositoryRoot, target, isBlock);
-  removeDroppedPages(repositoryRoot, target, upstreamItem, log);
 
+  // block でも配布ファイルの実体を読んで渡す。空文字にすると buildRegistryItem の
+  // externalImports が空走し、「上流 item の dependencies 宣言漏れを生成物の import から
+  // 拾い直す」安全網が block レーンだけ黙って無効になる（上流 dashboard-01 は実際に
+  // recharts / sonner の宣言を欠く）。generatedContentSha256 は block では
+  // blockProvenanceEntry が files ごとに個別計算するので、この連結値は来歴へ入らない。
   const generatedSource = isBlock
-    ? ""
+    ? target.files
+        .map(({ targetPath }) => readFileSync(join(repositoryRoot, targetPath), "utf8"))
+        .join("\n")
     : readFileSync(join(repositoryRoot, target.targetPath), "utf8");
   const entry = await createProvenanceEntry({
     root: repositoryRoot,

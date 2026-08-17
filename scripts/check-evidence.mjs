@@ -4,6 +4,7 @@ import { execFileSync, spawnSync } from "node:child_process";
 import { existsSync, lstatSync, readdirSync, readFileSync, realpathSync } from "node:fs";
 import { basename, extname, isAbsolute, join, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
+import { scanBlockNames } from "./block-scan.mjs";
 
 // preview 全体へ影響しうる共有面はここだけを育てる。
 export const SHARED_EVIDENCE_PATHS = [
@@ -906,11 +907,21 @@ export function checkEvidenceInRepo(root) {
   const componentVerifications = [];
   const reports = [];
   const componentsRoot = join(repositoryRoot, "src/components/ui");
-  const components = existsSync(componentsRoot)
-    ? readdirSync(componentsRoot)
-        .filter((file) => file.endsWith(".tsx"))
-        .map((file) => file.replace(/\.tsx$/, ""))
-    : [];
+  // block も証跡のカバレッジ強制の対象に含める。走査根が src/components/ui 固定のままだと
+  // 「block ごとの証跡 Markdown が無い」が検出されず、証跡を撮り忘れても緑になる。
+  // stale 検知は componentPaths が registry item から実パスを引くので既に block を見ている。
+  const provenancePath = join(repositoryRoot, "provenance.json");
+  const provenance = existsSync(provenancePath)
+    ? JSON.parse(readFileSync(provenancePath, "utf8"))
+    : {};
+  const components = [
+    ...(existsSync(componentsRoot)
+      ? readdirSync(componentsRoot)
+          .filter((file) => file.endsWith(".tsx"))
+          .map((file) => file.replace(/\.tsx$/, ""))
+      : []),
+    ...scanBlockNames(join(repositoryRoot, "src/blocks"), provenance),
+  ];
 
   for (const entry of entries.filter((candidate) => !candidate.isFile)) {
     problems.push(`${entry.path}: 通常ファイルではないため証跡として検査できない`);

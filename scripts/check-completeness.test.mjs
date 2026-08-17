@@ -451,3 +451,127 @@ test("法務ファイルは配布分の突合対象に含めない", () => {
   });
   assert.deepEqual(checkCompleteness({ ...completeBlock, registry }).problems, []);
 });
+
+// 台帳 2 つの間だけで突合すると、どちらにも載っていない＝ディスクにだけ在るファイルが
+// 永久に緑になる。実測ではこの状態で配布物が壊れ（import 先が同梱されない）、
+// 手元の typecheck と build は通ってしまった。3 本目の足を固定する。
+test("ディスクにあって registry item に無いファイルを検出する", () => {
+  const { problems } = checkCompleteness({
+    ...completeBlock,
+    blockFiles: {
+      "login-01": [
+        "src/blocks/login-01/components/login-form.tsx",
+        "src/blocks/login-01/components/social-buttons.tsx",
+      ],
+    },
+  });
+  assert.deepEqual(problems, [
+    "login-01: src/blocks/login-01/components/social-buttons.tsx が registry item に無い（配布されない）",
+  ]);
+});
+
+test("registry item にあってディスクに無いファイルを検出する", () => {
+  const { problems } = checkCompleteness({
+    ...completeBlock,
+    blockFiles: { "login-01": [] },
+  });
+  assert.deepEqual(problems, [
+    "login-01: registry item の src/blocks/login-01/components/login-form.tsx が src/blocks/ に無い",
+  ]);
+});
+
+test("ディスク実体が一致していれば問題を返さない", () => {
+  const { problems } = checkCompleteness({
+    ...completeBlock,
+    blockFiles: { "login-01": ["src/blocks/login-01/components/login-form.tsx"] },
+  });
+  assert.deepEqual(problems, []);
+});
+
+test("blockFiles を渡さなければディスク突合を行わない", () => {
+  assert.deepEqual(checkCompleteness(completeBlock).problems, []);
+});
+
+// dropped 側には「1 件以上」のガードがあるのに配布側に無いと、
+// 「何も配布しない block」が全経路に載っていると判定される。
+test("配布ファイルが 0 件の block を検出する", () => {
+  const registry = structuredClone(completeBlock.registry);
+  registry.items[1].files = registry.items[1].files.filter((file) => file.target !== undefined);
+  const provenance = structuredClone(completeBlock.provenance);
+  provenance.blocks["login-01"].files = provenance.blocks["login-01"].files.filter(
+    (file) => file.dropped,
+  );
+  const { problems } = checkCompleteness({ ...completeBlock, registry, provenance });
+  assert.deepEqual(problems, ["login-01: registry item に配布ファイルが 1 件も無い"]);
+});
+
+// 法務ファイルの除外を type で行うと、block 自身の registry:file まで巻き込んで
+// 正しい来歴を赤くする（dashboard-01 の data.json が該当する）。target の有無で切る。
+test("block 自身の registry:file を法務ファイルと取り違えない", () => {
+  const registry = structuredClone(completeBlock.registry);
+  registry.items[1].files.push({
+    path: "src/blocks/login-01/data.json",
+    type: "registry:file",
+  });
+  const provenance = structuredClone(completeBlock.provenance);
+  provenance.blocks["login-01"].files.push({
+    path: "src/blocks/login-01/data.json",
+    upstreamPath: "apps/v4/registry/bases/base/blocks/login-01/data.json",
+    upstreamPathSha: "0123456789abcdef0123456789abcdef01234567",
+    generatedContentSha256: "f".repeat(64),
+  });
+  assert.deepEqual(checkCompleteness({ ...completeBlock, registry, provenance }).problems, []);
+});
+
+// 「全キーが x」だけでは、個別キーの正規表現を緩めても検出できない
+// （notDeepEqual は 7 キーのうち 1 つでも鳴れば通る）。per-key で固定する。
+test("block の来歴は各キーの形式を個別に要求する", () => {
+  // license（/^\S+$/）と modified（/\S/）は自由記述なので "x" を正当に受理する。
+  // 構造を持つキーだけを対象にする。
+  for (const key of [
+    "registryUrl",
+    "registryContentSha256",
+    "addTarget",
+    "shadcnCliVersion",
+    "fetchedAt",
+  ]) {
+    const provenance = structuredClone(completeBlock.provenance);
+    provenance.blocks["login-01"][key] = "x";
+    const { problems } = checkCompleteness({ ...completeBlock, provenance });
+    assert.ok(
+      problems.some((problem) => problem.includes(`provenance の ${key} が形式に合わない`)),
+      key,
+    );
+  }
+});
+
+test("block の来歴ハッシュは 64 桁の小文字 16 進を要求する", () => {
+  for (const value of ["A".repeat(64), "abc", `${"a".repeat(64)}0`]) {
+    const provenance = structuredClone(completeBlock.provenance);
+    provenance.blocks["login-01"].registryContentSha256 = value;
+    const { problems } = checkCompleteness({ ...completeBlock, provenance });
+    assert.ok(
+      problems.some((problem) => problem.includes("registryContentSha256")),
+      value,
+    );
+  }
+});
+
+test("block の files のハッシュも 64 桁の小文字 16 進を要求する", () => {
+  for (const value of ["A".repeat(64), "abc"]) {
+    const provenance = structuredClone(completeBlock.provenance);
+    provenance.blocks["login-01"].files[0].generatedContentSha256 = value;
+    const { problems } = checkCompleteness({ ...completeBlock, provenance });
+    assert.ok(
+      problems.some((problem) => problem.includes("generatedContentSha256")),
+      value,
+    );
+  }
+});
+
+test("block の fetchedAt はゼロ埋めした日付を要求する", () => {
+  const provenance = structuredClone(completeBlock.provenance);
+  provenance.blocks["login-01"].fetchedAt = "2026-8-17";
+  const { problems } = checkCompleteness({ ...completeBlock, provenance });
+  assert.ok(problems.some((problem) => problem.includes("fetchedAt")));
+});

@@ -2,6 +2,7 @@
 // selector の実在確認は Portal や操作後の DOM を含むため、実ブラウザ検証で行う。
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
+import { scanBlockNames } from "./block-scan.mjs";
 
 const CATALOG_PREVIEW_NAMES = ["catalog", "catalog-dark"];
 
@@ -54,11 +55,11 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
 
   // 走査根が src/components/ui 固定のままだと block の preview selector が
   // 未宣言でも緑になり、ゲートを掛けたつもりで掛かっていない状態になる。
-  const blocks = existsSync("src/blocks")
-    ? readdirSync("src/blocks", { withFileTypes: true })
-        .filter((entry) => entry.isDirectory())
-        .map((entry) => entry.name)
-    : [];
+  // 走査根はディスクと来歴の和集合（ディスク単独だと台帳との乖離時に対象が黙って縮む）。
+  const provenance = existsSync("provenance.json")
+    ? JSON.parse(readFileSync("provenance.json", "utf8"))
+    : {};
+  const blocks = scanBlockNames("src/blocks", provenance);
 
   const selectors = JSON.parse(readFileSync(manifestPath, "utf8"));
   const { problems } = checkPreviewRender(requiredPreviewNames(components, blocks), selectors);

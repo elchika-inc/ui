@@ -4,6 +4,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import ts from "typescript";
+import { listBlockFiles, scanBlockNames } from "./block-scan.mjs";
 
 const exportDeclarations = (source, fileName) => {
   const sourceFile = ts.createSourceFile(
@@ -127,7 +128,7 @@ function blockFileProblems(name, file, index) {
 
 // block は barrel export と <Name>Props を要求しない。registry 経由で copy-and-edit
 // する雛形であり、ライブラリの公開 API ではないため（設計 §3-1 の要件マトリクス）。
-function blockProblems(name, registry, previewFiles, previewSources, provenance) {
+function blockProblems(name, registry, previewFiles, previewSources, provenance, onDisk) {
   const problems = [];
   if (!registry.items.some((i) => i.name === name)) {
     problems.push(`${name}: registry.json に item が無い`);
@@ -153,27 +154,41 @@ function blockProblems(name, registry, previewFiles, previewSources, provenance)
   return [
     ...problems,
     ...p.files.flatMap((file, index) => blockFileProblems(name, file, index)),
-    ...blockFileSetProblems(name, registry, p.files),
+    ...blockFileSetProblems(name, registry, p.files, onDisk),
   ];
 }
 
 // files[] の「形」だけを見ると、エントリを 1 件消しても残りが正しい限り緑になる。
 // 実際に mutation で緑のまま通り抜けた。期待される集合と突き合わせる。
-function blockFileSetProblems(name, registry, files) {
+//
+// 突合は 3 集合で行う。台帳 2 つ（registry item / provenance）の間だけで閉じると、
+// registry.json と provenance.json は add-component が同じ target.files から同時に書くため
+// 「両方に載っていないファイル」＝ディスクにだけ在るファイルが永久に緑になる。
+// このとき配布物には import 先を欠いた tsx が入り、壊れているのは配布物だけなので
+// 手元の typecheck も build も通ってしまう（実測で確認済みの失敗モード）。
+function blockFileSetProblems(name, registry, files, onDisk) {
   const problems = [];
   const item = registry.items.find((i) => i.name === name);
   // item が無いことは別途 problem 済み。ここで二重に鳴らさない。
   if (!item) return problems;
 
-  // 配布分の正解は registry item。法務ファイル（registry:file）は全 item 共通なので除く。
+  // 配布分の正解は registry item。法務ファイルは全 item へ共通で足されるもので、
+  // block 自身のファイルではないので除く。type ではなく target の有無で判定する
+  // ——type で切ると block 自身の registry:file まで巻き込み、正しい来歴を赤くする。
   const distributed = (item.files ?? [])
-    .filter((file) => file.type !== "registry:file")
+    .filter((file) => file.target === undefined)
     .map((file) => file.path)
     .sort();
   const recorded = files
     .filter((file) => file.dropped !== true)
     .map((file) => file.path)
     .sort();
+
+  // 配布ファイルが 0 件の block は「何も配布しない item」であり、
+  // 両方向のループが空回りして緑になる。dropped 側と対称に塞ぐ。
+  if (distributed.length === 0) {
+    problems.push(`${name}: registry item に配布ファイルが 1 件も無い`);
+  }
   for (const path of distributed) {
     if (!recorded.includes(path)) {
       problems.push(`${name}: registry item の ${path} が provenance の files に無い`);
@@ -182,6 +197,20 @@ function blockFileSetProblems(name, registry, files) {
   for (const path of recorded) {
     if (!distributed.includes(path)) {
       problems.push(`${name}: provenance の files の ${path} が registry item に無い`);
+    }
+  }
+
+  // 3 本目の足。onDisk を渡さない呼び出し（既存のテスト等）はここを飛ばす。
+  if (onDisk !== undefined) {
+    for (const path of onDisk) {
+      if (!distributed.includes(path)) {
+        problems.push(`${name}: ${path} が registry item に無い（配布されない）`);
+      }
+    }
+    for (const path of distributed) {
+      if (!onDisk.includes(path)) {
+        problems.push(`${name}: registry item の ${path} が src/blocks/ に無い`);
+      }
     }
   }
 
@@ -242,6 +271,9 @@ function componentProblems(name, barrelPaths, registry, previewFiles, previewSou
 export function checkCompleteness({
   components,
   blocks = [],
+  // block ごとのディスク実体（{ "login-01": ["src/blocks/login-01/..."] }）。
+  // 省略した block はディスク突合を行わない（既存の呼び出しを壊さないため）。
+  blockFiles = {},
   barrel,
   dts,
   registry,
@@ -257,7 +289,16 @@ export function checkCompleteness({
     );
   }
   for (const name of blocks) {
-    problems.push(...blockProblems(name, registry, previewFiles, previewSources, provenance));
+    problems.push(
+      ...blockProblems(
+        name,
+        registry,
+        previewFiles,
+        previewSources,
+        provenance,
+        blockFiles[name]?.slice().sort(),
+      ),
+    );
   }
   return { problems };
 }
@@ -270,26 +311,27 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     console.error("コンポーネントが 0 件（走査対象が壊れている）");
     process.exit(1);
   }
-  // block レーンは後から生えるので、ディレクトリが無い状態を正常として扱う。
-  // ここを fail-closed にすると block 導入前のリポジトリが赤くなる。
-  const blocks = existsSync("src/blocks")
-    ? readdirSync("src/blocks", { withFileTypes: true })
-        .filter((entry) => entry.isDirectory())
-        .map((entry) => entry.name)
-    : [];
   if (!existsSync("lib/index.d.ts")) {
     console.error("lib/index.d.ts が無い（build:lib を先に実行する）");
     process.exit(1);
   }
+  const provenance = JSON.parse(readFileSync("provenance.json", "utf8"));
+  // block レーンは後から生えるので、ディレクトリが無い状態を正常として扱う
+  // （scanBlockNames が両方の走査根が空なら空配列を返す）。
+  const blocks = scanBlockNames("src/blocks", provenance);
+  const blockFiles = Object.fromEntries(
+    blocks.map((name) => [name, listBlockFiles("src/blocks", name)]),
+  );
   const { problems } = checkCompleteness({
     components,
     blocks,
+    blockFiles,
     barrel: readFileSync("src/index.ts", "utf8"),
     dts: readFileSync("lib/index.d.ts", "utf8"),
     registry: JSON.parse(readFileSync("registry.json", "utf8")),
     previewFiles: readdirSync("src/pages/preview"),
     previewSources: readdirSync("src/previews"),
-    provenance: JSON.parse(readFileSync("provenance.json", "utf8")),
+    provenance,
   });
   if (problems.length) {
     console.error(`欠落:\n  ${problems.join("\n  ")}`);
