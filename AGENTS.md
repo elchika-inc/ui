@@ -36,11 +36,13 @@ elchika-inc の共有 UI コンポーネント。Base UI + Tailwind CSS v4。sha
 | `scripts/record-provenance.mjs` | コンポーネント来歴の記録 |
 | `scripts/check-standards.mjs` | standards `DESIGN.md` §3（色トークン）・§5（arbitrary value / focus ring）違反の機械検知。当リポジトリの `DESIGN.md` ではない |
 | `scripts/check-distribution.mjs` | registry item への法務ファイル同梱検査 |
+| `scripts/block-scan.mjs` | block レーンの走査根の正本。completeness / preview render / evidence の 3 検査が共有する。走査根は「ディスク ∪ `provenance.blocks` ∪ `registry.json` の `registry:block` item」の和集合 |
 | `scripts/contrast.mjs` | トークンのコントラストを oklch から実計算する |
 | `provenance.json` | コンポーネント単位の来歴（機械可読） |
 | `.shadcn-cli-version` | scaffold を実行した CLI の exact version。来歴の正本 |
 | `components.json` | shadcn の設定 |
 | `src/components/ui/*.tsx` | 部品本体 |
+| `src/blocks/<name>/**` | block 本体（組み立て済みの雛形）。registry 専用で `src/index.ts` には載せない。`src/components/ui/*.tsx` と同格の走査根 |
 | `src/index.ts` | ライブラリのバレル |
 | `types/dts-contract.ts` | ビルド出力の props 契約を型で検査する（grep で代替できない） |
 | `src/styles/global.css` | トークン |
@@ -80,6 +82,9 @@ elchika-inc の共有 UI コンポーネント。Base UI + Tailwind CSS v4。sha
 - routes:
   - `/` — 利用者向け導入手順と component 索引。
   - `/components/button/` — Button の公開 component ページ。
+  - `/components/login-01/` — login-01（block）の公開ページ。block はソースリンクがディレクトリの tree URL を指し、Props セクションを出さない。
   - `/catalog/` — 横断検証カタログ（既存証跡の対象）。
   - `/preview/button/` — Button の隔離プレビュー（light）。
   - `/preview/button-dark/` — Button の隔離プレビュー（dark）。
+  - `/preview/login-01/` — login-01 の隔離プレビュー（light）。
+  - `/preview/login-01-dark/` — login-01 の隔離プレビュー（dark）。

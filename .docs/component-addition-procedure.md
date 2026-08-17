@@ -76,3 +76,57 @@ npm run check:pre
 - 描画を持たない Provider の preview consumer と selector をどう作るか
 - overlay を初期 open にするか、操作後 open にするか
 - shared surface 変更後に、どの既存証跡を再撮影するか
+
+## registry:block を追加する場合の差分
+
+block は部品（`registry:ui`）と同じ手順を使うが、次の点だけ異なる。実装計画
+`.docs/plans/2026-08-17-registry-blocks-design.md` は 1 回限りの文書なので、
+消化後に頼る手順の正本はここになる。
+
+| 項目 | 部品（`registry:ui`） | block（`registry:block`） |
+|---|---|---|
+| 配置 | `src/components/ui/<name>.tsx` | `src/blocks/<name>/**` の per-block ディレクトリ |
+| barrel（`src/index.ts`） | 載せる | **載せない**。`<Name>Props` も作らない |
+| 公開ページの Props 節 | 出す | **出さない**（props 契約が設計上存在しないため） |
+| 上流の `registry:page` | 該当なし | **配布しない**。来歴へ `dropped: true` で記録する |
+| preview | 部品を並べる | 上流 `page.tsx` のレイアウト枠を再現する。**`mode === "catalog"` では高さを固定する**（`min-h-svh` を catalog へ持ち込むとグリッド行が破綻する。`src/previews/sidebar.tsx` が同じ形の分岐を持つ） |
+| カテゴリ | 部品のカテゴリ | block 専用のカテゴリへ入れる（部品のカテゴリに混ぜない） |
+
+### 実行手順の差分
+
+1. `node scripts/add-component.mjs <name> --modified "..."` は共通。block では
+   CLI が配布ファイルを `src/components/` 直下へフラットに落とすため、スクリプトが
+   `src/blocks/<name>/` へ移設する。移設は `registryPath` の basename から決定的に対応付ける。
+2. **移設後に biome の整形や standards 適合の修正を行ったら、`--force` で再実行して
+   来歴の `generatedContentSha256` を取り直す。** `check-completeness` がディスク実体と
+   突合するため、ずれたままにはできない。
+3. `preview-selectors.json` の追加は既存キーの順序を崩さず 1 件だけ挿入する。
+4. `npm run registry:build` を先に実行してから `npm run check:pre` を走らせる
+   （`check-distribution` が `public/r/<name>.json` を要求する）。
+
+### block で追加されたゲート
+
+`npm run check:all` に加えて、次が block へ掛かる。Phase 2 で件数を増やす前に、
+**1 度だけ意図的な違反を仕込んで赤くなることを確認する**（緑は検査が働いている証拠にならない）。
+
+| 仕込む違反 | 赤くなる検査 |
+|---|---|
+| block の tsx に生の色指定を入れる | standards |
+| preview の astro を 1 枚消す | completeness |
+| `preview-selectors.json` から宣言を消す | preview render |
+| 来歴の `files[]` からエントリを消す | completeness |
+| 台帳に載らないファイルを `src/blocks/<name>/` へ置く | completeness |
+| registry item から block 自身の配布ファイルを消す | completeness |
+| `registryDependencies` から使っている部品を落とす | completeness |
+| 来歴の `generatedContentSha256` を書き換える | completeness |
+| block の証跡 Markdown を消す | evidence |
+| preview の tsx で存在しない export を import する | **typecheck**（`npm run typecheck`。`check:all` の 7 検査では捕まらない） |
+
+### 未対応（Phase 2 以降で決める）
+
+- 上流 block の `registry:file`（`dashboard-01/data.json`）は CLI が item の `target` へ書くため
+  移設が成立せず、`SUPPORTED_BLOCK_FILE_TYPES` が fail-closed で止める。
+- 配布ファイルが**互いを import する** block（sidebar 系の `app-sidebar.tsx` → `nav-main.tsx`）は、
+  consumer 側で `src/components/` へフラットに落ちるうえ `shadcn build` が import specifier を
+  書き換えないため、解決不能な import が残りうる。**Phase 2 の最初の 1 件で落下先の import を
+  目視で確かめてから残りへ進む。**
