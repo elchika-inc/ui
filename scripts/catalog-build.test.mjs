@@ -25,6 +25,15 @@ before(() => {
   execFileSync("npm", ["run", "build"], { cwd: root, stdio: "pipe" });
 });
 
+// block は barrel に載せず <Name>Props も作らない（設計 §1）ため、公開ページで
+// Props の枠を出すと利用者へ存在しない API を予告することになる。kind 別に検査する。
+const blockNames = () => {
+  const registry = JSON.parse(readFileSync(join(root, "registry.json"), "utf8"));
+  return new Set(
+    registry.items.filter((item) => item.type === "registry:block").map((item) => item.name),
+  );
+};
+
 const previewNames = () => {
   const names = readdirSync(join(root, "src/previews"))
     .filter((file) => file.endsWith(".tsx"))
@@ -62,6 +71,7 @@ test("index と個別 route が全 preview のcomponentページを列挙する"
   assert.match(html, /href="#main-content"/);
   assert.match(html, /<main[^>]*id="main-content"/);
 
+  const blocks = blockNames();
   for (const name of previewNames()) {
     assert.match(html, new RegExp(`href="/components/${name}/"`), `${name}: component link`);
     const componentHtml = builtPage(`components/${name}`);
@@ -76,7 +86,26 @@ test("index と個別 route が全 preview のcomponentページを列挙する"
       new RegExp(`npx shadcn@latest add https://ui\\.elchika\\.dev/r/${name}\\.json`),
     );
     assert.match(componentHtml, new RegExp(`npx shadcn@latest add @elchika/${name}`));
-    assert.match(componentHtml, /Props一覧は次段で追加します/);
+    if (blocks.has(name)) {
+      assert.doesNotMatch(
+        componentHtml,
+        /Props一覧は次段で追加します/,
+        `${name}: block に Props 節`,
+      );
+      assert.match(componentHtml, /uppercase">Block</, `${name}: block ラベル`);
+      assert.match(
+        componentHtml,
+        new RegExp(`github\\.com/elchika-inc/ui/tree/main/src/blocks/${name}`),
+        `${name}: block のソースリンクは tree URL`,
+      );
+    } else {
+      assert.match(componentHtml, /Props一覧は次段で追加します/, `${name}: Props 節`);
+      assert.match(
+        componentHtml,
+        new RegExp(`github\\.com/elchika-inc/ui/blob/main/src/components/ui/${name}\\.tsx`),
+        `${name}: component のソースリンクは blob URL`,
+      );
+    }
   }
 
   for (const name of previewNames()) {

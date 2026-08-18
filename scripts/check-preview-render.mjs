@@ -2,10 +2,15 @@
 // selector の実在確認は Portal や操作後の DOM を含むため、実ブラウザ検証で行う。
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
+import { scanBlockNames } from "./block-scan.mjs";
 
 const CATALOG_PREVIEW_NAMES = ["catalog", "catalog-dark"];
 
-export const requiredPreviewNames = (components) => [...components, ...CATALOG_PREVIEW_NAMES];
+export const requiredPreviewNames = (components, blocks = []) => [
+  ...components,
+  ...blocks,
+  ...CATALOG_PREVIEW_NAMES,
+];
 
 export function checkPreviewRender(components, selectors) {
   const problems = [];
@@ -48,8 +53,19 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     process.exit(1);
   }
 
+  // 走査根が src/components/ui 固定のままだと block の preview selector が
+  // 未宣言でも緑になり、ゲートを掛けたつもりで掛かっていない状態になる。
+  // 走査根はディスクと来歴の和集合（ディスク単独だと台帳との乖離時に対象が黙って縮む）。
+  const provenance = existsSync("provenance.json")
+    ? JSON.parse(readFileSync("provenance.json", "utf8"))
+    : {};
+  const registry = existsSync("registry.json")
+    ? JSON.parse(readFileSync("registry.json", "utf8"))
+    : {};
+  const blocks = scanBlockNames("src/blocks", provenance, registry);
+
   const selectors = JSON.parse(readFileSync(manifestPath, "utf8"));
-  const { problems } = checkPreviewRender(requiredPreviewNames(components), selectors);
+  const { problems } = checkPreviewRender(requiredPreviewNames(components, blocks), selectors);
   if (problems.length) {
     console.error(`preview selector の検査に失敗:\n  ${problems.join("\n  ")}`);
     process.exit(1);

@@ -68,3 +68,34 @@ test("catalog 2 route も selector の必須対象に含める", async () => {
     "catalog-dark",
   ]);
 });
+
+test("requiredPreviewNames は block を含める", async () => {
+  assert.ok(existsSync(checkerPath), "check-preview-render.mjs がまだ無い");
+  const { requiredPreviewNames } = await import(checkerPath);
+
+  assert.deepEqual(requiredPreviewNames(["button"], ["login-01"]), [
+    "button",
+    "login-01",
+    "catalog",
+    "catalog-dark",
+  ]);
+});
+
+test("requiredPreviewNames は block 省略時に既存の並びを保つ", async () => {
+  assert.ok(existsSync(checkerPath), "check-preview-render.mjs がまだ無い");
+  const { requiredPreviewNames } = await import(checkerPath);
+
+  assert.deepEqual(requiredPreviewNames(["button"]), ["button", "catalog", "catalog-dark"]);
+});
+
+test("block の selector 宣言欠落を検出する", async () => {
+  assert.ok(existsSync(checkerPath), "check-preview-render.mjs がまだ無い");
+  const { checkPreviewRender, requiredPreviewNames } = await import(checkerPath);
+
+  const { problems } = checkPreviewRender(requiredPreviewNames(["button"], ["login-01"]), {
+    button: '[data-slot="button"]',
+    catalog: '[data-slot="catalog"]',
+    "catalog-dark": '[data-slot="catalog"]',
+  });
+  assert.deepEqual(problems, ["login-01: preview selector の宣言が無い"]);
+});

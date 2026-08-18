@@ -1302,5 +1302,37 @@
       "modified": "DirectionProvider と useDirection を公開し、DirectionProviderProps 契約と LTR / RTL consumer preview を追加し、Provider が HTML / CSS の文字方向を変更しない利用契約を README に記録",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     }
+  },
+  "blocks": {
+    "login-01": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/login-01.json",
+      "registryContentSha256": "55b7b62eec1bbef2b5c24848f05335985b6b90b39dff5a19af38fa940ad90efb",
+      "addTarget": "@shadcn/login-01",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-18",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、CLI がフラット配置した配布ファイルを src/blocks/login-01/ へ移設。biome の整形と import 順の正規化を適用し、a11y/useValidAnchor 違反となる href=\"#\" を /forgot-password と /signup へ置き換えた。UI 文言は上流の英語のまま。",
+      "files": [
+        {
+          "path": "src/blocks/login-01/components/login-form.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/login-01/components/login-form.tsx",
+          "upstreamPathSha": "b9f62a83999dc7df855738a8715f40ab156b1f10",
+          "generatedContentSha256": "3c96754196b97ec0d454c864e2dd681ca297d90d4b64879568e64f9fab3c9d44"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/login-01/page.tsx",
+          "upstreamPathSha": "b9f62a83999dc7df855738a8715f40ab156b1f10"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    }
   }
 }

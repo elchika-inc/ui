@@ -76,3 +76,92 @@ npm run check:pre
 - 描画を持たない Provider の preview consumer と selector をどう作るか
 - overlay を初期 open にするか、操作後 open にするか
 - shared surface 変更後に、どの既存証跡を再撮影するか
+
+## registry:block を追加する場合の差分
+
+block は部品（`registry:ui`）と同じ手順を使うが、次の点だけ異なる。実装計画
+`.docs/plans/2026-08-17-registry-blocks-design.md` は 1 回限りの文書なので、
+消化後に頼る手順の正本はここになる。
+
+| 項目 | 部品（`registry:ui`） | block（`registry:block`） |
+|---|---|---|
+| 配置 | `src/components/ui/<name>.tsx` | `src/blocks/<name>/**` の per-block ディレクトリ |
+| barrel（`src/index.ts`） | 載せる | **載せない**。`<Name>Props` も作らない |
+| 公開ページの Props 節 | 出す | **出さない**（props 契約が設計上存在しないため） |
+| 上流の `registry:page` | 該当なし | **配布しない**。来歴へ `dropped: true` で記録する |
+| preview | 部品を並べる | 上流 `page.tsx` のレイアウト枠を再現する。**`mode === "catalog"` では高さを固定する**（`min-h-svh` を catalog へ持ち込むとグリッド行が破綻する。`src/previews/sidebar.tsx` が同じ形の分岐を持つ） |
+| カテゴリ | 部品のカテゴリ | block 専用のカテゴリへ入れる（部品のカテゴリに混ぜない） |
+
+### 実行手順の差分
+
+1. `node scripts/add-component.mjs <name> --modified "..."` は共通。block では
+   CLI が配布ファイルを `src/components/` 直下へフラットに落とすため、スクリプトが
+   `src/blocks/<name>/` へ移設する。移設は `registryPath` の basename から決定的に対応付ける。
+2. **移設後に biome の整形や standards 適合の修正を行ったら、`--resync` で来歴の
+   `generatedContentSha256` を取り直す。** `check-completeness` がディスク実体と突合するため、
+   ずれたままにはできない。
+
+   ```bash
+   node scripts/add-component.mjs <name> --resync
+   ```
+
+   `--modified` は付けない。付けると既存の `modified`（上流から何を変えたかの唯一の記録）を
+   その文字列で**置き換える**。追記したいときだけ、既存の全文へ追記した文字列を渡す。
+
+   **`--force` を使ってはいけない。** `--force` は shadcn CLI を再実行するので、正規化済みの
+   ファイルを CLI 生成物で上書きする。その後 lint を直すと今度はハッシュがずれ、
+   正規化と来歴を同時に満たす経路が無くなる（循環する）。`--resync` は CLI も通信も行わず、
+   ディスク実体からハッシュだけを取り直す。
+3. `preview-selectors.json` の追加は既存キーの順序を崩さず 1 件だけ挿入する。
+4. `npm run registry:build` を先に実行してから `npm run check:pre` を走らせる
+   （`check-distribution` が `public/r/<name>.json` を要求する）。
+
+### block で追加されたゲート
+
+`npm run check:all` に加えて、次が block へ掛かる。Phase 2 で件数を増やす前に、
+**1 度だけ意図的な違反を仕込んで赤くなることを確認する**（緑は検査が働いている証拠にならない）。
+
+| 仕込む違反 | 赤くなる検査 |
+|---|---|
+| block の tsx に値系 arbitrary value（例 `text-[#ff0000]`）を入れる | standards（**生の色リテラルは検知しない**。`check-standards.mjs` は focus ring の透明度合成と値系 arbitrary value の 2 規定のみ） |
+| preview の astro を 1 枚消す | completeness |
+| `preview-selectors.json` から宣言を消す | preview render |
+| 来歴の `files[]` からエントリを消す | completeness |
+| 台帳に載らないファイルを `src/blocks/<name>/` へ置く | completeness |
+| registry item から block 自身の配布ファイルを消す | completeness |
+| `registryDependencies` から使っている部品を落とす | completeness |
+| 来歴の `generatedContentSha256` を書き換える | completeness |
+| block の証跡 Markdown を消す | evidence |
+| preview の tsx で存在しない export を import する | **typecheck**（`npm run typecheck`）。下記の注記を読むこと |
+
+**最後の行の注記**: この違反を捕まえるのは typecheck であって検査群ではない。
+実行手順で先に走らせる `npm run check:pre`（6 検査）は**緑のまま通る**（実測）。
+`npm run check:all`（7 検査）は exit 1 になるが、それは import の破損の検出ではなく
+evidence が「preview が証跡の検証 SHA より新しい」を見ているためで、
+**無害なコメント 1 行を足しただけでも同じく赤くなる**（実測）。
+`check:all` が赤いことを「壊れた import を検知した」と読まないこと。
+
+### 未対応（Phase 2 以降で決める）
+
+- 上流 block の `registry:file`（`dashboard-01/data.json`）は CLI が item の `target` へ書くため
+  移設が成立せず、`SUPPORTED_BLOCK_FILE_TYPES` が fail-closed で止める。
+  `registry:ui` / `registry:hook` も同様に止まる（CLI がそれぞれ `aliases.ui` /
+  `aliases.hooks` へ落とすため、`src/components/` 直下からの移設が成立しない）。
+  上流 block がこれらの type を持つと「なぜか止まる」形で現れる。
+- **18 件の block が、どの registry にも存在しない `@/app/(create)/components/icon-placeholder` を
+  import する**（`login-05` / `signup-05` / `sidebar-01〜13,15,16` / `dashboard-01`。実測）。
+  上流 shadcn.com のサイト内部コンポーネントで、`https://ui.shadcn.com/r/styles/base-nova/icon-placeholder.json`
+  は **404**、当リポジトリの `registry.json` にも無い。`internalDependency` が `unknown` を返して
+  completeness が `registry item へ対応付けられない` で赤くなる（fail-closed なので黙って壊れはしない）。
+  block ごとに「lucide アイコンへ置換 / placeholder を自作 / 対象から外す」を人が決める。
+
+  **設計 §6-2 の「既存 61 コンポーネントで全 block をまかなえる」は `registryDependencies` の
+  宣言だけを突き合わせた結論で、配布ファイルの中身は測っていない。** 宣言側の不足が 0 件なのは
+  正しいが、中身は上記のとおり不足する。
+
+  素通しで進められるのは `login-02,03,04` / `signup-01,02,03,04` / `sidebar-14` の 8 件のみ。
+
+- 配布ファイルが**互いを import する** block（sidebar 系の `app-sidebar.tsx` → `nav-main.tsx`）は、
+  consumer 側で `src/components/` へフラットに落ちるうえ `shadcn build` が import specifier を
+  書き換えないため、解決不能な import が残りうる。**Phase 2 の最初の 1 件で落下先の import を
+  目視で確かめてから残りへ進む。**

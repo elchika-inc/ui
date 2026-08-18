@@ -1696,3 +1696,87 @@ test("reviews の祖先 symlink で repo 外を走査しない", async (t) => {
   ]);
   assert.deepEqual(result.stale, []);
 });
+
+// block の証跡カバレッジ強制。走査根が src/components/ui 固定だった間は、
+// block の証跡を 1 枚も撮らなくても緑で通った（hunk を戻すと 84 pass / 0 fail のまま）。
+const addBlockToRepo = (root, { withProvenance = true, withRegistryItem = false } = {}) => {
+  mkdirSync(join(root, "src/blocks/login-01/components"), { recursive: true });
+  writeFileSync(join(root, "src/blocks/login-01/components/login-form.tsx"), "login form\n");
+  if (withProvenance) {
+    writeFileSync(
+      join(root, "provenance.json"),
+      `${JSON.stringify({ components: {}, blocks: { "login-01": { license: "MIT" } } }, null, 2)}\n`,
+    );
+  }
+  if (withRegistryItem) {
+    writeFileSync(
+      join(root, "registry.json"),
+      `${JSON.stringify({ items: [{ name: "login-01", type: "registry:block" }] }, null, 2)}\n`,
+    );
+  }
+  git(root, ["add", "."]);
+  git(root, ["commit", "-m", "add block"]);
+};
+
+test("block の証跡 Markdown が無ければ検出する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await import("./check-evidence.mjs");
+  addBlockToRepo(root);
+
+  const { problems } = checkEvidenceInRepo(root);
+  assert.ok(
+    problems.includes("login-01: component 固有の証跡 Markdown が無い"),
+    problems.join("\n"),
+  );
+});
+
+// ディスクに実体が無く来歴にだけ載っている block も対象になる（走査根の和集合）。
+test("来歴にだけ載っている block も証跡を要求する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await import("./check-evidence.mjs");
+  writeFileSync(
+    join(root, "provenance.json"),
+    `${JSON.stringify({ components: {}, blocks: { "ghost-01": { license: "MIT" } } }, null, 2)}\n`,
+  );
+  git(root, ["add", "."]);
+  git(root, ["commit", "-m", "ledger only block"]);
+
+  const { problems } = checkEvidenceInRepo(root);
+  assert.ok(
+    problems.includes("ghost-01: component 固有の証跡 Markdown が無い"),
+    problems.join("\n"),
+  );
+});
+
+// 配布物を生むのは registry.json なので、そこにだけ在る block も対象にする。
+test("registry にだけ載っている block も証跡を要求する", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await import("./check-evidence.mjs");
+  writeFileSync(
+    join(root, "registry.json"),
+    `${JSON.stringify({ items: [{ name: "login-02", type: "registry:block" }] }, null, 2)}\n`,
+  );
+  git(root, ["add", "."]);
+  git(root, ["commit", "-m", "registry only block"]);
+
+  const { problems } = checkEvidenceInRepo(root);
+  assert.ok(
+    problems.includes("login-02: component 固有の証跡 Markdown が無い"),
+    problems.join("\n"),
+  );
+});
+
+test("block が無ければ block 由来の problem を出さない", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await import("./check-evidence.mjs");
+
+  const { problems } = checkEvidenceInRepo(root);
+  assert.deepEqual(
+    problems.filter((problem) => problem.includes("login-01") || problem.includes("ghost-01")),
+    [],
+  );
+});
