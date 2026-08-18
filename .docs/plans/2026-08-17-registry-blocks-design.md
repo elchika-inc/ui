@@ -64,7 +64,7 @@
 | preview render | `readdirSync("src/components/ui")`（固定） | **拾わない** | **必要** |
 | distribution | registry item 起点 | 自動で拾う | 不要 |
 | design tokens / contrast | トークンファイルのみ | 対象外 | 不要 |
-| evidence | `.docs/reviews/` 起点 | 自動で拾う | 不要 |
+| evidence | `.docs/reviews/` 起点 | stale 検知は自動で拾う。**coverage（block に証跡があるか）は拾わない** | **必要**（訂正 2026-08-18: 当初「不要」としたが、証跡の欠落を検出できなかった。Task 5 のレビューで block 証跡のカバレッジ検査を追加した） |
 
 preview render の走査根拡張は当初の設計に含まれておらず、この実測で追加された。ここを見落とすと、**block の preview が壊れていても緑になる**状態で「ゲートを掛けた」と主張することになる。
 
@@ -82,7 +82,9 @@ preview render の走査根拡張は当初の設計に含まれておらず、�
 
 ### 3-4. preview とカテゴリ
 
-`src/catalog/previews.ts` は `import.meta.glob("../previews/*.tsx")` で自動収集するため、preview の配線改修は不要。ただし `component-categories.mjs` は全 preview の分類を強制する検査を持つので、block 用カテゴリ（「認証」「ダッシュボード」）を追加する。
+`src/catalog/previews.ts` は `import.meta.glob("../previews/*.tsx")` で自動収集するため、preview の配線改修は不要。ただし `component-categories.mjs` は全 preview の分類を強制する検査を持つので、block 用カテゴリを追加する。
+
+**Phase 1 では「認証」カテゴリのみを追加した。** sidebar 系 16 件の置き場所となるカテゴリは未定で、Phase 2 の着手前に決める（既存の「ナビゲーション」へ入れるか、「ダッシュボード」を新設するか）。
 
 `registry:page` を配布しない代わりに、page.tsx が持っていたレイアウト枠（`flex min-h-svh w-full items-center justify-center p-6 md:p-10` と `max-w-sm` 相当）は preview 側へ移し、上流と同じ見た目を再現する。
 
@@ -144,7 +146,17 @@ registry を per-item ファイルへ分割すれば並列化できるが、今�
 
 ### 6-2. 依存の充足
 
-27 件の `registryDependencies` を既存 registry item と突き合わせた結果、**不足は 0 件**。既存 61 コンポーネントで全 block をまかなえる。
+27 件の `registryDependencies` を既存 registry item と突き合わせた結果、**宣言の不足は 0 件**。
+
+**訂正（2026-08-18）— この節は当初「既存 61 コンポーネントで全 block をまかなえる」と結論していたが、それは成立しない。**
+
+測ったのは `registryDependencies` の**宣言**だけで、配布ファイルの**中身**を読んでいなかった。実測すると **18 件の block** が registry に存在しない `@/app/(create)/components/icon-placeholder` を import する。
+
+対象: dashboard-01 / login-05 / signup-05 / sidebar-01〜13 / sidebar-15 / sidebar-16。
+
+素通しで移植できるのは **8 件**（login-02, login-03, login-04, signup-01〜04, sidebar-14）に限られる。`icon-placeholder` の扱い（自前で用意する / 上流の実体を移植する / 該当 18 件を対象から外す）は Phase 2 の着手前に決める。
+
+この誤りは Task 5 の実装中に worker が検出した。司令塔側の 1 回目の追試は検査パターンを `@/registry/base-nova/ui/` に限定していたため 0 件と出たが、実際の import パスは `@/app/(create)/components/` で、範囲を広げて測り直すと 18 件で一致した。
 
 npm 依存の不足は **dashboard-01 のみ**で 6 件（`@dnd-kit/core` / `@dnd-kit/modifiers` / `@dnd-kit/sortable` / `@dnd-kit/utilities` / `@tanstack/react-table` / `zod`）。他 26 件は新規依存ゼロ。
 
@@ -205,7 +217,7 @@ npm 依存の不足は **dashboard-01 のみ**で 6 件（`@dnd-kit/core` / `@dn
    |---|---|
    | block の tsx に生の色指定を 1 箇所入れる | standards |
    | block の preview astro を 1 枚消す | completeness |
-   | block の preview tsx で存在しない export を import する | preview render |
+   | block の preview tsx で存在しない export を import する | **`npm run typecheck`**（訂正: 当初 preview render と書いていたが、実測で preview render・completeness とも exit 0。型解決の誤りは検査スクリプトでは捕まらない） |
    | block の provenance から `files[]` の 1 エントリを消す | completeness |
 
 2. `provenance.json` の `blocks` に 27 件分の来歴があり、**上流から受け取った 103 ファイルすべて**が `files[]` に載っていること。配布する 76 件は `generatedContentSha256` を持ち、配布しない 27 件の `page.tsx` は `dropped: true` と `upstreamPathSha` を持つ（§3-3）
