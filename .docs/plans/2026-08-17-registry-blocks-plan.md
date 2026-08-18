@@ -1165,6 +1165,26 @@ node scripts/add-component.mjs login-02 --modified "registry:page を配布か�
 
 以降 `login-03` `login-04` `login-05` `signup-01`〜`signup-05` `sidebar-01`〜`sidebar-16` を同じ形式で実行する。1 件終えるごとに `node scripts/check-standards.mjs` を実行し、standards 違反があればその場で直す（25 件溜めてから直すと、どの block 由来か切り分けられなくなる）。
 
+- [ ] **Step 1-2: `IconPlaceholder` を lucide へ展開する**
+
+18 件（login-05 / signup-05 / sidebar-01〜13 / sidebar-15 / sidebar-16）が `@/app/(create)/components/icon-placeholder` を import する。add 直後、preview を書く前に展開する（設計 §3-4-2）。
+
+展開は **fail-closed** で書くこと。`lucide` 属性を持たない `<IconPlaceholder>` を 1 つでも見つけたら、そのファイルを書き換えずに停止して報告する。実測では欠損 0 件だが、上流が将来 lucide を落としたときに黙って壊れた JSX を生成させないための防御である。
+
+展開後、必ず次を確認する。
+
+```
+grep -rn "IconPlaceholder" src/blocks/
+```
+期待: **ヒット 0 件**（exit 1 が正しい結果）
+
+```
+npm run typecheck
+```
+期待: exit 0。展開したアイコン名が `lucide-react` に実在しない場合はここで落ちる（設計 §7 の訂正どおり、型解決の誤りは check スクリプトでは捕まらない）。
+
+展開したことを各 block の `modified` へ記録する。
+
 - [ ] **Step 2: preview を 25 件書く**
 
 Task 5 Step 4 の形式に従う。上流 `page.tsx` のレイアウト枠は block ごとに異なるため、**各 block の `page.tsx` の content を上流 JSON から読んで写す**。
@@ -1185,7 +1205,7 @@ curl -s https://ui.shadcn.com/r/styles/base-nova/sidebar-07.json | node -e "let 
 
 - [ ] **Step 4: selector とカテゴリを宣言する**
 
-`preview-selectors.json` に 25 件追加する。`component-categories.mjs` の「認証」に login-02〜05 と signup-01〜05 を、新設する「ダッシュボード」に sidebar-01〜16 を入れる。
+`preview-selectors.json` に 25 件追加する。`component-categories.mjs` の既存「認証」へ login-02〜05 と signup-01〜05 を、**新設する「アプリシェル」へ sidebar-01〜16** を入れる（設計 §3-4-3）。「ダッシュボード」は作らない — dashboard-01 も Task 7 で「アプリシェル」へ入れる。
 
 - [ ] **Step 5: 検査を全部走らせる**
 
