@@ -806,7 +806,7 @@ test("Sidebarのforeground aliasは面のaliasとペアを保つ", () => {
 
 test("配信文書は未公開状態と公開後の正本ドメインを区別する", () => {
   const readme = readSource("README.md");
-  const action = readSource(".docs/actions/manual-subproject-3-domain.md");
+  const action = readSource(".docs/actions/done/2026-08-15-manual-subproject-3-domain.md");
   const risks = readSource(".docs/risk-registry.md");
   for (const [path, source] of [
     ["README.md", readme],
