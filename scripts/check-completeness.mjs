@@ -178,7 +178,32 @@ function blockProblems(name, registry, previewFiles, previewSources, provenance,
 //    npm 依存については add 側で import から拾い直す安全網があるが、内部依存には無かった。
 // 2. 来歴のハッシュ: generatedContentSha256 は「記録時点の手元のファイル」の錨で、
 //    形式（64 桁）しか見ないと正規化後にずれたまま緑になる。
-const INTERNAL_IMPORT = /["']@\/components\/ui\/([\w-]+)["']/g;
+// import / export 文の specifier だけを見る。文字列リテラルを無条件に拾うと
+// コメント内の例示で赤くなり、正しいコードを直させる方向の偽陽性になる。
+// 行頭（インデントのみ許容）から始まる import / export に限定する——コメント行は
+// `//` や `*` が先に来るので一致しない。
+const IMPORT_SPECIFIER = /^[ \t]*(?:import|export)\b[^;'"\n]*?["']([^"'\n]+)["']/gm;
+
+// @/ alias は tsconfig の paths が "@/*": ["./src/*"] の 1 本なので、src 配下すべてが
+// この形で参照されうる。ui だけを見ると hooks の宣言漏れが素通りする（実測）。
+// 未知のサブディレクトリは fail-closed で止める——新しい alias が増えたときに
+// 黙って穴が開くのを防ぐ。
+const REGISTRY_ITEM_ALIASES = { "components/ui": true, hooks: true };
+// registry item を持たない共有物。shadcn init が consumer 側へ必ず作るので宣言不要。
+const ALIAS_EXEMPT = new Set(["lib/utils", "lib/cn"]);
+
+function internalDependency(specifier) {
+  if (!specifier.startsWith("@/")) return undefined;
+  const rest = specifier.slice(2);
+  if (ALIAS_EXEMPT.has(rest)) return undefined;
+  for (const prefix of Object.keys(REGISTRY_ITEM_ALIASES)) {
+    if (rest.startsWith(`${prefix}/`)) {
+      const name = rest.slice(prefix.length + 1).split("/")[0];
+      return { name };
+    }
+  }
+  return { unknown: rest };
+}
 
 function blockSourceProblems(name, item, files, sources) {
   if (sources === undefined) return [];
@@ -196,12 +221,23 @@ function blockSourceProblems(name, item, files, sources) {
     if (sha256(source) !== file.generatedContentSha256) {
       problems.push(`${name}: ${file.path} の generatedContentSha256 が実体と一致しない`);
     }
-    for (const [, dependency] of source.matchAll(INTERNAL_IMPORT)) {
-      // 自 item が配る部品なら宣言は要らない。
-      if (ownFiles.has(`src/components/ui/${dependency}.tsx`)) continue;
-      if (!declared.has(dependency)) {
+    for (const [, specifier] of source.matchAll(IMPORT_SPECIFIER)) {
+      const dependency = internalDependency(specifier);
+      if (dependency === undefined) continue;
+      if (dependency.unknown !== undefined) {
         problems.push(
-          `${name}: ${file.path} が import する @/components/ui/${dependency} が registryDependencies に無い`,
+          `${name}: ${file.path} が import する ${specifier} を registry item へ対応付けられない`,
+        );
+        continue;
+      }
+      // 自 item が配るファイルなら宣言は要らない。
+      // 現状 block の配布ファイルは src/blocks/ 配下のみなので発火しないが、
+      // SUPPORTED_BLOCK_FILE_TYPES を広げたときにここが効く。
+      if (ownFiles.has(`src/components/ui/${dependency.name}.tsx`)) continue;
+      if (ownFiles.has(`src/hooks/${dependency.name}.ts`)) continue;
+      if (!declared.has(dependency.name)) {
+        problems.push(
+          `${name}: ${file.path} が import する ${specifier} が registryDependencies に無い`,
         );
       }
     }

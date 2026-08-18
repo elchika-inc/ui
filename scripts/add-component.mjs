@@ -303,6 +303,23 @@ function externalImports(source) {
 const UPSTREAM_PREFIX = "apps/v4/registry/bases/base/";
 const REGISTRY_PREFIX = "registry/base-nova/";
 
+// 上流 registry の応答に含まれる path は、そのまま join() → mkdirSync / renameSync /
+// rmSync へ流れる値。prefix の検査だけでは prefix より後ろの `..` が通り、repo 外へ
+// 書き込める。副作用より前で止めないと、fail-closed のゲートが後ろにあっても手遅れになる。
+function assertContainedPath(label, path) {
+  const normalized = relative(".", resolve(".", path));
+  if (
+    isAbsolute(path) ||
+    !normalized ||
+    normalized === ".." ||
+    normalized.startsWith(`..${sep}`) ||
+    normalized !== path
+  ) {
+    throw new Error(`${label}: repo 内の通常相対 path でない: ${path}`);
+  }
+  return path;
+}
+
 // 文字列引数の replace は先頭アンカーを持たず「最初に現れた出現位置」を消すため、
 // prefix が先頭以外にあるパス（vendor/registry/base-nova/...）を黙って別物へ変換する。
 // 前方一致を検査してから slice する。
@@ -346,7 +363,10 @@ function resolveBlockTarget(name, upstreamItem) {
     }
     files.push({
       registryPath,
-      targetPath: `src/blocks/${name}/${registryPath.slice(blockPrefix.length)}`,
+      targetPath: assertContainedPath(
+        `${name}: block の targetPath`,
+        `src/blocks/${name}/${registryPath.slice(blockPrefix.length)}`,
+      ),
       upstreamPath: upstreamPathOf(registryPath),
       fileType: file.type,
     });

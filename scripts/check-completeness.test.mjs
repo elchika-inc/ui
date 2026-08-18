@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { test } from "node:test";
 import { checkCompleteness } from "./check-completeness.mjs";
 
@@ -574,4 +575,89 @@ test("block の fetchedAt はゼロ埋めした日付を要求する", () => {
   provenance.blocks["login-01"].fetchedAt = "2026-8-17";
   const { problems } = checkCompleteness({ ...completeBlock, provenance });
   assert.ok(problems.some((problem) => problem.includes("fetchedAt")));
+});
+
+// 内部依存の突合。registryDependencies は上流の宣言をそのまま転記しているだけなので、
+// 宣言が漏れると利用者側で解決できない import を持つ配布物が出る。
+// ui だけを見ると hooks の宣言漏れが素通りする（実測で確認した失敗モード）。
+// ハッシュ検査も同時に走るので、fixture の来歴を source の実ハッシュへ揃える。
+// 揃えないと内部依存の期待値にハッシュ不一致が混ざり、何を固定しているか読めなくなる。
+const withSource = (source, extra = {}) => {
+  const provenance = structuredClone(completeBlock.provenance);
+  provenance.blocks["login-01"].files[0].generatedContentSha256 = createHash("sha256")
+    .update(source, "utf8")
+    .digest("hex");
+  return {
+    ...completeBlock,
+    provenance,
+    blockSources: { "login-01": { "src/blocks/login-01/components/login-form.tsx": source } },
+    ...extra,
+  };
+};
+
+test("配布ファイルが import する @/components/ui の未宣言を検出する", () => {
+  const { problems } = checkCompleteness(
+    withSource('import { Field } from "@/components/ui/field";\n'),
+  );
+  assert.deepEqual(problems, [
+    "login-01: src/blocks/login-01/components/login-form.tsx が import する @/components/ui/field が registryDependencies に無い",
+  ]);
+});
+
+test("配布ファイルが import する @/hooks の未宣言を検出する", () => {
+  const { problems } = checkCompleteness(
+    withSource('import { useIsMobile } from "@/hooks/use-mobile";\n'),
+  );
+  assert.deepEqual(problems, [
+    "login-01: src/blocks/login-01/components/login-form.tsx が import する @/hooks/use-mobile が registryDependencies に無い",
+  ]);
+});
+
+test("registryDependencies に宣言されていれば問題を返さない", () => {
+  const registry = structuredClone(completeBlock.registry);
+  registry.items[1].registryDependencies = ["@elchika/field", "@elchika/use-mobile"];
+  const { problems } = checkCompleteness(
+    withSource(
+      'import { Field } from "@/components/ui/field";\nimport { useIsMobile } from "@/hooks/use-mobile";\n',
+      { registry },
+    ),
+  );
+  assert.deepEqual(problems, []);
+});
+
+// 新しい alias が増えたときに黙って穴が開かないよう fail-closed にする。
+test("registry item へ対応付けられない @/ import を検出する", () => {
+  const { problems } = checkCompleteness(
+    withSource('import { thing } from "@/features/login/thing";\n'),
+  );
+  assert.deepEqual(problems, [
+    "login-01: src/blocks/login-01/components/login-form.tsx が import する @/features/login/thing を registry item へ対応付けられない",
+  ]);
+});
+
+test("@/lib/utils は registry item を持たないので宣言を要求しない", () => {
+  assert.deepEqual(
+    checkCompleteness(withSource('import { cn } from "@/lib/utils";\n')).problems,
+    [],
+  );
+});
+
+test("外部 npm の import は内部依存として扱わない", () => {
+  assert.deepEqual(checkCompleteness(withSource('import * as React from "react";\n')).problems, []);
+});
+
+// 文字列リテラルを無条件に拾うと、コメント内の例示で赤くなる（偽陽性で
+// 正しいコードを直させる方向）。import / export 文の specifier だけを見る。
+test("コメント内の alias を import として誤検出しない", () => {
+  const source = [
+    '// 例: import { Field } from "@/components/ui/field";',
+    'const doc = "@/components/ui/field";',
+    "export const LoginForm = () => null;",
+    "",
+  ].join("\n");
+  assert.deepEqual(checkCompleteness(withSource(source)).problems, []);
+});
+
+test("blockSources を渡さなければ内容検査を行わない", () => {
+  assert.deepEqual(checkCompleteness(completeBlock).problems, []);
 });

@@ -61,5 +61,15 @@ export function listBlockFiles(repositoryRoot, name, prefix = `src/blocks/${name
     ["ls-files", "--cached", "--others", "--exclude-standard", "-z", "--", prefix],
     { cwd: repositoryRoot, encoding: "utf8" },
   );
-  return output.split("\0").filter(Boolean).sort();
+  return (
+    output
+      .split("\0")
+      .filter(Boolean)
+      // --cached は index のエントリを返すので、作業ツリーから消えたファイルも含む。
+      // 落とさないと「ディスクの足」が「index の足」になり、rm しただけで
+      // 台帳との突合が通ってしまう（実測: 唯一の配布ファイルを rm しても緑だった）。
+      // 落ちた分は「registry item の X が src/blocks/ に無い」で別途赤くなる。
+      .filter((path) => existsSync(join(repositoryRoot, path)))
+      .sort()
+  );
 }
