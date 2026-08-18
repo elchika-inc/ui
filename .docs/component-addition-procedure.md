@@ -97,9 +97,18 @@ block は部品（`registry:ui`）と同じ手順を使うが、次の点だけ�
 1. `node scripts/add-component.mjs <name> --modified "..."` は共通。block では
    CLI が配布ファイルを `src/components/` 直下へフラットに落とすため、スクリプトが
    `src/blocks/<name>/` へ移設する。移設は `registryPath` の basename から決定的に対応付ける。
-2. **移設後に biome の整形や standards 適合の修正を行ったら、`--force` で再実行して
-   来歴の `generatedContentSha256` を取り直す。** `check-completeness` がディスク実体と
-   突合するため、ずれたままにはできない。
+2. **移設後に biome の整形や standards 適合の修正を行ったら、`--resync` で来歴の
+   `generatedContentSha256` を取り直す。** `check-completeness` がディスク実体と突合するため、
+   ずれたままにはできない。
+
+   ```bash
+   node scripts/add-component.mjs <name> --resync --modified "biome 整形と a11y 適合を適用"
+   ```
+
+   **`--force` を使ってはいけない。** `--force` は shadcn CLI を再実行するので、正規化済みの
+   ファイルを CLI 生成物で上書きする。その後 lint を直すと今度はハッシュがずれ、
+   正規化と来歴を同時に満たす経路が無くなる（循環する）。`--resync` は CLI も通信も行わず、
+   ディスク実体からハッシュだけを取り直す。
 3. `preview-selectors.json` の追加は既存キーの順序を崩さず 1 件だけ挿入する。
 4. `npm run registry:build` を先に実行してから `npm run check:pre` を走らせる
    （`check-distribution` が `public/r/<name>.json` を要求する）。
@@ -111,7 +120,7 @@ block は部品（`registry:ui`）と同じ手順を使うが、次の点だけ�
 
 | 仕込む違反 | 赤くなる検査 |
 |---|---|
-| block の tsx に生の色指定を入れる | standards |
+| block の tsx に値系 arbitrary value（例 `text-[#ff0000]`）を入れる | standards（**生の色リテラルは検知しない**。`check-standards.mjs` は focus ring の透明度合成と値系 arbitrary value の 2 規定のみ） |
 | preview の astro を 1 枚消す | completeness |
 | `preview-selectors.json` から宣言を消す | preview render |
 | 来歴の `files[]` からエントリを消す | completeness |
@@ -126,6 +135,9 @@ block は部品（`registry:ui`）と同じ手順を使うが、次の点だけ�
 
 - 上流 block の `registry:file`（`dashboard-01/data.json`）は CLI が item の `target` へ書くため
   移設が成立せず、`SUPPORTED_BLOCK_FILE_TYPES` が fail-closed で止める。
+  `registry:ui` / `registry:hook` も同様に止まる（CLI がそれぞれ `aliases.ui` /
+  `aliases.hooks` へ落とすため、`src/components/` 直下からの移設が成立しない）。
+  上流 block がこれらの type を持つと「なぜか止まる」形で現れる。
 - 配布ファイルが**互いを import する** block（sidebar 系の `app-sidebar.tsx` → `nav-main.tsx`）は、
   consumer 側で `src/components/` へフラットに落ちるうえ `shadcn build` が import specifier を
   書き換えないため、解決不能な import が残りうる。**Phase 2 の最初の 1 件で落下先の import を

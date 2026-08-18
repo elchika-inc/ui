@@ -4221,7 +4221,7 @@
       "name": "login-01",
       "type": "registry:block",
       "title": "Login 01",
-      "description": "login-01 component.",
+      "description": "login-01 block.",
       "files": [
         {
           "path": "src/blocks/login-01/components/login-form.tsx",

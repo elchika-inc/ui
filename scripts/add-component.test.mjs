@@ -973,3 +973,78 @@ test("prefix が先頭以外にある block の file path を通さない", asyn
     /block の file path が想定外/,
   );
 });
+
+// 正規化（biome 整形・standards 適合）を行うと、CLI 生成物から取ったハッシュとずれる。
+// --force は CLI を再実行するので正規化を上書きしてしまい、lint を直すと再びずれる。
+// 正規化と来歴を同時に満たす経路として --resync を持つ。
+test("--resync は CLI も通信もせず来歴のハッシュを実体へ揃える", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+
+  await runAddComponent({
+    argv: ["login-01", "--modified", "registry:page を配布から除外"],
+    root,
+    fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+    runCommand: () => {
+      writeFileSync(join(root, "src/components/login-form.tsx"), 'export const a = "raw"\n');
+    },
+    log: () => {},
+  });
+
+  // 正規化を模す（整形して内容が変わる）。この時点で来歴のハッシュはずれる。
+  const normalized = 'export const a = "normalized";\n';
+  writeFileSync(join(root, "src/blocks/login-01/components/login-form.tsx"), normalized);
+
+  const logs = [];
+  const result = await runAddComponent({
+    argv: ["login-01", "--resync", "--modified", "biome 整形を適用"],
+    root,
+    fetchImpl: async () => {
+      throw new Error("fetch してはならない");
+    },
+    runCommand: () => {
+      throw new Error("CLI を実行してはならない");
+    },
+    log: (message) => logs.push(message),
+  });
+
+  assert.equal(result.resynced, true);
+  const provenance = JSON.parse(readFileSync(join(root, "provenance.json"), "utf8"));
+  const file = provenance.blocks["login-01"].files.find((f) => !f.dropped);
+  assert.equal(file.generatedContentSha256, createHash("sha256").update(normalized).digest("hex"));
+  assert.equal(provenance.blocks["login-01"].modified, "biome 整形を適用");
+  // 正規化した実体が CLI 生成物で上書きされていない（--force との違い）
+  assert.equal(
+    readFileSync(join(root, "src/blocks/login-01/components/login-form.tsx"), "utf8"),
+    normalized,
+  );
+  assert.ok(logs.some((message) => message.startsWith("ハッシュを更新:")));
+});
+
+test("--resync は来歴が無ければ停止する", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+
+  await assert.rejects(
+    runAddComponent({
+      argv: ["login-01", "--resync", "--modified", "整形"],
+      root,
+      fetchImpl: async () => {
+        throw new Error("fetch してはならない");
+      },
+      runCommand: () => {},
+      log: () => {},
+    }),
+    /provenance.blocks に来歴が無い/,
+  );
+});
+
+test("--resync と --force は同時に指定できない", async () => {
+  const { parseArgs } = await loadModule();
+  assert.throws(
+    () => parseArgs(["login-01", "--resync", "--force", "--modified", "整形"]),
+    /同時に指定できない/,
+  );
+});

@@ -26,6 +26,13 @@ export const CHANGE_CLASSIFICATION_RULES = [
 // 入らないと `@tailwindcss/cli` が "Can't resolve" で落ちる（実測）。
 const SHARED_DEPENDENCIES = ["tw-animate-css", "shadcn"];
 
+// registry item の description に出る名詞。配布物 public/r/*.json へ入り利用者へ届くので、
+// block を "component" と呼ばない。
+const ITEM_NOUN = {
+  "registry:hook": "hook",
+  "registry:block": "block",
+};
+
 const SHARED_REGISTRY_FILES = [
   {
     path: "src/styles/global.css",
@@ -70,8 +77,19 @@ export function parseArgs(argv) {
 
   let modified;
   let force = false;
+  let resync = false;
   for (let index = 0; index < options.length; index++) {
     const option = options[index];
+    // 正規化（biome 整形・standards 適合）を行った後に来歴のハッシュだけを取り直す。
+    // --force は CLI を再実行するので正規化済みファイルを生成物で上書きしてしまい、
+    // lint を直すと今度は sha がずれる——正規化と来歴を同時に満たす経路が無くなる。
+    if (option === "--resync") {
+      if (resync) {
+        throw new Error("--resync は1回だけ指定すること");
+      }
+      resync = true;
+      continue;
+    }
     if (option === "--force") {
       if (force) {
         throw new Error("--force は1回だけ指定すること");
@@ -97,7 +115,11 @@ export function parseArgs(argv) {
     throw new Error('--modified "実際に行った変更" を必ず指定すること');
   }
 
-  return { name, modified: modified.trim(), force };
+  if (resync && force) {
+    throw new Error("--resync と --force は同時に指定できない");
+  }
+
+  return { name, modified: modified.trim(), force, resync };
 }
 
 export function shadcnCommand(version, name) {
@@ -436,7 +458,7 @@ export function buildRegistryItem(name, upstreamItem, generatedSource, target) {
       .split("-")
       .map((part) => `${part[0].toUpperCase()}${part.slice(1)}`)
       .join(" "),
-    description: `${name} ${target.itemType === "registry:hook" ? "hook" : "component"}.`,
+    description: `${name} ${ITEM_NOUN[target.itemType] ?? "component"}.`,
     files: [...itemFiles, ...SHARED_REGISTRY_FILES],
   };
   if (dependenciesByName.size) {
@@ -601,7 +623,7 @@ async function blockProvenanceEntry({
     files,
     notes:
       "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。" +
-      "files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --force で再実行して取り直す。check-completeness がディスク実体と突合するため、ずれたままにはできない。" +
+      "files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。" +
       "upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。" +
       "dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。" +
       "CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。",
@@ -657,6 +679,36 @@ function createProvenanceEntry({ isBlock, upstreamText, ...rest }) {
   return provenanceEntry(rest);
 }
 
+// 正規化後にハッシュだけを取り直す。CLI も通信も行わない。
+// ensureClean を求めないのは、正規化した変更が作業ツリーに載っている状態で
+// 呼ぶための経路だから（求めると、この関数を使う唯一の場面で必ず弾かれる）。
+export function resyncBlockHashes({ root, name, modified, provenance, log = console.log }) {
+  const entry = provenance.blocks?.[name];
+  if (!entry) {
+    throw new Error(`${name}: provenance.blocks に来歴が無い（先に add を実行する）`);
+  }
+  const updated = [];
+  for (const file of entry.files) {
+    if (file.dropped === true) continue;
+    const absolute = join(root, assertContainedPath(`${name}: 来歴の path`, file.path));
+    if (!existsSync(absolute)) {
+      throw new Error(`${name}: 来歴にある ${file.path} が存在しない`);
+    }
+    const actual = sha256(readFileSync(absolute, "utf8"));
+    if (actual !== file.generatedContentSha256) {
+      updated.push({ path: file.path, before: file.generatedContentSha256, after: actual });
+      file.generatedContentSha256 = actual;
+    }
+  }
+  entry.modified = modified;
+  writeJson(root, "provenance.json", provenance);
+  for (const { path, before, after } of updated) {
+    log(`ハッシュを更新: ${path} ${before.slice(0, 8)} -> ${after.slice(0, 8)}`);
+  }
+  if (updated.length === 0) log(`${name}: 来歴のハッシュは実体と一致していた（更新なし）`);
+  return { skipped: false, resynced: true, updated };
+}
+
 export async function runAddComponent({
   argv = process.argv.slice(2),
   root = process.cwd(),
@@ -664,11 +716,12 @@ export async function runAddComponent({
   runCommand = execFileSync,
   log = console.log,
 } = {}) {
-  const { name, modified, force } = parseArgs(argv);
+  const { name, modified, force, resync } = parseArgs(argv);
   const repositoryRoot = git(root, ["rev-parse", "--show-toplevel"]).trim();
-  ensureClean(repositoryRoot);
+  if (!resync) ensureClean(repositoryRoot);
 
   const provenance = readJson(repositoryRoot, "provenance.json");
+  if (resync) return resyncBlockHashes({ root: repositoryRoot, name, modified, provenance, log });
   // component の記録済み判定は fetch より前に置く。記録済みの再実行で通信しないことを
   // 既存 61 件が保証として持っている。block は種別が target 確定まで分からないので後段で見る。
   if (shouldSkipRecorded(provenance, name, force)) {
