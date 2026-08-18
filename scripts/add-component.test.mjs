@@ -996,9 +996,11 @@ test("--resync は CLI も通信もせず来歴のハッシュを実体へ揃え
   const normalized = 'export const a = "normalized";\n';
   writeFileSync(join(root, "src/blocks/login-01/components/login-form.tsx"), normalized);
 
+  const before = JSON.parse(readFileSync(join(root, "provenance.json"), "utf8")).blocks["login-01"]
+    .modified;
   const logs = [];
   const result = await runAddComponent({
-    argv: ["login-01", "--resync", "--modified", "biome 整形を適用"],
+    argv: ["login-01", "--resync"],
     root,
     fetchImpl: async () => {
       throw new Error("fetch してはならない");
@@ -1013,13 +1015,44 @@ test("--resync は CLI も通信もせず来歴のハッシュを実体へ揃え
   const provenance = JSON.parse(readFileSync(join(root, "provenance.json"), "utf8"));
   const file = provenance.blocks["login-01"].files.find((f) => !f.dropped);
   assert.equal(file.generatedContentSha256, createHash("sha256").update(normalized).digest("hex"));
-  assert.equal(provenance.blocks["login-01"].modified, "biome 整形を適用");
+  // --modified を渡さなければ既存の来歴を保つ。上流から何を変えたかの唯一の記録なので、
+  // ハッシュの取り直しのたびに 1 行へ潰れてはいけない。
+  assert.equal(provenance.blocks["login-01"].modified, before);
   // 正規化した実体が CLI 生成物で上書きされていない（--force との違い）
   assert.equal(
     readFileSync(join(root, "src/blocks/login-01/components/login-form.tsx"), "utf8"),
     normalized,
   );
   assert.ok(logs.some((message) => message.startsWith("ハッシュを更新:")));
+});
+
+test("--resync は --modified を渡したときだけ来歴を上書きする", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+
+  await runAddComponent({
+    argv: ["login-01", "--modified", "registry:page を配布から除外"],
+    root,
+    fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+    runCommand: () => {
+      writeFileSync(join(root, "src/components/login-form.tsx"), "export {}\n");
+    },
+    log: () => {},
+  });
+
+  await runAddComponent({
+    argv: ["login-01", "--resync", "--modified", "a11y 適合を追記"],
+    root,
+    fetchImpl: async () => {
+      throw new Error("fetch してはならない");
+    },
+    runCommand: () => {},
+    log: () => {},
+  });
+
+  const provenance = JSON.parse(readFileSync(join(root, "provenance.json"), "utf8"));
+  assert.equal(provenance.blocks["login-01"].modified, "a11y 適合を追記");
 });
 
 test("--resync は来歴が無ければ停止する", async (t) => {
@@ -1029,7 +1062,7 @@ test("--resync は来歴が無ければ停止する", async (t) => {
 
   await assert.rejects(
     runAddComponent({
-      argv: ["login-01", "--resync", "--modified", "整形"],
+      argv: ["login-01", "--resync"],
       root,
       fetchImpl: async () => {
         throw new Error("fetch してはならない");
@@ -1043,8 +1076,5 @@ test("--resync は来歴が無ければ停止する", async (t) => {
 
 test("--resync と --force は同時に指定できない", async () => {
   const { parseArgs } = await loadModule();
-  assert.throws(
-    () => parseArgs(["login-01", "--resync", "--force", "--modified", "整形"]),
-    /同時に指定できない/,
-  );
+  assert.throws(() => parseArgs(["login-01", "--resync", "--force"]), /同時に指定できない/);
 });

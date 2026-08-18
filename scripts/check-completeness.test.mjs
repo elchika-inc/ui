@@ -661,3 +661,63 @@ test("コメント内の alias を import として誤検出しない", () => {
 test("blockSources を渡さなければ内容検査を行わない", () => {
   assert.deepEqual(checkCompleteness(completeBlock).problems, []);
 });
+
+// 正規表現で「コメント内の例示」の偽陽性を消すと行頭限定になり、biome の
+// lineWidth 100 が作る折り返し import を全部取りこぼす（実測: 依存を落として
+// 整形するだけで全ゲートが緑になった）。AST なら両方同時に消える。
+test("折り返した import の specifier も拾う", () => {
+  const source = [
+    "import {",
+    "  Field,",
+    "  FieldDescription,",
+    '} from "@/components/ui/field";',
+    "",
+  ].join("\n");
+  const { problems } = checkCompleteness(withSource(source));
+  assert.deepEqual(problems, [
+    "login-01: src/blocks/login-01/components/login-form.tsx が import する @/components/ui/field が registryDependencies に無い",
+  ]);
+});
+
+test("default と named を混ぜた折り返し import も拾う", () => {
+  const source = ["import Field, {", "  FieldGroup,", '} from "@/components/ui/field";', ""].join(
+    "\n",
+  );
+  assert.deepEqual(checkCompleteness(withSource(source)).problems, [
+    "login-01: src/blocks/login-01/components/login-form.tsx が import する @/components/ui/field が registryDependencies に無い",
+  ]);
+});
+
+test("動的 import の specifier も拾う", () => {
+  const source = 'const Lazy = lazy(() => import("@/components/ui/field"));\n';
+  assert.deepEqual(checkCompleteness(withSource(source)).problems, [
+    "login-01: src/blocks/login-01/components/login-form.tsx が import する @/components/ui/field が registryDependencies に無い",
+  ]);
+});
+
+test("export * from の specifier も拾う", () => {
+  const source = 'export * from "@/components/ui/field";\n';
+  assert.deepEqual(checkCompleteness(withSource(source)).problems, [
+    "login-01: src/blocks/login-01/components/login-form.tsx が import する @/components/ui/field が registryDependencies に無い",
+  ]);
+});
+
+test("import type の specifier も拾う", () => {
+  const source = 'import type { FieldProps } from "@/components/ui/field";\n';
+  assert.deepEqual(checkCompleteness(withSource(source)).problems, [
+    "login-01: src/blocks/login-01/components/login-form.tsx が import する @/components/ui/field が registryDependencies に無い",
+  ]);
+});
+
+// JSX の型注釈に現れる文字列（React.ComponentProps<"div">）を specifier と誤認しない。
+test("import 以外の文字列リテラルを specifier として拾わない", () => {
+  const source = [
+    'import { cn } from "@/lib/utils";',
+    "",
+    'export function LoginForm(props: React.ComponentProps<"div">) {',
+    '  return <div className={cn("flex")} {...props} />;',
+    "}",
+    "",
+  ].join("\n");
+  assert.deepEqual(checkCompleteness(withSource(source)).problems, []);
+});

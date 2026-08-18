@@ -111,7 +111,10 @@ export function parseArgs(argv) {
     }
     throw new Error(`未対応の引数: ${option}`);
   }
-  if (!modified?.trim()) {
+  // --resync は既存の来歴を保ったままハッシュだけ取り直す経路なので --modified は任意。
+  // 必須にすると、手順書の例文をそのまま打った人が「上流から何を変えたか」の
+  // 唯一の記録（移設・page 除外・a11y 適合の 3 つ）を 1 行へ潰してしまう。
+  if (!resync && !modified?.trim()) {
     throw new Error('--modified "実際に行った変更" を必ず指定すること');
   }
 
@@ -119,7 +122,7 @@ export function parseArgs(argv) {
     throw new Error("--resync と --force は同時に指定できない");
   }
 
-  return { name, modified: modified.trim(), force, resync };
+  return { name, modified: modified?.trim(), force, resync };
 }
 
 export function shadcnCommand(version, name) {
@@ -700,7 +703,8 @@ export function resyncBlockHashes({ root, name, modified, provenance, log = cons
       file.generatedContentSha256 = actual;
     }
   }
-  entry.modified = modified;
+  // 渡されたときだけ上書きする。省略時は既存の記録を保つ。
+  if (modified) entry.modified = modified;
   writeJson(root, "provenance.json", provenance);
   for (const { path, before, after } of updated) {
     log(`ハッシュを更新: ${path} ${before.slice(0, 8)} -> ${after.slice(0, 8)}`);

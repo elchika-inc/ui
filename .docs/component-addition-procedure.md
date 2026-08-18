@@ -102,8 +102,11 @@ block は部品（`registry:ui`）と同じ手順を使うが、次の点だけ�
    ずれたままにはできない。
 
    ```bash
-   node scripts/add-component.mjs <name> --resync --modified "biome 整形と a11y 適合を適用"
+   node scripts/add-component.mjs <name> --resync
    ```
+
+   `--modified` は付けない。付けると既存の `modified`（上流から何を変えたかの唯一の記録）を
+   その文字列で**置き換える**。追記したいときだけ、既存の全文へ追記した文字列を渡す。
 
    **`--force` を使ってはいけない。** `--force` は shadcn CLI を再実行するので、正規化済みの
    ファイルを CLI 生成物で上書きする。その後 lint を直すと今度はハッシュがずれ、

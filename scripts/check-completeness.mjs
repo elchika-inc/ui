@@ -178,11 +178,43 @@ function blockProblems(name, registry, previewFiles, previewSources, provenance,
 //    npm 依存については add 側で import から拾い直す安全網があるが、内部依存には無かった。
 // 2. 来歴のハッシュ: generatedContentSha256 は「記録時点の手元のファイル」の錨で、
 //    形式（64 桁）しか見ないと正規化後にずれたまま緑になる。
-// import / export 文の specifier だけを見る。文字列リテラルを無条件に拾うと
-// コメント内の例示で赤くなり、正しいコードを直させる方向の偽陽性になる。
-// 行頭（インデントのみ許容）から始まる import / export に限定する——コメント行は
-// `//` や `*` が先に来るので一致しない。
-const IMPORT_SPECIFIER = /^[ \t]*(?:import|export)\b[^;'"\n]*?["']([^"'\n]+)["']/gm;
+// specifier の抽出は AST で行う。正規表現でやると偽陽性（コメント内の例示）を
+// 消すために行頭へ限定 → 折り返し import（biome の lineWidth 100 が作る正準形）を
+// 全部取りこぼす、という交換になる。実測では実ファイルの
+// `import {\n  Sheet,\n} from "@/components/ui/sheet"` を取りこぼし、
+// 依存を落として整形するだけで全ゲートが緑になった。
+// このファイルは barrel / dts の解析で既に typescript を使っているので追加の依存は無い。
+function importedSpecifiers(source, fileName) {
+  const sourceFile = ts.createSourceFile(
+    fileName,
+    source,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TSX,
+  );
+  const specifiers = [];
+  const visit = (node) => {
+    if (
+      (ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) &&
+      node.moduleSpecifier &&
+      ts.isStringLiteralLike(node.moduleSpecifier)
+    ) {
+      specifiers.push(node.moduleSpecifier.text);
+    }
+    // 動的 import(...)。lazy(() => import("@/...")) の形を拾う。
+    if (
+      ts.isCallExpression(node) &&
+      node.expression.kind === ts.SyntaxKind.ImportKeyword &&
+      node.arguments.length > 0 &&
+      ts.isStringLiteralLike(node.arguments[0])
+    ) {
+      specifiers.push(node.arguments[0].text);
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sourceFile);
+  return specifiers;
+}
 
 // @/ alias は tsconfig の paths が "@/*": ["./src/*"] の 1 本なので、src 配下すべてが
 // この形で参照されうる。ui だけを見ると hooks の宣言漏れが素通りする（実測）。
@@ -221,7 +253,7 @@ function blockSourceProblems(name, item, files, sources) {
     if (sha256(source) !== file.generatedContentSha256) {
       problems.push(`${name}: ${file.path} の generatedContentSha256 が実体と一致しない`);
     }
-    for (const [, specifier] of source.matchAll(IMPORT_SPECIFIER)) {
+    for (const specifier of importedSpecifiers(source, file.path)) {
       const dependency = internalDependency(specifier);
       if (dependency === undefined) continue;
       if (dependency.unknown !== undefined) {
