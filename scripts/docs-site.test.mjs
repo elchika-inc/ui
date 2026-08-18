@@ -45,10 +45,7 @@ test("READMEが3経路とtoken alias再削除を案内する", () => {
 
 test("Phase B手順が秘密登録・deploy・domain・実体検証を分離する", () => {
   const instructions = readFileSync(
-    new URL(
-      "../.docs/actions/done/2026-08-15-manual-subproject-3-domain.md",
-      import.meta.url,
-    ),
+    new URL("../.docs/actions/done/2026-08-15-manual-subproject-3-domain.md", import.meta.url),
     "utf8",
   );
 
