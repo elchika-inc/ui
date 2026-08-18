@@ -129,7 +129,14 @@ block は部品（`registry:ui`）と同じ手順を使うが、次の点だけ�
 | `registryDependencies` から使っている部品を落とす | completeness |
 | 来歴の `generatedContentSha256` を書き換える | completeness |
 | block の証跡 Markdown を消す | evidence |
-| preview の tsx で存在しない export を import する | **typecheck**（`npm run typecheck`。`check:all` の 7 検査では捕まらない） |
+| preview の tsx で存在しない export を import する | **typecheck**（`npm run typecheck`）。下記の注記を読むこと |
+
+**最後の行の注記**: この違反を捕まえるのは typecheck であって検査群ではない。
+実行手順で先に走らせる `npm run check:pre`（6 検査）は**緑のまま通る**（実測）。
+`npm run check:all`（7 検査）は exit 1 になるが、それは import の破損の検出ではなく
+evidence が「preview が証跡の検証 SHA より新しい」を見ているためで、
+**無害なコメント 1 行を足しただけでも同じく赤くなる**（実測）。
+`check:all` が赤いことを「壊れた import を検知した」と読まないこと。
 
 ### 未対応（Phase 2 以降で決める）
 

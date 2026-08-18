@@ -120,6 +120,23 @@ const createFixture = () => {
   return root;
 };
 
+// registry.json にだけ block item を置く。既存 fixture は同じ block を
+// ディスク・来歴・registry の 3 箇所すべてに置いているため、走査根から
+// registry を外しても残り 2 つが名前を供給して緑のままになる（実測）。
+// 配布物 public/r/<name>.json を生むのは registry.json なので、この経路が
+// 素通りすると来歴も preview も証跡も無い block が配布される。
+const createRegistryOnlyFixture = () => {
+  const root = createFixture();
+  const registry = JSON.parse(
+    execFileSync("cat", [join(root, "registry.json")], {
+      encoding: "utf8",
+    }),
+  );
+  registry.items.push({ name: "ghost-01", type: "registry:block", files: [] });
+  writeJson(root, "registry.json", registry);
+  return root;
+};
+
 const runChecker = (root, script) =>
   spawnSync(process.execPath, [join(scriptsRoot, script)], { cwd: root, encoding: "utf8" });
 
@@ -171,4 +188,20 @@ test("check-preview-render の CLI は宣言が揃っていれば緑になる", 
   t.after(() => rmSync(root, { recursive: true, force: true }));
   const result = runChecker(root, "check-preview-render.mjs");
   assert.equal(result.status, 0, result.stderr);
+});
+
+test("check-completeness の CLI は registry にだけ在る block を検出する", (t) => {
+  const root = createRegistryOnlyFixture();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const result = runChecker(root, "check-completeness.mjs");
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /ghost-01: provenance\.json に来歴が無い/);
+});
+
+test("check-preview-render の CLI は registry にだけ在る block を検出する", (t) => {
+  const root = createRegistryOnlyFixture();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const result = runChecker(root, "check-preview-render.mjs");
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /ghost-01: preview selector の宣言が無い/);
 });
