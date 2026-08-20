@@ -1933,6 +1933,42 @@
         }
       ],
       "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "sidebar-09": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/sidebar-09.json",
+      "registryContentSha256": "7653df5a50e1e8bfccc471cfa7e6d36ebf9fb0a559b889869675892b24f84b45",
+      "addTarget": "@shadcn/sidebar-09",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、CLI が IconPlaceholder を lucide-react へ自動展開。w-[calc(var(--sidebar-width-icon)+1px)] を component-local CSS 変数へ、w-[260px] を w-65 へ正規化",
+      "files": [
+        {
+          "path": "src/blocks/sidebar-09/components/app-sidebar.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-09/components/app-sidebar.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "27cf8f53c4c328c55cc75daba33232597f7a5b7bbcf3f3e9813c3c08f80f9667"
+        },
+        {
+          "path": "src/blocks/sidebar-09/components/nav-user.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-09/components/nav-user.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "a53bef6e7ec57ca250da734b901eb6044d0e157a5eeb9d448ce98a2e0a3cbed9"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-09/page.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
     }
   }
 }
