@@ -1645,6 +1645,48 @@
         }
       ],
       "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "sidebar-02": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/sidebar-02.json",
+      "registryContentSha256": "595090bf01ecbbb2cc2aeb5e6cc687e9766b6f51f05b22e1ba53c19cfe22d07a",
+      "addTarget": "@shadcn/sidebar-02",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去",
+      "files": [
+        {
+          "path": "src/blocks/sidebar-02/components/app-sidebar.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-02/components/app-sidebar.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "6b2dfc832987eec0426aebf250cb74908bb5910eb87a9df6be9426ed27f25b81"
+        },
+        {
+          "path": "src/blocks/sidebar-02/components/search-form.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-02/components/search-form.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "e963e626e448e60523045bdbb85531a4db630d2713445399711860e4c5ecef0f"
+        },
+        {
+          "path": "src/blocks/sidebar-02/components/version-switcher.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-02/components/version-switcher.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "9209d59ff45cb8ca1975d6195e2c73d01b7f9b5b820f62997842023c1925aafb"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-02/page.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
     }
   }
 }
