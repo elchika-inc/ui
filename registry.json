@@ -6939,6 +6939,55 @@
     },
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "signup-03",
+      "type": "registry:block",
+      "title": "Signup 03",
+      "description": "signup-03 block.",
+      "files": [
+        {
+          "path": "src/blocks/signup-03/components/signup-form.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/styles/global.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/tokens.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
+          "path": "LICENSE",
+          "type": "registry:file",
+          "target": "~/elchika-ui/LICENSE"
+        },
+        {
+          "path": "THIRD_PARTY_LICENSES",
+          "type": "registry:file",
+          "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
+        }
+      ],
+      "dependencies": [
+        "shadcn",
+        "tw-animate-css"
+      ],
+      "registryDependencies": [
+        "@elchika/button",
+        "@elchika/card",
+        "@elchika/input",
+        "@elchika/label",
+        "@elchika/field"
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
       "name": "skeleton",
       "type": "registry:ui",
       "title": "Skeleton",
