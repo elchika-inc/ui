@@ -1825,6 +1825,60 @@
         }
       ],
       "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "sidebar-07": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/sidebar-07.json",
+      "registryContentSha256": "2c1bfd041147775f01ef5c9ac26f74b1475a9a450af6779d3a62141ba9e50d06",
+      "addTarget": "@shadcn/sidebar-07",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去",
+      "files": [
+        {
+          "path": "src/blocks/sidebar-07/components/app-sidebar.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-07/components/app-sidebar.tsx",
+          "upstreamPathSha": "df1752dfe092957f84aa467d2270436139e3ecc7",
+          "generatedContentSha256": "d581e89152360f0102968782ac52141ba947daf028144a5264b9adb83d0703e1"
+        },
+        {
+          "path": "src/blocks/sidebar-07/components/nav-main.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-07/components/nav-main.tsx",
+          "upstreamPathSha": "df1752dfe092957f84aa467d2270436139e3ecc7",
+          "generatedContentSha256": "4f23a93bb907ab7386d62e347bfd2ee16f05464cf1c54e16a3918b4425dec770"
+        },
+        {
+          "path": "src/blocks/sidebar-07/components/nav-projects.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-07/components/nav-projects.tsx",
+          "upstreamPathSha": "df1752dfe092957f84aa467d2270436139e3ecc7",
+          "generatedContentSha256": "51543913ae8869ac0f051722d63031ec12c6ed22332eba7cc2ec495a414aa0c2"
+        },
+        {
+          "path": "src/blocks/sidebar-07/components/nav-user.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-07/components/nav-user.tsx",
+          "upstreamPathSha": "df1752dfe092957f84aa467d2270436139e3ecc7",
+          "generatedContentSha256": "4e05b2e7ba19c8b249ebfa0fc9b54594383a66a91ae50dae7c6bc651642997d3"
+        },
+        {
+          "path": "src/blocks/sidebar-07/components/team-switcher.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-07/components/team-switcher.tsx",
+          "upstreamPathSha": "df1752dfe092957f84aa467d2270436139e3ecc7",
+          "generatedContentSha256": "3ffd99bed60b8f5f47bbcd580f6045a0a4e98b254c0015bd3602c63e6504d317"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-07/page.tsx",
+          "upstreamPathSha": "df1752dfe092957f84aa467d2270436139e3ecc7"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
     }
   }
 }
