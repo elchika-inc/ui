@@ -7054,6 +7054,60 @@
     },
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "sidebar-05",
+      "type": "registry:block",
+      "title": "Sidebar 05",
+      "description": "sidebar-05 block.",
+      "files": [
+        {
+          "path": "src/blocks/sidebar-05/components/app-sidebar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/blocks/sidebar-05/components/search-form.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/styles/global.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/tokens.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/tokens.css"
+        },
+        {
+          "path": "src/styles/design-system/brands.css",
+          "type": "registry:file",
+          "target": "~/elchika-ui/design-system/brands.css"
+        },
+        {
+          "path": "LICENSE",
+          "type": "registry:file",
+          "target": "~/elchika-ui/LICENSE"
+        },
+        {
+          "path": "THIRD_PARTY_LICENSES",
+          "type": "registry:file",
+          "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
+        }
+      ],
+      "dependencies": [
+        "lucide-react",
+        "shadcn",
+        "tw-animate-css"
+      ],
+      "registryDependencies": [
+        "@elchika/sidebar",
+        "@elchika/breadcrumb",
+        "@elchika/separator",
+        "@elchika/label",
+        "@elchika/collapsible"
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
       "name": "signup-01",
       "type": "registry:block",
       "title": "Signup 01",
