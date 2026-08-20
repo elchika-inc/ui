@@ -2257,6 +2257,72 @@
         }
       ],
       "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "sidebar-16": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/sidebar-16.json",
+      "registryContentSha256": "72c943705cce4b9ed08f9696eac7527032b5f51cad5c8828cf1434fcfb676d77",
+      "addTarget": "@shadcn/sidebar-16",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、CLI が IconPlaceholder を lucide-react へ自動展開。h-[calc(100svh-var(--header-height))] を component-local CSS 変数へ正規化",
+      "files": [
+        {
+          "path": "src/blocks/sidebar-16/components/app-sidebar.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/app-sidebar.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "e3427c4c28096335c5399da0b267d828852b7b95b6b89519d6a4f264b2bd59d2"
+        },
+        {
+          "path": "src/blocks/sidebar-16/components/nav-main.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/nav-main.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "2dfe5cd5fdc5600ba18a2d4ec3dcf51b3f6b10081d9d7a0511484738a15ecbea"
+        },
+        {
+          "path": "src/blocks/sidebar-16/components/nav-projects.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/nav-projects.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "903c3260ba21e272e0da5480866b0ed9c311d7aea6071cfcd459752253fe1e23"
+        },
+        {
+          "path": "src/blocks/sidebar-16/components/nav-secondary.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/nav-secondary.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "329c8b61453f3b825f535c27154d388119e3b0f3d4e64b05387e9b428c69c371"
+        },
+        {
+          "path": "src/blocks/sidebar-16/components/nav-user.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/nav-user.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "8e56b8cea8e98097fdeb74fff0b2e74450a7eca9cd1d3bcfc2ccdf7a54085ce9"
+        },
+        {
+          "path": "src/blocks/sidebar-16/components/search-form.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/search-form.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "89c3c32ddf36099542ab4defeceb08b4ce595f02e039e8a00de151507b26f4ee"
+        },
+        {
+          "path": "src/blocks/sidebar-16/components/site-header.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/site-header.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "2a54588edf19f5148750597c672f237cf3bdeb985ddc07727640cba7ba51f264"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/page.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
     }
   }
 }
