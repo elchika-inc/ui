@@ -2,8 +2,17 @@
 
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
-import { basename, dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  renameSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
+import { basename, dirname, extname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
 
 const DEPENDENCY_SECTIONS = [
@@ -125,13 +134,26 @@ export function parseArgs(argv) {
   return { name, modified: modified?.trim(), force, resync };
 }
 
-export function shadcnCommand(version, name) {
+export function shadcnCommand(version, itemPath) {
   if (!exactSemver.test(version)) {
     throw new Error(`.shadcn-cli-version が exact semver でない: ${version}`);
   }
+  if (!isAbsolute(itemPath) || extname(itemPath) !== ".json") {
+    throw new Error(`shadcn の入力は絶対 path の JSON であること: ${itemPath}`);
+  }
   return {
     command: "npx",
-    args: [`shadcn@${version}`, "add", "--overwrite", `@shadcn/${name}`],
+    args: [`shadcn@${version}`, "add", "--overwrite", itemPath],
+  };
+}
+
+function pinnedRegistryItem(name, upstreamText) {
+  const directory = mkdtempSync(join(tmpdir(), "elchika-shadcn-item-"));
+  const path = join(directory, `${name}.json`);
+  writeFileSync(path, upstreamText, { flag: "wx" });
+  return {
+    path,
+    remove: () => rmSync(directory, { recursive: true, force: true }),
   };
 }
 
@@ -287,16 +309,52 @@ export function blockRelocationPlan(target) {
   });
 }
 
+const MODULE_SPECIFIER = /(from\s*|import\s+)(["'])([^"']+)\2/g;
+
+export function rewriteBlockSiblingImports(source, targetPath, targetFiles) {
+  const replacements = new Map();
+  for (const file of targetFiles) {
+    const base = basename(file.targetPath);
+    const extension = extname(base);
+    const stem = extension ? base.slice(0, -extension.length) : base;
+    let destination = relative(dirname(targetPath), file.targetPath).split(sep).join("/");
+    if (extension) destination = destination.slice(0, -extension.length);
+    if (!destination.startsWith(".")) destination = `./${destination}`;
+    replacements.set(`@/components/${stem}`, destination);
+    replacements.set(`@/components/${base}`, destination);
+  }
+  const rewritten = [];
+  const content = source.replace(MODULE_SPECIFIER, (match, prefix, quote, specifier) => {
+    const replacement = replacements.get(specifier);
+    if (!replacement) return match;
+    rewritten.push({ from: specifier, to: replacement });
+    return `${prefix}${quote}${replacement}${quote}`;
+  });
+  return { content, rewritten };
+}
+
 // reconcile より前に呼ぶ。移設を後にすると src/components/<basename> が
 // 変更パスとして残り、どのルールにも一致せず fail-closed で止まる。
 function relocateBlockFiles(root, target, log) {
-  for (const { from, to } of blockRelocationPlan(target)) {
+  const plan = blockRelocationPlan(target);
+  for (const { from, to } of plan) {
     const fromPath = join(root, from);
     // 生成されなかった場合はここで止めず、後段の生成確認に一本化する。
     if (!existsSync(fromPath)) continue;
     mkdirSync(dirname(join(root, to)), { recursive: true });
     renameSync(fromPath, join(root, to));
     log(`移設: ${from} -> ${to}`);
+  }
+  for (const { to } of plan) {
+    const path = join(root, to);
+    if (!existsSync(path)) continue;
+    const source = readFileSync(path, "utf8");
+    const { content, rewritten } = rewriteBlockSiblingImports(source, to, target.files);
+    if (rewritten.length === 0) continue;
+    writeFileSync(path, content);
+    for (const entry of rewritten) {
+      log(`内部 import: ${to} ${entry.from} -> ${entry.to}`);
+    }
   }
 }
 
@@ -323,6 +381,34 @@ function externalImports(source) {
     if (name && !["react", "react-dom"].includes(name)) packages.add(name);
   }
   return packages;
+}
+
+function registryUiImports(source) {
+  const names = new Set();
+  const pattern = /(?:from\s*|import\s*)["']@\/components\/ui\/([a-z0-9]+(?:-[a-z0-9]+)*)["']/g;
+  for (const match of source.matchAll(pattern)) names.add(match[1]);
+  return names;
+}
+
+export function completeBlockRegistryDependencies(
+  name,
+  upstreamDependencies,
+  generatedSource,
+  registryItems,
+) {
+  const dependencies = new Set(normalizeRegistryDependencies(upstreamDependencies));
+  for (const dependency of registryUiImports(generatedSource)) {
+    const dependencyItem = registryItems.find(
+      (candidate) => candidate.name === dependency && candidate.type === "registry:ui",
+    );
+    if (!dependencyItem) {
+      throw new Error(
+        `${name}: @/components/ui/${dependency} に対応する registry item が存在しない`,
+      );
+    }
+    dependencies.add(`@elchika/${dependency}`);
+  }
+  return [...dependencies];
 }
 
 const UPSTREAM_PREFIX = "apps/v4/registry/bases/base/";
@@ -374,8 +460,16 @@ function resolveBlockTarget(name, upstreamItem) {
   const blockPrefix = `${REGISTRY_PREFIX}blocks/${name}/`;
   for (const file of upstreamItem.files ?? []) {
     const registryPath = file.path;
+    if (typeof registryPath !== "string" || !registryPath.startsWith(blockPrefix)) {
+      throw new Error(`${name}: block の file path が想定外: ${registryPath ?? "なし"}`);
+    }
+    assertContainedPath(`${name}: block の registry path`, registryPath);
     if (file.type === "registry:page") {
-      droppedFiles.push({ registryPath, upstreamPath: upstreamPathOf(registryPath) });
+      droppedFiles.push({
+        registryPath,
+        upstreamPath: upstreamPathOf(registryPath),
+        target: file.target,
+      });
       continue;
     }
     if (!SUPPORTED_BLOCK_FILE_TYPES.has(file.type)) {
@@ -383,8 +477,8 @@ function resolveBlockTarget(name, upstreamItem) {
         `${name}: block の file type が未対応: ${file.type ?? "なし"} (${registryPath})`,
       );
     }
-    if (!registryPath.startsWith(blockPrefix)) {
-      throw new Error(`${name}: block の file path が想定外: ${registryPath}`);
+    if (file.target !== undefined) {
+      throw new Error(`${name}: registry:component に target は指定できない: ${file.target}`);
     }
     files.push({
       registryPath,
@@ -434,7 +528,7 @@ export function resolveRegistryTarget(name, upstreamItem) {
   };
 }
 
-export function buildRegistryItem(name, upstreamItem, generatedSource, target) {
+export function buildRegistryItem(name, upstreamItem, generatedSource, target, registryItems = []) {
   const dependenciesByName = new Map();
   for (const dependency of upstreamItem.dependencies ?? []) {
     dependenciesByName.set(dependencyName(dependency), dependency);
@@ -467,7 +561,15 @@ export function buildRegistryItem(name, upstreamItem, generatedSource, target) {
   if (dependenciesByName.size) {
     item.dependencies = [...dependenciesByName.values()].sort();
   }
-  const registryDependencies = normalizeRegistryDependencies(upstreamItem.registryDependencies);
+  const registryDependencies =
+    target.itemType === "registry:block"
+      ? completeBlockRegistryDependencies(
+          name,
+          upstreamItem.registryDependencies,
+          generatedSource,
+          registryItems,
+        )
+      : normalizeRegistryDependencies(upstreamItem.registryDependencies);
   if (registryDependencies.length) item.registryDependencies = registryDependencies;
   return item;
 }
@@ -650,9 +752,10 @@ function ensureGenerated(root, target, isBlock) {
 // 設定や CLI 版が変われば作りうるので防御として残す。
 // ここが発火しないことを「page を配布していない証拠」として扱わない。
 // 配布していないことは registry item の files と作業ツリーの実体で確かめる。
-function removeDroppedPages(root, target, upstreamItem, log) {
+function prepareDroppedPages(root, target) {
+  const droppedTargets = [];
   for (const file of target.droppedFiles ?? []) {
-    const droppedTarget = upstreamItem.files.find((f) => f.path === file.registryPath)?.target;
+    const droppedTarget = file.target;
     if (!droppedTarget) continue;
     // target は上流 registry の応答に含まれる文字列で、rmSync へ直接流す値。
     // 封じ込めを検査してから消す（check-evidence の registry path 検査と同じ形）。
@@ -667,10 +770,22 @@ function removeDroppedPages(root, target, upstreamItem, log) {
     ) {
       throw new Error(`registry:page の target が repo 内の通常相対 path でない: ${droppedTarget}`);
     }
-    if (existsSync(join(root, droppedTarget))) {
-      rmSync(join(root, droppedTarget));
-      log(`配布しない page を削除: ${droppedTarget}`);
+    if (!droppedTarget.startsWith("app/") || !droppedTarget.endsWith("/page.tsx")) {
+      throw new Error(`registry:page の target が許可した page path でない: ${droppedTarget}`);
     }
+    if (existsSync(join(root, droppedTarget))) {
+      throw new Error(`registry:page の target が実行前から存在する: ${droppedTarget}`);
+    }
+    droppedTargets.push(droppedTarget);
+  }
+  return droppedTargets;
+}
+
+function removeDroppedPages(root, droppedTargets, log) {
+  for (const droppedTarget of droppedTargets) {
+    if (!existsSync(join(root, droppedTarget))) continue;
+    rmSync(join(root, droppedTarget));
+    log(`配布しない page を削除: ${droppedTarget}`);
   }
 }
 
@@ -726,12 +841,6 @@ export async function runAddComponent({
 
   const provenance = readJson(repositoryRoot, "provenance.json");
   if (resync) return resyncBlockHashes({ root: repositoryRoot, name, modified, provenance, log });
-  // component の記録済み判定は fetch より前に置く。記録済みの再実行で通信しないことを
-  // 既存 61 件が保証として持っている。block は種別が target 確定まで分からないので後段で見る。
-  if (shouldSkipRecorded(provenance, name, force)) {
-    log(`${name}: 既に記録済み（--force で上書き可能）`);
-    return { skipped: true };
-  }
 
   const packageBefore = readJson(repositoryRoot, "package.json");
   const trackedBefore = trackedFiles(repositoryRoot);
@@ -744,18 +853,53 @@ export async function runAddComponent({
   const target = resolveRegistryTarget(name, upstreamItem);
   const isBlock = target.itemType === "registry:block";
 
-  if (isBlock && shouldSkipRecorded(provenance, name, force, "block")) {
+  // lane の衝突を provenance だけで判断すると、台帳の部分欠損時に同名の
+  // registry item や disk 実体を上書きできてしまう。CLI の副作用より前に、
+  // 独立した 3 根（provenance / registry / disk）をすべて照合する。
+  const registryBefore = readJson(repositoryRoot, "registry.json");
+  const existingRegistryItems = registryBefore.items.filter((item) => item.name === name);
+  if (existingRegistryItems.length > 1) {
+    throw new Error(`${name}: registry item が重複している（${existingRegistryItems.length} 件）`);
+  }
+  const existingRegistryItem = existingRegistryItems[0];
+  const oppositeDiskPath = isBlock
+    ? join(repositoryRoot, "src/components/ui", `${name}.tsx`)
+    : join(repositoryRoot, "src/blocks", name);
+
+  const otherLane = isBlock ? provenance.components?.[name] : provenance.blocks?.[name];
+  const registryLaneConflict = existingRegistryItem
+    ? isBlock
+      ? existingRegistryItem.type !== "registry:block"
+      : existingRegistryItem.type === "registry:block"
+    : false;
+  if (otherLane || registryLaneConflict || existsSync(oppositeDiskPath)) {
+    throw new Error(`${name}: component と block の同名衝突がある`);
+  }
+
+  if (shouldSkipRecorded(provenance, name, force, isBlock ? "block" : "component")) {
     log(`${name}: 既に記録済み（--force で上書き可能）`);
     return { skipped: true };
   }
 
-  const command = shadcnCommand(cliVersion, name);
-  runCommand(command.command, command.args, { cwd: repositoryRoot, stdio: "inherit" });
+  // 外部 registry が指定する削除対象は CLI の副作用より前に検証する。
+  // 実行前から存在する path は CLI が上書きする可能性もあるため、先に停止する。
+  const droppedTargets = prepareDroppedPages(repositoryRoot, target);
+
+  // 検証・来歴hash・CLI実行を同じresponse bytesへ束縛する。
+  // @shadcn/<name>を渡すとCLIがremoteを再取得し、preflight後に内容が変わる
+  // TOCTOUが生じるため、shadcn公式のlocal item入力を使う。
+  const pinnedItem = pinnedRegistryItem(name, upstreamText);
+  try {
+    const command = shadcnCommand(cliVersion, pinnedItem.path);
+    runCommand(command.command, command.args, { cwd: repositoryRoot, stdio: "inherit" });
+  } finally {
+    pinnedItem.remove();
+  }
 
   if (isBlock) relocateBlockFiles(repositoryRoot, target, log);
   // reconcile より前に呼ぶ。後にすると、CLI が作った app/<name>/page.tsx が
   // どの分類ルールにも一致せず reconcile が先に停止し、この防御へ到達しない。
-  removeDroppedPages(repositoryRoot, target, upstreamItem, log);
+  removeDroppedPages(repositoryRoot, droppedTargets, log);
 
   const reconciled = reconcileAddChanges({
     root: repositoryRoot,
@@ -801,8 +945,14 @@ export async function runAddComponent({
     provenance.components ??= {};
     provenance.components[name] = entry;
   }
-  const registry = readJson(repositoryRoot, "registry.json");
-  const registryItem = buildRegistryItem(name, upstreamItem, generatedSource, target);
+  const registry = registryBefore;
+  const registryItem = buildRegistryItem(
+    name,
+    upstreamItem,
+    generatedSource,
+    target,
+    registry.items,
+  );
   const existingIndex = registry.items.findIndex((item) => item.name === name);
   if (existingIndex === -1) registry.items.push(registryItem);
   else registry.items[existingIndex] = registryItem;

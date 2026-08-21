@@ -71,7 +71,39 @@ export const componentCategories = [
   // block は部品でなく組み立て済みの雛形なので、部品のカテゴリとは分けて並べる。
   {
     name: "認証",
-    items: ["login-01"],
+    items: [
+      "login-01",
+      "login-02",
+      "login-03",
+      "login-04",
+      "login-05",
+      "signup-01",
+      "signup-02",
+      "signup-03",
+      "signup-04",
+      "signup-05",
+    ],
+  },
+  {
+    name: "アプリシェル",
+    items: [
+      "sidebar-01",
+      "sidebar-02",
+      "sidebar-03",
+      "sidebar-04",
+      "sidebar-05",
+      "sidebar-06",
+      "sidebar-07",
+      "sidebar-08",
+      "sidebar-09",
+      "sidebar-10",
+      "sidebar-11",
+      "sidebar-12",
+      "sidebar-13",
+      "sidebar-14",
+      "sidebar-15",
+      "sidebar-16",
+    ],
   },
 ];
 

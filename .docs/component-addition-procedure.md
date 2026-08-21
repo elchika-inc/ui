@@ -42,7 +42,7 @@ npm run build:lib
 npm run check:pre
 ```
 
-`check:pre` は evidence を除く常設 checker を fail-fast で実行する。現行の構成と順序は `scripts/check-all.mjs` の `PRE_FLIGHT_CHECKS` を正本とする。すべて通ったら component 実装だけを明示パスで stage して commit する。CIと証跡commit後の最終検査は、evidenceを含む`check:all`を維持する。
+`check:pre` は evidence と live upstream audit を除く repo-local の常設 checker を fail-fast で実行する。現行の構成と順序は `scripts/check-all.mjs` の `PRE_FLIGHT_CHECKS` を正本とする。すべて通ったら component 実装だけを明示パスで stage して commit する。CIと証跡commit後の最終検査は、evidenceを含む`check:all`を維持する。
 
 証跡の鮮度検査は、Markdown内に一意に置く`verified_impl_sha: <40桁SHA>`を正本とし、検証SHAが現在のHEADの祖先であることを確認してから、`git diff <検証SHA> -- <paths>`と`git ls-files --others --exclude-standard -- <paths>`で検証SHA、作業ツリー、未追跡ファイルを比較する。構造化欄の欠落・重複・実在しないcommit・HEAD非祖先commitは、古い証跡を含む全証跡でhard failureにする。同じcomponentに複数の証跡がある場合、他候補の祖先ではないGit DAG上のmaximal候補が一意なら、その1件だけをcomponent固有pathの鮮度hard gate対象とする。相互に比較不能なmaximal候補が複数残る場合は、HEADからのcommit距離で選ばずhard failureにする。
 
@@ -115,6 +115,16 @@ block は部品（`registry:ui`）と同じ手順を使うが、次の点だけ�
 3. `preview-selectors.json` の追加は既存キーの順序を崩さず 1 件だけ挿入する。
 4. `npm run registry:build` を先に実行してから `npm run check:pre` を走らせる
    （`check-distribution` が `public/r/<name>.json` を要求する）。
+5. block の実装 commit 前と PR 作成前に、live upstream audit を独立して実行する。
+
+   ```bash
+   node scripts/check-block-icons.mjs
+   ```
+
+   この検査はライブな上流 registry JSON を取得し、`IconPlaceholder` の `lucide` 欠損と
+   block / preview への展開実体を fail-closed で突き合わせる。上流またはネットワークの障害を
+   repo-local な回帰と混同しないため、`check:pre` / `check:all` / CI へは含めない。ただし
+   block 追加時の省略可能な確認ではなく、この手順で個別に必須とする。
 
 ### block で追加されたゲート
 
@@ -131,6 +141,8 @@ block は部品（`registry:ui`）と同じ手順を使うが、次の点だけ�
 | registry item から block 自身の配布ファイルを消す | completeness |
 | `registryDependencies` から使っている部品を落とす | completeness |
 | 来歴の `generatedContentSha256` を書き換える | completeness |
+| 上流 fixture の `IconPlaceholder` から `lucide` を落とす | block icons（`node scripts/check-block-icons.mjs`） |
+| page-only icon を対応する preview から落とす | block icons（`node scripts/check-block-icons.mjs`） |
 | block の証跡 Markdown を消す | evidence |
 | preview の tsx で存在しない export を import する | **typecheck**（`npm run typecheck`）。下記の注記を読むこと |
 
@@ -141,27 +153,20 @@ evidence が「preview が証跡の検証 SHA より新しい」を見ている�
 **無害なコメント 1 行を足しただけでも同じく赤くなる**（実測）。
 `check:all` が赤いことを「壊れた import を検知した」と読まないこと。
 
-### 未対応（Phase 2 以降で決める）
+### block 移植で維持する契約
 
 - 上流 block の `registry:file`（`dashboard-01/data.json`）は CLI が item の `target` へ書くため
   移設が成立せず、`SUPPORTED_BLOCK_FILE_TYPES` が fail-closed で止める。
   `registry:ui` / `registry:hook` も同様に止まる（CLI がそれぞれ `aliases.ui` /
   `aliases.hooks` へ落とすため、`src/components/` 直下からの移設が成立しない）。
   上流 block がこれらの type を持つと「なぜか止まる」形で現れる。
-- **18 件の block が、どの registry にも存在しない `@/app/(create)/components/icon-placeholder` を
-  import する**（`login-05` / `signup-05` / `sidebar-01〜13,15,16` / `dashboard-01`。実測）。
-  上流 shadcn.com のサイト内部コンポーネントで、`https://ui.shadcn.com/r/styles/base-nova/icon-placeholder.json`
-  は **404**、当リポジトリの `registry.json` にも無い。`internalDependency` が `unknown` を返して
-  completeness が `registry item へ対応付けられない` で赤くなる（fail-closed なので黙って壊れはしない）。
-  block ごとに「lucide アイコンへ置換 / placeholder を自作 / 対象から外す」を人が決める。
-
-  **設計 §6-2 の「既存 61 コンポーネントで全 block をまかなえる」は `registryDependencies` の
-  宣言だけを突き合わせた結論で、配布ファイルの中身は測っていない。** 宣言側の不足が 0 件なのは
-  正しいが、中身は上記のとおり不足する。
-
-  素通しで進められるのは `login-02,03,04` / `signup-01,02,03,04` / `sidebar-14` の 8 件のみ。
-
-- 配布ファイルが**互いを import する** block（sidebar 系の `app-sidebar.tsx` → `nav-main.tsx`）は、
-  consumer 側で `src/components/` へフラットに落ちるうえ `shadcn build` が import specifier を
-  書き換えないため、解決不能な import が残りうる。**Phase 2 の最初の 1 件で落下先の import を
-  目視で確かめてから残りへ進む。**
+- 上流の `IconPlaceholder` は不足部品ではなく、shadcn CLI が `lucide` 属性の実アイコンへ
+  展開するマーカーとして扱う。独自の placeholder や置換スクリプトは作らない。
+  `node scripts/check-block-icons.mjs` は対象 block のライブ上流 JSON から期待集合を導出し、
+  次の述語を fail-closed で検査する。件数は可観測性のため出力するが成功条件にはしない。
+  1. 全上流ファイルの `IconPlaceholder` に `lucide` 属性がある。
+  2. `registry:component` のアイコン・引継ぎ属性が対応する `src/blocks/<name>/` の同一生成fileにある。
+  3. `registry:page` のアイコン・引継ぎ属性が対応する `src/previews/<name>.tsx` にある。
+- 配布ファイルが同一 block の sibling を `@/components/<name>` で import する場合、
+  `add-component.mjs` はその sibling が配布ファイル集合に実在するときだけ相対 import へ変換する。
+  `@/components/ui/*` と `@/lib/utils` は共有部品なので変換しない。

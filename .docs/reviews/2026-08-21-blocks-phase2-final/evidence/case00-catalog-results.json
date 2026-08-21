@@ -1,0 +1,676 @@
+[
+  {
+    "name": "catalog",
+    "theme": "light",
+    "path": "/catalog/",
+    "url": "http://127.0.0.1:4327/catalog/",
+    "facts": {
+      "expectedSelectorCount": 25,
+      "visibility": [
+        {
+          "name": "login-02",
+          "selector": "[data-slot=\"login-02-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "login-03",
+          "selector": "[data-slot=\"login-03-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "login-04",
+          "selector": "[data-slot=\"login-04-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "login-05",
+          "selector": "[data-slot=\"login-05-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "signup-01",
+          "selector": "[data-slot=\"signup-01-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "signup-02",
+          "selector": "[data-slot=\"signup-02-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "signup-03",
+          "selector": "[data-slot=\"signup-03-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "signup-04",
+          "selector": "[data-slot=\"signup-04-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "signup-05",
+          "selector": "[data-slot=\"signup-05-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-01",
+          "selector": "[data-slot=\"sidebar-01-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-02",
+          "selector": "[data-slot=\"sidebar-02-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-03",
+          "selector": "[data-slot=\"sidebar-03-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-04",
+          "selector": "[data-slot=\"sidebar-04-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-05",
+          "selector": "[data-slot=\"sidebar-05-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-06",
+          "selector": "[data-slot=\"sidebar-06-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-07",
+          "selector": "[data-slot=\"sidebar-07-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-08",
+          "selector": "[data-slot=\"sidebar-08-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-09",
+          "selector": "[data-slot=\"sidebar-09-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-10",
+          "selector": "[data-slot=\"sidebar-10-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-11",
+          "selector": "[data-slot=\"sidebar-11-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-12",
+          "selector": "[data-slot=\"sidebar-12-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-13",
+          "selector": "[data-slot=\"sidebar-13-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-14",
+          "selector": "[data-slot=\"sidebar-14-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-15",
+          "selector": "[data-slot=\"sidebar-15-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-16",
+          "selector": "[data-slot=\"sidebar-16-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        }
+      ],
+      "allSelectorsVisibleInSameDom": true,
+      "totalIds": 231,
+      "duplicateIds": [],
+      "sidebar10": {
+        "triggerCount": 1,
+        "ariaExpanded": "false",
+        "ariaControls": null,
+        "matchingOpenOverlayCount": 0
+      },
+      "theme": {
+        "expected": "light",
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "catalog-case51-light.jpg",
+      "bytes": 1172915,
+      "width": 1512,
+      "height": 13625,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/catalog/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/catalog/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "catalog",
+    "theme": "dark",
+    "path": "/catalog-dark/",
+    "url": "http://127.0.0.1:4327/catalog-dark/",
+    "facts": {
+      "expectedSelectorCount": 25,
+      "visibility": [
+        {
+          "name": "login-02",
+          "selector": "[data-slot=\"login-02-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "login-03",
+          "selector": "[data-slot=\"login-03-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "login-04",
+          "selector": "[data-slot=\"login-04-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "login-05",
+          "selector": "[data-slot=\"login-05-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "signup-01",
+          "selector": "[data-slot=\"signup-01-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "signup-02",
+          "selector": "[data-slot=\"signup-02-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "signup-03",
+          "selector": "[data-slot=\"signup-03-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "signup-04",
+          "selector": "[data-slot=\"signup-04-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "signup-05",
+          "selector": "[data-slot=\"signup-05-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-01",
+          "selector": "[data-slot=\"sidebar-01-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-02",
+          "selector": "[data-slot=\"sidebar-02-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-03",
+          "selector": "[data-slot=\"sidebar-03-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-04",
+          "selector": "[data-slot=\"sidebar-04-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-05",
+          "selector": "[data-slot=\"sidebar-05-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-06",
+          "selector": "[data-slot=\"sidebar-06-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-07",
+          "selector": "[data-slot=\"sidebar-07-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-08",
+          "selector": "[data-slot=\"sidebar-08-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-09",
+          "selector": "[data-slot=\"sidebar-09-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-10",
+          "selector": "[data-slot=\"sidebar-10-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-11",
+          "selector": "[data-slot=\"sidebar-11-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-12",
+          "selector": "[data-slot=\"sidebar-12-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-13",
+          "selector": "[data-slot=\"sidebar-13-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-14",
+          "selector": "[data-slot=\"sidebar-14-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-15",
+          "selector": "[data-slot=\"sidebar-15-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        },
+        {
+          "name": "sidebar-16",
+          "selector": "[data-slot=\"sidebar-16-preview\"]",
+          "count": 1,
+          "visibleCount": 1,
+          "inCatalog": true,
+          "modes": [
+            "catalog"
+          ]
+        }
+      ],
+      "allSelectorsVisibleInSameDom": true,
+      "totalIds": 231,
+      "duplicateIds": [],
+      "sidebar10": {
+        "triggerCount": 1,
+        "ariaExpanded": "false",
+        "ariaControls": null,
+        "matchingOpenOverlayCount": 0
+      },
+      "theme": {
+        "expected": "dark",
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "catalog-case52-dark.jpg",
+      "bytes": 1185610,
+      "width": 1512,
+      "height": 13625,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/catalog-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/catalog-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  }
+]

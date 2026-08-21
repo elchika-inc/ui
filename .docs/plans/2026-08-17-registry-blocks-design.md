@@ -88,6 +88,53 @@ preview render の走査根拡張は当初の設計に含まれておらず、�
 
 `registry:page` を配布しない代わりに、page.tsx が持っていたレイアウト枠（`flex min-h-svh w-full items-center justify-center p-6 md:p-10` と `max-w-sm` 相当）は preview 側へ移し、上流と同じ見た目を再現する。
 
+### 3-4-2. `IconPlaceholder` の展開（Phase 2 で追加）
+
+18 件の block が `@/app/(create)/components/icon-placeholder` を import する（§6-2 の訂正）。これは**不足している部品ではなく、配布時に解決されるべきマーカー**である。実体を読むと 5 つのアイコンライブラリの名前を並べて持つ。
+
+```tsx
+<IconPlaceholder
+  lucide="GalleryVerticalEndIcon"
+  tabler="IconLayoutRows"
+  hugeicons="LayoutBottomIcon"
+  phosphor="RowsIcon"
+  remixicon="RiGalleryLine"
+  className="size-4"
+/>
+```
+
+上流サイト（`app/(create)/`）が利用者の選んだライブラリへ解決するためのもので、registry からも GitHub の配布ツリーからも取得できない（両方 404 を実測）。
+
+**決定: 移植時の正規化として `lucide-react` の実アイコンへ展開する。** 自前の `IconPlaceholder` を用意しない — 5 ライブラリ対応の抽象を恒常的に保守することになり、「1 関数のために依存を足さない」「自前実装は最後の手段」に反する。`lucide-react` は既に当リポジトリの依存にある。
+
+展開ルール:
+
+- `<IconPlaceholder lucide="XIcon" ...その他ライブラリ属性 className="..." />` → `<XIcon className="..." />`
+- `lucide` 以外のライブラリ属性（`tabler` / `hugeicons` / `phosphor` / `remixicon`）は捨てる
+- `import { IconPlaceholder } from "@/app/(create)/components/icon-placeholder"` は `import { XIcon, YIcon } from "lucide-react"` へ置き換える（同一ファイル内で使う全アイコンをまとめる）
+- `className` 以外の属性が付いていたらそのまま引き継ぐ
+
+実測（2026-08-18）:
+
+| 項目 | 値 |
+|---|---|
+| 使用箇所 | 243 件 |
+| `lucide` 属性が欠けている箇所 | **0 件** |
+| 必要な lucide アイコン | 79 種 |
+
+`lucide` 属性の欠損が 0 件なので機械的に展開できる。**ただし展開スクリプトは「lucide 属性が無い箇所を見つけたら停止する」fail-closed で書く** — 上流が将来 lucide を落とした場合に、黙って壊れた JSX を生成させない。
+
+展開したことは各 block の `modified` に記録する。
+
+### 3-4-3. block のカテゴリ（Phase 2 で確定）
+
+| カテゴリ | 対象 | 状態 |
+|---|---|---|
+| 認証 | login-01〜05 / signup-01〜05 | Phase 1 で新設済み（login-01 のみ登録） |
+| **アプリシェル** | sidebar-01〜16 / dashboard-01 | **Phase 2 で新設** |
+
+既存の「ナビゲーション」へ入れない理由: そこには部品としての `sidebar` が既にあり、部品（`registry:ui`）と画面雛形（`registry:block`）が同じ棚に並ぶと利用者が区別できない。名前も `sidebar` と `sidebar-07` で紛らわしい。block は「アプリの骨格」という別の粒度なので棚を分ける。
+
 ### 3-5. 証跡
 
 `check-completeness` は証跡を要求しないが、当リポジトリの運用は実ブラウザ証跡を伴う。**27 件 × light/dark = 54 枚**を `.docs/reviews/` へ追加する。

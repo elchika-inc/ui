@@ -4,7 +4,7 @@ export function VerificationCatalog() {
   return (
     <main
       data-slot="verification-catalog"
-      className="min-h-svh bg-background px-6 py-12 text-foreground"
+      className="min-h-svh bg-background px-6 py-12 text-foreground [&_[data-slot=bubble-preview]_.opacity-70]:opacity-100"
     >
       <div className="mx-auto flex max-w-7xl flex-col gap-8">
         <header className="flex flex-col gap-3">

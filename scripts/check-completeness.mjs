@@ -133,8 +133,11 @@ function blockFileProblems(name, file, index) {
 // する雛形であり、ライブラリの公開 API ではないため（設計 §3-1 の要件マトリクス）。
 function blockProblems(name, registry, previewFiles, previewSources, provenance, onDisk, sources) {
   const problems = [];
-  if (!registry.items.some((i) => i.name === name)) {
+  const registryItem = registry.items.find((item) => item.name === name);
+  if (!registryItem) {
     problems.push(`${name}: registry.json に item が無い`);
+  } else if (registryItem.type !== "registry:block") {
+    problems.push(`${name}: registry item の type が registry:block でない`);
   }
   if (!previewSources.includes(`${name}.tsx`)) {
     problems.push(`${name}: src/previews/${name}.tsx が無い`);
@@ -290,6 +293,18 @@ function blockFileSetProblems(name, registry, files, onDisk, sources) {
     .filter((file) => file.target === undefined)
     .map((file) => file.path)
     .sort();
+  for (const file of (item.files ?? []).filter((candidate) => candidate.target === undefined)) {
+    // block の実装コードは registry:component でなければ CLI の配置契約が変わる。
+    // 一方 data.json のような block 固有 asset は registry:file が正しいため、
+    // 全ファイルを一律に registry:component へ固定しない。
+    const isCode = /\.[cm]?[jt]sx?$/.test(file.path ?? "");
+    const expectedType = isCode ? "registry:component" : "registry:file";
+    if (file.type !== expectedType) {
+      problems.push(
+        `${name}: registry item の ${file.path ?? "path不明"} の type が ${expectedType} でない`,
+      );
+    }
+  }
   const recorded = files
     .filter((file) => file.dropped !== true)
     .map((file) => file.path)
@@ -358,8 +373,11 @@ function componentProblems(name, barrelPaths, registry, previewFiles, previewSou
   if (!barrelPaths.has(`./components/ui/${name}`)) {
     problems.push(`${name}: src/index.ts から export されていない`);
   }
-  if (!registry.items.some((i) => i.name === name)) {
+  const registryItems = registry.items.filter((item) => item.name === name);
+  if (registryItems.length === 0) {
     problems.push(`${name}: registry.json に item が無い`);
+  } else if (registryItems.length === 1 && registryItems[0].type !== "registry:ui") {
+    problems.push(`${name}: registry item の type が registry:ui でない`);
   }
   // ルート（.astro）だけでなく中身（src/previews/<name>.tsx）も見る。
   // ルートだけ在って中身が無いと、誤った import でもビルドが通りうる。
@@ -398,6 +416,26 @@ export function checkCompleteness({
   provenance,
 }) {
   const problems = dtsContractProblems(dts);
+  const componentNames = new Set(components);
+  const provenanceComponentNames = new Set(Object.keys(provenance.components ?? {}));
+  const laneConflicts = new Set(
+    blocks.filter((name) => componentNames.has(name) || provenanceComponentNames.has(name)),
+  );
+  for (const name of Object.keys(provenance.blocks ?? {})) {
+    if (provenanceComponentNames.has(name)) laneConflicts.add(name);
+  }
+  for (const name of [...laneConflicts].sort()) {
+    problems.push(`${name}: component と block の両方に同名が存在する`);
+  }
+  const registryCounts = new Map();
+  for (const item of registry.items) {
+    registryCounts.set(item.name, (registryCounts.get(item.name) ?? 0) + 1);
+  }
+  for (const [name, count] of [...registryCounts].sort(([left], [right]) =>
+    left.localeCompare(right),
+  )) {
+    if (count > 1) problems.push(`${name}: registry.json に同名 item が ${count} 件ある`);
+  }
   const barrelPaths = exportedModulePaths(barrel);
   for (const name of components) {
     problems.push(

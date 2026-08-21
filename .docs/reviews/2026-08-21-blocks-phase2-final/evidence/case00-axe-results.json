@@ -1,0 +1,1146 @@
+[
+  {
+    "path": "/preview/login-02/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/login-02-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/login-03/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/login-03-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/login-04/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/login-04-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/login-05/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/login-05-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/signup-01/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/signup-01-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/signup-02/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/signup-02-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/signup-03/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/signup-03-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/signup-04/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/signup-04-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/signup-05/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/signup-05-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-01/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-01-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-02/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-02-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-03/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-03-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-04/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-04-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-05/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-05-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-06/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-06-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-07/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-07-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-08/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-08-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-09/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-09-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-10/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-10-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-11/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-11-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-12/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-12-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-13/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-13-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-14/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-14-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-15/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-15-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-16/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/preview/sidebar-16-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/catalog/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  },
+  {
+    "path": "/catalog-dark/",
+    "pass": true,
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "criticalSerious": []
+  }
+]

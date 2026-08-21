@@ -1333,6 +1333,996 @@
         }
       ],
       "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "login-02": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/login-02.json",
+      "registryContentSha256": "30db744c93f0390d9076b6ba6eaef97285db89b44bbabc7a6f254d84aa95e723",
+      "addTarget": "@shadcn/login-02",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-20",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、非配布 registry:page の IconPlaceholder を preview で lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持",
+      "files": [
+        {
+          "path": "src/blocks/login-02/components/login-form.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/login-02/components/login-form.tsx",
+          "upstreamPathSha": "67c99dd33cb21519941d26dd3d9f9ba6f2e65b98",
+          "generatedContentSha256": "1e8c9102d82f4145322922e8b71949268e21376d5e66ae47b5e922894b3641ce"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/login-02/page.tsx",
+          "upstreamPathSha": "67c99dd33cb21519941d26dd3d9f9ba6f2e65b98"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "login-03": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/login-03.json",
+      "registryContentSha256": "ec273759b8ac2f3bbd562d961556f7545a1bf85e04c9afca8b1029f349ad93ac",
+      "addTarget": "@shadcn/login-03",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、非配布 registry:page の IconPlaceholder を preview で lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持",
+      "files": [
+        {
+          "path": "src/blocks/login-03/components/login-form.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/login-03/components/login-form.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "b196c0d87e3878acf125c6b690c75758b3b90135722c707c2238337e0df095a8"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/login-03/page.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "login-04": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/login-04.json",
+      "registryContentSha256": "c8e5975948e771255993d7f250c182a1780a48cb642765ab1f8b49d547eeed87",
+      "addTarget": "@shadcn/login-04",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない /placeholder.svg への参照を除去し、装飾領域を token 背景だけで自己完結。禁止表記 Acme Inc を Acme へ正規化。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持",
+      "files": [
+        {
+          "path": "src/blocks/login-04/components/login-form.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/login-04/components/login-form.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "69a890e491232374ebe9d4687978cbe604a982c234810535fc6989147c279d82"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/login-04/page.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "login-05": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/login-05.json",
+      "registryContentSha256": "46271f70aecf6ef745e752c3a824b5b4c6372fb13f49dc79364d97adc0354303",
+      "addTarget": "@shadcn/login-05",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持",
+      "files": [
+        {
+          "path": "src/blocks/login-05/components/login-form.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/login-05/components/login-form.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "53058601d308434dd85dc3e0bc828c4172b80663eef2081b58178a8d3e1f2b92"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/login-05/page.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "signup-01": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/signup-01.json",
+      "registryContentSha256": "966ffc99f8f6c4df3a711bac7a8a2dff59afd965b86c3e2d5ea4759ec9b23129",
+      "addTarget": "@shadcn/signup-01",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。上流の registryDependencies に宣言漏れがあったため、配布ファイルの import から @elchika/field を補完。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持",
+      "files": [
+        {
+          "path": "src/blocks/signup-01/components/signup-form.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-01/components/signup-form.tsx",
+          "upstreamPathSha": "b9f62a83999dc7df855738a8715f40ab156b1f10",
+          "generatedContentSha256": "40bad359022064360b9c432f7c12622f9601b7fb7336d7e1a88683c7ec0c6715"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-01/page.tsx",
+          "upstreamPathSha": "b9f62a83999dc7df855738a8715f40ab156b1f10"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "signup-02": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/signup-02.json",
+      "registryContentSha256": "7fd938f2792fcba10777f86076d82d70b0b735b1f8d59679ae996ea164efa3df",
+      "addTarget": "@shadcn/signup-02",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、非配布 registry:page の IconPlaceholder を preview で lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持",
+      "files": [
+        {
+          "path": "src/blocks/signup-02/components/signup-form.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-02/components/signup-form.tsx",
+          "upstreamPathSha": "67c99dd33cb21519941d26dd3d9f9ba6f2e65b98",
+          "generatedContentSha256": "3bb850994216a2351c2fbdf7b4176879ca3e918ae599af13f2578c752c16e95f"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-02/page.tsx",
+          "upstreamPathSha": "67c99dd33cb21519941d26dd3d9f9ba6f2e65b98"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "signup-03": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/signup-03.json",
+      "registryContentSha256": "6555a358f9ebbd67d5ef0d4d20f4b80014cfd9b7172dfd9baa369094c5fac18f",
+      "addTarget": "@shadcn/signup-03",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、非配布 registry:page の IconPlaceholder を preview で lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持",
+      "files": [
+        {
+          "path": "src/blocks/signup-03/components/signup-form.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-03/components/signup-form.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "9f9805e19b4e0e6bb814d4a9d064e08c5a2773b8a5ac40db5d0900f3347d0a19"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-03/page.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "signup-04": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/signup-04.json",
+      "registryContentSha256": "2a8e6131644f1a1beabb09c8ccbb0ea899ed963da73b97abdb69f3c4782a1df9",
+      "addTarget": "@shadcn/signup-04",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない /placeholder.svg への参照を除去し、装飾領域を token 背景だけで自己完結。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持",
+      "files": [
+        {
+          "path": "src/blocks/signup-04/components/signup-form.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-04/components/signup-form.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "b36a3fe26dce0e446a67233062fe4743f6fd095940390b30e4e5fd08a68caab7"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-04/page.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "signup-05": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/signup-05.json",
+      "registryContentSha256": "48a177514f7566e6bf5ca502ef280c9cfc5940de661bcbe4527f235ba9df2b98",
+      "addTarget": "@shadcn/signup-05",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。上流の registryDependencies に宣言漏れがあったため、配布ファイルの import から @elchika/field を補完。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持",
+      "files": [
+        {
+          "path": "src/blocks/signup-05/components/signup-form.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-05/components/signup-form.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "61556ac18ae2e1e0e67e71bd0fb9d3904f3d1a8fbbee408522408468bf6e48e9"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-05/page.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "sidebar-01": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/sidebar-01.json",
+      "registryContentSha256": "f181fb64b13d06417570446ca5085001fd3542ea6462dc589ae42f01be17620f",
+      "addTarget": "@shadcn/sidebar-01",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持",
+      "files": [
+        {
+          "path": "src/blocks/sidebar-01/components/app-sidebar.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-01/components/app-sidebar.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "48e52b0a90b3f1122f6268e93ca33aed8ce75fb59364822a94fce8f792829942"
+        },
+        {
+          "path": "src/blocks/sidebar-01/components/search-form.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-01/components/search-form.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "c1fae10977726cbf76a0b6fc6dca84aa843ff42f74584fc971f2c7a2599b65bb"
+        },
+        {
+          "path": "src/blocks/sidebar-01/components/version-switcher.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-01/components/version-switcher.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "78614bca6ee9137273b39dedb2cb8b6aa76131d7e7675758ea545dba5fac4704"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-01/page.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "sidebar-02": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/sidebar-02.json",
+      "registryContentSha256": "595090bf01ecbbb2cc2aeb5e6cc687e9766b6f51f05b22e1ba53c19cfe22d07a",
+      "addTarget": "@shadcn/sidebar-02",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。上流の registryDependencies に宣言漏れがあったため、配布ファイルの import から @elchika/collapsible を補完。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持",
+      "files": [
+        {
+          "path": "src/blocks/sidebar-02/components/app-sidebar.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-02/components/app-sidebar.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "a02d6d9b19f8deca84ab72a178b3a91a182f989d71a6e2fc837aa16cfb6e7f28"
+        },
+        {
+          "path": "src/blocks/sidebar-02/components/search-form.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-02/components/search-form.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "12a151dd89149b80e6b710fa674178215da19e8ac603d93eca29f0a9ee23a61e"
+        },
+        {
+          "path": "src/blocks/sidebar-02/components/version-switcher.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-02/components/version-switcher.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "7997ae76b3061e68811b550a383df47d1c651f0ae6de9fbf50ddaa74947af9d4"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-02/page.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "sidebar-03": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/sidebar-03.json",
+      "registryContentSha256": "ff0ba274fd9ad0fddafa5ccc675ec1c7a8eb4a060ec302c61fa46e01b96f7758",
+      "addTarget": "@shadcn/sidebar-03",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
+      "files": [
+        {
+          "path": "src/blocks/sidebar-03/components/app-sidebar.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-03/components/app-sidebar.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "5c1a053fb9eed6a320509045fb296b1602f454e1f482c910cc9df05e66c68e01"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-03/page.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "sidebar-04": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/sidebar-04.json",
+      "registryContentSha256": "40bb0da981c90b3ced20f4e7b5f8bfba442658c978bbe12e056118284b08c83c",
+      "addTarget": "@shadcn/sidebar-04",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
+      "files": [
+        {
+          "path": "src/blocks/sidebar-04/components/app-sidebar.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-04/components/app-sidebar.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "3ff50a973c2610c9ef6716eb4f84108bda439b8eb08af3407450a13e3957c9c6"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-04/page.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "sidebar-05": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/sidebar-05.json",
+      "registryContentSha256": "c6e6afbe213e743aab65d763d850427a0104e9b32c0fa8340d7e4e2cd29d9320",
+      "addTarget": "@shadcn/sidebar-05",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持。list の直下要素を li に正規化",
+      "files": [
+        {
+          "path": "src/blocks/sidebar-05/components/app-sidebar.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-05/components/app-sidebar.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "897005614b7729ec6c9e749acd1273c3639caa95f357ebee2453336ab456ba83"
+        },
+        {
+          "path": "src/blocks/sidebar-05/components/search-form.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-05/components/search-form.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "12a151dd89149b80e6b710fa674178215da19e8ac603d93eca29f0a9ee23a61e"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-05/page.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "sidebar-06": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/sidebar-06.json",
+      "registryContentSha256": "3d7938d6160c76e7c06bec1b0097653d783e95de2f88b5f71e57b6a8f437e146",
+      "addTarget": "@shadcn/sidebar-06",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。上流の registryDependencies に宣言漏れがあったため、配布ファイルの import から @elchika/button を補完。newsletter input に accessible name を追加",
+      "files": [
+        {
+          "path": "src/blocks/sidebar-06/components/app-sidebar.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-06/components/app-sidebar.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "c2b3a5205857e1c29b5e54d7f59849d2fee6643a14137265e6d191b50191fdf5"
+        },
+        {
+          "path": "src/blocks/sidebar-06/components/nav-main.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-06/components/nav-main.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "72d20ad2ba6d520638e904452612870293f29ca5b73aed855ad2c15f97438fd1"
+        },
+        {
+          "path": "src/blocks/sidebar-06/components/sidebar-opt-in-form.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-06/components/sidebar-opt-in-form.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "12ce4b4ea58cfb182f3c3eb83b4eff361074f69750c71ce2dc3a7653014246f4"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-06/page.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "sidebar-07": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/sidebar-07.json",
+      "registryContentSha256": "2c1bfd041147775f01ef5c9ac26f74b1475a9a450af6779d3a62141ba9e50d06",
+      "addTarget": "@shadcn/sidebar-07",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。禁止表記 Acme Inc を Acme へ正規化",
+      "files": [
+        {
+          "path": "src/blocks/sidebar-07/components/app-sidebar.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-07/components/app-sidebar.tsx",
+          "upstreamPathSha": "df1752dfe092957f84aa467d2270436139e3ecc7",
+          "generatedContentSha256": "316068de6fc91b5d332f0427c0872e3589a7d5cd1e2d5d2235856fd6b8db1bef"
+        },
+        {
+          "path": "src/blocks/sidebar-07/components/nav-main.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-07/components/nav-main.tsx",
+          "upstreamPathSha": "df1752dfe092957f84aa467d2270436139e3ecc7",
+          "generatedContentSha256": "95b6b300a20e1c06023e5252181829554291fe4367f46e68aac585fdda09df9f"
+        },
+        {
+          "path": "src/blocks/sidebar-07/components/nav-projects.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-07/components/nav-projects.tsx",
+          "upstreamPathSha": "df1752dfe092957f84aa467d2270436139e3ecc7",
+          "generatedContentSha256": "643851c41b5504f3810178459f4b2dc937db279364550c49eeeea4e45411e1b8"
+        },
+        {
+          "path": "src/blocks/sidebar-07/components/nav-user.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-07/components/nav-user.tsx",
+          "upstreamPathSha": "df1752dfe092957f84aa467d2270436139e3ecc7",
+          "generatedContentSha256": "9f46630be616e7e6d603f852228af526cea1a2f6a4042e838418bb0e5306bf17"
+        },
+        {
+          "path": "src/blocks/sidebar-07/components/team-switcher.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-07/components/team-switcher.tsx",
+          "upstreamPathSha": "df1752dfe092957f84aa467d2270436139e3ecc7",
+          "generatedContentSha256": "f379553493c96efe5f34e195e15e09fa6aa208164884ceae22514a1cee236590"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-07/page.tsx",
+          "upstreamPathSha": "df1752dfe092957f84aa467d2270436139e3ecc7"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "sidebar-08": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/sidebar-08.json",
+      "registryContentSha256": "7961e31d9ca9e1d403c6acf5c6ee36a031c5f8aa9e2b5c832350580142603961",
+      "addTarget": "@shadcn/sidebar-08",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。禁止表記 Acme Inc を Acme へ正規化。Collapsible action の composition を正規化し target size を24pxへ拡大",
+      "files": [
+        {
+          "path": "src/blocks/sidebar-08/components/app-sidebar.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-08/components/app-sidebar.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "37adcb98743ac2c33373c526880c421f3df3d0ae3379b078fba17052c1c2850f"
+        },
+        {
+          "path": "src/blocks/sidebar-08/components/nav-main.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-08/components/nav-main.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "bada70227475c237204ae45fcb8ea17f0d5b5f5e14b2b555cedfeb41d28e2fda"
+        },
+        {
+          "path": "src/blocks/sidebar-08/components/nav-projects.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-08/components/nav-projects.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "17dc44211a7fd05cec7ba4e6b9729070e75bc430ce5c24c2226f0e32c01f4bae"
+        },
+        {
+          "path": "src/blocks/sidebar-08/components/nav-secondary.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-08/components/nav-secondary.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "48baed3f5139374d2b9321ce2a92ffebf2ec550550cbc6fc79d540bb04e34e94"
+        },
+        {
+          "path": "src/blocks/sidebar-08/components/nav-user.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-08/components/nav-user.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "873839c368117355c95938e8e8c19c378af15d373ce7d0b3ab160377f9693ccb"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-08/page.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "sidebar-09": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/sidebar-09.json",
+      "registryContentSha256": "7653df5a50e1e8bfccc471cfa7e6d36ebf9fb0a559b889869675892b24f84b45",
+      "addTarget": "@shadcn/sidebar-09",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、CLI が IconPlaceholder を lucide-react へ自動展開。w-[calc(var(--sidebar-width-icon)+1px)] を component-local CSS 変数へ、w-[260px] を w-65 へ正規化。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。禁止表記 Acme Inc を Acme へ正規化。search input に accessible name を追加",
+      "files": [
+        {
+          "path": "src/blocks/sidebar-09/components/app-sidebar.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-09/components/app-sidebar.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "e069d45db5282d42e0fdec5d0ceecf7fb2beff38fa29cb6ca21f3a3ed4243eb6"
+        },
+        {
+          "path": "src/blocks/sidebar-09/components/nav-user.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-09/components/nav-user.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "d0d8e4cd8e9319bd181b5882eeda0469542ba774f5ad5779267fda0f8cde72db"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-09/page.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "sidebar-10": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/sidebar-10.json",
+      "registryContentSha256": "8406d45ae53daa371706ccc5351cc98ba7a873bd3723343b45d3098922ca211e",
+      "addTarget": "@shadcn/sidebar-10",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。上流の registryDependencies に宣言漏れがあったため、配布ファイルの import から @elchika/button を補完。禁止表記 Acme Inc を Acme へ正規化。icon-only button に accessible name を追加し、popover の自動openを isolated preview のみに限定。list の直下要素を li に正規化",
+      "files": [
+        {
+          "path": "src/blocks/sidebar-10/components/app-sidebar.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-10/components/app-sidebar.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "2bd26f23f108daba7498ecd4f3b0e70d92c171feef145dacf9fead929684bd37"
+        },
+        {
+          "path": "src/blocks/sidebar-10/components/nav-actions.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-10/components/nav-actions.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "d82eea6bc5f9ba27c7eba0fe3612392d9820599eb572fb3479305cdc005aa852"
+        },
+        {
+          "path": "src/blocks/sidebar-10/components/nav-favorites.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-10/components/nav-favorites.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "ca05b133b48fabc6d1b149b11b1ecfa6538ad9ad68bc239a027460762439ae77"
+        },
+        {
+          "path": "src/blocks/sidebar-10/components/nav-main.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-10/components/nav-main.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "97c3ae9ab5f6c88cbe3d3f9540db8a41dd196c6dc9b24f9030e820e152c092fd"
+        },
+        {
+          "path": "src/blocks/sidebar-10/components/nav-secondary.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-10/components/nav-secondary.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "4c5488ec2a25d098ff8f24343c2f6ef047ee08da9f8d55ce535b8e5e46528cbc"
+        },
+        {
+          "path": "src/blocks/sidebar-10/components/nav-workspaces.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-10/components/nav-workspaces.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "3cede0d80cfa770000c7f4fa223088952605d43b71b925ed547e5dd947415761"
+        },
+        {
+          "path": "src/blocks/sidebar-10/components/team-switcher.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-10/components/team-switcher.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "2cc7c2393c78332f587ec3088d4420891b773d05b363d26613946ba4ffafe7d1"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-10/page.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "sidebar-11": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/sidebar-11.json",
+      "registryContentSha256": "40c30f9db6d66659d46e0d69ee7f16510339ade707e6531b3f2724dbca81bfca",
+      "addTarget": "@shadcn/sidebar-11",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。file tree の直下要素を li に正規化",
+      "files": [
+        {
+          "path": "src/blocks/sidebar-11/components/app-sidebar.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-11/components/app-sidebar.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "4c5784c382f2c077f06eb3b351f9704849830129289927b4c6ee7f4051c2c207"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-11/page.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "sidebar-12": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/sidebar-12.json",
+      "registryContentSha256": "ddf02826784e3d643d8b089481407d914c4e2b3f2def532327e93e4e62a4ad31",
+      "addTarget": "@shadcn/sidebar-12",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。Calendar の locale を enUS、初期日を固定値へ変更し SSR/CSR の hydration を一致",
+      "files": [
+        {
+          "path": "src/blocks/sidebar-12/components/app-sidebar.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-12/components/app-sidebar.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "a8a6c3a96f466e5b8c0c5a96ad8a8eb3d7d216a5660f6a7440848c596da45195"
+        },
+        {
+          "path": "src/blocks/sidebar-12/components/calendars.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-12/components/calendars.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "da4c5b1ee9dd404351cb2458b26ee31bb7e1c9d7b9c941cb781d1fe626da6147"
+        },
+        {
+          "path": "src/blocks/sidebar-12/components/date-picker.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-12/components/date-picker.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "e132501181df98b32f9cd71fbdac505077b12cf318f2736a9d85777f33bef4ce"
+        },
+        {
+          "path": "src/blocks/sidebar-12/components/nav-user.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-12/components/nav-user.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "106e2fade735cd6b38832fd2c8aea35a3b72736bfef62b2c4917e777e119038e"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-12/page.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "sidebar-13": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/sidebar-13.json",
+      "registryContentSha256": "30c9639612711b4c584f5690c7ae5123e99734ee611e3837b02d483d1c2b4514",
+      "addTarget": "@shadcn/sidebar-13",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、CLI が IconPlaceholder を lucide-react へ自動展開。固定pxの高さ・幅4箇所を等価な Tailwind spacing utility へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
+      "files": [
+        {
+          "path": "src/blocks/sidebar-13/components/settings-dialog.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-13/components/settings-dialog.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "06e892e1f25ac56838fce7ac7c6de527b392b4e14e27b3355b2295d7497ab434"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-13/page.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "sidebar-14": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/sidebar-14.json",
+      "registryContentSha256": "18a91a2449aa41a471b2740911c26c1589ad539296c951eab543e37ffbf166f5",
+      "addTarget": "@shadcn/sidebar-14",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
+      "files": [
+        {
+          "path": "src/blocks/sidebar-14/components/app-sidebar.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-14/components/app-sidebar.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "abcf270176fdda6936114387e3a1e5c30f85094aa005f5804764cdb36819bb59"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-14/page.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "sidebar-15": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/sidebar-15.json",
+      "registryContentSha256": "5daa6ce1eb5a36fcdb8f5e64243b0896b9c9d3b09aabaa30049d078227bb2ca8",
+      "addTarget": "@shadcn/sidebar-15",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。Calendar の locale を enUS、初期日を固定値へ変更し SSR/CSR の hydration を一致。禁止表記 Acme Inc を Acme へ正規化。icon-only button に accessible name を追加し、list の直下要素を li に正規化",
+      "files": [
+        {
+          "path": "src/blocks/sidebar-15/components/calendars.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/calendars.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "096028da2bbc38a5f9af824385592ad2939a3de06f869849c20c5c99af2ebf59"
+        },
+        {
+          "path": "src/blocks/sidebar-15/components/date-picker.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/date-picker.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "e132501181df98b32f9cd71fbdac505077b12cf318f2736a9d85777f33bef4ce"
+        },
+        {
+          "path": "src/blocks/sidebar-15/components/nav-favorites.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/nav-favorites.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "05d7e737251d3f014ecacfe146e70468d178e90982c9aed0e55ffee0d7ad6445"
+        },
+        {
+          "path": "src/blocks/sidebar-15/components/nav-main.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/nav-main.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "534e68d908cc8ae822680a5d29e1d63d82537760a9429e06fcd55688fd977c4d"
+        },
+        {
+          "path": "src/blocks/sidebar-15/components/nav-secondary.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/nav-secondary.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "a590fbba268fc8d0693d861cb64cfbf11958f9bab153030a192269ad45d4e74e"
+        },
+        {
+          "path": "src/blocks/sidebar-15/components/nav-user.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/nav-user.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "a24d7e25c98a90133aadab5850e174fb905f0b62f095c024f84d9d76b9cb3baf"
+        },
+        {
+          "path": "src/blocks/sidebar-15/components/nav-workspaces.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/nav-workspaces.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "3cede0d80cfa770000c7f4fa223088952605d43b71b925ed547e5dd947415761"
+        },
+        {
+          "path": "src/blocks/sidebar-15/components/sidebar-left.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/sidebar-left.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "82f2764bd23cfc2eab83aa47081b9612cae6a446b33fb19cf018563cc55cccbc"
+        },
+        {
+          "path": "src/blocks/sidebar-15/components/sidebar-right.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/sidebar-right.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "4aafd12bcfbf35f12b6bf402849202f8cfbceb3d64b49864ae6d3e1bfed88a08"
+        },
+        {
+          "path": "src/blocks/sidebar-15/components/team-switcher.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/team-switcher.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "9f012b0b486a96eb7e8664ae7ceba9fc9a2f1ee404e8ce96e8750b28f65762bb"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/page.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "sidebar-16": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/sidebar-16.json",
+      "registryContentSha256": "72c943705cce4b9ed08f9696eac7527032b5f51cad5c8828cf1434fcfb676d77",
+      "addTarget": "@shadcn/sidebar-16",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-21",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外し、CLI が IconPlaceholder を lucide-react へ自動展開。h-[calc(100svh-var(--header-height))] を component-local CSS 変数へ正規化。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。禁止表記 Acme Inc を Acme へ正規化。search form の固定 id を useId へ変更し、sidebar toggle に accessible name を追加。Collapsible action の target size を24pxへ拡大",
+      "files": [
+        {
+          "path": "src/blocks/sidebar-16/components/app-sidebar.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/app-sidebar.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "2563a0a15b77864862da6a25c5ec1269f85881f748854b28ee7b06c3fa1912e4"
+        },
+        {
+          "path": "src/blocks/sidebar-16/components/nav-main.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/nav-main.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "a5f48ca0b6ab2a43241e0f5801b37b52f4b9a3b808d938402648e680e73a22f3"
+        },
+        {
+          "path": "src/blocks/sidebar-16/components/nav-projects.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/nav-projects.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "a6951e5f5d6de1ccfa0eee650bb27049b354fc59e4d22caee88a74b96e1b1bb2"
+        },
+        {
+          "path": "src/blocks/sidebar-16/components/nav-secondary.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/nav-secondary.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "2400da55f3647bb667d72d873551200bfed02e4204ed8ab3dcc7898493abaae6"
+        },
+        {
+          "path": "src/blocks/sidebar-16/components/nav-user.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/nav-user.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "cf4f6c20b8030872f33f45cbae4c8123a8cee3dde4ad14f22b945a78a67d7d6b"
+        },
+        {
+          "path": "src/blocks/sidebar-16/components/search-form.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/search-form.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "64da1da00753d01a81e25c4fc4e1120ef18a42e154f6ee4b5f0dee79e1253672"
+        },
+        {
+          "path": "src/blocks/sidebar-16/components/site-header.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/site-header.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
+          "generatedContentSha256": "f6e6f50d035c89ef2f0edd22cdcaf81efed50d7e956517d45bc9d66d897686ad"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/page.tsx",
+          "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
     }
   }
 }

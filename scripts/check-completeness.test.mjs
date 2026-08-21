@@ -10,7 +10,7 @@ const complete = {
     'export type { ButtonProps } from "./components/ui/button";',
     'export { Button, buttonVariants } from "./components/ui/button";',
   ].join("\n"),
-  registry: { items: [{ name: "button" }] },
+  registry: { items: [{ name: "button", type: "registry:ui" }] },
   previewFiles: ["button.astro", "button-dark.astro"],
   previewSources: ["button.tsx"],
   provenance: {
@@ -150,6 +150,13 @@ test("registry item の欠落を検出する", () => {
   assert.deepEqual(problems, ["button: registry.json に item が無い"]);
 });
 
+test("component と同名の registry item の type 不一致を検出する", () => {
+  const registry = structuredClone(complete.registry);
+  registry.items[0].type = "registry:block";
+  const { problems } = checkCompleteness({ ...complete, registry });
+  assert.ok(problems.includes("button: registry item の type が registry:ui でない"));
+});
+
 test("プレビューの欠落を検出する", () => {
   const { problems } = checkCompleteness({ ...complete, previewFiles: ["button.astro"] });
   assert.deepEqual(problems, ["button: プレビュー button-dark.astro が無い"]);
@@ -246,6 +253,7 @@ test("5 経路が揃っていれば問題なし", () => {
 
 const blockRegistryItem = {
   name: "login-01",
+  type: "registry:block",
   files: [
     { path: "src/blocks/login-01/components/login-form.tsx", type: "registry:component" },
     { path: "LICENSE", type: "registry:file", target: "~/elchika-ui/LICENSE" },
@@ -255,7 +263,7 @@ const blockRegistryItem = {
 const completeBlock = {
   ...complete,
   blocks: ["login-01"],
-  registry: { items: [{ name: "button" }, blockRegistryItem] },
+  registry: { items: [{ name: "button", type: "registry:ui" }, blockRegistryItem] },
   previewFiles: ["button.astro", "button-dark.astro", "login-01.astro", "login-01-dark.astro"],
   previewSources: ["button.tsx", "login-01.tsx"],
   provenance: {
@@ -295,9 +303,68 @@ test("block が全経路に載っていれば問題を返さない", () => {
 test("block の registry item 欠落を検出する", () => {
   const { problems } = checkCompleteness({
     ...completeBlock,
-    registry: { items: [{ name: "button" }] },
+    registry: { items: [{ name: "button", type: "registry:ui" }] },
   });
   assert.deepEqual(problems, ["login-01: registry.json に item が無い"]);
+});
+
+test("block と同名の registry item の type 不一致を検出する", () => {
+  const registry = structuredClone(completeBlock.registry);
+  registry.items.find((item) => item.name === "login-01").type = "registry:ui";
+  const { problems } = checkCompleteness({ ...completeBlock, registry });
+  assert.ok(problems.includes("login-01: registry item の type が registry:block でない"));
+});
+
+test("component と block の同名二重所属を検出する", () => {
+  const component = structuredClone(complete.provenance.components.button);
+  const provenance = structuredClone(completeBlock.provenance);
+  provenance.components["login-01"] = component;
+  const { problems } = checkCompleteness({
+    ...completeBlock,
+    components: ["button", "login-01"],
+    barrel: [completeBlock.barrel, 'export { Login } from "./components/ui/login-01"'].join("\n"),
+    provenance,
+  });
+  assert.ok(problems.includes("login-01: component と block の両方に同名が存在する"));
+});
+
+test("provenance だけに残った component と block の同名二重所属を検出する", () => {
+  const provenance = structuredClone(completeBlock.provenance);
+  provenance.components["login-01"] = structuredClone(complete.provenance.components.button);
+  const { problems } = checkCompleteness({ ...completeBlock, provenance });
+  assert.ok(problems.includes("login-01: component と block の両方に同名が存在する"));
+});
+
+test("registry の同名 item が同じ type でも重複していれば検出する", () => {
+  const registry = structuredClone(completeBlock.registry);
+  registry.items.push(structuredClone(blockRegistryItem));
+  const { problems } = checkCompleteness({ ...completeBlock, registry });
+  assert.ok(problems.includes("login-01: registry.json に同名 item が 2 件ある"));
+});
+
+test("registry の同名 item が異なる type で重複していれば順序によらず検出する", () => {
+  for (const reverse of [false, true]) {
+    const registry = structuredClone(completeBlock.registry);
+    const conflicting = { name: "login-01", type: "registry:ui", files: [] };
+    registry.items = reverse
+      ? [registry.items[0], conflicting, registry.items[1]]
+      : [registry.items[0], registry.items[1], conflicting];
+    const { problems } = checkCompleteness({ ...completeBlock, registry });
+    assert.ok(problems.includes("login-01: registry.json に同名 item が 2 件ある"));
+  }
+});
+
+test("block の配布ファイル type 不一致を検出する", () => {
+  const registry = structuredClone(completeBlock.registry);
+  registry.items
+    .find((item) => item.name === "login-01")
+    .files.find((file) => file.target === undefined).type = "registry:page";
+  const { problems } = checkCompleteness({ ...completeBlock, registry });
+  assert.ok(
+    problems.includes(
+      "login-01: registry item の src/blocks/login-01/components/login-form.tsx の type が registry:component でない",
+    ),
+  );
 });
 
 test("block の preview 実装欠落を検出する", () => {
@@ -522,6 +589,27 @@ test("block 自身の registry:file を法務ファイルと取り違えない",
     generatedContentSha256: "f".repeat(64),
   });
   assert.deepEqual(checkCompleteness({ ...completeBlock, registry, provenance }).problems, []);
+});
+
+test("block の非code配布ファイルに registry:file 以外を許さない", () => {
+  const registry = structuredClone(completeBlock.registry);
+  registry.items[1].files.push({
+    path: "src/blocks/login-01/data.json",
+    type: "registry:page",
+  });
+  const provenance = structuredClone(completeBlock.provenance);
+  provenance.blocks["login-01"].files.push({
+    path: "src/blocks/login-01/data.json",
+    upstreamPath: "apps/v4/registry/bases/base/blocks/login-01/data.json",
+    upstreamPathSha: "0123456789abcdef0123456789abcdef01234567",
+    generatedContentSha256: "f".repeat(64),
+  });
+  const { problems } = checkCompleteness({ ...completeBlock, registry, provenance });
+  assert.ok(
+    problems.includes(
+      "login-01: registry item の src/blocks/login-01/data.json の type が registry:file でない",
+    ),
+  );
 });
 
 // 「全キーが x」だけでは、個別キーの正規表現を緩めても検出できない

@@ -1,0 +1,181 @@
+[
+  {
+    "name": "login-02 auth form",
+    "path": "/preview/login-02/",
+    "labels": [
+      {
+        "text": "Email",
+        "htmlFor": "_r1R_9_",
+        "targetTag": "INPUT",
+        "targetType": "email",
+        "targetOwnsLabel": true
+      },
+      {
+        "text": "Password",
+        "htmlFor": "_r1R_9H1_",
+        "targetTag": "INPUT",
+        "targetType": "password",
+        "targetOwnsLabel": true
+      }
+    ],
+    "expectedTabOrder": [
+      {
+        "tag": "A",
+        "type": null,
+        "text": "Acme",
+        "ariaLabel": null,
+        "id": null,
+        "href": "/"
+      },
+      {
+        "tag": "INPUT",
+        "type": "email",
+        "text": "",
+        "ariaLabel": null,
+        "id": "_r1R_9_",
+        "href": null
+      },
+      {
+        "tag": "A",
+        "type": null,
+        "text": "Forgot your password?",
+        "ariaLabel": null,
+        "id": null,
+        "href": "/"
+      },
+      {
+        "tag": "INPUT",
+        "type": "password",
+        "text": "",
+        "ariaLabel": null,
+        "id": "_r1R_9H1_",
+        "href": null
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "text": "Login",
+        "ariaLabel": null,
+        "id": null,
+        "href": null
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "Login with GitHub",
+        "ariaLabel": null,
+        "id": null,
+        "href": null
+      },
+      {
+        "tag": "A",
+        "type": null,
+        "text": "Sign up",
+        "ariaLabel": null,
+        "id": null,
+        "href": "/"
+      }
+    ],
+    "observedTabOrder": [
+      {
+        "tag": "A",
+        "type": null,
+        "text": "Acme",
+        "ariaLabel": null,
+        "id": null,
+        "href": "/"
+      },
+      {
+        "tag": "INPUT",
+        "type": "email",
+        "text": "",
+        "ariaLabel": null,
+        "id": "_r1R_9_",
+        "href": null
+      },
+      {
+        "tag": "A",
+        "type": null,
+        "text": "Forgot your password?",
+        "ariaLabel": null,
+        "id": null,
+        "href": "/"
+      },
+      {
+        "tag": "INPUT",
+        "type": "password",
+        "text": "",
+        "ariaLabel": null,
+        "id": "_r1R_9H1_",
+        "href": null
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "text": "Login",
+        "ariaLabel": null,
+        "id": null,
+        "href": null
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "Login with GitHub",
+        "ariaLabel": null,
+        "id": null,
+        "href": null
+      },
+      {
+        "tag": "A",
+        "type": null,
+        "text": "Sign up",
+        "ariaLabel": null,
+        "id": null,
+        "href": "/"
+      }
+    ],
+    "labelsPass": true,
+    "tabOrderPass": true,
+    "pass": true
+  },
+  {
+    "name": "sidebar-10 actions trigger",
+    "path": "/preview/sidebar-10/",
+    "initial": {
+      "expanded": "true",
+      "focused": true
+    },
+    "afterInitialClose": {
+      "expanded": "false",
+      "focused": true
+    },
+    "afterOpen": {
+      "expanded": "true",
+      "overlayCount": 1,
+      "focusedText": "Customize Page"
+    },
+    "afterClose": {
+      "expanded": "false",
+      "focusedTrigger": true,
+      "overlayCount": 0
+    },
+    "pass": true
+  },
+  {
+    "name": "sidebar-16 toggle",
+    "path": "/preview/sidebar-16/",
+    "initial": {
+      "state": "expanded",
+      "focused": true
+    },
+    "afterEnter": {
+      "state": "collapsed",
+      "focused": true
+    },
+    "afterSpace": {
+      "state": "expanded",
+      "focused": true
+    },
+    "pass": true
+  }
+]
