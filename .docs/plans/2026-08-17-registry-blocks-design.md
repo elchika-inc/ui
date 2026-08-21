@@ -84,7 +84,7 @@ preview render の走査根拡張は当初の設計に含まれておらず、�
 
 `src/catalog/previews.ts` は `import.meta.glob("../previews/*.tsx")` で自動収集するため、preview の配線改修は不要。ただし `component-categories.mjs` は全 preview の分類を強制する検査を持つので、block 用カテゴリを追加する。
 
-**Phase 1 では「認証」カテゴリのみを追加した。** sidebar 系 16 件の置き場所となるカテゴリは未定で、Phase 2 の着手前に決める（既存の「ナビゲーション」へ入れるか、「ダッシュボード」を新設するか）。
+**Phase 1 では「認証」カテゴリのみを追加した。** sidebar 系 16 件の置き場所は Phase 2 で「アプリシェル」として新設した（§3-4-3）。
 
 `registry:page` を配布しない代わりに、page.tsx が持っていたレイアウト枠（`flex min-h-svh w-full items-center justify-center p-6 md:p-10` と `max-w-sm` 相当）は preview 側へ移し、上流と同じ見た目を再現する。
 
@@ -147,7 +147,8 @@ preview render の走査根拡張は当初の設計に含まれておらず、�
 |---|---|---|
 | **1. レーン構築 + login-01** | `src/blocks/` 新設、§3-2 の 3 箇所拡張、§3-1 のマトリクス化、§3-3 のスキーマ新設。**login-01 の 1 件だけ**を端から端まで通す | 機構の設計ミス。1 件で見つければ修正コストは 1 件分 |
 | **2. 残り 25 件** | 認証系 9 件 + sidebar 16 件。新規 npm 依存ゼロ | 1 件では出ない衝突（`app-sidebar.tsx` が 15 件で同名）、preview 54 枚とカテゴリ分類の運用コスト |
-| **3. dashboard-01** | npm 依存 6 件（`@dnd-kit/core` / `@dnd-kit/modifiers` / `@dnd-kit/sortable` / `@dnd-kit/utilities` / `@tanstack/react-table` / `zod`）追加、`THIRD_PARTY_LICENSES` 再取得、ライブラリ選定基準の判断を記録 | 依存追加の是非。他 26 件の進行を止めずに切り離せる |
+| **3a. dashboard-01（10 ファイル）** | 上流 dashboard-01 から `data-table.tsx` を除いた 10 ファイルを移植。`registry:file`（`data.json`）対応の実装を含む | **新規 npm 依存ゼロ**。`registry:file` を扱う経路 |
+| **3b. `dashboard-table`（自作）** | `data-table` 相当を既存部品で自作した block を新設。設計 §1「移植のみ」の例外第 1 号 | 自作 block の来歴スキーマ分岐。§3-6 参照 |
 
 ### 実装体制
 
@@ -158,6 +159,68 @@ preview render の走査根拡張は当初の設計に含まれておらず、�
 | 3 | 1 | 依存追加の判断を含むため独立 |
 
 委任仕様には literal 実行前提の記述、「指示と実態が矛盾したら止めて報告せよ」、レビューサイクルの実施者（委譲先で完結）と上限ラウンド数を明記する。
+
+### 3-6. Phase 3 の分割と自作 block の新設（2026-08-21 決定）
+
+#### 依存 6 件は 1 ファイルに隔離されている（実測）
+
+当初 Phase 3 は「dashboard-01 を移植し、npm 依存 6 件の採否を判断する」としていた。実測すると、その 6 件は **`data-table.tsx` 1 ファイルにすべて集中**している。
+
+| ファイル | サイズ | 未導入の npm 依存 |
+|---|---|---|
+| `data-table.tsx` | 31KB | `@dnd-kit/core` / `@dnd-kit/modifiers` / `@dnd-kit/sortable` / `@dnd-kit/utilities` / `@tanstack/react-table` / `zod` |
+| `chart-area-interactive.tsx` | 11KB | `recharts`（導入済み） |
+| 他 8 ファイル + `data.json` | 1〜12KB | なし |
+
+`data-table.tsx` を import するのは `page.tsx` のみで、page は §1 の決定により配布しない。**除外しても他ファイルは壊れない。**
+
+よって「6 依存を受け入れるか、dashboard-01 を諦めるか」の二択ではなく、3a（依存ゼロで移植）と 3b（自作で同等機能）に分割する。
+
+#### 3a — `data-table.tsx` を配布対象から除外する
+
+`registry:page` と同じ扱いで、来歴には `dropped: true` として記録する。落とした理由が「Next 規約だから」ではなく「npm 依存 6 件を持ち込むから」なので、`modified` にその旨を書き分ける。
+
+#### 3b — `data-table` 相当を既存部品で自作する
+
+上流 `data-table.tsx` の機能内訳を実測した。
+
+| 機能 | 上流での箇所数 | 自作での実装 |
+|---|---|---|
+| drawer（行の詳細パネル） | 24 | `@elchika/drawer` |
+| **DnD（行の並べ替え）** | 11 | **実装しない**（2026-08-21 ユーザー判断） |
+| zod スキーマ | 8 | TypeScript の型 |
+| chart（詳細パネル内） | 7 | `@elchika/chart` |
+| フィルタ | 3 | React state + `Array.filter` |
+| ソート / 列の表示切替 / 行選択 | 各 2 | React state + `@elchika/dropdown-menu` / `@elchika/checkbox` |
+
+上流が使う `@/components/ui/*` は 12 件（badge / button / chart / checkbox / drawer / dropdown-menu / input / label / select / separator / table / tabs）で、**すべて当リポジトリの registry に存在する**（不足 0 件を実測）。
+
+`@tanstack/react-table` が担っているのはソート 2・フィルタ 3・列切替 2・行選択 2 箇所で、React state と `Array.sort` / `Array.filter` で書ける薄さである。汎用テーブルライブラリの機能のごく一部しか使っていない。
+
+**DnD だけは自前実装が重い。** キーボード操作・タッチ・スクリーンリーダー対応を恒常的に保守することになり、「自前実装は最後の手段」に反する。行の並べ替えが実際に必要になった時点で `@dnd-kit` の採否を再判断する（YAGNI）。
+
+#### item 名は上流と別にする
+
+自作版を `dashboard-01` の名前で配ると、上流の dashboard-01 を見た利用者が `data-table` を期待して導入し、中身が違って混乱する。§1 の「item 名は上流と同名」の根拠（上流のドキュメントから名前で辿れる）が、この場合は逆に働く。
+
+- `dashboard-01` — 上流由来の 10 ファイル（`data-table` を含まない）
+- **`dashboard-table`** — 自作の data-table block（上流に対応物を持たない）
+
+#### 自作 block は §1 の例外である — 来歴スキーマの分岐が要る
+
+§1 は「上流 shadcn base-nova からの移植（自作しない）」を決定しており、その根拠は「`provenance.json` の既存スキーマが移植品前提で作られており、自作はスキーマ分岐という恒常コストを生む」ことだった。**3b はこの決定の例外第 1 号であり、そのコストを払う判断である。**
+
+実測すると、現行の `BLOCK_PROVENANCE_SPEC` は自作 block を通さない。
+
+| 必須キー | 自作品での状態 |
+|---|---|
+| `registryUrl` | 上流 URL が存在しない |
+| `registryContentSha256` | 上流配信物が存在しない |
+| `files[].upstreamPathSha` | 上流 commit が存在しない |
+
+`origin` を分岐の軸として、移植品（`shadcn/ui registry`）と自作品（例: `elchika-inc original`）で要求キーを変える。自作品には `generatedContentSha256`・`license`・`modified`・`files[].path` を要求し、上流由来のキーは要求しない。**逆に、自作品に上流由来のキーがあれば fail-closed で弾く**（移植品を誤って自作として記録することを防ぐ）。
+
+これは「1 件では動くが別種で壊れる」型の 3 例目にあたる（1 件目→2 件目、単一ファイル→複数ファイル、移植品→自作品）。検査スキーマの分岐を先に実装し、fixture で RED/GREEN を確認してから block を作る。
 
 ## 5. 検討して採らなかった案
 

@@ -38,7 +38,7 @@
 | `src/previews/<name>.tsx` | 作成 | block の隔離プレビュー |
 | `src/pages/preview/<name>.astro` / `<name>-dark.astro` | 作成 | プレビューのルート |
 | `preview-selectors.json` | 修正 | block の preview selector 宣言 |
-| `src/catalog/component-categories.mjs` | 修正 | 「認証」「ダッシュボード」カテゴリを追加 |
+| `src/catalog/component-categories.mjs` | 修正 | 「認証」「アプリシェル」カテゴリを追加 |
 | `registry.json` | 修正 | block の registry item |
 | `provenance.json` | 修正 | `blocks` セクション |
 
@@ -1253,7 +1253,14 @@ CLAUDE.md のライブラリ選定基準（メンテが活発・採用実績が�
 node scripts/add-component.mjs dashboard-01 --modified "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去"
 ```
 
-`data.json` は `registry:file` なので `src/blocks/dashboard-01/data.json` へ落ちる。来歴の `files[]` に含まれることを確認する（`.tsx` 以外を弾いていないか）。
+**`data.json` は現状の実装では落ちない。** `add-component.mjs` は block 内の `registry:file` を未対応として CLI 実行前に停止する（`SUPPORTED_BLOCK_FILE_TYPES` は `registry:component` のみ）。この Task は `registry:file` 対応の実装から始まる。
+
+実装要件:
+
+- CLI は上流 item の target（`app/dashboard/data.json`）へ書くため、その実体を `src/blocks/dashboard-01/data.json` へ移設する
+- 既存ファイル衝突・path traversal・TOCTOU・`reconcileAddChanges` の許可集合を **fail-closed** で扱う
+- ローカル registry item では **block 所有の `registry:file`** として記録し、共有法務ファイル（`target` 付きの `registry:file`）と混同しない
+- fixture 先行で実装・コミットしてから、clean worktree で add する（未コミットのまま add すると `ensureClean` に止められる）
 
 - [ ] **Step 3: 法務ファイルを再取得する**
 
@@ -1262,7 +1269,7 @@ Expected: `THIRD_PARTY_LICENSES` に 6 件の新規依存のライセンスが�
 
 - [ ] **Step 4: preview とルートと宣言を作る**
 
-Task 5 Step 4〜6 と同じ手順。`component-categories.mjs` の「ダッシュボード」に `dashboard-01` を追加する。
+Task 5 Step 4〜6 と同じ手順。`component-categories.mjs` の**「アプリシェル」**に `dashboard-01` と `dashboard-table` を追加する（設計 §3-4-3。「ダッシュボード」カテゴリは作らない — 設計書を Phase 2 で統一した際にこの行を直し忘れていた）。
 
 - [ ] **Step 5: 検査を全部走らせる**
 
