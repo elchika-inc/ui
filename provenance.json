@@ -1894,7 +1894,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。禁止表記 Acme Inc を Acme へ正規化。project link と action の hit area を分離して24px以上を確保",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。禁止表記 Acme Inc を Acme へ正規化。Collapsible action の composition を正規化し target size を24pxへ拡大",
       "files": [
         {
           "path": "src/blocks/sidebar-08/components/app-sidebar.tsx",
@@ -1906,13 +1906,13 @@
           "path": "src/blocks/sidebar-08/components/nav-main.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-08/components/nav-main.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "3de828af80e83463cb2e4447864b99acc0b9a83ff588ead4c94b4f5c3c5f3e4a"
+          "generatedContentSha256": "bada70227475c237204ae45fcb8ea17f0d5b5f5e14b2b555cedfeb41d28e2fda"
         },
         {
           "path": "src/blocks/sidebar-08/components/nav-projects.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-08/components/nav-projects.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "3c9d1a3b8feff59d5edc76c0adde3ee975767262ef0932af6659fd11dc884b4a"
+          "generatedContentSha256": "17dc44211a7fd05cec7ba4e6b9729070e75bc430ce5c24c2226f0e32c01f4bae"
         },
         {
           "path": "src/blocks/sidebar-08/components/nav-secondary.tsx",
@@ -2272,7 +2272,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、CLI が IconPlaceholder を lucide-react へ自動展開。h-[calc(100svh-var(--header-height))] を component-local CSS 変数へ正規化。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。禁止表記 Acme Inc を Acme へ正規化。search form の固定 id を useId へ変更し、sidebar toggle に accessible name を追加。project link と action の hit area を分離して24px以上を確保",
+      "modified": "registry:page を配布から除外し、CLI が IconPlaceholder を lucide-react へ自動展開。h-[calc(100svh-var(--header-height))] を component-local CSS 変数へ正規化。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。禁止表記 Acme Inc を Acme へ正規化。search form の固定 id を useId へ変更し、sidebar toggle に accessible name を追加。Collapsible action の target size を24pxへ拡大",
       "files": [
         {
           "path": "src/blocks/sidebar-16/components/app-sidebar.tsx",
@@ -2284,13 +2284,13 @@
           "path": "src/blocks/sidebar-16/components/nav-main.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/nav-main.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "11c6e1c4865b7b2bb8755d881b4ab48b45f510d50fcb20fbff6b503d79c70ba5"
+          "generatedContentSha256": "a5f48ca0b6ab2a43241e0f5801b37b52f4b9a3b808d938402648e680e73a22f3"
         },
         {
           "path": "src/blocks/sidebar-16/components/nav-projects.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/nav-projects.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "802ff149e5b0a7a5927cf261abd140d96c0ea532ab9092daade625019ae7e8b4"
+          "generatedContentSha256": "a6951e5f5d6de1ccfa0eee650bb27049b354fc59e4d22caee88a74b96e1b1bb2"
         },
         {
           "path": "src/blocks/sidebar-16/components/nav-secondary.tsx",

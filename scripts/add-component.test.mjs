@@ -1020,6 +1020,37 @@ test("component と同名の registry item があれば来歴欠落でも CLI �
   assert.equal(ran, false);
 });
 
+test("同名 registry item が複数あれば type と順序によらず CLI 前に停止する", async (t) => {
+  for (const reverse of [false, true]) {
+    const root = prepareWrapperRepo();
+    t.after(() => rmSync(root, { recursive: true, force: true }));
+    const items = [
+      { name: "login-01", type: "registry:block" },
+      { name: "login-01", type: "registry:ui" },
+    ];
+    writeJson(join(root, "registry.json"), { items: reverse ? items.reverse() : items });
+    git(root, ["add", "registry.json"]);
+    git(root, ["commit", "-m", "duplicate registry fixture"]);
+    const { runAddComponent } = await loadModule();
+    let ran = false;
+
+    await assert.rejects(
+      runAddComponent({
+        argv: ["login-01", "--modified", "registry:page を配布から除外"],
+        root,
+        fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+        runCommand: () => {
+          ran = true;
+        },
+        log: () => {},
+      }),
+      /registry item が重複/,
+    );
+
+    assert.equal(ran, false);
+  }
+});
+
 test("component と同名の disk 実体があれば来歴欠落でも CLI 前に停止する", async (t) => {
   const root = prepareWrapperRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));

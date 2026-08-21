@@ -857,7 +857,11 @@ export async function runAddComponent({
   // registry item や disk 実体を上書きできてしまう。CLI の副作用より前に、
   // 独立した 3 根（provenance / registry / disk）をすべて照合する。
   const registryBefore = readJson(repositoryRoot, "registry.json");
-  const existingRegistryItem = registryBefore.items.find((item) => item.name === name);
+  const existingRegistryItems = registryBefore.items.filter((item) => item.name === name);
+  if (existingRegistryItems.length > 1) {
+    throw new Error(`${name}: registry item が重複している（${existingRegistryItems.length} 件）`);
+  }
+  const existingRegistryItem = existingRegistryItems[0];
   const oppositeDiskPath = isBlock
     ? join(repositoryRoot, "src/components/ui", `${name}.tsx`)
     : join(repositoryRoot, "src/blocks", name);

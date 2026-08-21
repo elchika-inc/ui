@@ -373,10 +373,10 @@ function componentProblems(name, barrelPaths, registry, previewFiles, previewSou
   if (!barrelPaths.has(`./components/ui/${name}`)) {
     problems.push(`${name}: src/index.ts から export されていない`);
   }
-  const registryItem = registry.items.find((item) => item.name === name);
-  if (!registryItem) {
+  const registryItems = registry.items.filter((item) => item.name === name);
+  if (registryItems.length === 0) {
     problems.push(`${name}: registry.json に item が無い`);
-  } else if (registryItem.type !== "registry:ui") {
+  } else if (registryItems.length === 1 && registryItems[0].type !== "registry:ui") {
     problems.push(`${name}: registry item の type が registry:ui でない`);
   }
   // ルート（.astro）だけでなく中身（src/previews/<name>.tsx）も見る。
@@ -417,10 +417,24 @@ export function checkCompleteness({
 }) {
   const problems = dtsContractProblems(dts);
   const componentNames = new Set(components);
-  for (const name of blocks) {
-    if (componentNames.has(name)) {
-      problems.push(`${name}: component と block の両方に同名が存在する`);
-    }
+  const provenanceComponentNames = new Set(Object.keys(provenance.components ?? {}));
+  const laneConflicts = new Set(
+    blocks.filter((name) => componentNames.has(name) || provenanceComponentNames.has(name)),
+  );
+  for (const name of Object.keys(provenance.blocks ?? {})) {
+    if (provenanceComponentNames.has(name)) laneConflicts.add(name);
+  }
+  for (const name of [...laneConflicts].sort()) {
+    problems.push(`${name}: component と block の両方に同名が存在する`);
+  }
+  const registryCounts = new Map();
+  for (const item of registry.items) {
+    registryCounts.set(item.name, (registryCounts.get(item.name) ?? 0) + 1);
+  }
+  for (const [name, count] of [...registryCounts].sort(([left], [right]) =>
+    left.localeCompare(right),
+  )) {
+    if (count > 1) problems.push(`${name}: registry.json に同名 item が ${count} 件ある`);
   }
   const barrelPaths = exportedModulePaths(barrel);
   for (const name of components) {

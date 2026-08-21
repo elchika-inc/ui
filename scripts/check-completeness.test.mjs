@@ -328,6 +328,32 @@ test("component と block の同名二重所属を検出する", () => {
   assert.ok(problems.includes("login-01: component と block の両方に同名が存在する"));
 });
 
+test("provenance だけに残った component と block の同名二重所属を検出する", () => {
+  const provenance = structuredClone(completeBlock.provenance);
+  provenance.components["login-01"] = structuredClone(complete.provenance.components.button);
+  const { problems } = checkCompleteness({ ...completeBlock, provenance });
+  assert.ok(problems.includes("login-01: component と block の両方に同名が存在する"));
+});
+
+test("registry の同名 item が同じ type でも重複していれば検出する", () => {
+  const registry = structuredClone(completeBlock.registry);
+  registry.items.push(structuredClone(blockRegistryItem));
+  const { problems } = checkCompleteness({ ...completeBlock, registry });
+  assert.ok(problems.includes("login-01: registry.json に同名 item が 2 件ある"));
+});
+
+test("registry の同名 item が異なる type で重複していれば順序によらず検出する", () => {
+  for (const reverse of [false, true]) {
+    const registry = structuredClone(completeBlock.registry);
+    const conflicting = { name: "login-01", type: "registry:ui", files: [] };
+    registry.items = reverse
+      ? [registry.items[0], conflicting, registry.items[1]]
+      : [registry.items[0], registry.items[1], conflicting];
+    const { problems } = checkCompleteness({ ...completeBlock, registry });
+    assert.ok(problems.includes("login-01: registry.json に同名 item が 2 件ある"));
+  }
+});
+
 test("block の配布ファイル type 不一致を検出する", () => {
   const registry = structuredClone(completeBlock.registry);
   registry.items

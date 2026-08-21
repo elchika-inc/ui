@@ -42,7 +42,7 @@ export function NavMain({
               <>
                 <SidebarMenuAction
                   render={<CollapsibleTrigger />}
-                  className="aria-expanded:rotate-90"
+                  className="size-6! aria-expanded:rotate-90"
                 >
                   <ChevronRightIcon />
                   <span className="sr-only">Toggle</span>
