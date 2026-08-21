@@ -158,6 +158,117 @@ function pinnedRegistryItem(name, upstreamText) {
   };
 }
 
+function hasExplicitCliExclusions(target) {
+  return target.droppedFiles?.some((file) => file.excludeFromCli === true) ?? false;
+}
+
+function dependenciesForDistributedFiles(upstreamItem, target) {
+  if (!hasExplicitCliExclusions(target)) return upstreamItem.dependencies ?? [];
+  const distributedPaths = new Set(target.files.map((file) => file.registryPath));
+  const imported = new Set(
+    (upstreamItem.files ?? [])
+      .filter((file) => distributedPaths.has(file.path) && typeof file.content === "string")
+      .flatMap((file) => [...externalImports(file.content)]),
+  );
+  return (upstreamItem.dependencies ?? []).filter((dependency) =>
+    imported.has(dependencyName(dependency)),
+  );
+}
+
+function registryDependencyName(dependency) {
+  const normalized = normalizeRegistryDependencies([dependency])[0];
+  return normalized.startsWith("@elchika/") ? normalized.slice("@elchika/".length) : normalized;
+}
+
+function registryDependencyClosure(directDependencies, registryItems) {
+  const itemsByName = new Map(
+    registryItems.filter((item) => item.type === "registry:ui").map((item) => [item.name, item]),
+  );
+  const closure = new Set();
+  const pending = [...directDependencies];
+  while (pending.length > 0) {
+    const name = pending.shift();
+    if (closure.has(name)) continue;
+    closure.add(name);
+    const item = itemsByName.get(name);
+    for (const dependency of item?.registryDependencies ?? []) {
+      pending.push(registryDependencyName(dependency));
+    }
+  }
+  return closure;
+}
+
+function registryDependenciesForDistributedFiles(upstreamItem, target, registryItems) {
+  if (!hasExplicitCliExclusions(target)) return upstreamItem.registryDependencies ?? [];
+  const distributedPaths = new Set(target.files.map((file) => file.registryPath));
+  const directDependencies = new Set(
+    (upstreamItem.files ?? [])
+      .filter((file) => distributedPaths.has(file.path) && typeof file.content === "string")
+      .flatMap((file) => [...registryUiImports(file.content)]),
+  );
+  const closure = registryDependencyClosure(directDependencies, registryItems);
+  return (upstreamItem.registryDependencies ?? []).filter((dependency) =>
+    closure.has(registryDependencyName(dependency)),
+  );
+}
+
+function droppedManifestDependencies(upstreamItem, target, registryItems) {
+  if (!hasExplicitCliExclusions(target)) {
+    return { dependencies: [], registryDependencies: [] };
+  }
+  const dependencies = new Set(dependenciesForDistributedFiles(upstreamItem, target));
+  const registryDependencies = new Set(
+    registryDependenciesForDistributedFiles(upstreamItem, target, registryItems).map(
+      registryDependencyName,
+    ),
+  );
+  return {
+    dependencies: (upstreamItem.dependencies ?? [])
+      .filter((dependency) => !dependencies.has(dependency))
+      .sort(),
+    registryDependencies: (upstreamItem.registryDependencies ?? [])
+      .filter((dependency) => !registryDependencies.has(registryDependencyName(dependency)))
+      .map(registryDependencyName)
+      .sort(),
+  };
+}
+
+function modifiedWithDroppedDependencies(modified, upstreamItem, target, registryItems) {
+  const dropped = droppedManifestDependencies(upstreamItem, target, registryItems);
+  const notes = [];
+  if (dropped.dependencies.length > 0) {
+    notes.push(`上流 manifest から除外した dependencies: ${dropped.dependencies.join(", ")}`);
+  }
+  if (dropped.registryDependencies.length > 0) {
+    notes.push(
+      `上流 manifest から除外した registryDependencies: ${dropped.registryDependencies.join(", ")}`,
+    );
+  }
+  if (notes.length === 0) return modified;
+  return [modified.replace(/。+$/, ""), ...notes].join("。");
+}
+
+// provenance の hash は生の upstreamText に固定しつつ、CLI 入力から明示除外ファイルと
+// そのファイルだけが要求する npm 依存を落とす。
+function registryTextForCli(upstreamText, upstreamItem, target, registryItems) {
+  if (!hasExplicitCliExclusions(target)) return upstreamText;
+  const excluded = new Set(
+    target.droppedFiles
+      .filter((file) => file.excludeFromCli === true)
+      .map((file) => file.registryPath),
+  );
+  return JSON.stringify({
+    ...JSON.parse(upstreamText),
+    files: (upstreamItem.files ?? []).filter((file) => !excluded.has(file.path)),
+    dependencies: dependenciesForDistributedFiles(upstreamItem, target),
+    registryDependencies: registryDependenciesForDistributedFiles(
+      upstreamItem,
+      target,
+      registryItems,
+    ),
+  });
+}
+
 export function trackedFiles(root) {
   return new Set(git(root, ["ls-files", "-z"]).split("\0").filter(Boolean));
 }
@@ -405,7 +516,8 @@ function externalImports(source) {
 
 function registryUiImports(source) {
   const names = new Set();
-  const pattern = /(?:from\s*|import\s*)["']@\/components\/ui\/([a-z0-9]+(?:-[a-z0-9]+)*)["']/g;
+  const pattern =
+    /(?:from\s*|import\s*)["']@\/(?:components\/ui|registry\/base-nova\/ui)\/([a-z0-9]+(?:-[a-z0-9]+)*)["']/g;
   for (const match of source.matchAll(pattern)) names.add(match[1]);
   return names;
 }
@@ -468,6 +580,12 @@ const upstreamPathOf = (registryPath) => {
 // CLI が書く。移設元を type ごとに解決できるこの 2 種だけを許可する。
 const SUPPORTED_BLOCK_FILE_TYPES = new Set(["registry:component", "registry:file"]);
 
+// dashboard-01 固有の採用判断。別 block の同名ファイルを巻き込まないよう、
+// block 名と上流 registry path の完全一致で指定する。
+const BLOCK_FILE_EXCLUSIONS = new Map([
+  ["dashboard-01", new Set(["registry/base-nova/blocks/dashboard-01/components/data-table.tsx"])],
+]);
+
 function resolveDistributedBlockFile(name, file, registryPath, blockPrefix) {
   if (!SUPPORTED_BLOCK_FILE_TYPES.has(file.type)) {
     throw new Error(
@@ -509,6 +627,14 @@ function resolveBlockTarget(name, upstreamItem) {
       throw new Error(`${name}: block の file path が想定外: ${registryPath ?? "なし"}`);
     }
     assertContainedPath(`${name}: block の registry path`, registryPath);
+    if (BLOCK_FILE_EXCLUSIONS.get(name)?.has(registryPath)) {
+      droppedFiles.push({
+        registryPath,
+        upstreamPath: upstreamPathOf(registryPath),
+        excludeFromCli: true,
+      });
+      continue;
+    }
     if (file.type === "registry:page") {
       droppedFiles.push({
         registryPath,
@@ -559,7 +685,7 @@ export function resolveRegistryTarget(name, upstreamItem) {
 
 export function buildRegistryItem(name, upstreamItem, generatedSource, target, registryItems = []) {
   const dependenciesByName = new Map();
-  for (const dependency of upstreamItem.dependencies ?? []) {
+  for (const dependency of dependenciesForDistributedFiles(upstreamItem, target)) {
     dependenciesByName.set(dependencyName(dependency), dependency);
   }
   for (const dependency of externalImports(generatedSource)) {
@@ -594,7 +720,7 @@ export function buildRegistryItem(name, upstreamItem, generatedSource, target, r
     target.itemType === "registry:block"
       ? completeBlockRegistryDependencies(
           name,
-          upstreamItem.registryDependencies,
+          registryDependenciesForDistributedFiles(upstreamItem, target, registryItems),
           generatedSource,
           registryItems,
         )
@@ -919,7 +1045,10 @@ export async function runAddComponent({
   // 検証・来歴hash・CLI実行を同じresponse bytesへ束縛する。
   // @shadcn/<name>を渡すとCLIがremoteを再取得し、preflight後に内容が変わる
   // TOCTOUが生じるため、shadcn公式のlocal item入力を使う。
-  const pinnedItem = pinnedRegistryItem(name, upstreamText);
+  const pinnedItem = pinnedRegistryItem(
+    name,
+    registryTextForCli(upstreamText, upstreamItem, target, registryBefore.items),
+  );
   try {
     const command = shadcnCommand(cliVersion, pinnedItem.path);
     runCommand(command.command, command.args, { cwd: repositoryRoot, stdio: "inherit" });
@@ -959,7 +1088,7 @@ export async function runAddComponent({
     root: repositoryRoot,
     isBlock,
     name,
-    modified,
+    modified: modifiedWithDroppedDependencies(modified, upstreamItem, target, registryBefore.items),
     cliVersion,
     generatedSource,
     upstreamItem,

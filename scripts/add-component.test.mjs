@@ -55,6 +55,14 @@ const seedRegistryItems = (root, names) => {
   git(root, ["commit", "-m", "registry item fixture"]);
 };
 
+const seedRegistryGraph = (root, items) => {
+  const registry = JSON.parse(readFileSync(join(root, "registry.json"), "utf8"));
+  registry.items.push(...items);
+  writeJson(join(root, "registry.json"), registry);
+  git(root, ["add", "registry.json"]);
+  git(root, ["commit", "-m", "registry graph fixture"]);
+};
+
 const loadModule = async () => {
   assert.ok(existsSync(scriptUrl), "add-component.mjs がまだ無い");
   return import(scriptUrl);
@@ -331,7 +339,7 @@ test("wrapper が pin add から2つの hash・来歴・registryまで記録し�
   };
 
   const result = await runAddComponent({
-    argv: ["calendar", "--modified", "Props 型を追加"],
+    argv: ["calendar", "--modified", "Props 型を追加。"],
     root,
     fetchImpl,
     runCommand,
@@ -355,7 +363,7 @@ test("wrapper が pin add から2つの hash・来歴・registryまで記録し�
     provenance.components.calendar.registryContentSha256,
     createHash("sha256").update(served).digest("hex"),
   );
-  assert.equal(provenance.components.calendar.modified, "Props 型を追加");
+  assert.equal(provenance.components.calendar.modified, "Props 型を追加。");
   const registry = JSON.parse(readFileSync(join(root, "registry.json"), "utf8"));
   assert.deepEqual(registry.items[0].registryDependencies, ["@elchika/button"]);
   assert.deepEqual(registry.items[0].dependencies, [
@@ -510,6 +518,19 @@ const dashboardUpstream = {
       type: "registry:component",
       content: "export const ChartAreaInteractive = () => null\n",
     },
+    {
+      path: "registry/base-nova/blocks/dashboard-01/components/data-table.tsx",
+      type: "registry:component",
+      content: 'import { useReactTable } from "@tanstack/react-table";\n',
+    },
+  ],
+  dependencies: [
+    "@dnd-kit/core",
+    "@dnd-kit/modifiers",
+    "@dnd-kit/sortable",
+    "@dnd-kit/utilities",
+    "@tanstack/react-table",
+    "zod",
   ],
   registryDependencies: ["button"],
 };
@@ -553,6 +574,28 @@ test("block 所有の registry:file を配布対象へ含める", async () => {
       fileType: "registry:file",
       cliTargetPath: "app/dashboard/data.json",
     },
+  );
+});
+
+test("dashboard-01 の data-table.tsx を明示的な dropped file として扱う", async () => {
+  const { resolveRegistryTarget } = await loadModule();
+  const target = resolveRegistryTarget("dashboard-01", dashboardUpstream);
+
+  assert.deepEqual(
+    target.droppedFiles.map(({ registryPath, excludeFromCli }) => ({
+      registryPath,
+      excludeFromCli,
+    })),
+    [
+      {
+        registryPath: "registry/base-nova/blocks/dashboard-01/page.tsx",
+        excludeFromCli: undefined,
+      },
+      {
+        registryPath: "registry/base-nova/blocks/dashboard-01/components/data-table.tsx",
+        excludeFromCli: true,
+      },
+    ],
   );
 });
 
@@ -1386,6 +1429,91 @@ test("registry:file の上流 target に既存ファイルがあれば CLI 実�
 
   assert.equal(ran, false);
   assert.equal(readFileSync(join(root, "app/dashboard/data.json"), "utf8"), "既存データ\n");
+});
+
+test("dashboard-01 は配布ファイルの registry 依存閉包だけを pin と最終 item に残す", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+  seedRegistryGraph(root, [
+    {
+      name: "sidebar",
+      type: "registry:ui",
+      registryDependencies: ["input"],
+    },
+    {
+      name: "input",
+      type: "registry:ui",
+      registryDependencies: ["@elchika/sheet"],
+    },
+    { name: "sheet", type: "registry:ui" },
+    { name: "label", type: "registry:ui" },
+    { name: "breadcrumb", type: "registry:ui" },
+  ]);
+  const upstream = structuredClone(dashboardUpstream);
+  upstream.files.find((file) => file.path.endsWith("/chart-area-interactive.tsx")).content =
+    'import { Sidebar } from "@/registry/base-nova/ui/sidebar";\nexport const ChartAreaInteractive = Sidebar;\n';
+  upstream.files.find((file) => file.path.endsWith("/data-table.tsx")).content =
+    'import { Label } from "@/registry/base-nova/ui/label";\nimport { useReactTable } from "@tanstack/react-table";\nexport const DataTable = Label;\n';
+  upstream.registryDependencies = ["sidebar", "@elchika/input", "sheet", "label", "breadcrumb"];
+  let pinnedItemPath;
+
+  const result = await runAddComponent({
+    argv: ["dashboard-01", "--modified", "data-table.tsx を配布から除外"],
+    root,
+    fetchImpl: blockFetch(JSON.stringify(upstream)),
+    runCommand: (_command, args) => {
+      pinnedItemPath = args.at(-1);
+      const pinned = JSON.parse(readFileSync(pinnedItemPath, "utf8"));
+      assert.equal(
+        pinned.files.some((file) => file.path.endsWith("/data-table.tsx")),
+        false,
+      );
+      assert.equal(
+        pinned.files.some((file) => file.path.endsWith("/data.json")),
+        true,
+      );
+      assert.deepEqual(pinned.dependencies ?? [], []);
+      assert.deepEqual(pinned.registryDependencies, ["sidebar", "@elchika/input", "sheet"]);
+      writeFileSync(
+        join(root, "src/components/chart-area-interactive.tsx"),
+        'import { Sidebar } from "@/components/ui/sidebar";\nexport const ChartAreaInteractive = Sidebar;\n',
+      );
+      mkdirSync(join(root, "app/dashboard"), { recursive: true });
+      writeFileSync(join(root, "app/dashboard/data.json"), '[{"id": 1}]\n');
+    },
+    log: () => {},
+  });
+
+  assert.equal(existsSync(pinnedItemPath), false);
+  assert.equal(existsSync(join(root, "src/components/data-table.tsx")), false);
+  assert.equal(existsSync(join(root, "src/blocks/dashboard-01/data.json")), true);
+  assert.deepEqual(
+    result.registryItem.files
+      .filter((file) => file.target === undefined)
+      .map(({ path, type }) => ({ path, type })),
+    [
+      { path: "src/blocks/dashboard-01/data.json", type: "registry:file" },
+      {
+        path: "src/blocks/dashboard-01/components/chart-area-interactive.tsx",
+        type: "registry:component",
+      },
+    ],
+  );
+  assert.equal(result.entry.files.filter((file) => file.dropped).length, 2);
+  assert.equal(
+    result.registryItem.dependencies.some((dependency) => dependency.startsWith("@dnd-kit/")),
+    false,
+  );
+  assert.deepEqual(result.registryItem.registryDependencies, [
+    "@elchika/sidebar",
+    "@elchika/input",
+    "@elchika/sheet",
+  ]);
+  assert.equal(
+    result.entry.modified,
+    "data-table.tsx を配布から除外。上流 manifest から除外した dependencies: @dnd-kit/core, @dnd-kit/modifiers, @dnd-kit/sortable, @dnd-kit/utilities, @tanstack/react-table, zod。上流 manifest から除外した registryDependencies: breadcrumb, label",
+  );
 });
 
 test("prefix が先頭以外にある block の file path を通さない", async () => {
