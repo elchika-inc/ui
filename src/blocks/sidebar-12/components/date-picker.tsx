@@ -1,3 +1,4 @@
+import { enUS } from "date-fns/locale";
 import * as React from "react";
 
 import { Calendar } from "@/components/ui/calendar";
@@ -15,6 +16,7 @@ export function DatePicker() {
           selected={date}
           onSelect={setDate}
           captionLayout="dropdown"
+          locale={enUS}
           className="bg-transparent [--cell-size:2.1rem]"
         />
       </SidebarGroupContent>

@@ -25,7 +25,7 @@ import { TeamSwitcher } from "./team-switcher";
 const data = {
   teams: [
     {
-      name: "Acme Inc",
+      name: "Acme",
       logo: <TerminalIcon />,
       plan: "Enterprise",
     },

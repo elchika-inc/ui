@@ -83,13 +83,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
               </FieldDescription>
             </FieldGroup>
           </form>
-          <div className="relative hidden bg-muted md:block">
-            <img
-              src="/placeholder.svg"
-              alt=""
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-            />
-          </div>
+          <div aria-hidden="true" className="relative hidden bg-muted md:block" />
         </CardContent>
       </Card>
       <FieldDescription className="px-6 text-center">

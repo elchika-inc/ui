@@ -27,13 +27,7 @@ export function LoginZeroTwoPreview({ mode = "isolated" }: PreviewProps) {
             </div>
           </div>
         </div>
-        <div className="relative hidden bg-muted lg:block">
-          <img
-            src="/placeholder.svg"
-            alt=""
-            className="absolute inset-0 h-full w-full object-cover dark:brightness-20 dark:grayscale"
-          />
-        </div>
+        <div aria-hidden="true" className="relative hidden bg-muted lg:block" />
       </div>
     </section>
   );

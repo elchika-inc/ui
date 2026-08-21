@@ -1408,13 +1408,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない /placeholder.svg への参照を除去し、装飾領域を token 背景だけで自己完結。禁止表記 Acme Inc を Acme へ正規化",
       "files": [
         {
           "path": "src/blocks/login-04/components/login-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/login-04/components/login-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "c17cc17efbc1f06118a8a81916abf9fa0edd721d710fab2ed405dd9b34e92ee9"
+          "generatedContentSha256": "5efbf570ac96c4d80231fa536b30587bc6d6cccdc91d311a50dc31876e0f322b"
         },
         {
           "dropped": true,
@@ -1558,13 +1558,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない /placeholder.svg への参照を除去し、装飾領域を token 背景だけで自己完結",
       "files": [
         {
           "path": "src/blocks/signup-04/components/signup-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-04/components/signup-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "e42d5a877ce5d697e6c4a43b551c7c9c66b0996cdcee2521e1621309b5c4c336"
+          "generatedContentSha256": "d1e52c60f9f9061126ea9ac25d63a78b2a149d769ba19c1c455ce4605028ca54"
         },
         {
           "dropped": true,
@@ -1840,13 +1840,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。禁止表記 Acme Inc を Acme へ正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-07/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-07/components/app-sidebar.tsx",
           "upstreamPathSha": "df1752dfe092957f84aa467d2270436139e3ecc7",
-          "generatedContentSha256": "526c78e666680d4efd804b3c5ff493400536092da470820bdb4319400f58de0e"
+          "generatedContentSha256": "316068de6fc91b5d332f0427c0872e3589a7d5cd1e2d5d2235856fd6b8db1bef"
         },
         {
           "path": "src/blocks/sidebar-07/components/nav-main.tsx",
@@ -1864,7 +1864,7 @@
           "path": "src/blocks/sidebar-07/components/nav-user.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-07/components/nav-user.tsx",
           "upstreamPathSha": "df1752dfe092957f84aa467d2270436139e3ecc7",
-          "generatedContentSha256": "93e2fe647572310c27a55476d4b03a423d2a220dcfb9a1e801b776219502cca9"
+          "generatedContentSha256": "9f46630be616e7e6d603f852228af526cea1a2f6a4042e838418bb0e5306bf17"
         },
         {
           "path": "src/blocks/sidebar-07/components/team-switcher.tsx",
@@ -1894,13 +1894,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。禁止表記 Acme Inc を Acme へ正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-08/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-08/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "a010bd8bac363f3c477645283f16f0d480aec5f43630188b89827a3c6ae7db44"
+          "generatedContentSha256": "37adcb98743ac2c33373c526880c421f3df3d0ae3379b078fba17052c1c2850f"
         },
         {
           "path": "src/blocks/sidebar-08/components/nav-main.tsx",
@@ -1924,7 +1924,7 @@
           "path": "src/blocks/sidebar-08/components/nav-user.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-08/components/nav-user.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "e7afdc2d36379eabb82d95bc8eeef113ca5217fe5827b74d83f5797050ba3c22"
+          "generatedContentSha256": "873839c368117355c95938e8e8c19c378af15d373ce7d0b3ab160377f9693ccb"
         },
         {
           "dropped": true,
@@ -1948,19 +1948,19 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、CLI が IconPlaceholder を lucide-react へ自動展開。w-[calc(var(--sidebar-width-icon)+1px)] を component-local CSS 変数へ、w-[260px] を w-65 へ正規化。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
+      "modified": "registry:page を配布から除外し、CLI が IconPlaceholder を lucide-react へ自動展開。w-[calc(var(--sidebar-width-icon)+1px)] を component-local CSS 変数へ、w-[260px] を w-65 へ正規化。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。禁止表記 Acme Inc を Acme へ正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-09/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-09/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "4b6af956fe4536f8892f2e6a8a5da9bc9b2cb26acb2e9f59fe403810b2b73d9a"
+          "generatedContentSha256": "8e396f91b82c5ce47197c2d13a7a65a3df8ae7263e69e8980fdbc03c85f5ed7a"
         },
         {
           "path": "src/blocks/sidebar-09/components/nav-user.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-09/components/nav-user.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "169ea9b135d35acb68003cf99b22b12956c54125381b42970cb742d54885a37d"
+          "generatedContentSha256": "d0d8e4cd8e9319bd181b5882eeda0469542ba774f5ad5779267fda0f8cde72db"
         },
         {
           "dropped": true,
@@ -1984,13 +1984,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。上流の registryDependencies に宣言漏れがあったため、配布ファイルの import から @elchika/button を補完",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。上流の registryDependencies に宣言漏れがあったため、配布ファイルの import から @elchika/button を補完。禁止表記 Acme Inc を Acme へ正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-10/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-10/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "a584a68dea5f1a242ba0a6ddcf60a33740e78f3f5c17df82f3340f6fd5c28ea4"
+          "generatedContentSha256": "2bd26f23f108daba7498ecd4f3b0e70d92c171feef145dacf9fead929684bd37"
         },
         {
           "path": "src/blocks/sidebar-10/components/nav-actions.tsx",
@@ -2080,13 +2080,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。Calendar の locale を enUS へ固定し SSR/CSR の hydration を一致",
       "files": [
         {
           "path": "src/blocks/sidebar-12/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-12/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "cad7e258a1cdde1563b6b29d13aad12fe4a070c937bd9cd0bb4dd7f886f6eaf7"
+          "generatedContentSha256": "a8a6c3a96f466e5b8c0c5a96ad8a8eb3d7d216a5660f6a7440848c596da45195"
         },
         {
           "path": "src/blocks/sidebar-12/components/calendars.tsx",
@@ -2098,13 +2098,13 @@
           "path": "src/blocks/sidebar-12/components/date-picker.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-12/components/date-picker.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "59db46feb10e3e6888d4a4fcf4a2d745be61a8e6f9671eed3887b2aafccac4bb"
+          "generatedContentSha256": "f567ee84ff5055cea02feb10bc2a2d13ca802c7572310768330021831ad87efa"
         },
         {
           "path": "src/blocks/sidebar-12/components/nav-user.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-12/components/nav-user.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "46dc0bec975dbe318fbe91809edd9feaf07dbcfb6dc512490dd2596613f8a7b0"
+          "generatedContentSha256": "106e2fade735cd6b38832fd2c8aea35a3b72736bfef62b2c4917e777e119038e"
         },
         {
           "dropped": true,
@@ -2188,7 +2188,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。Calendar の locale を enUS へ固定し SSR/CSR の hydration を一致。禁止表記 Acme Inc を Acme へ正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-15/components/calendars.tsx",
@@ -2200,7 +2200,7 @@
           "path": "src/blocks/sidebar-15/components/date-picker.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/date-picker.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "59db46feb10e3e6888d4a4fcf4a2d745be61a8e6f9671eed3887b2aafccac4bb"
+          "generatedContentSha256": "f567ee84ff5055cea02feb10bc2a2d13ca802c7572310768330021831ad87efa"
         },
         {
           "path": "src/blocks/sidebar-15/components/nav-favorites.tsx",
@@ -2224,7 +2224,7 @@
           "path": "src/blocks/sidebar-15/components/nav-user.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/nav-user.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "4c790fed4c3701ed137ad40d383feef1853ef5d7fe98461c43f260302cbf1bce"
+          "generatedContentSha256": "a24d7e25c98a90133aadab5850e174fb905f0b62f095c024f84d9d76b9cb3baf"
         },
         {
           "path": "src/blocks/sidebar-15/components/nav-workspaces.tsx",
@@ -2236,13 +2236,13 @@
           "path": "src/blocks/sidebar-15/components/sidebar-left.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/sidebar-left.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "47d13a8082831c1008e310cfc8b372ec854479fa44882033910a903e2ea12102"
+          "generatedContentSha256": "82f2764bd23cfc2eab83aa47081b9612cae6a446b33fb19cf018563cc55cccbc"
         },
         {
           "path": "src/blocks/sidebar-15/components/sidebar-right.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/sidebar-right.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "d20c716fe8751d478c22d4e420f6e1c31b9764be5590573b0488ec5f3e8b5319"
+          "generatedContentSha256": "4aafd12bcfbf35f12b6bf402849202f8cfbceb3d64b49864ae6d3e1bfed88a08"
         },
         {
           "path": "src/blocks/sidebar-15/components/team-switcher.tsx",
@@ -2272,13 +2272,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、CLI が IconPlaceholder を lucide-react へ自動展開。h-[calc(100svh-var(--header-height))] を component-local CSS 変数へ正規化。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
+      "modified": "registry:page を配布から除外し、CLI が IconPlaceholder を lucide-react へ自動展開。h-[calc(100svh-var(--header-height))] を component-local CSS 変数へ正規化。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。禁止表記 Acme Inc を Acme へ正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-16/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "8d86461e375ec77d2f413c046bc02552103a7bc24f198bf228cb793a7afea6c7"
+          "generatedContentSha256": "2563a0a15b77864862da6a25c5ec1269f85881f748854b28ee7b06c3fa1912e4"
         },
         {
           "path": "src/blocks/sidebar-16/components/nav-main.tsx",
@@ -2302,7 +2302,7 @@
           "path": "src/blocks/sidebar-16/components/nav-user.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/nav-user.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "08afcf99bb3dc1609ff35614028e8505790ec77512290d42b1e3355e8a445fb5"
+          "generatedContentSha256": "cf4f6c20b8030872f33f45cbae4c8123a8cee3dde4ad14f22b945a78a67d7d6b"
         },
         {
           "path": "src/blocks/sidebar-16/components/search-form.tsx",

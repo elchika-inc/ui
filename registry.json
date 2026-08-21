@@ -7228,7 +7228,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["date-fns", "lucide-react", "shadcn", "tw-animate-css"],
       "registryDependencies": [
         "@elchika/sidebar",
         "@elchika/breadcrumb",
@@ -7397,7 +7397,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["date-fns", "lucide-react", "shadcn", "tw-animate-css"],
       "registryDependencies": [
         "@elchika/sidebar",
         "@elchika/breadcrumb",
