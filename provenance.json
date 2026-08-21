@@ -1348,13 +1348,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-20",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
+      "modified": "registry:page を配布から除外し、非配布 registry:page の IconPlaceholder を preview で lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持",
       "files": [
         {
           "path": "src/blocks/login-02/components/login-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/login-02/components/login-form.tsx",
           "upstreamPathSha": "67c99dd33cb21519941d26dd3d9f9ba6f2e65b98",
-          "generatedContentSha256": "9275903de5240f7075e6da2c9dc97d47be5d56209edc739108853520c347c8e7"
+          "generatedContentSha256": "1e8c9102d82f4145322922e8b71949268e21376d5e66ae47b5e922894b3641ce"
         },
         {
           "dropped": true,
@@ -1378,13 +1378,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
+      "modified": "registry:page を配布から除外し、非配布 registry:page の IconPlaceholder を preview で lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持",
       "files": [
         {
           "path": "src/blocks/login-03/components/login-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/login-03/components/login-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "2146bc9a827c474d82c571bd481c7c24676e5ece36f0bd0a068ff39ead77b070"
+          "generatedContentSha256": "b196c0d87e3878acf125c6b690c75758b3b90135722c707c2238337e0df095a8"
         },
         {
           "dropped": true,
@@ -1408,13 +1408,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない /placeholder.svg への参照を除去し、装飾領域を token 背景だけで自己完結。禁止表記 Acme Inc を Acme へ正規化",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない /placeholder.svg への参照を除去し、装飾領域を token 背景だけで自己完結。禁止表記 Acme Inc を Acme へ正規化。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持",
       "files": [
         {
           "path": "src/blocks/login-04/components/login-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/login-04/components/login-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "5efbf570ac96c4d80231fa536b30587bc6d6cccdc91d311a50dc31876e0f322b"
+          "generatedContentSha256": "69a890e491232374ebe9d4687978cbe604a982c234810535fc6989147c279d82"
         },
         {
           "dropped": true,
@@ -1438,13 +1438,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持",
       "files": [
         {
           "path": "src/blocks/login-05/components/login-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/login-05/components/login-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "1695fe0c7688ea50a05f27d8d6207ef96d4dc2c73d2e341cf810aac3c75d2823"
+          "generatedContentSha256": "53058601d308434dd85dc3e0bc828c4172b80663eef2081b58178a8d3e1f2b92"
         },
         {
           "dropped": true,
@@ -1468,13 +1468,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。上流の registryDependencies に宣言漏れがあったため、配布ファイルの import から @elchika/field を補完",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。上流の registryDependencies に宣言漏れがあったため、配布ファイルの import から @elchika/field を補完。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持",
       "files": [
         {
           "path": "src/blocks/signup-01/components/signup-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-01/components/signup-form.tsx",
           "upstreamPathSha": "b9f62a83999dc7df855738a8715f40ab156b1f10",
-          "generatedContentSha256": "d877dcc57d107ea9288f1af5d417d982f6c9457c29eee17c66a5903ba9c6f722"
+          "generatedContentSha256": "40bad359022064360b9c432f7c12622f9601b7fb7336d7e1a88683c7ec0c6715"
         },
         {
           "dropped": true,
@@ -1498,13 +1498,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
+      "modified": "registry:page を配布から除外し、非配布 registry:page の IconPlaceholder を preview で lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持",
       "files": [
         {
           "path": "src/blocks/signup-02/components/signup-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-02/components/signup-form.tsx",
           "upstreamPathSha": "67c99dd33cb21519941d26dd3d9f9ba6f2e65b98",
-          "generatedContentSha256": "fd5a310c596864ea7a1204977ef5f27814b299dc419b2ee50f48b4479f8a438d"
+          "generatedContentSha256": "3bb850994216a2351c2fbdf7b4176879ca3e918ae599af13f2578c752c16e95f"
         },
         {
           "dropped": true,
@@ -1528,13 +1528,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
+      "modified": "registry:page を配布から除外し、非配布 registry:page の IconPlaceholder を preview で lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持",
       "files": [
         {
           "path": "src/blocks/signup-03/components/signup-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-03/components/signup-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "98acf098baa2a8eb4e5f86df538ca64dbe056c9c4ad7119065d6770cbe2bbcb6"
+          "generatedContentSha256": "9f9805e19b4e0e6bb814d4a9d064e08c5a2773b8a5ac40db5d0900f3347d0a19"
         },
         {
           "dropped": true,
@@ -1558,13 +1558,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない /placeholder.svg への参照を除去し、装飾領域を token 背景だけで自己完結",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない /placeholder.svg への参照を除去し、装飾領域を token 背景だけで自己完結。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持",
       "files": [
         {
           "path": "src/blocks/signup-04/components/signup-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-04/components/signup-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "d1e52c60f9f9061126ea9ac25d63a78b2a149d769ba19c1c455ce4605028ca54"
+          "generatedContentSha256": "b36a3fe26dce0e446a67233062fe4743f6fd095940390b30e4e5fd08a68caab7"
         },
         {
           "dropped": true,
@@ -1588,13 +1588,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。上流の registryDependencies に宣言漏れがあったため、配布ファイルの import から @elchika/field を補完",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。上流の registryDependencies に宣言漏れがあったため、配布ファイルの import から @elchika/field を補完。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持",
       "files": [
         {
           "path": "src/blocks/signup-05/components/signup-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-05/components/signup-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "182368db4f3920f89432536a9aef63e8d66d2c289743eccd10d95cd7f62ca84a"
+          "generatedContentSha256": "61556ac18ae2e1e0e67e71bd0fb9d3904f3d1a8fbbee408522408468bf6e48e9"
         },
         {
           "dropped": true,
@@ -1618,7 +1618,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持",
       "files": [
         {
           "path": "src/blocks/sidebar-01/components/app-sidebar.tsx",
@@ -1630,7 +1630,7 @@
           "path": "src/blocks/sidebar-01/components/search-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-01/components/search-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "be28a288c40febc124ee48f6b016be248ab6806481b0be9d1aeca5087281f05a"
+          "generatedContentSha256": "c1fae10977726cbf76a0b6fc6dca84aa843ff42f74584fc971f2c7a2599b65bb"
         },
         {
           "path": "src/blocks/sidebar-01/components/version-switcher.tsx",
@@ -1660,7 +1660,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。上流の registryDependencies に宣言漏れがあったため、配布ファイルの import から @elchika/collapsible を補完",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。上流の registryDependencies に宣言漏れがあったため、配布ファイルの import から @elchika/collapsible を補完。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持",
       "files": [
         {
           "path": "src/blocks/sidebar-02/components/app-sidebar.tsx",
@@ -1672,7 +1672,7 @@
           "path": "src/blocks/sidebar-02/components/search-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-02/components/search-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "b91da2761a8c38325c7108503f22f9088e5161480d4fb7a63a26e2a5119c44c8"
+          "generatedContentSha256": "12a151dd89149b80e6b710fa674178215da19e8ac603d93eca29f0a9ee23a61e"
         },
         {
           "path": "src/blocks/sidebar-02/components/version-switcher.tsx",
@@ -1702,7 +1702,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-03/components/app-sidebar.tsx",
@@ -1732,7 +1732,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-04/components/app-sidebar.tsx",
@@ -1762,7 +1762,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持",
       "files": [
         {
           "path": "src/blocks/sidebar-05/components/app-sidebar.tsx",
@@ -1774,7 +1774,7 @@
           "path": "src/blocks/sidebar-05/components/search-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-05/components/search-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "b91da2761a8c38325c7108503f22f9088e5161480d4fb7a63a26e2a5119c44c8"
+          "generatedContentSha256": "12a151dd89149b80e6b710fa674178215da19e8ac603d93eca29f0a9ee23a61e"
         },
         {
           "dropped": true,
@@ -1798,7 +1798,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。上流の registryDependencies に宣言漏れがあったため、配布ファイルの import から @elchika/button を補完",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。上流の registryDependencies に宣言漏れがあったため、配布ファイルの import から @elchika/button を補完。newsletter input に accessible name を追加",
       "files": [
         {
           "path": "src/blocks/sidebar-06/components/app-sidebar.tsx",
@@ -1816,7 +1816,7 @@
           "path": "src/blocks/sidebar-06/components/sidebar-opt-in-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-06/components/sidebar-opt-in-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "0bf3b9c1dfb465c50340e59279ff0cbc3ddd43bae200eb2f7d19233c94226ed9"
+          "generatedContentSha256": "12ce4b4ea58cfb182f3c3eb83b4eff361074f69750c71ce2dc3a7653014246f4"
         },
         {
           "dropped": true,
@@ -1840,7 +1840,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。禁止表記 Acme Inc を Acme へ正規化",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。禁止表記 Acme Inc を Acme へ正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-07/components/app-sidebar.tsx",
@@ -1894,7 +1894,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。禁止表記 Acme Inc を Acme へ正規化",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。禁止表記 Acme Inc を Acme へ正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-08/components/app-sidebar.tsx",
@@ -1948,13 +1948,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、CLI が IconPlaceholder を lucide-react へ自動展開。w-[calc(var(--sidebar-width-icon)+1px)] を component-local CSS 変数へ、w-[260px] を w-65 へ正規化。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。禁止表記 Acme Inc を Acme へ正規化",
+      "modified": "registry:page を配布から除外し、CLI が IconPlaceholder を lucide-react へ自動展開。w-[calc(var(--sidebar-width-icon)+1px)] を component-local CSS 変数へ、w-[260px] を w-65 へ正規化。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。禁止表記 Acme Inc を Acme へ正規化。search input に accessible name を追加",
       "files": [
         {
           "path": "src/blocks/sidebar-09/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-09/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "8e396f91b82c5ce47197c2d13a7a65a3df8ae7263e69e8980fdbc03c85f5ed7a"
+          "generatedContentSha256": "e069d45db5282d42e0fdec5d0ceecf7fb2beff38fa29cb6ca21f3a3ed4243eb6"
         },
         {
           "path": "src/blocks/sidebar-09/components/nav-user.tsx",
@@ -1984,7 +1984,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。上流の registryDependencies に宣言漏れがあったため、配布ファイルの import から @elchika/button を補完。禁止表記 Acme Inc を Acme へ正規化",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。上流の registryDependencies に宣言漏れがあったため、配布ファイルの import から @elchika/button を補完。禁止表記 Acme Inc を Acme へ正規化。icon-only button に accessible name を追加し、popover の自動openを isolated preview のみに限定",
       "files": [
         {
           "path": "src/blocks/sidebar-10/components/app-sidebar.tsx",
@@ -1996,7 +1996,7 @@
           "path": "src/blocks/sidebar-10/components/nav-actions.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-10/components/nav-actions.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "6e8d94454924a98de3622870bc4215b322fe7fd850137f7f9c3f06338cd3109b"
+          "generatedContentSha256": "d82eea6bc5f9ba27c7eba0fe3612392d9820599eb572fb3479305cdc005aa852"
         },
         {
           "path": "src/blocks/sidebar-10/components/nav-favorites.tsx",
@@ -2050,7 +2050,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-11/components/app-sidebar.tsx",
@@ -2080,7 +2080,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。Calendar の locale を enUS へ固定し SSR/CSR の hydration を一致",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。Calendar の locale を enUS、初期日を固定値へ変更し SSR/CSR の hydration を一致",
       "files": [
         {
           "path": "src/blocks/sidebar-12/components/app-sidebar.tsx",
@@ -2098,7 +2098,7 @@
           "path": "src/blocks/sidebar-12/components/date-picker.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-12/components/date-picker.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "f567ee84ff5055cea02feb10bc2a2d13ca802c7572310768330021831ad87efa"
+          "generatedContentSha256": "e132501181df98b32f9cd71fbdac505077b12cf318f2736a9d85777f33bef4ce"
         },
         {
           "path": "src/blocks/sidebar-12/components/nav-user.tsx",
@@ -2188,7 +2188,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。Calendar の locale を enUS へ固定し SSR/CSR の hydration を一致。禁止表記 Acme Inc を Acme へ正規化",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。Calendar の locale を enUS、初期日を固定値へ変更し SSR/CSR の hydration を一致。禁止表記 Acme Inc を Acme へ正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-15/components/calendars.tsx",
@@ -2200,7 +2200,7 @@
           "path": "src/blocks/sidebar-15/components/date-picker.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/date-picker.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "f567ee84ff5055cea02feb10bc2a2d13ca802c7572310768330021831ad87efa"
+          "generatedContentSha256": "e132501181df98b32f9cd71fbdac505077b12cf318f2736a9d85777f33bef4ce"
         },
         {
           "path": "src/blocks/sidebar-15/components/nav-favorites.tsx",
@@ -2272,7 +2272,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、CLI が IconPlaceholder を lucide-react へ自動展開。h-[calc(100svh-var(--header-height))] を component-local CSS 変数へ正規化。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。禁止表記 Acme Inc を Acme へ正規化",
+      "modified": "registry:page を配布から除外し、CLI が IconPlaceholder を lucide-react へ自動展開。h-[calc(100svh-var(--header-height))] を component-local CSS 変数へ正規化。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。禁止表記 Acme Inc を Acme へ正規化。search form の固定 id を useId へ変更し、sidebar toggle に accessible name を追加",
       "files": [
         {
           "path": "src/blocks/sidebar-16/components/app-sidebar.tsx",
@@ -2308,13 +2308,13 @@
           "path": "src/blocks/sidebar-16/components/search-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/search-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "cd6929e842bc2d5d3989848de3697d23eb5101a05e19964178660b41fe928977"
+          "generatedContentSha256": "64da1da00753d01a81e25c4fc4e1120ef18a42e154f6ee4b5f0dee79e1253672"
         },
         {
           "path": "src/blocks/sidebar-16/components/site-header.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/site-header.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "4a8ae7c96d7f15d2c83ca207f41459618109456e2bf2d32720c930a78fb547e6"
+          "generatedContentSha256": "f6e6f50d035c89ef2f0edd22cdcaf81efed50d7e956517d45bc9d66d897686ad"
         },
         {
           "dropped": true,

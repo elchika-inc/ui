@@ -5,9 +5,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { SidebarGroup, SidebarGroupContent } from "@/components/ui/sidebar";
 
 export function DatePicker() {
-  const [date, setDate] = React.useState<Date | undefined>(
-    new Date(new Date().getFullYear(), new Date().getMonth(), 12),
-  );
+  const [date, setDate] = React.useState<Date | undefined>(() => new Date(2025, 5, 12));
   return (
     <SidebarGroup className="px-0">
       <SidebarGroupContent>

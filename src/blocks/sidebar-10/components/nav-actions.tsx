@@ -90,20 +90,27 @@ const data = [
     },
   ],
 ];
-export function NavActions() {
+export function NavActions({ autoOpen = false }: { autoOpen?: boolean }) {
   const [isOpen, setIsOpen] = React.useState(false);
   React.useEffect(() => {
-    setIsOpen(true);
-  }, []);
+    if (autoOpen) setIsOpen(true);
+  }, [autoOpen]);
   return (
     <div className="flex items-center gap-2 text-sm">
       <div className="hidden font-medium text-muted-foreground md:inline-block">Edit Oct 08</div>
-      <Button variant="ghost" size="icon" className="h-7 w-7">
+      <Button aria-label="Add to favorites" variant="ghost" size="icon" className="h-7 w-7">
         <StarIcon />
       </Button>
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger
-          render={<Button variant="ghost" size="icon" className="h-7 w-7 data-open:bg-accent" />}
+          render={
+            <Button
+              aria-label="Open page actions"
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 data-open:bg-accent"
+            />
+          }
         >
           <MoreHorizontalIcon />
         </PopoverTrigger>

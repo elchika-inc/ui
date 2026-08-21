@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -10,6 +11,11 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 export function SignupForm({ className, ...props }: React.ComponentProps<"form">) {
+  const nameId = useId();
+  const emailId = useId();
+  const passwordId = useId();
+  const confirmPasswordId = useId();
+
   return (
     <form className={cn("flex flex-col gap-6", className)} {...props}>
       <FieldGroup>
@@ -20,13 +26,19 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"form">
           </p>
         </div>
         <Field>
-          <FieldLabel htmlFor="name">Full Name</FieldLabel>
-          <Input id="name" type="text" placeholder="John Doe" required className="bg-background" />
+          <FieldLabel htmlFor={nameId}>Full Name</FieldLabel>
+          <Input
+            id={nameId}
+            type="text"
+            placeholder="John Doe"
+            required
+            className="bg-background"
+          />
         </Field>
         <Field>
-          <FieldLabel htmlFor="email">Email</FieldLabel>
+          <FieldLabel htmlFor={emailId}>Email</FieldLabel>
           <Input
-            id="email"
+            id={emailId}
             type="email"
             placeholder="m@example.com"
             required
@@ -37,13 +49,13 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"form">
           </FieldDescription>
         </Field>
         <Field>
-          <FieldLabel htmlFor="password">Password</FieldLabel>
-          <Input id="password" type="password" required className="bg-background" />
+          <FieldLabel htmlFor={passwordId}>Password</FieldLabel>
+          <Input id={passwordId} type="password" required className="bg-background" />
           <FieldDescription>Must be at least 8 characters long.</FieldDescription>
         </Field>
         <Field>
-          <FieldLabel htmlFor="confirm-password">Confirm Password</FieldLabel>
-          <Input id="confirm-password" type="password" required className="bg-background" />
+          <FieldLabel htmlFor={confirmPasswordId}>Confirm Password</FieldLabel>
+          <Input id={confirmPasswordId} type="password" required className="bg-background" />
           <FieldDescription>Please confirm your password.</FieldDescription>
         </Field>
         <Field>

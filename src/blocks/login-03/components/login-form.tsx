@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -11,6 +12,9 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
+  const emailId = useId();
+  const passwordId = useId();
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -45,17 +49,17 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
                 Or continue with
               </FieldSeparator>
               <Field>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
-                <Input id="email" type="email" placeholder="m@example.com" required />
+                <FieldLabel htmlFor={emailId}>Email</FieldLabel>
+                <Input id={emailId} type="email" placeholder="m@example.com" required />
               </Field>
               <Field>
                 <div className="flex items-center">
-                  <FieldLabel htmlFor="password">Password</FieldLabel>
+                  <FieldLabel htmlFor={passwordId}>Password</FieldLabel>
                   <a href="/" className="ml-auto text-sm underline-offset-4 hover:underline">
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input id={passwordId} type="password" required />
               </Field>
               <Field>
                 <Button type="submit">Login</Button>

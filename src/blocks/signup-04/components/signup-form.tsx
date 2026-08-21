@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -11,6 +12,10 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 export function SignupForm({ className, ...props }: React.ComponentProps<"div">) {
+  const emailId = useId();
+  const passwordId = useId();
+  const confirmPasswordId = useId();
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden p-0">
@@ -24,8 +29,8 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
                 </p>
               </div>
               <Field>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
-                <Input id="email" type="email" placeholder="m@example.com" required />
+                <FieldLabel htmlFor={emailId}>Email</FieldLabel>
+                <Input id={emailId} type="email" placeholder="m@example.com" required />
                 <FieldDescription>
                   We&apos;ll use this to contact you. We will not share your email with anyone else.
                 </FieldDescription>
@@ -33,12 +38,12 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
               <Field>
                 <Field className="grid grid-cols-2 gap-4">
                   <Field>
-                    <FieldLabel htmlFor="password">Password</FieldLabel>
-                    <Input id="password" type="password" required />
+                    <FieldLabel htmlFor={passwordId}>Password</FieldLabel>
+                    <Input id={passwordId} type="password" required />
                   </Field>
                   <Field>
-                    <FieldLabel htmlFor="confirm-password">Confirm Password</FieldLabel>
-                    <Input id="confirm-password" type="password" required />
+                    <FieldLabel htmlFor={confirmPasswordId}>Confirm Password</FieldLabel>
+                    <Input id={confirmPasswordId} type="password" required />
                   </Field>
                 </Field>
                 <FieldDescription>Must be at least 8 characters long.</FieldDescription>

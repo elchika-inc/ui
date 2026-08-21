@@ -438,17 +438,21 @@ function resolveBlockTarget(name, upstreamItem) {
   const blockPrefix = `${REGISTRY_PREFIX}blocks/${name}/`;
   for (const file of upstreamItem.files ?? []) {
     const registryPath = file.path;
+    if (typeof registryPath !== "string" || !registryPath.startsWith(blockPrefix)) {
+      throw new Error(`${name}: block の file path が想定外: ${registryPath ?? "なし"}`);
+    }
     if (file.type === "registry:page") {
-      droppedFiles.push({ registryPath, upstreamPath: upstreamPathOf(registryPath) });
+      droppedFiles.push({
+        registryPath,
+        upstreamPath: upstreamPathOf(registryPath),
+        target: file.target,
+      });
       continue;
     }
     if (!SUPPORTED_BLOCK_FILE_TYPES.has(file.type)) {
       throw new Error(
         `${name}: block の file type が未対応: ${file.type ?? "なし"} (${registryPath})`,
       );
-    }
-    if (!registryPath.startsWith(blockPrefix)) {
-      throw new Error(`${name}: block の file path が想定外: ${registryPath}`);
     }
     files.push({
       registryPath,
@@ -722,9 +726,10 @@ function ensureGenerated(root, target, isBlock) {
 // 設定や CLI 版が変われば作りうるので防御として残す。
 // ここが発火しないことを「page を配布していない証拠」として扱わない。
 // 配布していないことは registry item の files と作業ツリーの実体で確かめる。
-function removeDroppedPages(root, target, upstreamItem, log) {
+function prepareDroppedPages(root, target) {
+  const droppedTargets = [];
   for (const file of target.droppedFiles ?? []) {
-    const droppedTarget = upstreamItem.files.find((f) => f.path === file.registryPath)?.target;
+    const droppedTarget = file.target;
     if (!droppedTarget) continue;
     // target は上流 registry の応答に含まれる文字列で、rmSync へ直接流す値。
     // 封じ込めを検査してから消す（check-evidence の registry path 検査と同じ形）。
@@ -739,10 +744,22 @@ function removeDroppedPages(root, target, upstreamItem, log) {
     ) {
       throw new Error(`registry:page の target が repo 内の通常相対 path でない: ${droppedTarget}`);
     }
-    if (existsSync(join(root, droppedTarget))) {
-      rmSync(join(root, droppedTarget));
-      log(`配布しない page を削除: ${droppedTarget}`);
+    if (!droppedTarget.startsWith("app/") || !droppedTarget.endsWith("/page.tsx")) {
+      throw new Error(`registry:page の target が許可した page path でない: ${droppedTarget}`);
     }
+    if (existsSync(join(root, droppedTarget))) {
+      throw new Error(`registry:page の target が実行前から存在する: ${droppedTarget}`);
+    }
+    droppedTargets.push(droppedTarget);
+  }
+  return droppedTargets;
+}
+
+function removeDroppedPages(root, droppedTargets, log) {
+  for (const droppedTarget of droppedTargets) {
+    if (!existsSync(join(root, droppedTarget))) continue;
+    rmSync(join(root, droppedTarget));
+    log(`配布しない page を削除: ${droppedTarget}`);
   }
 }
 
@@ -798,12 +815,6 @@ export async function runAddComponent({
 
   const provenance = readJson(repositoryRoot, "provenance.json");
   if (resync) return resyncBlockHashes({ root: repositoryRoot, name, modified, provenance, log });
-  // component の記録済み判定は fetch より前に置く。記録済みの再実行で通信しないことを
-  // 既存 61 件が保証として持っている。block は種別が target 確定まで分からないので後段で見る。
-  if (shouldSkipRecorded(provenance, name, force)) {
-    log(`${name}: 既に記録済み（--force で上書き可能）`);
-    return { skipped: true };
-  }
 
   const packageBefore = readJson(repositoryRoot, "package.json");
   const trackedBefore = trackedFiles(repositoryRoot);
@@ -816,10 +827,14 @@ export async function runAddComponent({
   const target = resolveRegistryTarget(name, upstreamItem);
   const isBlock = target.itemType === "registry:block";
 
-  if (isBlock && shouldSkipRecorded(provenance, name, force, "block")) {
+  if (shouldSkipRecorded(provenance, name, force, isBlock ? "block" : "component")) {
     log(`${name}: 既に記録済み（--force で上書き可能）`);
     return { skipped: true };
   }
+
+  // 外部 registry が指定する削除対象は CLI の副作用より前に検証する。
+  // 実行前から存在する path は CLI が上書きする可能性もあるため、先に停止する。
+  const droppedTargets = prepareDroppedPages(repositoryRoot, target);
 
   const command = shadcnCommand(cliVersion, name);
   runCommand(command.command, command.args, { cwd: repositoryRoot, stdio: "inherit" });
@@ -827,7 +842,7 @@ export async function runAddComponent({
   if (isBlock) relocateBlockFiles(repositoryRoot, target, log);
   // reconcile より前に呼ぶ。後にすると、CLI が作った app/<name>/page.tsx が
   // どの分類ルールにも一致せず reconcile が先に停止し、この防御へ到達しない。
-  removeDroppedPages(repositoryRoot, target, upstreamItem, log);
+  removeDroppedPages(repositoryRoot, droppedTargets, log);
 
   const reconciled = reconcileAddChanges({
     root: repositoryRoot,

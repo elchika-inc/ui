@@ -42,7 +42,7 @@ export function SidebarOneZeroPreview({ mode = "isolated" }: PreviewProps) {
                 </Breadcrumb>
               </div>
               <div className="ml-auto px-3">
-                <NavActions />
+                <NavActions autoOpen={!catalog} />
               </div>
             </header>
             <div className="flex flex-1 flex-col gap-4 px-4 py-10">

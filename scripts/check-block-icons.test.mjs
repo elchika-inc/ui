@@ -46,10 +46,16 @@ test("上流 JSON から件数に依存せず lucide の期待集合を導出す
   assert.deepEqual(result.problems, []);
   assert.deepEqual(result.expectedByTarget, {
     blocks: {
-      "login-05": {
-        BadgeIcon: 1,
-        GalleryVerticalEndIcon: 2,
-      },
+      "login-05": [
+        {
+          path: "src/blocks/login-05/components/login-form.tsx",
+          occurrences: [
+            { icon: "GalleryVerticalEndIcon", attributes: ['className="size-6"'] },
+            { icon: "GalleryVerticalEndIcon", attributes: [] },
+            { icon: "BadgeIcon", attributes: [] },
+          ],
+        },
+      ],
     },
     previews: {},
   });
@@ -105,8 +111,22 @@ test("registry:page の lucide 期待集合は preview 側へ分離する", asyn
 
   assert.deepEqual(result.problems, []);
   assert.deepEqual(result.expectedByTarget, {
-    blocks: { "login-02": { BadgeIcon: 1 } },
-    previews: { "login-02": { GalleryVerticalEndIcon: 1 } },
+    blocks: {
+      "login-02": [
+        {
+          path: "src/blocks/login-02/components/login-form.tsx",
+          occurrences: [{ icon: "BadgeIcon", attributes: [] }],
+        },
+      ],
+    },
+    previews: {
+      "login-02": [
+        {
+          path: "src/previews/login-02.tsx",
+          occurrences: [{ icon: "GalleryVerticalEndIcon", attributes: [] }],
+        },
+      ],
+    },
   });
 });
 
@@ -194,4 +214,65 @@ test("期待対象 block の生成物が無ければ空走せず検出する", a
 
   assert.deepEqual(result.problems, ["sidebar-02: 生成物が無い"]);
   assert.equal(result.stats.blocksChecked, 1);
+});
+
+test("別ファイルの同名 import alias は期待アイコンを横取りできない", async () => {
+  const { inspectGeneratedIcons } = await loadChecker();
+  const result = inspectGeneratedIcons(
+    {
+      "sidebar-01": [
+        {
+          path: "src/blocks/sidebar-01/components/search-form.tsx",
+          occurrences: [{ icon: "SearchIcon", attributes: [] }],
+        },
+      ],
+    },
+    {
+      "sidebar-01": [
+        {
+          path: "src/blocks/sidebar-01/components/search-form.tsx",
+          source: 'import { SearchIcon as Icon } from "lucide-react"; export const Search = Icon;',
+        },
+        {
+          path: "src/blocks/sidebar-01/components/nav-main.tsx",
+          source:
+            'import { HomeIcon as Icon } from "lucide-react"; export const Nav = () => <Icon />;',
+        },
+      ],
+    },
+  );
+
+  assert.ok(result.problems.some((problem) => problem.includes("SearchIcon")));
+  assert.equal(result.stats.matchedOccurrences, 0);
+});
+
+test("IconPlaceholder から引き継ぐ属性が欠けていれば検出する", async () => {
+  const { inspectGeneratedIcons } = await loadChecker();
+  const result = inspectGeneratedIcons(
+    {
+      "login-05": [
+        {
+          path: "src/blocks/login-05/components/login-form.tsx",
+          occurrences: [
+            {
+              icon: "GalleryVerticalEndIcon",
+              attributes: ['className="size-6"', "strokeWidth={1}"],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      "login-05": [
+        {
+          path: "src/blocks/login-05/components/login-form.tsx",
+          source:
+            'import { GalleryVerticalEndIcon } from "lucide-react"; export const Logo = () => <GalleryVerticalEndIcon className="size-6" />;',
+        },
+      ],
+    },
+  );
+
+  assert.ok(result.problems.some((problem) => problem.includes("属性")));
+  assert.equal(result.stats.matchedOccurrences, 0);
 });

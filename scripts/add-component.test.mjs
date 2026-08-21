@@ -389,9 +389,7 @@ test("wrapper が pin add から2つの hash・来歴・registryまで記録し�
     runCommand: () => {
       reran = true;
     },
-    fetchImpl: async () => {
-      throw new Error("fetch してはならない");
-    },
+    fetchImpl,
     log: (message) => rerunLogs.push(message),
   });
   assert.deepEqual(rerun, { skipped: true });
@@ -509,6 +507,7 @@ test("registry:page を配布対象から外し droppedFiles へ振り分ける"
     {
       registryPath: "registry/base-nova/blocks/login-01/page.tsx",
       upstreamPath: "apps/v4/registry/bases/base/blocks/login-01/page.tsx",
+      target: "app/login/page.tsx",
     },
   ]);
 });
@@ -805,7 +804,7 @@ test("block の配布ファイルが移設先に無ければ停止する", async
   );
 });
 
-test("記録済み component の再実行は fetch せずに skip する", async (t) => {
+test("記録済み component の再実行は kind 確定後に CLI を実行せず skip する", async (t) => {
   const root = prepareWrapperRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));
   const { runAddComponent } = await loadModule();
@@ -813,11 +812,18 @@ test("記録済み component の再実行は fetch せずに skip する", async
   git(root, ["add", "."]);
   git(root, ["commit", "-m", "badge fixture"]);
 
+  let fetched = 0;
+  const upstream = {
+    name: "badge",
+    type: "registry:ui",
+    files: [{ type: "registry:ui", path: "registry/base-nova/ui/badge.tsx", content: "" }],
+  };
   const rerun = await runAddComponent({
     argv: ["badge", "--modified", "同じ変更"],
     root,
     fetchImpl: async () => {
-      throw new Error("fetch してはならない");
+      fetched++;
+      return { ok: true, status: 200, text: async () => JSON.stringify(upstream) };
     },
     runCommand: () => {
       throw new Error("CLI を実行してはならない");
@@ -825,6 +831,7 @@ test("記録済み component の再実行は fetch せずに skip する", async
     log: () => {},
   });
   assert.deepEqual(rerun, { skipped: true });
+  assert.equal(fetched, 1);
 });
 
 test("記録済み block の再実行は skip する", async (t) => {
@@ -875,6 +882,71 @@ test("CLI が作った配布しない page を reconcile より前に削除す�
   assert.equal(result.skipped, false);
   assert.equal(existsSync(join(root, "app/login/page.tsx")), false);
   assert.ok(logs.includes("配布しない page を削除: app/login/page.tsx"));
+});
+
+test("別 block 配下の registry:page は CLI 実行前に停止する", async () => {
+  const { resolveRegistryTarget } = await loadModule();
+  const upstream = structuredClone(loginUpstream);
+  upstream.files[0].path = "registry/base-nova/blocks/other/page.tsx";
+  upstream.files[0].target = "package.json";
+
+  assert.throws(
+    () => resolveRegistryTarget("login-01", upstream),
+    /login-01: block の file path が想定外/,
+  );
+});
+
+test("配布しない page の target が実行前から存在すれば CLI より前に停止する", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+  mkdirSync(join(root, "app/login"), { recursive: true });
+  writeFileSync(join(root, "app/login/page.tsx"), "既存 page\n");
+  git(root, ["add", "app/login/page.tsx"]);
+  git(root, ["commit", "-m", "existing page fixture"]);
+  let ran = false;
+
+  await assert.rejects(
+    runAddComponent({
+      argv: ["login-01", "--modified", "registry:page を配布から除外"],
+      root,
+      fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+      runCommand: () => {
+        ran = true;
+      },
+      log: () => {},
+    }),
+    /registry:page の target が実行前から存在する/,
+  );
+  assert.equal(ran, false);
+  assert.equal(readFileSync(join(root, "app/login/page.tsx"), "utf8"), "既存 page\n");
+});
+
+test("component と同名の block は component 来歴だけで早期 skip しない", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  writeJson(join(root, "provenance.json"), {
+    components: { "login-01": { license: "MIT" } },
+    blocks: {},
+  });
+  git(root, ["add", "provenance.json"]);
+  git(root, ["commit", "-m", "component collision fixture"]);
+  const { runAddComponent } = await loadModule();
+  let ran = false;
+
+  const result = await runAddComponent({
+    argv: ["login-01", "--modified", "registry:page を配布から除外"],
+    root,
+    fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+    runCommand: () => {
+      ran = true;
+      writeFileSync(join(root, "src/components/login-form.tsx"), "export {}\n");
+    },
+    log: () => {},
+  });
+
+  assert.equal(ran, true);
+  assert.equal(result.skipped, false);
 });
 
 test("block の registry item は配布ファイルの import から npm 依存を補う", async (t) => {

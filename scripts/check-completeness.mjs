@@ -133,8 +133,11 @@ function blockFileProblems(name, file, index) {
 // する雛形であり、ライブラリの公開 API ではないため（設計 §3-1 の要件マトリクス）。
 function blockProblems(name, registry, previewFiles, previewSources, provenance, onDisk, sources) {
   const problems = [];
-  if (!registry.items.some((i) => i.name === name)) {
+  const registryItem = registry.items.find((item) => item.name === name);
+  if (!registryItem) {
     problems.push(`${name}: registry.json に item が無い`);
+  } else if (registryItem.type !== "registry:block") {
+    problems.push(`${name}: registry item の type が registry:block でない`);
   }
   if (!previewSources.includes(`${name}.tsx`)) {
     problems.push(`${name}: src/previews/${name}.tsx が無い`);
@@ -290,6 +293,16 @@ function blockFileSetProblems(name, registry, files, onDisk, sources) {
     .filter((file) => file.target === undefined)
     .map((file) => file.path)
     .sort();
+  for (const file of (item.files ?? []).filter((candidate) => candidate.target === undefined)) {
+    // block の実装コードは registry:component でなければ CLI の配置契約が変わる。
+    // 一方 data.json のような block 固有 asset は registry:file が正しいため、
+    // 全ファイルを一律に registry:component へ固定しない。
+    if (/\.[cm]?[jt]sx?$/.test(file.path ?? "") && file.type !== "registry:component") {
+      problems.push(
+        `${name}: registry item の ${file.path ?? "path不明"} の type が registry:component でない`,
+      );
+    }
+  }
   const recorded = files
     .filter((file) => file.dropped !== true)
     .map((file) => file.path)

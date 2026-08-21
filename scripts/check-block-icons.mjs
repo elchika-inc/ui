@@ -37,10 +37,37 @@ function stringAttribute(node, name) {
   return undefined;
 }
 
-function sortedCounts(counts) {
-  return Object.fromEntries(
-    [...counts.entries()].sort(([left], [right]) => left.localeCompare(right)),
-  );
+const ICON_LIBRARY_ATTRIBUTES = new Set(["lucide", "tabler", "hugeicons", "phosphor", "remixicon"]);
+
+function normalizedAttribute(property) {
+  if (ts.isJsxSpreadAttribute(property)) return `{...${property.expression.getText().trim()}}`;
+  const name = property.name.getText();
+  if (!property.initializer) return name;
+  if (ts.isStringLiteral(property.initializer)) {
+    return `${name}=${JSON.stringify(property.initializer.text)}`;
+  }
+  if (ts.isJsxExpression(property.initializer)) {
+    return `${name}={${property.initializer.expression?.getText().trim() ?? ""}}`;
+  }
+  return `${name}=${property.initializer.getText().trim()}`;
+}
+
+function preservedAttributes(node) {
+  return node.attributes.properties
+    .filter(
+      (property) =>
+        ts.isJsxSpreadAttribute(property) || !ICON_LIBRARY_ATTRIBUTES.has(property.name.getText()),
+    )
+    .map(normalizedAttribute)
+    .sort();
+}
+
+function generatedPath(name, file, target) {
+  if (target === "previews") return `src/previews/${name}.tsx`;
+  const prefix = `registry/base-nova/blocks/${name}/`;
+  return typeof file.path === "string" && file.path.startsWith(prefix)
+    ? `src/blocks/${name}/${file.path.slice(prefix.length)}`
+    : undefined;
 }
 
 export function inspectUpstreamBlocks(entries) {
@@ -56,7 +83,7 @@ export function inspectUpstreamBlocks(entries) {
       problems.push(`${name}: 上流 JSON の files が配列でない`);
       continue;
     }
-    const countsByTarget = { blocks: new Map(), previews: new Map() };
+    const filesByTarget = { blocks: new Map(), previews: new Map() };
     let blockPlaceholderCount = 0;
     for (const file of item.files) {
       if (typeof file?.content !== "string") continue;
@@ -79,8 +106,14 @@ export function inspectUpstreamBlocks(entries) {
               `${name}: ${path} の IconPlaceholder #${filePlaceholderIndex} に lucide 属性が無い`,
             );
           } else {
-            const counts = countsByTarget[target];
-            counts.set(icon, (counts.get(icon) ?? 0) + 1);
+            const targetPath = generatedPath(name, file, target);
+            if (!targetPath) {
+              problems.push(`${name}: ${path} を生成物 path へ対応付けられない`);
+            } else {
+              const occurrences = filesByTarget[target].get(targetPath) ?? [];
+              occurrences.push({ icon, attributes: preservedAttributes(node) });
+              filesByTarget[target].set(targetPath, occurrences);
+            }
             uniqueIcons.add(icon);
           }
         }
@@ -91,8 +124,13 @@ export function inspectUpstreamBlocks(entries) {
     if (blockPlaceholderCount > 0) {
       blocksWithPlaceholders++;
       for (const target of ["blocks", "previews"]) {
-        const counts = countsByTarget[target];
-        if (counts.size > 0) expectedByTarget[target][name] = sortedCounts(counts);
+        const files = filesByTarget[target];
+        if (files.size > 0) {
+          expectedByTarget[target][name] = [...files.entries()].map(([path, occurrences]) => ({
+            path,
+            occurrences,
+          }));
+        }
       }
     }
   }
@@ -110,41 +148,54 @@ export function inspectUpstreamBlocks(entries) {
   };
 }
 
-function inspectGeneratedSources(files) {
-  const imports = new Map();
-  const usages = new Map();
-
-  for (const { path, source } of files) {
-    const parsed = sourceFile(path, source);
-    const visit = (node) => {
-      if (
-        ts.isImportDeclaration(node) &&
-        ts.isStringLiteral(node.moduleSpecifier) &&
-        node.moduleSpecifier.text === "lucide-react"
-      ) {
-        const bindings = node.importClause?.namedBindings;
-        if (bindings && ts.isNamedImports(bindings)) {
-          for (const element of bindings.elements) {
-            const imported = element.propertyName?.text ?? element.name.text;
-            const locals = imports.get(imported) ?? new Set();
-            locals.add(element.name.text);
-            imports.set(imported, locals);
-          }
+function inspectGeneratedSource({ path, source }) {
+  const importsByLocal = new Map();
+  const importedIcons = new Set();
+  const occurrences = [];
+  const parsed = sourceFile(path, source);
+  const visit = (node) => {
+    if (
+      ts.isImportDeclaration(node) &&
+      ts.isStringLiteral(node.moduleSpecifier) &&
+      node.moduleSpecifier.text === "lucide-react"
+    ) {
+      const bindings = node.importClause?.namedBindings;
+      if (bindings && ts.isNamedImports(bindings)) {
+        for (const element of bindings.elements) {
+          const imported = element.propertyName?.text ?? element.name.text;
+          importsByLocal.set(element.name.text, imported);
+          importedIcons.add(imported);
         }
       }
-      if (
-        (ts.isJsxSelfClosingElement(node) || ts.isJsxOpeningElement(node)) &&
-        ts.isIdentifier(node.tagName)
-      ) {
-        const local = node.tagName.text;
-        usages.set(local, (usages.get(local) ?? 0) + 1);
-      }
-      ts.forEachChild(node, visit);
-    };
-    visit(parsed);
-  }
+    }
+    if (
+      (ts.isJsxSelfClosingElement(node) || ts.isJsxOpeningElement(node)) &&
+      ts.isIdentifier(node.tagName)
+    ) {
+      const local = node.tagName.text;
+      const icon = importsByLocal.get(local);
+      if (icon) occurrences.push({ icon, attributes: preservedAttributes(node) });
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(parsed);
+  return { path, importedIcons, occurrences };
+}
 
-  return { imports, usages };
+function normalizedExpectedFiles(expected) {
+  if (Array.isArray(expected)) return expected;
+  return [
+    {
+      path: undefined,
+      occurrences: Object.entries(expected).flatMap(([icon, count]) =>
+        Array.from({ length: count }, () => ({ icon, attributes: undefined })),
+      ),
+    },
+  ];
+}
+
+function sameAttributes(left, right) {
+  return JSON.stringify(left) === JSON.stringify(right);
 }
 
 export function inspectGeneratedIcons(expectedByBlock, generatedByBlock) {
@@ -153,27 +204,59 @@ export function inspectGeneratedIcons(expectedByBlock, generatedByBlock) {
   let matchedOccurrences = 0;
   const entries = Object.entries(expectedByBlock);
 
-  for (const [name, expectedIcons] of entries) {
+  for (const [name, expected] of entries) {
     const files = generatedByBlock[name];
-    const blockExpected = Object.values(expectedIcons).reduce((sum, count) => sum + count, 0);
+    const expectedFiles = normalizedExpectedFiles(expected);
+    const blockExpected = expectedFiles.reduce((sum, file) => sum + file.occurrences.length, 0);
     expectedOccurrences += blockExpected;
     if (!Array.isArray(files) || files.length === 0) {
       problems.push(`${name}: 生成物が無い`);
       continue;
     }
-    const { imports, usages } = inspectGeneratedSources(files);
-    for (const [icon, expectedCount] of Object.entries(expectedIcons)) {
-      const locals = imports.get(icon);
-      if (!locals || locals.size === 0) {
-        problems.push(`${name}: ${icon} が lucide-react から named import されていない`);
+    const inspected = files.map(inspectGeneratedSource);
+    for (const expectedFile of expectedFiles) {
+      const candidates = expectedFile.path
+        ? inspected.filter((file) => file.path === expectedFile.path)
+        : inspected;
+      if (candidates.length === 0) {
+        problems.push(`${name}: ${expectedFile.path} の生成物が無い`);
         continue;
       }
-      const actualCount = [...locals].reduce((sum, local) => sum + (usages.get(local) ?? 0), 0);
-      matchedOccurrences += Math.min(actualCount, expectedCount);
-      if (actualCount < expectedCount) {
-        problems.push(
-          `${name}: ${icon} の JSX 使用が不足している（期待 ${expectedCount} / 実測 ${actualCount}）`,
+      const importedIcons = new Set(candidates.flatMap((file) => [...file.importedIcons]));
+      const actual = candidates.flatMap((file) => file.occurrences).map((item) => ({ ...item }));
+      for (const occurrence of expectedFile.occurrences) {
+        if (!importedIcons.has(occurrence.icon)) {
+          problems.push(
+            `${name}: ${expectedFile.path ? `${expectedFile.path} の ` : ""}${occurrence.icon} が lucide-react から named import されていない`,
+          );
+          continue;
+        }
+        const match = actual.findIndex(
+          (candidate) =>
+            candidate.icon === occurrence.icon &&
+            (occurrence.attributes === undefined ||
+              sameAttributes(candidate.attributes, occurrence.attributes)),
         );
+        if (match >= 0) {
+          actual.splice(match, 1);
+          matchedOccurrences++;
+          continue;
+        }
+        if (actual.some((candidate) => candidate.icon === occurrence.icon)) {
+          problems.push(
+            `${name}: ${expectedFile.path ? `${expectedFile.path} の ` : ""}${occurrence.icon} の属性が一致しない（期待 ${occurrence.attributes.join(" ") || "属性なし"}）`,
+          );
+        } else {
+          const expectedCount = expectedFile.occurrences.filter(
+            (candidate) => candidate.icon === occurrence.icon,
+          ).length;
+          const actualCount = candidates
+            .flatMap((file) => file.occurrences)
+            .filter((candidate) => candidate.icon === occurrence.icon).length;
+          problems.push(
+            `${name}: ${expectedFile.path ? `${expectedFile.path} の ` : ""}${occurrence.icon} の JSX 使用が不足している（期待 ${expectedCount} / 実測 ${actualCount}）`,
+          );
+        }
       }
     }
   }

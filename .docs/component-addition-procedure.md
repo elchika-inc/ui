@@ -141,27 +141,20 @@ evidence が「preview が証跡の検証 SHA より新しい」を見ている�
 **無害なコメント 1 行を足しただけでも同じく赤くなる**（実測）。
 `check:all` が赤いことを「壊れた import を検知した」と読まないこと。
 
-### 未対応（Phase 2 以降で決める）
+### block 移植で維持する契約
 
 - 上流 block の `registry:file`（`dashboard-01/data.json`）は CLI が item の `target` へ書くため
   移設が成立せず、`SUPPORTED_BLOCK_FILE_TYPES` が fail-closed で止める。
   `registry:ui` / `registry:hook` も同様に止まる（CLI がそれぞれ `aliases.ui` /
   `aliases.hooks` へ落とすため、`src/components/` 直下からの移設が成立しない）。
   上流 block がこれらの type を持つと「なぜか止まる」形で現れる。
-- **18 件の block が、どの registry にも存在しない `@/app/(create)/components/icon-placeholder` を
-  import する**（`login-05` / `signup-05` / `sidebar-01〜13,15,16` / `dashboard-01`。実測）。
-  上流 shadcn.com のサイト内部コンポーネントで、`https://ui.shadcn.com/r/styles/base-nova/icon-placeholder.json`
-  は **404**、当リポジトリの `registry.json` にも無い。`internalDependency` が `unknown` を返して
-  completeness が `registry item へ対応付けられない` で赤くなる（fail-closed なので黙って壊れはしない）。
-  block ごとに「lucide アイコンへ置換 / placeholder を自作 / 対象から外す」を人が決める。
-
-  **設計 §6-2 の「既存 61 コンポーネントで全 block をまかなえる」は `registryDependencies` の
-  宣言だけを突き合わせた結論で、配布ファイルの中身は測っていない。** 宣言側の不足が 0 件なのは
-  正しいが、中身は上記のとおり不足する。
-
-  素通しで進められるのは `login-02,03,04` / `signup-01,02,03,04` / `sidebar-14` の 8 件のみ。
-
-- 配布ファイルが**互いを import する** block（sidebar 系の `app-sidebar.tsx` → `nav-main.tsx`）は、
-  consumer 側で `src/components/` へフラットに落ちるうえ `shadcn build` が import specifier を
-  書き換えないため、解決不能な import が残りうる。**Phase 2 の最初の 1 件で落下先の import を
-  目視で確かめてから残りへ進む。**
+- 上流の `IconPlaceholder` は不足部品ではなく、shadcn CLI が `lucide` 属性の実アイコンへ
+  展開するマーカーとして扱う。独自の placeholder や置換スクリプトは作らない。
+  `node scripts/check-block-icons.mjs` は対象 block のライブ上流 JSON から期待集合を導出し、
+  次の述語を fail-closed で検査する。件数は可観測性のため出力するが成功条件にはしない。
+  1. 全上流ファイルの `IconPlaceholder` に `lucide` 属性がある。
+  2. `registry:component` のアイコン・引継ぎ属性が対応する `src/blocks/<name>/` の同一生成fileにある。
+  3. `registry:page` のアイコン・引継ぎ属性が対応する `src/previews/<name>.tsx` にある。
+- 配布ファイルが同一 block の sibling を `@/components/<name>` で import する場合、
+  `add-component.mjs` はその sibling が配布ファイル集合に実在するときだけ相対 import へ変換する。
+  `@/components/ui/*` と `@/lib/utils` は共有部品なので変換しない。

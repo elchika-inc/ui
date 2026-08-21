@@ -1,6 +1,7 @@
 "use client";
 
 import { GalleryVerticalEndIcon } from "lucide-react";
+import { useId } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -13,6 +14,8 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
+  const emailId = useId();
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <form>
@@ -30,8 +33,8 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
             </FieldDescription>
           </div>
           <Field>
-            <FieldLabel htmlFor="email">Email</FieldLabel>
-            <Input id="email" type="email" placeholder="m@example.com" required />
+            <FieldLabel htmlFor={emailId}>Email</FieldLabel>
+            <Input id={emailId} type="email" placeholder="m@example.com" required />
           </Field>
           <Field>
             <Button type="submit">Login</Button>

@@ -246,6 +246,7 @@ test("5 経路が揃っていれば問題なし", () => {
 
 const blockRegistryItem = {
   name: "login-01",
+  type: "registry:block",
   files: [
     { path: "src/blocks/login-01/components/login-form.tsx", type: "registry:component" },
     { path: "LICENSE", type: "registry:file", target: "~/elchika-ui/LICENSE" },
@@ -298,6 +299,26 @@ test("block の registry item 欠落を検出する", () => {
     registry: { items: [{ name: "button" }] },
   });
   assert.deepEqual(problems, ["login-01: registry.json に item が無い"]);
+});
+
+test("block と同名の registry item の type 不一致を検出する", () => {
+  const registry = structuredClone(completeBlock.registry);
+  registry.items.find((item) => item.name === "login-01").type = "registry:ui";
+  const { problems } = checkCompleteness({ ...completeBlock, registry });
+  assert.ok(problems.includes("login-01: registry item の type が registry:block でない"));
+});
+
+test("block の配布ファイル type 不一致を検出する", () => {
+  const registry = structuredClone(completeBlock.registry);
+  registry.items
+    .find((item) => item.name === "login-01")
+    .files.find((file) => file.target === undefined).type = "registry:page";
+  const { problems } = checkCompleteness({ ...completeBlock, registry });
+  assert.ok(
+    problems.includes(
+      "login-01: registry item の src/blocks/login-01/components/login-form.tsx の type が registry:component でない",
+    ),
+  );
 });
 
 test("block の preview 実装欠落を検出する", () => {
