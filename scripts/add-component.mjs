@@ -3,11 +3,12 @@
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import {
+  copyFileSync,
   existsSync,
+  constants as fsConstants,
   mkdirSync,
   mkdtempSync,
   readFileSync,
-  renameSync,
   rmSync,
   writeFileSync,
 } from "node:fs";
@@ -299,13 +300,14 @@ export function blockRelocationPlan(target) {
   const seen = new Set();
   return target.files.map((file) => {
     const base = basename(file.registryPath);
+    const from = file.cliTargetPath ?? `src/components/${base}`;
     // CLI がフラット化する以上、同一 block 内で basename が衝突すると移設先を一意に決められない。
     // 実測では衝突しないが、上流の将来変更で静かに取り違えるより止める。
-    if (seen.has(base)) {
+    if (seen.has(from)) {
       throw new Error(`${file.targetPath}: 移設元の basename が重複: ${base}`);
     }
-    seen.add(base);
-    return { from: `src/components/${base}`, to: file.targetPath };
+    seen.add(from);
+    return { from, to: file.targetPath };
   });
 }
 
@@ -342,7 +344,10 @@ function relocateBlockFiles(root, target, log) {
     // 生成されなかった場合はここで止めず、後段の生成確認に一本化する。
     if (!existsSync(fromPath)) continue;
     mkdirSync(dirname(join(root, to)), { recursive: true });
-    renameSync(fromPath, join(root, to));
+    // rename は POSIX では既存の移設先を上書きする。副作用前の検査に加え、
+    // COPYFILE_EXCL で実移設時の競合も fail-closed にする。
+    copyFileSync(fromPath, join(root, to), fsConstants.COPYFILE_EXCL);
+    rmSync(fromPath);
     log(`移設: ${from} -> ${to}`);
   }
   for (const { to } of plan) {
@@ -354,6 +359,21 @@ function relocateBlockFiles(root, target, log) {
     writeFileSync(path, content);
     for (const entry of rewritten) {
       log(`内部 import: ${to} ${entry.from} -> ${entry.to}`);
+    }
+  }
+}
+
+// CLI は --overwrite で動くため、registry:file の上流 target と最終移設先を副作用前に検査する。
+// 実移設時にも COPYFILE_EXCL を使い、検査後に競合が生じても上書きしない。
+function prepareBlockRelocation(root, target) {
+  for (const { to } of blockRelocationPlan(target)) {
+    if (existsSync(join(root, to))) {
+      throw new Error(`block の移設先が実行前から存在する: ${to}`);
+    }
+  }
+  for (const file of target.files) {
+    if (file.cliTargetPath && existsSync(join(root, file.cliTargetPath))) {
+      throw new Error(`registry:file の target が実行前から存在する: ${file.cliTargetPath}`);
     }
   }
 }
@@ -414,7 +434,7 @@ export function completeBlockRegistryDependencies(
 const UPSTREAM_PREFIX = "apps/v4/registry/bases/base/";
 const REGISTRY_PREFIX = "registry/base-nova/";
 
-// 上流 registry の応答に含まれる path は、そのまま join() → mkdirSync / renameSync /
+// 上流 registry の応答に含まれる path は、そのまま join() → mkdirSync / copyFileSync /
 // rmSync へ流れる値。prefix の検査だけでは prefix より後ろの `..` が通り、repo 外へ
 // 書き込める。副作用より前で止めないと、fail-closed のゲートが後ろにあっても手遅れになる。
 function assertContainedPath(label, path) {
@@ -444,12 +464,37 @@ const upstreamPathOf = (registryPath) => {
 // 上流 block が持ちうる file type のうち、この機構が正しく扱えると実証済みのもの。
 // 「registry:page 以外は全部配布」にすると未知の type を黙って配布側へ流す。
 //
-// registry:component だけに絞る。blockRelocationPlan の移設元は components alias 直下の
-// 固定で、CLI は type ごとに別 alias へ落とす（registry:ui → aliases.ui、
-// registry:hook → aliases.hooks）ため、その 2 種は移設元が一致せず扱えない。
-// registry:file（dashboard-01 の data.json）は CLI が item の target へ書くため同様。
-// 扱えるようになるまで fail-closed で止める。
-const SUPPORTED_BLOCK_FILE_TYPES = new Set(["registry:component"]);
+// registry:component は components alias 直下、registry:file は上流 item の target へ
+// CLI が書く。移設元を type ごとに解決できるこの 2 種だけを許可する。
+const SUPPORTED_BLOCK_FILE_TYPES = new Set(["registry:component", "registry:file"]);
+
+function resolveDistributedBlockFile(name, file, registryPath, blockPrefix) {
+  if (!SUPPORTED_BLOCK_FILE_TYPES.has(file.type)) {
+    throw new Error(
+      `${name}: block の file type が未対応: ${file.type ?? "なし"} (${registryPath})`,
+    );
+  }
+  if (file.type === "registry:component" && file.target !== undefined) {
+    throw new Error(`${name}: registry:component に target は指定できない: ${file.target}`);
+  }
+  let cliTargetPath;
+  if (file.type === "registry:file") {
+    if (typeof file.target !== "string" || !file.target) {
+      throw new Error(`${name}: registry:file に target が無い: ${registryPath}`);
+    }
+    cliTargetPath = assertContainedPath(`${name}: registry:file の target`, file.target);
+  }
+  return {
+    registryPath,
+    targetPath: assertContainedPath(
+      `${name}: block の targetPath`,
+      `src/blocks/${name}/${registryPath.slice(blockPrefix.length)}`,
+    ),
+    upstreamPath: upstreamPathOf(registryPath),
+    fileType: file.type,
+    ...(cliTargetPath ? { cliTargetPath } : {}),
+  };
+}
 
 // block は「利用者が 1 つ選んでコピーする雛形」なので、page.tsx は 27 件すべてが同名で衝突する。
 // standards が Next.js を標準スタック外としているため target: app/<name>/page.tsx も配れない。
@@ -472,23 +517,7 @@ function resolveBlockTarget(name, upstreamItem) {
       });
       continue;
     }
-    if (!SUPPORTED_BLOCK_FILE_TYPES.has(file.type)) {
-      throw new Error(
-        `${name}: block の file type が未対応: ${file.type ?? "なし"} (${registryPath})`,
-      );
-    }
-    if (file.target !== undefined) {
-      throw new Error(`${name}: registry:component に target は指定できない: ${file.target}`);
-    }
-    files.push({
-      registryPath,
-      targetPath: assertContainedPath(
-        `${name}: block の targetPath`,
-        `src/blocks/${name}/${registryPath.slice(blockPrefix.length)}`,
-      ),
-      upstreamPath: upstreamPathOf(registryPath),
-      fileType: file.type,
-    });
+    files.push(resolveDistributedBlockFile(name, file, registryPath, blockPrefix));
   }
   if (files.length === 0) {
     throw new Error(`${name}: 配布対象のファイルが 0 件`);
@@ -880,6 +909,8 @@ export async function runAddComponent({
     log(`${name}: 既に記録済み（--force で上書き可能）`);
     return { skipped: true };
   }
+
+  if (isBlock) prepareBlockRelocation(repositoryRoot, target);
 
   // 外部 registry が指定する削除対象は CLI の副作用より前に検証する。
   // 実行前から存在する path は CLI が上書きする可能性もあるため、先に停止する。

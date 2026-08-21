@@ -489,6 +489,31 @@ const loginUpstream = {
   registryDependencies: ["button", "card", "input", "label", "field"],
 };
 
+const dashboardUpstream = {
+  name: "dashboard-01",
+  type: "registry:block",
+  files: [
+    {
+      path: "registry/base-nova/blocks/dashboard-01/page.tsx",
+      type: "registry:page",
+      target: "app/dashboard/page.tsx",
+      content: "export default () => null\n",
+    },
+    {
+      path: "registry/base-nova/blocks/dashboard-01/data.json",
+      type: "registry:file",
+      target: "app/dashboard/data.json",
+      content: '[{"id": 1}]\n',
+    },
+    {
+      path: "registry/base-nova/blocks/dashboard-01/components/chart-area-interactive.tsx",
+      type: "registry:component",
+      content: "export const ChartAreaInteractive = () => null\n",
+    },
+  ],
+  registryDependencies: ["button"],
+};
+
 test("registry:block の配布ファイルを src/blocks/<name>/ へ解決する", async () => {
   const { resolveRegistryTarget } = await loadModule();
   const target = resolveRegistryTarget("login-01", loginUpstream);
@@ -513,6 +538,44 @@ test("registry:page を配布対象から外し droppedFiles へ振り分ける"
       target: "app/login/page.tsx",
     },
   ]);
+});
+
+test("block 所有の registry:file を配布対象へ含める", async () => {
+  const { resolveRegistryTarget } = await loadModule();
+  const target = resolveRegistryTarget("dashboard-01", dashboardUpstream);
+
+  assert.deepEqual(
+    target.files.find((file) => file.registryPath.endsWith("/data.json")),
+    {
+      registryPath: "registry/base-nova/blocks/dashboard-01/data.json",
+      targetPath: "src/blocks/dashboard-01/data.json",
+      upstreamPath: "apps/v4/registry/bases/base/blocks/dashboard-01/data.json",
+      fileType: "registry:file",
+      cliTargetPath: "app/dashboard/data.json",
+    },
+  );
+});
+
+test("registry:file の target に traversal があれば停止する", async () => {
+  const { resolveRegistryTarget } = await loadModule();
+  const upstream = structuredClone(dashboardUpstream);
+  upstream.files.find((file) => file.type === "registry:file").target = "../outside/data.json";
+
+  assert.throws(
+    () => resolveRegistryTarget("dashboard-01", upstream),
+    /registry:file の target.*repo 内の通常相対 path でない/,
+  );
+});
+
+test("registry:file の target が無ければ停止する", async () => {
+  const { resolveRegistryTarget } = await loadModule();
+  const upstream = structuredClone(dashboardUpstream);
+  upstream.files.find((file) => file.type === "registry:file").target = undefined;
+
+  assert.throws(
+    () => resolveRegistryTarget("dashboard-01", upstream),
+    /registry:file に target が無い/,
+  );
 });
 
 test("registry:block の配布ファイルが 0 件なら停止する", async () => {
@@ -735,6 +798,22 @@ test("上流の兄弟ファイルが複数あっても移設先を全件対応�
       to: "src/blocks/sidebar-07/components/app-sidebar.tsx",
     },
     { from: "src/components/nav-main.tsx", to: "src/blocks/sidebar-07/components/nav-main.tsx" },
+  ]);
+});
+
+test("registry:file は上流 target を移設元に使う", async () => {
+  const { blockRelocationPlan, resolveRegistryTarget } = await loadModule();
+  const target = resolveRegistryTarget("dashboard-01", dashboardUpstream);
+
+  assert.deepEqual(blockRelocationPlan(target), [
+    {
+      from: "app/dashboard/data.json",
+      to: "src/blocks/dashboard-01/data.json",
+    },
+    {
+      from: "src/components/chart-area-interactive.tsx",
+      to: "src/blocks/dashboard-01/components/chart-area-interactive.tsx",
+    },
   ]);
 });
 
@@ -1243,14 +1322,70 @@ test("block の未対応 file type は配布せず停止する", async () => {
         type: "registry:block",
         files: [
           {
-            path: "registry/base-nova/blocks/dashboard-01/data.json",
-            type: "registry:file",
-            target: "app/dashboard/data.json",
+            path: "registry/base-nova/blocks/dashboard-01/route.ts",
+            type: "registry:route",
           },
         ],
       }),
-    /block の file type が未対応: registry:file/,
+    /block の file type が未対応: registry:route/,
   );
+});
+
+test("block の移設先に既存ファイルがあれば CLI 実行前に停止する", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+  mkdirSync(join(root, "src/blocks/dashboard-01"), { recursive: true });
+  writeFileSync(join(root, "src/blocks/dashboard-01/data.json"), "既存データ\n");
+  git(root, ["add", "src/blocks/dashboard-01/data.json"]);
+  git(root, ["commit", "-m", "existing block file fixture"]);
+  let ran = false;
+
+  await assert.rejects(
+    runAddComponent({
+      argv: ["dashboard-01", "--modified", "data-table.tsx を配布から除外"],
+      root,
+      fetchImpl: blockFetch(JSON.stringify(dashboardUpstream)),
+      runCommand: () => {
+        ran = true;
+      },
+      log: () => {},
+    }),
+    /移設先が実行前から存在する.*src\/blocks\/dashboard-01\/data\.json/,
+  );
+
+  assert.equal(ran, false);
+  assert.equal(
+    readFileSync(join(root, "src/blocks/dashboard-01/data.json"), "utf8"),
+    "既存データ\n",
+  );
+});
+
+test("registry:file の上流 target に既存ファイルがあれば CLI 実行前に停止する", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+  mkdirSync(join(root, "app/dashboard"), { recursive: true });
+  writeFileSync(join(root, "app/dashboard/data.json"), "既存データ\n");
+  git(root, ["add", "app/dashboard/data.json"]);
+  git(root, ["commit", "-m", "existing registry file target fixture"]);
+  let ran = false;
+
+  await assert.rejects(
+    runAddComponent({
+      argv: ["dashboard-01", "--modified", "data-table.tsx を配布から除外"],
+      root,
+      fetchImpl: blockFetch(JSON.stringify(dashboardUpstream)),
+      runCommand: () => {
+        ran = true;
+      },
+      log: () => {},
+    }),
+    /registry:file の target が実行前から存在する.*app\/dashboard\/data\.json/,
+  );
+
+  assert.equal(ran, false);
+  assert.equal(readFileSync(join(root, "app/dashboard/data.json"), "utf8"), "既存データ\n");
 });
 
 test("prefix が先頭以外にある block の file path を通さない", async () => {
