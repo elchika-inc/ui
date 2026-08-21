@@ -31,8 +31,8 @@ export function NavWorkspaces({
       <SidebarGroupContent>
         <SidebarMenu>
           {workspaces.map((workspace) => (
-            <Collapsible key={workspace.name}>
-              <SidebarMenuItem>
+            <SidebarMenuItem key={workspace.name}>
+              <Collapsible>
                 <SidebarMenuButton render={<a href="/" />}>
                   <span>{workspace.emoji}</span>
                   <span>{workspace.name}</span>
@@ -41,10 +41,11 @@ export function NavWorkspaces({
                   render={<CollapsibleTrigger />}
                   className="left-2 bg-sidebar-accent text-sidebar-accent-foreground data-open:rotate-90"
                   showOnHover
+                  aria-label={`${workspace.name} のページを切り替える`}
                 >
                   <ChevronRightIcon />
                 </SidebarMenuAction>
-                <SidebarMenuAction showOnHover>
+                <SidebarMenuAction showOnHover aria-label={`${workspace.name} にページを追加する`}>
                   <PlusIcon />
                 </SidebarMenuAction>
                 <CollapsibleContent>
@@ -59,8 +60,8 @@ export function NavWorkspaces({
                     ))}
                   </SidebarMenuSub>
                 </CollapsibleContent>
-              </SidebarMenuItem>
-            </Collapsible>
+              </Collapsible>
+            </SidebarMenuItem>
           ))}
           <SidebarMenuItem>
             <SidebarMenuButton className="text-sidebar-foreground/70">

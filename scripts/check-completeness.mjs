@@ -373,8 +373,11 @@ function componentProblems(name, barrelPaths, registry, previewFiles, previewSou
   if (!barrelPaths.has(`./components/ui/${name}`)) {
     problems.push(`${name}: src/index.ts から export されていない`);
   }
-  if (!registry.items.some((i) => i.name === name)) {
+  const registryItem = registry.items.find((item) => item.name === name);
+  if (!registryItem) {
     problems.push(`${name}: registry.json に item が無い`);
+  } else if (registryItem.type !== "registry:ui") {
+    problems.push(`${name}: registry item の type が registry:ui でない`);
   }
   // ルート（.astro）だけでなく中身（src/previews/<name>.tsx）も見る。
   // ルートだけ在って中身が無いと、誤った import でもビルドが通りうる。
@@ -413,6 +416,12 @@ export function checkCompleteness({
   provenance,
 }) {
   const problems = dtsContractProblems(dts);
+  const componentNames = new Set(components);
+  for (const name of blocks) {
+    if (componentNames.has(name)) {
+      problems.push(`${name}: component と block の両方に同名が存在する`);
+    }
+  }
   const barrelPaths = exportedModulePaths(barrel);
   for (const name of components) {
     problems.push(

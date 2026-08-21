@@ -10,7 +10,7 @@ const complete = {
     'export type { ButtonProps } from "./components/ui/button";',
     'export { Button, buttonVariants } from "./components/ui/button";',
   ].join("\n"),
-  registry: { items: [{ name: "button" }] },
+  registry: { items: [{ name: "button", type: "registry:ui" }] },
   previewFiles: ["button.astro", "button-dark.astro"],
   previewSources: ["button.tsx"],
   provenance: {
@@ -150,6 +150,13 @@ test("registry item の欠落を検出する", () => {
   assert.deepEqual(problems, ["button: registry.json に item が無い"]);
 });
 
+test("component と同名の registry item の type 不一致を検出する", () => {
+  const registry = structuredClone(complete.registry);
+  registry.items[0].type = "registry:block";
+  const { problems } = checkCompleteness({ ...complete, registry });
+  assert.ok(problems.includes("button: registry item の type が registry:ui でない"));
+});
+
 test("プレビューの欠落を検出する", () => {
   const { problems } = checkCompleteness({ ...complete, previewFiles: ["button.astro"] });
   assert.deepEqual(problems, ["button: プレビュー button-dark.astro が無い"]);
@@ -256,7 +263,7 @@ const blockRegistryItem = {
 const completeBlock = {
   ...complete,
   blocks: ["login-01"],
-  registry: { items: [{ name: "button" }, blockRegistryItem] },
+  registry: { items: [{ name: "button", type: "registry:ui" }, blockRegistryItem] },
   previewFiles: ["button.astro", "button-dark.astro", "login-01.astro", "login-01-dark.astro"],
   previewSources: ["button.tsx", "login-01.tsx"],
   provenance: {
@@ -296,7 +303,7 @@ test("block が全経路に載っていれば問題を返さない", () => {
 test("block の registry item 欠落を検出する", () => {
   const { problems } = checkCompleteness({
     ...completeBlock,
-    registry: { items: [{ name: "button" }] },
+    registry: { items: [{ name: "button", type: "registry:ui" }] },
   });
   assert.deepEqual(problems, ["login-01: registry.json に item が無い"]);
 });
@@ -306,6 +313,19 @@ test("block と同名の registry item の type 不一致を検出する", () =>
   registry.items.find((item) => item.name === "login-01").type = "registry:ui";
   const { problems } = checkCompleteness({ ...completeBlock, registry });
   assert.ok(problems.includes("login-01: registry item の type が registry:block でない"));
+});
+
+test("component と block の同名二重所属を検出する", () => {
+  const component = structuredClone(complete.provenance.components.button);
+  const provenance = structuredClone(completeBlock.provenance);
+  provenance.components["login-01"] = component;
+  const { problems } = checkCompleteness({
+    ...completeBlock,
+    components: ["button", "login-01"],
+    barrel: [completeBlock.barrel, 'export { Login } from "./components/ui/login-01"'].join("\n"),
+    provenance,
+  });
+  assert.ok(problems.includes("login-01: component と block の両方に同名が存在する"));
 });
 
 test("block の配布ファイル type 不一致を検出する", () => {

@@ -54,6 +54,11 @@ test("上流 JSON から件数に依存せず lucide の期待集合を導出す
             { icon: "GalleryVerticalEndIcon", attributes: [] },
             { icon: "BadgeIcon", attributes: [] },
           ],
+          orderedOccurrences: [
+            { icon: "GalleryVerticalEndIcon", attributes: ['className="size-6"'] },
+            { icon: "GalleryVerticalEndIcon", attributes: [] },
+            { icon: "BadgeIcon", attributes: [] },
+          ],
         },
       ],
     },
@@ -116,6 +121,7 @@ test("registry:page の lucide 期待集合は preview 側へ分離する", asyn
         {
           path: "src/blocks/login-02/components/login-form.tsx",
           occurrences: [{ icon: "BadgeIcon", attributes: [] }],
+          orderedOccurrences: [{ icon: "BadgeIcon", attributes: [] }],
         },
       ],
     },
@@ -124,6 +130,7 @@ test("registry:page の lucide 期待集合は preview 側へ分離する", asyn
         {
           path: "src/previews/login-02.tsx",
           occurrences: [{ icon: "GalleryVerticalEndIcon", attributes: [] }],
+          orderedOccurrences: [{ icon: "GalleryVerticalEndIcon", attributes: [] }],
         },
       ],
     },
@@ -302,4 +309,64 @@ test("上流に既存の同一アイコンがあっても未展開 marker の身
 
   assert.ok(result.problems.some((problem) => problem.includes("SearchIcon")));
   assert.equal(result.stats.matchedOccurrences, 0);
+});
+
+test("既存アイコンと marker 展開結果の属性を位置交換しても一致扱いにしない", async () => {
+  const { inspectGeneratedIcons } = await loadChecker();
+  const result = inspectGeneratedIcons(
+    {
+      "sidebar-01": [
+        {
+          path: "src/blocks/sidebar-01/components/nav-main.tsx",
+          baselineOccurrences: [{ icon: "SearchIcon", attributes: ['className="base"'] }],
+          occurrences: [{ icon: "SearchIcon", attributes: ['className="marker"'] }],
+          orderedOccurrences: [
+            { icon: "SearchIcon", attributes: ['className="base"'] },
+            { icon: "SearchIcon", attributes: ['className="marker"'] },
+          ],
+        },
+      ],
+    },
+    {
+      "sidebar-01": [
+        {
+          path: "src/blocks/sidebar-01/components/nav-main.tsx",
+          source: `
+            import { SearchIcon } from "lucide-react"
+            export const Nav = () => <><SearchIcon className="marker" /><SearchIcon className="base" /></>
+          `,
+        },
+      ],
+    },
+  );
+
+  assert.ok(result.problems.some((problem) => problem.includes("位置")));
+  assert.equal(result.stats.matchedOccurrences, 0);
+});
+
+test("生成物に IconPlaceholder が残っていれば独立に検出する", async () => {
+  const { inspectGeneratedIcons } = await loadChecker();
+  const result = inspectGeneratedIcons(
+    {
+      "sidebar-01": [
+        {
+          path: "src/blocks/sidebar-01/components/nav-main.tsx",
+          occurrences: [{ icon: "SearchIcon", attributes: [] }],
+        },
+      ],
+    },
+    {
+      "sidebar-01": [
+        {
+          path: "src/blocks/sidebar-01/components/nav-main.tsx",
+          source: `
+            import { SearchIcon } from "lucide-react"
+            export const Nav = () => <><SearchIcon /><IconPlaceholder lucide="SearchIcon" /></>
+          `,
+        },
+      ],
+    },
+  );
+
+  assert.ok(result.problems.some((problem) => problem.includes("IconPlaceholder が残っている")));
 });

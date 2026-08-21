@@ -853,9 +853,23 @@ export async function runAddComponent({
   const target = resolveRegistryTarget(name, upstreamItem);
   const isBlock = target.itemType === "registry:block";
 
+  // lane の衝突を provenance だけで判断すると、台帳の部分欠損時に同名の
+  // registry item や disk 実体を上書きできてしまう。CLI の副作用より前に、
+  // 独立した 3 根（provenance / registry / disk）をすべて照合する。
+  const registryBefore = readJson(repositoryRoot, "registry.json");
+  const existingRegistryItem = registryBefore.items.find((item) => item.name === name);
+  const oppositeDiskPath = isBlock
+    ? join(repositoryRoot, "src/components/ui", `${name}.tsx`)
+    : join(repositoryRoot, "src/blocks", name);
+
   const otherLane = isBlock ? provenance.components?.[name] : provenance.blocks?.[name];
-  if (otherLane) {
-    throw new Error(`${name}: component と block の両方に同名の来歴がある`);
+  const registryLaneConflict = existingRegistryItem
+    ? isBlock
+      ? existingRegistryItem.type !== "registry:block"
+      : existingRegistryItem.type === "registry:block"
+    : false;
+  if (otherLane || registryLaneConflict || existsSync(oppositeDiskPath)) {
+    throw new Error(`${name}: component と block の同名衝突がある`);
   }
 
   if (shouldSkipRecorded(provenance, name, force, isBlock ? "block" : "component")) {
@@ -927,7 +941,7 @@ export async function runAddComponent({
     provenance.components ??= {};
     provenance.components[name] = entry;
   }
-  const registry = readJson(repositoryRoot, "registry.json");
+  const registry = registryBefore;
   const registryItem = buildRegistryItem(
     name,
     upstreamItem,

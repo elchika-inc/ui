@@ -132,6 +132,11 @@ export function inspectUpstreamBlocks(entries) {
           source: file.content,
         }).occurrences;
         if (baselineOccurrences.length > 0) expectedFile.baselineOccurrences = baselineOccurrences;
+        expectedFile.orderedOccurrences = inspectGeneratedSource({
+          path,
+          source: file.content,
+          includePlaceholders: true,
+        }).occurrences;
       }
     }
     if (blockPlaceholderCount > 0) {
@@ -161,12 +166,13 @@ export function inspectUpstreamBlocks(entries) {
   };
 }
 
-function inspectGeneratedSource({ path, source }) {
+function inspectGeneratedSource({ path, source, includePlaceholders = false }) {
   const importsByLocal = new Map();
   const importedIcons = new Set();
   const occurrences = [];
   const parsed = sourceFile(path, source);
-  const visit = (node) => {
+  let placeholderCount = 0;
+  const collectImports = (node) => {
     if (
       ts.isImportDeclaration(node) &&
       ts.isStringLiteral(node.moduleSpecifier) &&
@@ -181,18 +187,26 @@ function inspectGeneratedSource({ path, source }) {
         }
       }
     }
+    ts.forEachChild(node, collectImports);
+  };
+  collectImports(parsed);
+  const visit = (node) => {
     if (
       (ts.isJsxSelfClosingElement(node) || ts.isJsxOpeningElement(node)) &&
       ts.isIdentifier(node.tagName)
     ) {
       const local = node.tagName.text;
-      const icon = importsByLocal.get(local);
+      if (local === "IconPlaceholder") placeholderCount++;
+      const icon =
+        includePlaceholders && local === "IconPlaceholder"
+          ? stringAttribute(node, "lucide")
+          : importsByLocal.get(local);
       if (icon) occurrences.push({ icon, attributes: preservedAttributes(node) });
     }
     ts.forEachChild(node, visit);
   };
   visit(parsed);
-  return { path, importedIcons, occurrences };
+  return { path, importedIcons, occurrences, placeholderCount };
 }
 
 function normalizedExpectedFiles(expected) {
@@ -235,8 +249,47 @@ export function inspectGeneratedIcons(expectedByBlock, generatedByBlock) {
         problems.push(`${name}: ${expectedFile.path} の生成物が無い`);
         continue;
       }
+      const remainingPlaceholders = candidates.reduce(
+        (sum, file) => sum + file.placeholderCount,
+        0,
+      );
+      if (remainingPlaceholders > 0) {
+        problems.push(
+          `${name}: ${expectedFile.path ? `${expectedFile.path} に ` : ""}IconPlaceholder が残っている（${remainingPlaceholders} 箇所）`,
+        );
+      }
       const importedIcons = new Set(candidates.flatMap((file) => [...file.importedIcons]));
       const actual = candidates.flatMap((file) => file.occurrences).map((item) => ({ ...item }));
+      for (const occurrence of expectedFile.occurrences) {
+        if (!importedIcons.has(occurrence.icon)) {
+          problems.push(
+            `${name}: ${expectedFile.path ? `${expectedFile.path} の ` : ""}${occurrence.icon} が lucide-react から named import されていない`,
+          );
+        }
+      }
+      if (expectedFile.orderedOccurrences) {
+        const ordered = expectedFile.orderedOccurrences;
+        const mismatchIndex = Array.from(
+          { length: Math.max(ordered.length, actual.length) },
+          (_, index) => index,
+        ).find(
+          (index) =>
+            !ordered[index] ||
+            !actual[index] ||
+            ordered[index].icon !== actual[index].icon ||
+            !sameAttributes(ordered[index].attributes, actual[index].attributes),
+        );
+        if (mismatchIndex !== undefined) {
+          const expectedAtPosition = ordered[mismatchIndex];
+          const actualAtPosition = actual[mismatchIndex];
+          problems.push(
+            `${name}: ${expectedFile.path ? `${expectedFile.path} の ` : ""}アイコン位置 #${mismatchIndex + 1} が一致しない（期待 ${expectedAtPosition ? `${expectedAtPosition.icon} ${expectedAtPosition.attributes.join(" ") || "属性なし"}` : "なし"} / 実測 ${actualAtPosition ? `${actualAtPosition.icon} ${actualAtPosition.attributes.join(" ") || "属性なし"}` : "なし"}）`,
+          );
+        } else if (remainingPlaceholders === 0) {
+          matchedOccurrences += expectedFile.occurrences.length;
+        }
+        continue;
+      }
       for (const baseline of expectedFile.baselineOccurrences ?? []) {
         const match = actual.findIndex(
           (candidate) =>
@@ -247,9 +300,6 @@ export function inspectGeneratedIcons(expectedByBlock, generatedByBlock) {
       }
       for (const occurrence of expectedFile.occurrences) {
         if (!importedIcons.has(occurrence.icon)) {
-          problems.push(
-            `${name}: ${expectedFile.path ? `${expectedFile.path} の ` : ""}${occurrence.icon} が lucide-react から named import されていない`,
-          );
           continue;
         }
         const match = actual.findIndex(

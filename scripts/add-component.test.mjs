@@ -987,7 +987,59 @@ test("component と同名の block は kind 確定後に衝突として停止す
       },
       log: () => {},
     }),
-    /component と block の両方に同名の来歴がある/,
+    /component と block の同名衝突/,
+  );
+
+  assert.equal(ran, false);
+});
+
+test("component と同名の registry item があれば来歴欠落でも CLI 前に停止する", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  writeJson(join(root, "registry.json"), {
+    items: [{ name: "login-01", type: "registry:ui" }],
+  });
+  git(root, ["add", "registry.json"]);
+  git(root, ["commit", "-m", "registry collision fixture"]);
+  const { runAddComponent } = await loadModule();
+  let ran = false;
+
+  await assert.rejects(
+    runAddComponent({
+      argv: ["login-01", "--modified", "registry:page を配布から除外"],
+      root,
+      fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+      runCommand: () => {
+        ran = true;
+      },
+      log: () => {},
+    }),
+    /component と block の同名衝突/,
+  );
+
+  assert.equal(ran, false);
+});
+
+test("component と同名の disk 実体があれば来歴欠落でも CLI 前に停止する", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  writeFileSync(join(root, "src/components/ui/login-01.tsx"), "export const Login = null;\n");
+  git(root, ["add", "src/components/ui/login-01.tsx"]);
+  git(root, ["commit", "-m", "disk collision fixture"]);
+  const { runAddComponent } = await loadModule();
+  let ran = false;
+
+  await assert.rejects(
+    runAddComponent({
+      argv: ["login-01", "--modified", "registry:page を配布から除外"],
+      root,
+      fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+      runCommand: () => {
+        ran = true;
+      },
+      log: () => {},
+    }),
+    /component と block の同名衝突/,
   );
 
   assert.equal(ran, false);

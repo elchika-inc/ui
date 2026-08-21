@@ -179,8 +179,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarGroup>
           <SidebarMenu>
             {data.navMain.map((item, index) => (
-              <Collapsible key={item.title} defaultOpen={index === 1} className="group/collapsible">
-                <SidebarMenuItem>
+              <SidebarMenuItem key={item.title}>
+                <Collapsible defaultOpen={index === 1} className="group/collapsible">
                   <SidebarMenuButton render={<CollapsibleTrigger />}>
                     {item.title}{" "}
                     <PlusIcon className="ml-auto group-aria-expanded/menu-button:hidden" />
@@ -202,8 +202,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       </SidebarMenuSub>
                     </CollapsibleContent>
                   ) : null}
-                </SidebarMenuItem>
-              </Collapsible>
+                </Collapsible>
+              </SidebarMenuItem>
             ))}
           </SidebarMenu>
         </SidebarGroup>

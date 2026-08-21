@@ -1762,13 +1762,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。フォーム control の固定 id を useId へ変更し複数配置時の label 関連付けを維持。list の直下要素を li に正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-05/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-05/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "86a118ac941085c698369e9b8a5ca0b5f273b1ecc38ab819ced42f53e2f585e5"
+          "generatedContentSha256": "897005614b7729ec6c9e749acd1273c3639caa95f357ebee2453336ab456ba83"
         },
         {
           "path": "src/blocks/sidebar-05/components/search-form.tsx",
@@ -1894,7 +1894,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。禁止表記 Acme Inc を Acme へ正規化",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。禁止表記 Acme Inc を Acme へ正規化。project link と action の hit area を分離して24px以上を確保",
       "files": [
         {
           "path": "src/blocks/sidebar-08/components/app-sidebar.tsx",
@@ -1912,7 +1912,7 @@
           "path": "src/blocks/sidebar-08/components/nav-projects.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-08/components/nav-projects.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "17dc44211a7fd05cec7ba4e6b9729070e75bc430ce5c24c2226f0e32c01f4bae"
+          "generatedContentSha256": "3c9d1a3b8feff59d5edc76c0adde3ee975767262ef0932af6659fd11dc884b4a"
         },
         {
           "path": "src/blocks/sidebar-08/components/nav-secondary.tsx",
@@ -1984,7 +1984,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。上流の registryDependencies に宣言漏れがあったため、配布ファイルの import から @elchika/button を補完。禁止表記 Acme Inc を Acme へ正規化。icon-only button に accessible name を追加し、popover の自動openを isolated preview のみに限定",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。上流の registryDependencies に宣言漏れがあったため、配布ファイルの import から @elchika/button を補完。禁止表記 Acme Inc を Acme へ正規化。icon-only button に accessible name を追加し、popover の自動openを isolated preview のみに限定。list の直下要素を li に正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-10/components/app-sidebar.tsx",
@@ -2020,7 +2020,7 @@
           "path": "src/blocks/sidebar-10/components/nav-workspaces.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-10/components/nav-workspaces.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "f89dc33aa907b8bc58d3e4c750d083b11c4b22aa12040093b87fcab1d9c31fee"
+          "generatedContentSha256": "3cede0d80cfa770000c7f4fa223088952605d43b71b925ed547e5dd947415761"
         },
         {
           "path": "src/blocks/sidebar-10/components/team-switcher.tsx",
@@ -2050,13 +2050,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。file tree の直下要素を li に正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-11/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-11/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "7093dc40d035011138ee585eaf0904d69ffdf79050bbcfaac849cdd1248a3fd9"
+          "generatedContentSha256": "4c5784c382f2c077f06eb3b351f9704849830129289927b4c6ee7f4051c2c207"
         },
         {
           "dropped": true,
@@ -2188,7 +2188,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。Calendar の locale を enUS、初期日を固定値へ変更し SSR/CSR の hydration を一致。禁止表記 Acme Inc を Acme へ正規化",
+      "modified": "registry:page を配布から除外し、IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。Calendar の locale を enUS、初期日を固定値へ変更し SSR/CSR の hydration を一致。禁止表記 Acme Inc を Acme へ正規化。icon-only button に accessible name を追加し、list の直下要素を li に正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-15/components/calendars.tsx",
@@ -2230,7 +2230,7 @@
           "path": "src/blocks/sidebar-15/components/nav-workspaces.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/nav-workspaces.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "f89dc33aa907b8bc58d3e4c750d083b11c4b22aa12040093b87fcab1d9c31fee"
+          "generatedContentSha256": "3cede0d80cfa770000c7f4fa223088952605d43b71b925ed547e5dd947415761"
         },
         {
           "path": "src/blocks/sidebar-15/components/sidebar-left.tsx",
@@ -2272,7 +2272,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、CLI が IconPlaceholder を lucide-react へ自動展開。h-[calc(100svh-var(--header-height))] を component-local CSS 変数へ正規化。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。禁止表記 Acme Inc を Acme へ正規化。search form の固定 id を useId へ変更し、sidebar toggle に accessible name を追加",
+      "modified": "registry:page を配布から除外し、CLI が IconPlaceholder を lucide-react へ自動展開。h-[calc(100svh-var(--header-height))] を component-local CSS 変数へ正規化。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。配布されない avatar URL を省略可能な入力へ変更し、AvatarFallback で自己完結。禁止表記 Acme Inc を Acme へ正規化。search form の固定 id を useId へ変更し、sidebar toggle に accessible name を追加。project link と action の hit area を分離して24px以上を確保",
       "files": [
         {
           "path": "src/blocks/sidebar-16/components/app-sidebar.tsx",
@@ -2290,7 +2290,7 @@
           "path": "src/blocks/sidebar-16/components/nav-projects.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/nav-projects.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "a6951e5f5d6de1ccfa0eee650bb27049b354fc59e4d22caee88a74b96e1b1bb2"
+          "generatedContentSha256": "802ff149e5b0a7a5927cf261abd140d96c0ea532ab9092daade625019ae7e8b4"
         },
         {
           "path": "src/blocks/sidebar-16/components/nav-secondary.tsx",
