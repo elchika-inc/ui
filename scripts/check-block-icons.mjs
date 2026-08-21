@@ -110,9 +110,11 @@ export function inspectUpstreamBlocks(entries) {
             if (!targetPath) {
               problems.push(`${name}: ${path} を生成物 path へ対応付けられない`);
             } else {
-              const occurrences = filesByTarget[target].get(targetPath) ?? [];
-              occurrences.push({ icon, attributes: preservedAttributes(node) });
-              filesByTarget[target].set(targetPath, occurrences);
+              const expectedFile = filesByTarget[target].get(targetPath) ?? {
+                occurrences: [],
+              };
+              expectedFile.occurrences.push({ icon, attributes: preservedAttributes(node) });
+              filesByTarget[target].set(targetPath, expectedFile);
             }
             uniqueIcons.add(icon);
           }
@@ -120,15 +122,26 @@ export function inspectUpstreamBlocks(entries) {
         ts.forEachChild(node, visit);
       };
       visit(parsed);
+      for (const files of Object.values(filesByTarget)) {
+        const expectedFile = files.get(
+          generatedPath(name, file, file.type === "registry:page" ? "previews" : "blocks"),
+        );
+        if (!expectedFile) continue;
+        const baselineOccurrences = inspectGeneratedSource({
+          path,
+          source: file.content,
+        }).occurrences;
+        if (baselineOccurrences.length > 0) expectedFile.baselineOccurrences = baselineOccurrences;
+      }
     }
     if (blockPlaceholderCount > 0) {
       blocksWithPlaceholders++;
       for (const target of ["blocks", "previews"]) {
         const files = filesByTarget[target];
         if (files.size > 0) {
-          expectedByTarget[target][name] = [...files.entries()].map(([path, occurrences]) => ({
+          expectedByTarget[target][name] = [...files.entries()].map(([path, expectedFile]) => ({
             path,
-            occurrences,
+            ...expectedFile,
           }));
         }
       }
@@ -224,6 +237,14 @@ export function inspectGeneratedIcons(expectedByBlock, generatedByBlock) {
       }
       const importedIcons = new Set(candidates.flatMap((file) => [...file.importedIcons]));
       const actual = candidates.flatMap((file) => file.occurrences).map((item) => ({ ...item }));
+      for (const baseline of expectedFile.baselineOccurrences ?? []) {
+        const match = actual.findIndex(
+          (candidate) =>
+            candidate.icon === baseline.icon &&
+            sameAttributes(candidate.attributes, baseline.attributes),
+        );
+        if (match >= 0) actual.splice(match, 1);
+      }
       for (const occurrence of expectedFile.occurrences) {
         if (!importedIcons.has(occurrence.icon)) {
           problems.push(

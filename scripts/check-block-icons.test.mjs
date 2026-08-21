@@ -276,3 +276,30 @@ test("IconPlaceholder から引き継ぐ属性が欠けていれば検出する"
   assert.ok(result.problems.some((problem) => problem.includes("属性")));
   assert.equal(result.stats.matchedOccurrences, 0);
 });
+
+test("上流に既存の同一アイコンがあっても未展開 marker の身代わりにしない", async () => {
+  const { inspectGeneratedIcons } = await loadChecker();
+  const result = inspectGeneratedIcons(
+    {
+      "sidebar-01": [
+        {
+          path: "src/blocks/sidebar-01/components/nav-main.tsx",
+          baselineOccurrences: [{ icon: "SearchIcon", attributes: [] }],
+          occurrences: [{ icon: "SearchIcon", attributes: [] }],
+        },
+      ],
+    },
+    {
+      "sidebar-01": [
+        {
+          path: "src/blocks/sidebar-01/components/nav-main.tsx",
+          source:
+            'import { SearchIcon } from "lucide-react"; export const Nav = () => <SearchIcon />;',
+        },
+      ],
+    },
+  );
+
+  assert.ok(result.problems.some((problem) => problem.includes("SearchIcon")));
+  assert.equal(result.stats.matchedOccurrences, 0);
+});

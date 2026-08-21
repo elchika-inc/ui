@@ -297,9 +297,11 @@ function blockFileSetProblems(name, registry, files, onDisk, sources) {
     // block の実装コードは registry:component でなければ CLI の配置契約が変わる。
     // 一方 data.json のような block 固有 asset は registry:file が正しいため、
     // 全ファイルを一律に registry:component へ固定しない。
-    if (/\.[cm]?[jt]sx?$/.test(file.path ?? "") && file.type !== "registry:component") {
+    const isCode = /\.[cm]?[jt]sx?$/.test(file.path ?? "");
+    const expectedType = isCode ? "registry:component" : "registry:file";
+    if (file.type !== expectedType) {
       problems.push(
-        `${name}: registry item の ${file.path ?? "path不明"} の type が registry:component でない`,
+        `${name}: registry item の ${file.path ?? "path不明"} の type が ${expectedType} でない`,
       );
     }
   }

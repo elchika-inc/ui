@@ -545,6 +545,27 @@ test("block 自身の registry:file を法務ファイルと取り違えない",
   assert.deepEqual(checkCompleteness({ ...completeBlock, registry, provenance }).problems, []);
 });
 
+test("block の非code配布ファイルに registry:file 以外を許さない", () => {
+  const registry = structuredClone(completeBlock.registry);
+  registry.items[1].files.push({
+    path: "src/blocks/login-01/data.json",
+    type: "registry:page",
+  });
+  const provenance = structuredClone(completeBlock.provenance);
+  provenance.blocks["login-01"].files.push({
+    path: "src/blocks/login-01/data.json",
+    upstreamPath: "apps/v4/registry/bases/base/blocks/login-01/data.json",
+    upstreamPathSha: "0123456789abcdef0123456789abcdef01234567",
+    generatedContentSha256: "f".repeat(64),
+  });
+  const { problems } = checkCompleteness({ ...completeBlock, registry, provenance });
+  assert.ok(
+    problems.includes(
+      "login-01: registry item の src/blocks/login-01/data.json の type が registry:file でない",
+    ),
+  );
+});
+
 // 「全キーが x」だけでは、個別キーの正規表現を緩めても検出できない
 // （notDeepEqual は 7 キーのうち 1 つでも鳴れば通る）。per-key で固定する。
 test("block の来歴は各キーの形式を個別に要求する", () => {

@@ -84,10 +84,11 @@ test("同じoptionを重複指定したら停止する", async () => {
 
 test("pin 済み CLI の add command を組み立てる", async () => {
   const { shadcnCommand } = await loadModule();
-  assert.deepEqual(shadcnCommand("4.16.0", "calendar"), {
+  assert.deepEqual(shadcnCommand("4.16.0", "/tmp/calendar.json"), {
     command: "npx",
-    args: ["shadcn@4.16.0", "add", "--overwrite", "@shadcn/calendar"],
+    args: ["shadcn@4.16.0", "add", "--overwrite", "/tmp/calendar.json"],
   });
+  assert.throws(() => shadcnCommand("4.16.0", "@shadcn/calendar"), /絶対 path の JSON/);
 });
 
 test("別コンポーネントの変更を実ファイルから復元する", async (t) => {
@@ -302,7 +303,10 @@ test("wrapper が pin add から2つの hash・来歴・registryまで記録し�
   };
   const commands = [];
   const logs = [];
+  let pinnedItemPath;
   const runCommand = (command, args, options) => {
+    pinnedItemPath = args.at(-1);
+    assert.equal(readFileSync(pinnedItemPath, "utf8"), JSON.stringify(upstreamItem));
     commands.push({ command, args, cwd: options.cwd });
     writeFileSync(join(root, "src/components/ui/calendar.tsx"), generated);
     writeFileSync(join(root, "src/components/ui/input.tsx"), "input overwritten\n");
@@ -334,13 +338,12 @@ test("wrapper が pin add から2つの hash・来歴・registryまで記録し�
     log: (message) => logs.push(message),
   });
 
-  assert.deepEqual(commands, [
-    {
-      command: "npx",
-      args: ["shadcn@4.16.0", "add", "--overwrite", "@shadcn/calendar"],
-      cwd: git(root, ["rev-parse", "--show-toplevel"]).trim(),
-    },
-  ]);
+  assert.equal(commands.length, 1);
+  assert.equal(commands[0].command, "npx");
+  assert.deepEqual(commands[0].args.slice(0, 3), ["shadcn@4.16.0", "add", "--overwrite"]);
+  assert.equal(commands[0].args.at(-1), pinnedItemPath);
+  assert.equal(commands[0].cwd, git(root, ["rev-parse", "--show-toplevel"]).trim());
+  assert.equal(existsSync(pinnedItemPath), false);
   assert.deepEqual(result.reconciled.restored, ["src/components/ui/input.tsx"]);
   assert.equal(readFileSync(join(root, "src/components/ui/input.tsx"), "utf8"), "input original\n");
   const provenance = JSON.parse(readFileSync(join(root, "provenance.json"), "utf8"));
@@ -533,6 +536,42 @@ test("block の file path が block ディレクトリ配下でなければ停�
         files: [{ path: "registry/base-nova/ui/login-form.tsx", type: "registry:component" }],
       }),
     /block の file path が想定外/,
+  );
+});
+
+test("block の registry:page path に traversal があれば停止する", async () => {
+  const { resolveRegistryTarget } = await loadModule();
+  assert.throws(
+    () =>
+      resolveRegistryTarget("login-01", {
+        type: "registry:block",
+        files: [
+          {
+            path: "registry/base-nova/blocks/login-01/../other/page.tsx",
+            type: "registry:page",
+            target: "app/login/page.tsx",
+          },
+        ],
+      }),
+    /repo 内の通常相対 path でない/,
+  );
+});
+
+test("block の registry:component に target があれば停止する", async () => {
+  const { resolveRegistryTarget } = await loadModule();
+  assert.throws(
+    () =>
+      resolveRegistryTarget("login-01", {
+        type: "registry:block",
+        files: [
+          {
+            path: "registry/base-nova/blocks/login-01/components/login-form.tsx",
+            type: "registry:component",
+            target: "package.json",
+          },
+        ],
+      }),
+    /registry:component に target は指定できない/,
   );
 });
 
@@ -736,13 +775,16 @@ test("block を add すると移設してから reconcile し provenance.blocks 
   const generated =
     'import { Button } from "@/components/ui/button";\nexport const LoginForm = Button;\n';
   const logs = [];
+  let pinnedItemPath;
 
   const result = await runAddComponent({
     argv: ["login-01", "--modified", "registry:page を配布から除外"],
     root,
     fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
     // CLI は components alias 直下へフラットに落とす（実測）。既存の tracked component も上書きする。
-    runCommand: () => {
+    runCommand: (_command, args) => {
+      pinnedItemPath = args.at(-1);
+      assert.equal(readFileSync(pinnedItemPath, "utf8"), JSON.stringify(loginUpstream));
       writeFileSync(join(root, "src/components/login-form.tsx"), generated);
       writeFileSync(join(root, "src/components/ui/button.tsx"), "button overwritten\n");
     },
@@ -750,6 +792,7 @@ test("block を add すると移設してから reconcile し provenance.blocks 
   });
 
   assert.equal(result.skipped, false);
+  assert.equal(existsSync(pinnedItemPath), false);
   // 移設が済んでいる
   assert.equal(existsSync(join(root, "src/components/login-form.tsx")), false);
   assert.equal(
@@ -922,7 +965,7 @@ test("配布しない page の target が実行前から存在すれば CLI よ�
   assert.equal(readFileSync(join(root, "app/login/page.tsx"), "utf8"), "既存 page\n");
 });
 
-test("component と同名の block は component 来歴だけで早期 skip しない", async (t) => {
+test("component と同名の block は kind 確定後に衝突として停止する", async (t) => {
   const root = prepareWrapperRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));
   writeJson(join(root, "provenance.json"), {
@@ -934,19 +977,20 @@ test("component と同名の block は component 来歴だけで早期 skip し�
   const { runAddComponent } = await loadModule();
   let ran = false;
 
-  const result = await runAddComponent({
-    argv: ["login-01", "--modified", "registry:page を配布から除外"],
-    root,
-    fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
-    runCommand: () => {
-      ran = true;
-      writeFileSync(join(root, "src/components/login-form.tsx"), "export {}\n");
-    },
-    log: () => {},
-  });
+  await assert.rejects(
+    runAddComponent({
+      argv: ["login-01", "--modified", "registry:page を配布から除外"],
+      root,
+      fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+      runCommand: () => {
+        ran = true;
+      },
+      log: () => {},
+    }),
+    /component と block の両方に同名の来歴がある/,
+  );
 
-  assert.equal(ran, true);
-  assert.equal(result.skipped, false);
+  assert.equal(ran, false);
 });
 
 test("block の registry item は配布ファイルの import から npm 依存を補う", async (t) => {

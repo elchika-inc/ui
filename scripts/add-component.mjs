@@ -2,7 +2,16 @@
 
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  renameSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
 import { basename, dirname, extname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -125,13 +134,26 @@ export function parseArgs(argv) {
   return { name, modified: modified?.trim(), force, resync };
 }
 
-export function shadcnCommand(version, name) {
+export function shadcnCommand(version, itemPath) {
   if (!exactSemver.test(version)) {
     throw new Error(`.shadcn-cli-version が exact semver でない: ${version}`);
   }
+  if (!isAbsolute(itemPath) || extname(itemPath) !== ".json") {
+    throw new Error(`shadcn の入力は絶対 path の JSON であること: ${itemPath}`);
+  }
   return {
     command: "npx",
-    args: [`shadcn@${version}`, "add", "--overwrite", `@shadcn/${name}`],
+    args: [`shadcn@${version}`, "add", "--overwrite", itemPath],
+  };
+}
+
+function pinnedRegistryItem(name, upstreamText) {
+  const directory = mkdtempSync(join(tmpdir(), "elchika-shadcn-item-"));
+  const path = join(directory, `${name}.json`);
+  writeFileSync(path, upstreamText, { flag: "wx" });
+  return {
+    path,
+    remove: () => rmSync(directory, { recursive: true, force: true }),
   };
 }
 
@@ -441,6 +463,7 @@ function resolveBlockTarget(name, upstreamItem) {
     if (typeof registryPath !== "string" || !registryPath.startsWith(blockPrefix)) {
       throw new Error(`${name}: block の file path が想定外: ${registryPath ?? "なし"}`);
     }
+    assertContainedPath(`${name}: block の registry path`, registryPath);
     if (file.type === "registry:page") {
       droppedFiles.push({
         registryPath,
@@ -453,6 +476,9 @@ function resolveBlockTarget(name, upstreamItem) {
       throw new Error(
         `${name}: block の file type が未対応: ${file.type ?? "なし"} (${registryPath})`,
       );
+    }
+    if (file.target !== undefined) {
+      throw new Error(`${name}: registry:component に target は指定できない: ${file.target}`);
     }
     files.push({
       registryPath,
@@ -827,6 +853,11 @@ export async function runAddComponent({
   const target = resolveRegistryTarget(name, upstreamItem);
   const isBlock = target.itemType === "registry:block";
 
+  const otherLane = isBlock ? provenance.components?.[name] : provenance.blocks?.[name];
+  if (otherLane) {
+    throw new Error(`${name}: component と block の両方に同名の来歴がある`);
+  }
+
   if (shouldSkipRecorded(provenance, name, force, isBlock ? "block" : "component")) {
     log(`${name}: 既に記録済み（--force で上書き可能）`);
     return { skipped: true };
@@ -836,8 +867,16 @@ export async function runAddComponent({
   // 実行前から存在する path は CLI が上書きする可能性もあるため、先に停止する。
   const droppedTargets = prepareDroppedPages(repositoryRoot, target);
 
-  const command = shadcnCommand(cliVersion, name);
-  runCommand(command.command, command.args, { cwd: repositoryRoot, stdio: "inherit" });
+  // 検証・来歴hash・CLI実行を同じresponse bytesへ束縛する。
+  // @shadcn/<name>を渡すとCLIがremoteを再取得し、preflight後に内容が変わる
+  // TOCTOUが生じるため、shadcn公式のlocal item入力を使う。
+  const pinnedItem = pinnedRegistryItem(name, upstreamText);
+  try {
+    const command = shadcnCommand(cliVersion, pinnedItem.path);
+    runCommand(command.command, command.args, { cwd: repositoryRoot, stdio: "inherit" });
+  } finally {
+    pinnedItem.remove();
+  }
 
   if (isBlock) relocateBlockFiles(repositoryRoot, target, log);
   // reconcile より前に呼ぶ。後にすると、CLI が作った app/<name>/page.tsx が
