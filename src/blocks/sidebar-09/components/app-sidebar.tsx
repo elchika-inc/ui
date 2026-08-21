@@ -1,9 +1,15 @@
-"use client"
+"use client";
 
-import * as React from "react"
-
-import { NavUser } from "@/components/nav-user"
-import { Label } from "@/components/ui/label"
+import {
+  ArchiveXIcon,
+  FileIcon,
+  InboxIcon,
+  SendIcon,
+  TerminalIcon,
+  Trash2Icon,
+} from "lucide-react";
+import * as React from "react";
+import { Label } from "@/components/ui/label";
 import {
   Sidebar,
   SidebarContent,
@@ -16,11 +22,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
-import { Switch } from "@/components/ui/switch"
-import { InboxIcon, FileIcon, SendIcon, ArchiveXIcon, Trash2Icon, TerminalIcon } from "lucide-react"
+} from "@/components/ui/sidebar";
+import { Switch } from "@/components/ui/switch";
+import { NavUser } from "./nav-user";
 
-// This is sample data
+// サンプルデータ。
 const data = {
   user: {
     name: "shadcn",
@@ -31,46 +37,31 @@ const data = {
     {
       title: "Inbox",
       url: "#",
-      icon: (
-        <InboxIcon
-        />
-      ),
+      icon: <InboxIcon />,
       isActive: true,
     },
     {
       title: "Drafts",
       url: "#",
-      icon: (
-        <FileIcon
-        />
-      ),
+      icon: <FileIcon />,
       isActive: false,
     },
     {
       title: "Sent",
       url: "#",
-      icon: (
-        <SendIcon
-        />
-      ),
+      icon: <SendIcon />,
       isActive: false,
     },
     {
       title: "Junk",
       url: "#",
-      icon: (
-        <ArchiveXIcon
-        />
-      ),
+      icon: <ArchiveXIcon />,
       isActive: false,
     },
     {
       title: "Trash",
       url: "#",
-      icon: (
-        <Trash2Icon
-        />
-      ),
+      icon: <Trash2Icon />,
       isActive: false,
     },
   ],
@@ -156,13 +147,13 @@ const data = {
         "To celebrate our recent project success, I'd like to organize a team dinner.\nAre you available next Friday evening? Please let me know your preferences.",
     },
   ],
-}
+};
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  // Note: I'm using state to show active item.
-  // IRL you should use the url/router.
-  const [activeItem, setActiveItem] = React.useState(data.navMain[0])
-  const [mails, setMails] = React.useState(data.mails)
-  const { setOpen } = useSidebar()
+  // 表示上のアクティブ項目を示すため state を使用する。
+  // 実運用では URL/router と同期する。
+  const [activeItem, setActiveItem] = React.useState(data.navMain[0]);
+  const [mails, setMails] = React.useState(data.mails);
+  const { setOpen } = useSidebar();
   return (
     <Sidebar
       collapsible="icon"
@@ -179,11 +170,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton
-                size="lg"
-                className="md:h-8 md:p-0"
-                render={<a href="#" />}
-              >
+              <SidebarMenuButton size="lg" className="md:h-8 md:p-0" render={<a href="/" />}>
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <TerminalIcon className="size-4" />
                 </div>
@@ -207,15 +194,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                         hidden: false,
                       }}
                       onClick={() => {
-                        setActiveItem(item)
-                        const mail = data.mails.sort(() => Math.random() - 0.5)
-                        setMails(
-                          mail.slice(
-                            0,
-                            Math.max(5, Math.floor(Math.random() * 10) + 1)
-                          )
-                        )
-                        setOpen(true)
+                        setActiveItem(item);
+                        const mail = data.mails.sort(() => Math.random() - 0.5);
+                        setMails(mail.slice(0, Math.max(5, Math.floor(Math.random() * 10) + 1)));
+                        setOpen(true);
                       }}
                       isActive={activeItem?.title === item.title}
                       className="px-2.5 md:px-2"
@@ -239,9 +221,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <Sidebar collapsible="none" className="hidden flex-1 md:flex">
         <SidebarHeader className="gap-3.5 border-b p-4">
           <div className="flex w-full items-center justify-between">
-            <div className="text-base font-medium text-foreground">
-              {activeItem?.title}
-            </div>
+            <div className="text-base font-medium text-foreground">{activeItem?.title}</div>
             <Label className="flex items-center gap-2 text-sm">
               <span>Unreads</span>
               <Switch className="shadow-none" />
@@ -254,13 +234,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarGroupContent>
               {mails.map((mail) => (
                 <a
-                  href="#"
+                  href="/"
                   key={mail.email}
                   className="flex flex-col items-start gap-2 border-b p-4 text-sm leading-tight whitespace-nowrap last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                 >
                   <div className="flex w-full items-center gap-2">
-                    <span>{mail.name}</span>{" "}
-                    <span className="ml-auto text-xs">{mail.date}</span>
+                    <span>{mail.name}</span> <span className="ml-auto text-xs">{mail.date}</span>
                   </div>
                   <span className="font-medium">{mail.subject}</span>
                   <span className="line-clamp-2 w-65 text-xs whitespace-break-spaces">
@@ -273,5 +252,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarContent>
       </Sidebar>
     </Sidebar>
-  )
+  );
 }

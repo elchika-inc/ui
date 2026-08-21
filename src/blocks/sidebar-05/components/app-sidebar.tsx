@@ -1,11 +1,6 @@
-import * as React from "react"
-
-import { SearchForm } from "@/components/search-form"
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+import { GalleryVerticalEndIcon, MinusIcon, PlusIcon } from "lucide-react";
+import type * as React from "react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
   Sidebar,
   SidebarContent,
@@ -18,10 +13,10 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import { GalleryVerticalEndIcon, PlusIcon, MinusIcon } from "lucide-react"
+} from "@/components/ui/sidebar";
+import { SearchForm } from "./search-form";
 
-// This is sample data.
+// サンプルデータ。
 const data = {
   navMain: [
     {
@@ -160,14 +155,14 @@ const data = {
       ],
     },
   ],
-}
+};
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" render={<a href="#" />}>
+            <SidebarMenuButton size="lg" render={<a href="/" />}>
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                 <GalleryVerticalEndIcon className="size-4" />
               </div>
@@ -184,11 +179,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarGroup>
           <SidebarMenu>
             {data.navMain.map((item, index) => (
-              <Collapsible
-                key={item.title}
-                defaultOpen={index === 1}
-                className="group/collapsible"
-              >
+              <Collapsible key={item.title} defaultOpen={index === 1} className="group/collapsible">
                 <SidebarMenuItem>
                   <SidebarMenuButton render={<CollapsibleTrigger />}>
                     {item.title}{" "}
@@ -219,5 +210,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

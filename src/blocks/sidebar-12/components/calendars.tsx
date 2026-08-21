@@ -1,12 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
-
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+import { CheckIcon, ChevronRightIcon } from "lucide-react";
+import * as React from "react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -15,26 +11,22 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarSeparator,
-} from "@/components/ui/sidebar"
-import { ChevronRightIcon, CheckIcon } from "lucide-react"
+} from "@/components/ui/sidebar";
 
 export function Calendars({
   calendars,
 }: {
   calendars: {
-    name: string
-    items: string[]
-  }[]
+    name: string;
+    items: string[];
+  }[];
 }) {
   return (
     <>
       {calendars.map((calendar, index) => (
         <React.Fragment key={calendar.name}>
           <SidebarGroup key={calendar.name}>
-            <Collapsible
-              defaultOpen={index === 0}
-              className="group/collapsible"
-            >
+            <Collapsible defaultOpen={index === 0} className="group/collapsible">
               <SidebarGroupLabel
                 className="group/label w-full text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                 render={<CollapsibleTrigger />}
@@ -67,5 +59,5 @@ export function Calendars({
         </React.Fragment>
       ))}
     </>
-  )
+  );
 }

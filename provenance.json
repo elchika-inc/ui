@@ -1348,13 +1348,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-20",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
       "files": [
         {
           "path": "src/blocks/login-02/components/login-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/login-02/components/login-form.tsx",
           "upstreamPathSha": "67c99dd33cb21519941d26dd3d9f9ba6f2e65b98",
-          "generatedContentSha256": "d4a35f71ffe6a2121abb94f7b6cb214a1bba3bdb504c74d45a1976a32b60810d"
+          "generatedContentSha256": "9275903de5240f7075e6da2c9dc97d47be5d56209edc739108853520c347c8e7"
         },
         {
           "dropped": true,
@@ -1378,13 +1378,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
       "files": [
         {
           "path": "src/blocks/login-03/components/login-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/login-03/components/login-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "2d62079597289f0c5e7aac1faaba27106b85920ad58153947dc3a693ebaed5e0"
+          "generatedContentSha256": "2146bc9a827c474d82c571bd481c7c24676e5ece36f0bd0a068ff39ead77b070"
         },
         {
           "dropped": true,
@@ -1408,13 +1408,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
       "files": [
         {
           "path": "src/blocks/login-04/components/login-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/login-04/components/login-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "52bad7592426736e94aa6e084372eb54f6724bbd635109254ea1fa886744865e"
+          "generatedContentSha256": "c17cc17efbc1f06118a8a81916abf9fa0edd721d710fab2ed405dd9b34e92ee9"
         },
         {
           "dropped": true,
@@ -1438,13 +1438,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
       "files": [
         {
           "path": "src/blocks/login-05/components/login-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/login-05/components/login-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "20bfc3764062eb166ad9e76eeafce6ed6e873f294f1a694c3bcb599eaac6b29d"
+          "generatedContentSha256": "1695fe0c7688ea50a05f27d8d6207ef96d4dc2c73d2e341cf810aac3c75d2823"
         },
         {
           "dropped": true,
@@ -1468,13 +1468,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。上流の registryDependencies に宣言漏れがあったため、配布ファイルの import から @elchika/field を補完",
       "files": [
         {
           "path": "src/blocks/signup-01/components/signup-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-01/components/signup-form.tsx",
           "upstreamPathSha": "b9f62a83999dc7df855738a8715f40ab156b1f10",
-          "generatedContentSha256": "7db043fa56fe18527da55a8304e3b12e89ef25058608d2698150b1281189f3f0"
+          "generatedContentSha256": "d877dcc57d107ea9288f1af5d417d982f6c9457c29eee17c66a5903ba9c6f722"
         },
         {
           "dropped": true,
@@ -1498,13 +1498,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
       "files": [
         {
           "path": "src/blocks/signup-02/components/signup-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-02/components/signup-form.tsx",
           "upstreamPathSha": "67c99dd33cb21519941d26dd3d9f9ba6f2e65b98",
-          "generatedContentSha256": "e2ce38644865934ac4a9eaa9de4f4c4425bf25c6fcde494a952d0af56aeee342"
+          "generatedContentSha256": "fd5a310c596864ea7a1204977ef5f27814b299dc419b2ee50f48b4479f8a438d"
         },
         {
           "dropped": true,
@@ -1528,13 +1528,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
       "files": [
         {
           "path": "src/blocks/signup-03/components/signup-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-03/components/signup-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "6115a51e16b4b6bcd5ac07ebc3bc46c2a9435245c1841fa62b02cf36b0832ad3"
+          "generatedContentSha256": "98acf098baa2a8eb4e5f86df538ca64dbe056c9c4ad7119065d6770cbe2bbcb6"
         },
         {
           "dropped": true,
@@ -1558,13 +1558,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
       "files": [
         {
           "path": "src/blocks/signup-04/components/signup-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-04/components/signup-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "37e563fddb7b1725c9a2e6677121bdebec9558773a348a2815b24df1459889a4"
+          "generatedContentSha256": "e42d5a877ce5d697e6c4a43b551c7c9c66b0996cdcee2521e1621309b5c4c336"
         },
         {
           "dropped": true,
@@ -1588,13 +1588,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。上流の registryDependencies に宣言漏れがあったため、配布ファイルの import から @elchika/field を補完",
       "files": [
         {
           "path": "src/blocks/signup-05/components/signup-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-05/components/signup-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "dd858fb5332c9cb5202aeb08d0f5e4b209c61141d57ab1ba9c29b5f8cf0f86ec"
+          "generatedContentSha256": "182368db4f3920f89432536a9aef63e8d66d2c289743eccd10d95cd7f62ca84a"
         },
         {
           "dropped": true,
@@ -1618,25 +1618,25 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-01/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-01/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "8d8257c8aac38156d9af0d831e4ddf40e2134e145e6d06ca4f42071968fd168a"
+          "generatedContentSha256": "48e52b0a90b3f1122f6268e93ca33aed8ce75fb59364822a94fce8f792829942"
         },
         {
           "path": "src/blocks/sidebar-01/components/search-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-01/components/search-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "2a376391f6cd45c40d120deaf9dc97f38e567e120590a38d617121b44ebeb0bd"
+          "generatedContentSha256": "be28a288c40febc124ee48f6b016be248ab6806481b0be9d1aeca5087281f05a"
         },
         {
           "path": "src/blocks/sidebar-01/components/version-switcher.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-01/components/version-switcher.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "f90f63046919abc4f89a8e6adc017b0fb8cbb1091126acea3b08bb0be2229e81"
+          "generatedContentSha256": "78614bca6ee9137273b39dedb2cb8b6aa76131d7e7675758ea545dba5fac4704"
         },
         {
           "dropped": true,
@@ -1660,25 +1660,25 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。上流の registryDependencies に宣言漏れがあったため、配布ファイルの import から @elchika/collapsible を補完",
       "files": [
         {
           "path": "src/blocks/sidebar-02/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-02/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "6b2dfc832987eec0426aebf250cb74908bb5910eb87a9df6be9426ed27f25b81"
+          "generatedContentSha256": "a02d6d9b19f8deca84ab72a178b3a91a182f989d71a6e2fc837aa16cfb6e7f28"
         },
         {
           "path": "src/blocks/sidebar-02/components/search-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-02/components/search-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "e963e626e448e60523045bdbb85531a4db630d2713445399711860e4c5ecef0f"
+          "generatedContentSha256": "b91da2761a8c38325c7108503f22f9088e5161480d4fb7a63a26e2a5119c44c8"
         },
         {
           "path": "src/blocks/sidebar-02/components/version-switcher.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-02/components/version-switcher.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "9209d59ff45cb8ca1975d6195e2c73d01b7f9b5b820f62997842023c1925aafb"
+          "generatedContentSha256": "7997ae76b3061e68811b550a383df47d1c651f0ae6de9fbf50ddaa74947af9d4"
         },
         {
           "dropped": true,
@@ -1702,13 +1702,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-03/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-03/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "1ab14d180fe4303d92a050b58db3eacf8267bfe8f9df05a84da2e9acb039c15b"
+          "generatedContentSha256": "5c1a053fb9eed6a320509045fb296b1602f454e1f482c910cc9df05e66c68e01"
         },
         {
           "dropped": true,
@@ -1732,13 +1732,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-04/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-04/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "cf8dec6837fe06f8fce643961875d8353fff0b4f55156b2e9d1cacd9a221f67d"
+          "generatedContentSha256": "3ff50a973c2610c9ef6716eb4f84108bda439b8eb08af3407450a13e3957c9c6"
         },
         {
           "dropped": true,
@@ -1762,19 +1762,19 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-05/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-05/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "e85be955c6768d47e7fb445d24e43adeaf18c4dacb090e4a8c9d8e1e86c26e20"
+          "generatedContentSha256": "86a118ac941085c698369e9b8a5ca0b5f273b1ecc38ab819ced42f53e2f585e5"
         },
         {
           "path": "src/blocks/sidebar-05/components/search-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-05/components/search-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "e963e626e448e60523045bdbb85531a4db630d2713445399711860e4c5ecef0f"
+          "generatedContentSha256": "b91da2761a8c38325c7108503f22f9088e5161480d4fb7a63a26e2a5119c44c8"
         },
         {
           "dropped": true,
@@ -1798,25 +1798,25 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。上流の registryDependencies に宣言漏れがあったため、配布ファイルの import から @elchika/button を補完",
       "files": [
         {
           "path": "src/blocks/sidebar-06/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-06/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "268259ac7937439b18e4c5727254e65ed38c95eb2e58b65aba532ea7e1e03a42"
+          "generatedContentSha256": "c2b3a5205857e1c29b5e54d7f59849d2fee6643a14137265e6d191b50191fdf5"
         },
         {
           "path": "src/blocks/sidebar-06/components/nav-main.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-06/components/nav-main.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "5781f08c5aac0ff77820d4c05a1a5e90a0d0a31dbddb2b42186a1807a0d53fcc"
+          "generatedContentSha256": "72d20ad2ba6d520638e904452612870293f29ca5b73aed855ad2c15f97438fd1"
         },
         {
           "path": "src/blocks/sidebar-06/components/sidebar-opt-in-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-06/components/sidebar-opt-in-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "5cdc57f07f51b446cbab6851bf7ce5101aa790715178d750fe2ef4f24153ea37"
+          "generatedContentSha256": "0bf3b9c1dfb465c50340e59279ff0cbc3ddd43bae200eb2f7d19233c94226ed9"
         },
         {
           "dropped": true,
@@ -1840,37 +1840,37 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-07/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-07/components/app-sidebar.tsx",
           "upstreamPathSha": "df1752dfe092957f84aa467d2270436139e3ecc7",
-          "generatedContentSha256": "d581e89152360f0102968782ac52141ba947daf028144a5264b9adb83d0703e1"
+          "generatedContentSha256": "526c78e666680d4efd804b3c5ff493400536092da470820bdb4319400f58de0e"
         },
         {
           "path": "src/blocks/sidebar-07/components/nav-main.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-07/components/nav-main.tsx",
           "upstreamPathSha": "df1752dfe092957f84aa467d2270436139e3ecc7",
-          "generatedContentSha256": "4f23a93bb907ab7386d62e347bfd2ee16f05464cf1c54e16a3918b4425dec770"
+          "generatedContentSha256": "95b6b300a20e1c06023e5252181829554291fe4367f46e68aac585fdda09df9f"
         },
         {
           "path": "src/blocks/sidebar-07/components/nav-projects.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-07/components/nav-projects.tsx",
           "upstreamPathSha": "df1752dfe092957f84aa467d2270436139e3ecc7",
-          "generatedContentSha256": "51543913ae8869ac0f051722d63031ec12c6ed22332eba7cc2ec495a414aa0c2"
+          "generatedContentSha256": "643851c41b5504f3810178459f4b2dc937db279364550c49eeeea4e45411e1b8"
         },
         {
           "path": "src/blocks/sidebar-07/components/nav-user.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-07/components/nav-user.tsx",
           "upstreamPathSha": "df1752dfe092957f84aa467d2270436139e3ecc7",
-          "generatedContentSha256": "4e05b2e7ba19c8b249ebfa0fc9b54594383a66a91ae50dae7c6bc651642997d3"
+          "generatedContentSha256": "93e2fe647572310c27a55476d4b03a423d2a220dcfb9a1e801b776219502cca9"
         },
         {
           "path": "src/blocks/sidebar-07/components/team-switcher.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-07/components/team-switcher.tsx",
           "upstreamPathSha": "df1752dfe092957f84aa467d2270436139e3ecc7",
-          "generatedContentSha256": "3ffd99bed60b8f5f47bbcd580f6045a0a4e98b254c0015bd3602c63e6504d317"
+          "generatedContentSha256": "f379553493c96efe5f34e195e15e09fa6aa208164884ceae22514a1cee236590"
         },
         {
           "dropped": true,
@@ -1894,37 +1894,37 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-08/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-08/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "047ce9064ef8017e7c622a494b81bd381c2eeafef12ff704a31d7f83df921f9d"
+          "generatedContentSha256": "a010bd8bac363f3c477645283f16f0d480aec5f43630188b89827a3c6ae7db44"
         },
         {
           "path": "src/blocks/sidebar-08/components/nav-main.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-08/components/nav-main.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "5009a4b0c18c6d4799231e7a59f204b3fef7648c185f34b4e61dc6f933989d49"
+          "generatedContentSha256": "3de828af80e83463cb2e4447864b99acc0b9a83ff588ead4c94b4f5c3c5f3e4a"
         },
         {
           "path": "src/blocks/sidebar-08/components/nav-projects.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-08/components/nav-projects.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "81a14d68455f73a57d7dde42add5f9ef010265d2f8e23ccee9119ec6d94960ce"
+          "generatedContentSha256": "17dc44211a7fd05cec7ba4e6b9729070e75bc430ce5c24c2226f0e32c01f4bae"
         },
         {
           "path": "src/blocks/sidebar-08/components/nav-secondary.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-08/components/nav-secondary.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "0088d2a817be0b49bacd44707b3defa086f6bf63ed69a840765e63a07bf3ddf1"
+          "generatedContentSha256": "48baed3f5139374d2b9321ce2a92ffebf2ec550550cbc6fc79d540bb04e34e94"
         },
         {
           "path": "src/blocks/sidebar-08/components/nav-user.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-08/components/nav-user.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "218ead77603ea0f61dd3aca17ae715150562bfb257696bc8808aadebc0271ff0"
+          "generatedContentSha256": "e7afdc2d36379eabb82d95bc8eeef113ca5217fe5827b74d83f5797050ba3c22"
         },
         {
           "dropped": true,
@@ -1948,19 +1948,19 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、CLI が IconPlaceholder を lucide-react へ自動展開。w-[calc(var(--sidebar-width-icon)+1px)] を component-local CSS 変数へ、w-[260px] を w-65 へ正規化",
+      "modified": "registry:page を配布から除外し、CLI が IconPlaceholder を lucide-react へ自動展開。w-[calc(var(--sidebar-width-icon)+1px)] を component-local CSS 変数へ、w-[260px] を w-65 へ正規化。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-09/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-09/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "27cf8f53c4c328c55cc75daba33232597f7a5b7bbcf3f3e9813c3c08f80f9667"
+          "generatedContentSha256": "4b6af956fe4536f8892f2e6a8a5da9bc9b2cb26acb2e9f59fe403810b2b73d9a"
         },
         {
           "path": "src/blocks/sidebar-09/components/nav-user.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-09/components/nav-user.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "a53bef6e7ec57ca250da734b901eb6044d0e157a5eeb9d448ce98a2e0a3cbed9"
+          "generatedContentSha256": "169ea9b135d35acb68003cf99b22b12956c54125381b42970cb742d54885a37d"
         },
         {
           "dropped": true,
@@ -1984,49 +1984,49 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化。上流の registryDependencies に宣言漏れがあったため、配布ファイルの import から @elchika/button を補完",
       "files": [
         {
           "path": "src/blocks/sidebar-10/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-10/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "0eee92572b11c2a7184386f987c91c863a1d8a268b2210ac2cb3c55909daa25d"
+          "generatedContentSha256": "a584a68dea5f1a242ba0a6ddcf60a33740e78f3f5c17df82f3340f6fd5c28ea4"
         },
         {
           "path": "src/blocks/sidebar-10/components/nav-actions.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-10/components/nav-actions.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "710b1746bb02275bac2d59044a7712dd86156f30ed63c2ebe911e177a0237cfc"
+          "generatedContentSha256": "6e8d94454924a98de3622870bc4215b322fe7fd850137f7f9c3f06338cd3109b"
         },
         {
           "path": "src/blocks/sidebar-10/components/nav-favorites.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-10/components/nav-favorites.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "42add0bba2bf5cb663c9646eecaf0f5d60d695d80472f4f9b2de28f6fb92cea5"
+          "generatedContentSha256": "ca05b133b48fabc6d1b149b11b1ecfa6538ad9ad68bc239a027460762439ae77"
         },
         {
           "path": "src/blocks/sidebar-10/components/nav-main.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-10/components/nav-main.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "da783ded492d48466577bbc27357df54c5722300bed4938d33e6770f3e6ee3e6"
+          "generatedContentSha256": "97c3ae9ab5f6c88cbe3d3f9540db8a41dd196c6dc9b24f9030e820e152c092fd"
         },
         {
           "path": "src/blocks/sidebar-10/components/nav-secondary.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-10/components/nav-secondary.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "a525566dbc7aa96e079dd03e6dba2c970962f60336498636b810bd4fb76d6b01"
+          "generatedContentSha256": "4c5488ec2a25d098ff8f24343c2f6ef047ee08da9f8d55ce535b8e5e46528cbc"
         },
         {
           "path": "src/blocks/sidebar-10/components/nav-workspaces.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-10/components/nav-workspaces.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "0b0ee1aa1d744aeb3eef9ee79d06a82bff1049da4726118ad18b35dce4c0125a"
+          "generatedContentSha256": "f89dc33aa907b8bc58d3e4c750d083b11c4b22aa12040093b87fcab1d9c31fee"
         },
         {
           "path": "src/blocks/sidebar-10/components/team-switcher.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-10/components/team-switcher.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "b943adb6df9219a564a2f28d3d205455ef863e78bb9a2b95e10d907b7b0f3aea"
+          "generatedContentSha256": "2cc7c2393c78332f587ec3088d4420891b773d05b363d26613946ba4ffafe7d1"
         },
         {
           "dropped": true,
@@ -2050,13 +2050,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-11/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-11/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "d43afc4bf33235af046f26e3c73090c8b4c9a4357fa002bde576e920c87dd920"
+          "generatedContentSha256": "7093dc40d035011138ee585eaf0904d69ffdf79050bbcfaac849cdd1248a3fd9"
         },
         {
           "dropped": true,
@@ -2080,31 +2080,31 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-12/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-12/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "3cf741f83d2a58499e55eeb4ed0794dc11cf520d33ee026dc6ea3a3cac671943"
+          "generatedContentSha256": "cad7e258a1cdde1563b6b29d13aad12fe4a070c937bd9cd0bb4dd7f886f6eaf7"
         },
         {
           "path": "src/blocks/sidebar-12/components/calendars.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-12/components/calendars.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "a82f3daba865b8c75ff30490c6ea06b6c01e2fb4d1bb278851f8892914f8beff"
+          "generatedContentSha256": "da4c5b1ee9dd404351cb2458b26ee31bb7e1c9d7b9c941cb781d1fe626da6147"
         },
         {
           "path": "src/blocks/sidebar-12/components/date-picker.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-12/components/date-picker.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "99a3ab0543c68a09cadb73f9d4c38887a2886ca4d918c0883b98889f3ba94180"
+          "generatedContentSha256": "59db46feb10e3e6888d4a4fcf4a2d745be61a8e6f9671eed3887b2aafccac4bb"
         },
         {
           "path": "src/blocks/sidebar-12/components/nav-user.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-12/components/nav-user.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "75cd4ca87c3ada67eac7836c4e914c3eb18ff5354ef24ae7cbf19bf84cb3d256"
+          "generatedContentSha256": "46dc0bec975dbe318fbe91809edd9feaf07dbcfb6dc512490dd2596613f8a7b0"
         },
         {
           "dropped": true,
@@ -2128,13 +2128,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、CLI が IconPlaceholder を lucide-react へ自動展開。固定pxの高さ・幅4箇所を等価な Tailwind spacing utility へ正規化",
+      "modified": "registry:page を配布から除外し、CLI が IconPlaceholder を lucide-react へ自動展開。固定pxの高さ・幅4箇所を等価な Tailwind spacing utility へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-13/components/settings-dialog.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-13/components/settings-dialog.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "f4d700c041910fe305616b7298537e19102f6956db37f81408baf300163d984d"
+          "generatedContentSha256": "06e892e1f25ac56838fce7ac7c6de527b392b4e14e27b3355b2295d7497ab434"
         },
         {
           "dropped": true,
@@ -2158,13 +2158,13 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-14/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-14/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "9290e62bfe45a8f1bd8264883d8cd7f853f6fbd54dbaa449baf4078fa37f948a"
+          "generatedContentSha256": "abcf270176fdda6936114387e3a1e5c30f85094aa005f5804764cdb36819bb59"
         },
         {
           "dropped": true,
@@ -2188,67 +2188,67 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去",
+      "modified": "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-15/components/calendars.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/calendars.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "244be30b109912c5ef5b19f67d4983ea7bf5611bf88b3c09674e0ec02c232dc8"
+          "generatedContentSha256": "096028da2bbc38a5f9af824385592ad2939a3de06f869849c20c5c99af2ebf59"
         },
         {
           "path": "src/blocks/sidebar-15/components/date-picker.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/date-picker.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "99a3ab0543c68a09cadb73f9d4c38887a2886ca4d918c0883b98889f3ba94180"
+          "generatedContentSha256": "59db46feb10e3e6888d4a4fcf4a2d745be61a8e6f9671eed3887b2aafccac4bb"
         },
         {
           "path": "src/blocks/sidebar-15/components/nav-favorites.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/nav-favorites.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "684e36d20d9d6b94804e9127eabb936f39f6a61a80fc35321b3014949cb7f858"
+          "generatedContentSha256": "05d7e737251d3f014ecacfe146e70468d178e90982c9aed0e55ffee0d7ad6445"
         },
         {
           "path": "src/blocks/sidebar-15/components/nav-main.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/nav-main.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "a0c18b7ad745869a954f8cff867f0ee7ae570d1ee6432b21d07bbadb8bb9eda5"
+          "generatedContentSha256": "534e68d908cc8ae822680a5d29e1d63d82537760a9429e06fcd55688fd977c4d"
         },
         {
           "path": "src/blocks/sidebar-15/components/nav-secondary.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/nav-secondary.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "8c4a122e02bcc0dbc6288d4f40fd584460184bf175be9277a0771bd2b270648d"
+          "generatedContentSha256": "a590fbba268fc8d0693d861cb64cfbf11958f9bab153030a192269ad45d4e74e"
         },
         {
           "path": "src/blocks/sidebar-15/components/nav-user.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/nav-user.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "71ffad0f43479bff1f81febacd1bcdcf5a70156f727f2ad43ac4952e3a06e42d"
+          "generatedContentSha256": "4c790fed4c3701ed137ad40d383feef1853ef5d7fe98461c43f260302cbf1bce"
         },
         {
           "path": "src/blocks/sidebar-15/components/nav-workspaces.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/nav-workspaces.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "0b0ee1aa1d744aeb3eef9ee79d06a82bff1049da4726118ad18b35dce4c0125a"
+          "generatedContentSha256": "f89dc33aa907b8bc58d3e4c750d083b11c4b22aa12040093b87fcab1d9c31fee"
         },
         {
           "path": "src/blocks/sidebar-15/components/sidebar-left.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/sidebar-left.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "84e5a5338cbbc811b509b451670f248604ea3b64248f38c3451d77dffb183c4d"
+          "generatedContentSha256": "47d13a8082831c1008e310cfc8b372ec854479fa44882033910a903e2ea12102"
         },
         {
           "path": "src/blocks/sidebar-15/components/sidebar-right.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/sidebar-right.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "884dd3e3526fdb1c256f1b07d7c5350b7605eda1bf7c6e55c6c2894f207293bd"
+          "generatedContentSha256": "d20c716fe8751d478c22d4e420f6e1c31b9764be5590573b0488ec5f3e8b5319"
         },
         {
           "path": "src/blocks/sidebar-15/components/team-switcher.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/team-switcher.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "52cc3250c695d22dd6b18661750fed4cbfcc3ccb6bc39174c9c08eb4d217377d"
+          "generatedContentSha256": "9f012b0b486a96eb7e8664ae7ceba9fc9a2f1ee404e8ce96e8750b28f65762bb"
         },
         {
           "dropped": true,
@@ -2272,49 +2272,49 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-21",
       "license": "MIT",
-      "modified": "registry:page を配布から除外し、CLI が IconPlaceholder を lucide-react へ自動展開。h-[calc(100svh-var(--header-height))] を component-local CSS 変数へ正規化",
+      "modified": "registry:page を配布から除外し、CLI が IconPlaceholder を lucide-react へ自動展開。h-[calc(100svh-var(--header-height))] を component-local CSS 変数へ正規化。同一 block 内 sibling import を相対 path へ正規化。Biome 整形と a11y/lint 適合のため placeholder link・装飾要素・React key・型注釈・サンプル表記を必要な箇所で正規化",
       "files": [
         {
           "path": "src/blocks/sidebar-16/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "e3427c4c28096335c5399da0b267d828852b7b95b6b89519d6a4f264b2bd59d2"
+          "generatedContentSha256": "8d86461e375ec77d2f413c046bc02552103a7bc24f198bf228cb793a7afea6c7"
         },
         {
           "path": "src/blocks/sidebar-16/components/nav-main.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/nav-main.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "2dfe5cd5fdc5600ba18a2d4ec3dcf51b3f6b10081d9d7a0511484738a15ecbea"
+          "generatedContentSha256": "11c6e1c4865b7b2bb8755d881b4ab48b45f510d50fcb20fbff6b503d79c70ba5"
         },
         {
           "path": "src/blocks/sidebar-16/components/nav-projects.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/nav-projects.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "903c3260ba21e272e0da5480866b0ed9c311d7aea6071cfcd459752253fe1e23"
+          "generatedContentSha256": "a6951e5f5d6de1ccfa0eee650bb27049b354fc59e4d22caee88a74b96e1b1bb2"
         },
         {
           "path": "src/blocks/sidebar-16/components/nav-secondary.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/nav-secondary.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "329c8b61453f3b825f535c27154d388119e3b0f3d4e64b05387e9b428c69c371"
+          "generatedContentSha256": "2400da55f3647bb667d72d873551200bfed02e4204ed8ab3dcc7898493abaae6"
         },
         {
           "path": "src/blocks/sidebar-16/components/nav-user.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/nav-user.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "8e56b8cea8e98097fdeb74fff0b2e74450a7eca9cd1d3bcfc2ccdf7a54085ce9"
+          "generatedContentSha256": "08afcf99bb3dc1609ff35614028e8505790ec77512290d42b1e3355e8a445fb5"
         },
         {
           "path": "src/blocks/sidebar-16/components/search-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/search-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "89c3c32ddf36099542ab4defeceb08b4ce595f02e039e8a00de151507b26f4ee"
+          "generatedContentSha256": "cd6929e842bc2d5d3989848de3697d23eb5101a05e19964178660b41fe928977"
         },
         {
           "path": "src/blocks/sidebar-16/components/site-header.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/site-header.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "2a54588edf19f5148750597c672f237cf3bdeb985ddc07727640cba7ba51f264"
+          "generatedContentSha256": "4a8ae7c96d7f15d2c83ca207f41459618109456e2bf2d32720c930a78fb547e6"
         },
         {
           "dropped": true,

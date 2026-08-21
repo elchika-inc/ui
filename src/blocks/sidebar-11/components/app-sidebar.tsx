@@ -1,12 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
-
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+import { ChevronRightIcon, FileIcon, FolderIcon } from "lucide-react";
+import type * as React from "react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
   Sidebar,
   SidebarContent,
@@ -19,10 +15,9 @@ import {
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import { FileIcon, ChevronRightIcon, FolderIcon } from "lucide-react"
+} from "@/components/ui/sidebar";
 
-// This is sample data.
+// サンプルデータ。
 const data = {
   changes: [
     {
@@ -39,22 +34,8 @@ const data = {
     },
   ],
   tree: [
-    [
-      "app",
-      [
-        "api",
-        ["hello", ["route.ts"]],
-        "page.tsx",
-        "layout.tsx",
-        ["blog", ["page.tsx"]],
-      ],
-    ],
-    [
-      "components",
-      ["ui", "button.tsx", "card.tsx"],
-      "header.tsx",
-      "footer.tsx",
-    ],
+    ["app", ["api", ["hello", ["route.ts"]], "page.tsx", "layout.tsx", ["blog", ["page.tsx"]]]],
+    ["components", ["ui", "button.tsx", "card.tsx"], "header.tsx", "footer.tsx"],
     ["lib", ["util.ts"]],
     ["public", "favicon.ico", "vercel.svg"],
     ".eslintrc.json",
@@ -64,7 +45,7 @@ const data = {
     "package.json",
     "README.md",
   ],
-}
+};
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
@@ -73,11 +54,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarGroupLabel>Changes</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {data.changes.map((item, index) => (
-                <SidebarMenuItem key={index}>
+              {data.changes.map((item) => (
+                <SidebarMenuItem key={item.file}>
                   <SidebarMenuButton>
-                    <FileIcon
-                    />
+                    <FileIcon />
                     {item.file}
                   </SidebarMenuButton>
                   <SidebarMenuBadge>{item.state}</SidebarMenuBadge>
@@ -90,8 +70,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarGroupLabel>Files</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {data.tree.map((item, index) => (
-                <Tree key={index} item={item} />
+              {data.tree.map((item) => (
+                <Tree key={treeItemKey(item)} item={item} />
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
@@ -99,22 +79,24 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }
-type TreeItem = string | TreeItem[]
+type TreeItem = string | TreeItem[];
+function treeItemKey(item: TreeItem): string {
+  return typeof item === "string" ? item : item.map(treeItemKey).join("/");
+}
 function Tree({ item }: { item: TreeItem }) {
-  const [name, ...items] = Array.isArray(item) ? item : [item]
+  const [name, ...items] = Array.isArray(item) ? item : [item];
   if (!items.length) {
     return (
       <SidebarMenuButton
         isActive={name === "button.tsx"}
         className="data-[active=true]:bg-transparent"
       >
-        <FileIcon
-        />
+        <FileIcon />
         {name}
       </SidebarMenuButton>
-    )
+    );
   }
   return (
     <SidebarMenuItem>
@@ -124,18 +106,17 @@ function Tree({ item }: { item: TreeItem }) {
       >
         <SidebarMenuButton render={<CollapsibleTrigger />}>
           <ChevronRightIcon className="transition-transform" />
-          <FolderIcon
-          />
+          <FolderIcon />
           {name}
         </SidebarMenuButton>
         <CollapsibleContent>
           <SidebarMenuSub>
-            {items.map((subItem, index) => (
-              <Tree key={index} item={subItem} />
+            {items.map((subItem) => (
+              <Tree key={treeItemKey(subItem)} item={subItem} />
             ))}
           </SidebarMenuSub>
         </CollapsibleContent>
       </Collapsible>
     </SidebarMenuItem>
-  )
+  );
 }

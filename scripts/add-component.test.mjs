@@ -47,6 +47,14 @@ const prepareWrapperRepo = () => {
   return root;
 };
 
+const seedRegistryItems = (root, names) => {
+  const registry = JSON.parse(readFileSync(join(root, "registry.json"), "utf8"));
+  registry.items.push(...names.map((name) => ({ name, type: "registry:ui" })));
+  writeJson(join(root, "registry.json"), registry);
+  git(root, ["add", "registry.json"]);
+  git(root, ["commit", "-m", "registry item fixture"]);
+};
+
 const loadModule = async () => {
   assert.ok(existsSync(scriptUrl), "add-component.mjs がまだ無い");
   return import(scriptUrl);
@@ -579,6 +587,63 @@ test("block の registry item は配布ファイルだけを files に載せる"
   ]);
 });
 
+test("UI import 由来の registry dependency 補完は block だけに適用する", async () => {
+  const { buildRegistryItem, resolveRegistryTarget } = await loadModule();
+  const registryItems = [
+    { name: "button", type: "registry:ui" },
+    { name: "field", type: "registry:ui" },
+  ];
+  const blockUpstream = { ...loginUpstream, registryDependencies: ["button"] };
+  const blockTarget = resolveRegistryTarget("login-01", blockUpstream);
+  const generatedSource = [
+    'import { Button } from "@/components/ui/button";',
+    'import { Field } from "@/components/ui/field";',
+  ].join("\n");
+
+  const blockItem = buildRegistryItem(
+    "login-01",
+    blockUpstream,
+    generatedSource,
+    blockTarget,
+    registryItems,
+  );
+  assert.deepEqual(blockItem.registryDependencies, ["@elchika/button", "@elchika/field"]);
+
+  const componentUpstream = {
+    name: "badge",
+    type: "registry:ui",
+    files: [{ path: "registry/base-nova/ui/badge.tsx", type: "registry:ui" }],
+    registryDependencies: ["button"],
+  };
+  const componentTarget = resolveRegistryTarget("badge", componentUpstream);
+  const componentItem = buildRegistryItem(
+    "badge",
+    componentUpstream,
+    generatedSource,
+    componentTarget,
+    registryItems,
+  );
+  assert.deepEqual(componentItem.registryDependencies, ["@elchika/button"]);
+});
+
+test("block の UI import に対応する registry item が無ければ停止する", async () => {
+  const { buildRegistryItem, resolveRegistryTarget } = await loadModule();
+  const upstream = { ...loginUpstream, registryDependencies: ["button"] };
+  const target = resolveRegistryTarget("login-01", upstream);
+
+  assert.throws(
+    () =>
+      buildRegistryItem(
+        "login-01",
+        upstream,
+        'import { Field } from "@/components/ui/field";',
+        target,
+        [{ name: "button", type: "registry:ui" }],
+      ),
+    /field.*registry item が存在しない/,
+  );
+});
+
 test("block の記録済み判定は provenance.blocks を見る", async () => {
   const { shouldSkipRecorded } = await loadModule();
   const provenance = { components: {}, blocks: { "login-01": { license: "MIT" } } };
@@ -668,6 +733,7 @@ test("block を add すると移設してから reconcile し provenance.blocks 
   const root = prepareWrapperRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));
   const { runAddComponent } = await loadModule();
+  seedRegistryItems(root, ["button"]);
   const generated =
     'import { Button } from "@/components/ui/button";\nexport const LoginForm = Button;\n';
   const logs = [];
@@ -836,6 +902,29 @@ test("block の registry item は配布ファイルの import から npm 依存�
   assert.deepEqual(result.registryItem.dependencies, ["shadcn", "sonner", "tw-animate-css"]);
 });
 
+test("block の registry item は配布ファイルの UI import から宣言漏れを補う", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+  seedRegistryItems(root, ["field"]);
+  const upstream = { ...loginUpstream, registryDependencies: ["button"] };
+
+  const result = await runAddComponent({
+    argv: ["login-01", "--modified", "registry:page を配布から除外"],
+    root,
+    fetchImpl: blockFetch(JSON.stringify(upstream)),
+    runCommand: () => {
+      writeFileSync(
+        join(root, "src/components/login-form.tsx"),
+        'import { Field } from "@/components/ui/field";\nexport const LoginForm = Field;\n',
+      );
+    },
+    log: () => {},
+  });
+
+  assert.deepEqual(result.registryItem.registryDependencies, ["@elchika/button", "@elchika/field"]);
+});
+
 test("block の来歴は上流パスを記録する", async (t) => {
   const root = prepareWrapperRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));
@@ -867,6 +956,7 @@ test("block の複数配布ファイルを移設し全件の生成を確認す�
   const root = prepareWrapperRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));
   const { runAddComponent } = await loadModule();
+  seedRegistryItems(root, ["button"]);
   const multiUpstream = {
     name: "sidebar-07",
     type: "registry:block",
@@ -887,13 +977,17 @@ test("block の複数配布ファイルを移設し全件の生成を確認す�
     ],
   };
   const logs = [];
+  const appSidebar =
+    'import { NavMain } from "@/components/nav-main";\n' +
+    'import { Button } from "@/components/ui/button";\n' +
+    "export const AppSidebar = () => <><NavMain /><Button /></>;\n";
 
   await runAddComponent({
     argv: ["sidebar-07", "--modified", "registry:page を配布から除外"],
     root,
     fetchImpl: blockFetch(JSON.stringify(multiUpstream)),
     runCommand: () => {
-      writeFileSync(join(root, "src/components/app-sidebar.tsx"), "export {}\n");
+      writeFileSync(join(root, "src/components/app-sidebar.tsx"), appSidebar);
       writeFileSync(join(root, "src/components/nav-main.tsx"), "export {}\n");
     },
     log: (message) => logs.push(message),
@@ -901,6 +995,10 @@ test("block の複数配布ファイルを移設し全件の生成を確認す�
 
   assert.equal(existsSync(join(root, "src/blocks/sidebar-07/components/app-sidebar.tsx")), true);
   assert.equal(existsSync(join(root, "src/blocks/sidebar-07/components/nav-main.tsx")), true);
+  assert.equal(
+    readFileSync(join(root, "src/blocks/sidebar-07/components/app-sidebar.tsx"), "utf8"),
+    appSidebar.replace('"@/components/nav-main"', '"./nav-main"'),
+  );
   assert.ok(
     logs.includes(
       "移設: src/components/app-sidebar.tsx -> src/blocks/sidebar-07/components/app-sidebar.tsx",

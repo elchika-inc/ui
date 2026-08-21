@@ -1,45 +1,42 @@
-"use client"
+"use client";
 
-import * as React from "react"
-
-import { NavFavorites } from "@/components/nav-favorites"
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavWorkspaces } from "@/components/nav-workspaces"
-import { TeamSwitcher } from "@/components/team-switcher"
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarHeader,
-  SidebarRail,
-} from "@/components/ui/sidebar"
-import { TerminalIcon, AudioLinesIcon, SearchIcon, SparklesIcon, HomeIcon, InboxIcon, CalendarIcon, Settings2Icon, BlocksIcon, Trash2Icon, MessageCircleQuestionIcon } from "lucide-react"
+  AudioLinesIcon,
+  BlocksIcon,
+  CalendarIcon,
+  HomeIcon,
+  InboxIcon,
+  MessageCircleQuestionIcon,
+  SearchIcon,
+  Settings2Icon,
+  SparklesIcon,
+  TerminalIcon,
+  Trash2Icon,
+} from "lucide-react";
+import type * as React from "react";
+import { Sidebar, SidebarContent, SidebarHeader, SidebarRail } from "@/components/ui/sidebar";
+import { NavFavorites } from "./nav-favorites";
+import { NavMain } from "./nav-main";
+import { NavSecondary } from "./nav-secondary";
+import { NavWorkspaces } from "./nav-workspaces";
+import { TeamSwitcher } from "./team-switcher";
 
-// This is sample data.
+// サンプルデータ。
 const data = {
   teams: [
     {
       name: "Acme Inc",
-      logo: (
-        <TerminalIcon
-        />
-      ),
+      logo: <TerminalIcon />,
       plan: "Enterprise",
     },
     {
       name: "Acme Corp.",
-      logo: (
-        <AudioLinesIcon
-        />
-      ),
+      logo: <AudioLinesIcon />,
       plan: "Startup",
     },
     {
       name: "Evil Corp.",
-      logo: (
-        <TerminalIcon
-        />
-      ),
+      logo: <TerminalIcon />,
       plan: "Free",
     },
   ],
@@ -47,35 +44,23 @@ const data = {
     {
       title: "Search",
       url: "#",
-      icon: (
-        <SearchIcon
-        />
-      ),
+      icon: <SearchIcon />,
     },
     {
       title: "Ask AI",
       url: "#",
-      icon: (
-        <SparklesIcon
-        />
-      ),
+      icon: <SparklesIcon />,
     },
     {
       title: "Home",
       url: "#",
-      icon: (
-        <HomeIcon
-        />
-      ),
+      icon: <HomeIcon />,
       isActive: true,
     },
     {
       title: "Inbox",
       url: "#",
-      icon: (
-        <InboxIcon
-        />
-      ),
+      icon: <InboxIcon />,
       badge: "10",
     },
   ],
@@ -83,42 +68,27 @@ const data = {
     {
       title: "Calendar",
       url: "#",
-      icon: (
-        <CalendarIcon
-        />
-      ),
+      icon: <CalendarIcon />,
     },
     {
       title: "Settings",
       url: "#",
-      icon: (
-        <Settings2Icon
-        />
-      ),
+      icon: <Settings2Icon />,
     },
     {
       title: "Templates",
       url: "#",
-      icon: (
-        <BlocksIcon
-        />
-      ),
+      icon: <BlocksIcon />,
     },
     {
       title: "Trash",
       url: "#",
-      icon: (
-        <Trash2Icon
-        />
-      ),
+      icon: <Trash2Icon />,
     },
     {
       title: "Help",
       url: "#",
-      icon: (
-        <MessageCircleQuestionIcon
-        />
-      ),
+      icon: <MessageCircleQuestionIcon />,
     },
   ],
   favorites: [
@@ -280,11 +250,9 @@ const data = {
       ],
     },
   ],
-}
+};
 
-export function SidebarLeft({
-  ...props
-}: React.ComponentProps<typeof Sidebar>) {
+export function SidebarLeft({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar className="border-r-0" {...props}>
       <SidebarHeader>
@@ -298,5 +266,5 @@ export function SidebarLeft({
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

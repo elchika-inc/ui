@@ -3,7 +3,7 @@
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
-import { basename, dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
+import { basename, dirname, extname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
 
 const DEPENDENCY_SECTIONS = [
@@ -287,16 +287,52 @@ export function blockRelocationPlan(target) {
   });
 }
 
+const MODULE_SPECIFIER = /(from\s*|import\s+)(["'])([^"']+)\2/g;
+
+export function rewriteBlockSiblingImports(source, targetPath, targetFiles) {
+  const replacements = new Map();
+  for (const file of targetFiles) {
+    const base = basename(file.targetPath);
+    const extension = extname(base);
+    const stem = extension ? base.slice(0, -extension.length) : base;
+    let destination = relative(dirname(targetPath), file.targetPath).split(sep).join("/");
+    if (extension) destination = destination.slice(0, -extension.length);
+    if (!destination.startsWith(".")) destination = `./${destination}`;
+    replacements.set(`@/components/${stem}`, destination);
+    replacements.set(`@/components/${base}`, destination);
+  }
+  const rewritten = [];
+  const content = source.replace(MODULE_SPECIFIER, (match, prefix, quote, specifier) => {
+    const replacement = replacements.get(specifier);
+    if (!replacement) return match;
+    rewritten.push({ from: specifier, to: replacement });
+    return `${prefix}${quote}${replacement}${quote}`;
+  });
+  return { content, rewritten };
+}
+
 // reconcile より前に呼ぶ。移設を後にすると src/components/<basename> が
 // 変更パスとして残り、どのルールにも一致せず fail-closed で止まる。
 function relocateBlockFiles(root, target, log) {
-  for (const { from, to } of blockRelocationPlan(target)) {
+  const plan = blockRelocationPlan(target);
+  for (const { from, to } of plan) {
     const fromPath = join(root, from);
     // 生成されなかった場合はここで止めず、後段の生成確認に一本化する。
     if (!existsSync(fromPath)) continue;
     mkdirSync(dirname(join(root, to)), { recursive: true });
     renameSync(fromPath, join(root, to));
     log(`移設: ${from} -> ${to}`);
+  }
+  for (const { to } of plan) {
+    const path = join(root, to);
+    if (!existsSync(path)) continue;
+    const source = readFileSync(path, "utf8");
+    const { content, rewritten } = rewriteBlockSiblingImports(source, to, target.files);
+    if (rewritten.length === 0) continue;
+    writeFileSync(path, content);
+    for (const entry of rewritten) {
+      log(`内部 import: ${to} ${entry.from} -> ${entry.to}`);
+    }
   }
 }
 
@@ -323,6 +359,34 @@ function externalImports(source) {
     if (name && !["react", "react-dom"].includes(name)) packages.add(name);
   }
   return packages;
+}
+
+function registryUiImports(source) {
+  const names = new Set();
+  const pattern = /(?:from\s*|import\s*)["']@\/components\/ui\/([a-z0-9]+(?:-[a-z0-9]+)*)["']/g;
+  for (const match of source.matchAll(pattern)) names.add(match[1]);
+  return names;
+}
+
+export function completeBlockRegistryDependencies(
+  name,
+  upstreamDependencies,
+  generatedSource,
+  registryItems,
+) {
+  const dependencies = new Set(normalizeRegistryDependencies(upstreamDependencies));
+  for (const dependency of registryUiImports(generatedSource)) {
+    const dependencyItem = registryItems.find(
+      (candidate) => candidate.name === dependency && candidate.type === "registry:ui",
+    );
+    if (!dependencyItem) {
+      throw new Error(
+        `${name}: @/components/ui/${dependency} に対応する registry item が存在しない`,
+      );
+    }
+    dependencies.add(`@elchika/${dependency}`);
+  }
+  return [...dependencies];
 }
 
 const UPSTREAM_PREFIX = "apps/v4/registry/bases/base/";
@@ -434,7 +498,7 @@ export function resolveRegistryTarget(name, upstreamItem) {
   };
 }
 
-export function buildRegistryItem(name, upstreamItem, generatedSource, target) {
+export function buildRegistryItem(name, upstreamItem, generatedSource, target, registryItems = []) {
   const dependenciesByName = new Map();
   for (const dependency of upstreamItem.dependencies ?? []) {
     dependenciesByName.set(dependencyName(dependency), dependency);
@@ -467,7 +531,15 @@ export function buildRegistryItem(name, upstreamItem, generatedSource, target) {
   if (dependenciesByName.size) {
     item.dependencies = [...dependenciesByName.values()].sort();
   }
-  const registryDependencies = normalizeRegistryDependencies(upstreamItem.registryDependencies);
+  const registryDependencies =
+    target.itemType === "registry:block"
+      ? completeBlockRegistryDependencies(
+          name,
+          upstreamItem.registryDependencies,
+          generatedSource,
+          registryItems,
+        )
+      : normalizeRegistryDependencies(upstreamItem.registryDependencies);
   if (registryDependencies.length) item.registryDependencies = registryDependencies;
   return item;
 }
@@ -802,7 +874,13 @@ export async function runAddComponent({
     provenance.components[name] = entry;
   }
   const registry = readJson(repositoryRoot, "registry.json");
-  const registryItem = buildRegistryItem(name, upstreamItem, generatedSource, target);
+  const registryItem = buildRegistryItem(
+    name,
+    upstreamItem,
+    generatedSource,
+    target,
+    registry.items,
+  );
   const existingIndex = registry.items.findIndex((item) => item.name === name);
   if (existingIndex === -1) registry.items.push(registryItem);
   else registry.items[existingIndex] = registryItem;

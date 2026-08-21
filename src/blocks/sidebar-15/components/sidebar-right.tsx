@@ -1,8 +1,5 @@
-import * as React from "react"
-
-import { Calendars } from "@/components/calendars"
-import { DatePicker } from "@/components/date-picker"
-import { NavUser } from "@/components/nav-user"
+import { PlusIcon } from "lucide-react";
+import type * as React from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -11,12 +8,13 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarRail,
   SidebarSeparator,
-} from "@/components/ui/sidebar"
-import { PlusIcon } from "lucide-react"
+} from "@/components/ui/sidebar";
+import { Calendars } from "./calendars";
+import { DatePicker } from "./date-picker";
+import { NavUser } from "./nav-user";
 
-// This is sample data.
+// サンプルデータ。
 const data = {
   user: {
     name: "shadcn",
@@ -37,17 +35,11 @@ const data = {
       items: ["Travel", "Reminders", "Deadlines"],
     },
   ],
-}
+};
 
-export function SidebarRight({
-  ...props
-}: React.ComponentProps<typeof Sidebar>) {
+export function SidebarRight({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar
-      collapsible="none"
-      className="sticky top-0 hidden h-svh border-l lg:flex"
-      {...props}
-    >
+    <Sidebar collapsible="none" className="sticky top-0 hidden h-svh border-l lg:flex" {...props}>
       <SidebarHeader className="h-16 border-b border-sidebar-border">
         <NavUser user={data.user} />
       </SidebarHeader>
@@ -60,13 +52,12 @@ export function SidebarRight({
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton>
-              <PlusIcon
-              />
+              <PlusIcon />
               <span>New Calendar</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }
