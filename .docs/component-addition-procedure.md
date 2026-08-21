@@ -42,7 +42,7 @@ npm run build:lib
 npm run check:pre
 ```
 
-`check:pre` は evidence を除く常設 checker を fail-fast で実行する。現行の構成と順序は `scripts/check-all.mjs` の `PRE_FLIGHT_CHECKS` を正本とする。すべて通ったら component 実装だけを明示パスで stage して commit する。CIと証跡commit後の最終検査は、evidenceを含む`check:all`を維持する。
+`check:pre` は evidence と live upstream audit を除く repo-local の常設 checker を fail-fast で実行する。現行の構成と順序は `scripts/check-all.mjs` の `PRE_FLIGHT_CHECKS` を正本とする。すべて通ったら component 実装だけを明示パスで stage して commit する。CIと証跡commit後の最終検査は、evidenceを含む`check:all`を維持する。
 
 証跡の鮮度検査は、Markdown内に一意に置く`verified_impl_sha: <40桁SHA>`を正本とし、検証SHAが現在のHEADの祖先であることを確認してから、`git diff <検証SHA> -- <paths>`と`git ls-files --others --exclude-standard -- <paths>`で検証SHA、作業ツリー、未追跡ファイルを比較する。構造化欄の欠落・重複・実在しないcommit・HEAD非祖先commitは、古い証跡を含む全証跡でhard failureにする。同じcomponentに複数の証跡がある場合、他候補の祖先ではないGit DAG上のmaximal候補が一意なら、その1件だけをcomponent固有pathの鮮度hard gate対象とする。相互に比較不能なmaximal候補が複数残る場合は、HEADからのcommit距離で選ばずhard failureにする。
 
@@ -115,6 +115,16 @@ block は部品（`registry:ui`）と同じ手順を使うが、次の点だけ�
 3. `preview-selectors.json` の追加は既存キーの順序を崩さず 1 件だけ挿入する。
 4. `npm run registry:build` を先に実行してから `npm run check:pre` を走らせる
    （`check-distribution` が `public/r/<name>.json` を要求する）。
+5. block の実装 commit 前と PR 作成前に、live upstream audit を独立して実行する。
+
+   ```bash
+   node scripts/check-block-icons.mjs
+   ```
+
+   この検査はライブな上流 registry JSON を取得し、`IconPlaceholder` の `lucide` 欠損と
+   block / preview への展開実体を fail-closed で突き合わせる。上流またはネットワークの障害を
+   repo-local な回帰と混同しないため、`check:pre` / `check:all` / CI へは含めない。ただし
+   block 追加時の省略可能な確認ではなく、この手順で個別に必須とする。
 
 ### block で追加されたゲート
 
@@ -131,6 +141,8 @@ block は部品（`registry:ui`）と同じ手順を使うが、次の点だけ�
 | registry item から block 自身の配布ファイルを消す | completeness |
 | `registryDependencies` から使っている部品を落とす | completeness |
 | 来歴の `generatedContentSha256` を書き換える | completeness |
+| 上流 fixture の `IconPlaceholder` から `lucide` を落とす | block icons（`node scripts/check-block-icons.mjs`） |
+| page-only icon を対応する preview から落とす | block icons（`node scripts/check-block-icons.mjs`） |
 | block の証跡 Markdown を消す | evidence |
 | preview の tsx で存在しない export を import する | **typecheck**（`npm run typecheck`）。下記の注記を読むこと |
 
