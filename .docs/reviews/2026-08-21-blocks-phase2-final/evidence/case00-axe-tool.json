@@ -1,0 +1,7 @@
+{
+  "package": "axe-core",
+  "version": "4.10.3",
+  "temporaryInstallCommand": "npm install --prefix <TEMP> --no-save --package-lock=false axe-core@4.10.3",
+  "repositoryPackageJsonChanged": false,
+  "repositoryPackageLockChanged": false
+}

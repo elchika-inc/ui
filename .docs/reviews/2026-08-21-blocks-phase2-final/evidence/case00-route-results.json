@@ -1,0 +1,4152 @@
+[
+  {
+    "name": "login-02",
+    "theme": "light",
+    "path": "/preview/login-02/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/login-02.astro",
+    "url": "http://127.0.0.1:4327/preview/login-02/",
+    "facts": {
+      "title": "Login 02",
+      "documentUrl": "http://127.0.0.1:4327/preview/login-02/",
+      "selector": "[data-slot=\"login-02-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "login-02-case01-light.jpg",
+      "bytes": 33297,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/login-02/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/login-02/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "login-02",
+    "theme": "dark",
+    "path": "/preview/login-02-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/login-02-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/login-02-dark/",
+    "facts": {
+      "title": "Login 02 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/login-02-dark/",
+      "selector": "[data-slot=\"login-02-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "login-02-case02-dark.jpg",
+      "bytes": 33493,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/login-02-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/login-02-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "login-03",
+    "theme": "light",
+    "path": "/preview/login-03/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/login-03.astro",
+    "url": "http://127.0.0.1:4327/preview/login-03/",
+    "facts": {
+      "title": "Login 03",
+      "documentUrl": "http://127.0.0.1:4327/preview/login-03/",
+      "selector": "[data-slot=\"login-03-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "login-03-case03-light.jpg",
+      "bytes": 40737,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/login-03/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/login-03/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "login-03",
+    "theme": "dark",
+    "path": "/preview/login-03-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/login-03-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/login-03-dark/",
+    "facts": {
+      "title": "Login 03 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/login-03-dark/",
+      "selector": "[data-slot=\"login-03-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "login-03-case04-dark.jpg",
+      "bytes": 39979,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/login-03-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/login-03-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "login-04",
+    "theme": "light",
+    "path": "/preview/login-04/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/login-04.astro",
+    "url": "http://127.0.0.1:4327/preview/login-04/",
+    "facts": {
+      "title": "Login 04",
+      "documentUrl": "http://127.0.0.1:4327/preview/login-04/",
+      "selector": "[data-slot=\"login-04-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "login-04-case05-light.jpg",
+      "bytes": 39224,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/login-04/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/login-04/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "login-04",
+    "theme": "dark",
+    "path": "/preview/login-04-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/login-04-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/login-04-dark/",
+    "facts": {
+      "title": "Login 04 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/login-04-dark/",
+      "selector": "[data-slot=\"login-04-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "login-04-case06-dark.jpg",
+      "bytes": 38533,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/login-04-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/login-04-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "login-05",
+    "theme": "light",
+    "path": "/preview/login-05/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/login-05.astro",
+    "url": "http://127.0.0.1:4327/preview/login-05/",
+    "facts": {
+      "title": "Login 05",
+      "documentUrl": "http://127.0.0.1:4327/preview/login-05/",
+      "selector": "[data-slot=\"login-05-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "login-05-case07-light.jpg",
+      "bytes": 31682,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/login-05/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/login-05/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "login-05",
+    "theme": "dark",
+    "path": "/preview/login-05-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/login-05-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/login-05-dark/",
+    "facts": {
+      "title": "Login 05 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/login-05-dark/",
+      "selector": "[data-slot=\"login-05-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "login-05-case08-dark.jpg",
+      "bytes": 31771,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/login-05-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/login-05-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "signup-01",
+    "theme": "light",
+    "path": "/preview/signup-01/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/signup-01.astro",
+    "url": "http://127.0.0.1:4327/preview/signup-01/",
+    "facts": {
+      "title": "Signup 01",
+      "documentUrl": "http://127.0.0.1:4327/preview/signup-01/",
+      "selector": "[data-slot=\"signup-01-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "signup-01-case09-light.jpg",
+      "bytes": 46983,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/signup-01/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/signup-01/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "signup-01",
+    "theme": "dark",
+    "path": "/preview/signup-01-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/signup-01-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/signup-01-dark/",
+    "facts": {
+      "title": "Signup 01 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/signup-01-dark/",
+      "selector": "[data-slot=\"signup-01-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "signup-01-case10-dark.jpg",
+      "bytes": 45466,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/signup-01-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/signup-01-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "signup-02",
+    "theme": "light",
+    "path": "/preview/signup-02/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/signup-02.astro",
+    "url": "http://127.0.0.1:4327/preview/signup-02/",
+    "facts": {
+      "title": "Signup 02",
+      "documentUrl": "http://127.0.0.1:4327/preview/signup-02/",
+      "selector": "[data-slot=\"signup-02-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "signup-02-case11-light.jpg",
+      "bytes": 46496,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/signup-02/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/signup-02/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "signup-02",
+    "theme": "dark",
+    "path": "/preview/signup-02-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/signup-02-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/signup-02-dark/",
+    "facts": {
+      "title": "Signup 02 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/signup-02-dark/",
+      "selector": "[data-slot=\"signup-02-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "signup-02-case12-dark.jpg",
+      "bytes": 46405,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/signup-02-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/signup-02-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "signup-03",
+    "theme": "light",
+    "path": "/preview/signup-03/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/signup-03.astro",
+    "url": "http://127.0.0.1:4327/preview/signup-03/",
+    "facts": {
+      "title": "Signup 03",
+      "documentUrl": "http://127.0.0.1:4327/preview/signup-03/",
+      "selector": "[data-slot=\"signup-03-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "signup-03-case13-light.jpg",
+      "bytes": 42355,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/signup-03/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/signup-03/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "signup-03",
+    "theme": "dark",
+    "path": "/preview/signup-03-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/signup-03-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/signup-03-dark/",
+    "facts": {
+      "title": "Signup 03 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/signup-03-dark/",
+      "selector": "[data-slot=\"signup-03-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "signup-03-case14-dark.jpg",
+      "bytes": 40051,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/signup-03-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/signup-03-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "signup-04",
+    "theme": "light",
+    "path": "/preview/signup-04/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/signup-04.astro",
+    "url": "http://127.0.0.1:4327/preview/signup-04/",
+    "facts": {
+      "title": "Signup 04",
+      "documentUrl": "http://127.0.0.1:4327/preview/signup-04/",
+      "selector": "[data-slot=\"signup-04-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "signup-04-case15-light.jpg",
+      "bytes": 50583,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/signup-04/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/signup-04/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "signup-04",
+    "theme": "dark",
+    "path": "/preview/signup-04-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/signup-04-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/signup-04-dark/",
+    "facts": {
+      "title": "Signup 04 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/signup-04-dark/",
+      "selector": "[data-slot=\"signup-04-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "signup-04-case16-dark.jpg",
+      "bytes": 48830,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/signup-04-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/signup-04-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "signup-05",
+    "theme": "light",
+    "path": "/preview/signup-05/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/signup-05.astro",
+    "url": "http://127.0.0.1:4327/preview/signup-05/",
+    "facts": {
+      "title": "Signup 05",
+      "documentUrl": "http://127.0.0.1:4327/preview/signup-05/",
+      "selector": "[data-slot=\"signup-05-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "signup-05-case17-light.jpg",
+      "bytes": 32815,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/signup-05/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/signup-05/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "signup-05",
+    "theme": "dark",
+    "path": "/preview/signup-05-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/signup-05-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/signup-05-dark/",
+    "facts": {
+      "title": "Signup 05 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/signup-05-dark/",
+      "selector": "[data-slot=\"signup-05-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "signup-05-case18-dark.jpg",
+      "bytes": 32736,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/signup-05-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/signup-05-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-01",
+    "theme": "light",
+    "path": "/preview/sidebar-01/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-01.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-01/",
+    "facts": {
+      "title": "Sidebar 01",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-01/",
+      "selector": "[data-slot=\"sidebar-01-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-01-case19-light.jpg",
+      "bytes": 43485,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-01/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-01/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-01",
+    "theme": "dark",
+    "path": "/preview/sidebar-01-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-01-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-01-dark/",
+    "facts": {
+      "title": "Sidebar 01 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-01-dark/",
+      "selector": "[data-slot=\"sidebar-01-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-01-case20-dark.jpg",
+      "bytes": 44550,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-01-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-01-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-02",
+    "theme": "light",
+    "path": "/preview/sidebar-02/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-02.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-02/",
+    "facts": {
+      "title": "Sidebar 02",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-02/",
+      "selector": "[data-slot=\"sidebar-02-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-02-case21-light.jpg",
+      "bytes": 44449,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-02/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-02/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-02",
+    "theme": "dark",
+    "path": "/preview/sidebar-02-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-02-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-02-dark/",
+    "facts": {
+      "title": "Sidebar 02 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-02-dark/",
+      "selector": "[data-slot=\"sidebar-02-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-02-case22-dark.jpg",
+      "bytes": 44810,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-02-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-02-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-03",
+    "theme": "light",
+    "path": "/preview/sidebar-03/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-03.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-03/",
+    "facts": {
+      "title": "Sidebar 03",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-03/",
+      "selector": "[data-slot=\"sidebar-03-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-03-case23-light.jpg",
+      "bytes": 44667,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-03/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-03/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-03",
+    "theme": "dark",
+    "path": "/preview/sidebar-03-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-03-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-03-dark/",
+    "facts": {
+      "title": "Sidebar 03 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-03-dark/",
+      "selector": "[data-slot=\"sidebar-03-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-03-case24-dark.jpg",
+      "bytes": 45619,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-03-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-03-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-04",
+    "theme": "light",
+    "path": "/preview/sidebar-04/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-04.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-04/",
+    "facts": {
+      "title": "Sidebar 04",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-04/",
+      "selector": "[data-slot=\"sidebar-04-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-04-case25-light.jpg",
+      "bytes": 44956,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-04/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-04/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-04",
+    "theme": "dark",
+    "path": "/preview/sidebar-04-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-04-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-04-dark/",
+    "facts": {
+      "title": "Sidebar 04 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-04-dark/",
+      "selector": "[data-slot=\"sidebar-04-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-04-case26-dark.jpg",
+      "bytes": 46636,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-04-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-04-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-05",
+    "theme": "light",
+    "path": "/preview/sidebar-05/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-05.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-05/",
+    "facts": {
+      "title": "Sidebar 05",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-05/",
+      "selector": "[data-slot=\"sidebar-05-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-05-case27-light.jpg",
+      "bytes": 43152,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-05/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-05/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-05",
+    "theme": "dark",
+    "path": "/preview/sidebar-05-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-05-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-05-dark/",
+    "facts": {
+      "title": "Sidebar 05 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-05-dark/",
+      "selector": "[data-slot=\"sidebar-05-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-05-case28-dark.jpg",
+      "bytes": 43645,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-05-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-05-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-06",
+    "theme": "light",
+    "path": "/preview/sidebar-06/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-06.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-06/",
+    "facts": {
+      "title": "Sidebar 06",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-06/",
+      "selector": "[data-slot=\"sidebar-06-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-06-case29-light.jpg",
+      "bytes": 36302,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-06/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-06/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-06",
+    "theme": "dark",
+    "path": "/preview/sidebar-06-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-06-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-06-dark/",
+    "facts": {
+      "title": "Sidebar 06 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-06-dark/",
+      "selector": "[data-slot=\"sidebar-06-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-06-case30-dark.jpg",
+      "bytes": 36450,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-06-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-06-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-07",
+    "theme": "light",
+    "path": "/preview/sidebar-07/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-07.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-07/",
+    "facts": {
+      "title": "Sidebar 07",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-07/",
+      "selector": "[data-slot=\"sidebar-07-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-07-case31-light.jpg",
+      "bytes": 36185,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-07/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-07/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-07",
+    "theme": "dark",
+    "path": "/preview/sidebar-07-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-07-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-07-dark/",
+    "facts": {
+      "title": "Sidebar 07 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-07-dark/",
+      "selector": "[data-slot=\"sidebar-07-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-07-case32-dark.jpg",
+      "bytes": 36391,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-07-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-07-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-08",
+    "theme": "light",
+    "path": "/preview/sidebar-08/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-08.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-08/",
+    "facts": {
+      "title": "Sidebar 08",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-08/",
+      "selector": "[data-slot=\"sidebar-08-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-08-case33-light.jpg",
+      "bytes": 38738,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-08/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-08/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-08",
+    "theme": "dark",
+    "path": "/preview/sidebar-08-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-08-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-08-dark/",
+    "facts": {
+      "title": "Sidebar 08 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-08-dark/",
+      "selector": "[data-slot=\"sidebar-08-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-08-case34-dark.jpg",
+      "bytes": 38853,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-08-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-08-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-09",
+    "theme": "light",
+    "path": "/preview/sidebar-09/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-09.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-09/",
+    "facts": {
+      "title": "Sidebar 09",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-09/",
+      "selector": "[data-slot=\"sidebar-09-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-09-case35-light.jpg",
+      "bytes": 79094,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-09/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-09/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-09",
+    "theme": "dark",
+    "path": "/preview/sidebar-09-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-09-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-09-dark/",
+    "facts": {
+      "title": "Sidebar 09 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-09-dark/",
+      "selector": "[data-slot=\"sidebar-09-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-09-case36-dark.jpg",
+      "bytes": 83705,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-09-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-09-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-10",
+    "theme": "light",
+    "path": "/preview/sidebar-10/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-10.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-10/",
+    "facts": {
+      "title": "Sidebar 10",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-10/",
+      "selector": "[data-slot=\"sidebar-10-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-10-case37-light.jpg",
+      "bytes": 75196,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-10/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-10/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-10",
+    "theme": "dark",
+    "path": "/preview/sidebar-10-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-10-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-10-dark/",
+    "facts": {
+      "title": "Sidebar 10 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-10-dark/",
+      "selector": "[data-slot=\"sidebar-10-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-10-case38-dark.jpg",
+      "bytes": 76277,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-10-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-10-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-11",
+    "theme": "light",
+    "path": "/preview/sidebar-11/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-11.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-11/",
+    "facts": {
+      "title": "Sidebar 11",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-11/",
+      "selector": "[data-slot=\"sidebar-11-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-11-case39-light.jpg",
+      "bytes": 42914,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-11/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-11/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-11",
+    "theme": "dark",
+    "path": "/preview/sidebar-11-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-11-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-11-dark/",
+    "facts": {
+      "title": "Sidebar 11 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-11-dark/",
+      "selector": "[data-slot=\"sidebar-11-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-11-case40-dark.jpg",
+      "bytes": 43879,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-11-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-11-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-12",
+    "theme": "light",
+    "path": "/preview/sidebar-12/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-12.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-12/",
+    "facts": {
+      "title": "Sidebar 12",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-12/",
+      "selector": "[data-slot=\"sidebar-12-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-12-case41-light.jpg",
+      "bytes": 39751,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-12/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-12/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-12",
+    "theme": "dark",
+    "path": "/preview/sidebar-12-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-12-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-12-dark/",
+    "facts": {
+      "title": "Sidebar 12 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-12-dark/",
+      "selector": "[data-slot=\"sidebar-12-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-12-case42-dark.jpg",
+      "bytes": 41983,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-12-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-12-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-13",
+    "theme": "light",
+    "path": "/preview/sidebar-13/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-13.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-13/",
+    "facts": {
+      "title": "Sidebar 13",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-13/",
+      "selector": "[data-slot=\"sidebar-13-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-13-case43-light.jpg",
+      "bytes": 37792,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-13/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-13/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-13",
+    "theme": "dark",
+    "path": "/preview/sidebar-13-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-13-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-13-dark/",
+    "facts": {
+      "title": "Sidebar 13 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-13-dark/",
+      "selector": "[data-slot=\"sidebar-13-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-13-case44-dark.jpg",
+      "bytes": 37230,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-13-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-13-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-14",
+    "theme": "light",
+    "path": "/preview/sidebar-14/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-14.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-14/",
+    "facts": {
+      "title": "Sidebar 14",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-14/",
+      "selector": "[data-slot=\"sidebar-14-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-14-case45-light.jpg",
+      "bytes": 44937,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-14/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-14/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-14",
+    "theme": "dark",
+    "path": "/preview/sidebar-14-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-14-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-14-dark/",
+    "facts": {
+      "title": "Sidebar 14 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-14-dark/",
+      "selector": "[data-slot=\"sidebar-14-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-14-case46-dark.jpg",
+      "bytes": 45966,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-14-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-14-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-15",
+    "theme": "light",
+    "path": "/preview/sidebar-15/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-15.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-15/",
+    "facts": {
+      "title": "Sidebar 15",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-15/",
+      "selector": "[data-slot=\"sidebar-15-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-15-case47-light.jpg",
+      "bytes": 78721,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-15/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-15/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-15",
+    "theme": "dark",
+    "path": "/preview/sidebar-15-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-15-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-15-dark/",
+    "facts": {
+      "title": "Sidebar 15 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-15-dark/",
+      "selector": "[data-slot=\"sidebar-15-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-15-case48-dark.jpg",
+      "bytes": 79314,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-15-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-15-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-16",
+    "theme": "light",
+    "path": "/preview/sidebar-16/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-16.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-16/",
+    "facts": {
+      "title": "Sidebar 16",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-16/",
+      "selector": "[data-slot=\"sidebar-16-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "light",
+        "hasDarkClass": false,
+        "colorScheme": "light"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-16-case49-light.jpg",
+      "bytes": 41488,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-16/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-16/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  },
+  {
+    "name": "sidebar-16",
+    "theme": "dark",
+    "path": "/preview/sidebar-16-dark/",
+    "routeFile": "/Users/nishikawa/orca/workspaces/ui/blocks-phase2/src/pages/preview/sidebar-16-dark.astro",
+    "url": "http://127.0.0.1:4327/preview/sidebar-16-dark/",
+    "facts": {
+      "title": "Sidebar 16 Dark",
+      "documentUrl": "http://127.0.0.1:4327/preview/sidebar-16-dark/",
+      "selector": "[data-slot=\"sidebar-16-preview\"]",
+      "selectorCount": 1,
+      "visibleSelectorCount": 1,
+      "previewMode": "isolated",
+      "theme": {
+        "dataTheme": "dark",
+        "hasDarkClass": true,
+        "colorScheme": "dark"
+      },
+      "viewport": {
+        "innerWidth": 1512,
+        "innerHeight": 828,
+        "devicePixelRatio": 1
+      },
+      "overflow": {
+        "documentClientWidth": 1512,
+        "documentScrollWidth": 1512,
+        "bodyClientWidth": 1512,
+        "bodyScrollWidth": 1512,
+        "previewClientWidth": 1512,
+        "previewScrollWidth": 1512,
+        "hasHorizontalOverflow": false
+      }
+    },
+    "axe": {
+      "testEngine": {
+        "name": "axe-core",
+        "version": "4.10.3"
+      },
+      "testEnvironment": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+        "windowWidth": 1512,
+        "windowHeight": 828,
+        "orientationAngle": 0,
+        "orientationType": "landscape-primary"
+      },
+      "testRunner": {
+        "name": "axe"
+      },
+      "violations": []
+    },
+    "screenshot": {
+      "filename": "sidebar-16-case50-dark.jpg",
+      "bytes": 42833,
+      "width": 1512,
+      "height": 828,
+      "dpr": 1
+    },
+    "network": {
+      "documentResponses": [
+        {
+          "url": "http://127.0.0.1:4327/preview/sidebar-16-dark/",
+          "status": 200,
+          "statusText": "OK",
+          "mimeType": "text/html",
+          "type": "Document"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "documentResponse": {
+      "url": "http://127.0.0.1:4327/preview/sidebar-16-dark/",
+      "status": 200,
+      "statusText": "OK",
+      "mimeType": "text/html",
+      "type": "Document"
+    },
+    "criticalSerious": [],
+    "failures": [],
+    "pass": true
+  }
+]
