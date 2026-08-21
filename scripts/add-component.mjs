@@ -411,7 +411,7 @@ export function blockRelocationPlan(target) {
   const seen = new Set();
   return target.files.map((file) => {
     const base = basename(file.registryPath);
-    const from = file.cliTargetPath ?? `src/components/${base}`;
+    const from = file.cliOutputPath ?? `src/components/${base}`;
     // CLI がフラット化する以上、同一 block 内で basename が衝突すると移設先を一意に決められない。
     // 実測では衝突しないが、上流の将来変更で静かに取り違えるより止める。
     if (seen.has(from)) {
@@ -450,10 +450,20 @@ export function rewriteBlockSiblingImports(source, targetPath, targetFiles) {
 // 変更パスとして残り、どのルールにも一致せず fail-closed で止まる。
 function relocateBlockFiles(root, target, log) {
   const plan = blockRelocationPlan(target);
+  const registryFileSources = new Set(
+    target.files.map((file) => file.cliOutputPath).filter(Boolean),
+  );
+  // 全件を移設前に確認する。途中まで copy してから不足へ気付くと、同じ失敗でも
+  // worktree の残り方が file 順に依存し、再開時の復元範囲が不安定になる。
+  for (const { from } of plan) {
+    if (existsSync(join(root, from))) continue;
+    const label = registryFileSources.has(from)
+      ? "registry:file の CLI 生成先"
+      : "block の CLI 生成先";
+    throw new Error(`${label}が存在しない: ${from}`);
+  }
   for (const { from, to } of plan) {
     const fromPath = join(root, from);
-    // 生成されなかった場合はここで止めず、後段の生成確認に一本化する。
-    if (!existsSync(fromPath)) continue;
     mkdirSync(dirname(join(root, to)), { recursive: true });
     // rename は POSIX では既存の移設先を上書きする。副作用前の検査に加え、
     // COPYFILE_EXCL で実移設時の競合も fail-closed にする。
@@ -474,7 +484,7 @@ function relocateBlockFiles(root, target, log) {
   }
 }
 
-// CLI は --overwrite で動くため、registry:file の上流 target と最終移設先を副作用前に検査する。
+// CLI は --overwrite で動くため、registry:file の実生成先と最終移設先を副作用前に検査する。
 // 実移設時にも COPYFILE_EXCL を使い、検査後に競合が生じても上書きしない。
 function prepareBlockRelocation(root, target) {
   for (const { to } of blockRelocationPlan(target)) {
@@ -483,8 +493,8 @@ function prepareBlockRelocation(root, target) {
     }
   }
   for (const file of target.files) {
-    if (file.cliTargetPath && existsSync(join(root, file.cliTargetPath))) {
-      throw new Error(`registry:file の target が実行前から存在する: ${file.cliTargetPath}`);
+    if (file.cliOutputPath && existsSync(join(root, file.cliOutputPath))) {
+      throw new Error(`registry:file の CLI 生成先が実行前から存在する: ${file.cliOutputPath}`);
     }
   }
 }
@@ -576,8 +586,8 @@ const upstreamPathOf = (registryPath) => {
 // 上流 block が持ちうる file type のうち、この機構が正しく扱えると実証済みのもの。
 // 「registry:page 以外は全部配布」にすると未知の type を黙って配布側へ流す。
 //
-// registry:component は components alias 直下、registry:file は上流 item の target へ
-// CLI が書く。移設元を type ごとに解決できるこの 2 種だけを許可する。
+// registry:component は components alias 直下、registry:file は上流 target から
+// CLI 4.16.0 の実生成先を解決できる。この 2 種だけを許可する。
 const SUPPORTED_BLOCK_FILE_TYPES = new Set(["registry:component", "registry:file"]);
 
 // dashboard-01 固有の採用判断。別 block の同名ファイルを巻き込まないよう、
@@ -585,6 +595,15 @@ const SUPPORTED_BLOCK_FILE_TYPES = new Set(["registry:component", "registry:file
 const BLOCK_FILE_EXCLUSIONS = new Map([
   ["dashboard-01", new Set(["registry/base-nova/blocks/dashboard-01/components/data-table.tsx"])],
 ]);
+
+function cliOutputPathForRegistryFile(name, upstreamTargetPath) {
+  // 2026-08-22 に shadcn CLI 4.16.0 で実測した規則。target が `~/` で始まる場合は
+  // そのまま使い、それ以外は source root の `src/` を前置して生成する。
+  const cliOutputPath = upstreamTargetPath.startsWith("~/")
+    ? upstreamTargetPath
+    : `src/${upstreamTargetPath}`;
+  return assertContainedPath(`${name}: registry:file の CLI 生成先`, cliOutputPath);
+}
 
 function resolveDistributedBlockFile(name, file, registryPath, blockPrefix) {
   if (!SUPPORTED_BLOCK_FILE_TYPES.has(file.type)) {
@@ -595,12 +614,14 @@ function resolveDistributedBlockFile(name, file, registryPath, blockPrefix) {
   if (file.type === "registry:component" && file.target !== undefined) {
     throw new Error(`${name}: registry:component に target は指定できない: ${file.target}`);
   }
-  let cliTargetPath;
+  let upstreamTargetPath;
+  let cliOutputPath;
   if (file.type === "registry:file") {
     if (typeof file.target !== "string" || !file.target) {
       throw new Error(`${name}: registry:file に target が無い: ${registryPath}`);
     }
-    cliTargetPath = assertContainedPath(`${name}: registry:file の target`, file.target);
+    upstreamTargetPath = assertContainedPath(`${name}: registry:file の target`, file.target);
+    cliOutputPath = cliOutputPathForRegistryFile(name, upstreamTargetPath);
   }
   return {
     registryPath,
@@ -610,7 +631,7 @@ function resolveDistributedBlockFile(name, file, registryPath, blockPrefix) {
     ),
     upstreamPath: upstreamPathOf(registryPath),
     fileType: file.type,
-    ...(cliTargetPath ? { cliTargetPath } : {}),
+    ...(upstreamTargetPath ? { upstreamTargetPath, cliOutputPath } : {}),
   };
 }
 
