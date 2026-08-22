@@ -1,0 +1,3 @@
+rg -n "@dnd-kit|DndContext|SortableContext|useSortable|draggable|onDrag|drag handle|drag-handle" package.json src/blocks/dashboard-table src/previews/dashboard-table.tsx
+exit=1
+matches=0
