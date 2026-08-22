@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
-import { findMissingRegistryItems } from "./check-registry-build.mjs";
+import { findMissingRegistryItems, registryBuildProblems } from "./check-registry-build.mjs";
 
 const scriptPath = fileURLToPath(new URL("./check-registry-build.mjs", import.meta.url));
 
@@ -30,16 +30,131 @@ test("registry item に対応する生成物が無ければ item 名を返す", 
   ]);
 });
 
+test("生成 JSON の manifest と files content が source に一致すれば問題なし", () => {
+  const registry = {
+    items: [
+      {
+        name: "button",
+        type: "registry:ui",
+        files: [{ path: "src/components/ui/button.tsx", type: "registry:ui" }],
+      },
+    ],
+  };
+  const builtItems = new Map([
+    [
+      "button",
+      {
+        name: "button",
+        type: "registry:ui",
+        files: [
+          {
+            path: "src/components/ui/button.tsx",
+            type: "registry:ui",
+            content: "export const Button = () => null;\n",
+          },
+        ],
+      },
+    ],
+  ]);
+  const sourceContents = new Map([
+    ["src/components/ui/button.tsx", "export const Button = () => null;\n"],
+  ]);
+
+  assert.deepEqual(registryBuildProblems(registry, builtItems, sourceContents), []);
+});
+
+test("空 JSON と stale な files content を生成済みとして扱わない", () => {
+  const registry = {
+    items: [
+      {
+        name: "button",
+        type: "registry:ui",
+        files: [{ path: "src/components/ui/button.tsx", type: "registry:ui" }],
+      },
+      {
+        name: "dashboard-table",
+        type: "registry:block",
+        files: [
+          {
+            path: "src/blocks/dashboard-table/components/dashboard-table.tsx",
+            type: "registry:component",
+          },
+        ],
+      },
+    ],
+  };
+  const builtItems = new Map([
+    ["button", {}],
+    [
+      "dashboard-table",
+      {
+        name: "dashboard-table",
+        type: "registry:block",
+        files: [
+          {
+            path: "src/blocks/dashboard-table/components/dashboard-table.tsx",
+            type: "registry:component",
+            content: "古い生成物\n",
+          },
+        ],
+      },
+    ],
+  ]);
+  const sourceContents = new Map([
+    ["src/components/ui/button.tsx", "export const Button = () => null;\n"],
+    [
+      "src/blocks/dashboard-table/components/dashboard-table.tsx",
+      "export function DashboardTable() { return null; }\n",
+    ],
+  ]);
+
+  assert.deepEqual(registryBuildProblems(registry, builtItems, sourceContents), [
+    "button: 生成 JSON の manifest が registry.json と一致しない",
+    "dashboard-table: src/blocks/dashboard-table/components/dashboard-table.tsx の生成 content が source と一致しない",
+  ]);
+});
+
 test("CLI は生成物の充足を exit code と実 item 名で通知する", (t) => {
   const root = mkdtempSync(join(tmpdir(), "elchika-registry-build-test-"));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   mkdirSync(join(root, "public/r"), { recursive: true });
+  mkdirSync(join(root, "src/blocks/dashboard-01"), { recursive: true });
+  const registry = {
+    items: [
+      {
+        name: "button",
+        type: "registry:ui",
+        files: [{ path: "src/button.tsx", type: "registry:ui" }],
+      },
+      {
+        name: "dashboard-01",
+        type: "registry:block",
+        files: [{ path: "src/blocks/dashboard-01/data.json", type: "registry:file" }],
+      },
+    ],
+  };
+  writeFileSync(join(root, "registry.json"), `${JSON.stringify(registry)}\n`);
+  writeFileSync(join(root, "src/button.tsx"), "export const Button = () => null;\n");
+  writeFileSync(join(root, "src/blocks/dashboard-01/data.json"), "[]\n");
   writeFileSync(
-    join(root, "registry.json"),
-    `${JSON.stringify({ items: [{ name: "button" }, { name: "dashboard-01" }] })}\n`,
+    join(root, "public/r/button.json"),
+    `${JSON.stringify({
+      ...registry.items[0],
+      files: [
+        {
+          ...registry.items[0].files[0],
+          content: "export const Button = () => null;\n",
+        },
+      ],
+    })}\n`,
   );
-  writeFileSync(join(root, "public/r/button.json"), "{}\n");
-  writeFileSync(join(root, "public/r/dashboard-01.json"), "{}\n");
+  writeFileSync(
+    join(root, "public/r/dashboard-01.json"),
+    `${JSON.stringify({
+      ...registry.items[1],
+      files: [{ ...registry.items[1].files[0], content: "[]\n" }],
+    })}\n`,
+  );
   writeFileSync(join(root, "public/r/index.json"), "{}\n");
 
   const complete = spawnSync(process.execPath, [scriptPath], { cwd: root, encoding: "utf8" });
