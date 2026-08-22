@@ -83,6 +83,22 @@ shadcn CLI 同梱の MCP を初期化する。生成された `.mcp.json` を有
 npx shadcn@latest mcp init --client claude
 ```
 
+### block
+
+block は registry build に使った shadcn CLI の版を固定して取り込む。
+
+```bash
+npx shadcn@4.16.0 add https://ui.elchika.dev/r/login-01.json
+npx shadcn@4.16.0 add https://ui.elchika.dev/r/dashboard-01.json
+npx shadcn@4.16.0 add https://ui.elchika.dev/r/dashboard-table.json
+```
+
+- `login-01` はログイン画面の block。複数の login block は同じ `login-form.tsx` を生成して衝突するため、1 つを選んで使う。
+- `dashboard-01` はサイドバー・カード・チャートを含む dashboard の枠。上流の `data-table.tsx` は npm 依存 6 件を必要とするため配布せず、追加依存のない状態を保っている。
+- `dashboard-table` は除外した table の機能構成を参照し、既存の registry 部品と React state だけで自作した block。並べ替え・絞り込み・列表示・行選択・詳細 drawer・chart を備えるが、DnD による行の並べ替えは搭載しない。
+
+上流の `page.tsx` は配布しないため、ルーティングと block の配置は利用側で実装する。上流 `page.tsx` が持つレイアウト枠は、ドキュメントサイトの `/preview/<name>/` で確認できる。
+
 ### 貢献者向けローカル確認
 
 ```bash
