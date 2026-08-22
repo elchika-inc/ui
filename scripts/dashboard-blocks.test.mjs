@@ -200,6 +200,21 @@ test("dashboard-01 の来歴は法人格表記を除去したと記録しない"
   assert.doesNotMatch(modified, /法人格表記を除去/);
 });
 
+test("dashboard-01 preview は catalog の sidebar を item 内へ静的配置する", () => {
+  const { sourceFile } = parseTsx("src/previews/dashboard-01.tsx");
+  const component = namedTopLevelFunction(sourceFile, "DashboardZeroOnePreview");
+  const appSidebars = componentJsxOpenings(component).filter(
+    (opening) => opening.tagName.getText(sourceFile) === "AppSidebar",
+  );
+
+  assert.equal(appSidebars.length, 1, "DashboardZeroOnePreview 内の AppSidebar が一意である");
+  assert.equal(
+    jsxAttribute(appSidebars[0], "collapsible", sourceFile),
+    '{catalog ? "none" : "offcanvas"}',
+    "catalog では fixed sidebar 分岐を使わず、isolated では offcanvas を維持する",
+  );
+});
+
 test("dashboard chart は TimeRange から UTC の両端を含む 7/30/90 日だけを描画へ渡す", () => {
   const path = "src/blocks/dashboard-01/components/chart-area-interactive.tsx";
   const { sourceFile } = parseTsx(path);

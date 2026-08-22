@@ -28,7 +28,7 @@ export function DashboardZeroOnePreview({ mode = "isolated" }: PreviewProps) {
             } as React.CSSProperties
           }
         >
-          <AppSidebar variant="inset" />
+          <AppSidebar variant="inset" collapsible={catalog ? "none" : "offcanvas"} />
           <SidebarInset>
             <SiteHeader />
             <div className="flex flex-1 flex-col">
