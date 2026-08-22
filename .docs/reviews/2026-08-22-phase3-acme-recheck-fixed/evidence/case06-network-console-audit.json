@@ -1,0 +1,110 @@
+{
+  "verified_impl_sha": "71446e87c3fdf3127d3e3e990e9470893fa11990",
+  "acceptedAudits": {
+    "light": {
+      "cursorStart": 985,
+      "cursorEnd": 1738,
+      "batches": [
+        {
+          "cursor": 1738,
+          "eventCount": 161,
+          "hasMore": false,
+          "truncated": false
+        }
+      ],
+      "truncated": false,
+      "eventCount": 161,
+      "responseCount": 158,
+      "httpErrors": [],
+      "requestFailures": [],
+      "pageExceptions": [],
+      "consoleErrors": []
+    },
+    "dark": {
+      "cursorStart": 1738,
+      "cursorEnd": 2481,
+      "batches": [
+        {
+          "cursor": 2481,
+          "eventCount": 161,
+          "hasMore": false,
+          "truncated": false
+        }
+      ],
+      "truncated": false,
+      "eventCount": 161,
+      "responseCount": 158,
+      "httpErrors": [],
+      "requestFailures": [],
+      "pageExceptions": [],
+      "consoleErrors": []
+    },
+    "mobile": {
+      "cursorStart": 2481,
+      "cursorEnd": 3232,
+      "batches": [
+        {
+          "cursor": 3232,
+          "eventCount": 161,
+          "hasMore": false,
+          "truncated": false
+        }
+      ],
+      "truncated": false,
+      "eventCount": 161,
+      "responseCount": 158,
+      "httpErrors": [],
+      "requestFailures": [],
+      "pageExceptions": [],
+      "consoleErrors": []
+    },
+    "catalog": {
+      "cursorStart": 3233,
+      "cursorEnd": 5869,
+      "batchCount": 71,
+      "maxBatchEvents": 91,
+      "truncated": false,
+      "truncatedBatches": [],
+      "eventCount": 436,
+      "responseCount": 421,
+      "httpErrors": [],
+      "requestFailures": [],
+      "pageExceptions": [],
+      "consoleErrors": []
+    },
+    "catalogVisualInteraction": {
+      "cursorStart": 5875,
+      "cursorEnd": 5876,
+      "batches": [
+        {
+          "cursor": 5876,
+          "eventCount": 0,
+          "hasMore": false,
+          "truncated": false
+        }
+      ],
+      "truncated": false,
+      "eventCount": 0,
+      "responseCount": 0,
+      "httpErrors": [],
+      "requestFailures": [],
+      "pageExceptions": [],
+      "consoleErrors": []
+    }
+  },
+  "summary": {
+    "observedResponseCount": 895,
+    "countPolicy": "今回観測値のみ",
+    "http4xx5xx": 0,
+    "requestFailures": 0,
+    "pageExceptions": 0,
+    "consoleErrors": 0,
+    "allBuffersTruncatedFalse": true,
+    "devErrorLogs": {
+      "light": [],
+      "dark": [],
+      "mobile": [],
+      "catalog": []
+    }
+  }
+}
