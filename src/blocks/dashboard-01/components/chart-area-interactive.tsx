@@ -164,6 +164,14 @@ export function filterChartDataByDays<T extends { date: string }>(
   return data.filter((item) => chartDate(item.date) >= startDate);
 }
 
+export function chartDataForTimeRange<T extends { date: string }>(
+  data: readonly T[],
+  timeRange: TimeRange,
+  referenceDate: string,
+) {
+  return filterChartDataByDays(data, TIME_RANGES[timeRange].days, referenceDate);
+}
+
 function isTimeRange(value: string): value is TimeRange {
   return value in TIME_RANGES;
 }
@@ -182,7 +190,7 @@ export function ChartAreaInteractive() {
   }, [isMobile]);
 
   const selectedRange = TIME_RANGES[timeRange];
-  const filteredData = filterChartDataByDays(chartData, selectedRange.days, "2024-06-30");
+  const filteredData = chartDataForTimeRange(chartData, timeRange, "2024-06-30");
 
   return (
     <Card className="@container/card">

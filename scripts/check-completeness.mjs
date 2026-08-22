@@ -202,6 +202,21 @@ function blockFileProblems(name, file, index, origin) {
   return migratedBlockFileProblems(name, file, index);
 }
 
+function duplicateBlockFileProblems(name, files, origin) {
+  const keyNames = origin.fileRequired.length === 0 ? ["path"] : ["upstreamPath", "path"];
+  return keyNames.flatMap((keyName) => {
+    const counts = new Map();
+    for (const file of files) {
+      const key = file[keyName];
+      if (typeof key !== "string" || key.length === 0) continue;
+      counts.set(key, (counts.get(key) ?? 0) + 1);
+    }
+    return [...counts]
+      .filter(([, count]) => count > 1)
+      .map(([key]) => `${name}: provenance の files に ${keyName} の重複がある: ${key}`);
+  });
+}
+
 // block は barrel export と <Name>Props を要求しない。registry 経由で copy-and-edit
 // する雛形であり、ライブラリの公開 API ではないため（設計 §3-1 の要件マトリクス）。
 function blockProblems(name, registry, previewFiles, previewSources, provenance, onDisk, sources) {
@@ -246,9 +261,30 @@ function blockProblems(name, registry, previewFiles, previewSources, provenance,
   }
   return [
     ...problems,
+    ...duplicateBlockFileProblems(name, p.files, origin),
     ...p.files.flatMap((file, index) => blockFileProblems(name, file, index, origin)),
     ...blockFileSetProblems(name, registry, p.files, onDisk, sources, origin.requiresDropped),
   ];
+}
+
+function registryDependencyProblems(registry) {
+  const problems = [];
+  const itemCounts = new Map();
+  for (const item of registry.items) {
+    itemCounts.set(item.name, (itemCounts.get(item.name) ?? 0) + 1);
+  }
+  for (const item of registry.items) {
+    for (const dependency of item.registryDependencies ?? []) {
+      if (dependency.startsWith("@") && !dependency.startsWith("@elchika/")) continue;
+      const name = dependency.replace(/^@elchika\//, "");
+      if ((itemCounts.get(name) ?? 0) === 0) {
+        problems.push(
+          `${item.name}: registryDependencies の ${dependency} に対応する registry item が存在しない`,
+        );
+      }
+    }
+  }
+  return problems;
 }
 
 // files[] の「形」だけを見ると、エントリを 1 件消しても残りが正しい限り緑になる。
@@ -516,6 +552,7 @@ export function checkCompleteness({
   )) {
     if (count > 1) problems.push(`${name}: registry.json に同名 item が ${count} 件ある`);
   }
+  problems.push(...registryDependencyProblems(registry));
   const barrelPaths = exportedModulePaths(barrel);
   for (const name of components) {
     problems.push(

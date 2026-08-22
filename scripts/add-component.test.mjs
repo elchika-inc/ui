@@ -2062,6 +2062,94 @@ test("prefix が先頭以外にある block の file path を通さない", asyn
   );
 });
 
+test("registry 依存閉包の推移先 item が無ければ fail-closed で停止する", async () => {
+  const { buildRegistryItem, resolveRegistryTarget } = await loadModule();
+  const upstream = structuredClone(dashboardUpstream);
+  upstream.files.find((file) => file.path.endsWith("/chart-area-interactive.tsx")).content =
+    'import { Sidebar } from "@/registry/base-nova/ui/sidebar";\n';
+  upstream.registryDependencies = ["sidebar", "ghost"];
+  const target = resolveRegistryTarget("dashboard-01", upstream);
+
+  assert.throws(
+    () =>
+      buildRegistryItem(
+        "dashboard-01",
+        upstream,
+        'import { Sidebar } from "@/components/ui/sidebar";\n',
+        target,
+        [
+          {
+            name: "sidebar",
+            type: "registry:ui",
+            registryDependencies: ["@elchika/ghost"],
+          },
+        ],
+      ),
+    /registry dependency.*ghost.*存在しない/,
+  );
+});
+
+test("block 所有 registry:file が共有配布 target と衝突したら停止する", async () => {
+  const { buildRegistryItem, resolveRegistryTarget } = await loadModule();
+  const upstream = {
+    name: "asset-01",
+    type: "registry:block",
+    files: [
+      {
+        path: "registry/base-nova/blocks/asset-01/LICENSE",
+        type: "registry:file",
+        target: "~/elchika-ui/LICENSE",
+      },
+    ],
+  };
+  const target = resolveRegistryTarget("asset-01", upstream);
+
+  assert.throws(
+    () => buildRegistryItem("asset-01", upstream, "", target),
+    /registry:file.*target.*共有配布 file.*衝突.*~\/elchika-ui\/LICENSE/,
+  );
+});
+
+test("明示除外 block の動的 import から npm dependency を保持する", async () => {
+  const { buildRegistryItem, resolveRegistryTarget } = await loadModule();
+  const upstream = structuredClone(dashboardUpstream);
+  upstream.files.find((file) => file.path.endsWith("/chart-area-interactive.tsx")).content =
+    'export const loadWidget = () => import("optional-widget");\n';
+  upstream.dependencies = ["optional-widget"];
+  upstream.registryDependencies = [];
+  const target = resolveRegistryTarget("dashboard-01", upstream);
+
+  const item = buildRegistryItem(
+    "dashboard-01",
+    upstream,
+    'export const loadWidget = () => import("optional-widget");\n',
+    target,
+  );
+
+  assert.deepEqual(item.dependencies, ["optional-widget", "shadcn", "tw-animate-css"]);
+});
+
+test("明示除外 block の非 literal 動的 import は推測せず停止する", async () => {
+  const { buildRegistryItem, resolveRegistryTarget } = await loadModule();
+  const upstream = structuredClone(dashboardUpstream);
+  upstream.files.find((file) => file.path.endsWith("/chart-area-interactive.tsx")).content =
+    "export const loadWidget = (name) => import(name);\n";
+  upstream.dependencies = ["optional-widget"];
+  upstream.registryDependencies = [];
+  const target = resolveRegistryTarget("dashboard-01", upstream);
+
+  assert.throws(
+    () =>
+      buildRegistryItem(
+        "dashboard-01",
+        upstream,
+        "export const loadWidget = (name) => import(name);\n",
+        target,
+      ),
+    /動的 import.*文字列リテラルでない/,
+  );
+});
+
 // 正規化（biome 整形・standards 適合）を行うと、CLI 生成物から取ったハッシュとずれる。
 // --force は CLI を再実行するので正規化を上書きしてしまい、lint を直すと再びずれる。
 // 正規化と来歴を同時に満たす経路として --resync を持つ。

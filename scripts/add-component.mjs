@@ -17,6 +17,7 @@ import {
 import { tmpdir } from "node:os";
 import { basename, dirname, extname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
+import ts from "typescript";
 
 const DEPENDENCY_SECTIONS = [
   "dependencies",
@@ -185,15 +186,26 @@ function registryDependencyName(dependency) {
 }
 
 function registryDependencyClosure(directDependencies, registryItems) {
-  const itemsByName = new Map(registryItems.map((item) => [item.name, item]));
+  const itemsByName = new Map();
+  for (const item of registryItems) {
+    const candidates = itemsByName.get(item.name) ?? [];
+    candidates.push(item);
+    itemsByName.set(item.name, candidates);
+  }
   const closure = new Set();
   const pending = [...directDependencies];
   while (pending.length > 0) {
     const name = pending.shift();
     if (closure.has(name)) continue;
+    const candidates = itemsByName.get(name) ?? [];
+    if (candidates.length === 0) {
+      throw new Error(`registry dependency ${name} に対応する registry item が存在しない`);
+    }
+    if (candidates.length > 1) {
+      throw new Error(`registry dependency ${name} に対応する registry item が重複している`);
+    }
     closure.add(name);
-    const item = itemsByName.get(name);
-    for (const dependency of item?.registryDependencies ?? []) {
+    for (const dependency of candidates[0].registryDependencies ?? []) {
       pending.push(registryDependencyName(dependency));
     }
   }
@@ -583,21 +595,53 @@ function packageFromImport(specifier) {
   return specifier.split("/")[0];
 }
 
-function externalImports(source) {
+function importedModuleSpecifiers(source, fileName) {
+  const sourceFile = ts.createSourceFile(
+    fileName,
+    source,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TSX,
+  );
+  if (sourceFile.parseDiagnostics.length > 0) {
+    throw new Error(`${fileName}: import を解析できない`);
+  }
+  const specifiers = new Set();
+  const visit = (node) => {
+    if (
+      (ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) &&
+      node.moduleSpecifier &&
+      ts.isStringLiteralLike(node.moduleSpecifier)
+    ) {
+      specifiers.add(node.moduleSpecifier.text);
+    }
+    if (ts.isCallExpression(node) && node.expression.kind === ts.SyntaxKind.ImportKeyword) {
+      if (node.arguments.length !== 1 || !ts.isStringLiteralLike(node.arguments[0])) {
+        throw new Error(`${fileName}: 動的 import の指定が文字列リテラルでない`);
+      }
+      specifiers.add(node.arguments[0].text);
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sourceFile);
+  return specifiers;
+}
+
+function externalImports(source, fileName = "registry item") {
   const packages = new Set();
-  const pattern = /(?:from\s*|import\s*)["']([^"']+)["']/g;
-  for (const match of source.matchAll(pattern)) {
-    const name = packageFromImport(match[1]);
+  for (const specifier of importedModuleSpecifiers(source, fileName)) {
+    const name = packageFromImport(specifier);
     if (name && !["react", "react-dom"].includes(name)) packages.add(name);
   }
   return packages;
 }
 
-function registryItemImports(source) {
+function registryItemImports(source, fileName = "registry item") {
   const dependencies = new Map();
-  const pattern =
-    /(?:from\s*|import\s*)["']@\/(components\/ui|registry\/base-nova\/ui|hooks)\/([a-z0-9]+(?:-[a-z0-9]+)*)["']/g;
-  for (const match of source.matchAll(pattern)) {
+  const pattern = /^@\/(components\/ui|registry\/base-nova\/ui|hooks)\/([a-z0-9]+(?:-[a-z0-9]+)*)$/;
+  for (const specifier of importedModuleSpecifiers(source, fileName)) {
+    const match = specifier.match(pattern);
+    if (!match) continue;
     const prefix = match[1];
     const name = match[2];
     const expectedType = prefix === "hooks" ? "registry:hook" : "registry:ui";
@@ -608,6 +652,16 @@ function registryItemImports(source) {
     });
   }
   return [...dependencies.values()];
+}
+
+function assertNoSharedRegistryTargetCollisions(name, itemFiles) {
+  const sharedTargets = new Set(SHARED_REGISTRY_FILES.map((file) => file.target));
+  const collision = itemFiles.find(
+    (file) => file.type === "registry:file" && sharedTargets.has(file.target),
+  );
+  if (collision) {
+    throw new Error(`${name}: registry:file の target が共有配布 file と衝突: ${collision.target}`);
+  }
 }
 
 export function completeBlockRegistryDependencies(
@@ -812,7 +866,7 @@ export function buildRegistryItem(name, upstreamItem, generatedSource, target, r
   for (const dependency of dependenciesForDistributedFiles(upstreamItem, target)) {
     dependenciesByName.set(dependencyName(dependency), dependency);
   }
-  for (const dependency of externalImports(generatedSource)) {
+  for (const dependency of externalImports(generatedSource, `${name}: 生成物`)) {
     if (!dependenciesByName.has(dependency)) dependenciesByName.set(dependency, dependency);
   }
   for (const dependency of SHARED_DEPENDENCIES) {
@@ -831,6 +885,8 @@ export function buildRegistryItem(name, upstreamItem, generatedSource, target, r
           ...(fileType === "registry:file" ? { target: upstreamTargetPath } : {}),
         }))
       : [{ path: target.targetPath, type: target.itemType }];
+
+  assertNoSharedRegistryTargetCollisions(name, itemFiles);
 
   const item = {
     $schema: "https://ui.shadcn.com/schema/registry-item.json",

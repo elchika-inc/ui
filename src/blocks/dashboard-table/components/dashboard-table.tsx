@@ -101,9 +101,12 @@ export function compareRows(left: DashboardTableRow, right: DashboardTableRow, k
   if (key === "target") {
     const leftTarget = Number(left.target);
     const rightTarget = Number(right.target);
-    if (Number.isFinite(leftTarget) && Number.isFinite(rightTarget)) {
+    const leftIsNumeric = Number.isFinite(leftTarget);
+    const rightIsNumeric = Number.isFinite(rightTarget);
+    if (leftIsNumeric && rightIsNumeric) {
       return leftTarget - rightTarget;
     }
+    if (leftIsNumeric !== rightIsNumeric) return leftIsNumeric ? -1 : 1;
   }
   return left[key].localeCompare(right[key]);
 }
@@ -300,10 +303,17 @@ function DetailChart({ row }: { row: DashboardTableRow }) {
       role="group"
       aria-label={`${row.header} の進捗チャート`}
       config={DETAIL_CHART_CONFIG}
-      className="min-h-48 w-full text-primary"
+      className="h-48 w-full text-primary"
       initialDimension={{ width: 320, height: 160 }}
     >
-      <svg role="img" aria-label="Target と limit の推移" viewBox="0 0 320 160">
+      <svg
+        role="img"
+        aria-label="Target と limit の推移"
+        className="h-full w-full"
+        width="100%"
+        height="100%"
+        viewBox="0 0 320 160"
+      >
         <line x1="24" y1="136" x2="296" y2="136" stroke="currentColor" opacity="0.2" />
         <polyline
           points={points}

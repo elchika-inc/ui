@@ -1233,7 +1233,11 @@ registry.json / provenance.json / component-categories.mjs が単一の
 
 設計 §3-6 に従い、上流 dashboard-01 の 11 ファイルから **`registry:page` と `data-table.tsx` を除いた 9 ファイル**を移植する。後者を除外する理由は npm 依存 6 件を持ち込むためで、Next 規約による `registry:page` の除外とは理由が異なる。
 
-**新規 npm 依存はゼロ。** `recharts` と `sonner` は導入済み（実測）。
+**新規 npm 依存はゼロ。** `recharts` と `sonner` は導入済み（実測）。ここでいう依存ゼロは、次の 3 境界を別々に検証する。
+
+- **repo dependency delta**: 当リポジトリの `package.json` / `package-lock.json` に差分が無い
+- **配布 item の npm `dependencies`**: 通常の `registry:page` 除外だけなら上流宣言を保持する。`data-table.tsx` のような明示的な追加除外がある場合は、残存配布 file の静的・動的 external import が直接要求する依存だけへ絞る
+- **配布 item の `registryDependencies`**: 通常の `registry:page` 除外だけなら上流宣言を保持する。明示的な追加除外がある場合は、残存配布 file の直接 local import を起点に、当リポジトリの local registry graph で到達できる推移閉包だけへ絞る。閉包の全 item は一意に解決できなければならず、解決不能・重複は fail-closed で停止する
 
 **Files:**
 - Modify: `scripts/add-component.mjs`（block 内 `registry:file` への対応）
@@ -1274,6 +1278,16 @@ Expected: FAIL。`registry:file` が未対応として throw される。
 - 移設先に既存ファイルがあれば上書きせず停止する
 - `reconcileAddChanges` の許可集合に移設後のパスを含める
 - ローカル registry item では **block 所有の `registry:file`** として記録する。共有法務ファイル（`target` 付きの `registry:file`）と混同しない
+
+共有 file は次の exact `(path, target)` pair だけを指す。片方だけ一致する file は block 所有として扱い、block 所有 `registry:file` の target が共有 file の target と衝突する場合は manifest 作成前に fail-closed で停止する。
+
+| path | target |
+|---|---|
+| `src/styles/global.css` | `~/elchika-ui/tokens.css` |
+| `src/styles/design-system/tokens.css` | `~/elchika-ui/design-system/tokens.css` |
+| `src/styles/design-system/brands.css` | `~/elchika-ui/design-system/brands.css` |
+| `LICENSE` | `~/elchika-ui/LICENSE` |
+| `THIRD_PARTY_LICENSES` | `~/elchika-ui/THIRD_PARTY_LICENSES` |
 
 - [ ] **Step 4: テストを実行して通ることを確認する**
 
@@ -1561,7 +1575,7 @@ Task 5 Step 4〜6 と同じ手順。カテゴリは「アプリシェル」。`p
 | 確認項目 | 判定 |
 |---|---|
 | テーブルが行データを描画する | light / dark 両方 |
-| 列ヘッダのクリックでソートが切り替わる | 実操作 |
+| 列ヘッダのクリックでソートが切り替わる | 実操作。`target` は有限数値文字列同士を数値順、数値と非数値を固定 bucket 順、非数値同士を `localeCompare` で並べる |
 | フィルタ入力で行が絞られる | 実操作 |
 | 列の表示切替メニューが機能する | 実操作 |
 | 行のチェックボックスで選択できる | 実操作 |
@@ -1569,6 +1583,8 @@ Task 5 Step 4〜6 と同じ手順。カテゴリは「アプリシェル」。`p
 | **DnD は非搭載** | DnD の依存・import、handler、`draggable` や drag handle の affordance が無いことを検査し、実ブラウザでもドラッグ affordance と行順変更が無いことを確認する |
 
 証跡は `.docs/reviews/` へ light / dark で追加し、**DnD 非搭載を上流との既知の差分として report 本文に書く**。ソース検査では依存・import、handler、affordance の不在を固定し、実ブラウザでは drag affordance が描画されず行順を変更できないことを確認する。
+
+数値・非数値を混在させた `target` sort は、全 permutation が同じ全順序へ収束し、昇順・降順で順序が正確に反転することを検査する。
 
 - [ ] **Step 10: コミット**
 

@@ -529,6 +529,27 @@ test("block の files が空なら検出する", () => {
   assert.deepEqual(problems, ["login-01: provenance の files が 0 件"]);
 });
 
+test("移植 block の files は upstreamPath の重複を許さない", () => {
+  const provenance = structuredClone(completeBlock.provenance);
+  provenance.blocks["login-01"].files.push(structuredClone(provenance.blocks["login-01"].files[0]));
+
+  assert.deepEqual(checkCompleteness({ ...completeBlock, provenance }).problems, [
+    "login-01: provenance の files に upstreamPath の重複がある: apps/v4/registry/bases/base/blocks/login-01/components/login-form.tsx",
+    "login-01: provenance の files に path の重複がある: src/blocks/login-01/components/login-form.tsx",
+  ]);
+});
+
+test("自作 block の files は path の重複を許さない", () => {
+  const provenance = structuredClone(completeOriginalBlock.provenance);
+  provenance.blocks["dashboard-table"].files.push(
+    structuredClone(provenance.blocks["dashboard-table"].files[0]),
+  );
+
+  assert.deepEqual(checkCompleteness({ ...completeOriginalBlock, provenance }).problems, [
+    `dashboard-table: provenance の files に path の重複がある: ${originalBlockPath}`,
+  ]);
+});
+
 test("配布ファイルの generatedContentSha256 欠落を検出する", () => {
   const provenance = structuredClone(completeBlock.provenance);
   provenance.blocks["login-01"].files[0].generatedContentSha256 = undefined;
@@ -819,6 +840,10 @@ test("配布ファイルが import する @/hooks の未宣言を検出する", 
 
 test("registryDependencies に宣言されていれば問題を返さない", () => {
   const registry = structuredClone(completeBlock.registry);
+  registry.items.push(
+    { name: "field", type: "registry:ui" },
+    { name: "use-mobile", type: "registry:hook" },
+  );
   registry.items[1].registryDependencies = ["@elchika/field", "@elchika/use-mobile"];
   const { problems } = checkCompleteness(
     withSource(
@@ -827,6 +852,15 @@ test("registryDependencies に宣言されていれば問題を返さない", ()
     ),
   );
   assert.deepEqual(problems, []);
+});
+
+test("registryDependencies が存在しない local item を指したら検出する", () => {
+  const registry = structuredClone(completeBlock.registry);
+  registry.items[1].registryDependencies = ["@elchika/ghost"];
+
+  assert.deepEqual(checkCompleteness({ ...completeBlock, registry }).problems, [
+    "login-01: registryDependencies の @elchika/ghost に対応する registry item が存在しない",
+  ]);
 });
 
 // 新しい alias が増えたときに黙って穴が開かないよう fail-closed にする。

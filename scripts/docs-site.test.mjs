@@ -111,3 +111,35 @@ test("dashboard-table の実ブラウザ基準は明示ボタンと DnD 不在�
   assert.match(step9, /affordance/);
   assert.match(step9, /実ブラウザ/);
 });
+
+test("Task 7 は依存ゼロの3境界と registry:file 所有衝突を区別する", () => {
+  const plan = readFileSync(
+    new URL("../.docs/plans/2026-08-17-registry-blocks-plan.md", import.meta.url),
+    "utf8",
+  );
+  const task7 = plan.slice(plan.indexOf("## Task 7:"), plan.indexOf("## Task 8:"));
+
+  assert.match(task7, /repo dependency delta/);
+  assert.match(task7, /配布 item の npm `dependencies`/);
+  assert.match(task7, /配布 item の `registryDependencies`/);
+  assert.match(task7, /明示的な追加除外/);
+  assert.match(task7, /local registry graph/);
+  assert.match(task7, /解決不能.*fail-closed/);
+  assert.match(task7, /exact `\(path, target\)` pair/);
+  assert.match(task7, /共有 file の target.*衝突.*fail-closed/);
+});
+
+test("dashboard-table の sort 基準は数値と非数値の全順序を定義する", () => {
+  const plan = readFileSync(
+    new URL("../.docs/plans/2026-08-17-registry-blocks-plan.md", import.meta.url),
+    "utf8",
+  );
+  const task8 = plan.slice(plan.indexOf("## Task 8:"), plan.indexOf("## Task 9:"));
+  const step9 = task8.slice(task8.indexOf("- [ ] **Step 9:"));
+
+  assert.match(step9, /有限数値文字列/);
+  assert.match(step9, /固定 bucket/);
+  assert.match(step9, /非数値.*localeCompare/);
+  assert.match(step9, /全 permutation/);
+  assert.match(step9, /昇順・降順/);
+});
