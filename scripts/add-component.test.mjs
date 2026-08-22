@@ -1107,6 +1107,88 @@ test("記録済み block の再実行は skip する", async (t) => {
   assert.equal(reran, false);
 });
 
+test("記録済み block は --force で来歴にある既存ファイルを更新する", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+
+  const addBlock = async (generated, force = false) =>
+    runAddComponent({
+      argv: [
+        "login-01",
+        "--modified",
+        force ? "上流の再取得" : "registry:page を配布から除外",
+        ...(force ? ["--force"] : []),
+      ],
+      root,
+      fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+      runCommand: () => {
+        writeFileSync(join(root, "src/components/login-form.tsx"), generated);
+      },
+      log: () => {},
+    });
+
+  await addBlock("export const version = 1\n");
+  git(root, ["add", "."]);
+  git(root, ["commit", "-m", "login block fixture"]);
+
+  const result = await addBlock("export const version = 2\n", true);
+
+  assert.equal(result.skipped, false);
+  assert.equal(
+    readFileSync(join(root, "src/blocks/login-01/components/login-form.tsx"), "utf8"),
+    "export const version = 2\n",
+  );
+  const provenance = JSON.parse(readFileSync(join(root, "provenance.json"), "utf8"));
+  assert.equal(
+    provenance.blocks["login-01"].files.find((file) => !file.dropped).generatedContentSha256,
+    createHash("sha256").update("export const version = 2\n").digest("hex"),
+  );
+});
+
+test("block の --force は上流から消えた前回来歴のファイルを削除する", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+  const initialUpstream = structuredClone(loginUpstream);
+  initialUpstream.files.splice(1, 0, {
+    path: "registry/base-nova/blocks/login-01/components/login-extra.tsx",
+    type: "registry:component",
+    content: "export const LoginExtra = true\n",
+  });
+
+  await runAddComponent({
+    argv: ["login-01", "--modified", "registry:page を配布から除外"],
+    root,
+    fetchImpl: blockFetch(JSON.stringify(initialUpstream)),
+    runCommand: () => {
+      writeFileSync(join(root, "src/components/login-form.tsx"), "export const version = 1\n");
+      writeFileSync(join(root, "src/components/login-extra.tsx"), "export const extra = 1\n");
+    },
+    log: () => {},
+  });
+  git(root, ["add", "."]);
+  git(root, ["commit", "-m", "login block with extra fixture"]);
+
+  const logs = [];
+  await runAddComponent({
+    argv: ["login-01", "--modified", "上流で extra を削除", "--force"],
+    root,
+    fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+    runCommand: () => {
+      writeFileSync(join(root, "src/components/login-form.tsx"), "export const version = 2\n");
+    },
+    log: (message) => logs.push(message),
+  });
+
+  assert.equal(existsSync(join(root, "src/blocks/login-01/components/login-extra.tsx")), false);
+  assert.ok(
+    logs.includes(
+      "上流から消えた block file を削除: src/blocks/login-01/components/login-extra.tsx",
+    ),
+  );
+});
+
 test("CLI が作った配布しない page を reconcile より前に削除する", async (t) => {
   const root = prepareWrapperRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));

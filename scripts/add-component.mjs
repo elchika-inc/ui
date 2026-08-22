@@ -444,13 +444,7 @@ export function rewriteBlockSiblingImports(source, targetPath, targetFiles) {
   return { content, rewritten };
 }
 
-// reconcile より前に呼ぶ。移設を後にすると src/components/<basename> が
-// 変更パスとして残り、どのルールにも一致せず fail-closed で止まる。
-function relocateBlockFiles(root, target, log) {
-  const plan = blockRelocationPlan(target);
-  const registryFileSources = new Set(
-    target.files.map((file) => file.cliOutputPath).filter(Boolean),
-  );
+function ensureBlockRelocationSources(root, plan, registryFileSources) {
   // 全件を移設前に確認する。途中まで copy してから不足へ気付くと、同じ失敗でも
   // worktree の残り方が file 順に依存し、再開時の復元範囲が不安定になる。
   for (const { from } of plan) {
@@ -460,13 +454,48 @@ function relocateBlockFiles(root, target, log) {
       : "block の CLI 生成先";
     throw new Error(`${label}が存在しない: ${from}`);
   }
+}
+
+function removeObsoleteBlockFiles(root, plannedTargets, overwriteTargets, log) {
+  // --force で上流から消えたファイルは、前回来歴に記録された path だけを削除する。
+  // 新しい生成元を全件確認した後に行い、CLI の生成不足で旧 block が部分欠損しないようにする。
+  for (const path of overwriteTargets) {
+    if (plannedTargets.has(path) || !existsSync(join(root, path))) continue;
+    rmSync(join(root, path));
+    log(`上流から消えた block file を削除: ${path}`);
+  }
+}
+
+function copyBlockFile(root, from, to, overwriteTargets) {
+  const fromPath = join(root, from);
+  const toPath = join(root, to);
+  mkdirSync(dirname(toPath), { recursive: true });
+  // rename は POSIX では既存の移設先を上書きする。副作用前の検査に加え、
+  // 新規 path は COPYFILE_EXCL で競合を止める。--force でも上書きできるのは
+  // 前回来歴に記録された同じ block の path だけに限定する。
+  if (existsSync(toPath)) {
+    if (!overwriteTargets.has(to)) {
+      throw new Error(`block の移設先に想定外の競合が生じた: ${to}`);
+    }
+    copyFileSync(fromPath, toPath);
+  } else {
+    copyFileSync(fromPath, toPath, fsConstants.COPYFILE_EXCL);
+  }
+  rmSync(fromPath);
+}
+
+// reconcile より前に呼ぶ。移設を後にすると src/components/<basename> が
+// 変更パスとして残り、どのルールにも一致せず fail-closed で止まる。
+function relocateBlockFiles(root, target, log, overwriteTargets = new Set()) {
+  const plan = blockRelocationPlan(target);
+  const plannedTargets = new Set(plan.map(({ to }) => to));
+  const registryFileSources = new Set(
+    target.files.map((file) => file.cliOutputPath).filter(Boolean),
+  );
+  ensureBlockRelocationSources(root, plan, registryFileSources);
+  removeObsoleteBlockFiles(root, plannedTargets, overwriteTargets, log);
   for (const { from, to } of plan) {
-    const fromPath = join(root, from);
-    mkdirSync(dirname(join(root, to)), { recursive: true });
-    // rename は POSIX では既存の移設先を上書きする。副作用前の検査に加え、
-    // COPYFILE_EXCL で実移設時の競合も fail-closed にする。
-    copyFileSync(fromPath, join(root, to), fsConstants.COPYFILE_EXCL);
-    rmSync(fromPath);
+    copyBlockFile(root, from, to, overwriteTargets);
     log(`移設: ${from} -> ${to}`);
   }
   for (const { to } of plan) {
@@ -482,11 +511,31 @@ function relocateBlockFiles(root, target, log) {
   }
 }
 
+function blockOverwriteTargets(provenance, name, force) {
+  if (!force || !provenance.blocks?.[name]) return new Set();
+  const files = provenance.blocks[name].files;
+  if (!Array.isArray(files)) {
+    throw new Error(`${name}: --force には既存 block の files 来歴が必要`);
+  }
+  const prefix = `src/blocks/${name}/`;
+  return new Set(
+    files
+      .filter((file) => file.dropped !== true)
+      .map((file) => {
+        const path = assertContainedPath(`${name}: 既存 block 来歴の path`, file.path);
+        if (!path.startsWith(prefix)) {
+          throw new Error(`${name}: 既存 block 来歴の path が block 配下でない: ${path}`);
+        }
+        return path;
+      }),
+  );
+}
+
 // CLI は --overwrite で動くため、registry:file の実生成先と最終移設先を副作用前に検査する。
-// 実移設時にも COPYFILE_EXCL を使い、検査後に競合が生じても上書きしない。
-function prepareBlockRelocation(root, target) {
+// 実移設時にも新規 path には COPYFILE_EXCL を使い、検査後の競合を上書きしない。
+function prepareBlockRelocation(root, target, overwriteTargets = new Set()) {
   for (const { to } of blockRelocationPlan(target)) {
-    if (existsSync(join(root, to))) {
+    if (existsSync(join(root, to)) && !overwriteTargets.has(to)) {
       throw new Error(`block の移設先が実行前から存在する: ${to}`);
     }
   }
@@ -1075,7 +1124,8 @@ export async function runAddComponent({
     return { skipped: true };
   }
 
-  if (isBlock) prepareBlockRelocation(repositoryRoot, target);
+  const overwriteTargets = isBlock ? blockOverwriteTargets(provenance, name, force) : new Set();
+  if (isBlock) prepareBlockRelocation(repositoryRoot, target, overwriteTargets);
 
   // 外部 registry が指定する削除対象は CLI の副作用より前に検証する。
   // 実行前から存在する path は CLI が上書きする可能性もあるため、先に停止する。
@@ -1095,7 +1145,7 @@ export async function runAddComponent({
     pinnedItem.remove();
   }
 
-  if (isBlock) relocateBlockFiles(repositoryRoot, target, log);
+  if (isBlock) relocateBlockFiles(repositoryRoot, target, log, overwriteTargets);
   // reconcile より前に呼ぶ。後にすると、CLI が作った app/<name>/page.tsx が
   // どの分類ルールにも一致せず reconcile が先に停止し、この防御へ到達しない。
   removeDroppedPages(repositoryRoot, droppedTargets, log);
