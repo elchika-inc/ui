@@ -2338,7 +2338,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-22",
       "license": "MIT",
-      "modified": "registry:page を配布から除外。data-table.tsx は npm 依存 6 件（@dnd-kit 系 4 件・@tanstack/react-table・zod）を持ち込むため配布から除外し、同等機能を dashboard-table として自作した。IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。上流 manifest から除外した dependencies: @dnd-kit/core, @dnd-kit/modifiers, @dnd-kit/sortable, @dnd-kit/utilities, @tanstack/react-table, zod。上流 manifest から除外した registryDependencies: breadcrumb, checkbox, drawer, label, sonner, table, tabs。外部 avatar URL を除去して AvatarFallback を使い、静的なブランドリンクを有効なルートへ変更。現行の名称規則に合わせて法人格表記を除去。catalog 内の SVG gradient ID 重複を防ぐため React.useId で描画単位の ID を生成。上流 manifest の宣言漏れを補完した registryDependencies: use-mobile",
+      "modified": "registry:page を配布から除外。data-table.tsx は npm 依存 6 件（@dnd-kit 系 4 件・@tanstack/react-table・zod）を持ち込むため配布から除外し、同等機能を dashboard-table として自作した。IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。上流 manifest から除外した dependencies: @dnd-kit/core, @dnd-kit/modifiers, @dnd-kit/sortable, @dnd-kit/utilities, @tanstack/react-table, zod。上流 manifest から除外した registryDependencies: breadcrumb, checkbox, drawer, label, sonner, table, tabs。外部 avatar URL を除去して AvatarFallback を使い、静的なブランドリンクを有効なルートへ変更。catalog 内の SVG gradient ID 重複を防ぐため React.useId で描画単位の ID を生成。上流 manifest の宣言漏れを補完した registryDependencies: use-mobile",
       "files": [
         {
           "path": "src/blocks/dashboard-01/data.json",
@@ -2350,7 +2350,7 @@
           "path": "src/blocks/dashboard-01/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/dashboard-01/components/app-sidebar.tsx",
           "upstreamPathSha": "6261bd89f72d794aea491482cc2acfd8dc3d63e2",
-          "generatedContentSha256": "77807221e275dbdeb8a9e8055595e51c85ae248ddeaa3fc897ad9a9939ba4d84"
+          "generatedContentSha256": "73e97803b0f4834ba31ff5f7ec42c131e185f1c727b4e4d9dea52289962c94b8"
         },
         {
           "path": "src/blocks/dashboard-01/components/chart-area-interactive.tsx",

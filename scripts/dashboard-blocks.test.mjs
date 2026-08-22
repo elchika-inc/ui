@@ -26,6 +26,19 @@ const jsxOpenings = (sourceFile) => {
   return openings;
 };
 
+const jsxTextValues = (sourceFile) => {
+  const values = [];
+  const visit = (node) => {
+    if (ts.isJsxText(node)) {
+      const value = node.text.trim();
+      if (value) values.push(value);
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sourceFile);
+  return values;
+};
+
 const isExecutionScope = (node) =>
   ts.isFunctionDeclaration(node) ||
   ts.isFunctionExpression(node) ||
@@ -169,6 +182,22 @@ const loadTsxLogic = (path, names) => {
 test("dashboard navigation は受け取った URL を link として描画する", () => {
   const source = readSource("src/blocks/dashboard-01/components/nav-main.tsx");
   assert.match(source, /render={<a href={item\.url} \/>}/);
+});
+
+test("dashboard-01 は上流の架空社名 Acme Inc. を表示する", () => {
+  const { sourceFile } = parseTsx("src/blocks/dashboard-01/components/app-sidebar.tsx");
+  const values = jsxTextValues(sourceFile);
+
+  assert.ok(values.includes("Acme Inc."), "Acme Inc. が JSX text として表示される");
+  assert.equal(values.includes("Acme"), false, "法人格を落とした Acme だけの表記は残さない");
+});
+
+test("dashboard-01 の来歴は法人格表記を除去したと記録しない", () => {
+  const provenance = JSON.parse(readSource("provenance.json"));
+  const modified = provenance.blocks?.["dashboard-01"]?.modified;
+
+  assert.equal(typeof modified, "string", "dashboard-01 の modified がある");
+  assert.doesNotMatch(modified, /法人格表記を除去/);
 });
 
 test("dashboard chart は TimeRange から UTC の両端を含む 7/30/90 日だけを描画へ渡す", () => {
