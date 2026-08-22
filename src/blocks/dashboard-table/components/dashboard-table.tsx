@@ -111,9 +111,12 @@ export function compareRows(left: DashboardTableRow, right: DashboardTableRow, k
     const leftIsNumeric = leftTarget !== null;
     const rightIsNumeric = rightTarget !== null;
     if (leftIsNumeric && rightIsNumeric) {
-      return leftTarget - rightTarget;
+      const comparison = leftTarget - rightTarget;
+      return comparison === 0 ? left.id - right.id : comparison;
     }
     if (leftIsNumeric !== rightIsNumeric) return leftIsNumeric ? -1 : 1;
+    const comparison = left.target.localeCompare(right.target);
+    return comparison === 0 ? left.id - right.id : comparison;
   }
   return left[key].localeCompare(right[key]);
 }

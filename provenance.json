@@ -2410,11 +2410,11 @@
     "dashboard-table": {
       "origin": "elchika original",
       "license": "MIT",
-      "modified": "上流 dashboard-01 の data-table.tsx の機能構成を参照し、registry の既存部品と React state で npm 依存を追加せず自作。DnD は設計 §3-6 に従い実装しない。空文字・空白だけの metric は非数値として扱う",
+      "modified": "上流 dashboard-01 の data-table.tsx の機能構成を参照し、registry の既存部品と React state で npm 依存を追加せず自作。DnD は設計 §3-6 に従い実装しない。空文字・空白だけの metric は非数値として扱い、同値 target は id で決定的に並べる",
       "files": [
         {
           "path": "src/blocks/dashboard-table/components/dashboard-table.tsx",
-          "generatedContentSha256": "49abd9f60623dc9023210208dcf19a24e2046868b60e48176eee7d8495095af0"
+          "generatedContentSha256": "dea27802b25c0965a6bcbe188f8166acce94777039231b38fc1c4a3f92714f9c"
         }
       ]
     }

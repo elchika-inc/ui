@@ -503,6 +503,32 @@ test("dashboard table は数値と非数値の target を全順序で安定し�
       ["1x", "10", "2"],
     );
   }
+  const tiedRows = [
+    { ...base, id: 4, target: "N/A" },
+    { ...base, id: 2, target: "10" },
+    { ...base, id: 3, target: "N/A" },
+    { ...base, id: 1, target: "10" },
+  ];
+  const allPermutations = (values) =>
+    values.length <= 1
+      ? [values]
+      : values.flatMap((value, index) =>
+          allPermutations(values.toSpliced(index, 1)).map((rest) => [value, ...rest]),
+        );
+  for (const permutation of allPermutations(tiedRows)) {
+    assert.deepEqual(
+      [...permutation]
+        .sort((left, right) => compareRows(left, right, "target"))
+        .map((row) => row.id),
+      [1, 2, 3, 4],
+    );
+    assert.deepEqual(
+      [...permutation]
+        .sort((left, right) => -compareRows(left, right, "target"))
+        .map((row) => row.id),
+      [4, 3, 2, 1],
+    );
+  }
   for (const [key, leftValue, rightValue] of [
     ["header", "Alpha", "Beta"],
     ["status", "Done", "In Process"],
