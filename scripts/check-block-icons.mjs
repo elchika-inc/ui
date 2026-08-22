@@ -99,11 +99,7 @@ function droppedRelativePaths(name, item, droppedUpstreamPaths, problems) {
   );
   const dropped = new Set();
   for (const upstreamPath of droppedUpstreamPaths) {
-    const relativePath = blockRelativePath(
-      name,
-      upstreamPath,
-      "apps/v4/registry/bases/base",
-    );
+    const relativePath = blockRelativePath(name, upstreamPath, "apps/v4/registry/bases/base");
     if (!relativePath || !upstreamRelativePaths.has(relativePath)) {
       problems.push(
         `${name}: dropped file を上流 JSON へ対応付けられない: ${String(upstreamPath)}`,
