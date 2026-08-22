@@ -66,6 +66,53 @@ test("light / dark catalog が全 preview を単一 island に描画する", () 
   assert.match(builtPage("catalog-dark"), /<html[^>]*class="dark"/);
 });
 
+// block は fixed 配置の sidebar や初期表示の dialog を持ち、catalog の同一 DOM に並べると
+// 他のカードや catalog 全体を覆う（本番 /catalog/ で発生）。block だけを隔離プレビューの
+// iframe で埋め込み、component は直接描画のままであることを registry の kind 別に検査する。
+test("catalog は block だけを隔離プレビューの iframe で埋め込み、component は直接描画する", () => {
+  const blocks = [...blockNames()].sort();
+  assert.notEqual(blocks.length, 0, "registry の block 走査が空走している");
+  const componentCount = previewNames().length - blocks.length;
+  assert.ok(componentCount > 0, "component preview が 0 件（走査が空走している）");
+
+  for (const route of ["catalog", "catalog-dark"]) {
+    const html = builtPage(route);
+    const suffix = route === "catalog-dark" ? "-dark" : "";
+    const iframes = html.match(/<iframe\b[^>]*>/g) ?? [];
+    assert.deepEqual(
+      iframes.map((tag) => tag.match(/\bsrc="([^"]+)"/)?.[1]).sort(),
+      blocks.map((name) => `/preview/${name}${suffix}/`),
+      `${route}: iframe の集合が registry:block の隔離プレビュー route と一致する`,
+    );
+    for (const tag of iframes) {
+      assert.match(tag, /\bloading="lazy"/, `${route}: iframe は遅延読込 (${tag})`);
+      assert.match(tag, /\btitle="[^"]+"/, `${route}: iframe に title が要る (${tag})`);
+    }
+    for (const name of blocks) {
+      assert.match(
+        html,
+        new RegExp(`data-catalog-preview="${name}"[^>]*data-catalog-kind="block"`),
+        `${route}: ${name} は block card`,
+      );
+      assert.doesNotMatch(
+        html,
+        new RegExp(`data-slot="${name}-preview"`),
+        `${route}: ${name} の block 本体を catalog の DOM に直接描画しない`,
+      );
+      assert.match(
+        html,
+        new RegExp(`<a href="/preview/${name}${suffix}/"`),
+        `${route}: ${name} のカードから隔離プレビューへ辿れる`,
+      );
+    }
+    assert.equal(
+      html.match(/data-catalog-kind="component"/g)?.length ?? 0,
+      componentCount,
+      `${route}: component は直接描画のまま`,
+    );
+  }
+});
+
 test("index と個別 route が全 preview のcomponentページを列挙する", () => {
   const html = builtPage("");
   assert.match(html, /href="#main-content"/);

@@ -1,8 +1,14 @@
 ---
+import { blockNamesFromRegistry } from "@/catalog/registry-kinds";
 import { VerificationCatalog } from "@/catalog/verification-catalog";
 import Layout from "@/layouts/main.astro";
+import registry from "../../registry.json";
+
+// catalog.astro と同じ判別。dark は /preview/<name>-dark/ を埋め込む。
+// biome-ignore lint/correctness/noUnusedVariables: Astro template から参照する値。
+const blockNames = blockNamesFromRegistry(registry);
 ---
 
 <Layout title="カタログ Dark — elchika-inc/ui" dark>
-  <VerificationCatalog client:load />
+  <VerificationCatalog blockNames={blockNames} theme="dark" client:load />
 </Layout>

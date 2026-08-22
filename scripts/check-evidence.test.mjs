@@ -1530,6 +1530,36 @@ test("index と catalog の集約 path が変わると陳腐化一覧へ出す",
   ]);
 });
 
+// catalog は registry item の type で block（iframe 埋め込み）と component（直接描画）を分け、
+// block の iframe は src/pages/preview/<name>.astro を読み込む。これらの変更だけでも catalog の
+// 見た目が変わるので、catalog 証跡の陳腐化一覧へ出す。既存 component の route を書き換えると
+// component 固有 path の変更として problems 側に出るため、block の route は新規追加で表現する。
+test("catalog の block 判別と隔離プレビュー route の変更も catalog 証跡の陳腐化一覧へ出す", async (t) => {
+  const { root } = createEvidenceRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { checkEvidenceInRepo } = await loadModule();
+  writeFileSync(
+    join(root, "registry.json"),
+    `${JSON.stringify({ items: [{ name: "button", type: "registry:ui" }] }, null, 2)}\n`,
+  );
+  writeFileSync(join(root, "src/catalog/registry-kinds.ts"), "registry kinds\n");
+  writeFileSync(join(root, "src/pages/preview/login-01.astro"), "login-01 light\n");
+  git(root, [
+    "add",
+    "registry.json",
+    "src/catalog/registry-kinds.ts",
+    "src/pages/preview/login-01.astro",
+  ]);
+  git(root, ["commit", "-m", "change catalog block inputs"]);
+
+  const result = checkEvidenceInRepo(root);
+
+  assert.deepEqual(result.problems, []);
+  assert.deepEqual(result.stale, [
+    "2026-08-01-verification-catalog.md: src/catalog/registry-kinds.ts, registry.json, src/pages/preview",
+  ]);
+});
+
 test("日付とscopeを持つcatalog証跡も実装変更を陳腐化一覧へ出す", async (t) => {
   const { root, verifiedSha } = createEvidenceRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));
