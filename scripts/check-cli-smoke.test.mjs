@@ -21,6 +21,7 @@ const writeJson = (root, path, value) =>
   writeFile(root, path, `${JSON.stringify(value, null, 2)}\n`);
 
 const blockProvenance = (sha) => ({
+  origin: "shadcn/ui registry",
   registryUrl: "https://ui.shadcn.com/r/styles/base-nova/login-01.json",
   registryContentSha256: "c".repeat(64),
   addTarget: "@shadcn/login-01",
