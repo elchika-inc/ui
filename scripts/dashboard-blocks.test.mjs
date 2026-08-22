@@ -101,6 +101,15 @@ const assertTabsContentTableBranch = (opening, sourceFile) => {
   );
 };
 
+const assertDashboardTableContentValues = (openings, sourceFile) => {
+  const values = openings.map((opening) => jsxAttribute(opening, "value", sourceFile)).sort();
+  assert.deepEqual(
+    values,
+    ['"all"', '"review"'],
+    "TabsContent の value が all と review の一意な集合である",
+  );
+};
+
 const namedTopLevelFunction = (sourceFile, name) => {
   const declarations = sourceFile.statements.filter(
     (statement) => ts.isFunctionDeclaration(statement) && statement.name?.text === name,
@@ -288,6 +297,28 @@ test("dashboard table の配線検査は TabsContent value と表示条件を対
   assert.throws(
     () => assertTabsContentTableBranch(content, sourceFile),
     /TabsContent の value と table 表示条件が一致する/,
+  );
+});
+
+test("dashboard table の配線検査は all と review の content を一意に要求する", () => {
+  const sourceFile = parseTsxSource(`
+    function DashboardTable() {
+      const table = <DashboardDataTable />;
+      const view = "all";
+      return <>
+        <TabsContent value="review">{view === "review" ? table : null}</TabsContent>
+        <TabsContent value="review">{view === "review" ? table : null}</TabsContent>
+      </>;
+    }
+  `);
+  const component = namedTopLevelFunction(sourceFile, "DashboardTable");
+  const contents = componentJsxOpenings(component).filter(
+    (opening) => opening.tagName.getText(sourceFile) === "TabsContent",
+  );
+
+  assert.throws(
+    () => assertDashboardTableContentValues(contents, sourceFile),
+    /TabsContent の value が all と review の一意な集合である/,
   );
 });
 
@@ -502,7 +533,7 @@ test("dashboard table の helper 結果は checkbox・drawer・詳細 button へ
   assert.match(jsxAttribute(detailButton, "onClick", sourceFile), /onOpen\(row\)/);
 
   const tableContents = byTableTag("TabsContent");
-  assert.equal(tableContents.length, 2, "DashboardTable の TabsContent が2件ある");
+  assertDashboardTableContentValues(tableContents, sourceFile);
   for (const content of tableContents) {
     assertTabsContentTableBranch(content, sourceFile);
   }
