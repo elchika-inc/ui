@@ -17,7 +17,13 @@ import { basename, dirname, extname, isAbsolute, join, relative, resolve, sep } 
 import { pathToFileURL } from "node:url";
 import { dependencyName, externalImports, importedModuleSpecifiers } from "./import-analysis.mjs";
 import { assertContainedPath, assertPathWithoutSymlinks } from "./path-safety.mjs";
+import {
+  localRegistryDependencyName,
+  normalizeRegistryDependencies,
+} from "./registry-dependency.mjs";
 import { SHARED_DEPENDENCIES, SHARED_REGISTRY_FILES } from "./registry-policy.mjs";
+
+export { normalizeRegistryDependencies } from "./registry-dependency.mjs";
 
 const DEPENDENCY_SECTIONS = [
   "dependencies",
@@ -153,8 +159,7 @@ function dependenciesForDistributedFiles(upstreamItem, target) {
 }
 
 function registryDependencyName(dependency) {
-  const normalized = normalizeRegistryDependencies([dependency])[0];
-  return normalized.startsWith("@elchika/") ? normalized.slice("@elchika/".length) : normalized;
+  return localRegistryDependencyName(dependency);
 }
 
 function registryDependencyClosure(directDependencies, registryItems) {
@@ -167,7 +172,8 @@ function registryDependencyClosure(directDependencies, registryItems) {
   const closure = new Set();
   const pending = [...directDependencies];
   while (pending.length > 0) {
-    const name = pending.shift();
+    const name = registryDependencyName(pending.shift());
+    if (name === undefined) continue;
     if (closure.has(name)) continue;
     const candidates = itemsByName.get(name) ?? [];
     if (candidates.length === 0) {
@@ -178,7 +184,7 @@ function registryDependencyClosure(directDependencies, registryItems) {
     }
     closure.add(name);
     for (const dependency of candidates[0].registryDependencies ?? []) {
-      pending.push(registryDependencyName(dependency));
+      pending.push(dependency);
     }
   }
   return closure;
@@ -193,9 +199,10 @@ function registryDependenciesForDistributedFiles(upstreamItem, target, registryI
       .flatMap((file) => registryItemImports(file.content).map(({ name }) => name)),
   );
   const closure = registryDependencyClosure(directDependencies, registryItems);
-  return (upstreamItem.registryDependencies ?? []).filter((dependency) =>
-    closure.has(registryDependencyName(dependency)),
-  );
+  return (upstreamItem.registryDependencies ?? []).filter((dependency) => {
+    const name = registryDependencyName(dependency);
+    return name === undefined || closure.has(name);
+  });
 }
 
 function droppedManifestDependencies(upstreamItem, target, registryItems) {
@@ -204,8 +211,8 @@ function droppedManifestDependencies(upstreamItem, target, registryItems) {
   }
   const dependencies = new Set(dependenciesForDistributedFiles(upstreamItem, target));
   const registryDependencies = new Set(
-    registryDependenciesForDistributedFiles(upstreamItem, target, registryItems).map(
-      registryDependencyName,
+    normalizeRegistryDependencies(
+      registryDependenciesForDistributedFiles(upstreamItem, target, registryItems),
     ),
   );
   return {
@@ -213,8 +220,10 @@ function droppedManifestDependencies(upstreamItem, target, registryItems) {
       .filter((dependency) => !dependencies.has(dependency))
       .sort(),
     registryDependencies: (upstreamItem.registryDependencies ?? [])
-      .filter((dependency) => !registryDependencies.has(registryDependencyName(dependency)))
-      .map(registryDependencyName)
+      .filter(
+        (dependency) => !registryDependencies.has(normalizeRegistryDependencies([dependency])[0]),
+      )
+      .map((dependency) => registryDependencyName(dependency) ?? dependency)
       .sort(),
   };
 }
@@ -374,13 +383,6 @@ export function reconcileAddChanges({
       .filter(({ kind }) => kind === "dependency-manifest")
       .map(({ path }) => path),
   };
-}
-
-export function normalizeRegistryDependencies(dependencies = []) {
-  return dependencies.map((dependency) => {
-    if (dependency.startsWith("@") || dependency.includes("://")) return dependency;
-    return `@elchika/${dependency}`;
-  });
 }
 
 export function shouldSkipRecorded(provenance, name, force, kind = "component") {

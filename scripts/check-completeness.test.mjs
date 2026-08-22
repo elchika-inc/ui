@@ -882,6 +882,13 @@ test("registryDependencies が存在しない local item を指したら検出�
   ]);
 });
 
+test("外部 URL と外部 namespace の registryDependencies は local item 突合から除外する", () => {
+  const registry = structuredClone(completeBlock.registry);
+  registry.items[1].registryDependencies = ["https://example.com/r/input.json", "@example/input"];
+
+  assert.deepEqual(checkCompleteness({ ...completeBlock, registry }).problems, []);
+});
+
 // 新しい alias が増えたときに黙って穴が開かないよう fail-closed にする。
 test("registry item へ対応付けられない @/ import を検出する", () => {
   const { problems } = checkCompleteness(

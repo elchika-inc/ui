@@ -13,6 +13,7 @@ import {
   importedModuleSpecifiers,
 } from "./import-analysis.mjs";
 import { assertPathWithoutSymlinks } from "./path-safety.mjs";
+import { localRegistryDependencyName } from "./registry-dependency.mjs";
 import { SHARED_DEPENDENCIES, SHARED_REGISTRY_FILES } from "./registry-policy.mjs";
 
 const sha256 = (content) => createHash("sha256").update(content, "utf8").digest("hex");
@@ -283,8 +284,8 @@ function registryDependencyProblems(registry) {
   }
   for (const item of registry.items) {
     for (const dependency of item.registryDependencies ?? []) {
-      if (dependency.startsWith("@") && !dependency.startsWith("@elchika/")) continue;
-      const name = dependency.replace(/^@elchika\//, "");
+      const name = localRegistryDependencyName(dependency);
+      if (name === undefined) continue;
       if ((itemCounts.get(name) ?? 0) === 0) {
         problems.push(
           `${item.name}: registryDependencies の ${dependency} に対応する registry item が存在しない`,

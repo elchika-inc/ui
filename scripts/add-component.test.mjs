@@ -2089,6 +2089,35 @@ test("registry 依存閉包の推移先 item が無ければ fail-closed で停�
   );
 });
 
+test("明示除外 block の外部 registry 依存は local 閉包の突合対象にしない", async () => {
+  const { buildRegistryItem, resolveRegistryTarget } = await loadModule();
+  const upstream = structuredClone(dashboardUpstream);
+  upstream.files.find((file) => file.path.endsWith("/chart-area-interactive.tsx")).content =
+    'import { Sidebar } from "@/registry/base-nova/ui/sidebar";\n';
+  upstream.registryDependencies = ["sidebar", "https://example.com/r/input.json", "@example/input"];
+  const target = resolveRegistryTarget("dashboard-01", upstream);
+
+  const item = buildRegistryItem(
+    "dashboard-01",
+    upstream,
+    'import { Sidebar } from "@/components/ui/sidebar";\n',
+    target,
+    [
+      {
+        name: "sidebar",
+        type: "registry:ui",
+        registryDependencies: ["https://example.com/r/input.json", "@example/input"],
+      },
+    ],
+  );
+
+  assert.deepEqual(item.registryDependencies, [
+    "@elchika/sidebar",
+    "https://example.com/r/input.json",
+    "@example/input",
+  ]);
+});
+
 test("block 所有 registry:file が共有配布 target と衝突したら停止する", async () => {
   const { buildRegistryItem, resolveRegistryTarget } = await loadModule();
   const upstream = {
