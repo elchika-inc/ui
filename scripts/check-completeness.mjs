@@ -100,6 +100,36 @@ const BLOCK_PROVENANCE_SPEC = {
   modified: /\S/,
 };
 
+const ORIGINAL_BLOCK_PROVENANCE_SPEC = {
+  license: /^\S+$/,
+  modified: /\S/,
+};
+
+// origin は来歴スキーマの分岐キー。完全一致で判定し、未知の出所は fail-closed にする。
+// 自作品で上流由来キーを禁止するのは、移植品を自作と誤分類して来歴を失うのを防ぐため。
+const BLOCK_ORIGINS = {
+  "shadcn/ui registry": {
+    spec: BLOCK_PROVENANCE_SPEC,
+    forbidden: [],
+    fileRequired: ["upstreamPath", "upstreamPathSha"],
+    fileForbidden: [],
+    requiresDropped: true,
+  },
+  "elchika original": {
+    spec: ORIGINAL_BLOCK_PROVENANCE_SPEC,
+    forbidden: [
+      "registryUrl",
+      "registryContentSha256",
+      "addTarget",
+      "shadcnCliVersion",
+      "fetchedAt",
+    ],
+    fileRequired: [],
+    fileForbidden: ["upstreamPath", "upstreamPathSha", "dropped"],
+    requiresDropped: false,
+  },
+};
+
 // 全 item へ同梱する共有ファイルだけを block 所有集合から除く。
 // target の有無だけで分けると、target が必須の block 所有 registry:file まで除外される。
 // path または target の片方だけを借りた file は共有扱いにしない。
@@ -119,9 +149,26 @@ function blockOwnedRegistryFiles(item) {
   );
 }
 
-// 配布しない registry:page も来歴には残す。dropped を「記録しない」で表現すると、
-// 上流に page が無かったのか意図的に落としたのかを後から区別できない。
-function blockFileProblems(name, file, index) {
+// 移植品で配布しない上流 file も来歴には残す。dropped を「記録しない」で表現すると、
+// 上流に file が無かったのか意図的に落としたのかを後から区別できない。
+function originalBlockFileProblems(name, file, index, origin) {
+  const label = `${name}: files[${index}]`;
+  const problems = [];
+  for (const key of origin.fileForbidden) {
+    if (Object.hasOwn(file, key)) {
+      problems.push(`${label} は自作 block なので ${key} を持たない`);
+    }
+  }
+  if (!String(file.path ?? "").startsWith(`src/blocks/${name}/`)) {
+    problems.push(`${label} の path が src/blocks/${name}/ 配下でない`);
+  }
+  if (!/^[0-9a-f]{64}$/.test(String(file.generatedContentSha256 ?? ""))) {
+    problems.push(`${label} の generatedContentSha256 が64桁の小文字ハッシュでない`);
+  }
+  return problems;
+}
+
+function migratedBlockFileProblems(name, file, index) {
   const label = `${name}: files[${index}]`;
   const problems = [];
   if (!/^\S+$/.test(String(file.upstreamPath ?? ""))) {
@@ -148,6 +195,13 @@ function blockFileProblems(name, file, index) {
   return problems;
 }
 
+function blockFileProblems(name, file, index, origin) {
+  if (origin.fileRequired.length === 0) {
+    return originalBlockFileProblems(name, file, index, origin);
+  }
+  return migratedBlockFileProblems(name, file, index);
+}
+
 // block は barrel export と <Name>Props を要求しない。registry 経由で copy-and-edit
 // する雛形であり、ライブラリの公開 API ではないため（設計 §3-1 の要件マトリクス）。
 function blockProblems(name, registry, previewFiles, previewSources, provenance, onDisk, sources) {
@@ -171,15 +225,29 @@ function blockProblems(name, registry, previewFiles, previewSources, provenance,
     problems.push(`${name}: provenance.json に来歴が無い`);
     return problems;
   }
-  problems.push(...provenanceMetaProblems(name, p, BLOCK_PROVENANCE_SPEC));
+  if (!p.origin) {
+    problems.push(`${name}: provenance の origin が無い`);
+    return problems;
+  }
+  const origin = BLOCK_ORIGINS[p.origin];
+  if (!origin) {
+    problems.push(`${name}: provenance の origin が未対応: ${p.origin}`);
+    return problems;
+  }
+  problems.push(...provenanceMetaProblems(name, p, origin.spec));
+  for (const key of origin.forbidden) {
+    if (Object.hasOwn(p, key)) {
+      problems.push(`${name}: 自作 block は ${key} を持たない`);
+    }
+  }
   if (!Array.isArray(p.files) || p.files.length === 0) {
     problems.push(`${name}: provenance の files が 0 件`);
     return problems;
   }
   return [
     ...problems,
-    ...p.files.flatMap((file, index) => blockFileProblems(name, file, index)),
-    ...blockFileSetProblems(name, registry, p.files, onDisk, sources),
+    ...p.files.flatMap((file, index) => blockFileProblems(name, file, index, origin)),
+    ...blockFileSetProblems(name, registry, p.files, onDisk, sources, origin.requiresDropped),
   ];
 }
 
@@ -297,7 +365,7 @@ function blockSourceProblems(name, item, files, sources) {
   return problems;
 }
 
-function blockFileSetProblems(name, registry, files, onDisk, sources) {
+function blockFileSetProblems(name, registry, files, onDisk, sources, requiresDropped) {
   const problems = [];
   const item = registry.items.find((i) => i.name === name);
   // item が無いことは別途 problem 済み。ここで二重に鳴らさない。
@@ -320,7 +388,7 @@ function blockFileSetProblems(name, registry, files, onDisk, sources) {
     }
   }
   const recorded = files
-    .filter((file) => file.dropped !== true)
+    .filter((file) => !requiresDropped || file.dropped !== true)
     .map((file) => file.path)
     .sort();
 
@@ -356,11 +424,9 @@ function blockFileSetProblems(name, registry, files, onDisk, sources) {
 
   problems.push(...blockSourceProblems(name, item, files, sources));
 
-  // 落とした分はローカルに実体が無いため、実体との突合ができない。
-  // 上流 block は必ず registry:page を持ち、それを配布しないのが設計 §1 の決定なので、
-  // 「1 件以上の dropped がある」ことを要求する。上流が page を持たない block を
-  // 出してきたら赤くなるが、その時は決定の見直しが要るので止まる方が正しい。
-  if (!files.some((file) => file.dropped === true)) {
+  // 移植品で落とした分はローカル実体と突合できないため、1 件以上の dropped を要求する。
+  // 自作品には上流 file 自体が無く、dropped は禁止キーなのでこの要件を適用しない。
+  if (requiresDropped && !files.some((file) => file.dropped === true)) {
     problems.push(`${name}: 配布しない registry:page の来歴（dropped: true）が無い`);
   }
   return problems;

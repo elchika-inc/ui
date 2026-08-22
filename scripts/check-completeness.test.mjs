@@ -270,6 +270,7 @@ const completeBlock = {
     ...complete.provenance,
     blocks: {
       "login-01": {
+        origin: "shadcn/ui registry",
         registryUrl: "https://ui.shadcn.com/r/styles/base-nova/login-01.json",
         registryContentSha256: "c".repeat(64),
         addTarget: "@shadcn/login-01",
@@ -294,6 +295,108 @@ const completeBlock = {
     },
   },
 };
+
+const originalBlockPath = "src/blocks/dashboard-table/components/dashboard-table.tsx";
+
+const completeOriginalBlock = {
+  ...complete,
+  blocks: ["dashboard-table"],
+  registry: {
+    items: [
+      { name: "button", type: "registry:ui" },
+      {
+        name: "dashboard-table",
+        type: "registry:block",
+        files: [
+          { path: originalBlockPath, type: "registry:component" },
+          { path: "LICENSE", type: "registry:file", target: "~/elchika-ui/LICENSE" },
+        ],
+      },
+    ],
+  },
+  previewFiles: [
+    "button.astro",
+    "button-dark.astro",
+    "dashboard-table.astro",
+    "dashboard-table-dark.astro",
+  ],
+  previewSources: ["button.tsx", "dashboard-table.tsx"],
+  provenance: {
+    ...complete.provenance,
+    blocks: {
+      "dashboard-table": {
+        origin: "elchika original",
+        license: "MIT",
+        modified:
+          "上流 dashboard-01 の data-table.tsx を参照しつつ、npm 依存ゼロで自作。DnD は実装しない",
+        files: [
+          {
+            path: originalBlockPath,
+            generatedContentSha256: "f".repeat(64),
+          },
+        ],
+      },
+    },
+  },
+};
+
+test("自作 block は上流由来キーを要求されない", () => {
+  const { problems } = checkCompleteness(completeOriginalBlock);
+  assert.deepEqual(problems, []);
+});
+
+test("自作 block は上流由来の共通メタを持たない", () => {
+  for (const key of [
+    "registryUrl",
+    "registryContentSha256",
+    "addTarget",
+    "shadcnCliVersion",
+    "fetchedAt",
+  ]) {
+    const provenance = structuredClone(completeOriginalBlock.provenance);
+    provenance.blocks["dashboard-table"][key] = "x";
+    const { problems } = checkCompleteness({ ...completeOriginalBlock, provenance });
+    assert.deepEqual(problems, [`dashboard-table: 自作 block は ${key} を持たない`], key);
+  }
+});
+
+test("自作 block の files は上流由来キーを持たない", () => {
+  for (const [key, value] of [
+    ["upstreamPath", "apps/v4/registry/bases/base/blocks/dashboard-01/data-table.tsx"],
+    ["upstreamPathSha", "0".repeat(40)],
+    ["dropped", true],
+  ]) {
+    const provenance = structuredClone(completeOriginalBlock.provenance);
+    provenance.blocks["dashboard-table"].files[0][key] = value;
+    const { problems } = checkCompleteness({ ...completeOriginalBlock, provenance });
+    assert.deepEqual(
+      problems,
+      [`dashboard-table: files[0] は自作 block なので ${key} を持たない`],
+      key,
+    );
+  }
+});
+
+test("未知の origin は fail-closed で弾く", () => {
+  const provenance = structuredClone(completeOriginalBlock.provenance);
+  provenance.blocks["dashboard-table"].origin = "unknown-source";
+  const { problems } = checkCompleteness({ ...completeOriginalBlock, provenance });
+  assert.deepEqual(problems, ["dashboard-table: provenance の origin が未対応: unknown-source"]);
+});
+
+test("origin が無ければ検出する", () => {
+  const provenance = structuredClone(completeOriginalBlock.provenance);
+  provenance.blocks["dashboard-table"].origin = undefined;
+  const { problems } = checkCompleteness({ ...completeOriginalBlock, provenance });
+  assert.deepEqual(problems, ["dashboard-table: provenance の origin が無い"]);
+});
+
+test("移植品は従来どおり上流由来キーを要求される", () => {
+  const provenance = structuredClone(completeBlock.provenance);
+  provenance.blocks["login-01"].registryUrl = undefined;
+  const { problems } = checkCompleteness({ ...completeBlock, provenance });
+  assert.deepEqual(problems, ["login-01: provenance の registryUrl が無い"]);
+});
 
 test("block が全経路に載っていれば問題を返さない", () => {
   const { problems } = checkCompleteness(completeBlock);
