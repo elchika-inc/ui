@@ -100,6 +100,25 @@ const BLOCK_PROVENANCE_SPEC = {
   modified: /\S/,
 };
 
+// 全 item へ同梱する共有ファイルだけを block 所有集合から除く。
+// target の有無だけで分けると、target が必須の block 所有 registry:file まで除外される。
+// path または target の片方だけを借りた file は共有扱いにしない。
+const SHARED_REGISTRY_FILE_KEYS = new Set(
+  [
+    ["src/styles/global.css", "~/elchika-ui/tokens.css"],
+    ["src/styles/design-system/tokens.css", "~/elchika-ui/design-system/tokens.css"],
+    ["src/styles/design-system/brands.css", "~/elchika-ui/design-system/brands.css"],
+    ["LICENSE", "~/elchika-ui/LICENSE"],
+    ["THIRD_PARTY_LICENSES", "~/elchika-ui/THIRD_PARTY_LICENSES"],
+  ].map(([path, target]) => `${path}\0${target}`),
+);
+
+function blockOwnedRegistryFiles(item) {
+  return (item.files ?? []).filter(
+    (file) => !SHARED_REGISTRY_FILE_KEYS.has(`${file.path}\0${file.target}`),
+  );
+}
+
 // 配布しない registry:page も来歴には残す。dropped を「記録しない」で表現すると、
 // 上流に page が無かったのか意図的に落としたのかを後から区別できない。
 function blockFileProblems(name, file, index) {
@@ -246,9 +265,7 @@ function blockSourceProblems(name, item, files, sources) {
   const declared = new Set(
     (item.registryDependencies ?? []).map((dependency) => dependency.replace(/^@elchika\//, "")),
   );
-  const ownFiles = new Set(
-    (item.files ?? []).filter((file) => file.target === undefined).map((file) => file.path),
-  );
+  const ownFiles = new Set(blockOwnedRegistryFiles(item).map((file) => file.path));
 
   for (const file of files.filter((entry) => entry.dropped !== true)) {
     const source = sources[file.path];
@@ -286,14 +303,11 @@ function blockFileSetProblems(name, registry, files, onDisk, sources) {
   // item が無いことは別途 problem 済み。ここで二重に鳴らさない。
   if (!item) return problems;
 
-  // 配布分の正解は registry item。法務ファイルは全 item へ共通で足されるもので、
-  // block 自身のファイルではないので除く。type ではなく target の有無で判定する
-  // ——type で切ると block 自身の registry:file まで巻き込み、正しい来歴を赤くする。
-  const distributed = (item.files ?? [])
-    .filter((file) => file.target === undefined)
-    .map((file) => file.path)
-    .sort();
-  for (const file of (item.files ?? []).filter((candidate) => candidate.target === undefined)) {
+  // 配布分の正解は registry item。全 item へ共通で足される既知の共有ファイルだけを
+  // path/target pair で除外し、target を持つ block 固有 asset は所有集合へ残す。
+  const ownedFiles = blockOwnedRegistryFiles(item);
+  const distributed = ownedFiles.map((file) => file.path).sort();
+  for (const file of ownedFiles) {
     // block の実装コードは registry:component でなければ CLI の配置契約が変わる。
     // 一方 data.json のような block 固有 asset は registry:file が正しいため、
     // 全ファイルを一律に registry:component へ固定しない。

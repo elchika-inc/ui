@@ -573,13 +573,14 @@ test("配布ファイルが 0 件の block を検出する", () => {
   assert.deepEqual(problems, ["login-01: registry item に配布ファイルが 1 件も無い"]);
 });
 
-// 法務ファイルの除外を type で行うと、block 自身の registry:file まで巻き込んで
-// 正しい来歴を赤くする（dashboard-01 の data.json が該当する）。target の有無で切る。
+// 法務ファイルの除外を type や target の有無で行うと、block 自身の registry:file まで
+// 巻き込んで正しい来歴を赤くする（dashboard-01 の data.json が該当する）。
 test("block 自身の registry:file を法務ファイルと取り違えない", () => {
   const registry = structuredClone(completeBlock.registry);
   registry.items[1].files.push({
     path: "src/blocks/login-01/data.json",
     type: "registry:file",
+    target: "app/login/data.json",
   });
   const provenance = structuredClone(completeBlock.provenance);
   provenance.blocks["login-01"].files.push({
@@ -589,6 +590,18 @@ test("block 自身の registry:file を法務ファイルと取り違えない",
     generatedContentSha256: "f".repeat(64),
   });
   assert.deepEqual(checkCompleteness({ ...completeBlock, registry, provenance }).problems, []);
+});
+
+test("共有 target だけを借りた block file を法務ファイルと取り違えない", () => {
+  const registry = structuredClone(completeBlock.registry);
+  registry.items[1].files.push({
+    path: "src/blocks/login-01/rogue.json",
+    type: "registry:file",
+    target: "~/elchika-ui/LICENSE",
+  });
+  assert.deepEqual(checkCompleteness({ ...completeBlock, registry }).problems, [
+    "login-01: registry item の src/blocks/login-01/rogue.json が provenance の files に無い",
+  ]);
 });
 
 test("block の非code配布ファイルに registry:file 以外を許さない", () => {

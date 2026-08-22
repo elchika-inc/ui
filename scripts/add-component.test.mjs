@@ -784,10 +784,7 @@ test("block の registry:file は上流 target を保持し component には tar
       type: "registry:component",
     },
   );
-  assert.equal(
-    item.files.find((file) => file.path === "LICENSE")?.target,
-    "~/elchika-ui/LICENSE",
-  );
+  assert.equal(item.files.find((file) => file.path === "LICENSE")?.target, "~/elchika-ui/LICENSE");
 });
 
 test("UI import 由来の registry dependency 補完は block だけに適用する", async () => {
@@ -1330,6 +1327,75 @@ test("block の registry item は配布ファイルの UI import から宣言漏
   });
 
   assert.deepEqual(result.registryItem.registryDependencies, ["@elchika/button", "@elchika/field"]);
+});
+
+test("block の registry item は hook import とその推移的依存を補完する", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+  seedRegistryGraph(root, [
+    {
+      name: "use-mobile",
+      type: "registry:hook",
+      registryDependencies: ["@elchika/input"],
+    },
+    { name: "input", type: "registry:ui" },
+    { name: "label", type: "registry:ui" },
+  ]);
+  const upstream = structuredClone(dashboardUpstream);
+  upstream.files.find((file) => file.path.endsWith("/chart-area-interactive.tsx")).content =
+    'import { useIsMobile } from "@/hooks/use-mobile";\nexport const Chart = useIsMobile;\n';
+  upstream.files.find((file) => file.path.endsWith("/data-table.tsx")).content =
+    'import { Label } from "@/registry/base-nova/ui/label";\nexport const Table = Label;\n';
+  upstream.registryDependencies = ["input", "label"];
+
+  const result = await runAddComponent({
+    argv: ["dashboard-01", "--modified", "data-table.tsx を配布から除外"],
+    root,
+    fetchImpl: blockFetch(JSON.stringify(upstream)),
+    runCommand: () => {
+      writeFileSync(
+        join(root, "src/components/chart-area-interactive.tsx"),
+        'import { useIsMobile } from "@/hooks/use-mobile";\nexport const Chart = useIsMobile;\n',
+      );
+      mkdirSync(join(root, "src/app/dashboard"), { recursive: true });
+      writeFileSync(join(root, "src/app/dashboard/data.json"), "[]\n");
+    },
+    log: () => {},
+  });
+
+  assert.deepEqual(result.registryItem.registryDependencies, [
+    "@elchika/input",
+    "@elchika/use-mobile",
+  ]);
+});
+
+test("hook import に対応する registry item が無ければ fail-closed で停止する", async () => {
+  const { completeBlockRegistryDependencies } = await loadModule();
+  assert.throws(
+    () =>
+      completeBlockRegistryDependencies(
+        "dashboard-01",
+        [],
+        'import { useIsMobile } from "@/hooks/use-mobile";',
+        [],
+      ),
+    /@\/hooks\/use-mobile に対応する registry item が存在しない（期待 type: registry:hook）/,
+  );
+});
+
+test("hook import と同名の item が registry:hook でなければ fail-closed で停止する", async () => {
+  const { completeBlockRegistryDependencies } = await loadModule();
+  assert.throws(
+    () =>
+      completeBlockRegistryDependencies(
+        "dashboard-01",
+        [],
+        'import { useIsMobile } from "@/hooks/use-mobile";',
+        [{ name: "use-mobile", type: "registry:ui" }],
+      ),
+    /use-mobile の type が registry:hook でない/,
+  );
 });
 
 test("block の来歴は上流パスを記録する", async (t) => {

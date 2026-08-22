@@ -181,9 +181,7 @@ function registryDependencyName(dependency) {
 }
 
 function registryDependencyClosure(directDependencies, registryItems) {
-  const itemsByName = new Map(
-    registryItems.filter((item) => item.type === "registry:ui").map((item) => [item.name, item]),
-  );
+  const itemsByName = new Map(registryItems.map((item) => [item.name, item]));
   const closure = new Set();
   const pending = [...directDependencies];
   while (pending.length > 0) {
@@ -204,7 +202,7 @@ function registryDependenciesForDistributedFiles(upstreamItem, target, registryI
   const directDependencies = new Set(
     (upstreamItem.files ?? [])
       .filter((file) => distributedPaths.has(file.path) && typeof file.content === "string")
-      .flatMap((file) => [...registryUiImports(file.content)]),
+      .flatMap((file) => registryItemImports(file.content).map(({ name }) => name)),
   );
   const closure = registryDependencyClosure(directDependencies, registryItems);
   return (upstreamItem.registryDependencies ?? []).filter((dependency) =>
@@ -524,12 +522,21 @@ function externalImports(source) {
   return packages;
 }
 
-function registryUiImports(source) {
-  const names = new Set();
+function registryItemImports(source) {
+  const dependencies = new Map();
   const pattern =
-    /(?:from\s*|import\s*)["']@\/(?:components\/ui|registry\/base-nova\/ui)\/([a-z0-9]+(?:-[a-z0-9]+)*)["']/g;
-  for (const match of source.matchAll(pattern)) names.add(match[1]);
-  return names;
+    /(?:from\s*|import\s*)["']@\/(components\/ui|registry\/base-nova\/ui|hooks)\/([a-z0-9]+(?:-[a-z0-9]+)*)["']/g;
+  for (const match of source.matchAll(pattern)) {
+    const prefix = match[1];
+    const name = match[2];
+    const expectedType = prefix === "hooks" ? "registry:hook" : "registry:ui";
+    dependencies.set(`${expectedType}:${name}`, {
+      name,
+      expectedType,
+      specifier: `@/${prefix}/${name}`,
+    });
+  }
+  return [...dependencies.values()];
 }
 
 export function completeBlockRegistryDependencies(
@@ -539,14 +546,18 @@ export function completeBlockRegistryDependencies(
   registryItems,
 ) {
   const dependencies = new Set(normalizeRegistryDependencies(upstreamDependencies));
-  for (const dependency of registryUiImports(generatedSource)) {
-    const dependencyItem = registryItems.find(
-      (candidate) => candidate.name === dependency && candidate.type === "registry:ui",
-    );
-    if (!dependencyItem) {
+  for (const { name: dependency, expectedType, specifier } of registryItemImports(
+    generatedSource,
+  )) {
+    const candidates = registryItems.filter((candidate) => candidate.name === dependency);
+    const dependencyItem = candidates.find((candidate) => candidate.type === expectedType);
+    if (!dependencyItem && candidates.length === 0) {
       throw new Error(
-        `${name}: @/components/ui/${dependency} に対応する registry item が存在しない`,
+        `${name}: ${specifier} に対応する registry item が存在しない（期待 type: ${expectedType}）`,
       );
+    }
+    if (!dependencyItem) {
+      throw new Error(`${name}: ${dependency} の type が ${expectedType} でない`);
     }
     dependencies.add(`@elchika/${dependency}`);
   }
