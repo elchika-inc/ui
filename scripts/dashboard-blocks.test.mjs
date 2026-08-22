@@ -28,6 +28,18 @@ const jsxAttribute = (opening, name, sourceFile) =>
     .find((attribute) => ts.isJsxAttribute(attribute) && attribute.name.text === name)
     ?.initializer?.getText(sourceFile);
 
+const variableInitializer = (sourceFile, name) => {
+  let initializer;
+  const visit = (node) => {
+    if (ts.isVariableDeclaration(node) && node.name.getText(sourceFile) === name) {
+      initializer = node.initializer?.getText(sourceFile);
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sourceFile);
+  return initializer;
+};
+
 const loadTsxLogic = (path, names) => {
   const output = ts.transpileModule(readSource(path), {
     compilerOptions: {
@@ -81,8 +93,43 @@ test("dashboard chart は TimeRange から UTC の両端を含む 7/30/90 日だ
   const areaChart = jsxOpenings(sourceFile).find(
     (opening) => opening.tagName.getText(sourceFile) === "AreaChart",
   );
+  assert.equal(
+    variableInitializer(sourceFile, "filteredData"),
+    'chartDataForTimeRange(chartData, timeRange, "2024-06-30")',
+  );
   assert.ok(areaChart, "AreaChart がある");
   assert.equal(jsxAttribute(areaChart, "data", sourceFile), "{filteredData}");
+});
+
+test("dashboard block の配布 manifest は除外後の依存集合と共有依存を保つ", () => {
+  const registry = JSON.parse(readSource("registry.json"));
+  const dashboard = registry.items.find((item) => item.name === "dashboard-01");
+  const table = registry.items.find((item) => item.name === "dashboard-table");
+
+  assert.ok(dashboard, "dashboard-01 registry item がある");
+  assert.ok(table, "dashboard-table registry item がある");
+  assert.deepEqual([...dashboard.dependencies].sort(), [
+    "lucide-react",
+    "recharts",
+    "shadcn",
+    "tw-animate-css",
+  ]);
+  assert.deepEqual([...dashboard.registryDependencies].sort(), [
+    "@elchika/avatar",
+    "@elchika/badge",
+    "@elchika/button",
+    "@elchika/card",
+    "@elchika/chart",
+    "@elchika/dropdown-menu",
+    "@elchika/input",
+    "@elchika/select",
+    "@elchika/separator",
+    "@elchika/sheet",
+    "@elchika/sidebar",
+    "@elchika/toggle-group",
+    "@elchika/use-mobile",
+  ]);
+  assert.deepEqual([...table.dependencies].sort(), ["shadcn", "tw-animate-css"]);
 });
 
 test("dashboard table は部分選択を mixed state として計算する", () => {
@@ -205,25 +252,14 @@ test("dashboard table の helper 結果は checkbox・drawer・詳細 button へ
   const { sourceFile } = parseTsx("src/blocks/dashboard-table/components/dashboard-table.tsx");
   const openings = jsxOpenings(sourceFile);
   const byTag = (tag) => openings.filter((opening) => opening.tagName.getText(sourceFile) === tag);
-  const variableInitializer = (name) => {
-    let initializer;
-    const visit = (node) => {
-      if (ts.isVariableDeclaration(node) && node.name.getText(sourceFile) === name) {
-        initializer = node.initializer?.getText(sourceFile);
-      }
-      ts.forEachChild(node, visit);
-    };
-    visit(sourceFile);
-    return initializer;
-  };
 
   assert.match(
-    variableInitializer("reconciledState"),
+    variableInitializer(sourceFile, "reconciledState"),
     /reconcileDashboardTableState\(selectedIds, activeRowId, data\)/,
   );
-  assert.equal(variableInitializer("selectedIdsInData"), "reconciledState.selectedIds");
-  assert.equal(variableInitializer("activeRow"), "reconciledState.activeRow");
-  assert.equal(variableInitializer("comparison"), "compareRows(left, right, sort.key)");
+  assert.equal(variableInitializer(sourceFile, "selectedIdsInData"), "reconciledState.selectedIds");
+  assert.equal(variableInitializer(sourceFile, "activeRow"), "reconciledState.activeRow");
+  assert.equal(variableInitializer(sourceFile, "comparison"), "compareRows(left, right, sort.key)");
 
   const headerCheckbox = byTag("Checkbox").find(
     (opening) => jsxAttribute(opening, "aria-label", sourceFile) === '"表示中の行をすべて選択"',

@@ -18,6 +18,7 @@ import { tmpdir } from "node:os";
 import { basename, dirname, extname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
 import { dependencyName, externalImports, importedModuleSpecifiers } from "./import-analysis.mjs";
+import { SHARED_DEPENDENCIES, SHARED_REGISTRY_FILES } from "./registry-policy.mjs";
 
 const DEPENDENCY_SECTIONS = [
   "dependencies",
@@ -35,40 +36,12 @@ export const CHANGE_CLASSIFICATION_RULES = [
   { kind: "dependency-manifest", paths: ["package.json", "package-lock.json"] },
 ];
 
-// 配布した tokens.css が @import する npm パッケージ。これが consumer の package.json に
-// 入らないと `@tailwindcss/cli` が "Can't resolve" で落ちる（実測）。
-const SHARED_DEPENDENCIES = ["tw-animate-css", "shadcn"];
-
 // registry item の description に出る名詞。配布物 public/r/*.json へ入り利用者へ届くので、
 // block を "component" と呼ばない。
 const ITEM_NOUN = {
   "registry:hook": "hook",
   "registry:block": "block",
 };
-
-const SHARED_REGISTRY_FILES = [
-  {
-    path: "src/styles/global.css",
-    type: "registry:file",
-    target: "~/elchika-ui/tokens.css",
-  },
-  {
-    path: "src/styles/design-system/tokens.css",
-    type: "registry:file",
-    target: "~/elchika-ui/design-system/tokens.css",
-  },
-  {
-    path: "src/styles/design-system/brands.css",
-    type: "registry:file",
-    target: "~/elchika-ui/design-system/brands.css",
-  },
-  { path: "LICENSE", type: "registry:file", target: "~/elchika-ui/LICENSE" },
-  {
-    path: "THIRD_PARTY_LICENSES",
-    type: "registry:file",
-    target: "~/elchika-ui/THIRD_PARTY_LICENSES",
-  },
-];
 
 const SHARED_CLI_OUTPUT_PATHS = new Set(SHARED_REGISTRY_FILES.map(({ target }) => target.slice(2)));
 

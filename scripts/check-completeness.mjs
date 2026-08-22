@@ -11,6 +11,7 @@ import {
   externalPackageFromImport,
   importedModuleSpecifiers,
 } from "./import-analysis.mjs";
+import { SHARED_DEPENDENCIES, SHARED_REGISTRY_FILES } from "./registry-policy.mjs";
 
 const sha256 = (content) => createHash("sha256").update(content, "utf8").digest("hex");
 
@@ -292,6 +293,28 @@ function registryDependencyProblems(registry) {
   return problems;
 }
 
+const SHARED_DEPENDENCY_FILE = SHARED_REGISTRY_FILES.find(
+  (file) => file.path === "src/styles/global.css",
+);
+
+function sharedDependencyProblems(registry) {
+  const problems = [];
+  for (const item of registry.items) {
+    const distributesSharedCss = (item.files ?? []).some(
+      (file) =>
+        file.path === SHARED_DEPENDENCY_FILE.path && file.target === SHARED_DEPENDENCY_FILE.target,
+    );
+    if (!distributesSharedCss) continue;
+    const declared = new Set((item.dependencies ?? []).map(dependencyName));
+    for (const dependency of SHARED_DEPENDENCIES) {
+      if (!declared.has(dependency)) {
+        problems.push(`${item.name}: 共有配布物が要求する ${dependency} が dependencies に無い`);
+      }
+    }
+  }
+  return problems;
+}
+
 // files[] の「形」だけを見ると、エントリを 1 件消しても残りが正しい限り緑になる。
 // 実際に mutation で緑のまま通り抜けた。期待される集合と突き合わせる。
 //
@@ -556,6 +579,7 @@ export function checkCompleteness({
     if (count > 1) problems.push(`${name}: registry.json に同名 item が ${count} 件ある`);
   }
   problems.push(...registryDependencyProblems(registry));
+  problems.push(...sharedDependencyProblems(registry));
   const barrelPaths = exportedModulePaths(barrel);
   for (const name of components) {
     problems.push(

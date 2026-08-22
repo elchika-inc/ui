@@ -150,6 +150,22 @@ test("registry item の欠落を検出する", () => {
   assert.deepEqual(problems, ["button: registry.json に item が無い"]);
 });
 
+test("共有配布物を持つ registry item は共有 npm 依存を宣言する", () => {
+  const registry = structuredClone(complete.registry);
+  registry.items[0].dependencies = ["shadcn"];
+  registry.items[0].files = [
+    {
+      path: "src/styles/global.css",
+      type: "registry:file",
+      target: "~/elchika-ui/tokens.css",
+    },
+  ];
+  const { problems } = checkCompleteness({ ...complete, registry });
+  assert.deepEqual(problems, [
+    "button: 共有配布物が要求する tw-animate-css が dependencies に無い",
+  ]);
+});
+
 test("component と同名の registry item の type 不一致を検出する", () => {
   const registry = structuredClone(complete.registry);
   registry.items[0].type = "registry:block";

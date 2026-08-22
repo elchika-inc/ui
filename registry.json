@@ -2773,7 +2773,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": [],
+      "dependencies": ["shadcn", "tw-animate-css"],
       "registryDependencies": [
         "@elchika/badge",
         "@elchika/button",
