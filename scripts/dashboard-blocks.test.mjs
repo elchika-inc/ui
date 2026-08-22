@@ -234,12 +234,21 @@ test("dashboard table の helper 結果は checkbox・drawer・詳細 button へ
   assert.equal(jsxAttribute(detailChart, "row", sourceFile), "{activeRow}");
 });
 
-test("dashboard table の詳細 chart は非ゼロ領域を持つ class を SVG へ指定する", () => {
+test("dashboard table の詳細 chart は Recharts のゼロ寸法 wrapper に依存せず表示する", () => {
   const { sourceFile } = parseTsx("src/blocks/dashboard-table/components/dashboard-table.tsx");
-  const svg = jsxOpenings(sourceFile).find(
+  const openings = jsxOpenings(sourceFile);
+  const chartContainer = openings.find(
+    (opening) => opening.tagName.getText(sourceFile) === "ChartContainer",
+  );
+  const svg = openings.find(
     (opening) => opening.tagName.getText(sourceFile) === "svg",
   );
 
+  assert.ok(chartContainer, "詳細 chart の ChartContainer がある");
   assert.ok(svg, "詳細 chart の SVG がある");
-  assert.equal(jsxAttribute(svg, "className", sourceFile), '"h-full w-full"');
+  assert.match(jsxAttribute(chartContainer, "className", sourceFile), /\brelative\b/);
+  assert.match(jsxAttribute(svg, "className", sourceFile), /\babsolute\b/);
+  assert.match(jsxAttribute(svg, "className", sourceFile), /\binset-0\b/);
+  assert.match(jsxAttribute(svg, "className", sourceFile), /\bh-full\b/);
+  assert.match(jsxAttribute(svg, "className", sourceFile), /\bw-full\b/);
 });

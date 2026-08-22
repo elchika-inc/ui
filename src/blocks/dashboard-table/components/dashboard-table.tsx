@@ -303,13 +303,13 @@ function DetailChart({ row }: { row: DashboardTableRow }) {
       role="group"
       aria-label={`${row.header} の進捗チャート`}
       config={DETAIL_CHART_CONFIG}
-      className="h-48 w-full text-primary"
+      className="relative h-48 w-full text-primary"
       initialDimension={{ width: 320, height: 160 }}
     >
       <svg
         role="img"
         aria-label="Target と limit の推移"
-        className="h-full w-full"
+        className="absolute inset-0 h-full w-full"
         width="100%"
         height="100%"
         viewBox="0 0 320 160"
