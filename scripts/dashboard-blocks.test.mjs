@@ -297,6 +297,8 @@ test("dashboard table は数値と非数値の target を全順序で安定し�
     reviewer: "Reviewer",
   };
   const unavailable = { ...base, target: "N/A" };
+  const empty = { ...base, target: "" };
+  const whitespace = { ...base, target: "   " };
   const numeric = { ...base, id: 2, target: "10" };
   const rows = [
     { ...base, id: 1, target: "2" },
@@ -313,6 +315,10 @@ test("dashboard table は数値と非数値の target を全順序で安定し�
   ];
 
   assert.equal(dashboardMetricValues(unavailable), null);
+  assert.equal(dashboardMetricValues(empty), null);
+  assert.equal(dashboardMetricValues(whitespace), null);
+  assert.ok(compareRows(empty, numeric, "target") > 0, "空文字は非数値 bucket に入る");
+  assert.ok(compareRows(whitespace, numeric, "target") > 0, "空白は非数値 bucket に入る");
   for (const permutation of permutations) {
     assert.deepEqual(
       [...permutation]

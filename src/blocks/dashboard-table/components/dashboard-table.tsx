@@ -97,12 +97,19 @@ export function reconcileDashboardTableState(
   };
 }
 
+function dashboardMetricNumber(value: string) {
+  const normalized = value.trim();
+  if (normalized.length === 0) return null;
+  const number = Number(normalized);
+  return Number.isFinite(number) ? number : null;
+}
+
 export function compareRows(left: DashboardTableRow, right: DashboardTableRow, key: SortKey) {
   if (key === "target") {
-    const leftTarget = Number(left.target);
-    const rightTarget = Number(right.target);
-    const leftIsNumeric = Number.isFinite(leftTarget);
-    const rightIsNumeric = Number.isFinite(rightTarget);
+    const leftTarget = dashboardMetricNumber(left.target);
+    const rightTarget = dashboardMetricNumber(right.target);
+    const leftIsNumeric = leftTarget !== null;
+    const rightIsNumeric = rightTarget !== null;
     if (leftIsNumeric && rightIsNumeric) {
       return leftTarget - rightTarget;
     }
@@ -112,9 +119,9 @@ export function compareRows(left: DashboardTableRow, right: DashboardTableRow, k
 }
 
 export function dashboardMetricValues(row: Pick<DashboardTableRow, "target" | "limit">) {
-  const target = Number(row.target);
-  const limit = Number(row.limit);
-  if (!Number.isFinite(target) || !Number.isFinite(limit)) return null;
+  const target = dashboardMetricNumber(row.target);
+  const limit = dashboardMetricNumber(row.limit);
+  if (target === null || limit === null) return null;
   const values = [limit, target, (limit + target) / 2, Math.max(limit, target), target];
   return { values, maximum: Math.max(...values, 1) };
 }
