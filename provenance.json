@@ -2356,7 +2356,7 @@
           "path": "src/blocks/dashboard-01/components/chart-area-interactive.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/dashboard-01/components/chart-area-interactive.tsx",
           "upstreamPathSha": "6261bd89f72d794aea491482cc2acfd8dc3d63e2",
-          "generatedContentSha256": "a92cffa88791788273c5ecfb8785ddc0c4177a8c5daf12547d59d35d10a47422"
+          "generatedContentSha256": "6cc616fd58f36b5dd9bd8375d46e9d9f2adf3e81af25d4fcabd33511fb2d31b2"
         },
         {
           "path": "src/blocks/dashboard-01/components/nav-documents.tsx",

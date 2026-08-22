@@ -6,6 +6,11 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import ts from "typescript";
 import { listBlockFiles, scanBlockNames } from "./block-scan.mjs";
+import {
+  dependencyName,
+  externalPackageFromImport,
+  importedModuleSpecifiers,
+} from "./import-analysis.mjs";
 
 const sha256 = (content) => createHash("sha256").update(content, "utf8").digest("hex");
 
@@ -304,43 +309,13 @@ function registryDependencyProblems(registry) {
 //    npm 依存については add 側で import から拾い直す安全網があるが、内部依存には無かった。
 // 2. 来歴のハッシュ: generatedContentSha256 は「記録時点の手元のファイル」の錨で、
 //    形式（64 桁）しか見ないと正規化後にずれたまま緑になる。
-// specifier の抽出は AST で行う。正規表現でやると偽陽性（コメント内の例示）を
+// specifier の抽出は add-component と同じ AST parser で行う。正規表現でやると偽陽性
+// （コメント内の例示）を
 // 消すために行頭へ限定 → 折り返し import（biome の lineWidth 100 が作る正準形）を
 // 全部取りこぼす、という交換になる。実測では実ファイルの
 // `import {\n  Sheet,\n} from "@/components/ui/sheet"` を取りこぼし、
-// 依存を落として整形するだけで全ゲートが緑になった。
-// このファイルは barrel / dts の解析で既に typescript を使っているので追加の依存は無い。
-function importedSpecifiers(source, fileName) {
-  const sourceFile = ts.createSourceFile(
-    fileName,
-    source,
-    ts.ScriptTarget.Latest,
-    true,
-    ts.ScriptKind.TSX,
-  );
-  const specifiers = [];
-  const visit = (node) => {
-    if (
-      (ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) &&
-      node.moduleSpecifier &&
-      ts.isStringLiteralLike(node.moduleSpecifier)
-    ) {
-      specifiers.push(node.moduleSpecifier.text);
-    }
-    // 動的 import(...)。lazy(() => import("@/...")) の形を拾う。
-    if (
-      ts.isCallExpression(node) &&
-      node.expression.kind === ts.SyntaxKind.ImportKeyword &&
-      node.arguments.length > 0 &&
-      ts.isStringLiteralLike(node.arguments[0])
-    ) {
-      specifiers.push(node.arguments[0].text);
-    }
-    ts.forEachChild(node, visit);
-  };
-  visit(sourceFile);
-  return specifiers;
-}
+// 依存を落として整形するだけで全ゲートが緑になった。非 literal dynamic import も
+// add 時と同じく fail-closed にし、--resync で生成時保証を迂回できないようにする。
 
 // @/ alias は tsconfig の paths が "@/*": ["./src/*"] の 1 本なので、src 配下すべてが
 // この形で参照されうる。ui だけを見ると hooks の宣言漏れが素通りする（実測）。
@@ -363,12 +338,41 @@ function internalDependency(specifier) {
   return { unknown: rest };
 }
 
+function blockSpecifierProblems({
+  name,
+  filePath,
+  specifier,
+  declared,
+  declaredExternal,
+  ownFiles,
+}) {
+  const dependency = internalDependency(specifier);
+  if (dependency === undefined) {
+    const external = externalPackageFromImport(specifier);
+    return external && !declaredExternal.has(external)
+      ? [`${name}: ${filePath} が import する ${external} が dependencies に無い`]
+      : [];
+  }
+  if (dependency.unknown !== undefined) {
+    return [`${name}: ${filePath} が import する ${specifier} を registry item へ対応付けられない`];
+  }
+  // 自 item が配るファイルなら宣言は要らない。
+  // 現状 block の配布ファイルは src/blocks/ 配下のみなので発火しないが、
+  // SUPPORTED_BLOCK_FILE_TYPES を広げたときにここが効く。
+  if (ownFiles.has(`src/components/ui/${dependency.name}.tsx`)) return [];
+  if (ownFiles.has(`src/hooks/${dependency.name}.ts`)) return [];
+  return !declared.has(dependency.name)
+    ? [`${name}: ${filePath} が import する ${specifier} が registryDependencies に無い`]
+    : [];
+}
+
 function blockSourceProblems(name, item, files, sources) {
   if (sources === undefined) return [];
   const problems = [];
   const declared = new Set(
     (item.registryDependencies ?? []).map((dependency) => dependency.replace(/^@elchika\//, "")),
   );
+  const declaredExternal = new Set((item.dependencies ?? []).map(dependencyName));
   const ownFiles = new Set(blockOwnedRegistryFiles(item).map((file) => file.path));
 
   for (const file of files.filter((entry) => entry.dropped !== true)) {
@@ -377,25 +381,24 @@ function blockSourceProblems(name, item, files, sources) {
     if (sha256(source) !== file.generatedContentSha256) {
       problems.push(`${name}: ${file.path} の generatedContentSha256 が実体と一致しない`);
     }
-    for (const specifier of importedSpecifiers(source, file.path)) {
-      const dependency = internalDependency(specifier);
-      if (dependency === undefined) continue;
-      if (dependency.unknown !== undefined) {
-        problems.push(
-          `${name}: ${file.path} が import する ${specifier} を registry item へ対応付けられない`,
-        );
-        continue;
-      }
-      // 自 item が配るファイルなら宣言は要らない。
-      // 現状 block の配布ファイルは src/blocks/ 配下のみなので発火しないが、
-      // SUPPORTED_BLOCK_FILE_TYPES を広げたときにここが効く。
-      if (ownFiles.has(`src/components/ui/${dependency.name}.tsx`)) continue;
-      if (ownFiles.has(`src/hooks/${dependency.name}.ts`)) continue;
-      if (!declared.has(dependency.name)) {
-        problems.push(
-          `${name}: ${file.path} が import する ${specifier} が registryDependencies に無い`,
-        );
-      }
+    let specifiers;
+    try {
+      specifiers = importedModuleSpecifiers(source, file.path);
+    } catch (error) {
+      problems.push(`${name}: ${error.message}`);
+      continue;
+    }
+    for (const specifier of specifiers) {
+      problems.push(
+        ...blockSpecifierProblems({
+          name,
+          filePath: file.path,
+          specifier,
+          declared,
+          declaredExternal,
+          ownFiles,
+        }),
+      );
     }
   }
   return problems;

@@ -933,6 +933,30 @@ test("動的 import の specifier も拾う", () => {
   ]);
 });
 
+test("文字列リテラルでない動的 import は fail-closed で検出する", () => {
+  const source = ['const dependency = "optional-widget";', "void import(dependency);", ""].join(
+    "\n",
+  );
+  assert.deepEqual(checkCompleteness(withSource(source)).problems, [
+    "login-01: src/blocks/login-01/components/login-form.tsx: 動的 import の指定が文字列リテラルでない",
+  ]);
+});
+
+test("配布ファイルが import する外部 npm 依存の未宣言を検出する", () => {
+  assert.deepEqual(checkCompleteness(withSource('import "optional-widget/subpath";\n')).problems, [
+    "login-01: src/blocks/login-01/components/login-form.tsx が import する optional-widget が dependencies に無い",
+  ]);
+});
+
+test("外部 npm 依存が dependencies に宣言されていれば問題を返さない", () => {
+  const registry = structuredClone(completeBlock.registry);
+  registry.items[1].dependencies = ["optional-widget"];
+  assert.deepEqual(
+    checkCompleteness(withSource('import "optional-widget/subpath";\n', { registry })).problems,
+    [],
+  );
+});
+
 test("export * from の specifier も拾う", () => {
   const source = 'export * from "@/components/ui/field";\n';
   assert.deepEqual(checkCompleteness(withSource(source)).problems, [

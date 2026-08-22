@@ -47,8 +47,9 @@ test("dashboard navigation は受け取った URL を link として描画する
   assert.match(source, /render={<a href={item\.url} \/>}/);
 });
 
-test("dashboard chart は TimeRange から UTC の両端を含む 7/30/90 日を返す", () => {
+test("dashboard chart は TimeRange から UTC の両端を含む 7/30/90 日だけを描画へ渡す", () => {
   const path = "src/blocks/dashboard-01/components/chart-area-interactive.tsx";
+  const { sourceFile } = parseTsx(path);
   const { chartData, chartDataForTimeRange } = loadTsxLogic(path, [
     "chartData",
     "chartDataForTimeRange",
@@ -64,10 +65,24 @@ test("dashboard chart は TimeRange から UTC の両端を含む 7/30/90 日を
     assert.equal(filtered[0].date, firstDate);
     assert.equal(filtered.at(-1).date, "2024-06-30");
   }
-  assert.match(
-    readSource(path),
-    /const filteredData = chartDataForTimeRange\(chartData, timeRange, "2024-06-30"\)/,
+
+  const unsortedWithFuture = [
+    { date: "2024-07-01" },
+    { date: "2024-06-24" },
+    { date: "2024-06-30" },
+    { date: "2024-06-23" },
+    { date: "2024-06-29" },
+  ];
+  assert.deepEqual(
+    chartDataForTimeRange(unsortedWithFuture, "7d", "2024-06-30").map((item) => item.date),
+    ["2024-06-24", "2024-06-30", "2024-06-29"],
   );
+
+  const areaChart = jsxOpenings(sourceFile).find(
+    (opening) => opening.tagName.getText(sourceFile) === "AreaChart",
+  );
+  assert.ok(areaChart, "AreaChart がある");
+  assert.equal(jsxAttribute(areaChart, "data", sourceFile), "{filteredData}");
 });
 
 test("dashboard table は部分選択を mixed state として計算する", () => {
@@ -240,12 +255,14 @@ test("dashboard table の詳細 chart は Recharts のゼロ寸法 wrapper に�
   const chartContainer = openings.find(
     (opening) => opening.tagName.getText(sourceFile) === "ChartContainer",
   );
-  const svg = openings.find(
+  assert.ok(chartContainer, "詳細 chart の ChartContainer がある");
+  assert.ok(ts.isJsxElement(chartContainer.parent), "ChartContainer が子要素を持つ");
+
+  const svg = jsxOpenings(chartContainer.parent).find(
     (opening) => opening.tagName.getText(sourceFile) === "svg",
   );
 
-  assert.ok(chartContainer, "詳細 chart の ChartContainer がある");
-  assert.ok(svg, "詳細 chart の SVG がある");
+  assert.ok(svg, "詳細 chart の SVG が ChartContainer の子孫にある");
   assert.match(jsxAttribute(chartContainer, "className", sourceFile), /\brelative\b/);
   assert.match(jsxAttribute(svg, "className", sourceFile), /\babsolute\b/);
   assert.match(jsxAttribute(svg, "className", sourceFile), /\binset-0\b/);

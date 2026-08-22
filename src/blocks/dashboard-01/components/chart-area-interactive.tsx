@@ -159,9 +159,13 @@ export function filterChartDataByDays<T extends { date: string }>(
   days: number,
   referenceDate: string,
 ) {
-  const startDate = chartDate(referenceDate);
+  const endDate = chartDate(referenceDate);
+  const startDate = new Date(endDate);
   startDate.setUTCDate(startDate.getUTCDate() - (days - 1));
-  return data.filter((item) => chartDate(item.date) >= startDate);
+  return data.filter((item) => {
+    const date = chartDate(item.date);
+    return date >= startDate && date <= endDate;
+  });
 }
 
 export function chartDataForTimeRange<T extends { date: string }>(

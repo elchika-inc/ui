@@ -1236,7 +1236,7 @@ registry.json / provenance.json / component-categories.mjs が単一の
 **新規 npm 依存はゼロ。** `recharts` と `sonner` は導入済み（実測）。ここでいう依存ゼロは、次の 3 境界を別々に検証する。
 
 - **repo dependency delta**: 当リポジトリの `package.json` / `package-lock.json` に差分が無い
-- **配布 item の npm `dependencies`**: 通常の `registry:page` 除外だけなら上流宣言を保持する。`data-table.tsx` のような明示的な追加除外がある場合は、残存配布 file の静的・動的 external import が直接要求する依存だけへ絞る
+- **配布 item の npm `dependencies`**: 通常の `registry:page` 除外だけなら上流宣言を保持する。`data-table.tsx` のような明示的な追加除外がある場合、最終集合は「残存 block 所有 source の静的・動的 external import」「CLI 生成 source から補完した external import」「共有配布物が常に要求する exact `SHARED_DEPENDENCIES`（現行は `shadcn` / `tw-animate-css`）」の和集合とする。CSS の全 import など、この 3 集合以外から npm 依存を推測しない
 - **配布 item の `registryDependencies`**: 通常の `registry:page` 除外だけなら上流宣言を保持する。明示的な追加除外がある場合は、残存配布 file の直接 local import を起点に、当リポジトリの local registry graph で到達できる推移閉包だけへ絞る。閉包の全 item は一意に解決できなければならず、解決不能・重複は fail-closed で停止する
 
 **Files:**
@@ -1260,7 +1260,7 @@ registry.json / provenance.json / component-categories.mjs が単一の
 - 配布ファイル集合に `registry:file` が含まれること
 - ローカル移設先の `targetPath` が `src/blocks/<name>/data.json` になること
 - 配布 target は上流 item の `target`（`app/dashboard/data.json`）を保持すること
-- ローカル CLI 生成先の `cliOutputPath` は、`~/` 付き target なら接頭辞を除いた repo root 相対、その他なら `src/` を前置した path になること
+- ローカル CLI 生成先の `cliOutputPath` は、`~/` 付き target なら接頭辞を除いた repo root 相対とする。その他は CLI 4.16.0 の実測どおり先頭の `src/` を一度除いてから source root の `src/` を前置するため、`app/x` と `src/app/x` はどちらも `src/app/x` になること
 - **`targetPath` が `src/blocks/<name>/` の外を指す場合は fail-closed で停止すること**（path traversal）
 - **移設先に既存ファイルがある場合は上書きせず停止すること**
 
