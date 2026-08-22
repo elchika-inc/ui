@@ -87,6 +87,7 @@ export const componentCategories = [
   {
     name: "アプリシェル",
     items: [
+      "dashboard-01",
       "sidebar-01",
       "sidebar-02",
       "sidebar-03",
