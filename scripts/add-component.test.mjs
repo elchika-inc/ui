@@ -1572,6 +1572,11 @@ test("dashboard-01 は配布ファイルの registry 依存閉包だけを pin �
     result.entry.modified,
     "data-table.tsx を配布から除外。上流 manifest から除外した dependencies: @dnd-kit/core, @dnd-kit/modifiers, @dnd-kit/sortable, @dnd-kit/utilities, @tanstack/react-table, zod。上流 manifest から除外した registryDependencies: breadcrumb, label",
   );
+  assert.match(
+    result.entry.notes,
+    /dropped: true の file は配布しない上流 file を表し、理由は modified に記録する/,
+  );
+  assert.doesNotMatch(result.entry.notes, /dropped: true の file は registry:page/);
 });
 
 test("prefix が先頭以外にある block の file path を通さない", async () => {

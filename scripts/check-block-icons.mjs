@@ -1,16 +1,20 @@
 // 上流 registry JSON の IconPlaceholder が lucide 属性を持ち、shadcn CLI の
 // 生成物に対応する実アイコンの import と JSX 使用があることを検査する。
 // 上流はライブな配信物なので、マーカー件数や対象 block の集合は固定しない。
+// icon 監査は次の 4 区分で扱う。
+// - registry:component は src/blocks の生成物へ要求する。
+// - registry:page は配布しなくても src/previews の生成物へ要求する。
+// - dropped な registry:component は配布しないため生成物へ要求しない。
+// - lucide 属性の欠損は配布有無によらず全上流 file で検出する。
 import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import ts from "typescript";
-import { listBlockFiles } from "./block-scan.mjs";
+import { listBlockFiles, scanBlockNames } from "./block-scan.mjs";
 
-const BLOCK_NAMES = [
-  ...Array.from({ length: 4 }, (_, index) => `login-${String(index + 2).padStart(2, "0")}`),
-  ...Array.from({ length: 5 }, (_, index) => `signup-${String(index + 1).padStart(2, "0")}`),
-  ...Array.from({ length: 16 }, (_, index) => `sidebar-${String(index + 1).padStart(2, "0")}`),
-];
+export function listIconAuditBlockNames(root = ".") {
+  return scanBlockNames(join(root, "src/blocks"));
+}
 
 function sourceFile(path, source) {
   return ts.createSourceFile(path, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
@@ -70,7 +74,34 @@ function generatedPath(name, file, target) {
     : undefined;
 }
 
-export function inspectUpstreamBlocks(entries) {
+function blockRelativePath(name, path) {
+  if (typeof path !== "string") return undefined;
+  const marker = `blocks/${name}/`;
+  const index = path.indexOf(marker);
+  if (index < 0 || (index > 0 && path[index - 1] !== "/")) return undefined;
+  const relativePath = path.slice(index + marker.length);
+  return relativePath.length > 0 ? relativePath : undefined;
+}
+
+function droppedRelativePaths(name, item, droppedUpstreamPaths, problems) {
+  const upstreamRelativePaths = new Set(
+    item.files.map((file) => blockRelativePath(name, file?.path)).filter(Boolean),
+  );
+  const dropped = new Set();
+  for (const upstreamPath of droppedUpstreamPaths) {
+    const relativePath = blockRelativePath(name, upstreamPath);
+    if (!relativePath || !upstreamRelativePaths.has(relativePath)) {
+      problems.push(
+        `${name}: dropped file を上流 JSON へ対応付けられない: ${String(upstreamPath)}`,
+      );
+      continue;
+    }
+    dropped.add(relativePath);
+  }
+  return dropped;
+}
+
+export function inspectUpstreamBlocks(entries, { droppedUpstreamPathsByBlock = {} } = {}) {
   const problems = [];
   const expectedByTarget = { blocks: {}, previews: {} };
   const uniqueIcons = new Set();
@@ -83,6 +114,12 @@ export function inspectUpstreamBlocks(entries) {
       problems.push(`${name}: 上流 JSON の files が配列でない`);
       continue;
     }
+    const droppedPaths = droppedRelativePaths(
+      name,
+      item,
+      droppedUpstreamPathsByBlock[name] ?? [],
+      problems,
+    );
     const filesByTarget = { blocks: new Map(), previews: new Map() };
     let blockPlaceholderCount = 0;
     for (const file of item.files) {
@@ -106,15 +143,20 @@ export function inspectUpstreamBlocks(entries) {
               `${name}: ${path} の IconPlaceholder #${filePlaceholderIndex} に lucide 属性が無い`,
             );
           } else {
-            const targetPath = generatedPath(name, file, target);
-            if (!targetPath) {
-              problems.push(`${name}: ${path} を生成物 path へ対応付けられない`);
-            } else {
-              const expectedFile = filesByTarget[target].get(targetPath) ?? {
-                occurrences: [],
-              };
-              expectedFile.occurrences.push({ icon, attributes: preservedAttributes(node) });
-              filesByTarget[target].set(targetPath, expectedFile);
+            const relativePath = blockRelativePath(name, file.path);
+            const droppedComponent =
+              file.type === "registry:component" && droppedPaths.has(relativePath);
+            if (!droppedComponent) {
+              const targetPath = generatedPath(name, file, target);
+              if (!targetPath) {
+                problems.push(`${name}: ${path} を生成物 path へ対応付けられない`);
+              } else {
+                const expectedFile = filesByTarget[target].get(targetPath) ?? {
+                  occurrences: [],
+                };
+                expectedFile.occurrences.push({ icon, attributes: preservedAttributes(node) });
+                filesByTarget[target].set(targetPath, expectedFile);
+              }
             }
             uniqueIcons.add(icon);
           }
@@ -342,9 +384,9 @@ export function inspectGeneratedIcons(expectedByBlock, generatedByBlock) {
   };
 }
 
-async function fetchUpstreamBlocks() {
+async function fetchUpstreamBlocks(blockNames = listIconAuditBlockNames()) {
   const entries = [];
-  for (const name of BLOCK_NAMES) {
+  for (const name of blockNames) {
     const url = `https://ui.shadcn.com/r/styles/base-nova/${name}.json`;
     const response = await fetch(url, { headers: { accept: "application/json" } });
     if (!response.ok) throw new Error(`${name}: 上流 JSON の取得に失敗 (${response.status})`);
@@ -355,6 +397,18 @@ async function fetchUpstreamBlocks() {
     entries.push({ name, item });
   }
   return entries;
+}
+
+function readDroppedUpstreamPaths(blockNames, root = ".") {
+  const provenance = JSON.parse(readFileSync(join(root, "provenance.json"), "utf8"));
+  return Object.fromEntries(
+    blockNames.map((name) => [
+      name,
+      (provenance.blocks?.[name]?.files ?? [])
+        .filter((file) => file.dropped === true)
+        .map((file) => file.upstreamPath),
+    ]),
+  );
 }
 
 function readGeneratedBlocks(expectedByBlock, root = ".") {
@@ -377,7 +431,10 @@ function readGeneratedPreviews(expectedByPreview) {
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   try {
-    const upstream = inspectUpstreamBlocks(await fetchUpstreamBlocks());
+    const blockNames = listIconAuditBlockNames();
+    const upstream = inspectUpstreamBlocks(await fetchUpstreamBlocks(blockNames), {
+      droppedUpstreamPathsByBlock: readDroppedUpstreamPaths(blockNames),
+    });
     console.log(
       `上流検査: JSON ${upstream.stats.jsonCount} 件 / IconPlaceholder ${upstream.stats.placeholderCount} 箇所 / 対象 block ${upstream.stats.blocksWithPlaceholders} 件 / lucide ${upstream.stats.uniqueIconCount} 種 / lucide 欠損 ${upstream.stats.missingLucideCount} 件`,
     );
