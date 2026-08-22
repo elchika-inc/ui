@@ -26,6 +26,31 @@ const jsxOpenings = (sourceFile) => {
   return openings;
 };
 
+const componentReturnExpressions = (component) => {
+  const returnExpressions = [];
+  const visit = (node) => {
+    if (
+      ts.isFunctionDeclaration(node) ||
+      ts.isFunctionExpression(node) ||
+      ts.isArrowFunction(node) ||
+      ts.isClassDeclaration(node) ||
+      ts.isClassExpression(node)
+    ) {
+      return;
+    }
+    if (ts.isReturnStatement(node)) {
+      if (node.expression) returnExpressions.push(node.expression);
+      return;
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(component.body);
+  return returnExpressions;
+};
+
+const componentJsxOpenings = (component) =>
+  componentReturnExpressions(component).flatMap(jsxOpenings);
+
 const jsxAttribute = (opening, name, sourceFile) =>
   opening.attributes.properties
     .find((attribute) => ts.isJsxAttribute(attribute) && attribute.name.text === name)
@@ -124,7 +149,7 @@ test("dashboard chart は TimeRange から UTC の両端を含む 7/30/90 日だ
     ["2024-06-24", "2024-06-30", "2024-06-29"],
   );
 
-  const areaCharts = jsxOpenings(chartComponent).filter(
+  const areaCharts = componentJsxOpenings(chartComponent).filter(
     (opening) => opening.tagName.getText(sourceFile) === "AreaChart",
   );
   assert.equal(areaCharts.length, 1, "ChartAreaInteractive 内の AreaChart が一意である");
@@ -152,6 +177,23 @@ test("dashboard chart の配線検査は nested function の同名変数を採�
     () => uniqueVariableInitializer(component, sourceFile, "filteredData"),
     /filteredData の宣言が対象 scope で一意/,
   );
+});
+
+test("dashboard chart の配線検査は nested function の JSX decoy を採用しない", () => {
+  const sourceFile = parseTsxSource(`
+    function ChartAreaInteractive() {
+      function decoy() {
+        return <AreaChart data={filteredData} />;
+      }
+      return <div />;
+    }
+  `);
+  const component = namedTopLevelFunction(sourceFile, "ChartAreaInteractive");
+  const areaCharts = componentJsxOpenings(component).filter(
+    (opening) => opening.tagName.getText(sourceFile) === "AreaChart",
+  );
+
+  assert.equal(areaCharts.length, 0, "nested function の AreaChart を実 return と数えない");
 });
 
 test("dashboard block の配布 manifest は除外後の依存集合と共有依存を保つ", () => {
@@ -306,11 +348,16 @@ test("dashboard table の helper 結果は checkbox・drawer・詳細 button へ
   const tableComponent = namedTopLevelFunction(sourceFile, "DashboardTable");
   const dataTableComponent = namedTopLevelFunction(sourceFile, "DashboardDataTable");
   const rowComponent = namedTopLevelFunction(sourceFile, "DashboardTableDataRow");
-  const tableOpenings = jsxOpenings(tableComponent);
-  const dataTableOpenings = jsxOpenings(dataTableComponent);
-  const rowOpenings = jsxOpenings(rowComponent);
+  const tableOpenings = componentJsxOpenings(tableComponent);
+  const tableFragment = uniqueVariableDeclaration(tableComponent, sourceFile, "table").initializer;
+  assert.ok(tableFragment, "table の JSX initializer がある");
+  const tableFragmentOpenings = jsxOpenings(tableFragment);
+  const dataTableOpenings = componentJsxOpenings(dataTableComponent);
+  const rowOpenings = componentJsxOpenings(rowComponent);
   const byTableTag = (tag) =>
     tableOpenings.filter((opening) => opening.tagName.getText(sourceFile) === tag);
+  const byTableFragmentTag = (tag) =>
+    tableFragmentOpenings.filter((opening) => opening.tagName.getText(sourceFile) === tag);
   const byDataTableTag = (tag) =>
     dataTableOpenings.filter((opening) => opening.tagName.getText(sourceFile) === tag);
   const byRowTag = (tag) =>
@@ -353,7 +400,19 @@ test("dashboard table の helper 結果は checkbox・drawer・詳細 button へ
   assert.ok(detailButton, "accessible name 付き詳細 button がある");
   assert.match(jsxAttribute(detailButton, "onClick", sourceFile), /onOpen\(row\)/);
 
-  const table = byTableTag("DashboardDataTable")[0];
+  const returnedTableReferences = componentReturnExpressions(tableComponent).flatMap(
+    (expression) => {
+      const names = [];
+      const visit = (node) => {
+        if (ts.isIdentifier(node)) names.push(node.text);
+        ts.forEachChild(node, visit);
+      };
+      visit(expression);
+      return names;
+    },
+  );
+  assert.ok(returnedTableReferences.includes("table"), "table fragment が実 return から参照される");
+  const table = byTableFragmentTag("DashboardDataTable")[0];
   assert.equal(jsxAttribute(table, "selectedIds", sourceFile), "{selectedIdsInData}");
   const drawer = byTableTag("Drawer")[0];
   assert.equal(jsxAttribute(drawer, "open", sourceFile), "{activeRow !== null}");
@@ -363,7 +422,8 @@ test("dashboard table の helper 結果は checkbox・drawer・詳細 button へ
 
 test("dashboard table の詳細 chart は Recharts のゼロ寸法 wrapper に依存せず表示する", () => {
   const { sourceFile } = parseTsx("src/blocks/dashboard-table/components/dashboard-table.tsx");
-  const openings = jsxOpenings(sourceFile);
+  const detailChartComponent = namedTopLevelFunction(sourceFile, "DetailChart");
+  const openings = componentJsxOpenings(detailChartComponent);
   const chartContainer = openings.find(
     (opening) => opening.tagName.getText(sourceFile) === "ChartContainer",
   );
