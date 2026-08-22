@@ -79,6 +79,28 @@ const jsxAttribute = (opening, name, sourceFile) =>
     .find((attribute) => ts.isJsxAttribute(attribute) && attribute.name.text === name)
     ?.initializer?.getText(sourceFile);
 
+const assertTabsContentTableBranch = (opening, sourceFile) => {
+  const valueAttribute = opening.attributes.properties.find(
+    (attribute) => ts.isJsxAttribute(attribute) && attribute.name.text === "value",
+  );
+  const conditionalExpressions = opening.parent.children
+    .filter(ts.isJsxExpression)
+    .map((child) => child.expression)
+    .filter((expression) => expression && ts.isConditionalExpression(expression));
+  assert.ok(
+    valueAttribute &&
+      ts.isJsxAttribute(valueAttribute) &&
+      valueAttribute.initializer &&
+      ts.isStringLiteral(valueAttribute.initializer) &&
+      conditionalExpressions.length === 1 &&
+      conditionalExpressions[0].condition.getText(sourceFile) ===
+        `view === "${valueAttribute.initializer.text}"` &&
+      conditionalExpressions[0].whenTrue.getText(sourceFile) === "table" &&
+      conditionalExpressions[0].whenFalse.kind === ts.SyntaxKind.NullKeyword,
+    "TabsContent の value と table 表示条件が一致する",
+  );
+};
+
 const namedTopLevelFunction = (sourceFile, name) => {
   const declarations = sourceFile.statements.filter(
     (statement) => ts.isFunctionDeclaration(statement) && statement.name?.text === name,
@@ -246,6 +268,26 @@ test("dashboard table の配線検査は return 内 callback の fragment decoy 
     returnedIdentifierNames(component).includes("table"),
     false,
     "callback 内の table を直接配線と数えない",
+  );
+});
+
+test("dashboard table の配線検査は TabsContent value と表示条件を対応付ける", () => {
+  const sourceFile = parseTsxSource(`
+    function DashboardTable() {
+      const table = <DashboardDataTable />;
+      const view = "all";
+      return <TabsContent value="all">{view === "review" ? table : null}</TabsContent>;
+    }
+  `);
+  const component = namedTopLevelFunction(sourceFile, "DashboardTable");
+  const content = componentJsxOpenings(component).find(
+    (opening) => opening.tagName.getText(sourceFile) === "TabsContent",
+  );
+  assert.ok(content, "fixture の TabsContent がある");
+
+  assert.throws(
+    () => assertTabsContentTableBranch(content, sourceFile),
+    /TabsContent の value と table 表示条件が一致する/,
   );
 });
 
@@ -462,10 +504,7 @@ test("dashboard table の helper 結果は checkbox・drawer・詳細 button へ
   const tableContents = byTableTag("TabsContent");
   assert.equal(tableContents.length, 2, "DashboardTable の TabsContent が2件ある");
   for (const content of tableContents) {
-    assert.ok(
-      identifierNames(content.parent).includes("table"),
-      "各 TabsContent が table fragment を直接参照する",
-    );
+    assertTabsContentTableBranch(content, sourceFile);
   }
   const table = byTableFragmentTag("DashboardDataTable")[0];
   assert.equal(jsxAttribute(table, "selectedIds", sourceFile), "{selectedIdsInData}");
