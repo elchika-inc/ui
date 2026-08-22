@@ -1,8 +1,15 @@
 ---
+import { blockNamesFromRegistry } from "@/catalog/registry-kinds";
 import { VerificationCatalog } from "@/catalog/verification-catalog";
 import Layout from "@/layouts/main.astro";
+import registry from "../../registry.json";
+
+// block は catalog の同一 DOM に並べると fixed 配置や dialog が他のカードを覆うため、
+// registry item の type を正本に block だけを隔離プレビューの iframe で埋め込む。
+// biome-ignore lint/correctness/noUnusedVariables: Astro template から参照する値。
+const blockNames = blockNamesFromRegistry(registry);
 ---
 
 <Layout title="カタログ — elchika-inc/ui">
-  <VerificationCatalog client:load />
+  <VerificationCatalog blockNames={blockNames} theme="light" client:load />
 </Layout>

@@ -135,8 +135,14 @@ function evidencePaths(file) {
       "src/pages/catalog-dark.astro",
       "src/catalog/preview-manifest.mjs",
       "src/catalog/previews.ts",
+      // catalog は registry item の type で block（iframe 埋め込み）と component（直接描画）を
+      // 分けるため、registry.json の type 変更だけでも見た目が変わる。block の iframe は
+      // src/pages/preview/<name>[-dark].astro を読み込むので、その route 実体にも依存する。
+      "src/catalog/registry-kinds.ts",
       "src/catalog/verification-catalog.tsx",
+      "registry.json",
       "src/components/ui",
+      "src/pages/preview",
       "src/previews",
     ];
   }
