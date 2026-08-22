@@ -1,0 +1,118 @@
+[fixture source: tiedRows and allPermutations]
+test("dashboard table は数値と非数値の target を全順序で安定して並べる", () => {
+  const { compareRows, dashboardMetricValues } = loadTsxLogic(
+    "src/blocks/dashboard-table/components/dashboard-table.tsx",
+    ["compareRows", "dashboardMetricValues"],
+  );
+  const base = {
+    id: 1,
+    header: "Document",
+    type: "Narrative",
+    status: "Done",
+    limit: "5",
+    reviewer: "Reviewer",
+  };
+  const unavailable = { ...base, target: "N/A" };
+  const empty = { ...base, target: "" };
+  const whitespace = { ...base, target: "   " };
+  const numeric = { ...base, id: 2, target: "10" };
+  const rows = [
+    { ...base, id: 1, target: "2" },
+    { ...base, id: 2, target: "10" },
+    { ...base, id: 3, target: "1x" },
+  ];
+  const permutations = [
+    [rows[0], rows[1], rows[2]],
+    [rows[0], rows[2], rows[1]],
+    [rows[1], rows[0], rows[2]],
+    [rows[1], rows[2], rows[0]],
+    [rows[2], rows[0], rows[1]],
+    [rows[2], rows[1], rows[0]],
+  ];
+
+  assert.equal(dashboardMetricValues(unavailable), null);
+  assert.equal(dashboardMetricValues(empty), null);
+  assert.equal(dashboardMetricValues(whitespace), null);
+  assert.ok(compareRows(empty, numeric, "target") > 0, "空文字は非数値 bucket に入る");
+  assert.ok(compareRows(whitespace, numeric, "target") > 0, "空白は非数値 bucket に入る");
+  for (const permutation of permutations) {
+    assert.deepEqual(
+      [...permutation]
+        .sort((left, right) => compareRows(left, right, "target"))
+        .map((row) => row.target),
+      ["2", "10", "1x"],
+    );
+    assert.deepEqual(
+      [...permutation]
+        .sort((left, right) => -compareRows(left, right, "target"))
+        .map((row) => row.target),
+      ["1x", "10", "2"],
+    );
+  }
+  const tiedRows = [
+    { ...base, id: 4, target: "N/A" },
+    { ...base, id: 2, target: "10" },
+    { ...base, id: 3, target: "N/A" },
+    { ...base, id: 1, target: "10" },
+  ];
+  const allPermutations = (values) =>
+    values.length <= 1
+      ? [values]
+      : values.flatMap((value, index) =>
+          allPermutations(values.toSpliced(index, 1)).map((rest) => [value, ...rest]),
+        );
+  for (const permutation of allPermutations(tiedRows)) {
+    assert.deepEqual(
+      [...permutation]
+        .sort((left, right) => compareRows(left, right, "target"))
+        .map((row) => row.id),
+      [1, 2, 3, 4],
+    );
+    assert.deepEqual(
+      [...permutation]
+        .sort((left, right) => -compareRows(left, right, "target"))
+        .map((row) => row.id),
+      [4, 3, 2, 1],
+    );
+  }
+  for (const [key, leftValue, rightValue] of [
+    ["header", "Alpha", "Beta"],
+    ["status", "Done", "In Process"],
+    ["reviewer", "Alice", "Bob"],
+  ]) {
+    const left = { ...base, [key]: leftValue };
+    const right = { ...base, id: 2, [key]: rightValue };
+    assert.ok(compareRows(left, right, key) < 0, `${key} ascending`);
+    assert.ok(-compareRows(left, right, key) > 0, `${key} descending`);
+
+[execution]
+✔ dashboard navigation は受け取った URL を link として描画する (0.740708ms)
+✔ dashboard-01 は上流の架空社名 Acme Inc. を表示する (4.974541ms)
+✔ dashboard-01 の来歴は法人格表記を除去したと記録しない (1.264375ms)
+✔ dashboard-01 preview は catalog の sidebar を item 内へ静的配置する (1.352333ms)
+✔ dashboard chart は TimeRange から UTC の両端を含む 7/30/90 日だけを描画へ渡す (34.732042ms)
+✔ dashboard chart の配線検査は nested function の同名変数を採用しない (0.678584ms)
+✔ dashboard chart の配線検査は nested function の JSX decoy を採用しない (0.112791ms)
+✔ dashboard chart の配線検査は return 内 callback の JSX decoy を採用しない (0.105667ms)
+✔ dashboard table の配線検査は return 内 callback の fragment decoy を採用しない (0.113875ms)
+✔ dashboard table の配線検査は TabsContent value と表示条件を対応付ける (0.228ms)
+✔ dashboard table の配線検査は all と review の content を一意に要求する (0.395917ms)
+✔ dashboard block の配布 manifest は除外後の依存集合と共有依存を保つ (2.148416ms)
+✔ dashboard table は部分選択を mixed state として計算する (11.931ms)
+✔ dashboard table は data 更新時に選択 ID と active row を現在データへ束縛する (7.681666ms)
+✔ dashboard table は DnD による行順変更を実装しない (0.489417ms)
+✔ dashboard table は数値と非数値の target を全順序で安定して並べる (7.041ms)
+✔ dashboard table の helper 結果は checkbox・drawer・詳細 button へ配線される (2.860458ms)
+✔ dashboard table の詳細 chart は Recharts のゼロ寸法 wrapper に依存せず表示する (1.452041ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 223.619209
+
+exit_code: 0
+tied_fixture_rows: 4
+all_permutations_observed_by_fixture: 24
