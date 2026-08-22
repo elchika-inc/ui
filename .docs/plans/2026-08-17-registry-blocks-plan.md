@@ -1237,7 +1237,7 @@ registry.json / provenance.json / component-categories.mjs が単一の
 
 - **repo dependency delta**: 当リポジトリの `package.json` / `package-lock.json` に差分が無い
 - **配布 item の npm `dependencies`**: 通常の `registry:page` 除外だけなら上流宣言を保持する。`data-table.tsx` のような明示的な追加除外がある場合、最終集合は「残存 block 所有 source の静的・動的 external import」「CLI 生成 source から補完した external import」「共有配布物が常に要求する exact `SHARED_DEPENDENCIES`（現行は `shadcn` / `tw-animate-css`）」の和集合とする。CSS の全 import など、この 3 集合以外から npm 依存を推測しない
-- **配布 item の `registryDependencies`**: 通常の `registry:page` 除外だけなら上流宣言を保持する。明示的な追加除外がある場合は、残存配布 file の直接 local import を起点に、当リポジトリの local registry graph で到達できる推移閉包だけへ絞る。閉包の全 item は一意に解決できなければならず、解決不能・重複は fail-closed で停止する
+- **配布 item の `registryDependencies`**: 通常の `registry:page` 除外だけなら上流宣言を保持する。明示的な追加除外がある場合、bare 名と `@elchika/*` は残存配布 file の直接 local import を起点に、当リポジトリの local registry graph で到達できる推移閉包だけへ絞る。閉包の全 item は一意に解決できなければならず、解決不能・重複は fail-closed で停止する。外部 URL と `@elchika` 以外の namespace は値を保持し、local graph の存在検査・推移閉包の対象外とする
 
 **Files:**
 - Modify: `scripts/add-component.mjs`（block 内 `registry:file` への対応）
@@ -1633,27 +1633,20 @@ Expected: exit 0。
 
 Run: 生成物と台帳の突合（件数を焼き込まない）
 
-`scripts/check-registry-build.mjs` として実装し、`node scripts/check-registry-build.mjs` で実行する。
-
-```js
-import { readFileSync, readdirSync } from "node:fs";
-
-const reg = JSON.parse(readFileSync("registry.json", "utf8"));
-const built = new Set(
-  readdirSync("public/r").filter((f) => f.endsWith(".json")).map((f) => f.replace(/\.json$/, "")),
-);
-const missing = reg.items.map((i) => i.name).filter((n) => !built.has(n));
-console.log(
-  missing.length
-    ? `未生成: ${missing.join(", ")}`
-    : "registry.json の全 item が public/r に生成されている",
-);
-process.exit(missing.length ? 1 : 0);
+```bash
+node scripts/check-registry-build.mjs
 ```
+
+checker は次の完全性述語をすべて検査する。
+
+- `public/r` の JSON 集合は `registry.json` の全 item と既知の補助 JSON（`index.json` / `registry.json`）に一致し、欠落・退役 item の残留がない
+- 各 item JSON は `files[].content` を除く manifest が `registry.json` の対応 item と一致する
+- 各 `files[].content` は item が指す source file の実体と byte 一致する
+- `registry:build` の末尾で、file 名・JSON 内 `name`・`registry:*` type が一致する退役 item JSON だけを安全に除去する。未知・壊れた JSON は黙って削除せず checker が拒否する
 
 Expected: exit 0
 
-**件数で判定しない。** `registry.json` の item がすべて `public/r/` に生成されていることを述語で確認する。block が増減しても正しいままの形にする。
+**件数で判定しない。** `registry.json` と `public/r/` の集合・manifest・content が一致することを述語で確認する。block が増減しても正しいままの形にする。
 
 - [ ] **Step 4: コミット**
 
