@@ -720,7 +720,13 @@ export function buildRegistryItem(name, upstreamItem, generatedSource, target, r
   // registry:page は resolveRegistryTarget が droppedFiles へ振り分け済みなのでここには来ない。
   const itemFiles =
     target.itemType === "registry:block"
-      ? target.files.map(({ targetPath, fileType }) => ({ path: targetPath, type: fileType }))
+      ? target.files.map(({ targetPath, fileType, upstreamTargetPath }) => ({
+          path: targetPath,
+          type: fileType,
+          // registry:file の target は利用者プロジェクトでの配置先なので上流値を保つ。
+          // 当リポジトリへ取り込む際の CLI 生成先（cliOutputPath）とは別概念である。
+          ...(fileType === "registry:file" ? { target: upstreamTargetPath } : {}),
+        }))
       : [{ path: target.targetPath, type: target.itemType }];
 
   const item = {

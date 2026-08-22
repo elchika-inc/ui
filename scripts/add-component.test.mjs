@@ -762,6 +762,34 @@ test("block の registry item は配布ファイルだけを files に載せる"
   ]);
 });
 
+test("block の registry:file は上流 target を保持し component には target を付けない", async () => {
+  const { buildRegistryItem, resolveRegistryTarget } = await loadModule();
+  const target = resolveRegistryTarget("dashboard-01", dashboardUpstream);
+  const item = buildRegistryItem("dashboard-01", dashboardUpstream, "", target);
+
+  assert.deepEqual(
+    item.files.find((file) => file.path === "src/blocks/dashboard-01/data.json"),
+    {
+      path: "src/blocks/dashboard-01/data.json",
+      type: "registry:file",
+      target: "app/dashboard/data.json",
+    },
+  );
+  assert.deepEqual(
+    item.files.find(
+      (file) => file.path === "src/blocks/dashboard-01/components/chart-area-interactive.tsx",
+    ),
+    {
+      path: "src/blocks/dashboard-01/components/chart-area-interactive.tsx",
+      type: "registry:component",
+    },
+  );
+  assert.equal(
+    item.files.find((file) => file.path === "LICENSE")?.target,
+    "~/elchika-ui/LICENSE",
+  );
+});
+
 test("UI import 由来の registry dependency 補完は block だけに適用する", async () => {
   const { buildRegistryItem, resolveRegistryTarget } = await loadModule();
   const registryItems = [
@@ -1548,13 +1576,18 @@ test("dashboard-01 は配布ファイルの registry 依存閉包だけを pin �
   assert.equal(existsSync(join(root, "src/blocks/dashboard-01/data.json")), true);
   assert.deepEqual(
     result.registryItem.files
-      .filter((file) => file.target === undefined)
-      .map(({ path, type }) => ({ path, type })),
+      .filter((file) => file.path.startsWith("src/blocks/dashboard-01/"))
+      .map(({ path, type, target }) => ({ path, type, target })),
     [
-      { path: "src/blocks/dashboard-01/data.json", type: "registry:file" },
+      {
+        path: "src/blocks/dashboard-01/data.json",
+        type: "registry:file",
+        target: "app/dashboard/data.json",
+      },
       {
         path: "src/blocks/dashboard-01/components/chart-area-interactive.tsx",
         type: "registry:component",
+        target: undefined,
       },
     ],
   );
