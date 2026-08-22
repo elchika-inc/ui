@@ -2202,6 +2202,68 @@ test("--resync は CLI も通信もせず来歴のハッシュを実体へ揃え
   assert.ok(logs.some((message) => message.startsWith("ハッシュを更新:")));
 });
 
+test("--resync は来歴 file 自身が symlink なら repo 外を読まず停止する", async (t) => {
+  const root = prepareWrapperRepo();
+  const outside = mkdtempSync(join(tmpdir(), "elchika-resync-leaf-outside-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(() => rmSync(outside, { recursive: true, force: true }));
+  mkdirSync(join(root, "src/blocks/login-01/components"), { recursive: true });
+  writeFileSync(join(outside, "secret.tsx"), "repo 外の秘密\n");
+  symlinkSync(
+    join(outside, "secret.tsx"),
+    join(root, "src/blocks/login-01/components/login-form.tsx"),
+    "file",
+  );
+  const provenance = {
+    components: {},
+    blocks: {
+      "login-01": {
+        files: [
+          {
+            path: "src/blocks/login-01/components/login-form.tsx",
+            generatedContentSha256: "0".repeat(64),
+          },
+        ],
+      },
+    },
+  };
+  const { resyncBlockHashes } = await loadModule();
+
+  assert.throws(
+    () => resyncBlockHashes({ root, name: "login-01", provenance, log: () => {} }),
+    /来歴の path.*symlink/,
+  );
+});
+
+test("--resync は来歴 file の祖先が symlink なら repo 外を読まず停止する", async (t) => {
+  const root = prepareWrapperRepo();
+  const outside = mkdtempSync(join(tmpdir(), "elchika-resync-ancestor-outside-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(() => rmSync(outside, { recursive: true, force: true }));
+  mkdirSync(join(root, "src/blocks/login-01"), { recursive: true });
+  writeFileSync(join(outside, "login-form.tsx"), "repo 外の秘密\n");
+  symlinkSync(outside, join(root, "src/blocks/login-01/components"), "dir");
+  const provenance = {
+    components: {},
+    blocks: {
+      "login-01": {
+        files: [
+          {
+            path: "src/blocks/login-01/components/login-form.tsx",
+            generatedContentSha256: "0".repeat(64),
+          },
+        ],
+      },
+    },
+  };
+  const { resyncBlockHashes } = await loadModule();
+
+  assert.throws(
+    () => resyncBlockHashes({ root, name: "login-01", provenance, log: () => {} }),
+    /来歴の path.*symlink/,
+  );
+});
+
 test("--resync は --modified を渡したときだけ来歴を上書きする", async (t) => {
   const root = prepareWrapperRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));

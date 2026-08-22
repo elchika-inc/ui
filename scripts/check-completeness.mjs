@@ -3,6 +3,7 @@
 // Button 固定の検査を一般化したもので、#2 で 50 件足すときの安全網になる。
 import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import ts from "typescript";
 import { listBlockFiles, scanBlockNames } from "./block-scan.mjs";
@@ -11,6 +12,7 @@ import {
   externalPackageFromImport,
   importedModuleSpecifiers,
 } from "./import-analysis.mjs";
+import { assertPathWithoutSymlinks } from "./path-safety.mjs";
 import { SHARED_DEPENDENCIES, SHARED_REGISTRY_FILES } from "./registry-policy.mjs";
 
 const sha256 = (content) => createHash("sha256").update(content, "utf8").digest("hex");
@@ -602,6 +604,29 @@ export function checkCompleteness({
   return { problems };
 }
 
+export function readBlockSources(root, blockFiles) {
+  return Object.fromEntries(
+    Object.entries(blockFiles).map(([name, paths]) => [
+      name,
+      Object.fromEntries(
+        paths
+          .map((path) => {
+            const safePath = assertPathWithoutSymlinks(
+              root,
+              `${name}: completeness の block file`,
+              path,
+            );
+            return [
+              safePath,
+              existsSync(join(root, safePath)) ? readFileSync(join(root, safePath), "utf8") : null,
+            ];
+          })
+          .filter(([, source]) => source !== null),
+      ),
+    ]),
+  );
+}
+
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   const components = readdirSync("src/components/ui")
     .filter((f) => f.endsWith(".tsx"))
@@ -620,16 +645,7 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   // （scanBlockNames は 3 つの走査根がすべて空なら空配列を返す）。
   const blocks = scanBlockNames("src/blocks", provenance, registry);
   const blockFiles = Object.fromEntries(blocks.map((name) => [name, listBlockFiles(".", name)]));
-  const blockSources = Object.fromEntries(
-    blocks.map((name) => [
-      name,
-      Object.fromEntries(
-        blockFiles[name]
-          .filter((path) => existsSync(path))
-          .map((path) => [path, readFileSync(path, "utf8")]),
-      ),
-    ]),
-  );
+  const blockSources = readBlockSources(".", blockFiles);
   const { problems } = checkCompleteness({
     components,
     blocks,

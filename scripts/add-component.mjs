@@ -6,11 +6,9 @@ import {
   copyFileSync,
   existsSync,
   constants as fsConstants,
-  lstatSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
-  realpathSync,
   rmSync,
   writeFileSync,
 } from "node:fs";
@@ -18,6 +16,7 @@ import { tmpdir } from "node:os";
 import { basename, dirname, extname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
 import { dependencyName, externalImports, importedModuleSpecifiers } from "./import-analysis.mjs";
+import { assertContainedPath, assertPathWithoutSymlinks } from "./path-safety.mjs";
 import { SHARED_DEPENDENCIES, SHARED_REGISTRY_FILES } from "./registry-policy.mjs";
 
 const DEPENDENCY_SECTIONS = [
@@ -609,36 +608,6 @@ export function completeBlockRegistryDependencies(
 const UPSTREAM_PREFIX = "apps/v4/registry/bases/base/";
 const REGISTRY_PREFIX = "registry/base-nova/";
 
-// 上流 registry の応答に含まれる path は、そのまま join() → mkdirSync / copyFileSync /
-// rmSync へ流れる値。prefix の検査だけでは prefix より後ろの `..` が通り、repo 外へ
-// 書き込める。副作用より前で止めないと、fail-closed のゲートが後ろにあっても手遅れになる。
-function assertContainedPath(label, path) {
-  const normalized = relative(".", resolve(".", path));
-  if (
-    isAbsolute(path) ||
-    !normalized ||
-    normalized === ".." ||
-    normalized.startsWith(`..${sep}`) ||
-    normalized !== path
-  ) {
-    throw new Error(`${label}: repo 内の通常相対 path でない: ${path}`);
-  }
-  return path;
-}
-
-function assertPathWithoutSymlinks(root, label, path) {
-  const canonicalRoot = realpathSync(root);
-  let current = canonicalRoot;
-  for (const segment of path.split("/")) {
-    current = join(current, segment);
-    const status = lstatSync(current, { throwIfNoEntry: false });
-    if (status?.isSymbolicLink()) {
-      throw new Error(`${label} に symlink を含められない: ${path}`);
-    }
-  }
-  return path;
-}
-
 // 文字列引数の replace は先頭アンカーを持たず「最初に現れた出現位置」を消すため、
 // prefix が先頭以外にあるパス（vendor/registry/base-nova/...）を黙って別物へ変換する。
 // 前方一致を検査してから slice する。
@@ -1069,7 +1038,8 @@ export function resyncBlockHashes({ root, name, modified, provenance, log = cons
   const updated = [];
   for (const file of entry.files) {
     if (file.dropped === true) continue;
-    const absolute = join(root, assertContainedPath(`${name}: 来歴の path`, file.path));
+    const safePath = assertPathWithoutSymlinks(root, `${name}: 来歴の path`, file.path);
+    const absolute = join(root, safePath);
     if (!existsSync(absolute)) {
       throw new Error(`${name}: 来歴にある ${file.path} が存在しない`);
     }

@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
+import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { test } from "node:test";
-import { checkCompleteness } from "./check-completeness.mjs";
+import { checkCompleteness, readBlockSources } from "./check-completeness.mjs";
 
 const complete = {
   components: ["button"],
@@ -914,6 +917,46 @@ test("コメント内の alias を import として誤検出しない", () => {
 
 test("blockSources を渡さなければ内容検査を行わない", () => {
   assert.deepEqual(checkCompleteness(completeBlock).problems, []);
+});
+
+test("completeness は block file 自身が symlink なら repo 外を読まず停止する", (t) => {
+  const root = mkdtempSync(join(tmpdir(), "elchika-completeness-leaf-"));
+  const outside = mkdtempSync(join(tmpdir(), "elchika-completeness-leaf-outside-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(() => rmSync(outside, { recursive: true, force: true }));
+  mkdirSync(join(root, "src/blocks/login-01/components"), { recursive: true });
+  writeFileSync(join(outside, "secret.tsx"), "repo 外の秘密\n");
+  symlinkSync(
+    join(outside, "secret.tsx"),
+    join(root, "src/blocks/login-01/components/login-form.tsx"),
+    "file",
+  );
+
+  assert.throws(
+    () =>
+      readBlockSources(root, {
+        "login-01": ["src/blocks/login-01/components/login-form.tsx"],
+      }),
+    /completeness の block file.*symlink/,
+  );
+});
+
+test("completeness は block file の祖先が symlink なら repo 外を読まず停止する", (t) => {
+  const root = mkdtempSync(join(tmpdir(), "elchika-completeness-ancestor-"));
+  const outside = mkdtempSync(join(tmpdir(), "elchika-completeness-ancestor-outside-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(() => rmSync(outside, { recursive: true, force: true }));
+  mkdirSync(join(root, "src/blocks/login-01"), { recursive: true });
+  writeFileSync(join(outside, "login-form.tsx"), "repo 外の秘密\n");
+  symlinkSync(outside, join(root, "src/blocks/login-01/components"), "dir");
+
+  assert.throws(
+    () =>
+      readBlockSources(root, {
+        "login-01": ["src/blocks/login-01/components/login-form.tsx"],
+      }),
+    /completeness の block file.*symlink/,
+  );
 });
 
 // 正規表現で「コメント内の例示」の偽陽性を消すと行頭限定になり、biome の

@@ -13,6 +13,9 @@ const parseTsx = (path) => {
   };
 };
 
+const parseTsxSource = (source) =>
+  ts.createSourceFile("fixture.tsx", source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+
 const jsxOpenings = (sourceFile) => {
   const openings = [];
   const visit = (node) => {
@@ -36,17 +39,38 @@ const namedTopLevelFunction = (sourceFile, name) => {
   return declarations[0];
 };
 
-const uniqueVariableInitializer = (scope, sourceFile, name) => {
-  const initializers = [];
+const uniqueVariableDeclaration = (scope, sourceFile, name) => {
+  const block = ts.isBlock(scope) ? scope : scope.body;
+  assert.ok(block && ts.isBlock(block), "変数の探索対象が statement block である");
+  const declarations = block.statements
+    .filter(ts.isVariableStatement)
+    .flatMap((statement) => statement.declarationList.declarations)
+    .filter((declaration) => declaration.name.getText(sourceFile) === name);
+  assert.equal(declarations.length, 1, `${name} の宣言が対象 scope で一意である`);
+  return declarations[0];
+};
+
+const uniqueVariableInitializer = (scope, sourceFile, name) =>
+  uniqueVariableDeclaration(scope, sourceFile, name).initializer?.getText(sourceFile);
+
+const uniqueMethodCallback = (scope, methodName) => {
+  const callbacks = [];
   const visit = (node) => {
-    if (ts.isVariableDeclaration(node) && node.name.getText(sourceFile) === name) {
-      initializers.push(node.initializer?.getText(sourceFile));
+    if (
+      ts.isCallExpression(node) &&
+      ts.isPropertyAccessExpression(node.expression) &&
+      node.expression.name.text === methodName
+    ) {
+      const callback = node.arguments[0];
+      if (callback && (ts.isArrowFunction(callback) || ts.isFunctionExpression(callback))) {
+        callbacks.push(callback);
+      }
     }
     ts.forEachChild(node, visit);
   };
   visit(scope);
-  assert.equal(initializers.length, 1, `${name} の宣言が対象 scope で一意である`);
-  return initializers[0];
+  assert.equal(callbacks.length, 1, `${methodName} callback が対象 scope で一意である`);
+  return callbacks[0];
 };
 
 const loadTsxLogic = (path, names) => {
@@ -109,6 +133,25 @@ test("dashboard chart は TimeRange から UTC の両端を含む 7/30/90 日だ
     'chartDataForTimeRange(chartData, timeRange, "2024-06-30")',
   );
   assert.equal(jsxAttribute(areaCharts[0], "data", sourceFile), "{filteredData}");
+});
+
+test("dashboard chart の配線検査は nested function の同名変数を採用しない", () => {
+  const sourceFile = parseTsxSource(`
+    const filteredData = chartData;
+    function ChartAreaInteractive() {
+      function decoy() {
+        const filteredData = chartDataForTimeRange(chartData, timeRange, "2024-06-30");
+        return filteredData;
+      }
+      return <AreaChart data={filteredData} />;
+    }
+  `);
+  const component = namedTopLevelFunction(sourceFile, "ChartAreaInteractive");
+
+  assert.throws(
+    () => uniqueVariableInitializer(component, sourceFile, "filteredData"),
+    /filteredData の宣言が対象 scope で一意/,
+  );
 });
 
 test("dashboard block の配布 manifest は除外後の依存集合と共有依存を保つ", () => {
@@ -286,7 +329,11 @@ test("dashboard table の helper 結果は checkbox・drawer・詳細 button へ
     "reconciledState.activeRow",
   );
   assert.equal(
-    uniqueVariableInitializer(tableComponent, sourceFile, "comparison"),
+    uniqueVariableInitializer(
+      uniqueMethodCallback(tableComponent, "sort"),
+      sourceFile,
+      "comparison",
+    ),
     "compareRows(left, right, sort.key)",
   );
 
