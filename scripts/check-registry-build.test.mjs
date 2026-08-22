@@ -45,9 +45,23 @@ test("registry item に対応する生成物が無ければ item 名を返す", 
     items: [{ name: "button" }, { name: "dashboard-01" }, { name: "dashboard-table" }],
   };
 
-  assert.deepEqual(findMissingRegistryItems(registry, ["button.json", "dashboard-table.json"]), [
-    "dashboard-01",
-  ]);
+  assert.deepEqual(
+    findMissingRegistryItems(registry, [
+      "button.json",
+      "dashboard-table.json",
+      "index.json",
+      "registry.json",
+    ]),
+    ["dashboard-01"],
+  );
+});
+
+test("既知の補助 JSON が無ければ欠落として検出する", () => {
+  const registry = {
+    items: [{ name: "button" }],
+  };
+
+  assert.deepEqual(findMissingRegistryItems(registry, ["button.json"]), ["index", "registry"]);
 });
 
 test("生成 JSON の manifest と files content が source に一致すれば問題なし", () => {
@@ -181,6 +195,21 @@ test("CLI は生成物の充足を exit code と実 item 名で通知する", (t
   const complete = spawnSync(process.execPath, [scriptPath], { cwd: root, encoding: "utf8" });
   assert.equal(complete.status, 0, complete.stderr);
   assert.match(complete.stdout, /全 item が public\/r に生成されている/);
+
+  rmSync(join(root, "public/r/index.json"));
+  const missingIndex = spawnSync(process.execPath, [scriptPath], { cwd: root, encoding: "utf8" });
+  assert.equal(missingIndex.status, 1);
+  assert.match(missingIndex.stdout, /未生成: index/);
+  writeFileSync(join(root, "public/r/index.json"), "{}\n");
+
+  rmSync(join(root, "public/r/registry.json"));
+  const missingRegistry = spawnSync(process.execPath, [scriptPath], {
+    cwd: root,
+    encoding: "utf8",
+  });
+  assert.equal(missingRegistry.status, 1);
+  assert.match(missingRegistry.stdout, /未生成: registry/);
+  writeFileSync(join(root, "public/r/registry.json"), `${JSON.stringify(registry)}\n`);
 
   writeFileSync(join(root, "public/r/retired-item.json"), "{}\n");
   const retired = spawnSync(process.execPath, [scriptPath], { cwd: root, encoding: "utf8" });

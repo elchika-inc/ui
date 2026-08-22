@@ -4,20 +4,21 @@ import { pathToFileURL } from "node:url";
 import { isDeepStrictEqual } from "node:util";
 import { assertPathWithoutSymlinks } from "./path-safety.mjs";
 
+const REGISTRY_HELPER_JSON = new Set(["index", "registry"]);
+
+function expectedRegistryJsonNames(registry) {
+  return new Set([...(registry.items ?? []).map((item) => item.name), ...REGISTRY_HELPER_JSON]);
+}
+
 export function findMissingRegistryItems(registry, builtFiles) {
   const built = new Set(
     builtFiles.filter((file) => file.endsWith(".json")).map((file) => file.replace(/\.json$/, "")),
   );
-  return (registry.items ?? []).map((item) => item.name).filter((name) => !built.has(name));
+  return [...expectedRegistryJsonNames(registry)].filter((name) => !built.has(name));
 }
 
-const REGISTRY_HELPER_JSON = new Set(["index", "registry"]);
-
 export function findUnexpectedRegistryItems(registry, builtFiles) {
-  const expected = new Set([
-    ...(registry.items ?? []).map((item) => item.name),
-    ...REGISTRY_HELPER_JSON,
-  ]);
+  const expected = expectedRegistryJsonNames(registry);
   return builtFiles
     .filter((file) => file.endsWith(".json"))
     .map((file) => file.replace(/\.json$/, ""))
@@ -102,14 +103,15 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     ...problems,
     ...(unexpected.length ? [`予期しない生成物: ${unexpected.join(", ")}`] : []),
   ];
+  const failed = missing.length > 0 || allProblems.length > 0;
 
   console.log(
-    allProblems.length
+    failed
       ? [
           ...(missing.length ? [`未生成: ${missing.join(", ")}`] : []),
-          `生成物不一致:\n  ${allProblems.join("\n  ")}`,
+          ...(allProblems.length ? [`生成物不一致:\n  ${allProblems.join("\n  ")}`] : []),
         ].join("\n")
       : "registry.json の全 item が public/r に生成されている（manifest と content も source に一致）",
   );
-  process.exit(allProblems.length ? 1 : 0);
+  process.exit(failed ? 1 : 0);
 }
