@@ -1,0 +1,28 @@
+✔ dashboard navigation は受け取った URL を link として描画する (0.759417ms)
+✔ dashboard-01 は上流の架空社名 Acme Inc. を表示する (4.557708ms)
+✔ dashboard-01 の来歴は法人格表記を除去したと記録しない (1.153333ms)
+✔ dashboard-01 preview は catalog の sidebar を item 内へ静的配置する (1.133875ms)
+✔ dashboard chart は TimeRange から UTC の両端を含む 7/30/90 日だけを描画へ渡す (33.384458ms)
+✔ dashboard chart の配線検査は nested function の同名変数を採用しない (0.605291ms)
+✔ dashboard chart の配線検査は nested function の JSX decoy を採用しない (0.114083ms)
+✔ dashboard chart の配線検査は return 内 callback の JSX decoy を採用しない (0.105875ms)
+✔ dashboard table の配線検査は return 内 callback の fragment decoy を採用しない (0.112083ms)
+✔ dashboard table の配線検査は TabsContent value と表示条件を対応付ける (0.261125ms)
+✔ dashboard table の配線検査は all と review の content を一意に要求する (0.379916ms)
+✔ dashboard block の配布 manifest は除外後の依存集合と共有依存を保つ (2.098875ms)
+✔ dashboard table は部分選択を mixed state として計算する (11.573167ms)
+✔ dashboard table は data 更新時に選択 ID と active row を現在データへ束縛する (7.34375ms)
+✔ dashboard table は DnD による行順変更を実装しない (0.439542ms)
+✔ dashboard table は数値と非数値の target を全順序で安定して並べる (6.753166ms)
+✔ dashboard table の helper 結果は checkbox・drawer・詳細 button へ配線される (2.80175ms)
+✔ dashboard table の詳細 chart は Recharts のゼロ寸法 wrapper に依存せず表示する (1.584417ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 228.972375
+
+exit_code: 0
