@@ -15,12 +15,23 @@ const upstreamItem = (...files) => ({
   files: files.map(([path, content]) => ({ path, type: "registry:component", content })),
 });
 
-test("icon 監査対象は src/blocks の実在 directory から動的に導出する", async (context) => {
+test("icon 監査対象は実在 directory のうち上流移植品だけから動的に導出する", async (context) => {
   const root = mkdtempSync(join(tmpdir(), "check-block-icons-"));
   context.after(() => rmSync(root, { recursive: true, force: true }));
   mkdirSync(join(root, "src/blocks/sidebar-01"), { recursive: true });
   mkdirSync(join(root, "src/blocks/dashboard-01"));
+  mkdirSync(join(root, "src/blocks/dashboard-table"));
   writeFileSync(join(root, "src/blocks/not-a-block.tsx"), "export {}\n");
+  writeFileSync(
+    join(root, "provenance.json"),
+    JSON.stringify({
+      blocks: {
+        "sidebar-01": { origin: "shadcn/ui registry" },
+        "dashboard-01": { origin: "shadcn/ui registry" },
+        "dashboard-table": { origin: "elchika original" },
+      },
+    }),
+  );
 
   const { listIconAuditBlockNames } = await loadChecker();
 
@@ -184,6 +195,34 @@ test("dropped path を上流 JSON へ照合できなければ fail-closed で問
 
   assert.deepEqual(result.problems, [
     `dashboard-01: dropped file を上流 JSON へ対応付けられない: ${droppedPath}`,
+  ]);
+});
+
+test("正しい相対 path でも dropped path の上流 prefix が不正なら fail-closed にする", async () => {
+  const { inspectUpstreamBlocks } = await loadChecker();
+  const droppedPath = "https://evil.invalid/blocks/dashboard-01/components/data-table.tsx";
+  const result = inspectUpstreamBlocks(
+    [
+      {
+        name: "dashboard-01",
+        item: upstreamItem([
+          "registry/base-nova/blocks/dashboard-01/components/data-table.tsx",
+          '<IconPlaceholder lucide="GripVerticalIcon" />',
+        ]),
+      },
+    ],
+    { droppedUpstreamPathsByBlock: { "dashboard-01": [droppedPath] } },
+  );
+
+  assert.deepEqual(result.problems, [
+    `dashboard-01: dropped file を上流 JSON へ対応付けられない: ${droppedPath}`,
+  ]);
+  assert.deepEqual(result.expectedByTarget.blocks["dashboard-01"], [
+    {
+      path: "src/blocks/dashboard-01/components/data-table.tsx",
+      occurrences: [{ icon: "GripVerticalIcon", attributes: [] }],
+      orderedOccurrences: [{ icon: "GripVerticalIcon", attributes: [] }],
+    },
   ]);
 });
 

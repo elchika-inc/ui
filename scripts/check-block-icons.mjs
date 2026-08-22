@@ -13,7 +13,16 @@ import ts from "typescript";
 import { listBlockFiles, scanBlockNames } from "./block-scan.mjs";
 
 export function listIconAuditBlockNames(root = ".") {
-  return scanBlockNames(join(root, "src/blocks"));
+  const blockNames = scanBlockNames(join(root, "src/blocks"));
+  const provenancePath = join(root, "provenance.json");
+  if (!existsSync(provenancePath)) throw new Error("provenance.json が無い");
+  const provenance = JSON.parse(readFileSync(provenancePath, "utf8"));
+  return blockNames.filter((name) => {
+    const origin = provenance.blocks?.[name]?.origin;
+    if (origin === "shadcn/ui registry") return true;
+    if (origin === "elchika original") return false;
+    throw new Error(`${name}: icon 監査の origin が未対応: ${String(origin)}`);
+  });
 }
 
 function sourceFile(path, source) {
@@ -74,22 +83,27 @@ function generatedPath(name, file, target) {
     : undefined;
 }
 
-function blockRelativePath(name, path) {
+function blockRelativePath(name, path, root) {
   if (typeof path !== "string") return undefined;
-  const marker = `blocks/${name}/`;
-  const index = path.indexOf(marker);
-  if (index < 0 || (index > 0 && path[index - 1] !== "/")) return undefined;
-  const relativePath = path.slice(index + marker.length);
+  const prefix = `${root}/blocks/${name}/`;
+  if (!path.startsWith(prefix)) return undefined;
+  const relativePath = path.slice(prefix.length);
   return relativePath.length > 0 ? relativePath : undefined;
 }
 
 function droppedRelativePaths(name, item, droppedUpstreamPaths, problems) {
   const upstreamRelativePaths = new Set(
-    item.files.map((file) => blockRelativePath(name, file?.path)).filter(Boolean),
+    item.files
+      .map((file) => blockRelativePath(name, file?.path, "registry/base-nova"))
+      .filter(Boolean),
   );
   const dropped = new Set();
   for (const upstreamPath of droppedUpstreamPaths) {
-    const relativePath = blockRelativePath(name, upstreamPath);
+    const relativePath = blockRelativePath(
+      name,
+      upstreamPath,
+      "apps/v4/registry/bases/base",
+    );
     if (!relativePath || !upstreamRelativePaths.has(relativePath)) {
       problems.push(
         `${name}: dropped file を上流 JSON へ対応付けられない: ${String(upstreamPath)}`,
@@ -143,7 +157,7 @@ export function inspectUpstreamBlocks(entries, { droppedUpstreamPathsByBlock = {
               `${name}: ${path} の IconPlaceholder #${filePlaceholderIndex} に lucide 属性が無い`,
             );
           } else {
-            const relativePath = blockRelativePath(name, file.path);
+            const relativePath = blockRelativePath(name, file.path, "registry/base-nova");
             const droppedComponent =
               file.type === "registry:component" && droppedPaths.has(relativePath);
             if (!droppedComponent) {

@@ -578,7 +578,7 @@ test("block 所有の registry:file を配布対象へ含める", async () => {
   );
 });
 
-test("registry:file の ~/ 付き target は CLI 生成先を変えない", async () => {
+test("registry:file の ~/ 付き target は CLI が repo root 相対へ生成する", async () => {
   const { blockRelocationPlan, resolveRegistryTarget } = await loadModule();
   const target = resolveRegistryTarget("asset-01", {
     name: "asset-01",
@@ -598,11 +598,11 @@ test("registry:file の ~/ 付き target は CLI 生成先を変えない", asyn
     upstreamPath: "apps/v4/registry/bases/base/blocks/asset-01/LICENSE",
     fileType: "registry:file",
     upstreamTargetPath: "~/elchika-ui/LICENSE",
-    cliOutputPath: "~/elchika-ui/LICENSE",
+    cliOutputPath: "elchika-ui/LICENSE",
   });
   assert.deepEqual(blockRelocationPlan(target), [
     {
-      from: "~/elchika-ui/LICENSE",
+      from: "elchika-ui/LICENSE",
       to: "src/blocks/asset-01/LICENSE",
     },
   ]);
