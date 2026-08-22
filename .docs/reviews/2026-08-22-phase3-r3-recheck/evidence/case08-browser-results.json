@@ -1,0 +1,3190 @@
+{
+  "verified_impl_sha": "6b61a15c01a5d97d99e8c2558cfd4d0e7187c63a",
+  "runtimeBaseUrl": "http://127.0.0.1:4322",
+  "requestedBaseUrl": "http://127.0.0.1:4321",
+  "pages": {
+    "dashboardTableLight": {
+      "initialRowOrder": [
+        {
+          "id": "11",
+          "text": "Adaptive Communication ProtocolsNarrativeDone931Assign reviewer"
+        },
+        {
+          "id": "10",
+          "text": "Advanced Algorithms and Machine LearningNarrativeDone3028Assign reviewer"
+        },
+        {
+          "id": "12",
+          "text": "Advantages Over Current TechnologiesNarrativeDone120Assign reviewer"
+        },
+        {
+          "id": "6",
+          "text": "CapabilitiesNarrativeIn Process208Jamik Tashpulatov"
+        },
+        {
+          "id": "1",
+          "text": "Cover pageCover pageIn Process185Eddie Lake"
+        },
+        {
+          "id": "5",
+          "text": "DesignNarrativeIn Process216Jamik Tashpulatov"
+        },
+        {
+          "id": "3",
+          "text": "Executive summaryNarrativeDone1013Eddie Lake"
+        },
+        {
+          "id": "8",
+          "text": "Innovation and AdvantagesNarrativeDone2526Assign reviewer"
+        },
+        {
+          "id": "7",
+          "text": "Integration with existing systemsNarrativeIn Process1921Jamik Tashpulatov"
+        },
+        {
+          "id": "9",
+          "text": "Overview of EMR's Innovative SolutionsTechnical contentDone723Assign reviewer"
+        },
+        {
+          "id": "2",
+          "text": "Table of contentsTable of contentsDone2924Eddie Lake"
+        },
+        {
+          "id": "4",
+          "text": "Technical approachNarrativeDone2723Jamik Tashpulatov"
+        }
+      ],
+      "dndStatic": {
+        "draggableTrue": 0,
+        "sortableAttributes": 0,
+        "dragHandles": 0,
+        "grabAffordances": 0,
+        "rows": 12
+      },
+      "dndPointer": {
+        "firstRowRect": {
+          "height": 38.5,
+          "width": 1230,
+          "x": 141,
+          "y": 143.5
+        },
+        "fourthRowRect": {
+          "height": 39,
+          "width": 1230,
+          "x": 141,
+          "y": 260
+        },
+        "dragPath": [
+          {
+            "x": 1002,
+            "y": 162.75
+          },
+          {
+            "x": 1002,
+            "y": 182
+          },
+          {
+            "x": 1002,
+            "y": 279.5
+          }
+        ],
+        "before": [
+          "11",
+          "10",
+          "12",
+          "6",
+          "1",
+          "5",
+          "3",
+          "8",
+          "7",
+          "9",
+          "2",
+          "4"
+        ],
+        "after": [
+          "11",
+          "10",
+          "12",
+          "6",
+          "1",
+          "5",
+          "3",
+          "8",
+          "7",
+          "9",
+          "2",
+          "4"
+        ],
+        "unchanged": true
+      },
+      "dndKeyboard": {
+        "sequence": [
+          "Control+ArrowDown",
+          "Control+ArrowUp"
+        ],
+        "focusTarget": "Adaptive Communication Protocols の詳細を開く",
+        "before": [
+          "11",
+          "10",
+          "12",
+          "6",
+          "1",
+          "5",
+          "3",
+          "8",
+          "7",
+          "9",
+          "2",
+          "4"
+        ],
+        "after": [
+          "11",
+          "10",
+          "12",
+          "6",
+          "1",
+          "5",
+          "3",
+          "8",
+          "7",
+          "9",
+          "2",
+          "4"
+        ],
+        "unchanged": true
+      },
+      "sort": {
+        "initial": [
+          "11",
+          "10",
+          "12",
+          "6",
+          "1",
+          "5",
+          "3",
+          "8",
+          "7",
+          "9",
+          "2",
+          "4"
+        ],
+        "documentDescending": [
+          "4",
+          "2",
+          "9",
+          "7",
+          "8",
+          "3",
+          "5",
+          "1",
+          "6",
+          "12",
+          "10",
+          "11"
+        ],
+        "documentDescendingAria": "descending",
+        "documentAscending": [
+          "11",
+          "10",
+          "12",
+          "6",
+          "1",
+          "5",
+          "3",
+          "8",
+          "7",
+          "9",
+          "2",
+          "4"
+        ],
+        "documentAscendingAria": "ascending",
+        "targetAscending": [
+          "5",
+          "9",
+          "11",
+          "3",
+          "12",
+          "1",
+          "7",
+          "6",
+          "8",
+          "4",
+          "2",
+          "10"
+        ],
+        "targetAscendingAria": "ascending",
+        "targetDescending": [
+          "10",
+          "2",
+          "4",
+          "8",
+          "6",
+          "7",
+          "1",
+          "12",
+          "3",
+          "11",
+          "9",
+          "5"
+        ],
+        "targetDescendingAria": "descending",
+        "documentChanged": true,
+        "documentReversed": true,
+        "targetChanged": true,
+        "targetReversed": true
+      },
+      "selection": {
+        "selected": "Advanced Algorithms and Machine Learning",
+        "headerCheckboxState": {
+          "ariaChecked": "mixed",
+          "dataChecked": null,
+          "dataIndeterminate": "",
+          "dataState": null
+        },
+        "selectionStatusText": "12 件を表示・1 件を選択",
+        "sectionSelectionCount": "1",
+        "mixed": true
+      },
+      "drawer": {
+        "triggerAccessibleName": "Adaptive Communication Protocols の詳細を開く",
+        "triggerCount": 0,
+        "chartGeometry": {
+          "group": {
+            "height": 192,
+            "width": 1480,
+            "x": 16,
+            "y": 616.8868408203125
+          },
+          "svg": {
+            "height": 0,
+            "width": 0,
+            "x": 16,
+            "y": 591.46728515625
+          },
+          "polyline": {
+            "height": 73.806396484375,
+            "width": 272,
+            "x": 40,
+            "y": 613.2926025390625
+          },
+          "svgCount": 1,
+          "polylineCount": 1,
+          "circleCount": 5,
+          "strokeAttribute": "currentColor",
+          "points": "24,32 92,105.80645161290323 160,68.90322580645162 228,32 296,105.80645161290323"
+        },
+        "chartStyle": {
+          "stroke": "rgb(47, 95, 209)",
+          "strokeWidth": "4px",
+          "opacity": "1",
+          "display": "inline",
+          "visibility": "visible",
+          "rect": {
+            "x": 40,
+            "y": 604.709228515625,
+            "width": 272,
+            "height": 73.80645751953125
+          },
+          "inViewport": true
+        },
+        "screenshot": "evidence/case01-dashboard-table-light-chart.png",
+        "visibleGeometry": false,
+        "visibleStroke": true,
+        "retry": {
+          "waitMs": 1500,
+          "geometry": {
+            "svg": {
+              "height": 0,
+              "width": 0,
+              "x": 16,
+              "y": 572
+            },
+            "polyline": {
+              "height": 73.80645751953125,
+              "width": 272,
+              "x": 40,
+              "y": 604
+            },
+            "circles": [
+              {
+                "height": 8,
+                "width": 8,
+                "x": 36,
+                "y": 600
+              },
+              {
+                "height": 8,
+                "width": 8,
+                "x": 104,
+                "y": 673.8064575195312
+              },
+              {
+                "height": 8,
+                "width": 8,
+                "x": 172,
+                "y": 636.9031982421875
+              },
+              {
+                "height": 8,
+                "width": 8,
+                "x": 240,
+                "y": 600
+              },
+              {
+                "height": 8,
+                "width": 8,
+                "x": 308,
+                "y": 673.8064575195312
+              }
+            ]
+          },
+          "screenshot": "evidence/case02-dashboard-table-light-chart-retry.png",
+          "svgPositive": false,
+          "polylinePositive": true
+        },
+        "dom": {
+          "svg": {
+            "tag": "svg",
+            "slot": null,
+            "class": "h-full w-full",
+            "widthAttribute": "100%",
+            "heightAttribute": "100%",
+            "styleAttribute": null,
+            "rect": {
+              "x": 16,
+              "y": 572,
+              "width": 0,
+              "height": 0
+            },
+            "computed": {
+              "display": "block",
+              "position": "static",
+              "width": "0px",
+              "height": "0px",
+              "overflow": "hidden",
+              "color": "rgb(47, 95, 209)",
+              "visibility": "visible",
+              "opacity": "1"
+            },
+            "outerHTML": "<svg role=\"img\" aria-label=\"Target と limit の推移\" class=\"h-full w-full\" width=\"100%\" height=\"100%\" viewBox=\"0 0 320 160\"><line x1=\"24\" y1=\"136\" x2=\"296\" y2=\"136\" stroke=\"currentColor\" opacity=\"0.2\"></line><polyline points=\"24,32 92,105.80645161290323 160,68.90322580645162 228,32 296,105.80645161290323\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline><circle cx=\"24\" cy=\"32\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"92\" cy=\"105.80645161290323\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"160\" cy=\"68.90322580645162\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"228\" cy=\"32\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"296\" cy=\"105.80645161290323\" r=\"4\" fill=\"currentColor\"></circle></svg>"
+          },
+          "parent": {
+            "tag": "DIV",
+            "slot": null,
+            "class": null,
+            "widthAttribute": null,
+            "heightAttribute": null,
+            "styleAttribute": "width: 0px; height: 0px; overflow: visible;",
+            "rect": {
+              "x": 16,
+              "y": 572,
+              "width": 0,
+              "height": 0
+            },
+            "computed": {
+              "display": "block",
+              "position": "static",
+              "width": "0px",
+              "height": "0px",
+              "overflow": "visible",
+              "color": "rgb(47, 95, 209)",
+              "visibility": "visible",
+              "opacity": "1"
+            },
+            "outerHTML": "<div style=\"width: 0px; height: 0px; overflow: visible;\"><svg role=\"img\" aria-label=\"Target と limit の推移\" class=\"h-full w-full\" width=\"100%\" height=\"100%\" viewBox=\"0 0 320 160\"><line x1=\"24\" y1=\"136\" x2=\"296\" y2=\"136\" stroke=\"currentColor\" opacity=\"0.2\"></line><polyline points=\"24,32 92,105.80645161290323 160,68.90322580645162 228,32 296,105.80645161290323\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline><circle cx=\"24\" cy=\"32\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"92\" cy=\"105.80645161290323\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"160\" cy=\"68.90322580645162\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"228\" cy=\"32\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"296\" cy=\"105.80645161290323\" r=\"4\" fill=\"currentColor\"></circle></svg></div>"
+          },
+          "grandparent": {
+            "tag": "DIV",
+            "slot": null,
+            "class": "recharts-responsive-container",
+            "widthAttribute": null,
+            "heightAttribute": null,
+            "styleAttribute": "width: 100%; height: 100%; min-width: 0px;",
+            "rect": {
+              "x": 16,
+              "y": 572,
+              "width": 1480,
+              "height": 192
+            },
+            "computed": {
+              "display": "block",
+              "position": "static",
+              "width": "1480px",
+              "height": "192px",
+              "overflow": "visible",
+              "color": "rgb(47, 95, 209)",
+              "visibility": "visible",
+              "opacity": "1"
+            },
+            "outerHTML": "<div class=\"recharts-responsive-container\" style=\"width: 100%; height: 100%; min-width: 0px;\"><div style=\"width: 0px; height: 0px; overflow: visible;\"><svg role=\"img\" aria-label=\"Target と limit の推移\" class=\"h-full w-full\" width=\"100%\" height=\"100%\" viewBox=\"0 0 320 160\"><line x1=\"24\" y1=\"136\" x2=\"296\" y2=\"136\" stroke=\"currentColor\" opacity=\"0.2\"></line><polyline points=\"24,32 92,105.80645161290323 160,68.90322580645162 228,32 296,105.80645161290323\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline><circle cx=\"24\" cy=\"32\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"92\" cy=\"105.80645161290323\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"160\" cy=\"68.90322580645162\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"228\" cy=\"32\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"296\" cy=\"105.80645161290323\" r=\"4\" fill=\"currentColor\"></circle></svg></div></div>"
+          },
+          "greatGrandparent": {
+            "tag": "DIV",
+            "slot": "chart",
+            "class": "flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden h-48 w-full text-primary",
+            "widthAttribute": null,
+            "heightAttribute": null,
+            "styleAttribute": null,
+            "rect": {
+              "x": 16,
+              "y": 572,
+              "width": 1480,
+              "height": 192
+            },
+            "computed": {
+              "display": "flex",
+              "position": "static",
+              "width": "1480px",
+              "height": "192px",
+              "overflow": "visible",
+              "color": "rgb(47, 95, 209)",
+              "visibility": "visible",
+              "opacity": "1"
+            },
+            "outerHTML": "<div data-slot=\"chart\" data-chart=\"chart-_r1r_7_\" class=\"flex aspect-video justify-center text-xs [&amp;_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&amp;_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&amp;_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&amp;_.recharts-dot[stroke='#fff']]:stroke-transparent [&amp;_.recharts-layer]:outline-hidden [&amp;_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&amp;_.recharts-radial-bar-background-sector]:fill-muted [&amp;_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&amp;_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&amp;_.recharts-sector]:outline-hidden [&amp;_.recharts-sector[stroke='#fff']]:stroke-transparent [&amp;_.recharts-surface]:outline-hidden h-48 w-full text-primary\" role=\"group\" aria-label=\"Adaptive Communication Protocols の進捗チャート\"><div class=\"recharts-responsive-container\" style=\"width: 100%; height: 100%; min-width: 0px;\"><div style=\"width: 0px; height: 0px; overflow: visible;\"><svg role=\"img\" aria-label=\"Target と limit の推移\" class=\"h-full w-full\" width=\"100%\" height=\"100%\" viewBox=\"0 0 320 160\"><line x1=\"24\" y1=\"136\" x2=\"296\" y2=\"136\" stroke=\"currentColor\" opacity=\"0.2\"></line><polyline points=\"24,32 92,105.80645161290323 160,68.90322580645162 228,32 296,105.80645161290323\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline><circle cx=\"24\" cy=\"32\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"92\" cy=\"105.80645161290323\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"160\" cy=\"68.90322580645162\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"228\" cy=\"32\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"296\" cy=\"105.80645161290323\" r=\"4\" fill=\"currentColor\"></circle></svg></div></div></div>"
+          }
+        }
+      },
+      "duplicateIds": [],
+      "consoleErrors": [],
+      "finalStable": {
+        "duplicates": [],
+        "url": "http://127.0.0.1:4322/preview/dashboard-table/",
+        "rows": 12
+      }
+    },
+    "dashboardTableDark": {
+      "trigger": {
+        "count": 1,
+        "visible": true
+      },
+      "geometry": {
+        "svg": {
+          "x": 16,
+          "y": 572,
+          "width": 0,
+          "height": 0
+        },
+        "polyline": {
+          "x": 40,
+          "y": 604,
+          "width": 272,
+          "height": 73.80645751953125
+        },
+        "svgCount": 1,
+        "polylineCount": 1,
+        "circleCount": 5
+      },
+      "dom": {
+        "svg": {
+          "tag": "svg",
+          "slot": null,
+          "class": "h-full w-full",
+          "widthAttribute": "100%",
+          "heightAttribute": "100%",
+          "styleAttribute": null,
+          "rect": {
+            "x": 16,
+            "y": 572,
+            "width": 0,
+            "height": 0
+          },
+          "computed": {
+            "display": "block",
+            "position": "static",
+            "width": "0px",
+            "height": "0px",
+            "overflow": "hidden",
+            "color": "rgb(110, 147, 240)",
+            "stroke": "none",
+            "strokeWidth": "1px",
+            "visibility": "visible",
+            "opacity": "1"
+          },
+          "outerHTML": "<svg role=\"img\" aria-label=\"Target と limit の推移\" class=\"h-full w-full\" width=\"100%\" height=\"100%\" viewBox=\"0 0 320 160\"><line x1=\"24\" y1=\"136\" x2=\"296\" y2=\"136\" stroke=\"currentColor\" opacity=\"0.2\"></line><polyline points=\"24,32 92,105.80645161290323 160,68.90322580645162 228,32 296,105.80645161290323\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline><circle cx=\"24\" cy=\"32\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"92\" cy=\"105.80645161290323\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"160\" cy=\"68.90322580645162\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"228\" cy=\"32\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"296\" cy=\"105.80645161290323\" r=\"4\" fill=\"currentColor\"></circle></svg>"
+        },
+        "polyline": {
+          "tag": "polyline",
+          "slot": null,
+          "class": null,
+          "widthAttribute": null,
+          "heightAttribute": null,
+          "styleAttribute": null,
+          "rect": {
+            "x": 40,
+            "y": 604,
+            "width": 272,
+            "height": 73.80645751953125
+          },
+          "computed": {
+            "display": "inline",
+            "position": "static",
+            "width": "auto",
+            "height": "auto",
+            "overflow": "visible",
+            "color": "rgb(110, 147, 240)",
+            "stroke": "rgb(110, 147, 240)",
+            "strokeWidth": "4px",
+            "visibility": "visible",
+            "opacity": "1"
+          },
+          "outerHTML": "<polyline points=\"24,32 92,105.80645161290323 160,68.90322580645162 228,32 296,105.80645161290323\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>"
+        },
+        "circles": [
+          {
+            "tag": "circle",
+            "slot": null,
+            "class": null,
+            "widthAttribute": null,
+            "heightAttribute": null,
+            "styleAttribute": null,
+            "rect": {
+              "x": 36,
+              "y": 600,
+              "width": 8,
+              "height": 8
+            },
+            "computed": {
+              "display": "inline",
+              "position": "static",
+              "width": "auto",
+              "height": "auto",
+              "overflow": "visible",
+              "color": "rgb(110, 147, 240)",
+              "stroke": "none",
+              "strokeWidth": "1px",
+              "visibility": "visible",
+              "opacity": "1"
+            },
+            "outerHTML": "<circle cx=\"24\" cy=\"32\" r=\"4\" fill=\"currentColor\"></circle>"
+          },
+          {
+            "tag": "circle",
+            "slot": null,
+            "class": null,
+            "widthAttribute": null,
+            "heightAttribute": null,
+            "styleAttribute": null,
+            "rect": {
+              "x": 104,
+              "y": 673.8064575195312,
+              "width": 8,
+              "height": 8
+            },
+            "computed": {
+              "display": "inline",
+              "position": "static",
+              "width": "auto",
+              "height": "auto",
+              "overflow": "visible",
+              "color": "rgb(110, 147, 240)",
+              "stroke": "none",
+              "strokeWidth": "1px",
+              "visibility": "visible",
+              "opacity": "1"
+            },
+            "outerHTML": "<circle cx=\"92\" cy=\"105.80645161290323\" r=\"4\" fill=\"currentColor\"></circle>"
+          },
+          {
+            "tag": "circle",
+            "slot": null,
+            "class": null,
+            "widthAttribute": null,
+            "heightAttribute": null,
+            "styleAttribute": null,
+            "rect": {
+              "x": 172,
+              "y": 636.9031982421875,
+              "width": 8,
+              "height": 8
+            },
+            "computed": {
+              "display": "inline",
+              "position": "static",
+              "width": "auto",
+              "height": "auto",
+              "overflow": "visible",
+              "color": "rgb(110, 147, 240)",
+              "stroke": "none",
+              "strokeWidth": "1px",
+              "visibility": "visible",
+              "opacity": "1"
+            },
+            "outerHTML": "<circle cx=\"160\" cy=\"68.90322580645162\" r=\"4\" fill=\"currentColor\"></circle>"
+          },
+          {
+            "tag": "circle",
+            "slot": null,
+            "class": null,
+            "widthAttribute": null,
+            "heightAttribute": null,
+            "styleAttribute": null,
+            "rect": {
+              "x": 240,
+              "y": 600,
+              "width": 8,
+              "height": 8
+            },
+            "computed": {
+              "display": "inline",
+              "position": "static",
+              "width": "auto",
+              "height": "auto",
+              "overflow": "visible",
+              "color": "rgb(110, 147, 240)",
+              "stroke": "none",
+              "strokeWidth": "1px",
+              "visibility": "visible",
+              "opacity": "1"
+            },
+            "outerHTML": "<circle cx=\"228\" cy=\"32\" r=\"4\" fill=\"currentColor\"></circle>"
+          },
+          {
+            "tag": "circle",
+            "slot": null,
+            "class": null,
+            "widthAttribute": null,
+            "heightAttribute": null,
+            "styleAttribute": null,
+            "rect": {
+              "x": 308,
+              "y": 673.8064575195312,
+              "width": 8,
+              "height": 8
+            },
+            "computed": {
+              "display": "inline",
+              "position": "static",
+              "width": "auto",
+              "height": "auto",
+              "overflow": "visible",
+              "color": "rgb(110, 147, 240)",
+              "stroke": "none",
+              "strokeWidth": "1px",
+              "visibility": "visible",
+              "opacity": "1"
+            },
+            "outerHTML": "<circle cx=\"296\" cy=\"105.80645161290323\" r=\"4\" fill=\"currentColor\"></circle>"
+          }
+        ],
+        "parent": {
+          "tag": "DIV",
+          "slot": null,
+          "class": null,
+          "widthAttribute": null,
+          "heightAttribute": null,
+          "styleAttribute": "width: 0px; height: 0px; overflow: visible;",
+          "rect": {
+            "x": 16,
+            "y": 572,
+            "width": 0,
+            "height": 0
+          },
+          "computed": {
+            "display": "block",
+            "position": "static",
+            "width": "0px",
+            "height": "0px",
+            "overflow": "visible",
+            "color": "rgb(110, 147, 240)",
+            "stroke": "none",
+            "strokeWidth": "1px",
+            "visibility": "visible",
+            "opacity": "1"
+          },
+          "outerHTML": "<div style=\"width: 0px; height: 0px; overflow: visible;\"><svg role=\"img\" aria-label=\"Target と limit の推移\" class=\"h-full w-full\" width=\"100%\" height=\"100%\" viewBox=\"0 0 320 160\"><line x1=\"24\" y1=\"136\" x2=\"296\" y2=\"136\" stroke=\"currentColor\" opacity=\"0.2\"></line><polyline points=\"24,32 92,105.80645161290323 160,68.90322580645162 228,32 296,105.80645161290323\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline><circle cx=\"24\" cy=\"32\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"92\" cy=\"105.80645161290323\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"160\" cy=\"68.90322580645162\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"228\" cy=\"32\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"296\" cy=\"105.80645161290323\" r=\"4\" fill=\"currentColor\"></circle></svg></div>"
+        },
+        "grandparent": {
+          "tag": "DIV",
+          "slot": null,
+          "class": "recharts-responsive-container",
+          "widthAttribute": null,
+          "heightAttribute": null,
+          "styleAttribute": "width: 100%; height: 100%; min-width: 0px;",
+          "rect": {
+            "x": 16,
+            "y": 572,
+            "width": 1480,
+            "height": 192
+          },
+          "computed": {
+            "display": "block",
+            "position": "static",
+            "width": "1480px",
+            "height": "192px",
+            "overflow": "visible",
+            "color": "rgb(110, 147, 240)",
+            "stroke": "none",
+            "strokeWidth": "1px",
+            "visibility": "visible",
+            "opacity": "1"
+          },
+          "outerHTML": "<div class=\"recharts-responsive-container\" style=\"width: 100%; height: 100%; min-width: 0px;\"><div style=\"width: 0px; height: 0px; overflow: visible;\"><svg role=\"img\" aria-label=\"Target と limit の推移\" class=\"h-full w-full\" width=\"100%\" height=\"100%\" viewBox=\"0 0 320 160\"><line x1=\"24\" y1=\"136\" x2=\"296\" y2=\"136\" stroke=\"currentColor\" opacity=\"0.2\"></line><polyline points=\"24,32 92,105.80645161290323 160,68.90322580645162 228,32 296,105.80645161290323\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline><circle cx=\"24\" cy=\"32\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"92\" cy=\"105.80645161290323\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"160\" cy=\"68.90322580645162\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"228\" cy=\"32\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"296\" cy=\"105.80645161290323\" r=\"4\" fill=\"currentColor\"></circle></svg></div></div>"
+        },
+        "greatGrandparent": {
+          "tag": "DIV",
+          "slot": "chart",
+          "class": "flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden h-48 w-full text-primary",
+          "widthAttribute": null,
+          "heightAttribute": null,
+          "styleAttribute": null,
+          "rect": {
+            "x": 16,
+            "y": 572,
+            "width": 1480,
+            "height": 192
+          },
+          "computed": {
+            "display": "flex",
+            "position": "static",
+            "width": "1480px",
+            "height": "192px",
+            "overflow": "visible",
+            "color": "rgb(110, 147, 240)",
+            "stroke": "none",
+            "strokeWidth": "1px",
+            "visibility": "visible",
+            "opacity": "1"
+          },
+          "outerHTML": "<div data-slot=\"chart\" data-chart=\"chart-_r1r_3_\" class=\"flex aspect-video justify-center text-xs [&amp;_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&amp;_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&amp;_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&amp;_.recharts-dot[stroke='#fff']]:stroke-transparent [&amp;_.recharts-layer]:outline-hidden [&amp;_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&amp;_.recharts-radial-bar-background-sector]:fill-muted [&amp;_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&amp;_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&amp;_.recharts-sector]:outline-hidden [&amp;_.recharts-sector[stroke='#fff']]:stroke-transparent [&amp;_.recharts-surface]:outline-hidden h-48 w-full text-primary\" role=\"group\" aria-label=\"Adaptive Communication Protocols の進捗チャート\"><div class=\"recharts-responsive-container\" style=\"width: 100%; height: 100%; min-width: 0px;\"><div style=\"width: 0px; height: 0px; overflow: visible;\"><svg role=\"img\" aria-label=\"Target と limit の推移\" class=\"h-full w-full\" width=\"100%\" height=\"100%\" viewBox=\"0 0 320 160\"><line x1=\"24\" y1=\"136\" x2=\"296\" y2=\"136\" stroke=\"currentColor\" opacity=\"0.2\"></line><polyline points=\"24,32 92,105.80645161290323 160,68.90322580645162 228,32 296,105.80645161290323\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline><circle cx=\"24\" cy=\"32\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"92\" cy=\"105.80645161290323\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"160\" cy=\"68.90322580645162\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"228\" cy=\"32\" r=\"4\" fill=\"currentColor\"></circle><circle cx=\"296\" cy=\"105.80645161290323\" r=\"4\" fill=\"currentColor\"></circle></svg></div></div></div>"
+        },
+        "duplicateIds": []
+      },
+      "screenshot": "evidence/case03-dashboard-table-dark-chart.png",
+      "svgPositive": false,
+      "polylinePositive": true,
+      "duplicateIds": []
+    },
+    "dashboard01Light": {
+      "rootCount": 1,
+      "recordCount": "68",
+      "heading": [
+        "Documents"
+      ],
+      "acmeText": 1,
+      "sectionCardCount": 5,
+      "chartRootCount": 1,
+      "chartSvgCount": 1,
+      "rootRect": {
+        "x": 0,
+        "y": 0,
+        "width": 1512,
+        "height": 828
+      },
+      "duplicateIds": [],
+      "screenshot": "evidence/case04-dashboard-01-light.png"
+    },
+    "dashboard01Dark": {
+      "rootCount": 1,
+      "recordCount": "68",
+      "heading": [
+        "Documents"
+      ],
+      "acmeText": 1,
+      "sectionCardCount": 5,
+      "chartRootCount": 1,
+      "chartSvgCount": 1,
+      "rootRect": {
+        "x": 0,
+        "y": 0,
+        "width": 1512,
+        "height": 828
+      },
+      "duplicateIds": [],
+      "screenshot": "evidence/case05-dashboard-01-dark.png"
+    },
+    "dashboard01Mobile": {
+      "before": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sidebarCount": 0,
+        "sidebars": []
+      },
+      "afterOpen": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "sidebarCount": 1,
+        "sidebars": [
+          {
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 292.5,
+              "height": 844
+            },
+            "visible": true,
+            "ariaHidden": null,
+            "dataState": null,
+            "text": "サイドバーモバイル用のサイドバーを表示します。AcmeQuick CreateInboxDashboardLifecycleAnalyticsProjectsTeamDocumentsData LibraryMoreReportsMoreWord AssistantMoreMoreSettingsGet HelpSearchCNshadcnm@example.com閉じる"
+          }
+        ],
+        "duplicateIds": []
+      },
+      "afterClose": {
+        "dialogCount": 0,
+        "visibleSidebar": 0
+      },
+      "screenshot": "evidence/case06-dashboard-01-mobile-sidebar-open.png"
+    },
+    "catalog": {
+      "rootCount": 1,
+      "observedPreviewCount": 89,
+      "dashboard01Count": 1,
+      "dashboardTableCount": 1,
+      "dashboard01Rect": {
+        "x": 985.328125,
+        "y": 2828.6484375,
+        "width": 410.6640625,
+        "height": 467
+      },
+      "dashboardTableRect": {
+        "x": 116,
+        "y": 3319.6484375,
+        "width": 410.6640625,
+        "height": 467
+      },
+      "dashboard01Sentinels": 0,
+      "dashboardTableSentinels": 0,
+      "duplicateIds": [
+        [
+          "base-ui-_r1R_52a_",
+          2
+        ]
+      ],
+      "viewport": {
+        "width": 1512,
+        "height": 828
+      },
+      "scrollY": 0,
+      "documentHeight": 14165,
+      "duplicateDetails": [
+        {
+          "tag": "INPUT",
+          "role": "combobox",
+          "ariaLabel": "フレームワーク",
+          "outerHTML": "<input id=\"base-ui-_r1R_52a_\" type=\"text\" data-slot=\"input-group-control\" autocomplete=\"off\" spellcheck=\"false\" autocorrect=\"off\" autocapitalize=\"none\" role=\"combobox\" aria-expanded=\"false\" aria-haspopup=\"listbox\" aria-autocomplete=\"list\" aria-label=\"フレームワーク\" placeholder=\"選択または検索\" class=\"h-8 w-full min-w-0 border-input px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-disabled aria-invalid:border-destructive aria-invalid:ring-destructive md:text-sm dark:aria-invalid:ring-destructive flex-1 rounded-none border-0 bg-transparent shadow-none ring-0 focus-visible:ring-0 disabled:bg-transparent disabled:opacity-100 aria-invalid:ring-0 dark:bg-transparent dark:disabled:bg-transparent\" value=\"\">",
+          "preview": "combobox"
+        }
+      ],
+      "duplicateRecheck": {
+        "duplicates": [],
+        "matching": 1,
+        "totalWithId": 261
+      },
+      "visible": {
+        "scrollY": 2841,
+        "dashboard01Rect": {
+          "x": 985.328125,
+          "y": -12.3515625,
+          "width": 410.6640625,
+          "height": 467
+        },
+        "dashboardTableRect": {
+          "x": 116,
+          "y": 478.6484375,
+          "width": 410.6640625,
+          "height": 467
+        },
+        "duplicates": [],
+        "dialogs": 0,
+        "screenshot": "evidence/case07-catalog-dashboard-items.png"
+      },
+      "stableDuplicateChecks": [
+        {
+          "duplicates": [],
+          "totalWithId": 263,
+          "previews": 89,
+          "dialogs": 1
+        },
+        {
+          "duplicates": [],
+          "totalWithId": 263,
+          "previews": 89,
+          "dialogs": 1
+        }
+      ],
+      "transientDuplicate": {
+        "observedAfterMs": 1200,
+        "id": "base-ui-_r1R_52a_",
+        "count": 2,
+        "resolvedAfterAdditionalMs": 1000
+      }
+    }
+  },
+  "observations": {},
+  "environment": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+    "platform": "MacIntel",
+    "language": "ja",
+    "viewport": {
+      "width": 1512,
+      "height": 828
+    },
+    "devicePixelRatio": 2,
+    "href": "http://127.0.0.1:4322/preview/dashboard-table/"
+  },
+  "audit": {
+    "eventCount": 705,
+    "responses": [
+      {
+        "url": "http://127.0.0.1:4322/src/components/ui/sheet.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-02/components/app-sidebar.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-05/components/app-sidebar.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/components/ui/progress.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-08/components/app-sidebar.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-10/components/app-sidebar.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/components/ui/select.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-07/components/app-sidebar.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-09/components/app-sidebar.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-12/components/app-sidebar.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-14/components/app-sidebar.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-10/components/nav-actions.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-11/components/app-sidebar.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-13/components/settings-dialog.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/signup-02/components/signup-form.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-15/components/sidebar-right.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-15/components/sidebar-left.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-16/components/app-sidebar.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-16/components/site-header.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/signup-01/components/signup-form.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/signup-03/components/signup-form.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/signup-04/components/signup-form.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/signup-05/components/signup-form.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-03/components/app-sidebar.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/components/ui/slider.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/components/ui/skeleton.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/previews/preview-theme.ts",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/components/ui/textarea.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/components/ui/sonner.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-04/components/app-sidebar.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/components/ui/toggle-group.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/components/ui/tabs.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/components/ui/switch.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_accordion.js?v=ec27c042",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_alert-dialog.js?v=bc8bbbc8",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/components/ui/table.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/components/ui/toggle.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/sonner.js?v=7b92784b",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/components/ui/toast.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-06/components/app-sidebar.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/react-dom.js?v=a3d014bb",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/lucide-react.js?v=be0c98ee",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/recharts.js?v=d0a4a6ab",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_button.js?v=2825dd23",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/class-variance-authority.js?v=a1f27ec4",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_merge-props.js?v=763d359e",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_use-render.js?v=16682d47",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_avatar.js?v=d79fe6c7",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_collapsible.js?v=1b1cdf71",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/embla-carousel-react.js?v=c8938053",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/react-day-picker.js?v=7525d263",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_checkbox.js?v=f763c11d",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_context-menu.js?v=ea6b34fb",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/hooks/use-mobile.ts",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/components/ui/chart-style.ts",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/dashboard-01/components/nav-documents.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/cmdk.js?v=87255f44",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/dashboard-01/components/nav-main.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/dashboard-01/components/nav-secondary.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/dashboard-01/components/nav-user.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_tooltip.js?v=87cf2661",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_dialog.js?v=318ad251",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_menu.js?v=a7f46f53",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_preview-card.js?v=d876a785",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_input.js?v=02bb9263",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_drawer.js?v=3d56477f",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/clsx.js?v=9dc3ff9f",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_direction-provider.js?v=dd088ffa",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/input-otp.js?v=5fc3359f",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_popover.js?v=5c0a45e1",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@shadcn_react_message-scroller.js?v=70cdc58b",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_navigation-menu.js?v=02151e6e",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_scroll-area.js?v=bd589f67",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_radio.js?v=608274cc",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_menubar.js?v=2b21ded9",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-01/components/search-form.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_separator.js?v=e2fcc07a",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-02/components/search-form.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-01/components/version-switcher.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-02/components/version-switcher.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-05/components/search-form.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_progress.js?v=8c63abbf",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-08/components/nav-main.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-08/components/nav-projects.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-08/components/nav-secondary.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-08/components/nav-user.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-10/components/nav-favorites.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-10/components/nav-main.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-10/components/nav-secondary.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_select.js?v=ad1e3936",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-10/components/nav-workspaces.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-10/components/team-switcher.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_radio-group.js?v=b44e4c8a",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-07/components/nav-projects.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-07/components/nav-user.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-07/components/team-switcher.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-12/components/nav-user.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-15/components/calendars.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-15/components/date-picker.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-15/components/nav-user.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-15/components/nav-main.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-15/components/nav-favorites.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-15/components/nav-secondary.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-15/components/nav-workspaces.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-15/components/team-switcher.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-07/components/nav-main.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-12/components/date-picker.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-09/components/nav-user.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-16/components/nav-secondary.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-12/components/calendars.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/tailwind-merge.js?v=d5df6dc7",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_toggle.js?v=20fc97a3",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_toggle-group.js?v=aadad5e5",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-16/components/nav-projects.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_tabs.js?v=e97cc6c2",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_switch.js?v=03032ed2",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-16/components/nav-user.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_slider.js?v=11f7670f",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_toast.js?v=2bcc0eb7",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-06/components/nav-main.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-06/components/sidebar-opt-in-form.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/button-g8Y5BIqA.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/with-selector-m9dUj709.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/accordion-DarObpmW.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/merge-props-B1zstas5.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-16/components/search-form.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/alert-dialog-C2-BwTvN.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/collapsible-BNkXC5PA.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/sidebar-16/components/nav-main.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/next-themes.js?v=6a058c81",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useRenderElement-a6OOTcyH.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/avatar-D7zOrlm9.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/react-resizable-panels.js?v=161067e6",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react.js?v=c3653398",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/checkbox-_RwhymO6.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/context-menu-PZXCfX3v.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/dialog-C659Ja0b.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/react_jsx-runtime.js?v=a3d014bb",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/preview-card-Cws08-og.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/input-DE5tmO8e.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/tooltip-CrSqSp7z.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/menu-CNlhtYGJ.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/drawer-Ck2jO6zD.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/locale-1bvDq8zT.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/direction-provider-DZJly7KA.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/DirectionContext-CiGZ3HMm.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/popover-BPQAWAIi.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/navigation-menu-8ID98EG2.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/Separator-lxhS1DSw.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/menubar-CCil_4yU.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/radio-B-OHQT4k.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/progress-DW3aF7TG.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/radio-group-j_sw-0wl.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/scroll-area-Dhw4voeL.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/select-aYPeT60K.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/toggle-VAAn7Owh.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/toggle-group-mCtW7Y2J.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/tabs-CBm1SXRT.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/switch-oCreLb6m.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useButton-CT7ncd16.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/slider-D6HR0smm.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useControlled-FiYfDic4.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/shim-BX6a9SD7.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useIsoLayoutEffect-XBfELL_r.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useStableCallback-LwO-L27-.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useBaseUiId-BcFDeGMz.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/CompositeList-ChtLE_0Q.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useCompositeListItem-DH2_IUkV.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useOpenChangeComplete-B4ZjpPUA.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useTransitionStatus-CpGCFPz-.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useCollapsiblePanel-lruR30S6.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useTimeout-DKqgqPXo.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/error-XQ9xu4Az.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useOnMount-CfABNg8j.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/toast-Dab585QD.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/createBaseUIEventDetails-CFGVWw70.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/addEventListener-BQ7RdTyp.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/owner-BDq0SB0M.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/floating-ui.utils.dom-PQ4NAIui.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/popupStoreUtils-CXuJoAEh.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/engine-DUed7b3v.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/shadowDom-Bqpha9sm.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/element-Ca3y_Szs.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/visuallyHidden-DhkJ3tLx.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/composite-9BJosqSF.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useValueAsRef-Ct8bIcdA.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useClick-CeFqAs-B.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/inertValue-CjCFVAFC.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useValueChanged-CqBjFd6Y.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useDismiss-sRCAD9T-.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/LabelableContext-CtdZoXo5.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/FormContext-DS12WbFN.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useLabelableId-sWY9vdP-.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/valueToPercent-BzK_52xs.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/getPseudoElementBounds-DqzRVKoK.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/DialogHandle-CN8QX5LX.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useOpenInteractionType-BF_uNfzO.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/popupStateMapping-KSz9S6Sw.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useLabel-MRWBTnsY.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useAnchoredPopupScrollLock-DHuo8xWV.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/FieldItemContext-CoEBybT4.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useRegisteredLabelId-DKVQQ-DM.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useAriaLabelledBy-ClOaCI7x.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/ToolbarRootContext-BUNnmv3Y.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/CompositeItem-Q1VzUu9Q.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/CSPContext-CNFPQ2Kg.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/clamp-BDFaQDEN.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useId-ByEnNbi7.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/CompositeRoot-CejgmmLQ.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/FloatingTree-a4t6gjlH.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/usePositioner-DhhQDnCU.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/FloatingPortalLite-BizJNCon.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/store-CNLVvrdH.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/safePolygon-BtG5enTE.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/CompositeRootContext-CPvrjgnY.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useFocus-B8PR7gSS.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/usePopupViewport-BVPpseuQ.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/MenubarContext-DdLjQb2B.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/composite-CNXK7owY.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useTriggerFocusGuards-6uqRZ3oZ.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/isElementDisabled-BhzRbdzP.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useAnimationFrame-Df-2YAv_.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useSwipeDismiss-CNGQPlfi.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/getEmptyRootContext-LaTM1fXC.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/getCssDimensions-CFqxIjaM.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/serializeValue-B-akXatF.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/constants-BitqINzc.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/RadioGroupContext-ClvOX3Qj.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/scrollEdges-DRovVna_.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/usePreviousValue-Dd3lq3H-.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/ToggleGroupContext-DIw-KlDV.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useIsHydrating-CS56SlF-.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useCompositeItem-Bx-NB1Tb.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/CompositeListContext-B9iAiGLu.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/constants-ZbPNHtOK.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/shared-Gaq1jeME.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%231d4ed8'/%3E%3Ccircle cx='32' cy='25' r='12' fill='%23bfdbfe'/%3E%3Cpath d='M10 60c3-14 12-21 22-21s19 7 22 21' fill='%23bfdbfe'/%3E%3C/svg%3E",
+        "status": 200,
+        "mimeType": "image/svg+xml",
+        "type": "Image"
+      },
+      {
+        "url": "http://127.0.0.1:4322/preview/dashboard-table/",
+        "status": 200,
+        "mimeType": "text/html",
+        "type": "Document"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/styles/global.css",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/@id/astro:scripts/before-hydration.js",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/@id/astro/runtime/client/dev-toolbar/entrypoint.js",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/@vite/client",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/@id/__x00__astro:toolbar:internal",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/vite/dist/client/env.mjs",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/@react-refresh",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/settings-CI954KWk.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/astro-C3dVLYN0.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/xray-RwUYjS7V.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/ui-library-a07AMWdn.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/toolbar-C8Jb8PvT.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/audit-CA0bnRvn.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "chrome-extension://hehggadaopoacecdllhhajmbjkdcmajg/images/cursor-chat.png",
+        "status": 200,
+        "mimeType": "image/png",
+        "type": "Image"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/window-DH1eA2cl.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/astro_runtime_client_dev-toolbar_entrypoint__js.js?v=a3d014bb",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/astro_n_html-escaper.js?v=a3d014bb",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/highlight-CpHMw7-c.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/icons-DcM8cGs_.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/previews/dashboard-table.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/@astrojs/react/dist/client.js",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/astro_n_axobject-query.js?v=a3d014bb",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/astro_n_aria-query.js?v=a3d014bb",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/dashboard-01/data.json?import",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/catalog/preview-sentinel.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/blocks/dashboard-table/components/dashboard-table.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/react-dom_client.js?v=a3d014bb",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/@astrojs/react/dist/static-html.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=a3d014bb",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/rolldown-runtime-DC62tzP2.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/react.js?v=a3d014bb",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/components/ui/chart.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/components/ui/badge.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/components/ui/dropdown-menu.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/components/ui/checkbox.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/components/ui/input.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/components/ui/table.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/lib/utils.ts",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/components/ui/tabs.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/components/ui/button.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/components/ui/drawer.tsx",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/client-Dwy9JRIz.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_merge-props.js?v=763d359e",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/src/components/ui/chart-style.ts",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_use-render.js?v=16682d47",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_menu.js?v=a7f46f53",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/class-variance-authority.js?v=a1f27ec4",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_checkbox.js?v=f763c11d",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_input.js?v=02bb9263",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/clsx.js?v=9dc3ff9f",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_tabs.js?v=e97cc6c2",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_button.js?v=2825dd23",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/@base-ui_react_drawer.js?v=3d56477f",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/merge-props-B1zstas5.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/react-dom.js?v=a3d014bb",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useRenderElement-a6OOTcyH.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/tailwind-merge.js?v=d5df6dc7",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/checkbox-_RwhymO6.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/input-DE5tmO8e.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/button-g8Y5BIqA.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/menu-CNlhtYGJ.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/tabs-CBm1SXRT.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/react_jsx-runtime.js?v=a3d014bb",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useControlled-FiYfDic4.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/drawer-Ck2jO6zD.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useBaseUiId-BcFDeGMz.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useIsoLayoutEffect-XBfELL_r.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useTransitionStatus-CpGCFPz-.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/createBaseUIEventDetails-CFGVWw70.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useOpenChangeComplete-B4ZjpPUA.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/floating-ui.utils.dom-PQ4NAIui.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/visuallyHidden-DhkJ3tLx.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useButton-CT7ncd16.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/LabelableContext-CtdZoXo5.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useValueChanged-CqBjFd6Y.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/FormContext-DS12WbFN.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/FieldItemContext-CoEBybT4.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useAriaLabelledBy-ClOaCI7x.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useStableCallback-LwO-L27-.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/owner-BDq0SB0M.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/shadowDom-Bqpha9sm.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useLabelableId-sWY9vdP-.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/CompositeList-ChtLE_0Q.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/DirectionContext-CiGZ3HMm.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useId-ByEnNbi7.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useCompositeListItem-DH2_IUkV.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/CompositeRootContext-CPvrjgnY.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/popupStoreUtils-CXuJoAEh.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/composite-9BJosqSF.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useTimeout-DKqgqPXo.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/popupStateMapping-KSz9S6Sw.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useOpenInteractionType-BF_uNfzO.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/FloatingTree-a4t6gjlH.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/safePolygon-BtG5enTE.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useDismiss-sRCAD9T-.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/recharts.js?v=d0a4a6ab",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useClick-CeFqAs-B.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/inertValue-CjCFVAFC.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/composite-CNXK7owY.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/Separator-lxhS1DSw.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useAnchoredPopupScrollLock-DHuo8xWV.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/ToolbarRootContext-BUNnmv3Y.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/MenubarContext-DdLjQb2B.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/CompositeItem-Q1VzUu9Q.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/getPseudoElementBounds-DqzRVKoK.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/lucide-react.js?v=be0c98ee",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useFocus-B8PR7gSS.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useTriggerFocusGuards-6uqRZ3oZ.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/store-CNLVvrdH.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/usePositioner-DhhQDnCU.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/isElementDisabled-BhzRbdzP.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useCompositeItem-Bx-NB1Tb.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/getCssDimensions-CFqxIjaM.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/constants-BitqINzc.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/CSPContext-CNFPQ2Kg.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/error-XQ9xu4Az.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useIsHydrating-CS56SlF-.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/addEventListener-BQ7RdTyp.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useAnimationFrame-Df-2YAv_.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/element-Ca3y_Szs.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/usePopupViewport-BVPpseuQ.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/CompositeRoot-CejgmmLQ.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/clamp-BDFaQDEN.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/DialogHandle-CN8QX5LX.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/dialog-C659Ja0b.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/CompositeListContext-B9iAiGLu.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/constants-ZbPNHtOK.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useOnMount-CfABNg8j.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/engine-DUed7b3v.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/shim-BX6a9SD7.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/with-selector-m9dUj709.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useValueAsRef-Ct8bIcdA.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/getEmptyRootContext-LaTM1fXC.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/usePreviousValue-Dd3lq3H-.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/shared-Gaq1jeME.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      },
+      {
+        "url": "http://127.0.0.1:4322/node_modules/.vite/deps/useSwipeDismiss-CNGQPlfi.js?v=de3bc442",
+        "status": 200,
+        "mimeType": "text/javascript",
+        "type": "Script"
+      }
+    ],
+    "requestFailures": [],
+    "pageExceptions": [],
+    "consoleErrors": [],
+    "httpErrors": []
+  },
+  "generatedAt": "2026-08-22T04:37:03.116Z",
+  "staticDndScan": {
+    "command": "rg -n \"@dnd-kit|DndContext|SortableContext|useSortable|draggable|onDrag|drag handle|drag-handle\" package.json src/blocks/dashboard-table src/previews/dashboard-table.tsx",
+    "exitCode": 1,
+    "matches": []
+  }
+}
