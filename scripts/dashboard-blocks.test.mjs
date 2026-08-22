@@ -28,16 +28,25 @@ const jsxAttribute = (opening, name, sourceFile) =>
     .find((attribute) => ts.isJsxAttribute(attribute) && attribute.name.text === name)
     ?.initializer?.getText(sourceFile);
 
-const variableInitializer = (sourceFile, name) => {
-  let initializer;
+const namedTopLevelFunction = (sourceFile, name) => {
+  const declarations = sourceFile.statements.filter(
+    (statement) => ts.isFunctionDeclaration(statement) && statement.name?.text === name,
+  );
+  assert.equal(declarations.length, 1, `${name} の top-level function が一意である`);
+  return declarations[0];
+};
+
+const uniqueVariableInitializer = (scope, sourceFile, name) => {
+  const initializers = [];
   const visit = (node) => {
     if (ts.isVariableDeclaration(node) && node.name.getText(sourceFile) === name) {
-      initializer = node.initializer?.getText(sourceFile);
+      initializers.push(node.initializer?.getText(sourceFile));
     }
     ts.forEachChild(node, visit);
   };
-  visit(sourceFile);
-  return initializer;
+  visit(scope);
+  assert.equal(initializers.length, 1, `${name} の宣言が対象 scope で一意である`);
+  return initializers[0];
 };
 
 const loadTsxLogic = (path, names) => {
@@ -62,6 +71,7 @@ test("dashboard navigation は受け取った URL を link として描画する
 test("dashboard chart は TimeRange から UTC の両端を含む 7/30/90 日だけを描画へ渡す", () => {
   const path = "src/blocks/dashboard-01/components/chart-area-interactive.tsx";
   const { sourceFile } = parseTsx(path);
+  const chartComponent = namedTopLevelFunction(sourceFile, "ChartAreaInteractive");
   const { chartData, chartDataForTimeRange } = loadTsxLogic(path, [
     "chartData",
     "chartDataForTimeRange",
@@ -90,15 +100,15 @@ test("dashboard chart は TimeRange から UTC の両端を含む 7/30/90 日だ
     ["2024-06-24", "2024-06-30", "2024-06-29"],
   );
 
-  const areaChart = jsxOpenings(sourceFile).find(
+  const areaCharts = jsxOpenings(chartComponent).filter(
     (opening) => opening.tagName.getText(sourceFile) === "AreaChart",
   );
+  assert.equal(areaCharts.length, 1, "ChartAreaInteractive 内の AreaChart が一意である");
   assert.equal(
-    variableInitializer(sourceFile, "filteredData"),
+    uniqueVariableInitializer(chartComponent, sourceFile, "filteredData"),
     'chartDataForTimeRange(chartData, timeRange, "2024-06-30")',
   );
-  assert.ok(areaChart, "AreaChart がある");
-  assert.equal(jsxAttribute(areaChart, "data", sourceFile), "{filteredData}");
+  assert.equal(jsxAttribute(areaCharts[0], "data", sourceFile), "{filteredData}");
 });
 
 test("dashboard block の配布 manifest は除外後の依存集合と共有依存を保つ", () => {
@@ -250,18 +260,37 @@ test("dashboard table は数値と非数値の target を全順序で安定し�
 
 test("dashboard table の helper 結果は checkbox・drawer・詳細 button へ配線される", () => {
   const { sourceFile } = parseTsx("src/blocks/dashboard-table/components/dashboard-table.tsx");
-  const openings = jsxOpenings(sourceFile);
-  const byTag = (tag) => openings.filter((opening) => opening.tagName.getText(sourceFile) === tag);
+  const tableComponent = namedTopLevelFunction(sourceFile, "DashboardTable");
+  const dataTableComponent = namedTopLevelFunction(sourceFile, "DashboardDataTable");
+  const rowComponent = namedTopLevelFunction(sourceFile, "DashboardTableDataRow");
+  const tableOpenings = jsxOpenings(tableComponent);
+  const dataTableOpenings = jsxOpenings(dataTableComponent);
+  const rowOpenings = jsxOpenings(rowComponent);
+  const byTableTag = (tag) =>
+    tableOpenings.filter((opening) => opening.tagName.getText(sourceFile) === tag);
+  const byDataTableTag = (tag) =>
+    dataTableOpenings.filter((opening) => opening.tagName.getText(sourceFile) === tag);
+  const byRowTag = (tag) =>
+    rowOpenings.filter((opening) => opening.tagName.getText(sourceFile) === tag);
 
   assert.match(
-    variableInitializer(sourceFile, "reconciledState"),
+    uniqueVariableInitializer(tableComponent, sourceFile, "reconciledState"),
     /reconcileDashboardTableState\(selectedIds, activeRowId, data\)/,
   );
-  assert.equal(variableInitializer(sourceFile, "selectedIdsInData"), "reconciledState.selectedIds");
-  assert.equal(variableInitializer(sourceFile, "activeRow"), "reconciledState.activeRow");
-  assert.equal(variableInitializer(sourceFile, "comparison"), "compareRows(left, right, sort.key)");
+  assert.equal(
+    uniqueVariableInitializer(tableComponent, sourceFile, "selectedIdsInData"),
+    "reconciledState.selectedIds",
+  );
+  assert.equal(
+    uniqueVariableInitializer(tableComponent, sourceFile, "activeRow"),
+    "reconciledState.activeRow",
+  );
+  assert.equal(
+    uniqueVariableInitializer(tableComponent, sourceFile, "comparison"),
+    "compareRows(left, right, sort.key)",
+  );
 
-  const headerCheckbox = byTag("Checkbox").find(
+  const headerCheckbox = byDataTableTag("Checkbox").find(
     (opening) => jsxAttribute(opening, "aria-label", sourceFile) === '"表示中の行をすべて選択"',
   );
   assert.ok(headerCheckbox, "header checkbox がある");
@@ -271,17 +300,17 @@ test("dashboard table の helper 結果は checkbox・drawer・詳細 button へ
     "{someSelected && !allSelected}",
   );
 
-  const detailButton = byTag("Button").find((opening) =>
+  const detailButton = byRowTag("Button").find((opening) =>
     jsxAttribute(opening, "aria-label", sourceFile)?.includes("の詳細を開く"),
   );
   assert.ok(detailButton, "accessible name 付き詳細 button がある");
   assert.match(jsxAttribute(detailButton, "onClick", sourceFile), /onOpen\(row\)/);
 
-  const table = byTag("DashboardDataTable")[0];
+  const table = byTableTag("DashboardDataTable")[0];
   assert.equal(jsxAttribute(table, "selectedIds", sourceFile), "{selectedIdsInData}");
-  const drawer = byTag("Drawer")[0];
+  const drawer = byTableTag("Drawer")[0];
   assert.equal(jsxAttribute(drawer, "open", sourceFile), "{activeRow !== null}");
-  const detailChart = byTag("DetailChart")[0];
+  const detailChart = byTableTag("DetailChart")[0];
   assert.equal(jsxAttribute(detailChart, "row", sourceFile), "{activeRow}");
 });
 
