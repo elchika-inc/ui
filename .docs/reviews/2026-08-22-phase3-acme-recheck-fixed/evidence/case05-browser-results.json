@@ -1,0 +1,334 @@
+{
+  "verified_impl_sha": "71446e87c3fdf3127d3e3e990e9470893fa11990",
+  "overall": "PASS",
+  "target": {
+    "baseUrl": "http://127.0.0.1:4322",
+    "serverPid": 51119,
+    "requestedCommand": "npm run dev -- --host 127.0.0.1 --port 4321",
+    "port4321OccupiedByUnrelatedPid": 11102
+  },
+  "environment": {
+    "os": "Darwin 25.3.0 arm64",
+    "node": "v26.7.0",
+    "npm": "11.19.0",
+    "browserUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+    "desktopViewport": {
+      "width": 1512,
+      "height": 828
+    },
+    "mobileViewport": {
+      "width": 390,
+      "height": 844
+    },
+    "devicePixelRatio": 2
+  },
+  "rubric": {
+    "lightDark": "可視exact Acme Inc. 1、旧Acme単独0",
+    "mobile": "390x844でAcme Inc.可視・開閉",
+    "catalog": "Acme Inc.のtarget rectがitem内でcenter前面、後続fixed layerに遮蔽されない",
+    "items": "dashboard-01/dashboard-tableが正寸法",
+    "runtime": "duplicate ID、console error、page exception、HTTP 4xx/5xx、request failure 0、truncated=false",
+    "screenshots": "light/dark/mobile/catalogを新規撮影してmagic bytes確認",
+    "isolatedRegression": "desktop offcanvasとmobile動作を維持",
+    "countPolicy": "件数は今回観測値のみ"
+  },
+  "cases": {
+    "light": {
+      "result": "PASS",
+      "domBefore": {
+        "acmeIncVisibleExactCount": 1,
+        "chartSvgCount": 1,
+        "documentsHeadingCount": 1,
+        "dpr": 2,
+        "duplicateIds": [],
+        "href": "http://127.0.0.1:4322/preview/dashboard-01/",
+        "htmlClass": "",
+        "legacyAcmeVisibleExactCount": 0,
+        "rootCount": 1,
+        "rootRect": {
+          "height": 828,
+          "width": 1512,
+          "x": 0,
+          "y": 0
+        },
+        "sectionCardCount": 5,
+        "viewport": {
+          "height": 828,
+          "width": 1512
+        }
+      },
+      "sidebarBefore": {
+        "collapsible": "",
+        "containerRect": {
+          "height": 828,
+          "right": 288,
+          "width": 288,
+          "x": 0,
+          "y": 0
+        },
+        "frontText": "Acme Inc.",
+        "state": "expanded",
+        "targetIsFront": true,
+        "targetRect": {
+          "height": 24,
+          "width": 77.7109375,
+          "x": 50,
+          "y": 20
+        }
+      },
+      "sidebarCollapsed": {
+        "collapsible": "offcanvas",
+        "containerRect": {
+          "height": 828,
+          "right": 32,
+          "width": 288,
+          "x": -256,
+          "y": 0
+        },
+        "state": "collapsed",
+        "targetRect": {
+          "height": 24,
+          "width": 77.7109375,
+          "x": -206,
+          "y": 20
+        }
+      },
+      "sidebarRestored": {
+        "collapsible": "",
+        "containerRect": {
+          "height": 828,
+          "right": 288,
+          "width": 288,
+          "x": 0,
+          "y": 0
+        },
+        "frontText": "Acme Inc.",
+        "state": "expanded",
+        "targetIsFront": true,
+        "targetRect": {
+          "height": 24,
+          "width": 77.7109375,
+          "x": 50,
+          "y": 20
+        }
+      },
+      "domAfter": {
+        "acmeIncVisibleExactCount": 1,
+        "chartSvgCount": 1,
+        "documentsHeadingCount": 1,
+        "dpr": 2,
+        "duplicateIds": [],
+        "href": "http://127.0.0.1:4322/preview/dashboard-01/",
+        "htmlClass": "",
+        "legacyAcmeVisibleExactCount": 0,
+        "rootCount": 1,
+        "rootRect": {
+          "height": 828,
+          "width": 1512,
+          "x": 0,
+          "y": 0
+        },
+        "sectionCardCount": 5,
+        "viewport": {
+          "height": 828,
+          "width": 1512
+        }
+      },
+      "triggerCount": 1,
+      "screenshot": {
+        "path": "evidence/2026-08-22-dashboard-01-light.jpg",
+        "bytes": 101087,
+        "magic": "JPEG"
+      },
+      "visualInspection": "Acme Inc.を目視"
+    },
+    "dark": {
+      "result": "PASS",
+      "dom": {
+        "acmeIncVisibleExactCount": 1,
+        "chartSvgCount": 1,
+        "documentsHeadingCount": 1,
+        "dpr": 2,
+        "duplicateIds": [],
+        "href": "http://127.0.0.1:4322/preview/dashboard-01-dark/",
+        "htmlClass": "dark",
+        "legacyAcmeVisibleExactCount": 0,
+        "rootCount": 1,
+        "rootRect": {
+          "height": 828,
+          "width": 1512,
+          "x": 0,
+          "y": 0
+        },
+        "sectionCardCount": 5,
+        "viewport": {
+          "height": 828,
+          "width": 1512
+        }
+      },
+      "sidebar": {
+        "collapsible": "",
+        "containerRect": {
+          "height": 828,
+          "right": 288,
+          "width": 288,
+          "x": 0,
+          "y": 0
+        },
+        "frontText": "Acme Inc.",
+        "state": "expanded",
+        "targetIsFront": true,
+        "targetRect": {
+          "height": 24,
+          "width": 77.7109375,
+          "x": 50,
+          "y": 20
+        }
+      },
+      "screenshot": {
+        "path": "evidence/2026-08-22-dashboard-01-dark.jpg",
+        "bytes": 93629,
+        "magic": "JPEG"
+      },
+      "visualInspection": "Acme Inc.を目視"
+    },
+    "mobile": {
+      "result": "PASS",
+      "before": {
+        "dialogCount": 0,
+        "mobileSidebarCount": 0,
+        "triggerCount": 1,
+        "viewport": {
+          "height": 844,
+          "width": 390
+        },
+        "visibleSidebarCount": 0
+      },
+      "open": {
+        "acmeIncVisibleExactCount": 1,
+        "dialogCount": 1,
+        "dialogRect": {
+          "height": 844,
+          "width": 292.5,
+          "x": 0,
+          "y": 0
+        },
+        "duplicateIds": [],
+        "legacyAcmeVisibleExactCount": 0,
+        "sidebarRect": {
+          "height": 844,
+          "width": 292.5,
+          "x": 0,
+          "y": 0
+        },
+        "targetIsFront": true
+      },
+      "closed": {
+        "dialogCount": 0,
+        "mobileSidebarCount": 0,
+        "visibleSidebarCount": 0
+      },
+      "screenshot": {
+        "path": "evidence/case03-dashboard-01-mobile-sidebar-acme-inc.jpg",
+        "bytes": 20711,
+        "magic": "JPEG"
+      },
+      "visualInspection": "開いたsidebar上部のAcme Inc.を目視"
+    },
+    "catalog": {
+      "result": "PASS",
+      "initial": {
+        "dashboard01Count": 1,
+        "dashboard01Rect": {
+          "height": 467,
+          "width": 410.6640625,
+          "x": 985.328125,
+          "y": 587.6484375
+        },
+        "dashboardTableCount": 1,
+        "dashboardTableRect": {
+          "height": 467,
+          "width": 410.6640625,
+          "x": 116,
+          "y": 1078.6484375
+        },
+        "dialogCount": 1,
+        "duplicateIds": [],
+        "observedPreviewCount": 89,
+        "rootCount": 1,
+        "scrollY": 2241,
+        "viewport": {
+          "height": 828,
+          "width": 1512
+        }
+      },
+      "visible": {
+        "acmeIncVisibleExactCount": 1,
+        "dashboard01Positive": true,
+        "dashboard01Rect": {
+          "bottom": 514.6484375,
+          "height": 467,
+          "right": 1395.9921875,
+          "width": 410.6640625,
+          "x": 985.328125,
+          "y": 47.6484375
+        },
+        "dashboardTablePositive": true,
+        "dashboardTableRect": {
+          "bottom": 1005.6484375,
+          "height": 467,
+          "right": 526.6640625,
+          "width": 410.6640625,
+          "x": 116,
+          "y": 538.6484375
+        },
+        "dialogCount": 0,
+        "duplicateIds": [],
+        "fixedDescendantCount": 1,
+        "frontPreview": "dashboard-01",
+        "frontTag": "SPAN",
+        "frontText": "Acme Inc.",
+        "legacyAcmeVisibleExactCount": 0,
+        "scrollY": 2781,
+        "sidebarContainerCount": 0,
+        "sidebarPosition": "static",
+        "sidebarRect": {
+          "bottom": 746.6484375,
+          "height": 616,
+          "right": 1201.2421875,
+          "width": 213.9140625,
+          "x": 987.328125,
+          "y": 130.6484375
+        },
+        "targetInsideItem": true,
+        "targetIntersectsViewport": true,
+        "targetIsFront": true,
+        "targetRect": {
+          "bottom": 166.6484375,
+          "height": 24,
+          "right": 1107.0390625,
+          "width": 77.7109375,
+          "x": 1029.328125,
+          "y": 142.6484375
+        }
+      },
+      "closeButtonCount": 1,
+      "screenshot": {
+        "path": "evidence/case04-catalog-dashboard-items-acme-inc-visible.jpg",
+        "bytes": 98638,
+        "magic": "JPEG"
+      },
+      "visualInspection": "dashboard-01 card内のAcme Inc.を目視",
+      "regressionFromPreviousFail": {
+        "targetInsideItem": true,
+        "targetIsFront": true,
+        "frontPreview": "dashboard-01",
+        "sidebarPosition": "static",
+        "sidebarContainerCount": 0
+      }
+    }
+  },
+  "scope": {
+    "dashboardTableFunctionalRetest": "非変更のため依頼どおり未実行。ただしcatalog itemの正寸法は確認"
+  }
+}

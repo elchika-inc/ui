@@ -1,0 +1,754 @@
+{
+  "verified_impl_sha": "7ccde67f72f6913da48065c1d160280e4ad410fd",
+  "observed_at": {
+    "started": "2026-08-22T17:37:37+09:00",
+    "finished": "2026-08-22T08:48:40.020Z"
+  },
+  "server": {
+    "requested": "http://127.0.0.1:4321",
+    "actual": "http://127.0.0.1:4322",
+    "pid": 56701,
+    "port4321UnrelatedPid": 11102
+  },
+  "browser": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+    "viewport": {
+      "width": 1536,
+      "height": 1000
+    },
+    "catalogViewport": {
+      "width": 1920,
+      "height": 1000
+    }
+  },
+  "rubric": {
+    "countsAreObservationsOnly": true
+  },
+  "light": {
+    "initial": {
+      "detailNames": [
+        "Adaptive Communication Protocols の詳細を開く",
+        "Advanced Algorithms and Machine Learning の詳細を開く",
+        "Advantages Over Current Technologies の詳細を開く",
+        "Capabilities の詳細を開く",
+        "Cover page の詳細を開く",
+        "Design の詳細を開く",
+        "Executive summary の詳細を開く",
+        "Innovation and Advantages の詳細を開く",
+        "Integration with existing systems の詳細を開く",
+        "Overview of EMR's Innovative Solutions の詳細を開く",
+        "Table of contents の詳細を開く",
+        "Technical approach の詳細を開く"
+      ],
+      "duplicateIds": [],
+      "previewRect": {
+        "height": 1000,
+        "width": 1280,
+        "x": 128,
+        "y": 0
+      },
+      "rowCount": 12,
+      "rowIds": [
+        "11",
+        "10",
+        "12",
+        "6",
+        "1",
+        "5",
+        "3",
+        "8",
+        "7",
+        "9",
+        "2",
+        "4"
+      ],
+      "tableRect": {
+        "height": 585.5,
+        "width": 1232,
+        "x": 152,
+        "y": 62
+      },
+      "title": "Dashboard Table",
+      "url": "http://127.0.0.1:4322/preview/dashboard-table/"
+    },
+    "stable": {
+      "duplicateIds": [],
+      "rows": 12,
+      "tableRect": {
+        "height": 585.5,
+        "width": 1232,
+        "x": 152,
+        "y": 62
+      }
+    },
+    "sort": {
+      "initial": [
+        "4",
+        "2",
+        "9",
+        "7",
+        "8",
+        "3",
+        "5",
+        "1",
+        "6",
+        "12",
+        "10",
+        "11"
+      ],
+      "documentFirst": [
+        "11",
+        "10",
+        "12",
+        "6",
+        "1",
+        "5",
+        "3",
+        "8",
+        "7",
+        "9",
+        "2",
+        "4"
+      ],
+      "documentSecond": [
+        "4",
+        "2",
+        "9",
+        "7",
+        "8",
+        "3",
+        "5",
+        "1",
+        "6",
+        "12",
+        "10",
+        "11"
+      ],
+      "targetFirst": [
+        "5",
+        "9",
+        "11",
+        "3",
+        "12",
+        "1",
+        "7",
+        "6",
+        "8",
+        "4",
+        "2",
+        "10"
+      ],
+      "targetSecond": [
+        "10",
+        "2",
+        "4",
+        "8",
+        "6",
+        "7",
+        "1",
+        "12",
+        "3",
+        "11",
+        "9",
+        "5"
+      ],
+      "targetAscendingValues": [
+        2,
+        7,
+        9,
+        10,
+        12,
+        18,
+        19,
+        20,
+        25,
+        27,
+        29,
+        30
+      ],
+      "targetDescendingValues": [
+        30,
+        29,
+        27,
+        25,
+        20,
+        19,
+        18,
+        12,
+        10,
+        9,
+        7,
+        2
+      ],
+      "targetAscendingMonotonic": true,
+      "targetDescendingMonotonic": true
+    },
+    "selection": {
+      "before": {
+        "header": "false",
+        "selected": "0",
+        "text": "12 件を表示・0 件を選択"
+      },
+      "after": {
+        "header": "mixed",
+        "indeterminate": true,
+        "selected": "1",
+        "text": "12 件を表示・1 件を選択"
+      }
+    },
+    "drawer": {
+      "buttonName": "Design の詳細を開く",
+      "chart": {
+        "chartDisplay": "flex",
+        "chartRect": {
+          "height": 192,
+          "width": 1504,
+          "x": 16,
+          "y": 744
+        },
+        "detailButtonName": "Design の詳細を開く",
+        "drawerVisible": true,
+        "pointCount": 5,
+        "pointFills": [
+          "rgb(47, 95, 209)",
+          "rgb(47, 95, 209)",
+          "rgb(47, 95, 209)",
+          "rgb(47, 95, 209)",
+          "rgb(47, 95, 209)"
+        ],
+        "pointRects": [
+          {
+            "height": 9.60003662109375,
+            "width": 9.5999755859375,
+            "x": 600,
+            "y": 777.5999755859375
+          },
+          {
+            "height": 9.60003662109375,
+            "width": 9.60003662109375,
+            "x": 681.5999755859375,
+            "y": 886.7999877929688
+          },
+          {
+            "height": 9.5999755859375,
+            "width": 9.5999755859375,
+            "x": 763.2000122070312,
+            "y": 832.2000122070312
+          },
+          {
+            "height": 9.60003662109375,
+            "width": 9.60003662109375,
+            "x": 844.7999877929688,
+            "y": 777.5999755859375
+          },
+          {
+            "height": 9.60003662109375,
+            "width": 9.5999755859375,
+            "x": 926.4000244140624,
+            "y": 886.7999877929688
+          }
+        ],
+        "polylineComputedStroke": "rgb(47, 95, 209)",
+        "polylineDisplay": "inline",
+        "polylineRect": {
+          "height": 109.199951171875,
+          "width": 326.4000244140625,
+          "x": 604.7999877929688,
+          "y": 782.4000244140625
+        },
+        "polylineStroke": "currentColor",
+        "polylineStrokeWidth": "4px",
+        "svgAria": "Target と limit の推移",
+        "svgDisplay": "block",
+        "svgHeight": "100%",
+        "svgRect": {
+          "height": 192,
+          "width": 1504,
+          "x": 16,
+          "y": 744
+        },
+        "svgWidth": "100%"
+      }
+    },
+    "dnd": {
+      "dom": {
+        "dragHandles": 0,
+        "draggableTrue": 0,
+        "firstRect": {
+          "height": 38.5,
+          "width": 1230,
+          "x": 153,
+          "y": 143.5
+        },
+        "grabCursors": 0,
+        "secondRect": {
+          "height": 39,
+          "width": 1230,
+          "x": 153,
+          "y": 182
+        },
+        "sortableAttrs": 0
+      },
+      "before": [
+        "5",
+        "9",
+        "11",
+        "3",
+        "12",
+        "1",
+        "7",
+        "6",
+        "8",
+        "4",
+        "2",
+        "10"
+      ],
+      "afterPointer": [
+        "5",
+        "9",
+        "11",
+        "3",
+        "12",
+        "1",
+        "7",
+        "6",
+        "8",
+        "4",
+        "2",
+        "10"
+      ],
+      "afterKeyboard": [
+        "5",
+        "9",
+        "11",
+        "3",
+        "12",
+        "1",
+        "7",
+        "6",
+        "8",
+        "4",
+        "2",
+        "10"
+      ],
+      "pointerUnchanged": true,
+      "keyboardUnchanged": true
+    },
+    "audit": {
+      "responses": 137,
+      "httpErrors": [],
+      "requestFailures": [],
+      "pageExceptions": [],
+      "logErrors": [],
+      "truncated": false,
+      "batches": 45,
+      "maxBatch": 49
+    }
+  },
+  "dark": {
+    "base": {
+      "duplicateIds": [],
+      "rowCount": 12,
+      "tableRect": {
+        "height": 585.5,
+        "width": 1232,
+        "x": 152,
+        "y": 62
+      },
+      "title": "Dashboard Table",
+      "url": "http://127.0.0.1:4322/preview/dashboard-table-dark/"
+    },
+    "drawer": {
+      "buttonName": "Adaptive Communication Protocols の詳細を開く",
+      "chart": {
+        "chartDisplay": "flex",
+        "chartRect": {
+          "height": 192,
+          "width": 1504,
+          "x": 16,
+          "y": 744
+        },
+        "drawerVisible": true,
+        "pointCount": 5,
+        "pointFills": [
+          "rgb(110, 147, 240)",
+          "rgb(110, 147, 240)",
+          "rgb(110, 147, 240)",
+          "rgb(110, 147, 240)",
+          "rgb(110, 147, 240)"
+        ],
+        "pointRects": [
+          {
+            "height": 9.60003662109375,
+            "width": 9.5999755859375,
+            "x": 600,
+            "y": 777.5999755859375
+          },
+          {
+            "height": 9.60003662109375,
+            "width": 9.60003662109375,
+            "x": 681.5999755859375,
+            "y": 866.167724609375
+          },
+          {
+            "height": 9.5999755859375,
+            "width": 9.5999755859375,
+            "x": 763.2000122070312,
+            "y": 821.8839111328125
+          },
+          {
+            "height": 9.60003662109375,
+            "width": 9.60003662109375,
+            "x": 844.7999877929688,
+            "y": 777.5999755859375
+          },
+          {
+            "height": 9.60003662109375,
+            "width": 9.5999755859375,
+            "x": 926.4000244140624,
+            "y": 866.167724609375
+          }
+        ],
+        "polylineComputedStroke": "rgb(110, 147, 240)",
+        "polylineDisplay": "inline",
+        "polylineRect": {
+          "height": 88.5677490234375,
+          "width": 326.4000244140625,
+          "x": 604.7999877929688,
+          "y": 782.4000244140625
+        },
+        "polylineStroke": "currentColor",
+        "polylineStrokeWidth": "4px",
+        "svgAria": "Target と limit の推移",
+        "svgDisplay": "block",
+        "svgHeight": "100%",
+        "svgRect": {
+          "height": 192,
+          "width": 1504,
+          "x": 16,
+          "y": 744
+        },
+        "svgWidth": "100%"
+      }
+    },
+    "audit": {
+      "responses": 137,
+      "httpErrors": [],
+      "requestFailures": [],
+      "pageExceptions": [],
+      "logErrors": [],
+      "truncated": false,
+      "batches": 53,
+      "maxBatch": 52
+    }
+  },
+  "catalog": {
+    "beforeClose": {
+      "bodyOverflow": "visible",
+      "center": {
+        "x": 333.33203125,
+        "y": 500.1484375
+      },
+      "dialogsVisible": 0,
+      "duplicateIds": [],
+      "front": {
+        "catalog": null,
+        "cls": "flex flex-col items-start gap-2 border-b p-4 text-sm leading-tight whitespace-nowrap last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+        "slot": null,
+        "tag": "A",
+        "text": "Emily Davis 2 days agoRe: Question about BudgetI've reviewed the budget numbers you sent over.\nCan w"
+      },
+      "frontRelation": false,
+      "itemRect": {
+        "height": 467,
+        "width": 410.6640625,
+        "x": 128,
+        "y": 266.6484375
+      },
+      "nameRect": {
+        "height": 20,
+        "width": 368.6640625,
+        "x": 149,
+        "y": 311.6484375
+      },
+      "scrollY": 3053,
+      "tableRect": {
+        "height": 585.5,
+        "width": 374.6640625,
+        "x": 146,
+        "y": 365.6484375
+      }
+    },
+    "closeSteps": [
+      {
+        "front": {
+          "slot": null,
+          "tag": "A",
+          "text": "Emily Davis 2 days agoRe: Question about BudgetI've reviewed"
+        },
+        "railAtPoint": true,
+        "relation": false,
+        "x": 333.33203125,
+        "y": 500.1484375
+      },
+      {
+        "front": {
+          "slot": null,
+          "tag": "A",
+          "text": "Emily Davis 2 days agoRe: Question about BudgetI've reviewed"
+        },
+        "railAtPoint": true,
+        "relation": false,
+        "x": 333.33203125,
+        "y": 500.1484375
+      },
+      {
+        "front": {
+          "slot": null,
+          "tag": "A",
+          "text": "Emily Davis 2 days agoRe: Question about BudgetI've reviewed"
+        },
+        "railAtPoint": true,
+        "relation": false,
+        "x": 333.33203125,
+        "y": 500.1484375
+      },
+      {
+        "front": {
+          "slot": null,
+          "tag": "A",
+          "text": "Emily Davis 2 days agoRe: Question about BudgetI've reviewed"
+        },
+        "railAtPoint": true,
+        "relation": false,
+        "x": 333.33203125,
+        "y": 500.1484375
+      },
+      {
+        "front": {
+          "slot": null,
+          "tag": "A",
+          "text": "Emily Davis 2 days agoRe: Question about BudgetI've reviewed"
+        },
+        "railAtPoint": true,
+        "relation": false,
+        "x": 333.33203125,
+        "y": 500.1484375
+      },
+      {
+        "front": {
+          "slot": null,
+          "tag": "A",
+          "text": "Emily Davis 2 days agoRe: Question about BudgetI've reviewed"
+        },
+        "railAtPoint": true,
+        "relation": false,
+        "x": 333.33203125,
+        "y": 500.1484375
+      },
+      {
+        "front": {
+          "slot": null,
+          "tag": "A",
+          "text": "Emily Davis 2 days agoRe: Question about BudgetI've reviewed"
+        },
+        "railAtPoint": true,
+        "relation": false,
+        "x": 333.33203125,
+        "y": 500.1484375
+      },
+      {
+        "front": {
+          "slot": null,
+          "tag": "A",
+          "text": "Emily Davis 2 days agoRe: Question about BudgetI've reviewed"
+        },
+        "railAtPoint": true,
+        "relation": false,
+        "x": 333.33203125,
+        "y": 500.1484375
+      },
+      {
+        "front": {
+          "slot": null,
+          "tag": "A",
+          "text": "Emily Davis 2 days agoRe: Question about BudgetI've reviewed"
+        },
+        "railAtPoint": true,
+        "relation": false,
+        "x": 333.33203125,
+        "y": 500.1484375
+      },
+      {
+        "front": {
+          "slot": null,
+          "tag": "A",
+          "text": "Emily Davis 2 days agoRe: Question about BudgetI've reviewed"
+        },
+        "railAtPoint": true,
+        "relation": false,
+        "x": 333.33203125,
+        "y": 500.1484375
+      },
+      {
+        "front": {
+          "slot": null,
+          "tag": "A",
+          "text": "Emily Davis 2 days agoRe: Question about BudgetI've reviewed"
+        },
+        "railAtPoint": true,
+        "relation": false,
+        "x": 333.33203125,
+        "y": 500.1484375
+      },
+      {
+        "front": {
+          "slot": null,
+          "tag": "A",
+          "text": "Emily Davis 2 days agoRe: Question about BudgetI've reviewed"
+        },
+        "railAtPoint": true,
+        "relation": false,
+        "x": 333.33203125,
+        "y": 500.1484375
+      },
+      {
+        "front": {
+          "slot": null,
+          "tag": "A",
+          "text": "Emily Davis 2 days agoRe: Question about BudgetI've reviewed"
+        },
+        "railAtPoint": true,
+        "relation": false,
+        "x": 333.33203125,
+        "y": 500.1484375
+      },
+      {
+        "front": {
+          "slot": null,
+          "tag": "A",
+          "text": "Emily Davis 2 days agoRe: Question about BudgetI've reviewed"
+        },
+        "railAtPoint": true,
+        "relation": false,
+        "x": 333.33203125,
+        "y": 500.1484375
+      },
+      {
+        "front": {
+          "slot": null,
+          "tag": "A",
+          "text": "Emily Davis 2 days agoRe: Question about BudgetI've reviewed"
+        },
+        "railAtPoint": true,
+        "relation": false,
+        "x": 333.33203125,
+        "y": 500.1484375
+      }
+    ],
+    "afterClose": {
+      "center": {
+        "x": 333.33203125,
+        "y": 500.1484375
+      },
+      "dialogVisible": 0,
+      "duplicateIds": [],
+      "frontRelation": true,
+      "frontTag": "BUTTON",
+      "frontText": "Advanced Algorithms and Machine Learning",
+      "itemRect": {
+        "height": 467,
+        "width": 410.6640625,
+        "x": 128,
+        "y": 266.6484375
+      },
+      "tableRect": {
+        "height": 585.5,
+        "width": 374.6640625,
+        "x": 146,
+        "y": 365.6484375
+      }
+    },
+    "audit": {
+      "responses": 422,
+      "httpErrors": [],
+      "requestFailures": [],
+      "pageExceptions": [],
+      "logErrors": [],
+      "truncated": false,
+      "batches": 80,
+      "maxBatch": 88
+    },
+    "wide": {
+      "duplicateIds": [],
+      "itemRect": {
+        "height": 467,
+        "width": 410.6640625,
+        "x": 320,
+        "y": 266.6484375
+      },
+      "points": [
+        {
+          "frontRelation": true,
+          "frontTag": "SPAN",
+          "frontText": "",
+          "name": "left",
+          "x": 340,
+          "y": 500.1484375
+        },
+        {
+          "frontRelation": true,
+          "frontTag": "BUTTON",
+          "frontText": "Advanced Algorithms and Machine Learning",
+          "name": "center",
+          "x": 525.33203125,
+          "y": 500.1484375
+        },
+        {
+          "frontRelation": true,
+          "frontTag": "TD",
+          "frontText": "Narrative",
+          "name": "right",
+          "x": 710.6640625,
+          "y": 500.1484375
+        }
+      ],
+      "tableRect": {
+        "height": 585.5,
+        "width": 374.6640625,
+        "x": 338,
+        "y": 365.6484375
+      },
+      "viewport": {
+        "height": 1000,
+        "width": 1920
+      }
+    }
+  },
+  "console": {
+    "errors": []
+  },
+  "metricFallback": {
+    "actualDataRows": 68,
+    "emptyBlankOrNonNumericRows": [],
+    "browserBranchReached": false,
+    "boundaryEvidence": "scripts/dashboard-blocks.test.mjs fixture test; targeted test output in case05-unit-metric-fallback.log"
+  },
+  "overall": "PASS",
+  "screenshotVisualReview": {
+    "light": {
+      "chartLineVisible": true,
+      "chartPointsVisible": 5
+    },
+    "dark": {
+      "chartLineVisible": true,
+      "chartPointsVisible": 5
+    },
+    "catalog": {
+      "dashboardTableHeadingVisible": true,
+      "tableHeadersVisible": true,
+      "rowsVisible": true,
+      "allSamplePointsFront": true
+    }
+  }
+}

@@ -38,7 +38,7 @@
 | `src/previews/<name>.tsx` | 作成 | block の隔離プレビュー |
 | `src/pages/preview/<name>.astro` / `<name>-dark.astro` | 作成 | プレビューのルート |
 | `preview-selectors.json` | 修正 | block の preview selector 宣言 |
-| `src/catalog/component-categories.mjs` | 修正 | 「認証」「ダッシュボード」カテゴリを追加 |
+| `src/catalog/component-categories.mjs` | 修正 | 「認証」「アプリシェル」カテゴリを追加 |
 | `registry.json` | 修正 | block の registry item |
 | `provenance.json` | 修正 | `blocks` セクション |
 
@@ -674,7 +674,7 @@ Task 3 は純関数だけを直した。実行経路 `runAddComponent` は**単�
 **Interfaces:**
 - Consumes: Task 3 の `resolveRegistryTarget`（block では `{itemType, files, droppedFiles}` を返す）
 - Produces:
-  - `blockProvenanceEntry({root, name, modified, cliVersion, upstreamItem, upstreamText, target, registryUrl, fetchImpl})` → Task 1 の `BLOCK_PROVENANCE_SPEC` を満たすオブジェクト。`files[]` は配布ファイル（`path` / `upstreamPath` / `upstreamPathSha` / `generatedContentSha256`）と落とした page（`dropped: true` / `upstreamPath` / `upstreamPathSha`）を含む。
+  - `blockProvenanceEntry({root, name, modified, cliVersion, upstreamItem, upstreamText, target, registryUrl, fetchImpl})` → Task 1 の `BLOCK_PROVENANCE_SPEC` を満たすオブジェクト。`files[]` は配布ファイル（`path` / `upstreamPath` / `upstreamPathSha` / `generatedContentSha256`）と配布しない上流 file（`dropped: true` / `upstreamPath` / `upstreamPathSha`）を含む。
   - `shouldSkipRecorded(provenance, name, force, kind)` → `kind` が `"block"` のとき `provenance.blocks?.[name]` を見る。省略時は従来どおり `components`。
 
 - [ ] **Step 1: `shouldSkipRecorded` の失敗テストを書く**
@@ -804,7 +804,7 @@ async function blockProvenanceEntry({
     files,
     notes:
       "registryContentSha256 は受け取った配信物 JSON 全体の錨である。files[].generatedContentSha256 は standards 正規化を適用したあとの現行ファイルのハッシュであり、CLI 生成直後の値とは一致しない。" +
-      "dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。",
+      "dropped: true の file は配布しない上流 file を表し、理由は modified に記録する。",
   };
 }
 ```
@@ -1229,70 +1229,384 @@ registry.json / provenance.json / component-categories.mjs が単一の
 
 ---
 
-## Task 7: dashboard-01 を移植する
+## Task 7: dashboard-01 の 9 ファイルを移植する（Phase 3a）
+
+設計 §3-6 に従い、上流 dashboard-01 の 11 ファイルから **`registry:page` と `data-table.tsx` を除いた 9 ファイル**を移植する。後者を除外する理由は npm 依存 6 件を持ち込むためで、Next 規約による `registry:page` の除外とは理由が異なる。
+
+**新規 npm 依存はゼロ。** `recharts` と `sonner` は導入済み（実測）。ここでいう依存ゼロは、次の 3 境界を別々に検証する。
+
+- **repo dependency delta**: 当リポジトリの `package.json` / `package-lock.json` に差分が無い
+- **配布 item の npm `dependencies`**: 通常の `registry:page` 除外だけなら上流宣言を保持する。`data-table.tsx` のような明示的な追加除外がある場合、最終集合は「残存 block 所有 source の静的・動的 external import」「CLI 生成 source から補完した external import」「共有配布物が常に要求する exact `SHARED_DEPENDENCIES`（現行は `shadcn` / `tw-animate-css`）」の和集合とする。CSS の全 import など、この 3 集合以外から npm 依存を推測しない
+- **配布 item の `registryDependencies`**: 通常の `registry:page` 除外だけなら上流宣言を保持する。明示的な追加除外がある場合、bare 名と `@elchika/*` は残存配布 file の直接 local import を起点に、当リポジトリの local registry graph で到達できる推移閉包だけへ絞る。閉包の全 item は一意に解決できなければならず、解決不能・重複は fail-closed で停止する。外部 URL と `@elchika` 以外の namespace は値を保持し、local graph の存在検査・推移閉包の対象外とする
 
 **Files:**
-- Create: `src/blocks/dashboard-01/**`（10 ファイル）
-- Modify: `package.json`, `THIRD_PARTY_LICENSES`, `registry.json`, `provenance.json`, `preview-selectors.json`, `src/catalog/component-categories.mjs`, `.docs/risk-registry.md`
+- Modify: `scripts/add-component.mjs`（block 内 `registry:file` への対応）
+- Modify: `scripts/add-component.test.mjs`
+- Create: `src/blocks/dashboard-01/**`
+- Modify: `registry.json`, `provenance.json`, `preview-selectors.json`, `src/catalog/component-categories.mjs`
 
 **Interfaces:**
 - Consumes: Task 6 までの全機構
-- Produces: 27 件すべてが `check:all` を通る状態
+- Produces: `resolveBlockTarget` が `registry:file` を配布対象として扱い、`data.json` を `src/blocks/dashboard-01/` へ移設する
 
-- [ ] **Step 1: 依存追加の判断を記録する**
+### 前提: `registry:file` は現状の実装では停止する
 
-`.docs/plans/2026-08-17-registry-blocks-design.md` に追記するのではなく、`.docs/risk-registry.md` へ記録する。dashboard-01 は次の 6 件を新規に持ち込む。
+`add-component.mjs` の `SUPPORTED_BLOCK_FILE_TYPES` は `registry:component` のみで、block 内の `registry:file`（`data.json`）は未対応として **CLI 実行前に停止する**。`add-component.test.mjs` がこの挙動を固定している。この Task は対応の実装から始まる。
 
-`@dnd-kit/core` / `@dnd-kit/modifiers` / `@dnd-kit/sortable` / `@dnd-kit/utilities` / `@tanstack/react-table` / `zod`
+- [ ] **Step 1: `registry:file` 対応の失敗テストを書く**
 
-CLAUDE.md のライブラリ選定基準（メンテが活発・採用実績が十分・推移的依存が少ない・公式やデファクトを優先）に照らした判断と、`data-table.tsx` が 32KB あることを書く。**この判断で「配布しない」を選ぶこともありうる** — その場合は Task 7 を中止し、設計書の §1 を更新する。
+既存の `createRepo()` ヘルパと注入テストのパターンに倣う。`registry:file` を含む block の fixture を作り、次を検査する。
 
-- [ ] **Step 2: add する**
+- 配布ファイル集合に `registry:file` が含まれること
+- ローカル移設先の `targetPath` が `src/blocks/<name>/data.json` になること
+- 配布 target は上流 item の `target`（`app/dashboard/data.json`）を保持すること
+- ローカル CLI 生成先の `cliOutputPath` は、`~/` 付き target なら接頭辞を除いた repo root 相対とする。その他は CLI 4.16.0 の実測どおり先頭の `src/` を一度除いてから source root の `src/` を前置するため、`app/x` と `src/app/x` はどちらも `src/app/x` になること
+- **`targetPath` が `src/blocks/<name>/` の外を指す場合は fail-closed で停止すること**（path traversal）
+- **移設先に既存ファイルがある場合は上書きせず停止すること**
+
+- [ ] **Step 2: テストを実行して失敗を確認する**
+
+Run: `node --test scripts/add-component.test.mjs`
+Expected: FAIL。`registry:file` が未対応として throw される。
+
+- [ ] **Step 3: `registry:file` 対応を実装する**
+
+`SUPPORTED_BLOCK_FILE_TYPES` に `registry:file` を追加し、移設ロジックを拡張する。要件は次のとおり。
+
+- CLI の実生成先 `cliOutputPath` は、配布 target とローカル移設先 `targetPath` のどちらとも別概念である。`registry:component`（alias 直下へフラット配置）を含め、type ごとに移設元を解決する
+- 移設先が `src/blocks/<name>/` 配下であることを検証し、外を指すなら停止する（path traversal）
+- 移設先に既存ファイルがあれば上書きせず停止する
+- `reconcileAddChanges` の許可集合に移設後のパスを含める
+- ローカル registry item では **block 所有の `registry:file`** として記録する。共有法務ファイル（`target` 付きの `registry:file`）と混同しない
+
+共有 file は次の exact `(path, target)` pair だけを指す。片方だけ一致する file は block 所有として扱い、block 所有 `registry:file` の target が共有 file の target と衝突する場合は manifest 作成前に fail-closed で停止する。
+
+| path | target |
+|---|---|
+| `src/styles/global.css` | `~/elchika-ui/tokens.css` |
+| `src/styles/design-system/tokens.css` | `~/elchika-ui/design-system/tokens.css` |
+| `src/styles/design-system/brands.css` | `~/elchika-ui/design-system/brands.css` |
+| `LICENSE` | `~/elchika-ui/LICENSE` |
+| `THIRD_PARTY_LICENSES` | `~/elchika-ui/THIRD_PARTY_LICENSES` |
+
+- [ ] **Step 4: テストを実行して通ることを確認する**
+
+Run: `node --test scripts/add-component.test.mjs`
+Expected: PASS（既存テストを含めて全件）
+
+- [ ] **Step 5: コミット**
 
 ```bash
-node scripts/add-component.mjs dashboard-01 --modified "registry:page を配布から除外し、standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去"
+git add scripts/add-component.mjs scripts/add-component.test.mjs
+git commit -m "feat: block 内の registry:file を配布対象として扱う
+
+CLI は registry:file を item の target へ書くため、registry:component
+とは移設元が異なる。path traversal と既存ファイル衝突を fail-closed で
+止める。"
 ```
 
-`data.json` は `registry:file` なので `src/blocks/dashboard-01/data.json` へ落ちる。来歴の `files[]` に含まれることを確認する（`.tsx` 以外を弾いていないか）。
+**ここで必ずコミットする。** 未コミットのまま次へ進むと `ensureClean` に止められる（Phase 2 で実際に踏んだ）。
 
-- [ ] **Step 3: 法務ファイルを再取得する**
+- [ ] **Step 6: `data-table.tsx` を除外する設定を確認する**
 
-Run: `node scripts/fetch-third-party-licenses.mjs`
-Expected: `THIRD_PARTY_LICENSES` に 6 件の新規依存のライセンスが追加される。差分を確認する。
+上流 dashboard-01 の 11 ファイルのうち、`registry:page`（§1 の決定で除外）と `data-table.tsx`（依存 6 件のため除外）を配布対象から外す。
 
-- [ ] **Step 4: preview とルートと宣言を作る**
+`data-table.tsx` の除外は**この block 固有の判断**なので、`resolveBlockTarget` へ汎用ルールとして埋め込まない。除外対象を明示的に指定できる形にし、その理由を来歴へ書けるようにする。
 
-Task 5 Step 4〜6 と同じ手順。`component-categories.mjs` の「ダッシュボード」に `dashboard-01` を追加する。
+- [ ] **Step 7: add する**
 
-- [ ] **Step 5: 検査を全部走らせる**
+```bash
+node scripts/add-component.mjs dashboard-01 --modified "registry:page を配布から除外。data-table.tsx は npm 依存 6 件（@dnd-kit 系 4 件・@tanstack/react-table・zod）を持ち込むため配布から除外し、同等機能を dashboard-table として自作した。IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去"
+```
 
-Run: `npm run check:all`
+- [ ] **Step 8: 依存が増えていないことを検証する**
+
+```
+git diff --exit-code package.json package-lock.json
+```
 Expected: exit 0
 
-- [ ] **Step 6: 証跡を撮る**
+```
+grep -rnE "from \"(@dnd-kit|@tanstack|zod)" src/blocks/dashboard-01/
+```
+Expected: ヒット 0 件（exit 1 が正しい）
 
-light / dark の 2 枚。
+- [ ] **Step 9: `data.json` の扱いを確認する**
 
-- [ ] **Step 7: コミット**
+`data.json` は上流では `page.tsx` だけが `./data.json` として import する。page を配布しないため、**preview 側から明示的に読み込む**必要がある。
+
+Run: `ls src/blocks/dashboard-01/data.json`
+Expected: 存在する
+
+来歴の `files[]` に含まれることを確認する（`.tsx` 以外を弾いていないか）。
+
+- [ ] **Step 10: preview・selector・カテゴリを登録する**
+
+Task 5 Step 4〜6 と同じ手順。カテゴリは**「アプリシェル」**（設計 §3-4-3）。
+
+preview は `data.json` を明示的に import してテーブル以外の構成（sidebar / header / section-cards / chart）を描画する。`data-table` は含まない。
+
+- [ ] **Step 11: `check-block-icons.mjs` の対象へ追加する**
+
+現状の対象は Phase 2 の 25 件に固定されている。dashboard-01 を加えないと `IconPlaceholder` が監査対象外になる。**対象一覧を固定配列で持たず、`src/blocks/` の走査から導出する形へ直す**（block が増えるたびに直す必要をなくす）。
+
+- [ ] **Step 12: 実ブラウザで検証する**
+
+上流は `/avatars/shadcn.jpg` を参照するため、Phase 2 と同じ 404 が再発しうる。ネットワークタブで確認する。
+
+dashboard 内には固定 DOM ID と SVG gradient ID があるため、catalog の同一 DOM での ID 重複を検査する。
+
+- [ ] **Step 13: build して registry を正規化する**
+
+`npm run build` が block へ cssVars を同期して `registry.json` を正規化する。**最終証跡の前に実行**し、再実行後の worktree 差分が 0 であることを確認する。
+
+- [ ] **Step 14: コミット**
 
 ```bash
 git add -A
-git commit -m "feat: dashboard-01 を移植
+git commit -m "feat: dashboard-01 の 9 ファイルを移植する
 
-新規 npm 依存 6 件（@dnd-kit 系 4 件・@tanstack/react-table・zod）を
-伴うため他 26 件と分けた。判断は risk-registry に記録した。
-THIRD_PARTY_LICENSES を再取得済み。"
+data-table.tsx は npm 依存 6 件を持ち込むため配布から除外した。
+同等機能は Task 8 で dashboard-table として自作する。
+新規 npm 依存はゼロ。"
 ```
 
 ---
 
-## Task 8: 利用者向けドキュメントを更新する
+## Task 8: `dashboard-table` を既存部品で自作する（Phase 3b）
+
+設計 §3-6 に従い、上流 `data-table.tsx` 相当を **npm 依存ゼロ**で自作する。設計 §1「上流からの移植（自作しない）」の**例外第 1 号**であり、来歴スキーマの分岐を伴う。
+
+**Files:**
+- Modify: `scripts/check-completeness.mjs`（自作品の来歴スキーマ分岐）
+- Modify: `scripts/check-completeness.test.mjs`
+- Create: `src/blocks/dashboard-table/components/dashboard-table.tsx`
+- Create: `src/previews/dashboard-table.tsx`, `src/pages/preview/dashboard-table.astro`, `dashboard-table-dark.astro`
+- Modify: `registry.json`, `provenance.json`, `preview-selectors.json`, `src/catalog/component-categories.mjs`
+
+**Interfaces:**
+- Consumes: Task 1 の `checkCompleteness({blocks})` と `BLOCK_PROVENANCE_SPEC`
+- Produces: `provenance.blocks["dashboard-table"]` が `origin: "elchika original"` を持ち、上流由来キーを持たない来歴として検査を通る
+
+### 自作品の来歴スキーマ（この形で確定させる）
+
+`origin` を分岐の軸にする。表記ゆれは検査の実効性を殺すので、**文字列を完全一致で判定する**。
+
+| origin | 値 | 要求するキー | 禁止するキー |
+|---|---|---|---|
+| 移植品 | `"shadcn/ui registry"` | 現行の `BLOCK_PROVENANCE_SPEC` 全キー | — |
+| **自作品** | `"elchika original"` | `license` / `modified` / `files[]` | `registryUrl` / `registryContentSha256` / `addTarget` / `shadcnCliVersion` / `fetchedAt` |
+
+`files[]` の各エントリ:
+
+| origin | 要求 | 禁止 |
+|---|---|---|
+| 移植品 | `path` / `upstreamPath` / `upstreamPathSha` / `generatedContentSha256`（`dropped` 時は §3-3 の形） | — |
+| **自作品** | `path` / `generatedContentSha256` | `upstreamPath` / `upstreamPathSha` / `dropped` |
+
+**禁止キーの検査は必須。** 移植品を誤って自作として記録すると来歴が失われるため、上流由来キーを持つ自作品は fail-closed で弾く。
+
+- [ ] **Step 1: スキーマ分岐の失敗テストを書く**
+
+`scripts/check-completeness.test.mjs` に追加する。`completeBlock` の自作品版を定義する。
+
+```js
+const completeOriginalBlock = {
+  ...complete,
+  blocks: ["dashboard-table"],
+  registry: { items: [{ name: "button" }, { name: "dashboard-table" }] },
+  previewFiles: ["button.astro", "button-dark.astro", "dashboard-table.astro", "dashboard-table-dark.astro"],
+  previewSources: ["button.tsx", "dashboard-table.tsx"],
+  provenance: {
+    ...complete.provenance,
+    blocks: {
+      "dashboard-table": {
+        origin: "elchika original",
+        license: "MIT",
+        modified: "上流 dashboard-01 の data-table.tsx を参照しつつ、npm 依存ゼロで自作。DnD は実装しない",
+        files: [
+          {
+            path: "src/blocks/dashboard-table/components/dashboard-table.tsx",
+            generatedContentSha256: "f".repeat(64),
+          },
+        ],
+      },
+    },
+  },
+};
+
+test("自作 block は上流由来キーを要求されない", () => {
+  const { problems } = checkCompleteness(completeOriginalBlock);
+  assert.deepEqual(problems, []);
+});
+
+test("自作 block に registryUrl があれば検出する", () => {
+  const provenance = structuredClone(completeOriginalBlock.provenance);
+  provenance.blocks["dashboard-table"].registryUrl = "https://ui.shadcn.com/r/x.json";
+  const { problems } = checkCompleteness({ ...completeOriginalBlock, provenance });
+  assert.deepEqual(problems, [
+    "dashboard-table: 自作 block は registryUrl を持たない",
+  ]);
+});
+
+test("自作 block の files に upstreamPathSha があれば検出する", () => {
+  const provenance = structuredClone(completeOriginalBlock.provenance);
+  provenance.blocks["dashboard-table"].files[0].upstreamPathSha = "0".repeat(40);
+  const { problems } = checkCompleteness({ ...completeOriginalBlock, provenance });
+  assert.deepEqual(problems, [
+    "dashboard-table: files[0] は自作 block なので upstreamPathSha を持たない",
+  ]);
+});
+
+test("未知の origin は fail-closed で弾く", () => {
+  const provenance = structuredClone(completeOriginalBlock.provenance);
+  provenance.blocks["dashboard-table"].origin = "unknown-source";
+  const { problems } = checkCompleteness({ ...completeOriginalBlock, provenance });
+  assert.deepEqual(problems, [
+    "dashboard-table: provenance の origin が未対応: unknown-source",
+  ]);
+});
+
+test("origin が無ければ検出する", () => {
+  const provenance = structuredClone(completeOriginalBlock.provenance);
+  provenance.blocks["dashboard-table"].origin = undefined;
+  const { problems } = checkCompleteness({ ...completeOriginalBlock, provenance });
+  assert.deepEqual(problems, ["dashboard-table: provenance の origin が無い"]);
+});
+
+test("移植品は従来どおり上流由来キーを要求される", () => {
+  const provenance = structuredClone(completeBlock.provenance);
+  provenance.blocks["login-01"].registryUrl = undefined;
+  const { problems } = checkCompleteness({ ...completeBlock, provenance });
+  assert.deepEqual(problems, ["login-01: provenance の registryUrl が無い"]);
+});
+```
+
+- [ ] **Step 2: テストを実行して失敗を確認する**
+
+Run: `node --test scripts/check-completeness.test.mjs`
+Expected: FAIL。`origin` を見ないため自作品が上流由来キーの欠落で弾かれる。
+
+- [ ] **Step 3: `origin` 分岐を実装する**
+
+`BLOCK_PROVENANCE_SPEC` を origin 別に分ける。既存の定数名は変えず、移植品用として残す。
+
+```js
+const ORIGINAL_BLOCK_PROVENANCE_SPEC = {
+  license: /^\S+$/,
+  modified: /\S/,
+};
+
+const BLOCK_ORIGINS = {
+  "shadcn/ui registry": {
+    spec: BLOCK_PROVENANCE_SPEC,
+    forbidden: [],
+    fileRequired: ["upstreamPath", "upstreamPathSha"],
+    fileForbidden: [],
+  },
+  "elchika original": {
+    spec: ORIGINAL_BLOCK_PROVENANCE_SPEC,
+    forbidden: ["registryUrl", "registryContentSha256", "addTarget", "shadcnCliVersion", "fetchedAt"],
+    fileRequired: [],
+    fileForbidden: ["upstreamPath", "upstreamPathSha", "dropped"],
+  },
+};
+```
+
+`blockProblems` の先頭で `origin` を解決し、未知の値・不在は fail-closed で停止する。禁止キーの検査を追加する。既存の移植品の経路は挙動を変えない。
+
+- [ ] **Step 4: テストを実行して通ることを確認する**
+
+Run: `node --test scripts/check-completeness.test.mjs`
+Expected: PASS（既存テストを含めて全件）
+
+- [ ] **Step 5: コミット**
+
+```bash
+git add scripts/check-completeness.mjs scripts/check-completeness.test.mjs
+git commit -m "feat: 来歴スキーマを origin 別へ分岐させる
+
+自作 block は上流 URL・配信物ハッシュ・commit SHA を持たないため、
+移植品前提のスキーマでは弾かれる。origin を軸に要求キーと禁止キーを
+分け、移植品を誤って自作として記録することを fail-closed で防ぐ。"
+```
+
+- [ ] **Step 6: `dashboard-table.tsx` を実装する**
+
+上流 `data-table.tsx` を**参照しつつ、依存ゼロで書き直す**。上流のコードをコピーしない（コピーすると来歴が移植品になる）。
+
+構成要素（設計 §3-6 の実測表に対応）:
+
+| 機能 | 実装 |
+|---|---|
+| テーブル本体 | `@/components/ui/table` |
+| 行の詳細パネル | `@/components/ui/drawer` |
+| 詳細内のチャート | `@/components/ui/chart` |
+| ソート | `React.useState` + `Array.prototype.sort` |
+| フィルタ | `React.useState` + `Array.prototype.filter` |
+| 列の表示切替 | `React.useState` + `@/components/ui/dropdown-menu` |
+| 行選択 | `React.useState` + `@/components/ui/checkbox` |
+| タブ切替 | `@/components/ui/tabs` |
+| 型 | TypeScript の型（`zod` を使わない） |
+| **行の並べ替え（DnD）** | **実装しない** |
+
+`import` してよいのは `react` と `@/components/ui/*` と `@/lib/utils` のみ。**npm 依存を 1 件も足さない。**
+
+- [ ] **Step 7: 依存ゼロを検証する**
+
+```
+grep -nE "from \"(@dnd-kit|@tanstack|zod)" src/blocks/dashboard-table/
+```
+Expected: ヒット 0 件（exit 1 が正しい）
+
+```
+git diff --exit-code package.json package-lock.json
+```
+Expected: exit 0（依存が 1 件も増えていない）
+
+- [ ] **Step 8: preview・selector・カテゴリ・来歴を登録する**
+
+Task 5 Step 4〜6 と同じ手順。カテゴリは「アプリシェル」。`provenance.blocks["dashboard-table"]` は Step 1 の fixture と同じ形で記録する。
+
+- [ ] **Step 9: 実ブラウザで「同等」を検証する**
+
+**自作 block には上流との突合先が無い。** 合否は次の構成要素が揃っていることで判定する。
+
+| 確認項目 | 判定 |
+|---|---|
+| テーブルが行データを描画する | light / dark 両方 |
+| 列ヘッダのクリックでソートが切り替わる | 実操作。`target` は有限数値文字列同士を数値順、数値と非数値を固定 bucket 順、非数値同士を `localeCompare` で並べる |
+| フィルタ入力で行が絞られる | 実操作 |
+| 列の表示切替メニューが機能する | 実操作 |
+| 行のチェックボックスで選択できる | 実操作 |
+| accessible name 付きの `Document button` で drawer が開き、中にチャートが出る。行自体は操作対象にしない | 実操作 |
+| **DnD は非搭載** | DnD の依存・import、handler、`draggable` や drag handle の affordance が無いことを検査し、実ブラウザでもドラッグ affordance と行順変更が無いことを確認する |
+
+証跡は `.docs/reviews/` へ light / dark で追加し、**DnD 非搭載を上流との既知の差分として report 本文に書く**。ソース検査では依存・import、handler、affordance の不在を固定し、実ブラウザでは drag affordance が描画されず行順を変更できないことを確認する。
+
+数値・非数値を混在させた `target` sort は、全 permutation が同じ全順序へ収束し、昇順・降順で順序が正確に反転することを検査する。
+
+- [ ] **Step 10: コミット**
+
+```bash
+git add src/blocks/dashboard-table src/previews/dashboard-table.tsx src/pages/preview/dashboard-table*.astro
+git add registry.json provenance.json preview-selectors.json src/catalog/component-categories.mjs .docs/reviews
+git commit -m "feat: dashboard-table を既存部品で自作する
+
+上流 data-table.tsx は npm 依存 6 件を持ち込むため移植せず、
+同等の機能を registry の既存部品で組み直した。DnD は自前実装の
+保守コストが高いため実装しない（設計 §3-6）。"
+```
+
+---
+
+## Task 9: 利用者向けドキュメントを更新する
 
 **Files:**
 - Modify: `README.md`, `AGENTS.md`
 
 **Interfaces:**
-- Consumes: Task 7 までの成果物
+- Consumes: Task 8 までの成果物
 
 - [ ] **Step 1: README に block の導入手順を書く**
 
@@ -1315,10 +1629,24 @@ Run: `npm run check:all`
 Expected: exit 0
 
 Run: `npm run build`
-Expected: exit 0。`public/r/` に 27 件の block JSON が生成される。
+Expected: exit 0。
 
-Run: `ls public/r/*.json | wc -l`
-Expected: 89（既存 62 + block 27）
+Run: 生成物と台帳の突合（件数を焼き込まない）
+
+```bash
+node scripts/check-registry-build.mjs
+```
+
+checker は次の完全性述語をすべて検査する。
+
+- `public/r` の JSON 集合は `registry.json` の全 item と既知の補助 JSON（`index.json` / `registry.json`）に一致し、欠落・退役 item の残留がない
+- 各 item JSON は `files[].content` を除く manifest が `registry.json` の対応 item と一致する
+- 各 `files[].content` は item が指す source file の実体と byte 一致する
+- `registry:build` の末尾で、file 名・JSON 内 `name`・`registry:*` type が一致する退役 item JSON だけを安全に除去する。未知・壊れた JSON は黙って削除せず checker が拒否する
+
+Expected: exit 0
+
+**件数で判定しない。** `registry.json` と `public/r/` の集合・manifest・content が一致することを述語で確認する。block が増減しても正しいままの形にする。
 
 - [ ] **Step 4: コミット**
 

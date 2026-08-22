@@ -1,0 +1,570 @@
+{
+  "verified_impl_sha": "2c1b6aa70c8e78dffefd5a80a2684ad758da0915",
+  "acceptedAudits": {
+    "light": {
+      "cursorStart": 18,
+      "cursorEnd": 781,
+      "pages": [
+        {
+          "cursor": 781,
+          "hasMore": false,
+          "truncated": false,
+          "eventCount": 161
+        }
+      ],
+      "truncated": false,
+      "eventCount": 161,
+      "responseCount": 158,
+      "httpErrors": [],
+      "requestFailures": [],
+      "pageExceptions": [],
+      "consoleErrors": []
+    },
+    "dark": {
+      "cursorStart": 782,
+      "cursorEnd": 1530,
+      "pages": [
+        {
+          "cursor": 1530,
+          "hasMore": false,
+          "truncated": false,
+          "eventCount": 161
+        }
+      ],
+      "truncated": false,
+      "eventCount": 161,
+      "responseCount": 158,
+      "httpErrors": [],
+      "requestFailures": [],
+      "pageExceptions": [],
+      "consoleErrors": []
+    },
+    "mobile": {
+      "cursorStart": 1531,
+      "cursorEnd": 2280,
+      "pages": [
+        {
+          "cursor": 2280,
+          "hasMore": false,
+          "truncated": false,
+          "eventCount": 161
+        }
+      ],
+      "truncated": false,
+      "eventCount": 161,
+      "responseCount": 158,
+      "httpErrors": [],
+      "requestFailures": [],
+      "pageExceptions": [],
+      "consoleErrors": []
+    },
+    "catalog": {
+      "cursorStart": 7197,
+      "cursorEnd": 9433,
+      "batchCount": 70,
+      "maxBatchEvents": 98,
+      "truncated": false,
+      "truncatedBatches": [],
+      "eventCount": 438,
+      "responseCount": 423,
+      "httpErrors": [],
+      "requestFailures": [],
+      "pageExceptions": [],
+      "consoleErrors": []
+    },
+    "catalogVisualInteraction": {
+      "cursorStart": 9434,
+      "cursorEnd": 9434,
+      "pages": [
+        {
+          "cursor": 9434,
+          "hasMore": false,
+          "truncated": false,
+          "eventCount": 0
+        }
+      ],
+      "truncated": false,
+      "eventCount": 0,
+      "responseCount": 0,
+      "httpErrors": [],
+      "requestFailures": [],
+      "pageExceptions": [],
+      "consoleErrors": []
+    }
+  },
+  "discardedAudits": {
+    "catalogInitial": {
+      "reason": "event buffer truncated=true のためエラー0判定には不採用",
+      "audit": {
+        "cursorStart": 2281,
+        "cursorEnd": 4954,
+        "pages": [
+          {
+            "cursor": 4954,
+            "hasMore": false,
+            "truncated": true,
+            "eventCount": 179
+          }
+        ],
+        "truncated": true,
+        "eventCount": 179,
+        "responseCount": 179,
+        "httpErrors": [],
+        "requestFailures": [],
+        "pageExceptions": [],
+        "consoleErrors": []
+      }
+    },
+    "catalogRetry100ms": {
+      "reason": "集中ロード中の1 batchでtruncated=trueのため不採用",
+      "audit": {
+        "cursorStart": 4956,
+        "cursorEnd": 7196,
+        "batches": [
+          {
+            "index": 0,
+            "cursor": 4960,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 1,
+            "cursor": 4960,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 2,
+            "cursor": 4995,
+            "eventCount": 4,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 3,
+            "cursor": 5015,
+            "eventCount": 4,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 4,
+            "cursor": 5126,
+            "eventCount": 32,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 5,
+            "cursor": 6071,
+            "eventCount": 124,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 6,
+            "cursor": 7149,
+            "eventCount": 250,
+            "hasMore": false,
+            "truncated": true
+          },
+          {
+            "index": 7,
+            "cursor": 7186,
+            "eventCount": 12,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 8,
+            "cursor": 7186,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 9,
+            "cursor": 7191,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 10,
+            "cursor": 7191,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 11,
+            "cursor": 7191,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 12,
+            "cursor": 7191,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 13,
+            "cursor": 7191,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 14,
+            "cursor": 7191,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 15,
+            "cursor": 7191,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 16,
+            "cursor": 7191,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 17,
+            "cursor": 7191,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 18,
+            "cursor": 7191,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 19,
+            "cursor": 7191,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 20,
+            "cursor": 7191,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 21,
+            "cursor": 7191,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 22,
+            "cursor": 7191,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 23,
+            "cursor": 7191,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 24,
+            "cursor": 7191,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 25,
+            "cursor": 7191,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 26,
+            "cursor": 7196,
+            "eventCount": 1,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 27,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 28,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 29,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 30,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 31,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 32,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 33,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 34,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 35,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 36,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 37,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 38,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 39,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 40,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 41,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 42,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 43,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 44,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 45,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 46,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 47,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 48,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 49,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 50,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 51,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 52,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 53,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 54,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 55,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 56,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 57,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 58,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          },
+          {
+            "index": 59,
+            "cursor": 7196,
+            "eventCount": 0,
+            "hasMore": false,
+            "truncated": false
+          }
+        ],
+        "truncated": true,
+        "eventCount": 427,
+        "responseCount": 412,
+        "httpErrors": [],
+        "requestFailures": [],
+        "pageExceptions": [],
+        "consoleErrors": []
+      }
+    }
+  },
+  "acceptedSummary": {
+    "observedResponseCount": 897,
+    "countPolicy": "今回観測値のみ。将来条件へ固定しない",
+    "http4xx5xx": 0,
+    "requestFailures": 0,
+    "pageExceptions": 0,
+    "consoleErrors": 0,
+    "allAcceptedBuffersTruncatedFalse": true,
+    "devErrorLogs": {
+      "light": [],
+      "dark": [],
+      "mobile": [],
+      "catalog": []
+    }
+  }
+}

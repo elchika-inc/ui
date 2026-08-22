@@ -83,10 +83,39 @@ export function createRegistryIndex(registry) {
   return index;
 }
 
+export function removeRetiredRegistryItems(registry, outputDirectory) {
+  const current = new Set((registry.items ?? []).map((item) => item.name));
+  const removed = [];
+  for (const file of readdirSync(outputDirectory)) {
+    if (!file.endsWith(".json") || file === "index.json" || file === "registry.json") continue;
+    const path = join(outputDirectory, file);
+    if (!lstatSync(path).isFile()) continue;
+    let item;
+    try {
+      item = JSON.parse(readFileSync(path, "utf8"));
+    } catch {
+      continue;
+    }
+    const name = basename(file, ".json");
+    if (
+      current.has(name) ||
+      item.name !== name ||
+      !String(item.type ?? "").startsWith("registry:")
+    ) {
+      continue;
+    }
+    rmSync(path);
+    removed.push(name);
+  }
+  return removed.sort();
+}
+
 export function writeRegistryIndex(registryPath, outputPath) {
   const registry = JSON.parse(readFileSync(registryPath, "utf8"));
   const index = createRegistryIndex(registry);
-  mkdirSync(dirname(outputPath), { recursive: true });
+  const outputDirectory = dirname(outputPath);
+  mkdirSync(outputDirectory, { recursive: true });
+  removeRetiredRegistryItems(registry, outputDirectory);
   writeFileSync(outputPath, `${JSON.stringify(index, null, 2)}\n`);
   return index;
 }
@@ -103,6 +132,6 @@ if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1]
   }
 }
 
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { lstatSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { basename, dirname, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";

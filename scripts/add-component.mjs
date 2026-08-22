@@ -3,17 +3,27 @@
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import {
+  copyFileSync,
   existsSync,
+  constants as fsConstants,
   mkdirSync,
   mkdtempSync,
   readFileSync,
-  renameSync,
   rmSync,
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { basename, dirname, extname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
+import { dependencyName, externalImports, importedModuleSpecifiers } from "./import-analysis.mjs";
+import { assertContainedPath, assertPathWithoutSymlinks } from "./path-safety.mjs";
+import {
+  localRegistryDependencyName,
+  normalizeRegistryDependencies,
+} from "./registry-dependency.mjs";
+import { SHARED_DEPENDENCIES, SHARED_REGISTRY_FILES } from "./registry-policy.mjs";
+
+export { normalizeRegistryDependencies } from "./registry-dependency.mjs";
 
 const DEPENDENCY_SECTIONS = [
   "dependencies",
@@ -31,10 +41,6 @@ export const CHANGE_CLASSIFICATION_RULES = [
   { kind: "dependency-manifest", paths: ["package.json", "package-lock.json"] },
 ];
 
-// 配布した tokens.css が @import する npm パッケージ。これが consumer の package.json に
-// 入らないと `@tailwindcss/cli` が "Can't resolve" で落ちる（実測）。
-const SHARED_DEPENDENCIES = ["tw-animate-css", "shadcn"];
-
 // registry item の description に出る名詞。配布物 public/r/*.json へ入り利用者へ届くので、
 // block を "component" と呼ばない。
 const ITEM_NOUN = {
@@ -42,29 +48,7 @@ const ITEM_NOUN = {
   "registry:block": "block",
 };
 
-const SHARED_REGISTRY_FILES = [
-  {
-    path: "src/styles/global.css",
-    type: "registry:file",
-    target: "~/elchika-ui/tokens.css",
-  },
-  {
-    path: "src/styles/design-system/tokens.css",
-    type: "registry:file",
-    target: "~/elchika-ui/design-system/tokens.css",
-  },
-  {
-    path: "src/styles/design-system/brands.css",
-    type: "registry:file",
-    target: "~/elchika-ui/design-system/brands.css",
-  },
-  { path: "LICENSE", type: "registry:file", target: "~/elchika-ui/LICENSE" },
-  {
-    path: "THIRD_PARTY_LICENSES",
-    type: "registry:file",
-    target: "~/elchika-ui/THIRD_PARTY_LICENSES",
-  },
-];
+const SHARED_CLI_OUTPUT_PATHS = new Set(SHARED_REGISTRY_FILES.map(({ target }) => target.slice(2)));
 
 const exactSemver =
   /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/;
@@ -155,6 +139,129 @@ function pinnedRegistryItem(name, upstreamText) {
     path,
     remove: () => rmSync(directory, { recursive: true, force: true }),
   };
+}
+
+function hasExplicitCliExclusions(target) {
+  return target.droppedFiles?.some((file) => file.excludeFromCli === true) ?? false;
+}
+
+function dependenciesForDistributedFiles(upstreamItem, target) {
+  if (!hasExplicitCliExclusions(target)) return upstreamItem.dependencies ?? [];
+  const distributedPaths = new Set(target.files.map((file) => file.registryPath));
+  const imported = new Set(
+    (upstreamItem.files ?? [])
+      .filter((file) => distributedPaths.has(file.path) && typeof file.content === "string")
+      .flatMap((file) => [...externalImports(file.content)]),
+  );
+  return (upstreamItem.dependencies ?? []).filter((dependency) =>
+    imported.has(dependencyName(dependency)),
+  );
+}
+
+function registryDependencyName(dependency) {
+  return localRegistryDependencyName(dependency);
+}
+
+function registryDependencyClosure(directDependencies, registryItems) {
+  const itemsByName = new Map();
+  for (const item of registryItems) {
+    const candidates = itemsByName.get(item.name) ?? [];
+    candidates.push(item);
+    itemsByName.set(item.name, candidates);
+  }
+  const closure = new Set();
+  const pending = [...directDependencies];
+  while (pending.length > 0) {
+    const name = registryDependencyName(pending.shift());
+    if (name === undefined) continue;
+    if (closure.has(name)) continue;
+    const candidates = itemsByName.get(name) ?? [];
+    if (candidates.length === 0) {
+      throw new Error(`registry dependency ${name} に対応する registry item が存在しない`);
+    }
+    if (candidates.length > 1) {
+      throw new Error(`registry dependency ${name} に対応する registry item が重複している`);
+    }
+    closure.add(name);
+    for (const dependency of candidates[0].registryDependencies ?? []) {
+      pending.push(dependency);
+    }
+  }
+  return closure;
+}
+
+function registryDependenciesForDistributedFiles(upstreamItem, target, registryItems) {
+  if (!hasExplicitCliExclusions(target)) return upstreamItem.registryDependencies ?? [];
+  const distributedPaths = new Set(target.files.map((file) => file.registryPath));
+  const directDependencies = new Set(
+    (upstreamItem.files ?? [])
+      .filter((file) => distributedPaths.has(file.path) && typeof file.content === "string")
+      .flatMap((file) => registryItemImports(file.content).map(({ name }) => name)),
+  );
+  const closure = registryDependencyClosure(directDependencies, registryItems);
+  return (upstreamItem.registryDependencies ?? []).filter((dependency) => {
+    const name = registryDependencyName(dependency);
+    return name === undefined || closure.has(name);
+  });
+}
+
+function droppedManifestDependencies(upstreamItem, target, registryItems) {
+  if (!hasExplicitCliExclusions(target)) {
+    return { dependencies: [], registryDependencies: [] };
+  }
+  const dependencies = new Set(dependenciesForDistributedFiles(upstreamItem, target));
+  const registryDependencies = new Set(
+    normalizeRegistryDependencies(
+      registryDependenciesForDistributedFiles(upstreamItem, target, registryItems),
+    ),
+  );
+  return {
+    dependencies: (upstreamItem.dependencies ?? [])
+      .filter((dependency) => !dependencies.has(dependency))
+      .sort(),
+    registryDependencies: (upstreamItem.registryDependencies ?? [])
+      .filter(
+        (dependency) => !registryDependencies.has(normalizeRegistryDependencies([dependency])[0]),
+      )
+      .map((dependency) => registryDependencyName(dependency) ?? dependency)
+      .sort(),
+  };
+}
+
+function modifiedWithDroppedDependencies(modified, upstreamItem, target, registryItems) {
+  const dropped = droppedManifestDependencies(upstreamItem, target, registryItems);
+  const notes = [];
+  if (dropped.dependencies.length > 0) {
+    notes.push(`上流 manifest から除外した dependencies: ${dropped.dependencies.join(", ")}`);
+  }
+  if (dropped.registryDependencies.length > 0) {
+    notes.push(
+      `上流 manifest から除外した registryDependencies: ${dropped.registryDependencies.join(", ")}`,
+    );
+  }
+  if (notes.length === 0) return modified;
+  return [modified.replace(/。+$/, ""), ...notes].join("。");
+}
+
+// provenance の hash は生の upstreamText に固定しつつ、CLI 入力から明示除外ファイルと
+// そのファイルだけが要求する npm 依存を落とす。
+function registryTextForCli(upstreamText, upstreamItem, target, registryItems) {
+  if (!hasExplicitCliExclusions(target)) return upstreamText;
+  const excluded = new Set(
+    target.droppedFiles
+      .filter((file) => file.excludeFromCli === true)
+      .map((file) => file.registryPath),
+  );
+  return JSON.stringify({
+    ...JSON.parse(upstreamText),
+    files: (upstreamItem.files ?? []).filter((file) => !excluded.has(file.path)),
+    dependencies: dependenciesForDistributedFiles(upstreamItem, target),
+    registryDependencies: registryDependenciesForDistributedFiles(
+      upstreamItem,
+      target,
+      registryItems,
+    ),
+  });
 }
 
 export function trackedFiles(root) {
@@ -278,13 +385,6 @@ export function reconcileAddChanges({
   };
 }
 
-export function normalizeRegistryDependencies(dependencies = []) {
-  return dependencies.map((dependency) => {
-    if (dependency.startsWith("@") || dependency.includes("://")) return dependency;
-    return `@elchika/${dependency}`;
-  });
-}
-
 export function shouldSkipRecorded(provenance, name, force, kind = "component") {
   const section = kind === "block" ? provenance.blocks : provenance.components;
   return Boolean(section?.[name]) && !force;
@@ -299,13 +399,14 @@ export function blockRelocationPlan(target) {
   const seen = new Set();
   return target.files.map((file) => {
     const base = basename(file.registryPath);
+    const from = file.cliOutputPath ?? `src/components/${base}`;
     // CLI がフラット化する以上、同一 block 内で basename が衝突すると移設先を一意に決められない。
     // 実測では衝突しないが、上流の将来変更で静かに取り違えるより止める。
-    if (seen.has(base)) {
+    if (seen.has(from)) {
       throw new Error(`${file.targetPath}: 移設元の basename が重複: ${base}`);
     }
-    seen.add(base);
-    return { from: `src/components/${base}`, to: file.targetPath };
+    seen.add(from);
+    return { from, to: file.targetPath };
   });
 }
 
@@ -333,21 +434,69 @@ export function rewriteBlockSiblingImports(source, targetPath, targetFiles) {
   return { content, rewritten };
 }
 
+function ensureBlockRelocationSources(root, plan, registryFileSources) {
+  // 全件を移設前に確認する。途中まで copy してから不足へ気付くと、同じ失敗でも
+  // worktree の残り方が file 順に依存し、再開時の復元範囲が不安定になる。
+  for (const { from } of plan) {
+    assertPathWithoutSymlinks(root, "block の CLI 生成先", from);
+    if (existsSync(join(root, from))) continue;
+    const label = registryFileSources.has(from)
+      ? "registry:file の CLI 生成先"
+      : "block の CLI 生成先";
+    throw new Error(`${label}が存在しない: ${from}`);
+  }
+}
+
+function removeObsoleteBlockFiles(root, plannedTargets, overwriteTargets, log) {
+  // --force で上流から消えたファイルは、前回来歴に記録された path だけを削除する。
+  // 新しい生成元を全件確認した後に行い、CLI の生成不足で旧 block が部分欠損しないようにする。
+  for (const path of overwriteTargets) {
+    if (plannedTargets.has(path) || !existsSync(join(root, path))) continue;
+    assertPathWithoutSymlinks(root, "上流から消えた block file", path);
+    rmSync(join(root, path));
+    log(`上流から消えた block file を削除: ${path}`);
+  }
+}
+
+function copyBlockFile(root, from, to, overwriteTargets) {
+  assertPathWithoutSymlinks(root, "block の移設元", from);
+  assertPathWithoutSymlinks(root, "block の移設先", to);
+  const fromPath = join(root, from);
+  const toPath = join(root, to);
+  mkdirSync(dirname(toPath), { recursive: true });
+  assertPathWithoutSymlinks(root, "block の移設先", to);
+  // rename は POSIX では既存の移設先を上書きする。副作用前の検査に加え、
+  // 新規 path は COPYFILE_EXCL で競合を止める。--force でも上書きできるのは
+  // 前回来歴に記録された同じ block の path だけに限定する。
+  if (existsSync(toPath)) {
+    if (!overwriteTargets.has(to)) {
+      throw new Error(`block の移設先に想定外の競合が生じた: ${to}`);
+    }
+    copyFileSync(fromPath, toPath);
+  } else {
+    copyFileSync(fromPath, toPath, fsConstants.COPYFILE_EXCL);
+  }
+  rmSync(fromPath);
+}
+
 // reconcile より前に呼ぶ。移設を後にすると src/components/<basename> が
 // 変更パスとして残り、どのルールにも一致せず fail-closed で止まる。
-function relocateBlockFiles(root, target, log) {
+function relocateBlockFiles(root, target, log, overwriteTargets = new Set()) {
   const plan = blockRelocationPlan(target);
+  const plannedTargets = new Set(plan.map(({ to }) => to));
+  const registryFileSources = new Set(
+    target.files.map((file) => file.cliOutputPath).filter(Boolean),
+  );
+  ensureBlockRelocationSources(root, plan, registryFileSources);
+  removeObsoleteBlockFiles(root, plannedTargets, overwriteTargets, log);
   for (const { from, to } of plan) {
-    const fromPath = join(root, from);
-    // 生成されなかった場合はここで止めず、後段の生成確認に一本化する。
-    if (!existsSync(fromPath)) continue;
-    mkdirSync(dirname(join(root, to)), { recursive: true });
-    renameSync(fromPath, join(root, to));
+    copyBlockFile(root, from, to, overwriteTargets);
     log(`移設: ${from} -> ${to}`);
   }
   for (const { to } of plan) {
     const path = join(root, to);
     if (!existsSync(path)) continue;
+    assertPathWithoutSymlinks(root, "block の import 書換先", to);
     const source = readFileSync(path, "utf8");
     const { content, rewritten } = rewriteBlockSiblingImports(source, to, target.files);
     if (rewritten.length === 0) continue;
@@ -358,36 +507,79 @@ function relocateBlockFiles(root, target, log) {
   }
 }
 
-function dependencyName(specifier) {
-  if (specifier.startsWith("@")) {
-    const [scope, packagePart] = specifier.split("/");
-    return packagePart ? `${scope}/${packagePart.split("@")[0]}` : specifier;
+function blockOverwriteTargets(provenance, name, force) {
+  if (!force || !provenance.blocks?.[name]) return new Set();
+  const block = provenance.blocks[name];
+  if (block.origin !== "shadcn/ui registry") {
+    throw new Error(
+      `${name}: --force は origin が shadcn/ui registry の既存 block だけに使用できる`,
+    );
   }
-  return specifier.split("@")[0];
-}
-
-function packageFromImport(specifier) {
-  if (specifier.startsWith("@/")) return undefined;
-  if (specifier.startsWith(".") || specifier.startsWith("node:")) return undefined;
-  if (specifier.startsWith("@")) return specifier.split("/").slice(0, 2).join("/");
-  return specifier.split("/")[0];
-}
-
-function externalImports(source) {
-  const packages = new Set();
-  const pattern = /(?:from\s*|import\s*)["']([^"']+)["']/g;
-  for (const match of source.matchAll(pattern)) {
-    const name = packageFromImport(match[1]);
-    if (name && !["react", "react-dom"].includes(name)) packages.add(name);
+  const files = block.files;
+  if (!Array.isArray(files)) {
+    throw new Error(`${name}: --force には既存 block の files 来歴が必要`);
   }
-  return packages;
+  const prefix = `src/blocks/${name}/`;
+  return new Set(
+    files
+      .filter((file) => file.dropped !== true)
+      .map((file) => {
+        const path = assertContainedPath(`${name}: 既存 block 来歴の path`, file.path);
+        if (!path.startsWith(prefix)) {
+          throw new Error(`${name}: 既存 block 来歴の path が block 配下でない: ${path}`);
+        }
+        return path;
+      }),
+  );
 }
 
-function registryUiImports(source) {
-  const names = new Set();
-  const pattern = /(?:from\s*|import\s*)["']@\/components\/ui\/([a-z0-9]+(?:-[a-z0-9]+)*)["']/g;
-  for (const match of source.matchAll(pattern)) names.add(match[1]);
-  return names;
+// CLI は --overwrite で動くため、registry:file の実生成先と最終移設先を副作用前に検査する。
+// 実移設時にも新規 path には COPYFILE_EXCL を使い、検査後の競合を上書きしない。
+function prepareBlockRelocation(root, target, overwriteTargets = new Set()) {
+  const registryFileSources = new Set(
+    target.files.map((file) => file.cliOutputPath).filter(Boolean),
+  );
+  for (const { from, to } of blockRelocationPlan(target)) {
+    const sourceLabel = registryFileSources.has(from)
+      ? "registry:file の CLI 生成先"
+      : "block の CLI 生成先";
+    assertPathWithoutSymlinks(root, sourceLabel, from);
+    if (existsSync(join(root, from))) {
+      throw new Error(`${sourceLabel}が実行前から存在する: ${from}`);
+    }
+    assertPathWithoutSymlinks(root, "block の移設先", to);
+    if (existsSync(join(root, to)) && !overwriteTargets.has(to)) {
+      throw new Error(`block の移設先が実行前から存在する: ${to}`);
+    }
+  }
+}
+
+function registryItemImports(source, fileName = "registry item") {
+  const dependencies = new Map();
+  const pattern = /^@\/(components\/ui|registry\/base-nova\/ui|hooks)\/([a-z0-9]+(?:-[a-z0-9]+)*)$/;
+  for (const specifier of importedModuleSpecifiers(source, fileName)) {
+    const match = specifier.match(pattern);
+    if (!match) continue;
+    const prefix = match[1];
+    const name = match[2];
+    const expectedType = prefix === "hooks" ? "registry:hook" : "registry:ui";
+    dependencies.set(`${expectedType}:${name}`, {
+      name,
+      expectedType,
+      specifier: `@/${prefix}/${name}`,
+    });
+  }
+  return [...dependencies.values()];
+}
+
+function assertNoSharedRegistryTargetCollisions(name, itemFiles) {
+  const sharedTargets = new Set(SHARED_REGISTRY_FILES.map((file) => file.target));
+  const collision = itemFiles.find(
+    (file) => file.type === "registry:file" && sharedTargets.has(file.target),
+  );
+  if (collision) {
+    throw new Error(`${name}: registry:file の target が共有配布 file と衝突: ${collision.target}`);
+  }
 }
 
 export function completeBlockRegistryDependencies(
@@ -397,14 +589,18 @@ export function completeBlockRegistryDependencies(
   registryItems,
 ) {
   const dependencies = new Set(normalizeRegistryDependencies(upstreamDependencies));
-  for (const dependency of registryUiImports(generatedSource)) {
-    const dependencyItem = registryItems.find(
-      (candidate) => candidate.name === dependency && candidate.type === "registry:ui",
-    );
-    if (!dependencyItem) {
+  for (const { name: dependency, expectedType, specifier } of registryItemImports(
+    generatedSource,
+  )) {
+    const candidates = registryItems.filter((candidate) => candidate.name === dependency);
+    const dependencyItem = candidates.find((candidate) => candidate.type === expectedType);
+    if (!dependencyItem && candidates.length === 0) {
       throw new Error(
-        `${name}: @/components/ui/${dependency} に対応する registry item が存在しない`,
+        `${name}: ${specifier} に対応する registry item が存在しない（期待 type: ${expectedType}）`,
       );
+    }
+    if (!dependencyItem) {
+      throw new Error(`${name}: ${dependency} の type が ${expectedType} でない`);
     }
     dependencies.add(`@elchika/${dependency}`);
   }
@@ -413,23 +609,6 @@ export function completeBlockRegistryDependencies(
 
 const UPSTREAM_PREFIX = "apps/v4/registry/bases/base/";
 const REGISTRY_PREFIX = "registry/base-nova/";
-
-// 上流 registry の応答に含まれる path は、そのまま join() → mkdirSync / renameSync /
-// rmSync へ流れる値。prefix の検査だけでは prefix より後ろの `..` が通り、repo 外へ
-// 書き込める。副作用より前で止めないと、fail-closed のゲートが後ろにあっても手遅れになる。
-function assertContainedPath(label, path) {
-  const normalized = relative(".", resolve(".", path));
-  if (
-    isAbsolute(path) ||
-    !normalized ||
-    normalized === ".." ||
-    normalized.startsWith(`..${sep}`) ||
-    normalized !== path
-  ) {
-    throw new Error(`${label}: repo 内の通常相対 path でない: ${path}`);
-  }
-  return path;
-}
 
 // 文字列引数の replace は先頭アンカーを持たず「最初に現れた出現位置」を消すため、
 // prefix が先頭以外にあるパス（vendor/registry/base-nova/...）を黙って別物へ変換する。
@@ -444,12 +623,62 @@ const upstreamPathOf = (registryPath) => {
 // 上流 block が持ちうる file type のうち、この機構が正しく扱えると実証済みのもの。
 // 「registry:page 以外は全部配布」にすると未知の type を黙って配布側へ流す。
 //
-// registry:component だけに絞る。blockRelocationPlan の移設元は components alias 直下の
-// 固定で、CLI は type ごとに別 alias へ落とす（registry:ui → aliases.ui、
-// registry:hook → aliases.hooks）ため、その 2 種は移設元が一致せず扱えない。
-// registry:file（dashboard-01 の data.json）は CLI が item の target へ書くため同様。
-// 扱えるようになるまで fail-closed で止める。
-const SUPPORTED_BLOCK_FILE_TYPES = new Set(["registry:component"]);
+// registry:component は components alias 直下、registry:file は上流 target から
+// CLI 4.16.0 の実生成先を解決できる。この 2 種だけを許可する。
+const SUPPORTED_BLOCK_FILE_TYPES = new Set(["registry:component", "registry:file"]);
+
+// dashboard-01 固有の採用判断。別 block の同名ファイルを巻き込まないよう、
+// block 名と上流 registry path の完全一致で指定する。
+const BLOCK_FILE_EXCLUSIONS = new Map([
+  ["dashboard-01", new Set(["registry/base-nova/blocks/dashboard-01/components/data-table.tsx"])],
+]);
+
+function cliOutputPathForRegistryFile(name, upstreamTargetPath) {
+  // 2026-08-22 に shadcn CLI 4.16.0 で実測した規則。target が `~/` で始まる場合は
+  // `~/` を除いて repo root 相対へ、それ以外は先頭の `src/` を一度除いてから source root の
+  // `src/` を前置して生成する。これにより `src/` 始まりの target も二重化しない。
+  // registry item へ残す upstreamTargetPath とは別概念であり、配布 target 自体は変更しない。
+  const sourceRootRelativePath = upstreamTargetPath.startsWith("src/")
+    ? upstreamTargetPath.slice("src/".length)
+    : upstreamTargetPath;
+  const cliOutputPath = upstreamTargetPath.startsWith("~/")
+    ? upstreamTargetPath.slice(2)
+    : `src/${sourceRootRelativePath}`;
+  if (!cliOutputPath.startsWith("src/") && !SHARED_CLI_OUTPUT_PATHS.has(cliOutputPath)) {
+    throw new Error(`${name}: registry:file の CLI 生成先が許可領域外: ${cliOutputPath}`);
+  }
+  return assertContainedPath(`${name}: registry:file の CLI 生成先`, cliOutputPath);
+}
+
+function resolveDistributedBlockFile(name, file, registryPath, blockPrefix) {
+  if (!SUPPORTED_BLOCK_FILE_TYPES.has(file.type)) {
+    throw new Error(
+      `${name}: block の file type が未対応: ${file.type ?? "なし"} (${registryPath})`,
+    );
+  }
+  if (file.type === "registry:component" && file.target !== undefined) {
+    throw new Error(`${name}: registry:component に target は指定できない: ${file.target}`);
+  }
+  let upstreamTargetPath;
+  let cliOutputPath;
+  if (file.type === "registry:file") {
+    if (typeof file.target !== "string" || !file.target) {
+      throw new Error(`${name}: registry:file に target が無い: ${registryPath}`);
+    }
+    upstreamTargetPath = assertContainedPath(`${name}: registry:file の target`, file.target);
+    cliOutputPath = cliOutputPathForRegistryFile(name, upstreamTargetPath);
+  }
+  return {
+    registryPath,
+    targetPath: assertContainedPath(
+      `${name}: block の targetPath`,
+      `src/blocks/${name}/${registryPath.slice(blockPrefix.length)}`,
+    ),
+    upstreamPath: upstreamPathOf(registryPath),
+    fileType: file.type,
+    ...(upstreamTargetPath ? { upstreamTargetPath, cliOutputPath } : {}),
+  };
+}
 
 // block は「利用者が 1 つ選んでコピーする雛形」なので、page.tsx は 27 件すべてが同名で衝突する。
 // standards が Next.js を標準スタック外としているため target: app/<name>/page.tsx も配れない。
@@ -464,6 +693,14 @@ function resolveBlockTarget(name, upstreamItem) {
       throw new Error(`${name}: block の file path が想定外: ${registryPath ?? "なし"}`);
     }
     assertContainedPath(`${name}: block の registry path`, registryPath);
+    if (BLOCK_FILE_EXCLUSIONS.get(name)?.has(registryPath)) {
+      droppedFiles.push({
+        registryPath,
+        upstreamPath: upstreamPathOf(registryPath),
+        excludeFromCli: true,
+      });
+      continue;
+    }
     if (file.type === "registry:page") {
       droppedFiles.push({
         registryPath,
@@ -472,23 +709,7 @@ function resolveBlockTarget(name, upstreamItem) {
       });
       continue;
     }
-    if (!SUPPORTED_BLOCK_FILE_TYPES.has(file.type)) {
-      throw new Error(
-        `${name}: block の file type が未対応: ${file.type ?? "なし"} (${registryPath})`,
-      );
-    }
-    if (file.target !== undefined) {
-      throw new Error(`${name}: registry:component に target は指定できない: ${file.target}`);
-    }
-    files.push({
-      registryPath,
-      targetPath: assertContainedPath(
-        `${name}: block の targetPath`,
-        `src/blocks/${name}/${registryPath.slice(blockPrefix.length)}`,
-      ),
-      upstreamPath: upstreamPathOf(registryPath),
-      fileType: file.type,
-    });
+    files.push(resolveDistributedBlockFile(name, file, registryPath, blockPrefix));
   }
   if (files.length === 0) {
     throw new Error(`${name}: 配布対象のファイルが 0 件`);
@@ -530,10 +751,10 @@ export function resolveRegistryTarget(name, upstreamItem) {
 
 export function buildRegistryItem(name, upstreamItem, generatedSource, target, registryItems = []) {
   const dependenciesByName = new Map();
-  for (const dependency of upstreamItem.dependencies ?? []) {
+  for (const dependency of dependenciesForDistributedFiles(upstreamItem, target)) {
     dependenciesByName.set(dependencyName(dependency), dependency);
   }
-  for (const dependency of externalImports(generatedSource)) {
+  for (const dependency of externalImports(generatedSource, `${name}: 生成物`)) {
     if (!dependenciesByName.has(dependency)) dependenciesByName.set(dependency, dependency);
   }
   for (const dependency of SHARED_DEPENDENCIES) {
@@ -544,8 +765,16 @@ export function buildRegistryItem(name, upstreamItem, generatedSource, target, r
   // registry:page は resolveRegistryTarget が droppedFiles へ振り分け済みなのでここには来ない。
   const itemFiles =
     target.itemType === "registry:block"
-      ? target.files.map(({ targetPath, fileType }) => ({ path: targetPath, type: fileType }))
+      ? target.files.map(({ targetPath, fileType, upstreamTargetPath }) => ({
+          path: targetPath,
+          type: fileType,
+          // registry:file の target は利用者プロジェクトでの配置先なので上流値を保つ。
+          // 当リポジトリへ取り込む際の CLI 生成先（cliOutputPath）とは別概念である。
+          ...(fileType === "registry:file" ? { target: upstreamTargetPath } : {}),
+        }))
       : [{ path: target.targetPath, type: target.itemType }];
+
+  assertNoSharedRegistryTargetCollisions(name, itemFiles);
 
   const item = {
     $schema: "https://ui.shadcn.com/schema/registry-item.json",
@@ -565,7 +794,7 @@ export function buildRegistryItem(name, upstreamItem, generatedSource, target, r
     target.itemType === "registry:block"
       ? completeBlockRegistryDependencies(
           name,
-          upstreamItem.registryDependencies,
+          registryDependenciesForDistributedFiles(upstreamItem, target, registryItems),
           generatedSource,
           registryItems,
         )
@@ -596,7 +825,7 @@ async function fetchJsonWithText(url, fetchImpl) {
   return { json: JSON.parse(text), text };
 }
 
-async function provenanceEntry({
+function provenanceEntry({
   root,
   name,
   modified,
@@ -605,22 +834,10 @@ async function provenanceEntry({
   upstreamItem,
   target,
   registryUrl,
-  fetchImpl,
+  upstreamPathSha,
 }) {
   const upstreamRepo = "shadcn-ui/ui";
   const upstreamPath = target.upstreamPath;
-  await fetchJson(
-    `https://api.github.com/repos/${upstreamRepo}/contents/${upstreamPath}`,
-    fetchImpl,
-  );
-  const commits = await fetchJson(
-    `https://api.github.com/repos/${upstreamRepo}/commits?path=${encodeURIComponent(upstreamPath)}&per_page=1`,
-    fetchImpl,
-  );
-  const upstreamPathSha = commits?.[0]?.sha;
-  if (!/^[0-9a-f]{40}$/.test(upstreamPathSha ?? "")) {
-    throw new Error(`${name}: 元テンプレートの commit SHA を特定できない`);
-  }
 
   const servedFile = upstreamItem.files?.find((file) => file.path === target.registryPath);
   if (!servedFile?.content) throw new Error(`${name}: registry 応答に primary content が無い`);
@@ -668,7 +885,7 @@ async function upstreamCommitSha(upstreamRepo, upstreamPath, fetchImpl, name) {
   return sha;
 }
 
-async function blockProvenanceEntry({
+function blockProvenanceEntry({
   root,
   name,
   modified,
@@ -676,17 +893,9 @@ async function blockProvenanceEntry({
   upstreamText,
   target,
   registryUrl,
-  fetchImpl,
+  upstreamPathSha,
 }) {
   const upstreamRepo = "shadcn-ui/ui";
-
-  // block ディレクトリ単位で 1 コールに畳む。ファイルごとに叩くと未認証の GitHub API
-  // （60 req/h）を 27 件 × 平均 4 ファイルで確実に超え、しかも 403 は shadcn CLI が
-  // 作業ツリーを書き換えた後に起きるので、次回実行が ensureClean で止まる。
-  // 意味は「このファイルを最後に変えた commit」から「この block を最後に変えた commit」
-  // へ広がる（login-01 は配布分と page が同一 SHA で、実測上の差は無かった）。
-  const blockUpstreamDir = `${UPSTREAM_PREFIX}blocks/${name}`;
-  const upstreamPathSha = await upstreamCommitSha(upstreamRepo, blockUpstreamDir, fetchImpl, name);
 
   const files = target.files.map((file) => ({
     path: file.targetPath,
@@ -730,7 +939,7 @@ async function blockProvenanceEntry({
       "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。" +
       "files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。" +
       "upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。" +
-      "dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。" +
+      "dropped: true の file は配布しない上流 file を表し、理由は modified に記録する。" +
       "CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。",
   };
 }
@@ -773,6 +982,7 @@ function prepareDroppedPages(root, target) {
     if (!droppedTarget.startsWith("app/") || !droppedTarget.endsWith("/page.tsx")) {
       throw new Error(`registry:page の target が許可した page path でない: ${droppedTarget}`);
     }
+    assertPathWithoutSymlinks(root, "registry:page の target", droppedTarget);
     if (existsSync(join(root, droppedTarget))) {
       throw new Error(`registry:page の target が実行前から存在する: ${droppedTarget}`);
     }
@@ -784,6 +994,7 @@ function prepareDroppedPages(root, target) {
 function removeDroppedPages(root, droppedTargets, log) {
   for (const droppedTarget of droppedTargets) {
     if (!existsSync(join(root, droppedTarget))) continue;
+    assertPathWithoutSymlinks(root, "registry:page の target", droppedTarget);
     rmSync(join(root, droppedTarget));
     log(`配布しない page を削除: ${droppedTarget}`);
   }
@@ -797,6 +1008,27 @@ function createProvenanceEntry({ isBlock, upstreamText, ...rest }) {
   return provenanceEntry(rest);
 }
 
+async function fetchProvenanceMetadata({ isBlock, name, target, fetchImpl }) {
+  const upstreamRepo = "shadcn-ui/ui";
+  if (isBlock) {
+    // block ディレクトリ単位で 1 コールに畳む。ファイルごとに叩くと未認証の GitHub API
+    // （60 req/h）を 27 件 × 平均 4 ファイルで確実に超える。CLI の副作用より前に固定し、
+    // API 失敗で既存 block が部分更新されないようにする。
+    const blockUpstreamDir = `${UPSTREAM_PREFIX}blocks/${name}`;
+    return {
+      upstreamPathSha: await upstreamCommitSha(upstreamRepo, blockUpstreamDir, fetchImpl, name),
+    };
+  }
+
+  await fetchJson(
+    `https://api.github.com/repos/${upstreamRepo}/contents/${target.upstreamPath}`,
+    fetchImpl,
+  );
+  return {
+    upstreamPathSha: await upstreamCommitSha(upstreamRepo, target.upstreamPath, fetchImpl, name),
+  };
+}
+
 // 正規化後にハッシュだけを取り直す。CLI も通信も行わない。
 // ensureClean を求めないのは、正規化した変更が作業ツリーに載っている状態で
 // 呼ぶための経路だから（求めると、この関数を使う唯一の場面で必ず弾かれる）。
@@ -808,7 +1040,8 @@ export function resyncBlockHashes({ root, name, modified, provenance, log = cons
   const updated = [];
   for (const file of entry.files) {
     if (file.dropped === true) continue;
-    const absolute = join(root, assertContainedPath(`${name}: 来歴の path`, file.path));
+    const safePath = assertPathWithoutSymlinks(root, `${name}: 来歴の path`, file.path);
+    const absolute = join(root, safePath);
     if (!existsSync(absolute)) {
       throw new Error(`${name}: 来歴にある ${file.path} が存在しない`);
     }
@@ -852,6 +1085,9 @@ export async function runAddComponent({
   );
   const target = resolveRegistryTarget(name, upstreamItem);
   const isBlock = target.itemType === "registry:block";
+  if (!isBlock) {
+    assertPathWithoutSymlinks(repositoryRoot, `${name}: CLI 生成先`, target.targetPath);
+  }
 
   // lane の衝突を provenance だけで判断すると、台帳の部分欠損時に同名の
   // registry item や disk 実体を上書きできてしまう。CLI の副作用より前に、
@@ -881,14 +1117,29 @@ export async function runAddComponent({
     return { skipped: true };
   }
 
+  const overwriteTargets = isBlock ? blockOverwriteTargets(provenance, name, force) : new Set();
+  if (isBlock) prepareBlockRelocation(repositoryRoot, target, overwriteTargets);
+
   // 外部 registry が指定する削除対象は CLI の副作用より前に検証する。
   // 実行前から存在する path は CLI が上書きする可能性もあるため、先に停止する。
   const droppedTargets = prepareDroppedPages(repositoryRoot, target);
 
+  // 来歴に必要な外部メタデータは、CLI・移設・削除より前に全件取得する。
+  // 後段に外部通信を残すと、API の一過性失敗だけで既存 block が部分更新される。
+  const provenanceMetadata = await fetchProvenanceMetadata({
+    isBlock,
+    name,
+    target,
+    fetchImpl,
+  });
+
   // 検証・来歴hash・CLI実行を同じresponse bytesへ束縛する。
   // @shadcn/<name>を渡すとCLIがremoteを再取得し、preflight後に内容が変わる
   // TOCTOUが生じるため、shadcn公式のlocal item入力を使う。
-  const pinnedItem = pinnedRegistryItem(name, upstreamText);
+  const pinnedItem = pinnedRegistryItem(
+    name,
+    registryTextForCli(upstreamText, upstreamItem, target, registryBefore.items),
+  );
   try {
     const command = shadcnCommand(cliVersion, pinnedItem.path);
     runCommand(command.command, command.args, { cwd: repositoryRoot, stdio: "inherit" });
@@ -896,7 +1147,7 @@ export async function runAddComponent({
     pinnedItem.remove();
   }
 
-  if (isBlock) relocateBlockFiles(repositoryRoot, target, log);
+  if (isBlock) relocateBlockFiles(repositoryRoot, target, log, overwriteTargets);
   // reconcile より前に呼ぶ。後にすると、CLI が作った app/<name>/page.tsx が
   // どの分類ルールにも一致せず reconcile が先に停止し、この防御へ到達しない。
   removeDroppedPages(repositoryRoot, droppedTargets, log);
@@ -924,18 +1175,18 @@ export async function runAddComponent({
         .map(({ targetPath }) => readFileSync(join(repositoryRoot, targetPath), "utf8"))
         .join("\n")
     : readFileSync(join(repositoryRoot, target.targetPath), "utf8");
-  const entry = await createProvenanceEntry({
+  const entry = createProvenanceEntry({
     root: repositoryRoot,
     isBlock,
     name,
-    modified,
+    modified: modifiedWithDroppedDependencies(modified, upstreamItem, target, registryBefore.items),
     cliVersion,
     generatedSource,
     upstreamItem,
     upstreamText,
     target,
     registryUrl,
-    fetchImpl,
+    ...provenanceMetadata,
   });
 
   if (isBlock) {

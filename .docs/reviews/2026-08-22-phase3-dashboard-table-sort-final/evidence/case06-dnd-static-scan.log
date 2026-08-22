@@ -1,0 +1,3 @@
+rg_exit_code: 1
+expected_for_absence: 1
+scanned: src/blocks/dashboard-table package.json

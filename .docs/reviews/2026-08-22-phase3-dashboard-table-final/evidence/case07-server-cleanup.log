@@ -1,0 +1,75 @@
+verified_impl_sha: 7ccde67f72f6913da48065c1d160280e4ad410fd
+finished_at: 2026-08-22T17:51:32+0900
+os: Darwin inta-m5-mac.local 25.3.0 Darwin Kernel Version 25.3.0: Wed Jan 28 20:56:42 PST 2026; root:xnu-12377.91.3~2/RELEASE_ARM64_T8142 arm64
+node: v26.7.0
+npm: 11.19.0
+
+[before] requested port 4321 (unrelated, must remain)
+COMMAND   PID      USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+node    11102 nishikawa   16u  IPv6 0x4ab606964c53b841      0t0  TCP *:4321 (LISTEN)
+port4321_before_exit: 0
+
+[before] actual target port 4322
+COMMAND   PID      USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+node    56701 nishikawa   29u  IPv4 0x1799ef30b8cb9c29      0t0  TCP 127.0.0.1:4322 (LISTEN)
+port4322_before_exit: 0
+
+[astro status before]
+{"message":"Dev server running at http://127.0.0.1:4322 (pid 56701, uptime 755s, background)","label":"SKIP_FORMAT","level":"info"}
+astro_status_before_exit: 0
+
+[astro stop]
+{"message":"Stopped dev server (pid 56701).","label":"SKIP_FORMAT","level":"info"}
+astro_stop_exit: 0
+
+[after] actual target port 4322
+port4322_after_exit: 1 (1 means no LISTEN)
+
+[after] requested port 4321 (unrelated, must remain)
+COMMAND   PID      USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+node    11102 nishikawa   16u  IPv6 0x4ab606964c53b841      0t0  TCP *:4321 (LISTEN)
+port4321_after_exit: 0 (0 means unrelated LISTEN preserved)
+
+[astro status after]
+{"message":"No dev server is running.","label":"SKIP_FORMAT","level":"info"}
+astro_status_after_exit: 0
+
+[image magic]
+.docs/reviews/2026-08-22-phase3-dashboard-table-final/evidence/2026-08-22-dashboard-table-dark.jpg:        JPEG image data, JFIF standard 1.01, aspect ratio, density 1x1, segment length 16, baseline, precision 8, 1536x1000, components 3
+.docs/reviews/2026-08-22-phase3-dashboard-table-final/evidence/2026-08-22-dashboard-table-light.jpg:       JPEG image data, JFIF standard 1.01, aspect ratio, density 1x1, segment length 16, baseline, precision 8, 1536x1000, components 3
+.docs/reviews/2026-08-22-phase3-dashboard-table-final/evidence/case03-catalog-dashboard-table-visible.jpg: JPEG image data, JFIF standard 1.01, aspect ratio, density 1x1, segment length 16, baseline, precision 8, 1920x1000, components 3
+00000000: ffd8 ffe0 0010 4a46 4946 0001            ......JFIF..
+00000000: ffd8 ffe0 0010 4a46 4946 0001            ......JFIF..
+00000000: ffd8 ffe0 0010 4a46 4946 0001            ......JFIF..
+
+[image sha256]
+a04cf20d925fae22d7f23a274b91f904ce9c4602c410b79c8a260eb65885125f  .docs/reviews/2026-08-22-phase3-dashboard-table-final/evidence/2026-08-22-dashboard-table-dark.jpg
+a740f5ec46c6d94f5070a53bd649ddfb7d1ed0fc4ea92d279c5cb0bc362a0e0a  .docs/reviews/2026-08-22-phase3-dashboard-table-final/evidence/2026-08-22-dashboard-table-light.jpg
+8136edf62f5588a8ea710ae31b9543e99750a345235f9adf89f539ee078a8ad0  .docs/reviews/2026-08-22-phase3-dashboard-table-final/evidence/case03-catalog-dashboard-table-visible.jpg
+
+[json syntax]
+{ overall: 'PASS', sha: '7ccde67f72f6913da48065c1d160280e4ad410fd' }
+json_parse_exit: 0
+
+[tracked diff]
+git_diff_exit: 0
+git_diff_cached_exit: 0
+
+[status]
+?? .docs/reviews/2026-08-22-phase3-dashboard-table-final/evidence/2026-08-22-dashboard-table-dark.jpg
+?? .docs/reviews/2026-08-22-phase3-dashboard-table-final/evidence/2026-08-22-dashboard-table-light.jpg
+?? .docs/reviews/2026-08-22-phase3-dashboard-table-final/evidence/case03-catalog-dashboard-table-visible.jpg
+?? .docs/reviews/2026-08-22-phase3-dashboard-table-final/evidence/case04-browser-results.json
+?? .docs/reviews/2026-08-22-phase3-dashboard-table-final/evidence/case05-unit-metric-fallback.log
+?? .docs/reviews/2026-08-22-phase3-dashboard-table-final/evidence/case06-dnd-static-scan.log
+?? .docs/reviews/2026-08-22-phase3-dashboard-table-final/evidence/case07-server-cleanup.log
+
+[evidence listing]
+.docs/reviews/2026-08-22-phase3-dashboard-table-final/evidence/case06-dnd-static-scan.log
+.docs/reviews/2026-08-22-phase3-dashboard-table-final/evidence/case07-server-cleanup.log
+.docs/reviews/2026-08-22-phase3-dashboard-table-final/evidence/case03-catalog-dashboard-table-visible.jpg
+.docs/reviews/2026-08-22-phase3-dashboard-table-final/evidence/2026-08-22-dashboard-table-light.jpg
+.docs/reviews/2026-08-22-phase3-dashboard-table-final/evidence/case04-browser-results.json
+.docs/reviews/2026-08-22-phase3-dashboard-table-final/evidence/case05-unit-metric-fallback.log
+.docs/reviews/2026-08-22-phase3-dashboard-table-final/evidence/2026-08-22-dashboard-table-dark.jpg
+evidence_file_count:        7

@@ -1,7 +1,15 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  symlinkSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
@@ -53,6 +61,14 @@ const seedRegistryItems = (root, names) => {
   writeJson(join(root, "registry.json"), registry);
   git(root, ["add", "registry.json"]);
   git(root, ["commit", "-m", "registry item fixture"]);
+};
+
+const seedRegistryGraph = (root, items) => {
+  const registry = JSON.parse(readFileSync(join(root, "registry.json"), "utf8"));
+  registry.items.push(...items);
+  writeJson(join(root, "registry.json"), registry);
+  git(root, ["add", "registry.json"]);
+  git(root, ["commit", "-m", "registry graph fixture"]);
 };
 
 const loadModule = async () => {
@@ -331,7 +347,7 @@ test("wrapper が pin add から2つの hash・来歴・registryまで記録し�
   };
 
   const result = await runAddComponent({
-    argv: ["calendar", "--modified", "Props 型を追加"],
+    argv: ["calendar", "--modified", "Props 型を追加。"],
     root,
     fetchImpl,
     runCommand,
@@ -355,7 +371,7 @@ test("wrapper が pin add から2つの hash・来歴・registryまで記録し�
     provenance.components.calendar.registryContentSha256,
     createHash("sha256").update(served).digest("hex"),
   );
-  assert.equal(provenance.components.calendar.modified, "Props 型を追加");
+  assert.equal(provenance.components.calendar.modified, "Props 型を追加。");
   const registry = JSON.parse(readFileSync(join(root, "registry.json"), "utf8"));
   assert.deepEqual(registry.items[0].registryDependencies, ["@elchika/button"]);
   assert.deepEqual(registry.items[0].dependencies, [
@@ -489,6 +505,44 @@ const loginUpstream = {
   registryDependencies: ["button", "card", "input", "label", "field"],
 };
 
+const dashboardUpstream = {
+  name: "dashboard-01",
+  type: "registry:block",
+  files: [
+    {
+      path: "registry/base-nova/blocks/dashboard-01/page.tsx",
+      type: "registry:page",
+      target: "app/dashboard/page.tsx",
+      content: "export default () => null\n",
+    },
+    {
+      path: "registry/base-nova/blocks/dashboard-01/data.json",
+      type: "registry:file",
+      target: "app/dashboard/data.json",
+      content: '[{"id": 1}]\n',
+    },
+    {
+      path: "registry/base-nova/blocks/dashboard-01/components/chart-area-interactive.tsx",
+      type: "registry:component",
+      content: "export const ChartAreaInteractive = () => null\n",
+    },
+    {
+      path: "registry/base-nova/blocks/dashboard-01/components/data-table.tsx",
+      type: "registry:component",
+      content: 'import { useReactTable } from "@tanstack/react-table";\n',
+    },
+  ],
+  dependencies: [
+    "@dnd-kit/core",
+    "@dnd-kit/modifiers",
+    "@dnd-kit/sortable",
+    "@dnd-kit/utilities",
+    "@tanstack/react-table",
+    "zod",
+  ],
+  registryDependencies: ["button"],
+};
+
 test("registry:block の配布ファイルを src/blocks/<name>/ へ解決する", async () => {
   const { resolveRegistryTarget } = await loadModule();
   const target = resolveRegistryTarget("login-01", loginUpstream);
@@ -513,6 +567,97 @@ test("registry:page を配布対象から外し droppedFiles へ振り分ける"
       target: "app/login/page.tsx",
     },
   ]);
+});
+
+test("block 所有の registry:file を配布対象へ含める", async () => {
+  const { resolveRegistryTarget } = await loadModule();
+  const target = resolveRegistryTarget("dashboard-01", dashboardUpstream);
+
+  assert.deepEqual(
+    target.files.find((file) => file.registryPath.endsWith("/data.json")),
+    {
+      registryPath: "registry/base-nova/blocks/dashboard-01/data.json",
+      targetPath: "src/blocks/dashboard-01/data.json",
+      upstreamPath: "apps/v4/registry/bases/base/blocks/dashboard-01/data.json",
+      fileType: "registry:file",
+      upstreamTargetPath: "app/dashboard/data.json",
+      cliOutputPath: "src/app/dashboard/data.json",
+    },
+  );
+});
+
+test("registry:file の ~/ 付き target は CLI が repo root 相対へ生成する", async () => {
+  const { blockRelocationPlan, resolveRegistryTarget } = await loadModule();
+  const target = resolveRegistryTarget("asset-01", {
+    name: "asset-01",
+    type: "registry:block",
+    files: [
+      {
+        path: "registry/base-nova/blocks/asset-01/LICENSE",
+        type: "registry:file",
+        target: "~/elchika-ui/LICENSE",
+      },
+    ],
+  });
+
+  assert.deepEqual(target.files[0], {
+    registryPath: "registry/base-nova/blocks/asset-01/LICENSE",
+    targetPath: "src/blocks/asset-01/LICENSE",
+    upstreamPath: "apps/v4/registry/bases/base/blocks/asset-01/LICENSE",
+    fileType: "registry:file",
+    upstreamTargetPath: "~/elchika-ui/LICENSE",
+    cliOutputPath: "elchika-ui/LICENSE",
+  });
+  assert.deepEqual(blockRelocationPlan(target), [
+    {
+      from: "elchika-ui/LICENSE",
+      to: "src/blocks/asset-01/LICENSE",
+    },
+  ]);
+});
+
+test("dashboard-01 の data-table.tsx を明示的な dropped file として扱う", async () => {
+  const { resolveRegistryTarget } = await loadModule();
+  const target = resolveRegistryTarget("dashboard-01", dashboardUpstream);
+
+  assert.deepEqual(
+    target.droppedFiles.map(({ registryPath, excludeFromCli }) => ({
+      registryPath,
+      excludeFromCli,
+    })),
+    [
+      {
+        registryPath: "registry/base-nova/blocks/dashboard-01/page.tsx",
+        excludeFromCli: undefined,
+      },
+      {
+        registryPath: "registry/base-nova/blocks/dashboard-01/components/data-table.tsx",
+        excludeFromCli: true,
+      },
+    ],
+  );
+});
+
+test("registry:file の target に traversal があれば停止する", async () => {
+  const { resolveRegistryTarget } = await loadModule();
+  const upstream = structuredClone(dashboardUpstream);
+  upstream.files.find((file) => file.type === "registry:file").target = "../outside/data.json";
+
+  assert.throws(
+    () => resolveRegistryTarget("dashboard-01", upstream),
+    /registry:file の target.*repo 内の通常相対 path でない/,
+  );
+});
+
+test("registry:file の target が無ければ停止する", async () => {
+  const { resolveRegistryTarget } = await loadModule();
+  const upstream = structuredClone(dashboardUpstream);
+  upstream.files.find((file) => file.type === "registry:file").target = undefined;
+
+  assert.throws(
+    () => resolveRegistryTarget("dashboard-01", upstream),
+    /registry:file に target が無い/,
+  );
 });
 
 test("registry:block の配布ファイルが 0 件なら停止する", async () => {
@@ -623,6 +768,31 @@ test("block の registry item は配布ファイルだけを files に載せる"
     "@elchika/label",
     "@elchika/field",
   ]);
+});
+
+test("block の registry:file は上流 target を保持し component には target を付けない", async () => {
+  const { buildRegistryItem, resolveRegistryTarget } = await loadModule();
+  const target = resolveRegistryTarget("dashboard-01", dashboardUpstream);
+  const item = buildRegistryItem("dashboard-01", dashboardUpstream, "", target);
+
+  assert.deepEqual(
+    item.files.find((file) => file.path === "src/blocks/dashboard-01/data.json"),
+    {
+      path: "src/blocks/dashboard-01/data.json",
+      type: "registry:file",
+      target: "app/dashboard/data.json",
+    },
+  );
+  assert.deepEqual(
+    item.files.find(
+      (file) => file.path === "src/blocks/dashboard-01/components/chart-area-interactive.tsx",
+    ),
+    {
+      path: "src/blocks/dashboard-01/components/chart-area-interactive.tsx",
+      type: "registry:component",
+    },
+  );
+  assert.equal(item.files.find((file) => file.path === "LICENSE")?.target, "~/elchika-ui/LICENSE");
 });
 
 test("UI import 由来の registry dependency 補完は block だけに適用する", async () => {
@@ -738,6 +908,46 @@ test("上流の兄弟ファイルが複数あっても移設先を全件対応�
   ]);
 });
 
+test("registry:file は上流 target と CLI 生成先を分離する", async () => {
+  const { blockRelocationPlan, resolveRegistryTarget } = await loadModule();
+  const target = resolveRegistryTarget("dashboard-01", dashboardUpstream);
+
+  assert.deepEqual(blockRelocationPlan(target), [
+    {
+      from: "src/app/dashboard/data.json",
+      to: "src/blocks/dashboard-01/data.json",
+    },
+    {
+      from: "src/components/chart-area-interactive.tsx",
+      to: "src/blocks/dashboard-01/components/chart-area-interactive.tsx",
+    },
+  ]);
+});
+
+test("registry:file の src/ 始まり target は CLI 生成先で二重化しない", async () => {
+  const { blockRelocationPlan, resolveRegistryTarget } = await loadModule();
+  const upstream = structuredClone(dashboardUpstream);
+  upstream.files.find((file) => file.path.endsWith("/data.json")).target =
+    "src/app/dashboard/data.json";
+  const target = resolveRegistryTarget("dashboard-01", upstream);
+
+  assert.deepEqual(
+    target.files.find((file) => file.registryPath.endsWith("/data.json")),
+    {
+      registryPath: "registry/base-nova/blocks/dashboard-01/data.json",
+      targetPath: "src/blocks/dashboard-01/data.json",
+      upstreamPath: "apps/v4/registry/bases/base/blocks/dashboard-01/data.json",
+      fileType: "registry:file",
+      upstreamTargetPath: "src/app/dashboard/data.json",
+      cliOutputPath: "src/app/dashboard/data.json",
+    },
+  );
+  assert.deepEqual(blockRelocationPlan(target)[0], {
+    from: "src/app/dashboard/data.json",
+    to: "src/blocks/dashboard-01/data.json",
+  });
+});
+
 test("同一 block 内で basename が重複したら移設せず停止する", async () => {
   const { blockRelocationPlan, resolveRegistryTarget } = await loadModule();
   const target = resolveRegistryTarget("broken-01", {
@@ -830,7 +1040,7 @@ test("block を add すると移設してから reconcile し provenance.blocks 
   );
 });
 
-test("block の配布ファイルが移設先に無ければ停止する", async (t) => {
+test("block の CLI 生成先が無ければ移設前に停止する", async (t) => {
   const root = prepareWrapperRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));
   const { runAddComponent } = await loadModule();
@@ -843,7 +1053,34 @@ test("block の配布ファイルが移設先に無ければ停止する", async
       runCommand: () => {},
       log: () => {},
     }),
-    /が生成されなかった/,
+    /block の CLI 生成先が存在しない.*src\/components\/login-form\.tsx/,
+  );
+});
+
+test("registry:file の CLI 生成先が無ければ一部を移設せず停止する", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+
+  await assert.rejects(
+    runAddComponent({
+      argv: ["dashboard-01", "--modified", "data-table.tsx を配布から除外"],
+      root,
+      fetchImpl: blockFetch(JSON.stringify(dashboardUpstream)),
+      runCommand: () => {
+        writeFileSync(
+          join(root, "src/components/chart-area-interactive.tsx"),
+          "export const ChartAreaInteractive = () => null\n",
+        );
+      },
+      log: () => {},
+    }),
+    /registry:file の CLI 生成先が存在しない.*src\/app\/dashboard\/data\.json/,
+  );
+
+  assert.equal(
+    existsSync(join(root, "src/blocks/dashboard-01/components/chart-area-interactive.tsx")),
+    false,
   );
 });
 
@@ -900,6 +1137,340 @@ test("記録済み block の再実行は skip する", async (t) => {
   });
   assert.deepEqual(rerun, { skipped: true });
   assert.equal(reran, false);
+});
+
+test("記録済み block は --force で来歴にある既存ファイルを更新する", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+
+  const addBlock = async (generated, force = false) =>
+    runAddComponent({
+      argv: [
+        "login-01",
+        "--modified",
+        force ? "上流の再取得" : "registry:page を配布から除外",
+        ...(force ? ["--force"] : []),
+      ],
+      root,
+      fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+      runCommand: () => {
+        writeFileSync(join(root, "src/components/login-form.tsx"), generated);
+      },
+      log: () => {},
+    });
+
+  await addBlock("export const version = 1\n");
+  git(root, ["add", "."]);
+  git(root, ["commit", "-m", "login block fixture"]);
+
+  const result = await addBlock("export const version = 2\n", true);
+
+  assert.equal(result.skipped, false);
+  assert.equal(
+    readFileSync(join(root, "src/blocks/login-01/components/login-form.tsx"), "utf8"),
+    "export const version = 2\n",
+  );
+  const provenance = JSON.parse(readFileSync(join(root, "provenance.json"), "utf8"));
+  assert.equal(
+    provenance.blocks["login-01"].files.find((file) => !file.dropped).generatedContentSha256,
+    createHash("sha256").update("export const version = 2\n").digest("hex"),
+  );
+});
+
+test("block の --force は前回来歴が所有しない新規移設先を上書きしない", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+
+  await runAddComponent({
+    argv: ["login-01", "--modified", "registry:page を配布から除外"],
+    root,
+    fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+    runCommand: () => {
+      writeFileSync(join(root, "src/components/login-form.tsx"), "export const version = 1\n");
+    },
+    log: () => {},
+  });
+  mkdirSync(join(root, "src/blocks/login-01/components"), { recursive: true });
+  writeFileSync(
+    join(root, "src/blocks/login-01/components/login-extra.tsx"),
+    "利用者が所有するファイル\n",
+  );
+  git(root, ["add", "."]);
+  git(root, ["commit", "-m", "consumer-owned fixture"]);
+
+  const updatedUpstream = structuredClone(loginUpstream);
+  updatedUpstream.files.splice(1, 0, {
+    path: "registry/base-nova/blocks/login-01/components/login-extra.tsx",
+    type: "registry:component",
+    content: "export const LoginExtra = true\n",
+  });
+  let ran = false;
+  await assert.rejects(
+    runAddComponent({
+      argv: ["login-01", "--modified", "上流の再取得", "--force"],
+      root,
+      fetchImpl: blockFetch(JSON.stringify(updatedUpstream)),
+      runCommand: () => {
+        ran = true;
+      },
+      log: () => {},
+    }),
+    /block の移設先が実行前から存在する.*login-extra\.tsx/,
+  );
+  assert.equal(ran, false);
+  assert.equal(
+    readFileSync(join(root, "src/blocks/login-01/components/login-extra.tsx"), "utf8"),
+    "利用者が所有するファイル\n",
+  );
+});
+
+test("block の --force は上流移植品以外の origin を上書きしない", async (t) => {
+  for (const origin of ["elchika original", "unknown-source", undefined]) {
+    const root = prepareWrapperRepo();
+    t.after(() => rmSync(root, { recursive: true, force: true }));
+    mkdirSync(join(root, "src/blocks/login-01/components"), { recursive: true });
+    writeFileSync(join(root, "src/blocks/login-01/components/login-form.tsx"), "既存 block\n");
+    writeJson(join(root, "provenance.json"), {
+      components: {},
+      blocks: {
+        "login-01": {
+          ...(origin === undefined ? {} : { origin }),
+          files: [
+            {
+              path: "src/blocks/login-01/components/login-form.tsx",
+              generatedContentSha256: "0".repeat(64),
+            },
+          ],
+        },
+      },
+    });
+    git(root, ["add", "."]);
+    git(root, ["commit", "-m", `origin ${String(origin)} fixture`]);
+    const { runAddComponent } = await loadModule();
+    let ran = false;
+
+    await assert.rejects(
+      runAddComponent({
+        argv: ["login-01", "--modified", "上流の再取得", "--force"],
+        root,
+        fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+        runCommand: () => {
+          ran = true;
+          writeFileSync(join(root, "src/components/login-form.tsx"), "上流の block\n");
+        },
+        log: () => {},
+      }),
+      /--force.*origin.*shadcn\/ui registry/,
+    );
+    assert.equal(ran, false);
+    assert.equal(
+      readFileSync(join(root, "src/blocks/login-01/components/login-form.tsx"), "utf8"),
+      "既存 block\n",
+    );
+  }
+});
+
+test("block の来歴 API が失敗しても --force 前の実体と台帳を保持する", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+
+  await runAddComponent({
+    argv: ["login-01", "--modified", "registry:page を配布から除外"],
+    root,
+    fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+    runCommand: () => {
+      writeFileSync(join(root, "src/components/login-form.tsx"), "export const version = 1\n");
+    },
+    log: () => {},
+  });
+  git(root, ["add", "."]);
+  git(root, ["commit", "-m", "preflight failure fixture"]);
+  const provenanceBefore = readFileSync(join(root, "provenance.json"), "utf8");
+  const registryBefore = readFileSync(join(root, "registry.json"), "utf8");
+  let ran = false;
+
+  await assert.rejects(
+    runAddComponent({
+      argv: ["login-01", "--modified", "上流の再取得", "--force"],
+      root,
+      fetchImpl: async (url) => {
+        if (url.includes("ui.shadcn.com")) {
+          return { ok: true, status: 200, text: async () => JSON.stringify(loginUpstream) };
+        }
+        return { ok: false, status: 403, json: async () => ({}) };
+      },
+      runCommand: () => {
+        ran = true;
+        writeFileSync(join(root, "src/components/login-form.tsx"), "export const version = 2\n");
+      },
+      log: () => {},
+    }),
+    /取得に失敗.*403/,
+  );
+  assert.equal(ran, false);
+  assert.equal(
+    readFileSync(join(root, "src/blocks/login-01/components/login-form.tsx"), "utf8"),
+    "export const version = 1\n",
+  );
+  assert.equal(readFileSync(join(root, "provenance.json"), "utf8"), provenanceBefore);
+  assert.equal(readFileSync(join(root, "registry.json"), "utf8"), registryBefore);
+});
+
+test("block の移設先に symlink 祖先があれば repo 外を書き換えず停止する", async (t) => {
+  const root = prepareWrapperRepo();
+  const outside = mkdtempSync(join(tmpdir(), "elchika-add-component-outside-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(() => rmSync(outside, { recursive: true, force: true }));
+  mkdirSync(join(root, "src/blocks/login-01"), { recursive: true });
+  symlinkSync(outside, join(root, "src/blocks/login-01/components"), "dir");
+  writeJson(join(root, "provenance.json"), {
+    components: {},
+    blocks: {
+      "login-01": {
+        origin: "shadcn/ui registry",
+        files: [
+          {
+            path: "src/blocks/login-01/components/login-form.tsx",
+            generatedContentSha256: "0".repeat(64),
+          },
+        ],
+      },
+    },
+  });
+  git(root, ["add", "."]);
+  git(root, ["commit", "-m", "symlink fixture"]);
+  const { runAddComponent } = await loadModule();
+  let ran = false;
+
+  await assert.rejects(
+    runAddComponent({
+      argv: ["login-01", "--modified", "上流の再取得", "--force"],
+      root,
+      fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+      runCommand: () => {
+        ran = true;
+        writeFileSync(join(root, "src/components/login-form.tsx"), "repo 外へ出してはならない\n");
+      },
+      log: () => {},
+    }),
+    /symlink/,
+  );
+  assert.equal(ran, false);
+  assert.equal(existsSync(join(outside, "login-form.tsx")), false);
+});
+
+test("block の CLI 生成先が symlink なら実行前に repo 外上書きを拒否する", async (t) => {
+  const root = prepareWrapperRepo();
+  const outside = mkdtempSync(join(tmpdir(), "elchika-add-component-cli-outside-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(() => rmSync(outside, { recursive: true, force: true }));
+  writeFileSync(join(outside, "login-form.tsx"), "repo 外の既存ファイル\n");
+  symlinkSync(join(outside, "login-form.tsx"), join(root, "src/components/login-form.tsx"), "file");
+  git(root, ["add", "."]);
+  git(root, ["commit", "-m", "CLI source symlink fixture"]);
+  const { runAddComponent } = await loadModule();
+  let ran = false;
+
+  await assert.rejects(
+    runAddComponent({
+      argv: ["login-01", "--modified", "registry:page を配布から除外"],
+      root,
+      fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+      runCommand: () => {
+        ran = true;
+        writeFileSync(join(root, "src/components/login-form.tsx"), "上書き\n");
+      },
+      log: () => {},
+    }),
+    /CLI 生成先.*symlink/,
+  );
+  assert.equal(ran, false);
+  assert.equal(readFileSync(join(outside, "login-form.tsx"), "utf8"), "repo 外の既存ファイル\n");
+});
+
+test("block の CLI 一時生成先に既存ファイルがあれば内容を保持して停止する", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  writeFileSync(join(root, "src/components/login-form.tsx"), "block が所有しない既存ファイル\n");
+  git(root, ["add", "."]);
+  git(root, ["commit", "-m", "existing CLI source fixture"]);
+  const { runAddComponent } = await loadModule();
+  let ran = false;
+
+  await assert.rejects(
+    runAddComponent({
+      argv: ["login-01", "--modified", "registry:page を配布から除外"],
+      root,
+      fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+      runCommand: () => {
+        ran = true;
+      },
+      log: () => {},
+    }),
+    /block の CLI 生成先が実行前から存在する.*src\/components\/login-form\.tsx/,
+  );
+  assert.equal(ran, false);
+  assert.equal(
+    readFileSync(join(root, "src/components/login-form.tsx"), "utf8"),
+    "block が所有しない既存ファイル\n",
+  );
+});
+
+test("registry:file の ~/ target は共有法務ファイル以外の管理領域を拒否する", async () => {
+  const { resolveRegistryTarget } = await loadModule();
+  const upstream = structuredClone(dashboardUpstream);
+  upstream.files[1].target = "~/.git/hooks/post-checkout";
+
+  assert.throws(
+    () => resolveRegistryTarget("dashboard-01", upstream),
+    /registry:file の CLI 生成先が許可領域外/,
+  );
+});
+
+test("block の --force は上流から消えた前回来歴のファイルを削除する", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+  const initialUpstream = structuredClone(loginUpstream);
+  initialUpstream.files.splice(1, 0, {
+    path: "registry/base-nova/blocks/login-01/components/login-extra.tsx",
+    type: "registry:component",
+    content: "export const LoginExtra = true\n",
+  });
+
+  await runAddComponent({
+    argv: ["login-01", "--modified", "registry:page を配布から除外"],
+    root,
+    fetchImpl: blockFetch(JSON.stringify(initialUpstream)),
+    runCommand: () => {
+      writeFileSync(join(root, "src/components/login-form.tsx"), "export const version = 1\n");
+      writeFileSync(join(root, "src/components/login-extra.tsx"), "export const extra = 1\n");
+    },
+    log: () => {},
+  });
+  git(root, ["add", "."]);
+  git(root, ["commit", "-m", "login block with extra fixture"]);
+
+  const logs = [];
+  await runAddComponent({
+    argv: ["login-01", "--modified", "上流で extra を削除", "--force"],
+    root,
+    fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+    runCommand: () => {
+      writeFileSync(join(root, "src/components/login-form.tsx"), "export const version = 2\n");
+    },
+    log: (message) => logs.push(message),
+  });
+
+  assert.equal(existsSync(join(root, "src/blocks/login-01/components/login-extra.tsx")), false);
+  assert.ok(
+    logs.includes(
+      "上流から消えた block file を削除: src/blocks/login-01/components/login-extra.tsx",
+    ),
+  );
 });
 
 test("CLI が作った配布しない page を reconcile より前に削除する", async (t) => {
@@ -1124,6 +1695,75 @@ test("block の registry item は配布ファイルの UI import から宣言漏
   assert.deepEqual(result.registryItem.registryDependencies, ["@elchika/button", "@elchika/field"]);
 });
 
+test("block の registry item は hook import とその推移的依存を補完する", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+  seedRegistryGraph(root, [
+    {
+      name: "use-mobile",
+      type: "registry:hook",
+      registryDependencies: ["@elchika/input"],
+    },
+    { name: "input", type: "registry:ui" },
+    { name: "label", type: "registry:ui" },
+  ]);
+  const upstream = structuredClone(dashboardUpstream);
+  upstream.files.find((file) => file.path.endsWith("/chart-area-interactive.tsx")).content =
+    'import { useIsMobile } from "@/hooks/use-mobile";\nexport const Chart = useIsMobile;\n';
+  upstream.files.find((file) => file.path.endsWith("/data-table.tsx")).content =
+    'import { Label } from "@/registry/base-nova/ui/label";\nexport const Table = Label;\n';
+  upstream.registryDependencies = ["input", "label"];
+
+  const result = await runAddComponent({
+    argv: ["dashboard-01", "--modified", "data-table.tsx を配布から除外"],
+    root,
+    fetchImpl: blockFetch(JSON.stringify(upstream)),
+    runCommand: () => {
+      writeFileSync(
+        join(root, "src/components/chart-area-interactive.tsx"),
+        'import { useIsMobile } from "@/hooks/use-mobile";\nexport const Chart = useIsMobile;\n',
+      );
+      mkdirSync(join(root, "src/app/dashboard"), { recursive: true });
+      writeFileSync(join(root, "src/app/dashboard/data.json"), "[]\n");
+    },
+    log: () => {},
+  });
+
+  assert.deepEqual(result.registryItem.registryDependencies, [
+    "@elchika/input",
+    "@elchika/use-mobile",
+  ]);
+});
+
+test("hook import に対応する registry item が無ければ fail-closed で停止する", async () => {
+  const { completeBlockRegistryDependencies } = await loadModule();
+  assert.throws(
+    () =>
+      completeBlockRegistryDependencies(
+        "dashboard-01",
+        [],
+        'import { useIsMobile } from "@/hooks/use-mobile";',
+        [],
+      ),
+    /@\/hooks\/use-mobile に対応する registry item が存在しない（期待 type: registry:hook）/,
+  );
+});
+
+test("hook import と同名の item が registry:hook でなければ fail-closed で停止する", async () => {
+  const { completeBlockRegistryDependencies } = await loadModule();
+  assert.throws(
+    () =>
+      completeBlockRegistryDependencies(
+        "dashboard-01",
+        [],
+        'import { useIsMobile } from "@/hooks/use-mobile";',
+        [{ name: "use-mobile", type: "registry:ui" }],
+      ),
+    /use-mobile の type が registry:hook でない/,
+  );
+});
+
 test("block の来歴は上流パスを記録する", async (t) => {
   const root = prepareWrapperRepo();
   t.after(() => rmSync(root, { recursive: true, force: true }));
@@ -1243,14 +1883,165 @@ test("block の未対応 file type は配布せず停止する", async () => {
         type: "registry:block",
         files: [
           {
-            path: "registry/base-nova/blocks/dashboard-01/data.json",
-            type: "registry:file",
-            target: "app/dashboard/data.json",
+            path: "registry/base-nova/blocks/dashboard-01/route.ts",
+            type: "registry:route",
           },
         ],
       }),
-    /block の file type が未対応: registry:file/,
+    /block の file type が未対応: registry:route/,
   );
+});
+
+test("block の移設先に既存ファイルがあれば CLI 実行前に停止する", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+  mkdirSync(join(root, "src/blocks/dashboard-01"), { recursive: true });
+  writeFileSync(join(root, "src/blocks/dashboard-01/data.json"), "既存データ\n");
+  git(root, ["add", "src/blocks/dashboard-01/data.json"]);
+  git(root, ["commit", "-m", "existing block file fixture"]);
+  let ran = false;
+
+  await assert.rejects(
+    runAddComponent({
+      argv: ["dashboard-01", "--modified", "data-table.tsx を配布から除外"],
+      root,
+      fetchImpl: blockFetch(JSON.stringify(dashboardUpstream)),
+      runCommand: () => {
+        ran = true;
+      },
+      log: () => {},
+    }),
+    /移設先が実行前から存在する.*src\/blocks\/dashboard-01\/data\.json/,
+  );
+
+  assert.equal(ran, false);
+  assert.equal(
+    readFileSync(join(root, "src/blocks/dashboard-01/data.json"), "utf8"),
+    "既存データ\n",
+  );
+});
+
+test("registry:file の CLI 生成先に既存ファイルがあれば CLI 実行前に停止する", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+  mkdirSync(join(root, "src/app/dashboard"), { recursive: true });
+  writeFileSync(join(root, "src/app/dashboard/data.json"), "既存データ\n");
+  git(root, ["add", "src/app/dashboard/data.json"]);
+  git(root, ["commit", "-m", "existing registry file target fixture"]);
+  let ran = false;
+
+  await assert.rejects(
+    runAddComponent({
+      argv: ["dashboard-01", "--modified", "data-table.tsx を配布から除外"],
+      root,
+      fetchImpl: blockFetch(JSON.stringify(dashboardUpstream)),
+      runCommand: () => {
+        ran = true;
+      },
+      log: () => {},
+    }),
+    /registry:file の CLI 生成先が実行前から存在する.*src\/app\/dashboard\/data\.json/,
+  );
+
+  assert.equal(ran, false);
+  assert.equal(readFileSync(join(root, "src/app/dashboard/data.json"), "utf8"), "既存データ\n");
+});
+
+test("dashboard-01 は配布ファイルの registry 依存閉包だけを pin と最終 item に残す", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+  seedRegistryGraph(root, [
+    {
+      name: "sidebar",
+      type: "registry:ui",
+      registryDependencies: ["input"],
+    },
+    {
+      name: "input",
+      type: "registry:ui",
+      registryDependencies: ["@elchika/sheet"],
+    },
+    { name: "sheet", type: "registry:ui" },
+    { name: "label", type: "registry:ui" },
+    { name: "breadcrumb", type: "registry:ui" },
+  ]);
+  const upstream = structuredClone(dashboardUpstream);
+  upstream.files.find((file) => file.path.endsWith("/chart-area-interactive.tsx")).content =
+    'import { Sidebar } from "@/registry/base-nova/ui/sidebar";\nexport const ChartAreaInteractive = Sidebar;\n';
+  upstream.files.find((file) => file.path.endsWith("/data-table.tsx")).content =
+    'import { Label } from "@/registry/base-nova/ui/label";\nimport { useReactTable } from "@tanstack/react-table";\nexport const DataTable = Label;\n';
+  upstream.registryDependencies = ["sidebar", "@elchika/input", "sheet", "label", "breadcrumb"];
+  let pinnedItemPath;
+
+  const result = await runAddComponent({
+    argv: ["dashboard-01", "--modified", "data-table.tsx を配布から除外"],
+    root,
+    fetchImpl: blockFetch(JSON.stringify(upstream)),
+    runCommand: (_command, args) => {
+      pinnedItemPath = args.at(-1);
+      const pinned = JSON.parse(readFileSync(pinnedItemPath, "utf8"));
+      assert.equal(
+        pinned.files.some((file) => file.path.endsWith("/data-table.tsx")),
+        false,
+      );
+      assert.equal(
+        pinned.files.some((file) => file.path.endsWith("/data.json")),
+        true,
+      );
+      assert.deepEqual(pinned.dependencies ?? [], []);
+      assert.deepEqual(pinned.registryDependencies, ["sidebar", "@elchika/input", "sheet"]);
+      writeFileSync(
+        join(root, "src/components/chart-area-interactive.tsx"),
+        'import { Sidebar } from "@/components/ui/sidebar";\nexport const ChartAreaInteractive = Sidebar;\n',
+      );
+      mkdirSync(join(root, "src/app/dashboard"), { recursive: true });
+      writeFileSync(join(root, "src/app/dashboard/data.json"), '[{"id": 1}]\n');
+    },
+    log: () => {},
+  });
+
+  assert.equal(existsSync(pinnedItemPath), false);
+  assert.equal(existsSync(join(root, "src/components/data-table.tsx")), false);
+  assert.equal(existsSync(join(root, "src/blocks/dashboard-01/data.json")), true);
+  assert.deepEqual(
+    result.registryItem.files
+      .filter((file) => file.path.startsWith("src/blocks/dashboard-01/"))
+      .map(({ path, type, target }) => ({ path, type, target })),
+    [
+      {
+        path: "src/blocks/dashboard-01/data.json",
+        type: "registry:file",
+        target: "app/dashboard/data.json",
+      },
+      {
+        path: "src/blocks/dashboard-01/components/chart-area-interactive.tsx",
+        type: "registry:component",
+        target: undefined,
+      },
+    ],
+  );
+  assert.equal(result.entry.files.filter((file) => file.dropped).length, 2);
+  assert.equal(
+    result.registryItem.dependencies.some((dependency) => dependency.startsWith("@dnd-kit/")),
+    false,
+  );
+  assert.deepEqual(result.registryItem.registryDependencies, [
+    "@elchika/sidebar",
+    "@elchika/input",
+    "@elchika/sheet",
+  ]);
+  assert.equal(
+    result.entry.modified,
+    "data-table.tsx を配布から除外。上流 manifest から除外した dependencies: @dnd-kit/core, @dnd-kit/modifiers, @dnd-kit/sortable, @dnd-kit/utilities, @tanstack/react-table, zod。上流 manifest から除外した registryDependencies: breadcrumb, label",
+  );
+  assert.match(
+    result.entry.notes,
+    /dropped: true の file は配布しない上流 file を表し、理由は modified に記録する/,
+  );
+  assert.doesNotMatch(result.entry.notes, /dropped: true の file は registry:page/);
 });
 
 test("prefix が先頭以外にある block の file path を通さない", async () => {
@@ -1268,6 +2059,123 @@ test("prefix が先頭以外にある block の file path を通さない", asyn
         ],
       }),
     /block の file path が想定外/,
+  );
+});
+
+test("registry 依存閉包の推移先 item が無ければ fail-closed で停止する", async () => {
+  const { buildRegistryItem, resolveRegistryTarget } = await loadModule();
+  const upstream = structuredClone(dashboardUpstream);
+  upstream.files.find((file) => file.path.endsWith("/chart-area-interactive.tsx")).content =
+    'import { Sidebar } from "@/registry/base-nova/ui/sidebar";\n';
+  upstream.registryDependencies = ["sidebar", "ghost"];
+  const target = resolveRegistryTarget("dashboard-01", upstream);
+
+  assert.throws(
+    () =>
+      buildRegistryItem(
+        "dashboard-01",
+        upstream,
+        'import { Sidebar } from "@/components/ui/sidebar";\n',
+        target,
+        [
+          {
+            name: "sidebar",
+            type: "registry:ui",
+            registryDependencies: ["@elchika/ghost"],
+          },
+        ],
+      ),
+    /registry dependency.*ghost.*存在しない/,
+  );
+});
+
+test("明示除外 block の外部 registry 依存は local 閉包の突合対象にしない", async () => {
+  const { buildRegistryItem, resolveRegistryTarget } = await loadModule();
+  const upstream = structuredClone(dashboardUpstream);
+  upstream.files.find((file) => file.path.endsWith("/chart-area-interactive.tsx")).content =
+    'import { Sidebar } from "@/registry/base-nova/ui/sidebar";\n';
+  upstream.registryDependencies = ["sidebar", "https://example.com/r/input.json", "@example/input"];
+  const target = resolveRegistryTarget("dashboard-01", upstream);
+
+  const item = buildRegistryItem(
+    "dashboard-01",
+    upstream,
+    'import { Sidebar } from "@/components/ui/sidebar";\n',
+    target,
+    [
+      {
+        name: "sidebar",
+        type: "registry:ui",
+        registryDependencies: ["https://example.com/r/input.json", "@example/input"],
+      },
+    ],
+  );
+
+  assert.deepEqual(item.registryDependencies, [
+    "@elchika/sidebar",
+    "https://example.com/r/input.json",
+    "@example/input",
+  ]);
+});
+
+test("block 所有 registry:file が共有配布 target と衝突したら停止する", async () => {
+  const { buildRegistryItem, resolveRegistryTarget } = await loadModule();
+  const upstream = {
+    name: "asset-01",
+    type: "registry:block",
+    files: [
+      {
+        path: "registry/base-nova/blocks/asset-01/LICENSE",
+        type: "registry:file",
+        target: "~/elchika-ui/LICENSE",
+      },
+    ],
+  };
+  const target = resolveRegistryTarget("asset-01", upstream);
+
+  assert.throws(
+    () => buildRegistryItem("asset-01", upstream, "", target),
+    /registry:file.*target.*共有配布 file.*衝突.*~\/elchika-ui\/LICENSE/,
+  );
+});
+
+test("明示除外 block の動的 import から npm dependency を保持する", async () => {
+  const { buildRegistryItem, resolveRegistryTarget } = await loadModule();
+  const upstream = structuredClone(dashboardUpstream);
+  upstream.files.find((file) => file.path.endsWith("/chart-area-interactive.tsx")).content =
+    'export const loadWidget = () => import("optional-widget");\n';
+  upstream.dependencies = ["optional-widget"];
+  upstream.registryDependencies = [];
+  const target = resolveRegistryTarget("dashboard-01", upstream);
+
+  const item = buildRegistryItem(
+    "dashboard-01",
+    upstream,
+    'export const loadWidget = () => import("optional-widget");\n',
+    target,
+  );
+
+  assert.deepEqual(item.dependencies, ["optional-widget", "shadcn", "tw-animate-css"]);
+});
+
+test("明示除外 block の非 literal 動的 import は推測せず停止する", async () => {
+  const { buildRegistryItem, resolveRegistryTarget } = await loadModule();
+  const upstream = structuredClone(dashboardUpstream);
+  upstream.files.find((file) => file.path.endsWith("/chart-area-interactive.tsx")).content =
+    "export const loadWidget = (name) => import(name);\n";
+  upstream.dependencies = ["optional-widget"];
+  upstream.registryDependencies = [];
+  const target = resolveRegistryTarget("dashboard-01", upstream);
+
+  assert.throws(
+    () =>
+      buildRegistryItem(
+        "dashboard-01",
+        upstream,
+        "export const loadWidget = (name) => import(name);\n",
+        target,
+      ),
+    /動的 import.*文字列リテラルでない/,
   );
 });
 
@@ -1321,6 +2229,68 @@ test("--resync は CLI も通信もせず来歴のハッシュを実体へ揃え
     normalized,
   );
   assert.ok(logs.some((message) => message.startsWith("ハッシュを更新:")));
+});
+
+test("--resync は来歴 file 自身が symlink なら repo 外を読まず停止する", async (t) => {
+  const root = prepareWrapperRepo();
+  const outside = mkdtempSync(join(tmpdir(), "elchika-resync-leaf-outside-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(() => rmSync(outside, { recursive: true, force: true }));
+  mkdirSync(join(root, "src/blocks/login-01/components"), { recursive: true });
+  writeFileSync(join(outside, "secret.tsx"), "repo 外の秘密\n");
+  symlinkSync(
+    join(outside, "secret.tsx"),
+    join(root, "src/blocks/login-01/components/login-form.tsx"),
+    "file",
+  );
+  const provenance = {
+    components: {},
+    blocks: {
+      "login-01": {
+        files: [
+          {
+            path: "src/blocks/login-01/components/login-form.tsx",
+            generatedContentSha256: "0".repeat(64),
+          },
+        ],
+      },
+    },
+  };
+  const { resyncBlockHashes } = await loadModule();
+
+  assert.throws(
+    () => resyncBlockHashes({ root, name: "login-01", provenance, log: () => {} }),
+    /来歴の path.*symlink/,
+  );
+});
+
+test("--resync は来歴 file の祖先が symlink なら repo 外を読まず停止する", async (t) => {
+  const root = prepareWrapperRepo();
+  const outside = mkdtempSync(join(tmpdir(), "elchika-resync-ancestor-outside-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(() => rmSync(outside, { recursive: true, force: true }));
+  mkdirSync(join(root, "src/blocks/login-01"), { recursive: true });
+  writeFileSync(join(outside, "login-form.tsx"), "repo 外の秘密\n");
+  symlinkSync(outside, join(root, "src/blocks/login-01/components"), "dir");
+  const provenance = {
+    components: {},
+    blocks: {
+      "login-01": {
+        files: [
+          {
+            path: "src/blocks/login-01/components/login-form.tsx",
+            generatedContentSha256: "0".repeat(64),
+          },
+        ],
+      },
+    },
+  };
+  const { resyncBlockHashes } = await loadModule();
+
+  assert.throws(
+    () => resyncBlockHashes({ root, name: "login-01", provenance, log: () => {} }),
+    /来歴の path.*symlink/,
+  );
 });
 
 test("--resync は --modified を渡したときだけ来歴を上書きする", async (t) => {

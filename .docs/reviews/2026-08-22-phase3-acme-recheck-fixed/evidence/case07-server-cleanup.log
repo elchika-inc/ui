@@ -1,0 +1,15 @@
+verified_impl_sha: 71446e87c3fdf3127d3e3e990e9470893fa11990
+検証開始: 2026-08-22 17:12:13 JST
+検証終了: 2026-08-22 17:20:49 JST
+起動要求: npm run dev -- --host 127.0.0.1 --port 4321
+4321事前状態: 無関係PID 11102がLISTEN
+対象Astro実測URL: http://127.0.0.1:4322
+対象Astro実測PID: 51119
+停止コマンド: ./node_modules/.bin/astro dev stop
+停止出力: Stopped dev server (pid 51119).
+停止後4322: lsof exit 1、LISTENなし
+停止後Astro status: No dev server is running.、exit 0
+停止後4321: PID 11102が引き続きLISTEN
+外部送信: なし
+deploy: なし
+既存データ削除: なし

@@ -1,0 +1,386 @@
+{
+  "verified_impl_sha": "2c1b6aa70c8e78dffefd5a80a2684ad758da0915",
+  "overall": "FAIL",
+  "failureReason": "catalog の dashboard-01 item 内 Acme Inc. は DOM 上に存在するが、後続 sidebar preview の fixed layer に遮蔽され画面上で可視ではない",
+  "target": {
+    "baseUrl": "http://127.0.0.1:4322",
+    "serverPid": 70760,
+    "requestedCommand": "npm run dev -- --host 127.0.0.1 --port 4321",
+    "port4321OccupiedByUnrelatedPid": 11102
+  },
+  "environment": {
+    "os": "Darwin 25.3.0 arm64",
+    "node": "v26.7.0",
+    "npm": "11.19.0",
+    "browserUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+    "desktopViewport": {
+      "width": 1512,
+      "height": 828
+    },
+    "mobileViewport": {
+      "width": 390,
+      "height": 844
+    },
+    "devicePixelRatio": 2
+  },
+  "rubric": {
+    "dashboard01LightDark": "可視 UI text が正確に Acme Inc.、旧 Acme 単独表記0",
+    "mobile": "390x844 で sidebar を開閉し、開いた sidebar 内に Acme Inc. が可視",
+    "catalog": "dashboard-01 item 内で Acme Inc. が画面上で可視、dashboard-01/dashboard-table item が正寸法",
+    "runtime": "安定描画後 duplicate DOM id、console error、page exception、HTTP 4xx/5xx、request failure 0。event buffer 切り捨てを記録",
+    "screenshots": "light/dark/mobile/catalogを新規撮影しmagic bytes確認",
+    "countPolicy": "件数は今回観測値のみ。将来条件へ固定しない"
+  },
+  "cases": {
+    "light": {
+      "result": "PASS",
+      "dom": {
+        "acmeIncVisibleExactCount": 1,
+        "chartSvgCount": 1,
+        "devicePixelRatio": 2,
+        "documentsHeadingCount": 1,
+        "duplicateIds": [],
+        "href": "http://127.0.0.1:4322/preview/dashboard-01/",
+        "htmlClass": "",
+        "legacyAcmeVisibleExactCount": 0,
+        "rootCount": 1,
+        "rootRect": {
+          "height": 828,
+          "width": 1512,
+          "x": 0,
+          "y": 0
+        },
+        "sectionCardCount": 5,
+        "viewport": {
+          "height": 828,
+          "width": 1512
+        }
+      },
+      "screenshot": {
+        "path": "evidence/case01-dashboard-01-light-acme-inc.jpg",
+        "bytes": 102397,
+        "magic": "JPEG"
+      },
+      "visualInspection": "Acme Inc. を左上に目視"
+    },
+    "dark": {
+      "result": "PASS",
+      "dom": {
+        "acmeIncVisibleExactCount": 1,
+        "chartSvgCount": 1,
+        "devicePixelRatio": 2,
+        "documentsHeadingCount": 1,
+        "duplicateIds": [],
+        "href": "http://127.0.0.1:4322/preview/dashboard-01-dark/",
+        "htmlClass": "dark",
+        "legacyAcmeVisibleExactCount": 0,
+        "rootCount": 1,
+        "rootRect": {
+          "height": 828,
+          "width": 1512,
+          "x": 0,
+          "y": 0
+        },
+        "sectionCardCount": 5,
+        "viewport": {
+          "height": 828,
+          "width": 1512
+        }
+      },
+      "screenshot": {
+        "path": "evidence/case02-dashboard-01-dark-acme-inc.jpg",
+        "bytes": 93629,
+        "magic": "JPEG"
+      },
+      "visualInspection": "Acme Inc. を左上に目視"
+    },
+    "mobile": {
+      "result": "PASS",
+      "before": {
+        "dialogCount": 0,
+        "mobileSidebarCount": 0,
+        "triggerCount": 1,
+        "viewport": {
+          "height": 844,
+          "width": 390
+        },
+        "visibleSidebarCount": 0
+      },
+      "open": {
+        "acmeIncVisibleExactCount": 1,
+        "dialogCount": 1,
+        "dialogRect": {
+          "height": 844,
+          "width": 292.5,
+          "x": 0,
+          "y": 0
+        },
+        "duplicateIds": [],
+        "legacyAcmeVisibleExactCount": 0,
+        "sidebarRect": {
+          "height": 844,
+          "width": 292.5,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "closed": {
+        "dialogCount": 0,
+        "mobileSidebarCount": 0,
+        "visibleSidebarCount": 0
+      },
+      "screenshot": {
+        "path": "evidence/case03-dashboard-01-mobile-sidebar-acme-inc.jpg",
+        "bytes": 20711,
+        "magic": "JPEG"
+      },
+      "visualInspection": "開いた sidebar 上部の Acme Inc. を目視"
+    },
+    "catalog": {
+      "result": "FAIL",
+      "stableDom": {
+        "acmeIncVisibleExactCount": 1,
+        "dashboard01Count": 1,
+        "dashboard01Rect": {
+          "height": 467,
+          "width": 410.6640625,
+          "x": 985.328125,
+          "y": 587.6484375
+        },
+        "dashboardTableCount": 1,
+        "dashboardTableRect": {
+          "height": 467,
+          "width": 410.6640625,
+          "x": 116,
+          "y": 1078.6484375
+        },
+        "duplicateIds": [],
+        "legacyAcmeVisibleExactCount": 0,
+        "observedPreviewCount": 89,
+        "rootCount": 1,
+        "scrollY": 2241,
+        "viewport": {
+          "height": 828,
+          "width": 1512
+        }
+      },
+      "initialScreenshot": {
+        "path": "evidence/case04-catalog-dashboard-items-acme-inc.jpg",
+        "note": "自動open dialogが重なり対象証跡として不採用"
+      },
+      "closedDialogScreenshot": {
+        "path": "evidence/case05-catalog-dashboard-items-acme-inc-visible.jpg",
+        "note": "dialogは閉じたが後続sidebar fixed layerが残りAcme Inc.は遮蔽"
+      },
+      "finalScreenshot": {
+        "path": "evidence/case06-catalog-acme-inc-occluded-final.jpg",
+        "note": "通常UI操作後もAcme Inc.遮蔽を再現"
+      },
+      "finalOcclusion": {
+        "acmeCenter": {
+          "x": 88.85546875,
+          "y": 32
+        },
+        "acmeTargetRect": {
+          "height": 24,
+          "width": 77.7109375,
+          "x": 50,
+          "y": 20
+        },
+        "acmeTargetText": "Acme Inc.",
+        "dashboard01Rect": {
+          "height": 467,
+          "width": 410.6640625,
+          "x": 985.328125,
+          "y": 47.6484375
+        },
+        "dashboardTableRect": {
+          "height": 467,
+          "width": 410.6640625,
+          "x": 116,
+          "y": 538.6484375
+        },
+        "dialogCount": 0,
+        "duplicateIds": [],
+        "frontPreview": "sidebar-10",
+        "frontSidebarCollapsible": "",
+        "frontSidebarState": "expanded",
+        "frontTag": "BUTTON",
+        "frontText": "Acme",
+        "scrollY": 2781,
+        "targetIsFront": false
+      },
+      "uiAttempts": {
+        "closeDialogButtonCount": 1,
+        "sidebar16ToggleCount": 1,
+        "sidebar15ToggleCount": 1,
+        "normalizedActions": [
+          {
+            "name": "sidebar-01",
+            "before": "expanded",
+            "triggerCount": 1
+          },
+          {
+            "name": "sidebar-02",
+            "before": "not-expanded",
+            "triggerCount": 0
+          },
+          {
+            "name": "sidebar-03",
+            "before": "not-expanded",
+            "triggerCount": 0
+          },
+          {
+            "name": "sidebar-04",
+            "before": "expanded",
+            "triggerCount": 1
+          },
+          {
+            "name": "sidebar-05",
+            "before": "not-expanded",
+            "triggerCount": 0
+          },
+          {
+            "name": "sidebar-06",
+            "before": "not-expanded",
+            "triggerCount": 0
+          },
+          {
+            "name": "sidebar-07",
+            "before": "expanded",
+            "triggerCount": 1
+          },
+          {
+            "name": "sidebar-08",
+            "before": "not-expanded",
+            "triggerCount": 0
+          },
+          {
+            "name": "sidebar-09",
+            "before": "not-expanded",
+            "triggerCount": 0
+          },
+          {
+            "name": "sidebar-10",
+            "before": "expanded",
+            "triggerCount": 1
+          },
+          {
+            "name": "sidebar-11",
+            "before": "not-expanded",
+            "triggerCount": 0
+          },
+          {
+            "name": "sidebar-12",
+            "before": "not-expanded",
+            "triggerCount": 0
+          },
+          {
+            "name": "sidebar-14",
+            "before": "expanded",
+            "triggerCount": 1
+          },
+          {
+            "name": "sidebar-15",
+            "before": "not-expanded",
+            "triggerCount": 0
+          },
+          {
+            "name": "sidebar-16",
+            "before": "not-expanded",
+            "triggerCount": 0
+          }
+        ],
+        "statesAfterNormalize": [
+          {
+            "collapsible": "",
+            "name": "sidebar-01",
+            "state": "expanded"
+          },
+          {
+            "collapsible": "offcanvas",
+            "name": "sidebar-02",
+            "state": "collapsed"
+          },
+          {
+            "collapsible": "offcanvas",
+            "name": "sidebar-03",
+            "state": "collapsed"
+          },
+          {
+            "collapsible": "",
+            "name": "sidebar-04",
+            "state": "expanded"
+          },
+          {
+            "collapsible": "offcanvas",
+            "name": "sidebar-05",
+            "state": "collapsed"
+          },
+          {
+            "collapsible": "offcanvas",
+            "name": "sidebar-06",
+            "state": "collapsed"
+          },
+          {
+            "collapsible": "",
+            "name": "sidebar-07",
+            "state": "expanded"
+          },
+          {
+            "collapsible": "offcanvas",
+            "name": "sidebar-08",
+            "state": "collapsed"
+          },
+          {
+            "collapsible": "icon",
+            "name": "sidebar-09",
+            "state": "collapsed"
+          },
+          {
+            "collapsible": "",
+            "name": "sidebar-10",
+            "state": "expanded"
+          },
+          {
+            "collapsible": "offcanvas",
+            "name": "sidebar-11",
+            "state": "collapsed"
+          },
+          {
+            "collapsible": "offcanvas",
+            "name": "sidebar-12",
+            "state": "collapsed"
+          },
+          {
+            "name": "sidebar-13"
+          },
+          {
+            "collapsible": "",
+            "name": "sidebar-14",
+            "state": "expanded"
+          },
+          {
+            "collapsible": "offcanvas",
+            "name": "sidebar-15",
+            "state": "collapsed"
+          },
+          {
+            "collapsible": "offcanvas",
+            "name": "sidebar-16",
+            "state": "collapsed"
+          }
+        ]
+      },
+      "expectation": "dashboard-01 item 内の Acme Inc. が画面上で可視",
+      "actual": "DOM内にAcme Inc.は存在しrectも正だが、中心点の前面はsidebar-10のAcme buttonでtargetIsFront=false"
+    }
+  },
+  "scope": {
+    "dashboardTableFunctionalRetest": "非変更のため依頼どおり未実行"
+  },
+  "verifierNotes": [
+    "URISK-046を適用。Playwright evaluate sandboxでNodeFilter/createTreeWalker/navigatorが非提供だったため、製品を変更せず互換な読み取り式とCDPへ分離した",
+    "catalogの最初の2回の通信監査はtruncated=trueのため成功根拠から除外し、連続回収で再実行した"
+  ]
+}

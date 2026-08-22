@@ -32,6 +32,8 @@
   "dialog": "[data-slot=\"dialog-content\"]",
   "direction": "[data-slot=\"direction-preview\"]",
   "drawer": "[data-slot=\"drawer-content\"]",
+  "dashboard-01": "[data-slot=\"dashboard-01-preview\"]",
+  "dashboard-table": "[data-slot=\"dashboard-table-preview\"]",
   "hover-card": "[data-slot=\"hover-card-content\"]",
   "empty": "[data-slot=\"empty-preview\"]",
   "field": "[data-slot=\"field-preview\"]",

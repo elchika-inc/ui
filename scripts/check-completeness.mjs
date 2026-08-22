@@ -3,9 +3,18 @@
 // Button 固定の検査を一般化したもので、#2 で 50 件足すときの安全網になる。
 import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import ts from "typescript";
 import { listBlockFiles, scanBlockNames } from "./block-scan.mjs";
+import {
+  dependencyName,
+  externalPackageFromImport,
+  importedModuleSpecifiers,
+} from "./import-analysis.mjs";
+import { assertPathWithoutSymlinks } from "./path-safety.mjs";
+import { localRegistryDependencyName } from "./registry-dependency.mjs";
+import { SHARED_DEPENDENCIES, SHARED_REGISTRY_FILES } from "./registry-policy.mjs";
 
 const sha256 = (content) => createHash("sha256").update(content, "utf8").digest("hex");
 
@@ -100,9 +109,75 @@ const BLOCK_PROVENANCE_SPEC = {
   modified: /\S/,
 };
 
-// 配布しない registry:page も来歴には残す。dropped を「記録しない」で表現すると、
-// 上流に page が無かったのか意図的に落としたのかを後から区別できない。
-function blockFileProblems(name, file, index) {
+const ORIGINAL_BLOCK_PROVENANCE_SPEC = {
+  license: /^\S+$/,
+  modified: /\S/,
+};
+
+// origin は来歴スキーマの分岐キー。完全一致で判定し、未知の出所は fail-closed にする。
+// 自作品で上流由来キーを禁止するのは、移植品を自作と誤分類して来歴を失うのを防ぐため。
+const BLOCK_ORIGINS = {
+  "shadcn/ui registry": {
+    spec: BLOCK_PROVENANCE_SPEC,
+    forbidden: [],
+    fileRequired: ["upstreamPath", "upstreamPathSha"],
+    fileForbidden: [],
+    requiresDropped: true,
+  },
+  "elchika original": {
+    spec: ORIGINAL_BLOCK_PROVENANCE_SPEC,
+    forbidden: [
+      "registryUrl",
+      "registryContentSha256",
+      "addTarget",
+      "shadcnCliVersion",
+      "fetchedAt",
+    ],
+    fileRequired: [],
+    fileForbidden: ["upstreamPath", "upstreamPathSha", "dropped"],
+    requiresDropped: false,
+  },
+};
+
+// 全 item へ同梱する共有ファイルだけを block 所有集合から除く。
+// target の有無だけで分けると、target が必須の block 所有 registry:file まで除外される。
+// path または target の片方だけを借りた file は共有扱いにしない。
+const SHARED_REGISTRY_FILE_KEYS = new Set(
+  [
+    ["src/styles/global.css", "~/elchika-ui/tokens.css"],
+    ["src/styles/design-system/tokens.css", "~/elchika-ui/design-system/tokens.css"],
+    ["src/styles/design-system/brands.css", "~/elchika-ui/design-system/brands.css"],
+    ["LICENSE", "~/elchika-ui/LICENSE"],
+    ["THIRD_PARTY_LICENSES", "~/elchika-ui/THIRD_PARTY_LICENSES"],
+  ].map(([path, target]) => `${path}\0${target}`),
+);
+
+function blockOwnedRegistryFiles(item) {
+  return (item.files ?? []).filter(
+    (file) => !SHARED_REGISTRY_FILE_KEYS.has(`${file.path}\0${file.target}`),
+  );
+}
+
+// 移植品で配布しない上流 file も来歴には残す。dropped を「記録しない」で表現すると、
+// 上流に file が無かったのか意図的に落としたのかを後から区別できない。
+function originalBlockFileProblems(name, file, index, origin) {
+  const label = `${name}: files[${index}]`;
+  const problems = [];
+  for (const key of origin.fileForbidden) {
+    if (Object.hasOwn(file, key)) {
+      problems.push(`${label} は自作 block なので ${key} を持たない`);
+    }
+  }
+  if (!String(file.path ?? "").startsWith(`src/blocks/${name}/`)) {
+    problems.push(`${label} の path が src/blocks/${name}/ 配下でない`);
+  }
+  if (!/^[0-9a-f]{64}$/.test(String(file.generatedContentSha256 ?? ""))) {
+    problems.push(`${label} の generatedContentSha256 が64桁の小文字ハッシュでない`);
+  }
+  return problems;
+}
+
+function migratedBlockFileProblems(name, file, index) {
   const label = `${name}: files[${index}]`;
   const problems = [];
   if (!/^\S+$/.test(String(file.upstreamPath ?? ""))) {
@@ -129,6 +204,28 @@ function blockFileProblems(name, file, index) {
   return problems;
 }
 
+function blockFileProblems(name, file, index, origin) {
+  if (origin.fileRequired.length === 0) {
+    return originalBlockFileProblems(name, file, index, origin);
+  }
+  return migratedBlockFileProblems(name, file, index);
+}
+
+function duplicateBlockFileProblems(name, files, origin) {
+  const keyNames = origin.fileRequired.length === 0 ? ["path"] : ["upstreamPath", "path"];
+  return keyNames.flatMap((keyName) => {
+    const counts = new Map();
+    for (const file of files) {
+      const key = file[keyName];
+      if (typeof key !== "string" || key.length === 0) continue;
+      counts.set(key, (counts.get(key) ?? 0) + 1);
+    }
+    return [...counts]
+      .filter(([, count]) => count > 1)
+      .map(([key]) => `${name}: provenance の files に ${keyName} の重複がある: ${key}`);
+  });
+}
+
 // block は barrel export と <Name>Props を要求しない。registry 経由で copy-and-edit
 // する雛形であり、ライブラリの公開 API ではないため（設計 §3-1 の要件マトリクス）。
 function blockProblems(name, registry, previewFiles, previewSources, provenance, onDisk, sources) {
@@ -152,16 +249,73 @@ function blockProblems(name, registry, previewFiles, previewSources, provenance,
     problems.push(`${name}: provenance.json に来歴が無い`);
     return problems;
   }
-  problems.push(...provenanceMetaProblems(name, p, BLOCK_PROVENANCE_SPEC));
+  if (!p.origin) {
+    problems.push(`${name}: provenance の origin が無い`);
+    return problems;
+  }
+  const origin = BLOCK_ORIGINS[p.origin];
+  if (!origin) {
+    problems.push(`${name}: provenance の origin が未対応: ${p.origin}`);
+    return problems;
+  }
+  problems.push(...provenanceMetaProblems(name, p, origin.spec));
+  for (const key of origin.forbidden) {
+    if (Object.hasOwn(p, key)) {
+      problems.push(`${name}: 自作 block は ${key} を持たない`);
+    }
+  }
   if (!Array.isArray(p.files) || p.files.length === 0) {
     problems.push(`${name}: provenance の files が 0 件`);
     return problems;
   }
   return [
     ...problems,
-    ...p.files.flatMap((file, index) => blockFileProblems(name, file, index)),
-    ...blockFileSetProblems(name, registry, p.files, onDisk, sources),
+    ...duplicateBlockFileProblems(name, p.files, origin),
+    ...p.files.flatMap((file, index) => blockFileProblems(name, file, index, origin)),
+    ...blockFileSetProblems(name, registry, p.files, onDisk, sources, origin.requiresDropped),
   ];
+}
+
+function registryDependencyProblems(registry) {
+  const problems = [];
+  const itemCounts = new Map();
+  for (const item of registry.items) {
+    itemCounts.set(item.name, (itemCounts.get(item.name) ?? 0) + 1);
+  }
+  for (const item of registry.items) {
+    for (const dependency of item.registryDependencies ?? []) {
+      const name = localRegistryDependencyName(dependency);
+      if (name === undefined) continue;
+      if ((itemCounts.get(name) ?? 0) === 0) {
+        problems.push(
+          `${item.name}: registryDependencies の ${dependency} に対応する registry item が存在しない`,
+        );
+      }
+    }
+  }
+  return problems;
+}
+
+const SHARED_DEPENDENCY_FILE = SHARED_REGISTRY_FILES.find(
+  (file) => file.path === "src/styles/global.css",
+);
+
+function sharedDependencyProblems(registry) {
+  const problems = [];
+  for (const item of registry.items) {
+    const distributesSharedCss = (item.files ?? []).some(
+      (file) =>
+        file.path === SHARED_DEPENDENCY_FILE.path && file.target === SHARED_DEPENDENCY_FILE.target,
+    );
+    if (!distributesSharedCss) continue;
+    const declared = new Set((item.dependencies ?? []).map(dependencyName));
+    for (const dependency of SHARED_DEPENDENCIES) {
+      if (!declared.has(dependency)) {
+        problems.push(`${item.name}: 共有配布物が要求する ${dependency} が dependencies に無い`);
+      }
+    }
+  }
+  return problems;
 }
 
 // files[] の「形」だけを見ると、エントリを 1 件消しても残りが正しい限り緑になる。
@@ -181,43 +335,13 @@ function blockProblems(name, registry, previewFiles, previewSources, provenance,
 //    npm 依存については add 側で import から拾い直す安全網があるが、内部依存には無かった。
 // 2. 来歴のハッシュ: generatedContentSha256 は「記録時点の手元のファイル」の錨で、
 //    形式（64 桁）しか見ないと正規化後にずれたまま緑になる。
-// specifier の抽出は AST で行う。正規表現でやると偽陽性（コメント内の例示）を
+// specifier の抽出は add-component と同じ AST parser で行う。正規表現でやると偽陽性
+// （コメント内の例示）を
 // 消すために行頭へ限定 → 折り返し import（biome の lineWidth 100 が作る正準形）を
 // 全部取りこぼす、という交換になる。実測では実ファイルの
 // `import {\n  Sheet,\n} from "@/components/ui/sheet"` を取りこぼし、
-// 依存を落として整形するだけで全ゲートが緑になった。
-// このファイルは barrel / dts の解析で既に typescript を使っているので追加の依存は無い。
-function importedSpecifiers(source, fileName) {
-  const sourceFile = ts.createSourceFile(
-    fileName,
-    source,
-    ts.ScriptTarget.Latest,
-    true,
-    ts.ScriptKind.TSX,
-  );
-  const specifiers = [];
-  const visit = (node) => {
-    if (
-      (ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) &&
-      node.moduleSpecifier &&
-      ts.isStringLiteralLike(node.moduleSpecifier)
-    ) {
-      specifiers.push(node.moduleSpecifier.text);
-    }
-    // 動的 import(...)。lazy(() => import("@/...")) の形を拾う。
-    if (
-      ts.isCallExpression(node) &&
-      node.expression.kind === ts.SyntaxKind.ImportKeyword &&
-      node.arguments.length > 0 &&
-      ts.isStringLiteralLike(node.arguments[0])
-    ) {
-      specifiers.push(node.arguments[0].text);
-    }
-    ts.forEachChild(node, visit);
-  };
-  visit(sourceFile);
-  return specifiers;
-}
+// 依存を落として整形するだけで全ゲートが緑になった。非 literal dynamic import も
+// add 時と同じく fail-closed にし、--resync で生成時保証を迂回できないようにする。
 
 // @/ alias は tsconfig の paths が "@/*": ["./src/*"] の 1 本なので、src 配下すべてが
 // この形で参照されうる。ui だけを見ると hooks の宣言漏れが素通りする（実測）。
@@ -240,15 +364,42 @@ function internalDependency(specifier) {
   return { unknown: rest };
 }
 
+function blockSpecifierProblems({
+  name,
+  filePath,
+  specifier,
+  declared,
+  declaredExternal,
+  ownFiles,
+}) {
+  const dependency = internalDependency(specifier);
+  if (dependency === undefined) {
+    const external = externalPackageFromImport(specifier);
+    return external && !declaredExternal.has(external)
+      ? [`${name}: ${filePath} が import する ${external} が dependencies に無い`]
+      : [];
+  }
+  if (dependency.unknown !== undefined) {
+    return [`${name}: ${filePath} が import する ${specifier} を registry item へ対応付けられない`];
+  }
+  // 自 item が配るファイルなら宣言は要らない。
+  // 現状 block の配布ファイルは src/blocks/ 配下のみなので発火しないが、
+  // SUPPORTED_BLOCK_FILE_TYPES を広げたときにここが効く。
+  if (ownFiles.has(`src/components/ui/${dependency.name}.tsx`)) return [];
+  if (ownFiles.has(`src/hooks/${dependency.name}.ts`)) return [];
+  return !declared.has(dependency.name)
+    ? [`${name}: ${filePath} が import する ${specifier} が registryDependencies に無い`]
+    : [];
+}
+
 function blockSourceProblems(name, item, files, sources) {
   if (sources === undefined) return [];
   const problems = [];
   const declared = new Set(
     (item.registryDependencies ?? []).map((dependency) => dependency.replace(/^@elchika\//, "")),
   );
-  const ownFiles = new Set(
-    (item.files ?? []).filter((file) => file.target === undefined).map((file) => file.path),
-  );
+  const declaredExternal = new Set((item.dependencies ?? []).map(dependencyName));
+  const ownFiles = new Set(blockOwnedRegistryFiles(item).map((file) => file.path));
 
   for (const file of files.filter((entry) => entry.dropped !== true)) {
     const source = sources[file.path];
@@ -256,44 +407,40 @@ function blockSourceProblems(name, item, files, sources) {
     if (sha256(source) !== file.generatedContentSha256) {
       problems.push(`${name}: ${file.path} の generatedContentSha256 が実体と一致しない`);
     }
-    for (const specifier of importedSpecifiers(source, file.path)) {
-      const dependency = internalDependency(specifier);
-      if (dependency === undefined) continue;
-      if (dependency.unknown !== undefined) {
-        problems.push(
-          `${name}: ${file.path} が import する ${specifier} を registry item へ対応付けられない`,
-        );
-        continue;
-      }
-      // 自 item が配るファイルなら宣言は要らない。
-      // 現状 block の配布ファイルは src/blocks/ 配下のみなので発火しないが、
-      // SUPPORTED_BLOCK_FILE_TYPES を広げたときにここが効く。
-      if (ownFiles.has(`src/components/ui/${dependency.name}.tsx`)) continue;
-      if (ownFiles.has(`src/hooks/${dependency.name}.ts`)) continue;
-      if (!declared.has(dependency.name)) {
-        problems.push(
-          `${name}: ${file.path} が import する ${specifier} が registryDependencies に無い`,
-        );
-      }
+    let specifiers;
+    try {
+      specifiers = importedModuleSpecifiers(source, file.path);
+    } catch (error) {
+      problems.push(`${name}: ${error.message}`);
+      continue;
+    }
+    for (const specifier of specifiers) {
+      problems.push(
+        ...blockSpecifierProblems({
+          name,
+          filePath: file.path,
+          specifier,
+          declared,
+          declaredExternal,
+          ownFiles,
+        }),
+      );
     }
   }
   return problems;
 }
 
-function blockFileSetProblems(name, registry, files, onDisk, sources) {
+function blockFileSetProblems(name, registry, files, onDisk, sources, requiresDropped) {
   const problems = [];
   const item = registry.items.find((i) => i.name === name);
   // item が無いことは別途 problem 済み。ここで二重に鳴らさない。
   if (!item) return problems;
 
-  // 配布分の正解は registry item。法務ファイルは全 item へ共通で足されるもので、
-  // block 自身のファイルではないので除く。type ではなく target の有無で判定する
-  // ——type で切ると block 自身の registry:file まで巻き込み、正しい来歴を赤くする。
-  const distributed = (item.files ?? [])
-    .filter((file) => file.target === undefined)
-    .map((file) => file.path)
-    .sort();
-  for (const file of (item.files ?? []).filter((candidate) => candidate.target === undefined)) {
+  // 配布分の正解は registry item。全 item へ共通で足される既知の共有ファイルだけを
+  // path/target pair で除外し、target を持つ block 固有 asset は所有集合へ残す。
+  const ownedFiles = blockOwnedRegistryFiles(item);
+  const distributed = ownedFiles.map((file) => file.path).sort();
+  for (const file of ownedFiles) {
     // block の実装コードは registry:component でなければ CLI の配置契約が変わる。
     // 一方 data.json のような block 固有 asset は registry:file が正しいため、
     // 全ファイルを一律に registry:component へ固定しない。
@@ -306,7 +453,7 @@ function blockFileSetProblems(name, registry, files, onDisk, sources) {
     }
   }
   const recorded = files
-    .filter((file) => file.dropped !== true)
+    .filter((file) => !requiresDropped || file.dropped !== true)
     .map((file) => file.path)
     .sort();
 
@@ -342,11 +489,9 @@ function blockFileSetProblems(name, registry, files, onDisk, sources) {
 
   problems.push(...blockSourceProblems(name, item, files, sources));
 
-  // 落とした分はローカルに実体が無いため、実体との突合ができない。
-  // 上流 block は必ず registry:page を持ち、それを配布しないのが設計 §1 の決定なので、
-  // 「1 件以上の dropped がある」ことを要求する。上流が page を持たない block を
-  // 出してきたら赤くなるが、その時は決定の見直しが要るので止まる方が正しい。
-  if (!files.some((file) => file.dropped === true)) {
+  // 移植品で落とした分はローカル実体と突合できないため、1 件以上の dropped を要求する。
+  // 自作品には上流 file 自体が無く、dropped は禁止キーなのでこの要件を適用しない。
+  if (requiresDropped && !files.some((file) => file.dropped === true)) {
     problems.push(`${name}: 配布しない registry:page の来歴（dropped: true）が無い`);
   }
   return problems;
@@ -436,6 +581,8 @@ export function checkCompleteness({
   )) {
     if (count > 1) problems.push(`${name}: registry.json に同名 item が ${count} 件ある`);
   }
+  problems.push(...registryDependencyProblems(registry));
+  problems.push(...sharedDependencyProblems(registry));
   const barrelPaths = exportedModulePaths(barrel);
   for (const name of components) {
     problems.push(
@@ -458,6 +605,29 @@ export function checkCompleteness({
   return { problems };
 }
 
+export function readBlockSources(root, blockFiles) {
+  return Object.fromEntries(
+    Object.entries(blockFiles).map(([name, paths]) => [
+      name,
+      Object.fromEntries(
+        paths
+          .map((path) => {
+            const safePath = assertPathWithoutSymlinks(
+              root,
+              `${name}: completeness の block file`,
+              path,
+            );
+            return [
+              safePath,
+              existsSync(join(root, safePath)) ? readFileSync(join(root, safePath), "utf8") : null,
+            ];
+          })
+          .filter(([, source]) => source !== null),
+      ),
+    ]),
+  );
+}
+
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   const components = readdirSync("src/components/ui")
     .filter((f) => f.endsWith(".tsx"))
@@ -476,16 +646,7 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   // （scanBlockNames は 3 つの走査根がすべて空なら空配列を返す）。
   const blocks = scanBlockNames("src/blocks", provenance, registry);
   const blockFiles = Object.fromEntries(blocks.map((name) => [name, listBlockFiles(".", name)]));
-  const blockSources = Object.fromEntries(
-    blocks.map((name) => [
-      name,
-      Object.fromEntries(
-        blockFiles[name]
-          .filter((path) => existsSync(path))
-          .map((path) => [path, readFileSync(path, "utf8")]),
-      ),
-    ]),
-  );
+  const blockSources = readBlockSources(".", blockFiles);
   const { problems } = checkCompleteness({
     components,
     blocks,

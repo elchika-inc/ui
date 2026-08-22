@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
+import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { test } from "node:test";
-import { checkCompleteness } from "./check-completeness.mjs";
+import { checkCompleteness, readBlockSources } from "./check-completeness.mjs";
 
 const complete = {
   components: ["button"],
@@ -150,6 +153,22 @@ test("registry item の欠落を検出する", () => {
   assert.deepEqual(problems, ["button: registry.json に item が無い"]);
 });
 
+test("共有配布物を持つ registry item は共有 npm 依存を宣言する", () => {
+  const registry = structuredClone(complete.registry);
+  registry.items[0].dependencies = ["shadcn"];
+  registry.items[0].files = [
+    {
+      path: "src/styles/global.css",
+      type: "registry:file",
+      target: "~/elchika-ui/tokens.css",
+    },
+  ];
+  const { problems } = checkCompleteness({ ...complete, registry });
+  assert.deepEqual(problems, [
+    "button: 共有配布物が要求する tw-animate-css が dependencies に無い",
+  ]);
+});
+
 test("component と同名の registry item の type 不一致を検出する", () => {
   const registry = structuredClone(complete.registry);
   registry.items[0].type = "registry:block";
@@ -270,6 +289,7 @@ const completeBlock = {
     ...complete.provenance,
     blocks: {
       "login-01": {
+        origin: "shadcn/ui registry",
         registryUrl: "https://ui.shadcn.com/r/styles/base-nova/login-01.json",
         registryContentSha256: "c".repeat(64),
         addTarget: "@shadcn/login-01",
@@ -294,6 +314,108 @@ const completeBlock = {
     },
   },
 };
+
+const originalBlockPath = "src/blocks/dashboard-table/components/dashboard-table.tsx";
+
+const completeOriginalBlock = {
+  ...complete,
+  blocks: ["dashboard-table"],
+  registry: {
+    items: [
+      { name: "button", type: "registry:ui" },
+      {
+        name: "dashboard-table",
+        type: "registry:block",
+        files: [
+          { path: originalBlockPath, type: "registry:component" },
+          { path: "LICENSE", type: "registry:file", target: "~/elchika-ui/LICENSE" },
+        ],
+      },
+    ],
+  },
+  previewFiles: [
+    "button.astro",
+    "button-dark.astro",
+    "dashboard-table.astro",
+    "dashboard-table-dark.astro",
+  ],
+  previewSources: ["button.tsx", "dashboard-table.tsx"],
+  provenance: {
+    ...complete.provenance,
+    blocks: {
+      "dashboard-table": {
+        origin: "elchika original",
+        license: "MIT",
+        modified:
+          "上流 dashboard-01 の data-table.tsx を参照しつつ、npm 依存ゼロで自作。DnD は実装しない",
+        files: [
+          {
+            path: originalBlockPath,
+            generatedContentSha256: "f".repeat(64),
+          },
+        ],
+      },
+    },
+  },
+};
+
+test("自作 block は上流由来キーを要求されない", () => {
+  const { problems } = checkCompleteness(completeOriginalBlock);
+  assert.deepEqual(problems, []);
+});
+
+test("自作 block は上流由来の共通メタを持たない", () => {
+  for (const key of [
+    "registryUrl",
+    "registryContentSha256",
+    "addTarget",
+    "shadcnCliVersion",
+    "fetchedAt",
+  ]) {
+    const provenance = structuredClone(completeOriginalBlock.provenance);
+    provenance.blocks["dashboard-table"][key] = "x";
+    const { problems } = checkCompleteness({ ...completeOriginalBlock, provenance });
+    assert.deepEqual(problems, [`dashboard-table: 自作 block は ${key} を持たない`], key);
+  }
+});
+
+test("自作 block の files は上流由来キーを持たない", () => {
+  for (const [key, value] of [
+    ["upstreamPath", "apps/v4/registry/bases/base/blocks/dashboard-01/data-table.tsx"],
+    ["upstreamPathSha", "0".repeat(40)],
+    ["dropped", true],
+  ]) {
+    const provenance = structuredClone(completeOriginalBlock.provenance);
+    provenance.blocks["dashboard-table"].files[0][key] = value;
+    const { problems } = checkCompleteness({ ...completeOriginalBlock, provenance });
+    assert.deepEqual(
+      problems,
+      [`dashboard-table: files[0] は自作 block なので ${key} を持たない`],
+      key,
+    );
+  }
+});
+
+test("未知の origin は fail-closed で弾く", () => {
+  const provenance = structuredClone(completeOriginalBlock.provenance);
+  provenance.blocks["dashboard-table"].origin = "unknown-source";
+  const { problems } = checkCompleteness({ ...completeOriginalBlock, provenance });
+  assert.deepEqual(problems, ["dashboard-table: provenance の origin が未対応: unknown-source"]);
+});
+
+test("origin が無ければ検出する", () => {
+  const provenance = structuredClone(completeOriginalBlock.provenance);
+  provenance.blocks["dashboard-table"].origin = undefined;
+  const { problems } = checkCompleteness({ ...completeOriginalBlock, provenance });
+  assert.deepEqual(problems, ["dashboard-table: provenance の origin が無い"]);
+});
+
+test("移植品は従来どおり上流由来キーを要求される", () => {
+  const provenance = structuredClone(completeBlock.provenance);
+  provenance.blocks["login-01"].registryUrl = undefined;
+  const { problems } = checkCompleteness({ ...completeBlock, provenance });
+  assert.deepEqual(problems, ["login-01: provenance の registryUrl が無い"]);
+});
 
 test("block が全経路に載っていれば問題を返さない", () => {
   const { problems } = checkCompleteness(completeBlock);
@@ -424,6 +546,27 @@ test("block の files が空なら検出する", () => {
   provenance.blocks["login-01"].files = [];
   const { problems } = checkCompleteness({ ...completeBlock, provenance });
   assert.deepEqual(problems, ["login-01: provenance の files が 0 件"]);
+});
+
+test("移植 block の files は upstreamPath の重複を許さない", () => {
+  const provenance = structuredClone(completeBlock.provenance);
+  provenance.blocks["login-01"].files.push(structuredClone(provenance.blocks["login-01"].files[0]));
+
+  assert.deepEqual(checkCompleteness({ ...completeBlock, provenance }).problems, [
+    "login-01: provenance の files に upstreamPath の重複がある: apps/v4/registry/bases/base/blocks/login-01/components/login-form.tsx",
+    "login-01: provenance の files に path の重複がある: src/blocks/login-01/components/login-form.tsx",
+  ]);
+});
+
+test("自作 block の files は path の重複を許さない", () => {
+  const provenance = structuredClone(completeOriginalBlock.provenance);
+  provenance.blocks["dashboard-table"].files.push(
+    structuredClone(provenance.blocks["dashboard-table"].files[0]),
+  );
+
+  assert.deepEqual(checkCompleteness({ ...completeOriginalBlock, provenance }).problems, [
+    `dashboard-table: provenance の files に path の重複がある: ${originalBlockPath}`,
+  ]);
 });
 
 test("配布ファイルの generatedContentSha256 欠落を検出する", () => {
@@ -573,13 +716,14 @@ test("配布ファイルが 0 件の block を検出する", () => {
   assert.deepEqual(problems, ["login-01: registry item に配布ファイルが 1 件も無い"]);
 });
 
-// 法務ファイルの除外を type で行うと、block 自身の registry:file まで巻き込んで
-// 正しい来歴を赤くする（dashboard-01 の data.json が該当する）。target の有無で切る。
+// 法務ファイルの除外を type や target の有無で行うと、block 自身の registry:file まで
+// 巻き込んで正しい来歴を赤くする（dashboard-01 の data.json が該当する）。
 test("block 自身の registry:file を法務ファイルと取り違えない", () => {
   const registry = structuredClone(completeBlock.registry);
   registry.items[1].files.push({
     path: "src/blocks/login-01/data.json",
     type: "registry:file",
+    target: "app/login/data.json",
   });
   const provenance = structuredClone(completeBlock.provenance);
   provenance.blocks["login-01"].files.push({
@@ -589,6 +733,18 @@ test("block 自身の registry:file を法務ファイルと取り違えない",
     generatedContentSha256: "f".repeat(64),
   });
   assert.deepEqual(checkCompleteness({ ...completeBlock, registry, provenance }).problems, []);
+});
+
+test("共有 target だけを借りた block file を法務ファイルと取り違えない", () => {
+  const registry = structuredClone(completeBlock.registry);
+  registry.items[1].files.push({
+    path: "src/blocks/login-01/rogue.json",
+    type: "registry:file",
+    target: "~/elchika-ui/LICENSE",
+  });
+  assert.deepEqual(checkCompleteness({ ...completeBlock, registry }).problems, [
+    "login-01: registry item の src/blocks/login-01/rogue.json が provenance の files に無い",
+  ]);
 });
 
 test("block の非code配布ファイルに registry:file 以外を許さない", () => {
@@ -703,6 +859,10 @@ test("配布ファイルが import する @/hooks の未宣言を検出する", 
 
 test("registryDependencies に宣言されていれば問題を返さない", () => {
   const registry = structuredClone(completeBlock.registry);
+  registry.items.push(
+    { name: "field", type: "registry:ui" },
+    { name: "use-mobile", type: "registry:hook" },
+  );
   registry.items[1].registryDependencies = ["@elchika/field", "@elchika/use-mobile"];
   const { problems } = checkCompleteness(
     withSource(
@@ -711,6 +871,22 @@ test("registryDependencies に宣言されていれば問題を返さない", ()
     ),
   );
   assert.deepEqual(problems, []);
+});
+
+test("registryDependencies が存在しない local item を指したら検出する", () => {
+  const registry = structuredClone(completeBlock.registry);
+  registry.items[1].registryDependencies = ["@elchika/ghost"];
+
+  assert.deepEqual(checkCompleteness({ ...completeBlock, registry }).problems, [
+    "login-01: registryDependencies の @elchika/ghost に対応する registry item が存在しない",
+  ]);
+});
+
+test("外部 URL と外部 namespace の registryDependencies は local item 突合から除外する", () => {
+  const registry = structuredClone(completeBlock.registry);
+  registry.items[1].registryDependencies = ["https://example.com/r/input.json", "@example/input"];
+
+  assert.deepEqual(checkCompleteness({ ...completeBlock, registry }).problems, []);
 });
 
 // 新しい alias が増えたときに黙って穴が開かないよう fail-closed にする。
@@ -750,6 +926,46 @@ test("blockSources を渡さなければ内容検査を行わない", () => {
   assert.deepEqual(checkCompleteness(completeBlock).problems, []);
 });
 
+test("completeness は block file 自身が symlink なら repo 外を読まず停止する", (t) => {
+  const root = mkdtempSync(join(tmpdir(), "elchika-completeness-leaf-"));
+  const outside = mkdtempSync(join(tmpdir(), "elchika-completeness-leaf-outside-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(() => rmSync(outside, { recursive: true, force: true }));
+  mkdirSync(join(root, "src/blocks/login-01/components"), { recursive: true });
+  writeFileSync(join(outside, "secret.tsx"), "repo 外の秘密\n");
+  symlinkSync(
+    join(outside, "secret.tsx"),
+    join(root, "src/blocks/login-01/components/login-form.tsx"),
+    "file",
+  );
+
+  assert.throws(
+    () =>
+      readBlockSources(root, {
+        "login-01": ["src/blocks/login-01/components/login-form.tsx"],
+      }),
+    /completeness の block file.*symlink/,
+  );
+});
+
+test("completeness は block file の祖先が symlink なら repo 外を読まず停止する", (t) => {
+  const root = mkdtempSync(join(tmpdir(), "elchika-completeness-ancestor-"));
+  const outside = mkdtempSync(join(tmpdir(), "elchika-completeness-ancestor-outside-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(() => rmSync(outside, { recursive: true, force: true }));
+  mkdirSync(join(root, "src/blocks/login-01"), { recursive: true });
+  writeFileSync(join(outside, "login-form.tsx"), "repo 外の秘密\n");
+  symlinkSync(outside, join(root, "src/blocks/login-01/components"), "dir");
+
+  assert.throws(
+    () =>
+      readBlockSources(root, {
+        "login-01": ["src/blocks/login-01/components/login-form.tsx"],
+      }),
+    /completeness の block file.*symlink/,
+  );
+});
+
 // 正規表現で「コメント内の例示」の偽陽性を消すと行頭限定になり、biome の
 // lineWidth 100 が作る折り返し import を全部取りこぼす（実測: 依存を落として
 // 整形するだけで全ゲートが緑になった）。AST なら両方同時に消える。
@@ -781,6 +997,30 @@ test("動的 import の specifier も拾う", () => {
   assert.deepEqual(checkCompleteness(withSource(source)).problems, [
     "login-01: src/blocks/login-01/components/login-form.tsx が import する @/components/ui/field が registryDependencies に無い",
   ]);
+});
+
+test("文字列リテラルでない動的 import は fail-closed で検出する", () => {
+  const source = ['const dependency = "optional-widget";', "void import(dependency);", ""].join(
+    "\n",
+  );
+  assert.deepEqual(checkCompleteness(withSource(source)).problems, [
+    "login-01: src/blocks/login-01/components/login-form.tsx: 動的 import の指定が文字列リテラルでない",
+  ]);
+});
+
+test("配布ファイルが import する外部 npm 依存の未宣言を検出する", () => {
+  assert.deepEqual(checkCompleteness(withSource('import "optional-widget/subpath";\n')).problems, [
+    "login-01: src/blocks/login-01/components/login-form.tsx が import する optional-widget が dependencies に無い",
+  ]);
+});
+
+test("外部 npm 依存が dependencies に宣言されていれば問題を返さない", () => {
+  const registry = structuredClone(completeBlock.registry);
+  registry.items[1].dependencies = ["optional-widget"];
+  assert.deepEqual(
+    checkCompleteness(withSource('import "optional-widget/subpath";\n', { registry })).problems,
+    [],
+  );
 });
 
 test("export * from の specifier も拾う", () => {

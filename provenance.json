@@ -2323,6 +2323,100 @@
         }
       ],
       "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "dashboard-01": {
+      "origin": "shadcn/ui registry",
+      "sourceUrl": "https://github.com/shadcn-ui/ui",
+      "registry": "https://ui.shadcn.com",
+      "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/dashboard-01.json",
+      "registryContentSha256": "e1f10e61fe3bea792cf4e980553ce9490d456f8bd410dc35a6a6afc4768498fa",
+      "addTarget": "@shadcn/dashboard-01",
+      "upstreamRepo": "shadcn-ui/ui",
+      "style": "base-nova",
+      "shadcnCliVersion": "4.16.0",
+      "shadcnVersion": "4.16.0",
+      "shadcnRange": "^4.16.0",
+      "fetchedAt": "2026-08-22",
+      "license": "MIT",
+      "modified": "registry:page を配布から除外。data-table.tsx は npm 依存 6 件（@dnd-kit 系 4 件・@tanstack/react-table・zod）を持ち込むため配布から除外し、同等機能を dashboard-table として自作した。IconPlaceholder を lucide-react の実アイコンへ展開。standards §5 適合のため値系 arbitrary value と focus ring の透明度合成を除去。上流 manifest から除外した dependencies: @dnd-kit/core, @dnd-kit/modifiers, @dnd-kit/sortable, @dnd-kit/utilities, @tanstack/react-table, zod。上流 manifest から除外した registryDependencies: breadcrumb, checkbox, drawer, label, sonner, table, tabs。外部 avatar URL を除去して AvatarFallback を使い、静的なブランドリンクを有効なルートへ変更。catalog 内の SVG gradient ID 重複を防ぐため React.useId で描画単位の ID を生成。上流 manifest の宣言漏れを補完した registryDependencies: use-mobile",
+      "files": [
+        {
+          "path": "src/blocks/dashboard-01/data.json",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/dashboard-01/data.json",
+          "upstreamPathSha": "6261bd89f72d794aea491482cc2acfd8dc3d63e2",
+          "generatedContentSha256": "a8dcfbe6d014ab33adb4be2ccc221313d0bbf5d1d69a06bc08527b66148e849a"
+        },
+        {
+          "path": "src/blocks/dashboard-01/components/app-sidebar.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/dashboard-01/components/app-sidebar.tsx",
+          "upstreamPathSha": "6261bd89f72d794aea491482cc2acfd8dc3d63e2",
+          "generatedContentSha256": "73e97803b0f4834ba31ff5f7ec42c131e185f1c727b4e4d9dea52289962c94b8"
+        },
+        {
+          "path": "src/blocks/dashboard-01/components/chart-area-interactive.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/dashboard-01/components/chart-area-interactive.tsx",
+          "upstreamPathSha": "6261bd89f72d794aea491482cc2acfd8dc3d63e2",
+          "generatedContentSha256": "6cc616fd58f36b5dd9bd8375d46e9d9f2adf3e81af25d4fcabd33511fb2d31b2"
+        },
+        {
+          "path": "src/blocks/dashboard-01/components/nav-documents.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/dashboard-01/components/nav-documents.tsx",
+          "upstreamPathSha": "6261bd89f72d794aea491482cc2acfd8dc3d63e2",
+          "generatedContentSha256": "c68bb311cb9e7f63d4f9445bf2f195324d00e64c40bfca278220863af770eb7e"
+        },
+        {
+          "path": "src/blocks/dashboard-01/components/nav-main.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/dashboard-01/components/nav-main.tsx",
+          "upstreamPathSha": "6261bd89f72d794aea491482cc2acfd8dc3d63e2",
+          "generatedContentSha256": "9f66fa712aba008e67cecdf6a3f89ffadd05268f9807ae611cd3d2f880bcf2ea"
+        },
+        {
+          "path": "src/blocks/dashboard-01/components/nav-secondary.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/dashboard-01/components/nav-secondary.tsx",
+          "upstreamPathSha": "6261bd89f72d794aea491482cc2acfd8dc3d63e2",
+          "generatedContentSha256": "7c465c5bb0157c1770fc439faf374b88631fff00dcc5541f8e7c9575bcfd01d0"
+        },
+        {
+          "path": "src/blocks/dashboard-01/components/nav-user.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/dashboard-01/components/nav-user.tsx",
+          "upstreamPathSha": "6261bd89f72d794aea491482cc2acfd8dc3d63e2",
+          "generatedContentSha256": "6c0b73dd833c697b2b82fa5a2e996603be6c4d752d5ec8c75db39b1fdcac9eff"
+        },
+        {
+          "path": "src/blocks/dashboard-01/components/section-cards.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/dashboard-01/components/section-cards.tsx",
+          "upstreamPathSha": "6261bd89f72d794aea491482cc2acfd8dc3d63e2",
+          "generatedContentSha256": "edbd61fa59aa668932b9409428bcd765b4371382500a66b3783c7ba27404a5e1"
+        },
+        {
+          "path": "src/blocks/dashboard-01/components/site-header.tsx",
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/dashboard-01/components/site-header.tsx",
+          "upstreamPathSha": "6261bd89f72d794aea491482cc2acfd8dc3d63e2",
+          "generatedContentSha256": "ec9cf9fdcb2fa9b000b1fb36d83932412cf03bb8ecac54e396859e1b3295d930"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/dashboard-01/page.tsx",
+          "upstreamPathSha": "6261bd89f72d794aea491482cc2acfd8dc3d63e2"
+        },
+        {
+          "dropped": true,
+          "upstreamPath": "apps/v4/registry/bases/base/blocks/dashboard-01/components/data-table.tsx",
+          "upstreamPathSha": "6261bd89f72d794aea491482cc2acfd8dc3d63e2"
+        }
+      ],
+      "notes": "registryContentSha256 は受け取った配信物 JSON 全体の錨である。component の同名キーは一次ファイルの content を指すため、意味が異なる。files[].generatedContentSha256 は記録時点の手元のファイルのハッシュである。add 直後に記録した値は CLI 生成物のもので、その後 standards 正規化（biome 整形・a11y 適合）を行った場合は --resync で取り直す（--force は CLI を再実行して正規化を上書きするため使わない）。check-completeness がディスク実体と突合するため、ずれたままにはできない。upstreamPathSha は block ディレクトリを最後に変更した commit を指す。未認証の GitHub API が 60 req/h であり、ファイル単位で引くと 27 件の移植で必ず超えるため、block 単位へ畳んでいる。dropped: true の file は配布しない上流 file を表し、理由は modified に記録する。CLI は block の配布ファイルを components alias 直下へフラットに落とすため、add 後に src/blocks/<name>/ へ移設している。"
+    },
+    "dashboard-table": {
+      "origin": "elchika original",
+      "license": "MIT",
+      "modified": "上流 dashboard-01 の data-table.tsx の機能構成を参照し、registry の既存部品と React state で npm 依存を追加せず自作。DnD は設計 §3-6 に従い実装しない。空文字・空白だけの metric は非数値として扱い、同値 target は id で決定的に並べる",
+      "files": [
+        {
+          "path": "src/blocks/dashboard-table/components/dashboard-table.tsx",
+          "generatedContentSha256": "dea27802b25c0965a6bcbe188f8166acce94777039231b38fc1c4a3f92714f9c"
+        }
+      ]
     }
   }
 }

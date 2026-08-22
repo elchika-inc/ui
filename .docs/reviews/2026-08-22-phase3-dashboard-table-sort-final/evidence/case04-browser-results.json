@@ -1,0 +1,668 @@
+{
+  "verified_impl_sha": "0f2350d0c643fa5f7dfebe91961175bb4360dcf0",
+  "observed_at": {
+    "finished": "2026-08-22T09:57:02.838Z"
+  },
+  "workspace_drift": {
+    "head_at_start": "0f2350d0c643fa5f7dfebe91961175bb4360dcf0",
+    "head_at_cleanup": "bb68c2cf27b8105bc2c14f84d4e795570d8c6449",
+    "target_runtime_diff_exit": 0,
+    "target_unit_fixture_diff_exit": 0,
+    "changed_paths_outside_target": [
+      ".docs/plans/2026-08-17-registry-blocks-plan.md",
+      "scripts/check-registry-build.mjs",
+      "scripts/check-registry-build.test.mjs",
+      "scripts/registry-index.mjs",
+      "scripts/registry-index.test.mjs"
+    ],
+    "assessment": "検証中に他エージェントの commit で HEAD は進んだが、dashboard-table runtime・preview・catalog・package・対象 unit fixture の内容差分はない"
+  },
+  "server": {
+    "requested": "http://127.0.0.1:4321",
+    "actual": "http://127.0.0.1:4322",
+    "pid": 72115,
+    "port4321UnrelatedPid": 11102
+  },
+  "browser": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+    "isolatedViewport": {
+      "width": 1536,
+      "height": 1000
+    },
+    "catalogViewport": {
+      "width": 1920,
+      "height": 1000
+    }
+  },
+  "countsAreObservationsOnly": true,
+  "light": {
+    "base": {
+      "detailNames": [
+        "Adaptive Communication Protocols の詳細を開く",
+        "Advanced Algorithms and Machine Learning の詳細を開く",
+        "Advantages Over Current Technologies の詳細を開く",
+        "Capabilities の詳細を開く",
+        "Cover page の詳細を開く",
+        "Design の詳細を開く",
+        "Executive summary の詳細を開く",
+        "Innovation and Advantages の詳細を開く",
+        "Integration with existing systems の詳細を開く",
+        "Overview of EMR's Innovative Solutions の詳細を開く",
+        "Table of contents の詳細を開く",
+        "Technical approach の詳細を開く"
+      ],
+      "duplicateIds": [],
+      "previewRect": {
+        "height": 1000,
+        "width": 1280,
+        "x": 128,
+        "y": 0
+      },
+      "recordCount": "12",
+      "rows": [
+        {
+          "document": "Adaptive Communication Protocols",
+          "id": 11,
+          "target": "9"
+        },
+        {
+          "document": "Advanced Algorithms and Machine Learning",
+          "id": 10,
+          "target": "30"
+        },
+        {
+          "document": "Advantages Over Current Technologies",
+          "id": 12,
+          "target": "12"
+        },
+        {
+          "document": "Capabilities",
+          "id": 6,
+          "target": "20"
+        },
+        {
+          "document": "Cover page",
+          "id": 1,
+          "target": "18"
+        },
+        {
+          "document": "Design",
+          "id": 5,
+          "target": "2"
+        },
+        {
+          "document": "Executive summary",
+          "id": 3,
+          "target": "10"
+        },
+        {
+          "document": "Innovation and Advantages",
+          "id": 8,
+          "target": "25"
+        },
+        {
+          "document": "Integration with existing systems",
+          "id": 7,
+          "target": "19"
+        },
+        {
+          "document": "Overview of EMR's Innovative Solutions",
+          "id": 9,
+          "target": "7"
+        },
+        {
+          "document": "Table of contents",
+          "id": 2,
+          "target": "29"
+        },
+        {
+          "document": "Technical approach",
+          "id": 4,
+          "target": "27"
+        }
+      ],
+      "tableRect": {
+        "height": 585.5,
+        "width": 1232,
+        "x": 152,
+        "y": 62
+      },
+      "url": "http://127.0.0.1:4322/preview/dashboard-table/"
+    },
+    "targetSort": {
+      "ascending": [
+        {
+          "document": "Design",
+          "id": 5,
+          "target": 2
+        },
+        {
+          "document": "Overview of EMR's Innovative Solutions",
+          "id": 9,
+          "target": 7
+        },
+        {
+          "document": "Adaptive Communication Protocols",
+          "id": 11,
+          "target": 9
+        },
+        {
+          "document": "Executive summary",
+          "id": 3,
+          "target": 10
+        },
+        {
+          "document": "Advantages Over Current Technologies",
+          "id": 12,
+          "target": 12
+        },
+        {
+          "document": "Cover page",
+          "id": 1,
+          "target": 18
+        },
+        {
+          "document": "Integration with existing systems",
+          "id": 7,
+          "target": 19
+        },
+        {
+          "document": "Capabilities",
+          "id": 6,
+          "target": 20
+        },
+        {
+          "document": "Innovation and Advantages",
+          "id": 8,
+          "target": 25
+        },
+        {
+          "document": "Technical approach",
+          "id": 4,
+          "target": 27
+        },
+        {
+          "document": "Table of contents",
+          "id": 2,
+          "target": 29
+        },
+        {
+          "document": "Advanced Algorithms and Machine Learning",
+          "id": 10,
+          "target": 30
+        }
+      ],
+      "descending": [
+        {
+          "document": "Advanced Algorithms and Machine Learning",
+          "id": 10,
+          "target": 30
+        },
+        {
+          "document": "Table of contents",
+          "id": 2,
+          "target": 29
+        },
+        {
+          "document": "Technical approach",
+          "id": 4,
+          "target": 27
+        },
+        {
+          "document": "Innovation and Advantages",
+          "id": 8,
+          "target": 25
+        },
+        {
+          "document": "Capabilities",
+          "id": 6,
+          "target": 20
+        },
+        {
+          "document": "Integration with existing systems",
+          "id": 7,
+          "target": 19
+        },
+        {
+          "document": "Cover page",
+          "id": 1,
+          "target": 18
+        },
+        {
+          "document": "Advantages Over Current Technologies",
+          "id": 12,
+          "target": 12
+        },
+        {
+          "document": "Executive summary",
+          "id": 3,
+          "target": 10
+        },
+        {
+          "document": "Adaptive Communication Protocols",
+          "id": 11,
+          "target": 9
+        },
+        {
+          "document": "Overview of EMR's Innovative Solutions",
+          "id": 9,
+          "target": 7
+        },
+        {
+          "document": "Design",
+          "id": 5,
+          "target": 2
+        }
+      ],
+      "checks": {
+        "ascendingMonotonic": true,
+        "descendingMonotonic": true,
+        "ascendingIds": [
+          5,
+          9,
+          11,
+          3,
+          12,
+          1,
+          7,
+          6,
+          8,
+          4,
+          2,
+          10
+        ],
+        "descendingIds": [
+          10,
+          2,
+          4,
+          8,
+          6,
+          7,
+          1,
+          12,
+          3,
+          11,
+          9,
+          5
+        ],
+        "ties": [],
+        "descIsReverse": true
+      }
+    },
+    "tieBreakBoundary": {
+      "screenRows": 12,
+      "screenTieGroups": [],
+      "browserBranchReached": false,
+      "fullSourceRows": 68,
+      "fullSourceHasTies": true,
+      "previewUses": "dashboardData.slice(0, 12)",
+      "fixtureRows": 4,
+      "fixturePermutations": 24,
+      "unitEvidence": "case05-target-order-unit.log"
+    },
+    "selection": {
+      "before": {
+        "ariaChecked": "false",
+        "indeterminate": false,
+        "selected": "0",
+        "text": "12 件を表示・0 件を選択"
+      },
+      "after": {
+        "ariaChecked": "mixed",
+        "indeterminate": true,
+        "selected": "1",
+        "text": "12 件を表示・1 件を選択"
+      }
+    },
+    "dnd": {
+      "dom": {
+        "dragHandles": 0,
+        "draggableTrue": 0,
+        "first": {
+          "height": 38.5,
+          "width": 1230,
+          "x": 153,
+          "y": 143.5
+        },
+        "grabCursors": 0,
+        "second": {
+          "height": 39,
+          "width": 1230,
+          "x": 153,
+          "y": 182
+        },
+        "sortableAttrs": 0
+      },
+      "before": [
+        10,
+        2,
+        4,
+        8,
+        6,
+        7,
+        1,
+        12,
+        3,
+        11,
+        9,
+        5
+      ],
+      "afterPointer": [
+        10,
+        2,
+        4,
+        8,
+        6,
+        7,
+        1,
+        12,
+        3,
+        11,
+        9,
+        5
+      ],
+      "afterKeyboard": [
+        10,
+        2,
+        4,
+        8,
+        6,
+        7,
+        1,
+        12,
+        3,
+        11,
+        9,
+        5
+      ],
+      "pointerUnchanged": true,
+      "keyboardUnchanged": true
+    },
+    "drawer": {
+      "buttonName": "Advanced Algorithms and Machine Learning の詳細を開く",
+      "chart": {
+        "chartRect": {
+          "height": 192,
+          "width": 1504,
+          "x": 16,
+          "y": 744
+        },
+        "drawerVisible": true,
+        "pointCount": 5,
+        "pointFills": [
+          "rgb(47, 95, 209)",
+          "rgb(47, 95, 209)",
+          "rgb(47, 95, 209)",
+          "rgb(47, 95, 209)",
+          "rgb(47, 95, 209)"
+        ],
+        "pointRects": [
+          {
+            "height": 9.60003662109375,
+            "width": 9.5999755859375,
+            "x": 600,
+            "y": 785.9199829101562
+          },
+          {
+            "height": 9.60003662109375,
+            "width": 9.60003662109375,
+            "x": 681.5999755859375,
+            "y": 777.5999755859375
+          },
+          {
+            "height": 9.5999755859375,
+            "width": 9.5999755859375,
+            "x": 763.2000122070312,
+            "y": 781.760009765625
+          },
+          {
+            "height": 9.60003662109375,
+            "width": 9.60003662109375,
+            "x": 844.7999877929688,
+            "y": 777.5999755859375
+          },
+          {
+            "height": 9.60003662109375,
+            "width": 9.5999755859375,
+            "x": 926.4000244140624,
+            "y": 777.5999755859375
+          }
+        ],
+        "polylineRect": {
+          "height": 8.3199462890625,
+          "width": 326.4000244140625,
+          "x": 604.7999877929688,
+          "y": 782.4000244140625
+        },
+        "stroke": "rgb(47, 95, 209)",
+        "strokeWidth": "4px",
+        "svgRect": {
+          "height": 192,
+          "width": 1504,
+          "x": 16,
+          "y": 744
+        }
+      }
+    },
+    "duplicateIds": [],
+    "audit": {
+      "responses": 137,
+      "httpErrors": [],
+      "requestFailures": [],
+      "pageExceptions": [],
+      "logErrors": [],
+      "truncated": false,
+      "batches": 50,
+      "maxBatch": 65
+    }
+  },
+  "dark": {
+    "base": {
+      "duplicateIds": [],
+      "rowCount": 12,
+      "tableRect": {
+        "height": 585.5,
+        "width": 1232,
+        "x": 152,
+        "y": 62
+      },
+      "url": "http://127.0.0.1:4322/preview/dashboard-table-dark/"
+    },
+    "drawer": {
+      "buttonName": "Adaptive Communication Protocols の詳細を開く",
+      "chart": {
+        "chartRect": {
+          "height": 192,
+          "width": 1504,
+          "x": 16,
+          "y": 744
+        },
+        "drawerVisible": true,
+        "pointCount": 5,
+        "pointFills": [
+          "rgb(110, 147, 240)",
+          "rgb(110, 147, 240)",
+          "rgb(110, 147, 240)",
+          "rgb(110, 147, 240)",
+          "rgb(110, 147, 240)"
+        ],
+        "pointRects": [
+          {
+            "height": 9.60003662109375,
+            "width": 9.5999755859375,
+            "x": 600,
+            "y": 777.5999755859375
+          },
+          {
+            "height": 9.60003662109375,
+            "width": 9.60003662109375,
+            "x": 681.5999755859375,
+            "y": 866.167724609375
+          },
+          {
+            "height": 9.5999755859375,
+            "width": 9.5999755859375,
+            "x": 763.2000122070312,
+            "y": 821.8839111328125
+          },
+          {
+            "height": 9.60003662109375,
+            "width": 9.60003662109375,
+            "x": 844.7999877929688,
+            "y": 777.5999755859375
+          },
+          {
+            "height": 9.60003662109375,
+            "width": 9.5999755859375,
+            "x": 926.4000244140624,
+            "y": 866.167724609375
+          }
+        ],
+        "polylineRect": {
+          "height": 88.5677490234375,
+          "width": 326.4000244140625,
+          "x": 604.7999877929688,
+          "y": 782.4000244140625
+        },
+        "stroke": "rgb(110, 147, 240)",
+        "strokeWidth": "4px",
+        "svgRect": {
+          "height": 192,
+          "width": 1504,
+          "x": 16,
+          "y": 744
+        }
+      }
+    },
+    "audit": {
+      "responses": 137,
+      "httpErrors": [],
+      "requestFailures": [],
+      "pageExceptions": [],
+      "logErrors": [],
+      "truncated": false,
+      "batches": 51,
+      "maxBatch": 77
+    }
+  },
+  "catalog": {
+    "initial": {
+      "dialogsVisible": 0,
+      "duplicateIds": [],
+      "itemRect": {
+        "height": 467,
+        "width": 410.6640625,
+        "x": 320,
+        "y": 266.6484375
+      },
+      "points": [
+        {
+          "frontRelation": false,
+          "frontTag": "A",
+          "frontText": "Emily Davis 2 days agoRe: Question about BudgetI've reviewed the budget numbers ",
+          "name": "left",
+          "x": 340,
+          "y": 500.1484375
+        },
+        {
+          "frontRelation": true,
+          "frontTag": "BUTTON",
+          "frontText": "Advanced Algorithms and Machine Learning",
+          "name": "center",
+          "x": 525.33203125,
+          "y": 500.1484375
+        },
+        {
+          "frontRelation": true,
+          "frontTag": "TD",
+          "frontText": "Narrative",
+          "name": "right",
+          "x": 710.6640625,
+          "y": 500.1484375
+        }
+      ],
+      "tableRect": {
+        "height": 585.5,
+        "width": 374.6640625,
+        "x": 338,
+        "y": 365.6484375
+      },
+      "viewport": {
+        "height": 1000,
+        "width": 1920
+      }
+    },
+    "final": {
+      "dialogsVisible": 0,
+      "duplicateIds": [],
+      "itemRect": {
+        "height": 467,
+        "width": 410.6640625,
+        "x": 320,
+        "y": 266.6484375
+      },
+      "points": [
+        {
+          "frontRelation": true,
+          "frontTag": "SPAN",
+          "frontText": "",
+          "name": "left",
+          "x": 340,
+          "y": 500.1484375
+        },
+        {
+          "frontRelation": true,
+          "frontTag": "BUTTON",
+          "frontText": "Advanced Algorithms and Machine Learning",
+          "name": "center",
+          "x": 525.33203125,
+          "y": 500.1484375
+        },
+        {
+          "frontRelation": true,
+          "frontTag": "TD",
+          "frontText": "Narrative",
+          "name": "right",
+          "x": 710.6640625,
+          "y": 500.1484375
+        }
+      ],
+      "tableRect": {
+        "height": 585.5,
+        "width": 374.6640625,
+        "x": 338,
+        "y": 365.6484375
+      }
+    },
+    "interaction": "Settings dialog を閉じ、遮蔽 sidebar 所属 trigger を画面内へ scrollIntoView 後 CUA click",
+    "audit": {
+      "responses": 424,
+      "httpErrors": [],
+      "requestFailures": [],
+      "pageExceptions": [],
+      "logErrors": [],
+      "truncated": false,
+      "batches": 74,
+      "maxBatch": 115
+    }
+  },
+  "console": {
+    "errors": []
+  },
+  "screenshots": {
+    "light": {
+      "lineVisible": true,
+      "pointsVisible": 5
+    },
+    "dark": {
+      "lineVisible": true,
+      "pointsVisible": 5
+    },
+    "catalog": {
+      "headingVisible": true,
+      "headersVisible": true,
+      "rowsVisible": true
+    }
+  },
+  "overall": "PASS"
+}

@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
-import { existsSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { test } from "node:test";
 
 const checkerPath = new URL("./check-block-icons.mjs", import.meta.url);
@@ -11,6 +13,51 @@ async function loadChecker() {
 
 const upstreamItem = (...files) => ({
   files: files.map(([path, content]) => ({ path, type: "registry:component", content })),
+});
+
+test("icon 監査対象は実在 directory のうち上流移植品だけから動的に導出する", async (context) => {
+  const root = mkdtempSync(join(tmpdir(), "check-block-icons-"));
+  context.after(() => rmSync(root, { recursive: true, force: true }));
+  mkdirSync(join(root, "src/blocks/sidebar-01"), { recursive: true });
+  mkdirSync(join(root, "src/blocks/dashboard-01"));
+  mkdirSync(join(root, "src/blocks/dashboard-table"));
+  writeFileSync(join(root, "src/blocks/not-a-block.tsx"), "export {}\n");
+  writeFileSync(
+    join(root, "provenance.json"),
+    JSON.stringify({
+      blocks: {
+        "sidebar-01": { origin: "shadcn/ui registry" },
+        "dashboard-01": { origin: "shadcn/ui registry" },
+        "dashboard-table": { origin: "elchika original" },
+      },
+    }),
+  );
+
+  const { listIconAuditBlockNames } = await loadChecker();
+
+  assert.deepEqual(listIconAuditBlockNames(root), ["dashboard-01", "sidebar-01"]);
+});
+
+test("icon 監査は未知または欠落した origin を fail-closed にする", async (context) => {
+  for (const origin of ["unknown-source", undefined]) {
+    const root = mkdtempSync(join(tmpdir(), "check-block-icons-origin-"));
+    context.after(() => rmSync(root, { recursive: true, force: true }));
+    mkdirSync(join(root, "src/blocks/example-01"), { recursive: true });
+    writeFileSync(
+      join(root, "provenance.json"),
+      JSON.stringify({
+        blocks: {
+          "example-01": origin === undefined ? {} : { origin },
+        },
+      }),
+    );
+    const { listIconAuditBlockNames } = await loadChecker();
+
+    assert.throws(
+      () => listIconAuditBlockNames(root),
+      new RegExp(`example-01: icon 監査の origin が未対応: ${String(origin)}`),
+    );
+  }
 });
 
 test("上流 JSON から件数に依存せず lucide の期待集合を導出する", async () => {
@@ -92,27 +139,143 @@ test("lucide 属性が無い IconPlaceholder は fail-closed で問題にする"
   assert.equal(result.stats.missingLucideCount, 1);
 });
 
-test("registry:page の lucide 期待集合は preview 側へ分離する", async () => {
+test("dropped な registry:component の icon は生成物へ要求しない", async () => {
   const { inspectUpstreamBlocks } = await loadChecker();
-  const result = inspectUpstreamBlocks([
+  const result = inspectUpstreamBlocks(
+    [
+      {
+        name: "dashboard-01",
+        item: upstreamItem([
+          "registry/base-nova/blocks/dashboard-01/components/data-table.tsx",
+          '<IconPlaceholder lucide="GripVerticalIcon" />',
+        ]),
+      },
+    ],
     {
-      name: "login-02",
-      item: {
-        files: [
-          {
-            path: "registry/base-nova/blocks/login-02/page.tsx",
-            type: "registry:page",
-            content: '<IconPlaceholder lucide="GalleryVerticalEndIcon" />',
-          },
-          {
-            path: "registry/base-nova/blocks/login-02/components/login-form.tsx",
-            type: "registry:component",
-            content: '<IconPlaceholder lucide="BadgeIcon" />',
-          },
+      droppedUpstreamPathsByBlock: {
+        "dashboard-01": [
+          "apps/v4/registry/bases/base/blocks/dashboard-01/components/data-table.tsx",
         ],
       },
     },
+  );
+
+  assert.deepEqual(result.problems, []);
+  assert.deepEqual(result.expectedByTarget, { blocks: {}, previews: {} });
+  assert.deepEqual(result.stats, {
+    jsonCount: 1,
+    blocksWithPlaceholders: 1,
+    placeholderCount: 1,
+    uniqueIconCount: 1,
+    missingLucideCount: 0,
+  });
+});
+
+test("dropped な registry:component でも lucide 属性の欠損は検出する", async () => {
+  const { inspectUpstreamBlocks } = await loadChecker();
+  const result = inspectUpstreamBlocks(
+    [
+      {
+        name: "dashboard-01",
+        item: upstreamItem([
+          "registry/base-nova/blocks/dashboard-01/components/data-table.tsx",
+          '<IconPlaceholder tabler="IconGripVertical" />',
+        ]),
+      },
+    ],
+    {
+      droppedUpstreamPathsByBlock: {
+        "dashboard-01": [
+          "apps/v4/registry/bases/base/blocks/dashboard-01/components/data-table.tsx",
+        ],
+      },
+    },
+  );
+
+  assert.deepEqual(result.problems, [
+    "dashboard-01: registry/base-nova/blocks/dashboard-01/components/data-table.tsx の IconPlaceholder #1 に lucide 属性が無い",
   ]);
+  assert.equal(result.stats.missingLucideCount, 1);
+});
+
+test("dropped path を上流 JSON へ照合できなければ fail-closed で問題にする", async () => {
+  const { inspectUpstreamBlocks } = await loadChecker();
+  const droppedPath =
+    "apps/v4/registry/bases/base/blocks/dashboard-01/components/missing-table.tsx";
+  const result = inspectUpstreamBlocks(
+    [
+      {
+        name: "dashboard-01",
+        item: upstreamItem([
+          "registry/base-nova/blocks/dashboard-01/components/data-table.tsx",
+          "export function DataTable() { return null }",
+        ]),
+      },
+    ],
+    { droppedUpstreamPathsByBlock: { "dashboard-01": [droppedPath] } },
+  );
+
+  assert.deepEqual(result.problems, [
+    `dashboard-01: dropped file を上流 JSON へ対応付けられない: ${droppedPath}`,
+  ]);
+});
+
+test("正しい相対 path でも dropped path の上流 prefix が不正なら fail-closed にする", async () => {
+  const { inspectUpstreamBlocks } = await loadChecker();
+  const droppedPath = "https://evil.invalid/blocks/dashboard-01/components/data-table.tsx";
+  const result = inspectUpstreamBlocks(
+    [
+      {
+        name: "dashboard-01",
+        item: upstreamItem([
+          "registry/base-nova/blocks/dashboard-01/components/data-table.tsx",
+          '<IconPlaceholder lucide="GripVerticalIcon" />',
+        ]),
+      },
+    ],
+    { droppedUpstreamPathsByBlock: { "dashboard-01": [droppedPath] } },
+  );
+
+  assert.deepEqual(result.problems, [
+    `dashboard-01: dropped file を上流 JSON へ対応付けられない: ${droppedPath}`,
+  ]);
+  assert.deepEqual(result.expectedByTarget.blocks["dashboard-01"], [
+    {
+      path: "src/blocks/dashboard-01/components/data-table.tsx",
+      occurrences: [{ icon: "GripVerticalIcon", attributes: [] }],
+      orderedOccurrences: [{ icon: "GripVerticalIcon", attributes: [] }],
+    },
+  ]);
+});
+
+test("registry:page の lucide 期待集合は preview 側へ分離する", async () => {
+  const { inspectUpstreamBlocks } = await loadChecker();
+  const result = inspectUpstreamBlocks(
+    [
+      {
+        name: "login-02",
+        item: {
+          files: [
+            {
+              path: "registry/base-nova/blocks/login-02/page.tsx",
+              type: "registry:page",
+              content: '<IconPlaceholder lucide="GalleryVerticalEndIcon" />',
+            },
+            {
+              path: "registry/base-nova/blocks/login-02/components/login-form.tsx",
+              type: "registry:component",
+              content: '<IconPlaceholder lucide="BadgeIcon" />',
+            },
+          ],
+        },
+      },
+    ],
+    {
+      droppedUpstreamPathsByBlock: {
+        "login-02": ["apps/v4/registry/bases/base/blocks/login-02/page.tsx"],
+      },
+    },
+  );
 
   assert.deepEqual(result.problems, []);
   assert.deepEqual(result.expectedByTarget, {
