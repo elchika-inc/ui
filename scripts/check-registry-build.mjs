@@ -11,6 +11,20 @@ export function findMissingRegistryItems(registry, builtFiles) {
   return (registry.items ?? []).map((item) => item.name).filter((name) => !built.has(name));
 }
 
+const REGISTRY_HELPER_JSON = new Set(["index", "registry"]);
+
+export function findUnexpectedRegistryItems(registry, builtFiles) {
+  const expected = new Set([
+    ...(registry.items ?? []).map((item) => item.name),
+    ...REGISTRY_HELPER_JSON,
+  ]);
+  return builtFiles
+    .filter((file) => file.endsWith(".json"))
+    .map((file) => file.replace(/\.json$/, ""))
+    .filter((name) => !expected.has(name))
+    .sort();
+}
+
 function withoutFileContents(item) {
   return {
     ...item,
@@ -81,15 +95,21 @@ export function checkRegistryBuild(root) {
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   const root = process.cwd();
   const { registry, problems } = checkRegistryBuild(root);
-  const missing = findMissingRegistryItems(registry, readdirSync(join(root, "public/r")));
+  const builtFiles = readdirSync(join(root, "public/r"));
+  const missing = findMissingRegistryItems(registry, builtFiles);
+  const unexpected = findUnexpectedRegistryItems(registry, builtFiles);
+  const allProblems = [
+    ...problems,
+    ...(unexpected.length ? [`予期しない生成物: ${unexpected.join(", ")}`] : []),
+  ];
 
   console.log(
-    problems.length
+    allProblems.length
       ? [
           ...(missing.length ? [`未生成: ${missing.join(", ")}`] : []),
-          `生成物不一致:\n  ${problems.join("\n  ")}`,
+          `生成物不一致:\n  ${allProblems.join("\n  ")}`,
         ].join("\n")
       : "registry.json の全 item が public/r に生成されている（manifest と content も source に一致）",
   );
-  process.exit(problems.length ? 1 : 0);
+  process.exit(allProblems.length ? 1 : 0);
 }

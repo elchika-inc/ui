@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
@@ -128,6 +128,12 @@ test("CLIがregistry.jsonからindex.jsonを生成する", (t) => {
   t.after(() => import("node:fs").then(({ rmSync }) => rmSync(root, { recursive: true })));
   const source = join(root, "registry.json");
   const output = join(root, "public/r/index.json");
+  mkdirSync(dirname(output), { recursive: true });
+  writeFileSync(
+    join(root, "public/r/retired-item.json"),
+    `${JSON.stringify({ name: "retired-item", type: "registry:ui", files: [] })}\n`,
+  );
+  writeFileSync(join(root, "public/r/unknown.json"), "{}\n");
   writeFileSync(
     source,
     JSON.stringify({
@@ -153,4 +159,6 @@ test("CLIがregistry.jsonからindex.jsonを生成する", (t) => {
       files: [{ path: "src/components/ui/button.tsx", type: "registry:ui" }],
     },
   ]);
+  assert.equal(existsSync(join(root, "public/r/retired-item.json")), false);
+  assert.equal(existsSync(join(root, "public/r/unknown.json")), true);
 });
