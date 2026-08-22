@@ -26,30 +26,53 @@ const jsxOpenings = (sourceFile) => {
   return openings;
 };
 
-const componentReturnExpressions = (component) => {
-  const returnExpressions = [];
+const isExecutionScope = (node) =>
+  ts.isFunctionDeclaration(node) ||
+  ts.isFunctionExpression(node) ||
+  ts.isArrowFunction(node) ||
+  ts.isClassDeclaration(node) ||
+  ts.isClassExpression(node);
+
+const visitWithoutNestedScopes = (scope, inspect) => {
   const visit = (node) => {
-    if (
-      ts.isFunctionDeclaration(node) ||
-      ts.isFunctionExpression(node) ||
-      ts.isArrowFunction(node) ||
-      ts.isClassDeclaration(node) ||
-      ts.isClassExpression(node)
-    ) {
-      return;
-    }
-    if (ts.isReturnStatement(node)) {
-      if (node.expression) returnExpressions.push(node.expression);
-      return;
-    }
+    if (node !== scope && isExecutionScope(node)) return;
+    inspect(node);
     ts.forEachChild(node, visit);
   };
-  visit(component.body);
+  visit(scope);
+};
+
+const lexicalJsxOpenings = (scope) => {
+  const openings = [];
+  visitWithoutNestedScopes(scope, (node) => {
+    if (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) openings.push(node);
+  });
+  return openings;
+};
+
+const componentReturnExpressions = (component) => {
+  const returnExpressions = [];
+  visitWithoutNestedScopes(component.body, (node) => {
+    if (ts.isReturnStatement(node)) {
+      if (node.expression) returnExpressions.push(node.expression);
+    }
+  });
   return returnExpressions;
 };
 
 const componentJsxOpenings = (component) =>
-  componentReturnExpressions(component).flatMap(jsxOpenings);
+  componentReturnExpressions(component).flatMap(lexicalJsxOpenings);
+
+const identifierNames = (scope) => {
+  const names = [];
+  visitWithoutNestedScopes(scope, (node) => {
+    if (ts.isIdentifier(node)) names.push(node.text);
+  });
+  return names;
+};
+
+const returnedIdentifierNames = (component) =>
+  componentReturnExpressions(component).flatMap(identifierNames);
 
 const jsxAttribute = (opening, name, sourceFile) =>
   opening.attributes.properties
@@ -194,6 +217,36 @@ test("dashboard chart の配線検査は nested function の JSX decoy を採用
   );
 
   assert.equal(areaCharts.length, 0, "nested function の AreaChart を実 return と数えない");
+});
+
+test("dashboard chart の配線検査は return 内 callback の JSX decoy を採用しない", () => {
+  const sourceFile = parseTsxSource(`
+    function ChartAreaInteractive() {
+      return <div>{[].map(() => <AreaChart data={filteredData} />)}</div>;
+    }
+  `);
+  const component = namedTopLevelFunction(sourceFile, "ChartAreaInteractive");
+  const areaCharts = componentJsxOpenings(component).filter(
+    (opening) => opening.tagName.getText(sourceFile) === "AreaChart",
+  );
+
+  assert.equal(areaCharts.length, 0, "callback 内の AreaChart を直接配線と数えない");
+});
+
+test("dashboard table の配線検査は return 内 callback の fragment decoy を採用しない", () => {
+  const sourceFile = parseTsxSource(`
+    function DashboardTable() {
+      const table = <DashboardDataTable selectedIds={selectedIdsInData} />;
+      return <TabsContent>{[].map(() => table)}</TabsContent>;
+    }
+  `);
+  const component = namedTopLevelFunction(sourceFile, "DashboardTable");
+
+  assert.equal(
+    returnedIdentifierNames(component).includes("table"),
+    false,
+    "callback 内の table を直接配線と数えない",
+  );
 });
 
 test("dashboard block の配布 manifest は除外後の依存集合と共有依存を保つ", () => {
@@ -406,18 +459,14 @@ test("dashboard table の helper 結果は checkbox・drawer・詳細 button へ
   assert.ok(detailButton, "accessible name 付き詳細 button がある");
   assert.match(jsxAttribute(detailButton, "onClick", sourceFile), /onOpen\(row\)/);
 
-  const returnedTableReferences = componentReturnExpressions(tableComponent).flatMap(
-    (expression) => {
-      const names = [];
-      const visit = (node) => {
-        if (ts.isIdentifier(node)) names.push(node.text);
-        ts.forEachChild(node, visit);
-      };
-      visit(expression);
-      return names;
-    },
-  );
-  assert.ok(returnedTableReferences.includes("table"), "table fragment が実 return から参照される");
+  const tableContents = byTableTag("TabsContent");
+  assert.equal(tableContents.length, 2, "DashboardTable の TabsContent が2件ある");
+  for (const content of tableContents) {
+    assert.ok(
+      identifierNames(content.parent).includes("table"),
+      "各 TabsContent が table fragment を直接参照する",
+    );
+  }
   const table = byTableFragmentTag("DashboardDataTable")[0];
   assert.equal(jsxAttribute(table, "selectedIds", sourceFile), "{selectedIdsInData}");
   const drawer = byTableTag("Drawer")[0];
