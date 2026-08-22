@@ -674,7 +674,7 @@ Task 3 は純関数だけを直した。実行経路 `runAddComponent` は**単�
 **Interfaces:**
 - Consumes: Task 3 の `resolveRegistryTarget`（block では `{itemType, files, droppedFiles}` を返す）
 - Produces:
-  - `blockProvenanceEntry({root, name, modified, cliVersion, upstreamItem, upstreamText, target, registryUrl, fetchImpl})` → Task 1 の `BLOCK_PROVENANCE_SPEC` を満たすオブジェクト。`files[]` は配布ファイル（`path` / `upstreamPath` / `upstreamPathSha` / `generatedContentSha256`）と落とした page（`dropped: true` / `upstreamPath` / `upstreamPathSha`）を含む。
+  - `blockProvenanceEntry({root, name, modified, cliVersion, upstreamItem, upstreamText, target, registryUrl, fetchImpl})` → Task 1 の `BLOCK_PROVENANCE_SPEC` を満たすオブジェクト。`files[]` は配布ファイル（`path` / `upstreamPath` / `upstreamPathSha` / `generatedContentSha256`）と配布しない上流 file（`dropped: true` / `upstreamPath` / `upstreamPathSha`）を含む。
   - `shouldSkipRecorded(provenance, name, force, kind)` → `kind` が `"block"` のとき `provenance.blocks?.[name]` を見る。省略時は従来どおり `components`。
 
 - [ ] **Step 1: `shouldSkipRecorded` の失敗テストを書く**
@@ -804,7 +804,7 @@ async function blockProvenanceEntry({
     files,
     notes:
       "registryContentSha256 は受け取った配信物 JSON 全体の錨である。files[].generatedContentSha256 は standards 正規化を適用したあとの現行ファイルのハッシュであり、CLI 生成直後の値とは一致しない。" +
-      "dropped: true の file は registry:page であり、standards が Next.js を標準スタック外とするため配布しない。",
+      "dropped: true の file は配布しない上流 file を表し、理由は modified に記録する。",
   };
 }
 ```
@@ -1229,9 +1229,9 @@ registry.json / provenance.json / component-categories.mjs が単一の
 
 ---
 
-## Task 7: dashboard-01 の 10 ファイルを移植する（Phase 3a）
+## Task 7: dashboard-01 の 9 ファイルを移植する（Phase 3a）
 
-設計 §3-6 に従い、上流 dashboard-01 から **`data-table.tsx` を除いた 10 ファイル**を移植する。除外する理由は npm 依存 6 件を持ち込むためで、Next 規約による `registry:page` の除外とは理由が異なる。
+設計 §3-6 に従い、上流 dashboard-01 の 11 ファイルから **`registry:page` と `data-table.tsx` を除いた 9 ファイル**を移植する。後者を除外する理由は npm 依存 6 件を持ち込むためで、Next 規約による `registry:page` の除外とは理由が異なる。
 
 **新規 npm 依存はゼロ。** `recharts` と `sonner` は導入済み（実測）。
 
@@ -1254,9 +1254,10 @@ registry.json / provenance.json / component-categories.mjs が単一の
 既存の `createRepo()` ヘルパと注入テストのパターンに倣う。`registry:file` を含む block の fixture を作り、次を検査する。
 
 - 配布ファイル集合に `registry:file` が含まれること
-- `targetPath` が `src/blocks/<name>/data.json` になること
-- 上流 item の `target`（`app/dashboard/data.json`）に CLI が書いた実体を移設すること
-- **`target` が `src/blocks/<name>/` の外を指す場合は fail-closed で停止すること**（path traversal）
+- ローカル移設先の `targetPath` が `src/blocks/<name>/data.json` になること
+- 配布 target は上流 item の `target`（`app/dashboard/data.json`）を保持すること
+- ローカル CLI 生成先の `cliOutputPath` は、`~/` 付き target なら接頭辞を除いた repo root 相対、その他なら `src/` を前置した path になること
+- **`targetPath` が `src/blocks/<name>/` の外を指す場合は fail-closed で停止すること**（path traversal）
 - **移設先に既存ファイルがある場合は上書きせず停止すること**
 
 - [ ] **Step 2: テストを実行して失敗を確認する**
@@ -1268,7 +1269,7 @@ Expected: FAIL。`registry:file` が未対応として throw される。
 
 `SUPPORTED_BLOCK_FILE_TYPES` に `registry:file` を追加し、移設ロジックを拡張する。要件は次のとおり。
 
-- CLI は上流 item の `target` へ書くため、`registry:component`（alias 直下へフラット配置）とは**移設元が異なる**。type ごとに移設元を解決する
+- CLI の実生成先 `cliOutputPath` は、配布 target とローカル移設先 `targetPath` のどちらとも別概念である。`registry:component`（alias 直下へフラット配置）を含め、type ごとに移設元を解決する
 - 移設先が `src/blocks/<name>/` 配下であることを検証し、外を指すなら停止する（path traversal）
 - 移設先に既存ファイルがあれば上書きせず停止する
 - `reconcileAddChanges` の許可集合に移設後のパスを含める
@@ -1349,7 +1350,7 @@ dashboard 内には固定 DOM ID と SVG gradient ID があるため、catalog �
 
 ```bash
 git add -A
-git commit -m "feat: dashboard-01 の 10 ファイルを移植する
+git commit -m "feat: dashboard-01 の 9 ファイルを移植する
 
 data-table.tsx は npm 依存 6 件を持ち込むため配布から除外した。
 同等機能は Task 8 で dashboard-table として自作する。
@@ -1371,7 +1372,7 @@ data-table.tsx は npm 依存 6 件を持ち込むため配布から除外した
 
 **Interfaces:**
 - Consumes: Task 1 の `checkCompleteness({blocks})` と `BLOCK_PROVENANCE_SPEC`
-- Produces: `provenance.blocks["dashboard-table"]` が `origin: "elchika-inc original"` を持ち、上流由来キーを持たない来歴として検査を通る
+- Produces: `provenance.blocks["dashboard-table"]` が `origin: "elchika original"` を持ち、上流由来キーを持たない来歴として検査を通る
 
 ### 自作品の来歴スキーマ（この形で確定させる）
 
@@ -1380,7 +1381,7 @@ data-table.tsx は npm 依存 6 件を持ち込むため配布から除外した
 | origin | 値 | 要求するキー | 禁止するキー |
 |---|---|---|---|
 | 移植品 | `"shadcn/ui registry"` | 現行の `BLOCK_PROVENANCE_SPEC` 全キー | — |
-| **自作品** | `"elchika-inc original"` | `license` / `modified` / `files[]` | `registryUrl` / `registryContentSha256` / `addTarget` / `shadcnCliVersion` / `fetchedAt` |
+| **自作品** | `"elchika original"` | `license` / `modified` / `files[]` | `registryUrl` / `registryContentSha256` / `addTarget` / `shadcnCliVersion` / `fetchedAt` |
 
 `files[]` の各エントリ:
 
@@ -1406,7 +1407,7 @@ const completeOriginalBlock = {
     ...complete.provenance,
     blocks: {
       "dashboard-table": {
-        origin: "elchika-inc original",
+        origin: "elchika original",
         license: "MIT",
         modified: "上流 dashboard-01 の data-table.tsx を参照しつつ、npm 依存ゼロで自作。DnD は実装しない",
         files: [
@@ -1489,7 +1490,7 @@ const BLOCK_ORIGINS = {
     fileRequired: ["upstreamPath", "upstreamPathSha"],
     fileForbidden: [],
   },
-  "elchika-inc original": {
+  "elchika original": {
     spec: ORIGINAL_BLOCK_PROVENANCE_SPEC,
     forbidden: ["registryUrl", "registryContentSha256", "addTarget", "shadcnCliVersion", "fetchedAt"],
     fileRequired: [],
@@ -1589,7 +1590,7 @@ git commit -m "feat: dashboard-table を既存部品で自作する
 - Modify: `README.md`, `AGENTS.md`
 
 **Interfaces:**
-- Consumes: Task 7 までの成果物
+- Consumes: Task 8 までの成果物
 
 - [ ] **Step 1: README に block の導入手順を書く**
 

@@ -43,6 +43,14 @@ test("READMEが3経路とtoken alias再削除を案内する", () => {
   assert.match(readme, /add のたびに[\s\S]*再削除/);
 });
 
+test("READMEのblock手順はregistry dependencies用のnamespace設定を前提にする", () => {
+  const readme = readFileSync(new URL("../README.md", import.meta.url), "utf8");
+  const blockSection = readme.slice(readme.indexOf("### block"));
+
+  assert.match(blockSection, /registryDependencies/);
+  assert.match(blockSection, /components\.json[\s\S]*@elchika 名前空間/);
+});
+
 test("Phase B手順が秘密登録・deploy・domain・実体検証を分離する", () => {
   const instructions = readFileSync(
     new URL("../.docs/actions/done/2026-08-15-manual-subproject-3-domain.md", import.meta.url),

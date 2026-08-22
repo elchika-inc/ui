@@ -76,7 +76,7 @@ preview render の走査根拡張は当初の設計に含まれておらず、�
 
 一次ファイル 1 個分しか記録しない設計では、PROJECT_GOAL の DoneCriteria 8（来歴をコンポーネントごとに機械可読で記録）が実質空洞化する。
 
-**配布しない `page.tsx` も `files[]` に記録する。** 上流から受け取ったファイルは 103 個で、うち 27 個の `page.tsx` は §1 の決定により配布しない。落としたエントリには `dropped: true` を付け、手元に実体がないため `generatedContentSha256` を持たせず `upstreamPath` / `upstreamPathSha` のみを記録する。
+**配布しない上流 file も `files[]` に記録する。** Phase 1・2 で上流から受け取ったファイルは 103 個で、うち 27 個の `page.tsx` は §1 の決定により配布しない。Phase 3 では `data-table.tsx` も配布対象から除外する。落としたエントリには `dropped: true` を付け、手元に実体がないため `generatedContentSha256` を持たせず `upstreamPath` / `upstreamPathSha` のみを記録し、理由は `modified` に残す。
 
 「落とした」こと自体が上流からの改変であり、`modified` の文章による主張を機械可読に裏付ける。配布分 76 件だけを記録すると、来歴からは page が最初から存在しなかったのか意図的に落としたのかを区別できない。
 
@@ -147,7 +147,7 @@ preview render の走査根拡張は当初の設計に含まれておらず、�
 |---|---|---|
 | **1. レーン構築 + login-01** | `src/blocks/` 新設、§3-2 の 3 箇所拡張、§3-1 のマトリクス化、§3-3 のスキーマ新設。**login-01 の 1 件だけ**を端から端まで通す | 機構の設計ミス。1 件で見つければ修正コストは 1 件分 |
 | **2. 残り 25 件** | 認証系 9 件 + sidebar 16 件。新規 npm 依存ゼロ | 1 件では出ない衝突（`app-sidebar.tsx` が 15 件で同名）、preview 54 枚とカテゴリ分類の運用コスト |
-| **3a. dashboard-01（10 ファイル）** | 上流 dashboard-01 から `data-table.tsx` を除いた 10 ファイルを移植。`registry:file`（`data.json`）対応の実装を含む | **新規 npm 依存ゼロ**。`registry:file` を扱う経路 |
+| **3a. dashboard-01（9 ファイル）** | 上流 dashboard-01 の 11 ファイルから `registry:page` と `data-table.tsx` を除いた 9 ファイルを移植。`registry:file`（`data.json`）対応の実装を含む | **新規 npm 依存ゼロ**。`registry:file` を扱う経路 |
 | **3b. `dashboard-table`（自作）** | `data-table` 相当を既存部品で自作した block を新設。設計 §1「移植のみ」の例外第 1 号 | 自作 block の来歴スキーマ分岐。§3-6 参照 |
 
 ### 実装体制
@@ -178,7 +178,7 @@ preview render の走査根拡張は当初の設計に含まれておらず、�
 
 #### 3a — `data-table.tsx` を配布対象から除外する
 
-`registry:page` と同じ扱いで、来歴には `dropped: true` として記録する。落とした理由が「Next 規約だから」ではなく「npm 依存 6 件を持ち込むから」なので、`modified` にその旨を書き分ける。
+配布しない上流 file の一般形として、来歴には `dropped: true` として記録する。落とした理由が「Next 規約だから」ではなく「npm 依存 6 件を持ち込むから」なので、`modified` にその旨を書き分ける。
 
 #### 3b — `data-table` 相当を既存部品で自作する
 
@@ -203,7 +203,7 @@ preview render の走査根拡張は当初の設計に含まれておらず、�
 
 自作版を `dashboard-01` の名前で配ると、上流の dashboard-01 を見た利用者が `data-table` を期待して導入し、中身が違って混乱する。§1 の「item 名は上流と同名」の根拠（上流のドキュメントから名前で辿れる）が、この場合は逆に働く。
 
-- `dashboard-01` — 上流由来の 10 ファイル（`data-table` を含まない）
+- `dashboard-01` — 上流由来の 9 ファイル（`registry:page` と `data-table` を含まない）
 - **`dashboard-table`** — 自作の data-table block（上流に対応物を持たない）
 
 #### 自作 block は §1 の例外である — 来歴スキーマの分岐が要る
@@ -218,7 +218,7 @@ preview render の走査根拡張は当初の設計に含まれておらず、�
 | `registryContentSha256` | 上流配信物が存在しない |
 | `files[].upstreamPathSha` | 上流 commit が存在しない |
 
-`origin` を分岐の軸として、移植品（`shadcn/ui registry`）と自作品（例: `elchika-inc original`）で要求キーを変える。自作品には `generatedContentSha256`・`license`・`modified`・`files[].path` を要求し、上流由来のキーは要求しない。**逆に、自作品に上流由来のキーがあれば fail-closed で弾く**（移植品を誤って自作として記録することを防ぐ）。
+`origin` を分岐の軸として、移植品（`shadcn/ui registry`）と自作品（例: `elchika original`）で要求キーを変える。自作品には `generatedContentSha256`・`license`・`modified`・`files[].path` を要求し、上流由来のキーは要求しない。**逆に、自作品に上流由来のキーがあれば fail-closed で弾く**（移植品を誤って自作として記録することを防ぐ）。
 
 これは「1 件では動くが別種で壊れる」型の 3 例目にあたる（1 件目→2 件目、単一ファイル→複数ファイル、移植品→自作品）。検査スキーマの分岐を先に実装し、fixture で RED/GREEN を確認してから block を作る。
 

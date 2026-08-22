@@ -86,6 +86,8 @@ npx shadcn@latest mcp init --client claude
 ### block
 
 block は registry build に使った shadcn CLI の版を固定して取り込む。
+block item の `registryDependencies` は `@elchika/...` を参照するため、利用側の
+`components.json` に上記「@elchika 名前空間」の `registries` 設定を先に追加する。
 
 ```bash
 npx shadcn@4.16.0 add https://ui.elchika.dev/r/login-01.json
