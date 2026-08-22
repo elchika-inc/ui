@@ -123,29 +123,25 @@ function DashboardTableDataRow({
   onOpen: (row: DashboardTableRow) => void;
 }) {
   return (
-    <TableRow
-      data-row-id={row.id}
-      data-state={selected ? "selected" : undefined}
-      className="cursor-pointer focus-visible:-outline-offset-2 focus-visible:outline-2 focus-visible:outline-ring"
-      tabIndex={0}
-      aria-label={`${row.header} の詳細を開く`}
-      onClick={() => onOpen(row)}
-      onKeyDown={(event) => {
-        if (event.target !== event.currentTarget) return;
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          onOpen(row);
-        }
-      }}
-    >
-      <TableCell onClick={(event) => event.stopPropagation()}>
+    <TableRow data-row-id={row.id} data-state={selected ? "selected" : undefined}>
+      <TableCell>
         <Checkbox
           aria-label={`${row.header} を選択`}
           checked={selected}
           onCheckedChange={(checked) => onSelect(row.id, checked)}
         />
       </TableCell>
-      <TableCell className="font-medium">{row.header}</TableCell>
+      <TableCell>
+        <Button
+          type="button"
+          variant="link"
+          className="h-auto p-0 font-medium"
+          aria-label={`${row.header} の詳細を開く`}
+          onClick={() => onOpen(row)}
+        >
+          {row.header}
+        </Button>
+      </TableCell>
       {visibleColumns.type ? <TableCell>{row.type}</TableCell> : null}
       {visibleColumns.status ? (
         <TableCell>
@@ -183,6 +179,7 @@ function DashboardDataTable({
   onOpen: (row: DashboardTableRow) => void;
 }) {
   const allSelected = rows.length > 0 && rows.every((row) => selectedIds.has(row.id));
+  const someSelected = rows.some((row) => selectedIds.has(row.id));
   const columnCount = 2 + OPTIONAL_COLUMNS.filter(({ key }) => visibleColumns[key]).length;
 
   return (
@@ -195,6 +192,7 @@ function DashboardDataTable({
               <Checkbox
                 aria-label="表示中の行をすべて選択"
                 checked={allSelected}
+                indeterminate={someSelected && !allSelected}
                 onCheckedChange={(checked) => onSelectAll(checked)}
               />
             </TableHead>
@@ -291,7 +289,23 @@ export function DashboardTable({ data, className }: DashboardTableProps) {
   const [visibleColumns, setVisibleColumns] =
     React.useState<Record<OptionalColumn, boolean>>(INITIAL_COLUMNS);
   const [selectedIds, setSelectedIds] = React.useState<Set<number>>(() => new Set());
-  const [activeRow, setActiveRow] = React.useState<DashboardTableRow | null>(null);
+  const [activeRowId, setActiveRowId] = React.useState<number | null>(null);
+
+  const dataIds = React.useMemo(() => new Set(data.map((row) => row.id)), [data]);
+  const selectedIdsInData = React.useMemo(
+    () => new Set([...selectedIds].filter((id) => dataIds.has(id))),
+    [dataIds, selectedIds],
+  );
+  const activeRow = data.find((row) => row.id === activeRowId) ?? null;
+
+  React.useEffect(() => {
+    if (selectedIdsInData.size !== selectedIds.size) {
+      setSelectedIds(selectedIdsInData);
+    }
+    if (activeRowId !== null && !dataIds.has(activeRowId)) {
+      setActiveRowId(null);
+    }
+  }, [activeRowId, dataIds, selectedIds, selectedIdsInData]);
 
   const rows = React.useMemo(() => {
     const normalizedQuery = query.trim().toLocaleLowerCase();
@@ -341,12 +355,12 @@ export function DashboardTable({ data, className }: DashboardTableProps) {
     <DashboardDataTable
       rows={rows}
       visibleColumns={visibleColumns}
-      selectedIds={selectedIds}
+      selectedIds={selectedIdsInData}
       sort={sort}
       onSort={toggleSort}
       onSelect={toggleSelection}
       onSelectAll={toggleAll}
-      onOpen={setActiveRow}
+      onOpen={(row) => setActiveRowId(row.id)}
     />
   );
 
@@ -354,7 +368,7 @@ export function DashboardTable({ data, className }: DashboardTableProps) {
     <section
       data-slot="dashboard-table"
       data-visible-rows={rows.length}
-      data-selected-rows={selectedIds.size}
+      data-selected-rows={selectedIdsInData.size}
       className={cn("grid min-w-0 gap-4", className)}
     >
       <Tabs value={view} onValueChange={(value) => setView(value as TableView)} className="min-w-0">
@@ -405,13 +419,13 @@ export function DashboardTable({ data, className }: DashboardTableProps) {
       </Tabs>
 
       <p className="text-sm text-muted-foreground" aria-live="polite">
-        {rows.length} 件を表示・{selectedIds.size} 件を選択
+        {rows.length} 件を表示・{selectedIdsInData.size} 件を選択
       </p>
 
       <Drawer
         open={activeRow !== null}
         showSwipeHandle
-        onOpenChange={(open) => !open && setActiveRow(null)}
+        onOpenChange={(open) => !open && setActiveRowId(null)}
       >
         {activeRow ? (
           <DrawerContent>

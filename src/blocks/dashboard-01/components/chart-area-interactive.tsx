@@ -136,9 +136,31 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+type TimeRange = "90d" | "30d" | "7d";
+
+const TIME_RANGES: Record<TimeRange, { days: number; description: string; short: string }> = {
+  "90d": { days: 90, description: "the last 3 months", short: "Last 3 months" },
+  "30d": { days: 30, description: "the last 30 days", short: "Last 30 days" },
+  "7d": { days: 7, description: "the last 7 days", short: "Last 7 days" },
+};
+
+const chartDateFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+  timeZone: "UTC",
+});
+
+function chartDate(value: string) {
+  return new Date(`${value}T00:00:00Z`);
+}
+
+function isTimeRange(value: string): value is TimeRange {
+  return value in TIME_RANGES;
+}
+
 export function ChartAreaInteractive() {
   const isMobile = useIsMobile();
-  const [timeRange, setTimeRange] = React.useState("90d");
+  const [timeRange, setTimeRange] = React.useState<TimeRange>("90d");
   const gradientId = React.useId().replaceAll(":", "");
   const desktopGradientId = `fill-desktop-${gradientId}`;
   const mobileGradientId = `fill-mobile-${gradientId}`;
@@ -149,17 +171,12 @@ export function ChartAreaInteractive() {
     }
   }, [isMobile]);
 
+  const selectedRange = TIME_RANGES[timeRange];
   const filteredData = chartData.filter((item) => {
-    const date = new Date(item.date);
-    const referenceDate = new Date("2024-06-30");
-    let daysToSubtract = 90;
-    if (timeRange === "30d") {
-      daysToSubtract = 30;
-    } else if (timeRange === "7d") {
-      daysToSubtract = 7;
-    }
+    const date = chartDate(item.date);
+    const referenceDate = chartDate("2024-06-30");
     const startDate = new Date(referenceDate);
-    startDate.setDate(startDate.getDate() - daysToSubtract);
+    startDate.setUTCDate(startDate.getUTCDate() - selectedRange.days);
     return date >= startDate;
   });
 
@@ -168,15 +185,16 @@ export function ChartAreaInteractive() {
       <CardHeader>
         <CardTitle>Total Visitors</CardTitle>
         <CardDescription>
-          <span className="hidden @[540px]/card:block">Total for the last 3 months</span>
-          <span className="@[540px]/card:hidden">Last 3 months</span>
+          <span className="hidden @[540px]/card:block">Total for {selectedRange.description}</span>
+          <span className="@[540px]/card:hidden">{selectedRange.short}</span>
         </CardDescription>
         <CardAction>
           <ToggleGroup
             multiple={false}
             value={timeRange ? [timeRange] : []}
             onValueChange={(value) => {
-              setTimeRange(value[0] ?? "90d");
+              const nextRange = value[0] ?? "90d";
+              if (isTimeRange(nextRange)) setTimeRange(nextRange);
             }}
             variant="outline"
             className="hidden *:data-[slot=toggle-group-item]:px-4! @[767px]/card:flex"
@@ -188,7 +206,7 @@ export function ChartAreaInteractive() {
           <Select
             value={timeRange}
             onValueChange={(value) => {
-              if (value !== null) {
+              if (value !== null && isTimeRange(value)) {
                 setTimeRange(value);
               }
             }}
@@ -235,11 +253,7 @@ export function ChartAreaInteractive() {
               tickMargin={8}
               minTickGap={32}
               tickFormatter={(value) => {
-                const date = new Date(value);
-                return date.toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                });
+                return chartDateFormatter.format(chartDate(value));
               }}
             />
             <ChartTooltip
@@ -247,10 +261,7 @@ export function ChartAreaInteractive() {
               content={
                 <ChartTooltipContent
                   labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                    });
+                    return chartDateFormatter.format(chartDate(String(value)));
                   }}
                   indicator="dot"
                 />
