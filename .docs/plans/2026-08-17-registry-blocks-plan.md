@@ -1565,10 +1565,10 @@ Task 5 Step 4〜6 と同じ手順。カテゴリは「アプリシェル」。`p
 | フィルタ入力で行が絞られる | 実操作 |
 | 列の表示切替メニューが機能する | 実操作 |
 | 行のチェックボックスで選択できる | 実操作 |
-| 行クリックで drawer が開き、中にチャートが出る | 実操作 |
-| **DnD は非搭載** | 既知の差分として report に明記する |
+| accessible name 付きの `Document button` で drawer が開き、中にチャートが出る。行自体は操作対象にしない | 実操作 |
+| **DnD は非搭載** | DnD の依存・import、handler、`draggable` や drag handle の affordance が無いことを検査し、実ブラウザでもドラッグ affordance と行順変更が無いことを確認する |
 
-証跡は `.docs/reviews/` へ light / dark で追加し、**DnD 非搭載を上流との既知の差分として report 本文に書く**。
+証跡は `.docs/reviews/` へ light / dark で追加し、**DnD 非搭載を上流との既知の差分として report 本文に書く**。ソース検査では依存・import、handler、affordance の不在を固定し、実ブラウザでは drag affordance が描画されず行順を変更できないことを確認する。
 
 - [ ] **Step 10: コミット**
 

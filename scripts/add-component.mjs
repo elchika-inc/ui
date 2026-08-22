@@ -693,11 +693,15 @@ const BLOCK_FILE_EXCLUSIONS = new Map([
 
 function cliOutputPathForRegistryFile(name, upstreamTargetPath) {
   // 2026-08-22 に shadcn CLI 4.16.0 で実測した規則。target が `~/` で始まる場合は
-  // `~/` を除いて repo root 相対へ、それ以外は source root の `src/` を前置して生成する。
+  // `~/` を除いて repo root 相対へ、それ以外は先頭の `src/` を一度除いてから source root の
+  // `src/` を前置して生成する。これにより `src/` 始まりの target も二重化しない。
   // registry item へ残す upstreamTargetPath とは別概念であり、配布 target 自体は変更しない。
+  const sourceRootRelativePath = upstreamTargetPath.startsWith("src/")
+    ? upstreamTargetPath.slice("src/".length)
+    : upstreamTargetPath;
   const cliOutputPath = upstreamTargetPath.startsWith("~/")
     ? upstreamTargetPath.slice(2)
-    : `src/${upstreamTargetPath}`;
+    : `src/${sourceRootRelativePath}`;
   if (!cliOutputPath.startsWith("src/") && !SHARED_CLI_OUTPUT_PATHS.has(cliOutputPath)) {
     throw new Error(`${name}: registry:file の CLI 生成先が許可領域外: ${cliOutputPath}`);
   }

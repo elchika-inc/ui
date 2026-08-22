@@ -330,7 +330,7 @@ npm 依存の不足は **dashboard-01 のみ**で 6 件（`@dnd-kit/core` / `@dn
    | block の preview tsx で存在しない export を import する | **`npm run typecheck`**（訂正: 当初 preview render と書いていたが、実測で preview render・completeness とも exit 0。型解決の誤りは検査スクリプトでは捕まらない） |
    | block の provenance から `files[]` の 1 エントリを消す | completeness |
 
-2. `provenance.json` の `blocks` に 27 件分の来歴があり、**上流から受け取った 103 ファイルすべて**が `files[]` に載っていること。配布する 76 件は `generatedContentSha256` を持ち、配布しない 27 件の `page.tsx` は `dropped: true` と `upstreamPathSha` を持つ（§3-3）
+2. `provenance.json` の `blocks` に、ディスクまたは registry に存在する全 block の来歴があること。移植 block は、**上流から受け取った全 file が `files[]` に一度だけ**載り、配布する file は `path` と `generatedContentSha256`、配布しない file は `dropped: true` と `upstreamPath` と `upstreamPathSha` を持つこと（§3-3）。自作 block は `origin: "elchika original"` を持ち、ディスク・registry・来歴の file 集合が完全一致すること（§3-6）
 3. 全 block の preview が light / dark の 2 ページで存在し、dark 側ルート要素が `class="dark"` を持つこと
 4. **リポジトリ外の別プロジェクトへ実際に `shadcn add` して描画されること** — React + Vite の scratch アプリで `@elchika/login-01` を導入し、ビルドと描画まで到達する
 5. 配布 registry item に法務ファイル（`LICENSE` / `THIRD_PARTY_LICENSES` / トークン 3 ファイル）が同梱され、`check-distribution` を通ること

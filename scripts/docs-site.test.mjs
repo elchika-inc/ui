@@ -75,3 +75,39 @@ test("Phase B手順が秘密登録・deploy・domain・実体検証を分離す�
     assert.match(instructions, new RegExp(required.replaceAll(".", "\\.")), required);
   }
 });
+
+test("Phase 3 の DoneCriteria は変動件数でなく完全性述語を要求する", () => {
+  const design = readFileSync(
+    new URL("../.docs/plans/2026-08-17-registry-blocks-design.md", import.meta.url),
+    "utf8",
+  );
+  const doneCriteria = design.slice(design.indexOf("## 7. DoneCriteria"));
+  const provenanceCriterion = doneCriteria.slice(
+    doneCriteria.indexOf("2. "),
+    doneCriteria.indexOf("3. "),
+  );
+
+  assert.doesNotMatch(provenanceCriterion, /76 件|27 件|103 ファイル/);
+  assert.match(provenanceCriterion, /上流から受け取った全 file/);
+  assert.match(provenanceCriterion, /`files\[\]` に一度だけ/);
+  assert.match(provenanceCriterion, /generatedContentSha256/);
+  assert.match(provenanceCriterion, /dropped: true/);
+});
+
+test("dashboard-table の実ブラウザ基準は明示ボタンと DnD 不在を実測する", () => {
+  const plan = readFileSync(
+    new URL("../.docs/plans/2026-08-17-registry-blocks-plan.md", import.meta.url),
+    "utf8",
+  );
+  const task8 = plan.slice(plan.indexOf("## Task 8:"), plan.indexOf("## Task 9:"));
+  const step9 = task8.slice(task8.indexOf("- [ ] **Step 9:"), task8.indexOf("- [ ] **Step 10:"));
+
+  assert.doesNotMatch(step9, /行クリック/);
+  assert.match(step9, /accessible name/);
+  assert.match(step9, /Document button/);
+  assert.match(step9, /行自体は操作対象にしない/);
+  assert.match(step9, /依存・import/);
+  assert.match(step9, /handler/);
+  assert.match(step9, /affordance/);
+  assert.match(step9, /実ブラウザ/);
+});

@@ -924,6 +924,30 @@ test("registry:file は上流 target と CLI 生成先を分離する", async ()
   ]);
 });
 
+test("registry:file の src/ 始まり target は CLI 生成先で二重化しない", async () => {
+  const { blockRelocationPlan, resolveRegistryTarget } = await loadModule();
+  const upstream = structuredClone(dashboardUpstream);
+  upstream.files.find((file) => file.path.endsWith("/data.json")).target =
+    "src/app/dashboard/data.json";
+  const target = resolveRegistryTarget("dashboard-01", upstream);
+
+  assert.deepEqual(
+    target.files.find((file) => file.registryPath.endsWith("/data.json")),
+    {
+      registryPath: "registry/base-nova/blocks/dashboard-01/data.json",
+      targetPath: "src/blocks/dashboard-01/data.json",
+      upstreamPath: "apps/v4/registry/bases/base/blocks/dashboard-01/data.json",
+      fileType: "registry:file",
+      upstreamTargetPath: "src/app/dashboard/data.json",
+      cliOutputPath: "src/app/dashboard/data.json",
+    },
+  );
+  assert.deepEqual(blockRelocationPlan(target)[0], {
+    from: "src/app/dashboard/data.json",
+    to: "src/blocks/dashboard-01/data.json",
+  });
+});
+
 test("同一 block 内で basename が重複したら移設せず停止する", async () => {
   const { blockRelocationPlan, resolveRegistryTarget } = await loadModule();
   const target = resolveRegistryTarget("broken-01", {
