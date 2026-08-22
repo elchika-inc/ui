@@ -1,7 +1,15 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  symlinkSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
@@ -1143,6 +1151,258 @@ test("記録済み block は --force で来歴にある既存ファイルを更�
   assert.equal(
     provenance.blocks["login-01"].files.find((file) => !file.dropped).generatedContentSha256,
     createHash("sha256").update("export const version = 2\n").digest("hex"),
+  );
+});
+
+test("block の --force は前回来歴が所有しない新規移設先を上書きしない", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+
+  await runAddComponent({
+    argv: ["login-01", "--modified", "registry:page を配布から除外"],
+    root,
+    fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+    runCommand: () => {
+      writeFileSync(join(root, "src/components/login-form.tsx"), "export const version = 1\n");
+    },
+    log: () => {},
+  });
+  mkdirSync(join(root, "src/blocks/login-01/components"), { recursive: true });
+  writeFileSync(
+    join(root, "src/blocks/login-01/components/login-extra.tsx"),
+    "利用者が所有するファイル\n",
+  );
+  git(root, ["add", "."]);
+  git(root, ["commit", "-m", "consumer-owned fixture"]);
+
+  const updatedUpstream = structuredClone(loginUpstream);
+  updatedUpstream.files.splice(1, 0, {
+    path: "registry/base-nova/blocks/login-01/components/login-extra.tsx",
+    type: "registry:component",
+    content: "export const LoginExtra = true\n",
+  });
+  let ran = false;
+  await assert.rejects(
+    runAddComponent({
+      argv: ["login-01", "--modified", "上流の再取得", "--force"],
+      root,
+      fetchImpl: blockFetch(JSON.stringify(updatedUpstream)),
+      runCommand: () => {
+        ran = true;
+      },
+      log: () => {},
+    }),
+    /block の移設先が実行前から存在する.*login-extra\.tsx/,
+  );
+  assert.equal(ran, false);
+  assert.equal(
+    readFileSync(join(root, "src/blocks/login-01/components/login-extra.tsx"), "utf8"),
+    "利用者が所有するファイル\n",
+  );
+});
+
+test("block の --force は上流移植品以外の origin を上書きしない", async (t) => {
+  for (const origin of ["elchika original", "unknown-source", undefined]) {
+    const root = prepareWrapperRepo();
+    t.after(() => rmSync(root, { recursive: true, force: true }));
+    mkdirSync(join(root, "src/blocks/login-01/components"), { recursive: true });
+    writeFileSync(join(root, "src/blocks/login-01/components/login-form.tsx"), "既存 block\n");
+    writeJson(join(root, "provenance.json"), {
+      components: {},
+      blocks: {
+        "login-01": {
+          ...(origin === undefined ? {} : { origin }),
+          files: [
+            {
+              path: "src/blocks/login-01/components/login-form.tsx",
+              generatedContentSha256: "0".repeat(64),
+            },
+          ],
+        },
+      },
+    });
+    git(root, ["add", "."]);
+    git(root, ["commit", "-m", `origin ${String(origin)} fixture`]);
+    const { runAddComponent } = await loadModule();
+    let ran = false;
+
+    await assert.rejects(
+      runAddComponent({
+        argv: ["login-01", "--modified", "上流の再取得", "--force"],
+        root,
+        fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+        runCommand: () => {
+          ran = true;
+          writeFileSync(join(root, "src/components/login-form.tsx"), "上流の block\n");
+        },
+        log: () => {},
+      }),
+      /--force.*origin.*shadcn\/ui registry/,
+    );
+    assert.equal(ran, false);
+    assert.equal(
+      readFileSync(join(root, "src/blocks/login-01/components/login-form.tsx"), "utf8"),
+      "既存 block\n",
+    );
+  }
+});
+
+test("block の来歴 API が失敗しても --force 前の実体と台帳を保持する", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+
+  await runAddComponent({
+    argv: ["login-01", "--modified", "registry:page を配布から除外"],
+    root,
+    fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+    runCommand: () => {
+      writeFileSync(join(root, "src/components/login-form.tsx"), "export const version = 1\n");
+    },
+    log: () => {},
+  });
+  git(root, ["add", "."]);
+  git(root, ["commit", "-m", "preflight failure fixture"]);
+  const provenanceBefore = readFileSync(join(root, "provenance.json"), "utf8");
+  const registryBefore = readFileSync(join(root, "registry.json"), "utf8");
+  let ran = false;
+
+  await assert.rejects(
+    runAddComponent({
+      argv: ["login-01", "--modified", "上流の再取得", "--force"],
+      root,
+      fetchImpl: async (url) => {
+        if (url.includes("ui.shadcn.com")) {
+          return { ok: true, status: 200, text: async () => JSON.stringify(loginUpstream) };
+        }
+        return { ok: false, status: 403, json: async () => ({}) };
+      },
+      runCommand: () => {
+        ran = true;
+        writeFileSync(join(root, "src/components/login-form.tsx"), "export const version = 2\n");
+      },
+      log: () => {},
+    }),
+    /取得に失敗.*403/,
+  );
+  assert.equal(ran, false);
+  assert.equal(
+    readFileSync(join(root, "src/blocks/login-01/components/login-form.tsx"), "utf8"),
+    "export const version = 1\n",
+  );
+  assert.equal(readFileSync(join(root, "provenance.json"), "utf8"), provenanceBefore);
+  assert.equal(readFileSync(join(root, "registry.json"), "utf8"), registryBefore);
+});
+
+test("block の移設先に symlink 祖先があれば repo 外を書き換えず停止する", async (t) => {
+  const root = prepareWrapperRepo();
+  const outside = mkdtempSync(join(tmpdir(), "elchika-add-component-outside-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(() => rmSync(outside, { recursive: true, force: true }));
+  mkdirSync(join(root, "src/blocks/login-01"), { recursive: true });
+  symlinkSync(outside, join(root, "src/blocks/login-01/components"), "dir");
+  writeJson(join(root, "provenance.json"), {
+    components: {},
+    blocks: {
+      "login-01": {
+        origin: "shadcn/ui registry",
+        files: [
+          {
+            path: "src/blocks/login-01/components/login-form.tsx",
+            generatedContentSha256: "0".repeat(64),
+          },
+        ],
+      },
+    },
+  });
+  git(root, ["add", "."]);
+  git(root, ["commit", "-m", "symlink fixture"]);
+  const { runAddComponent } = await loadModule();
+  let ran = false;
+
+  await assert.rejects(
+    runAddComponent({
+      argv: ["login-01", "--modified", "上流の再取得", "--force"],
+      root,
+      fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+      runCommand: () => {
+        ran = true;
+        writeFileSync(join(root, "src/components/login-form.tsx"), "repo 外へ出してはならない\n");
+      },
+      log: () => {},
+    }),
+    /symlink/,
+  );
+  assert.equal(ran, false);
+  assert.equal(existsSync(join(outside, "login-form.tsx")), false);
+});
+
+test("block の CLI 生成先が symlink なら実行前に repo 外上書きを拒否する", async (t) => {
+  const root = prepareWrapperRepo();
+  const outside = mkdtempSync(join(tmpdir(), "elchika-add-component-cli-outside-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(() => rmSync(outside, { recursive: true, force: true }));
+  writeFileSync(join(outside, "login-form.tsx"), "repo 外の既存ファイル\n");
+  symlinkSync(join(outside, "login-form.tsx"), join(root, "src/components/login-form.tsx"), "file");
+  git(root, ["add", "."]);
+  git(root, ["commit", "-m", "CLI source symlink fixture"]);
+  const { runAddComponent } = await loadModule();
+  let ran = false;
+
+  await assert.rejects(
+    runAddComponent({
+      argv: ["login-01", "--modified", "registry:page を配布から除外"],
+      root,
+      fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+      runCommand: () => {
+        ran = true;
+        writeFileSync(join(root, "src/components/login-form.tsx"), "上書き\n");
+      },
+      log: () => {},
+    }),
+    /CLI 生成先.*symlink/,
+  );
+  assert.equal(ran, false);
+  assert.equal(readFileSync(join(outside, "login-form.tsx"), "utf8"), "repo 外の既存ファイル\n");
+});
+
+test("block の CLI 一時生成先に既存ファイルがあれば内容を保持して停止する", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  writeFileSync(join(root, "src/components/login-form.tsx"), "block が所有しない既存ファイル\n");
+  git(root, ["add", "."]);
+  git(root, ["commit", "-m", "existing CLI source fixture"]);
+  const { runAddComponent } = await loadModule();
+  let ran = false;
+
+  await assert.rejects(
+    runAddComponent({
+      argv: ["login-01", "--modified", "registry:page を配布から除外"],
+      root,
+      fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+      runCommand: () => {
+        ran = true;
+      },
+      log: () => {},
+    }),
+    /block の CLI 生成先が実行前から存在する.*src\/components\/login-form\.tsx/,
+  );
+  assert.equal(ran, false);
+  assert.equal(
+    readFileSync(join(root, "src/components/login-form.tsx"), "utf8"),
+    "block が所有しない既存ファイル\n",
+  );
+});
+
+test("registry:file の ~/ target は共有法務ファイル以外の管理領域を拒否する", async () => {
+  const { resolveRegistryTarget } = await loadModule();
+  const upstream = structuredClone(dashboardUpstream);
+  upstream.files[1].target = "~/.git/hooks/post-checkout";
+
+  assert.throws(
+    () => resolveRegistryTarget("dashboard-01", upstream),
+    /registry:file の CLI 生成先が許可領域外/,
   );
 });
 

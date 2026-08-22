@@ -154,6 +154,16 @@ function chartDate(value: string) {
   return new Date(`${value}T00:00:00Z`);
 }
 
+export function filterChartDataByDays<T extends { date: string }>(
+  data: readonly T[],
+  days: number,
+  referenceDate: string,
+) {
+  const startDate = chartDate(referenceDate);
+  startDate.setUTCDate(startDate.getUTCDate() - (days - 1));
+  return data.filter((item) => chartDate(item.date) >= startDate);
+}
+
 function isTimeRange(value: string): value is TimeRange {
   return value in TIME_RANGES;
 }
@@ -172,13 +182,7 @@ export function ChartAreaInteractive() {
   }, [isMobile]);
 
   const selectedRange = TIME_RANGES[timeRange];
-  const filteredData = chartData.filter((item) => {
-    const date = chartDate(item.date);
-    const referenceDate = chartDate("2024-06-30");
-    const startDate = new Date(referenceDate);
-    startDate.setUTCDate(startDate.getUTCDate() - selectedRange.days);
-    return date >= startDate;
-  });
+  const filteredData = filterChartDataByDays(chartData, selectedRange.days, "2024-06-30");
 
   return (
     <Card className="@container/card">

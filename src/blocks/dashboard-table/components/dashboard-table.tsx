@@ -73,11 +73,47 @@ const INITIAL_COLUMNS: Record<OptionalColumn, boolean> = {
 
 const DETAIL_CHART_CONFIG = {};
 
-function compareRows(left: DashboardTableRow, right: DashboardTableRow, key: SortKey) {
+export function dashboardTableSelectionState(
+  rows: readonly Pick<DashboardTableRow, "id">[],
+  selectedIds: ReadonlySet<number>,
+) {
+  return {
+    allSelected: rows.length > 0 && rows.every((row) => selectedIds.has(row.id)),
+    someSelected: rows.some((row) => selectedIds.has(row.id)),
+  };
+}
+
+export function reconcileDashboardTableState(
+  selectedIds: ReadonlySet<number>,
+  activeRowId: number | null,
+  data: readonly DashboardTableRow[],
+) {
+  const dataIds = new Set(data.map((row) => row.id));
+  const nextActiveRowId = activeRowId !== null && dataIds.has(activeRowId) ? activeRowId : null;
+  return {
+    selectedIds: new Set([...selectedIds].filter((id) => dataIds.has(id))),
+    activeRowId: nextActiveRowId,
+    activeRow: data.find((row) => row.id === nextActiveRowId) ?? null,
+  };
+}
+
+export function compareRows(left: DashboardTableRow, right: DashboardTableRow, key: SortKey) {
   if (key === "target") {
-    return Number(left.target) - Number(right.target);
+    const leftTarget = Number(left.target);
+    const rightTarget = Number(right.target);
+    if (Number.isFinite(leftTarget) && Number.isFinite(rightTarget)) {
+      return leftTarget - rightTarget;
+    }
   }
   return left[key].localeCompare(right[key]);
+}
+
+export function dashboardMetricValues(row: Pick<DashboardTableRow, "target" | "limit">) {
+  const target = Number(row.target);
+  const limit = Number(row.limit);
+  if (!Number.isFinite(target) || !Number.isFinite(limit)) return null;
+  const values = [limit, target, (limit + target) / 2, Math.max(limit, target), target];
+  return { values, maximum: Math.max(...values, 1) };
 }
 
 function SortButton({
@@ -178,8 +214,7 @@ function DashboardDataTable({
   onSelectAll: (selected: boolean) => void;
   onOpen: (row: DashboardTableRow) => void;
 }) {
-  const allSelected = rows.length > 0 && rows.every((row) => selectedIds.has(row.id));
-  const someSelected = rows.some((row) => selectedIds.has(row.id));
+  const { allSelected, someSelected } = dashboardTableSelectionState(rows, selectedIds);
   const columnCount = 2 + OPTIONAL_COLUMNS.filter(({ key }) => visibleColumns[key]).length;
 
   return (
@@ -244,10 +279,18 @@ function DashboardDataTable({
 }
 
 function DetailChart({ row }: { row: DashboardTableRow }) {
-  const target = Number(row.target);
-  const limit = Number(row.limit);
-  const values = [limit, target, (limit + target) / 2, Math.max(limit, target), target];
-  const maximum = Math.max(...values, 1);
+  const metrics = dashboardMetricValues(row);
+  if (!metrics) {
+    return (
+      <div
+        role="status"
+        className="flex min-h-48 items-center justify-center rounded-lg border border-border bg-muted p-4 text-sm text-muted-foreground"
+      >
+        数値データがないためチャートを表示できません。
+      </div>
+    );
+  }
+  const { values, maximum } = metrics;
   const points = values
     .map((value, index) => `${24 + index * 68},${136 - (value / maximum) * 104}`)
     .join(" ");
@@ -291,21 +334,21 @@ export function DashboardTable({ data, className }: DashboardTableProps) {
   const [selectedIds, setSelectedIds] = React.useState<Set<number>>(() => new Set());
   const [activeRowId, setActiveRowId] = React.useState<number | null>(null);
 
-  const dataIds = React.useMemo(() => new Set(data.map((row) => row.id)), [data]);
-  const selectedIdsInData = React.useMemo(
-    () => new Set([...selectedIds].filter((id) => dataIds.has(id))),
-    [dataIds, selectedIds],
+  const reconciledState = React.useMemo(
+    () => reconcileDashboardTableState(selectedIds, activeRowId, data),
+    [activeRowId, data, selectedIds],
   );
-  const activeRow = data.find((row) => row.id === activeRowId) ?? null;
+  const selectedIdsInData = reconciledState.selectedIds;
+  const activeRow = reconciledState.activeRow;
 
   React.useEffect(() => {
     if (selectedIdsInData.size !== selectedIds.size) {
       setSelectedIds(selectedIdsInData);
     }
-    if (activeRowId !== null && !dataIds.has(activeRowId)) {
+    if (activeRowId !== reconciledState.activeRowId) {
       setActiveRowId(null);
     }
-  }, [activeRowId, dataIds, selectedIds, selectedIdsInData]);
+  }, [activeRowId, reconciledState.activeRowId, selectedIds, selectedIdsInData]);
 
   const rows = React.useMemo(() => {
     const normalizedQuery = query.trim().toLocaleLowerCase();

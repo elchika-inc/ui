@@ -38,6 +38,28 @@ test("icon 監査対象は実在 directory のうち上流移植品だけから�
   assert.deepEqual(listIconAuditBlockNames(root), ["dashboard-01", "sidebar-01"]);
 });
 
+test("icon 監査は未知または欠落した origin を fail-closed にする", async (context) => {
+  for (const origin of ["unknown-source", undefined]) {
+    const root = mkdtempSync(join(tmpdir(), "check-block-icons-origin-"));
+    context.after(() => rmSync(root, { recursive: true, force: true }));
+    mkdirSync(join(root, "src/blocks/example-01"), { recursive: true });
+    writeFileSync(
+      join(root, "provenance.json"),
+      JSON.stringify({
+        blocks: {
+          "example-01": origin === undefined ? {} : { origin },
+        },
+      }),
+    );
+    const { listIconAuditBlockNames } = await loadChecker();
+
+    assert.throws(
+      () => listIconAuditBlockNames(root),
+      new RegExp(`example-01: icon 監査の origin が未対応: ${String(origin)}`),
+    );
+  }
+});
+
 test("上流 JSON から件数に依存せず lucide の期待集合を導出する", async () => {
   const { inspectUpstreamBlocks } = await loadChecker();
   const result = inspectUpstreamBlocks([

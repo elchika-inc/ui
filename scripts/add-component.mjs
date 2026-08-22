@@ -6,9 +6,11 @@ import {
   copyFileSync,
   existsSync,
   constants as fsConstants,
+  lstatSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
+  realpathSync,
   rmSync,
   writeFileSync,
 } from "node:fs";
@@ -66,6 +68,8 @@ const SHARED_REGISTRY_FILES = [
     target: "~/elchika-ui/THIRD_PARTY_LICENSES",
   },
 ];
+
+const SHARED_CLI_OUTPUT_PATHS = new Set(SHARED_REGISTRY_FILES.map(({ target }) => target.slice(2)));
 
 const exactSemver =
   /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/;
@@ -448,6 +452,7 @@ function ensureBlockRelocationSources(root, plan, registryFileSources) {
   // 全件を移設前に確認する。途中まで copy してから不足へ気付くと、同じ失敗でも
   // worktree の残り方が file 順に依存し、再開時の復元範囲が不安定になる。
   for (const { from } of plan) {
+    assertPathWithoutSymlinks(root, "block の CLI 生成先", from);
     if (existsSync(join(root, from))) continue;
     const label = registryFileSources.has(from)
       ? "registry:file の CLI 生成先"
@@ -461,15 +466,19 @@ function removeObsoleteBlockFiles(root, plannedTargets, overwriteTargets, log) {
   // 新しい生成元を全件確認した後に行い、CLI の生成不足で旧 block が部分欠損しないようにする。
   for (const path of overwriteTargets) {
     if (plannedTargets.has(path) || !existsSync(join(root, path))) continue;
+    assertPathWithoutSymlinks(root, "上流から消えた block file", path);
     rmSync(join(root, path));
     log(`上流から消えた block file を削除: ${path}`);
   }
 }
 
 function copyBlockFile(root, from, to, overwriteTargets) {
+  assertPathWithoutSymlinks(root, "block の移設元", from);
+  assertPathWithoutSymlinks(root, "block の移設先", to);
   const fromPath = join(root, from);
   const toPath = join(root, to);
   mkdirSync(dirname(toPath), { recursive: true });
+  assertPathWithoutSymlinks(root, "block の移設先", to);
   // rename は POSIX では既存の移設先を上書きする。副作用前の検査に加え、
   // 新規 path は COPYFILE_EXCL で競合を止める。--force でも上書きできるのは
   // 前回来歴に記録された同じ block の path だけに限定する。
@@ -501,6 +510,7 @@ function relocateBlockFiles(root, target, log, overwriteTargets = new Set()) {
   for (const { to } of plan) {
     const path = join(root, to);
     if (!existsSync(path)) continue;
+    assertPathWithoutSymlinks(root, "block の import 書換先", to);
     const source = readFileSync(path, "utf8");
     const { content, rewritten } = rewriteBlockSiblingImports(source, to, target.files);
     if (rewritten.length === 0) continue;
@@ -513,7 +523,13 @@ function relocateBlockFiles(root, target, log, overwriteTargets = new Set()) {
 
 function blockOverwriteTargets(provenance, name, force) {
   if (!force || !provenance.blocks?.[name]) return new Set();
-  const files = provenance.blocks[name].files;
+  const block = provenance.blocks[name];
+  if (block.origin !== "shadcn/ui registry") {
+    throw new Error(
+      `${name}: --force は origin が shadcn/ui registry の既存 block だけに使用できる`,
+    );
+  }
+  const files = block.files;
   if (!Array.isArray(files)) {
     throw new Error(`${name}: --force には既存 block の files 来歴が必要`);
   }
@@ -534,14 +550,20 @@ function blockOverwriteTargets(provenance, name, force) {
 // CLI は --overwrite で動くため、registry:file の実生成先と最終移設先を副作用前に検査する。
 // 実移設時にも新規 path には COPYFILE_EXCL を使い、検査後の競合を上書きしない。
 function prepareBlockRelocation(root, target, overwriteTargets = new Set()) {
-  for (const { to } of blockRelocationPlan(target)) {
+  const registryFileSources = new Set(
+    target.files.map((file) => file.cliOutputPath).filter(Boolean),
+  );
+  for (const { from, to } of blockRelocationPlan(target)) {
+    const sourceLabel = registryFileSources.has(from)
+      ? "registry:file の CLI 生成先"
+      : "block の CLI 生成先";
+    assertPathWithoutSymlinks(root, sourceLabel, from);
+    if (existsSync(join(root, from))) {
+      throw new Error(`${sourceLabel}が実行前から存在する: ${from}`);
+    }
+    assertPathWithoutSymlinks(root, "block の移設先", to);
     if (existsSync(join(root, to)) && !overwriteTargets.has(to)) {
       throw new Error(`block の移設先が実行前から存在する: ${to}`);
-    }
-  }
-  for (const file of target.files) {
-    if (file.cliOutputPath && existsSync(join(root, file.cliOutputPath))) {
-      throw new Error(`registry:file の CLI 生成先が実行前から存在する: ${file.cliOutputPath}`);
     }
   }
 }
@@ -633,6 +655,19 @@ function assertContainedPath(label, path) {
   return path;
 }
 
+function assertPathWithoutSymlinks(root, label, path) {
+  const canonicalRoot = realpathSync(root);
+  let current = canonicalRoot;
+  for (const segment of path.split("/")) {
+    current = join(current, segment);
+    const status = lstatSync(current, { throwIfNoEntry: false });
+    if (status?.isSymbolicLink()) {
+      throw new Error(`${label} に symlink を含められない: ${path}`);
+    }
+  }
+  return path;
+}
+
 // 文字列引数の replace は先頭アンカーを持たず「最初に現れた出現位置」を消すため、
 // prefix が先頭以外にあるパス（vendor/registry/base-nova/...）を黙って別物へ変換する。
 // 前方一致を検査してから slice する。
@@ -663,6 +698,9 @@ function cliOutputPathForRegistryFile(name, upstreamTargetPath) {
   const cliOutputPath = upstreamTargetPath.startsWith("~/")
     ? upstreamTargetPath.slice(2)
     : `src/${upstreamTargetPath}`;
+  if (!cliOutputPath.startsWith("src/") && !SHARED_CLI_OUTPUT_PATHS.has(cliOutputPath)) {
+    throw new Error(`${name}: registry:file の CLI 生成先が許可領域外: ${cliOutputPath}`);
+  }
   return assertContainedPath(`${name}: registry:file の CLI 生成先`, cliOutputPath);
 }
 
@@ -839,7 +877,7 @@ async function fetchJsonWithText(url, fetchImpl) {
   return { json: JSON.parse(text), text };
 }
 
-async function provenanceEntry({
+function provenanceEntry({
   root,
   name,
   modified,
@@ -848,22 +886,10 @@ async function provenanceEntry({
   upstreamItem,
   target,
   registryUrl,
-  fetchImpl,
+  upstreamPathSha,
 }) {
   const upstreamRepo = "shadcn-ui/ui";
   const upstreamPath = target.upstreamPath;
-  await fetchJson(
-    `https://api.github.com/repos/${upstreamRepo}/contents/${upstreamPath}`,
-    fetchImpl,
-  );
-  const commits = await fetchJson(
-    `https://api.github.com/repos/${upstreamRepo}/commits?path=${encodeURIComponent(upstreamPath)}&per_page=1`,
-    fetchImpl,
-  );
-  const upstreamPathSha = commits?.[0]?.sha;
-  if (!/^[0-9a-f]{40}$/.test(upstreamPathSha ?? "")) {
-    throw new Error(`${name}: 元テンプレートの commit SHA を特定できない`);
-  }
 
   const servedFile = upstreamItem.files?.find((file) => file.path === target.registryPath);
   if (!servedFile?.content) throw new Error(`${name}: registry 応答に primary content が無い`);
@@ -911,7 +937,7 @@ async function upstreamCommitSha(upstreamRepo, upstreamPath, fetchImpl, name) {
   return sha;
 }
 
-async function blockProvenanceEntry({
+function blockProvenanceEntry({
   root,
   name,
   modified,
@@ -919,17 +945,9 @@ async function blockProvenanceEntry({
   upstreamText,
   target,
   registryUrl,
-  fetchImpl,
+  upstreamPathSha,
 }) {
   const upstreamRepo = "shadcn-ui/ui";
-
-  // block ディレクトリ単位で 1 コールに畳む。ファイルごとに叩くと未認証の GitHub API
-  // （60 req/h）を 27 件 × 平均 4 ファイルで確実に超え、しかも 403 は shadcn CLI が
-  // 作業ツリーを書き換えた後に起きるので、次回実行が ensureClean で止まる。
-  // 意味は「このファイルを最後に変えた commit」から「この block を最後に変えた commit」
-  // へ広がる（login-01 は配布分と page が同一 SHA で、実測上の差は無かった）。
-  const blockUpstreamDir = `${UPSTREAM_PREFIX}blocks/${name}`;
-  const upstreamPathSha = await upstreamCommitSha(upstreamRepo, blockUpstreamDir, fetchImpl, name);
 
   const files = target.files.map((file) => ({
     path: file.targetPath,
@@ -1016,6 +1034,7 @@ function prepareDroppedPages(root, target) {
     if (!droppedTarget.startsWith("app/") || !droppedTarget.endsWith("/page.tsx")) {
       throw new Error(`registry:page の target が許可した page path でない: ${droppedTarget}`);
     }
+    assertPathWithoutSymlinks(root, "registry:page の target", droppedTarget);
     if (existsSync(join(root, droppedTarget))) {
       throw new Error(`registry:page の target が実行前から存在する: ${droppedTarget}`);
     }
@@ -1027,6 +1046,7 @@ function prepareDroppedPages(root, target) {
 function removeDroppedPages(root, droppedTargets, log) {
   for (const droppedTarget of droppedTargets) {
     if (!existsSync(join(root, droppedTarget))) continue;
+    assertPathWithoutSymlinks(root, "registry:page の target", droppedTarget);
     rmSync(join(root, droppedTarget));
     log(`配布しない page を削除: ${droppedTarget}`);
   }
@@ -1038,6 +1058,27 @@ function createProvenanceEntry({ isBlock, upstreamText, ...rest }) {
     return blockProvenanceEntry({ ...blockArgs, upstreamText });
   }
   return provenanceEntry(rest);
+}
+
+async function fetchProvenanceMetadata({ isBlock, name, target, fetchImpl }) {
+  const upstreamRepo = "shadcn-ui/ui";
+  if (isBlock) {
+    // block ディレクトリ単位で 1 コールに畳む。ファイルごとに叩くと未認証の GitHub API
+    // （60 req/h）を 27 件 × 平均 4 ファイルで確実に超える。CLI の副作用より前に固定し、
+    // API 失敗で既存 block が部分更新されないようにする。
+    const blockUpstreamDir = `${UPSTREAM_PREFIX}blocks/${name}`;
+    return {
+      upstreamPathSha: await upstreamCommitSha(upstreamRepo, blockUpstreamDir, fetchImpl, name),
+    };
+  }
+
+  await fetchJson(
+    `https://api.github.com/repos/${upstreamRepo}/contents/${target.upstreamPath}`,
+    fetchImpl,
+  );
+  return {
+    upstreamPathSha: await upstreamCommitSha(upstreamRepo, target.upstreamPath, fetchImpl, name),
+  };
 }
 
 // 正規化後にハッシュだけを取り直す。CLI も通信も行わない。
@@ -1095,6 +1136,9 @@ export async function runAddComponent({
   );
   const target = resolveRegistryTarget(name, upstreamItem);
   const isBlock = target.itemType === "registry:block";
+  if (!isBlock) {
+    assertPathWithoutSymlinks(repositoryRoot, `${name}: CLI 生成先`, target.targetPath);
+  }
 
   // lane の衝突を provenance だけで判断すると、台帳の部分欠損時に同名の
   // registry item や disk 実体を上書きできてしまう。CLI の副作用より前に、
@@ -1130,6 +1174,15 @@ export async function runAddComponent({
   // 外部 registry が指定する削除対象は CLI の副作用より前に検証する。
   // 実行前から存在する path は CLI が上書きする可能性もあるため、先に停止する。
   const droppedTargets = prepareDroppedPages(repositoryRoot, target);
+
+  // 来歴に必要な外部メタデータは、CLI・移設・削除より前に全件取得する。
+  // 後段に外部通信を残すと、API の一過性失敗だけで既存 block が部分更新される。
+  const provenanceMetadata = await fetchProvenanceMetadata({
+    isBlock,
+    name,
+    target,
+    fetchImpl,
+  });
 
   // 検証・来歴hash・CLI実行を同じresponse bytesへ束縛する。
   // @shadcn/<name>を渡すとCLIがremoteを再取得し、preflight後に内容が変わる
@@ -1173,7 +1226,7 @@ export async function runAddComponent({
         .map(({ targetPath }) => readFileSync(join(repositoryRoot, targetPath), "utf8"))
         .join("\n")
     : readFileSync(join(repositoryRoot, target.targetPath), "utf8");
-  const entry = await createProvenanceEntry({
+  const entry = createProvenanceEntry({
     root: repositoryRoot,
     isBlock,
     name,
@@ -1184,7 +1237,7 @@ export async function runAddComponent({
     upstreamText,
     target,
     registryUrl,
-    fetchImpl,
+    ...provenanceMetadata,
   });
 
   if (isBlock) {

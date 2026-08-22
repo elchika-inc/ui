@@ -2356,7 +2356,7 @@
           "path": "src/blocks/dashboard-01/components/chart-area-interactive.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/dashboard-01/components/chart-area-interactive.tsx",
           "upstreamPathSha": "6261bd89f72d794aea491482cc2acfd8dc3d63e2",
-          "generatedContentSha256": "581e65667268003ae7d9705aed7ffd8c8239b1a0e3b9745c64de0f3d452937f7"
+          "generatedContentSha256": "1b345c6b2f7d45a4af602428da6d99be3dfe3ff573d63912edcd978d14ce508d"
         },
         {
           "path": "src/blocks/dashboard-01/components/nav-documents.tsx",
@@ -2414,7 +2414,7 @@
       "files": [
         {
           "path": "src/blocks/dashboard-table/components/dashboard-table.tsx",
-          "generatedContentSha256": "0133dd8201a9b552c623f60990890ff419ce284ed8b288861cae0ad95a5db4d8"
+          "generatedContentSha256": "2f7699b6fe344e872fa979821a9d67b461a29bb0849268016c370567c9e021f4"
         }
       ]
     }
