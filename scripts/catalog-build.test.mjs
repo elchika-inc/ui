@@ -175,6 +175,41 @@ test("トップとcomponentページが同じdocs shellとサイドバー導線�
   assert.doesNotMatch(componentHtml, /aria-current="page"[^>]*href="\/"/);
 });
 
+test("component一覧がpreview scanの全件を描画する", () => {
+  const html = builtPage("components");
+  const names = [...html.matchAll(/data-component-index-item="([^"]+)"/g)]
+    .map((match) => match[1])
+    .sort();
+
+  assert.notEqual(names.length, 0, "component一覧の走査が空走している");
+  assert.deepEqual(names, previewNames(), "component一覧とpreview scanが一致する");
+  assert.doesNotMatch(
+    html,
+    /&quot;Preview&quot;/,
+    "React componentをisland propsへ渡してhydration時にnull化しない",
+  );
+});
+
+test("component一覧のblock判定がregistry:blockと一致する", () => {
+  const html = builtPage("components");
+  const renderedBlocks = [
+    ...html.matchAll(/data-component-index-item="([^"]+)"[^>]*data-component-index-kind="block"/g),
+  ]
+    .map((match) => match[1])
+    .sort();
+  const registryBlocks = [...blockNames()].sort();
+
+  assert.notEqual(registryBlocks.length, 0, "registryのblock走査が空走している");
+  assert.deepEqual(renderedBlocks, registryBlocks, "component一覧のblock判定がregistryと一致する");
+});
+
+test("component一覧がdocs shellのサイドバー導線を出力する", () => {
+  const html = builtPage("components");
+
+  assert.match(html, /aria-current="page"[^>]*href="\/components\/"/);
+  assert.match(html, /href="\/components\/"[^>]*><span>コンポーネント一覧<\/span>/);
+});
+
 test("トップがLP要素なしで3経路とtoken置換を順に案内する", () => {
   const html = builtPage("");
   const sections = [
