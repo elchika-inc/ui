@@ -1,0 +1,26 @@
+---
+import { categorizePreviewItems } from "@/catalog/component-categories.mjs";
+import { previewItems } from "@/catalog/previews";
+import { blockNamesFromRegistry } from "@/catalog/registry-kinds";
+// biome-ignore lint/correctness/noUnusedImports: Astro template から参照する値。
+import DocsLayout from "@/layouts/docs.astro";
+// biome-ignore lint/correctness/noUnusedImports: Astro template から参照する値。
+import { ComponentIndex } from "@/site/component-index";
+import registry from "../../../registry.json";
+
+// biome-ignore lint/correctness/noUnusedVariables: Astro template から参照する値。
+const categories = categorizePreviewItems(previewItems).map((category) => ({
+  name: category.name,
+  items: category.items.map((item) => ({ name: item.name, title: item.title })),
+}));
+// registry.json 全体を client bundle へ載せず、block 名だけを island へ渡す。
+// biome-ignore lint/correctness/noUnusedVariables: Astro template から参照する値。
+const blockNames = blockNamesFromRegistry(registry);
+---
+
+<DocsLayout
+  title="コンポーネント一覧 - elchika-inc/ui"
+  description="elchika-inc/ui で配布する component と block の一覧"
+>
+  <ComponentIndex categories={categories} blockNames={blockNames} client:load />
+</DocsLayout>

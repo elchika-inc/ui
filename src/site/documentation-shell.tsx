@@ -27,6 +27,7 @@ export type NavigationCategory = {
 type DocumentationShellProps = {
   categories: NavigationCategory[];
   children: ReactNode | ((theme: SiteTheme) => ReactNode);
+  componentIndex?: boolean;
   currentName?: string;
   headerAction?: ReactNode;
   home?: boolean;
@@ -43,6 +44,7 @@ export function CommandBlock({ children }: { children: string }) {
 export function DocumentationShell({
   categories,
   children,
+  componentIndex = false,
   currentName,
   headerAction,
   home = false,
@@ -74,6 +76,19 @@ export function DocumentationShell({
                         render={<a aria-current={home ? "page" : undefined} href="/" />}
                       >
                         <span>はじめに</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton
+                        isActive={componentIndex}
+                        render={
+                          <a
+                            aria-current={componentIndex ? "page" : undefined}
+                            href="/components/"
+                          />
+                        }
+                      >
+                        <span>コンポーネント一覧</span>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   </SidebarMenu>
