@@ -46,6 +46,8 @@ export function MenubarPreview({ mode = "isolated" }: PreviewProps) {
                 <MenubarItem>共同編集者を招待</MenubarItem>
               </MenubarSubContent>
             </MenubarSub>
+            <MenubarSeparator />
+            <MenubarItem variant="destructive">削除</MenubarItem>
           </MenubarContent>
         </MenubarMenu>
         <MenubarMenu>

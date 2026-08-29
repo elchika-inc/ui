@@ -67,6 +67,8 @@ export function ContextMenuPreview({ mode = "isolated" }: PreviewProps) {
               <ContextMenuItem>グリッド</ContextMenuItem>
             </ContextMenuSubContent>
           </ContextMenuSub>
+          <ContextMenuSeparator />
+          <ContextMenuItem variant="destructive">削除</ContextMenuItem>
         </ContextMenuContent>
       </ContextMenu>
       <PreviewSentinel mode={mode} position="after" />

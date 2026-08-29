@@ -44,6 +44,8 @@ export function DropdownMenuPreview({ mode = "isolated" }: PreviewProps) {
               <DropdownMenuItem>グリッド</DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuSub>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem variant="destructive">削除</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <PreviewSentinel mode={mode} position="after" />
