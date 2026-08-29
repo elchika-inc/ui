@@ -66,7 +66,7 @@ function ComponentIndexCard({
             <div className="flex max-w-xs flex-col items-center gap-4">
               <div>
                 <p className="font-mono text-xs text-muted-foreground">{name}</p>
-                <h3 className="mt-1 font-heading text-lg font-semibold">隔離プレビューを開始</h3>
+                <p className="mt-1 font-heading text-lg font-semibold">隔離プレビューを開始</p>
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">
                   focus trap を一覧ページから分離した状態で読み込みます。
                 </p>
@@ -77,7 +77,7 @@ function ComponentIndexCard({
                 onPointerDown={onPreviewIntent}
                 onClick={onPreviewLoad}
               >
-                プレビューを読み込む
+                <span className="sr-only">{title} の</span>プレビューを読み込む
               </Button>
             </div>
           </div>
