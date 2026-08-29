@@ -48,8 +48,9 @@ elchika-inc の共有 UI コンポーネント。Base UI + Tailwind CSS v4。sha
 | `src/styles/global.css` | トークン |
 | `src/previews/*.tsx` | 隔離プレビューの中身 |
 | `src/pages/preview/*.astro` | 隔離プレビューのルート（light / dark で別ページ） |
+| `src/pages/components/index.astro` | `/components/` 一覧ページのルート |
 | `src/pages/components/[name].astro` | 公開 component ページの静的生成ルート |
-| `src/site/` | 公開サイトの導入情報・テーマ切替・Sidebar shell |
+| `src/site/` | 公開サイトの導入情報・component / block 一覧・テーマ切替・Sidebar shell |
 | `registry.json` | registry の定義 |
 | `tsup.config.ts` | ライブラリビルド（出力先 `lib/`） |
 | `biome.json` | lint / format |
@@ -81,6 +82,7 @@ elchika-inc の共有 UI コンポーネント。Base UI + Tailwind CSS v4。sha
 - dev-data-safety: local。
 - routes:
   - `/` — 利用者向け導入手順と component 索引。
+  - `/components/` — component と block を横断し、カテゴリ別に全 89 件を並べる一覧ページ。component は preview を直接描画し、block は明示操作で隔離プレビューを縮小表示する。
   - `/components/button/` — Button の公開 component ページ。
   - `/components/login-01/` — login-01（block）の公開ページ。block はソースリンクがディレクトリの tree URL を指し、Props セクションを出さない。
   - `/catalog/` — 横断検証カタログ（既存証跡の対象）。
