@@ -30,6 +30,11 @@ export function BubblePreview() {
             ) : null}
           </Bubble>
         ))}
+        <Bubble variant="default">
+          <BubbleContent render={<button type="button" data-preview-state="interactive-default" />}>
+            詳細を確認する
+          </BubbleContent>
+        </Bubble>
       </BubbleGroup>
     </div>
   );
