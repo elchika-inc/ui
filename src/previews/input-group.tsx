@@ -43,6 +43,13 @@ export function InputGroupPreview(_props: PreviewProps) {
         <InputGroupTextarea aria-label="共有メモ" defaultValue="共有内容を確認してください" />
       </InputGroup>
 
+      <InputGroup data-preview-state="disabled">
+        <InputGroupAddon>
+          <InputGroupText>無効</InputGroupText>
+        </InputGroupAddon>
+        <InputGroupInput aria-label="無効な入力" defaultValue="編集できません" disabled />
+      </InputGroup>
+
       <p role="status" className="text-sm text-muted-foreground">
         {copied ? "コピーしました" : "コピー操作を確認できます"}
       </p>
