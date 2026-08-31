@@ -4,7 +4,7 @@
 
 ## ビルド入力
 
-- `cssEntry` は **`dist/_astro/global.Cs8Ft9hd.css`**（Astro がコンパイルした Tailwind の実 CSS）を指す。
+- `cssEntry` は **`dist/_astro/global.BHAheRO3.css`**（Astro がコンパイルした Tailwind の実 CSS）を指す。
   `src/styles/global.css` は `@import "tailwindcss"` を含む**未コンパイルのソース**で、これを指すと
   ユーティリティクラスが一切効かない空の `styles.css` が出来上がる（実際に一度そうなり、
   同期先プロジェクトへ中身 `@import "./_ds_bundle.css";` 一行だけの styles.css が上がった）。
@@ -81,12 +81,28 @@
 
 - **`cssEntry` のハッシュ付きファイル名**: `dist/_astro/global.<hash>.css` の `<hash>` は
   CSS の内容が変われば変わる。トークンやユーティリティを触った後の再同期では
-  `npm run build` 後に `ls dist/_astro/*.css` で実ファイル名を確認し、config を更新すること。
+  `npm run build` 後に `ls dist/_astro/*.css` で実ファイル名を確認し、config と本 NOTES の
+  「ビルド入力」節を同じ実ファイル名へ更新すること。
   更新を忘れると converter が `[NO_DIST]` 系ではなく「CSS が見つからない」で静かに劣化する。
 - **claude.ai/design 側からの Google Fonts 到達性は未検証**。ローカルの headless chromium では
   読めているが、同期先のレンダリング環境で `fonts.googleapis.com` がブロックされると
   全デザインがフォールバックフォントになる。アップロード後に DS ペインで実際の字形を確認し、
   駄目なら `cfg.extraFonts` で IBM Plex（OFL）の woff2 を同梱する方針へ切り替える。
+  2026-08-31 に同期先のデザインカードの日本語テキストを DevTools の Computed で確認したところ、
+  `font-family` は `-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif`
+  で、ui のフォントチェーンですらなかった。これは Google Fonts の到達性の問題ではなく、ui の CSS
+  自体が同期先へ届いていない状態を示す。原因は `cssEntry` のハッシュずれで、config が
+  `dist/_astro/global.Cs8Ft9hd.css` を指す一方、実体は別のハッシュへ変わっており、直前の項目で警告
+  していた失敗が実際に起きていた。config は build 後の実体へ直したが、同期ツールの
+  `lib/preview-rebuild.mjs` / `lib/package-build.mjs` がこのリポジトリに存在せず、外向きの副作用も
+  伴うため、再同期は未実施である。
+
+  Google Fonts の到達性そのものは依然として未検証である。CSS が届いていない状態では判定できない
+  ため、修正した `cssEntry` で再同期した後、同じ日本語テキストの computed `font-family` を改めて
+  確認すること。`document.fonts.check()` だけを根拠にしてはならない。閲覧者のローカルに IBM Plex
+  がインストールされていると `true` を返すため、computed `font-family` と、実際に `@font-face`
+  としてロードされたファミリー一覧（`[...document.fonts].filter(f => f.status === "loaded")`）の両方を
+  確認すること。
 - **`.gitignore` の `.design-sync/previews/`**: 過去の同期が誤って除外していた。authored preview は
   durable set（コミット対象）なので、除外が復活していないか確認すること。
 - **`lucide-react` のアイコン**: 一部の preview が import している。`cfg.extraEntries` へ
