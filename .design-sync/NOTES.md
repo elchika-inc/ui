@@ -93,9 +93,15 @@
   で、ui のフォントチェーンですらなかった。これは Google Fonts の到達性の問題ではなく、ui の CSS
   自体が同期先へ届いていない状態を示す。原因は `cssEntry` のハッシュずれで、config が
   `dist/_astro/global.Cs8Ft9hd.css` を指す一方、実体は別のハッシュへ変わっており、直前の項目で警告
-  していた失敗が実際に起きていた。config は build 後の実体へ直したが、同期ツールの
-  `lib/preview-rebuild.mjs` / `lib/package-build.mjs` がこのリポジトリに存在せず、外向きの副作用も
-  伴うため、再同期は未実施である。
+  していた失敗が実際に起きていた。config は build 後の実体へ直し、**2026-09-01 に修正後の
+  `cssEntry` で再同期を実施した**。converter のスクリプトはこのリポジトリの持ち物ではなく
+  design-sync スキルの同梱物で、`.ds-sync/` へステージしてから走らせる（`lib/*.mjs` が
+  リポジトリに無いのは正常であって、再同期を妨げる理由にはならない）。
+  同期の実測: 共有ファイル 8 件（`styles.css` と 209,845 bytes の `_ds_bundle.css` を含む）と、
+  component / `_preview` の 1442 件、計 1450 ファイルを転送し、リモートの `list_files` とローカルの
+  `upload-manifest.json` を突合して**欠落 0 件**を確認した。manifest 外に残る
+  `_ds_manifest.json` / `_adherence.oxlintrc.json` / `_ds_sync.json` はアプリ生成物とアンカーで、
+  削除対象ではない。
 
   Google Fonts の到達性そのものは依然として未検証である。CSS が届いていない状態では判定できない
   ため、修正した `cssEntry` で再同期した後、同じ日本語テキストの computed `font-family` を改めて
