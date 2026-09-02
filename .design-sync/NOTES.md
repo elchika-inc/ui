@@ -84,10 +84,12 @@
   `npm run build` 後に `ls dist/_astro/*.css` で実ファイル名を確認し、config と本 NOTES の
   「ビルド入力」節を同じ実ファイル名へ更新すること。
   更新を忘れると converter が `[NO_DIST]` 系ではなく「CSS が見つからない」で静かに劣化する。
-- **claude.ai/design 側からの Google Fonts 到達性は未検証**。ローカルの headless chromium では
+- **claude.ai/design 側からの Google Fonts 到達性は 2026-09-02 に確認済み**。ローカルの headless chromium では
   読めているが、同期先のレンダリング環境で `fonts.googleapis.com` がブロックされると
   全デザインがフォールバックフォントになる。アップロード後に DS ペインで実際の字形を確認し、
   駄目なら `cfg.extraFonts` で IBM Plex（OFL）の woff2 を同梱する方針へ切り替える。
+  到達を確認できたため、この代替案は現時点では不要である。ただし将来 egress 条件が変わった場合の
+  手順として残す。
   2026-08-31 に同期先のデザインカードの日本語テキストを DevTools の Computed で確認したところ、
   `font-family` は `-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif`
   で、ui のフォントチェーンですらなかった。これは Google Fonts の到達性の問題ではなく、ui の CSS
@@ -103,12 +105,42 @@
   `_ds_manifest.json` / `_adherence.oxlintrc.json` / `_ds_sync.json` はアプリ生成物とアンカーで、
   削除対象ではない。
 
-  Google Fonts の到達性そのものは依然として未検証である。CSS が届いていない状態では判定できない
-  ため、修正した `cssEntry` で再同期した後、同じ日本語テキストの computed `font-family` を改めて
-  確認すること。`document.fonts.check()` だけを根拠にしてはならない。閲覧者のローカルに IBM Plex
-  がインストールされていると `true` を返すため、computed `font-family` と、実際に `@font-face`
-  としてロードされたファミリー一覧（`[...document.fonts].filter(f => f.status === "loaded")`）の両方を
-  確認すること。
+  **2026-09-02 の到達性検証**: claude.ai/design の同期先から Google Fonts へ到達していると判定した。
+  デザインカードは IBM Plex Sans JP で描画されている。根拠は次の合成証拠である。
+
+  1. 同期先の `_ds_bundle.css` を `curl` で実取得し、HTTP 200 / **209,845 bytes** を確認した。
+     このサイズは PR #43 が記録した転送時の値と一致する。
+  2. その CSS の先頭に Google Fonts の `@import` が 2 本（`IBM+Plex+Mono` と
+     `IBM+Plex+Sans` を含む 1 本、および `IBM+Plex+Sans+JP` の 1 本）そのまま保持されていた。
+  3. 同期先の `styles.css` は 28 bytes で、`@import "./_ds_bundle.css";` の 1 行だけだった。
+     入れ子になっても Google Fonts の `@import` は有効な位置に保たれる。
+  4. デザインカードを描画する iframe のレスポンスヘッダの CSP は `frame-ancestors` だけで、
+     `font-src` / `style-src` の制限を持たない。
+  5. iframe の sandbox 属性は
+     `allow-scripts allow-forms allow-popups allow-modals allow-downloads allow-same-origin` で、
+     外部フォント取得を阻む項目を含まない。
+  6. 検証マシンには IBM Plex がインストールされていなかった。`system_profiler SPFontsDataType` で
+     **337 ファミリー中 0 件**だった。
+  7. 同じブラウザのローカル probe ページでは、IBM Plex Sans JP の `@font-face` が
+     **6 サブセット `loaded`** になった。前項と合わせると、これは `fonts.gstatic.com` からの
+     実ダウンロードでしかありえない。
+  8. 同期先のデザインカード（ButtonGroup）の日本語ラベル「コンパクト」の字形は、IBM Plex Sans JP
+     指定の probe と一致し、システムフォント指定の probe とは一致しなかった。
+
+  ただし cross-origin のため、デザインカードの iframe 内にある `document.fonts` と computed
+  `font-family` は直接読めていない。上の判定は 1〜8 の合成証拠に基づき、iframe 内 API の直接観測ではない。
+
+  `document.fonts.check()` だけを到達判定の根拠にしてはならない。閲覧者のローカルに IBM Plex が
+  インストールされていると `true` を返す偽陽性に加え、今回は到達しているのに `false` を返す偽陰性も
+  観測した。ページに登録された 372 face のうち、まだ使われていないサブセットが `unloaded` のままだからである。
+  また、ブラウザ拡張のネットワーク記録には cross-origin iframe 内の CSS・フォントなどのサブリソースが
+  出ず、iframe の document 要求だけが記録された。「fonts へのリクエスト 0 件」を未到達の根拠にしないこと。
+
+  日本語テキストは全角の字幅が font-size と一致するため、描画幅の比較に判別力がない。IBM Plex 指定と
+  システムフォント指定の実測値は 69.44px vs 69.30px だった。一方、ラテン文字では 149.41px vs
+  153.89px と差が出たため、幅で判定する場合はラテン文字を使う。次回の最短経路は、同期先の CSS を
+  `curl` で取得して `@import` の位置を確認し、iframe の CSP と sandbox を確認することである。この 2 点で
+  ブラウザ操作なしに大半を判定できる。今回の作業では再同期を実施しておらず、検証結果の記録だけを更新した。
 - **`.gitignore` の `.design-sync/previews/`**: 過去の同期が誤って除外していた。authored preview は
   durable set（コミット対象）なので、除外が復活していないか確認すること。
 - **`lucide-react` のアイコン**: 一部の preview が import している。`cfg.extraEntries` へ
