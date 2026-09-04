@@ -149,6 +149,7 @@ import type {
   SelectSeparatorProps,
   SelectTriggerProps,
   SelectValueProps,
+  SheetContentProps,
   SpinnerProps,
   SwitchProps,
   TableBodyProps,
@@ -365,7 +366,15 @@ type DialogContracts = [
 
 const dialogContentCloseButton: DialogContentProps["showCloseButton"] = true
 const dialogFooterCloseButton: DialogFooterProps["showCloseButton"] = false
+const dialogContentModal: DialogContentProps["modal"] = false
+const dialogContentCloseLabel: DialogContentProps["closeLabel"] = "閉じる"
+const dialogFooterCloseLabel: DialogFooterProps["closeLabel"] = "閉じる"
 const dialogContractsReachable: DialogContracts extends unknown[] ? true : never = true
+
+const sheetContentModal: SheetContentProps["modal"] = false
+const sheetContentCloseLabel: SheetContentProps["closeLabel"] = "閉じる"
+// @ts-expect-error SheetContent の modal は文字列を受けない。
+const invalidSheetContentModal: SheetContentProps["modal"] = "yes"
 
 type DrawerContracts = [
   DrawerProps,
@@ -550,7 +559,13 @@ export {
   invalidHoverCardDefaultOpen,
   dialogContentCloseButton,
   dialogFooterCloseButton,
+  dialogContentModal,
+  dialogContentCloseLabel,
+  dialogFooterCloseLabel,
   dialogContractsReachable,
+  sheetContentModal,
+  sheetContentCloseLabel,
+  invalidSheetContentModal,
   markerContractsReachable,
   markerVariant,
   invalidMarkerVariant,

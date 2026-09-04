@@ -30,6 +30,17 @@ export function SheetPreview({ mode = "isolated" }: PreviewProps) {
           </SheetFooter>
         </SheetContent>
       </Sheet>
+      <Sheet modal={false}>
+        <SheetTrigger render={<Button variant="outline" />}>詳細ペインを開く</SheetTrigger>
+        <SheetContent modal={false} side="left" closeLabel="詳細ペインを閉じる">
+          <SheetHeader>
+            <SheetTitle>詳細ペイン</SheetTitle>
+            <SheetDescription>
+              非モーダルの Sheet です。背景は暗転せず、一覧側の操作を妨げません。
+            </SheetDescription>
+          </SheetHeader>
+        </SheetContent>
+      </Sheet>
       <PreviewSentinel mode={mode} position="after" />
     </section>
   );

@@ -12,7 +12,7 @@ import {
 
 export function DialogPreview({ mode = "isolated" }: PreviewProps) {
   return (
-    <div className="p-6">
+    <div className="flex flex-wrap gap-3 p-6">
       <Dialog defaultOpen={mode === "isolated"}>
         <DialogTrigger render={<Button variant="outline" />}>ダイアログを開く</DialogTrigger>
         <DialogContent>
@@ -23,6 +23,16 @@ export function DialogPreview({ mode = "isolated" }: PreviewProps) {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter showCloseButton />
+        </DialogContent>
+      </Dialog>
+      <Dialog modal={false}>
+        <DialogTrigger render={<Button variant="outline" />}>補足を開く</DialogTrigger>
+        <DialogContent modal={false} closeLabel="補足を閉じる">
+          <DialogHeader>
+            <DialogTitle>補足</DialogTitle>
+            <DialogDescription>非モーダルの Dialog です。背景は暗転しません。</DialogDescription>
+          </DialogHeader>
+          <DialogFooter showCloseButton closeLabel="補足を閉じる" />
         </DialogContent>
       </Dialog>
     </div>
