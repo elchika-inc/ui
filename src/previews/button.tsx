@@ -11,6 +11,10 @@ export function ButtonPreview() {
         <Button variant="destructive">削除する</Button>
         <Button variant="link">利用規約</Button>
         <Button disabled>送信中</Button>
+        <Button loading>保存中</Button>
+        <Button variant="outline" loading>
+          読み込み中
+        </Button>
       </div>
       <div
         data-slot="button-muted-surface"

@@ -283,6 +283,9 @@ const size: ButtonProps["size"] = "sm"
 // その場合 tsc は「未使用の @ts-expect-error」として失敗するので、
 // 潰れを検出できる。
 const invalid: ButtonProps["variant"] = "存在しない variant"
+const loading: ButtonProps["loading"] = true
+// @ts-expect-error Button の loading は文字列を受けない。
+const invalidLoading: ButtonProps["loading"] = "yes"
 
 type CheckboxContracts = [CheckboxProps]
 const checkboxContractsReachable: CheckboxContracts extends unknown[] ? true : never = true

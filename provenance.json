@@ -28,7 +28,7 @@
       "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/button.json",
       "registryPath": "registry/base-nova/ui/button.tsx",
       "registryContentSha256": "93edbf2075d6104e1b20d263419d91a9587208d3d05efdd06dfafcfe4d0dfd65",
-      "generatedContentSha256": "78fa2028ca261a75c3357430aa22e5dc443438a5b17973d6bda5a5e8a7145854",
+      "generatedContentSha256": "60d0a765e25c2b2ad5dd37c4a8fce40d80795044b7a629c3a96c993ff8403ab5",
       "addTarget": "@shadcn/button",
       "upstreamRepo": "shadcn-ui/ui",
       "upstreamPath": "apps/v4/registry/bases/base/ui/button.tsx",
@@ -39,7 +39,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-07-31",
       "license": "MIT",
-      "modified": "DESIGN.md §5 適合のため focus ring の透明度合成と値系 arbitrary value を除去し、ButtonProps を追加。v1.8 state contract に合わせ、primary / secondary / destructive / outline / ghost の hover と surface を正規化",
+      "modified": "DESIGN.md §5 適合のため focus ring の透明度合成と値系 arbitrary value を除去し、ButtonProps を追加。v1.8 state contract に合わせ、primary / secondary / destructive / outline / ghost の hover と surface を正規化。2026-09-04: loading prop と Spinner 表示・disabled / aria-busy / data-loading 連携を追加（Issue #46）",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。generatedContentSha256 は CLI 生成直後ではなく standards 正規化を適用したあとの現行ファイルのハッシュである。正規化では DESIGN.md §5 適合のためフォーカスリングの透明度合成と値系 arbitrary value を除去した。この機構を dialog の時点で導入したため、先行コンポーネントの生成直後の値は遡って記録できない。2026-07-31: modified の固定文言を実態に合わせて訂正した。ハッシュは変更していない。"
     },
     "dialog": {

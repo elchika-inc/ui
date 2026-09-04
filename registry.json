@@ -1186,6 +1186,7 @@
         }
       ],
       "dependencies": ["@base-ui/react", "class-variance-authority", "shadcn", "tw-animate-css"],
+      "registryDependencies": ["@elchika/spinner"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
