@@ -4,6 +4,8 @@ import type * as React from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+const DEFAULT_CLOSE_LABEL = "閉じる";
+
 export type DialogProps = DialogPrimitive.Root.Props;
 export type DialogTriggerProps = DialogPrimitive.Trigger.Props;
 export type DialogPortalProps = DialogPrimitive.Portal.Props;
@@ -11,10 +13,16 @@ export type DialogCloseProps = DialogPrimitive.Close.Props;
 export type DialogOverlayProps = DialogPrimitive.Backdrop.Props;
 export type DialogContentProps = DialogPrimitive.Popup.Props & {
   showCloseButton?: boolean;
+  /** false のとき backdrop を描かない。フォーカストラップ等の解除は親 Sheet（Dialog.Root）の modal={false} が担うので、非モーダル用途では両方に false を渡す。既定 true */
+  modal?: boolean;
+  /** 閉じるボタンの accessible name。既定は "閉じる" */
+  closeLabel?: string;
 };
 export type DialogHeaderProps = React.ComponentProps<"div">;
 export type DialogFooterProps = React.ComponentProps<"div"> & {
   showCloseButton?: boolean;
+  /** showCloseButton の閉じるボタンの表示文言。既定は "閉じる" */
+  closeLabel?: string;
 };
 export type DialogTitleProps = DialogPrimitive.Title.Props;
 export type DialogDescriptionProps = DialogPrimitive.Description.Props;
@@ -52,11 +60,13 @@ function DialogContent({
   className,
   children,
   showCloseButton = true,
+  modal = true,
+  closeLabel = DEFAULT_CLOSE_LABEL,
   ...props
 }: DialogContentProps) {
   return (
     <DialogPortal>
-      <DialogOverlay />
+      {modal && <DialogOverlay />}
       <DialogPrimitive.Popup
         data-slot="dialog-content"
         className={cn(
@@ -71,8 +81,8 @@ function DialogContent({
             data-slot="dialog-close"
             render={<Button variant="ghost" className="absolute top-2 right-2" size="icon-sm" />}
           >
-            <XIcon />
-            <span className="sr-only">Close</span>
+            <XIcon aria-hidden="true" />
+            <span className="sr-only">{closeLabel}</span>
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Popup>
@@ -89,6 +99,7 @@ function DialogHeader({ className, ...props }: DialogHeaderProps) {
 function DialogFooter({
   className,
   showCloseButton = false,
+  closeLabel = DEFAULT_CLOSE_LABEL,
   children,
   ...props
 }: DialogFooterProps) {
@@ -103,7 +114,9 @@ function DialogFooter({
     >
       {children}
       {showCloseButton && (
-        <DialogPrimitive.Close render={<Button variant="outline" />}>Close</DialogPrimitive.Close>
+        <DialogPrimitive.Close render={<Button variant="outline" />}>
+          {closeLabel}
+        </DialogPrimitive.Close>
       )}
     </div>
   );
