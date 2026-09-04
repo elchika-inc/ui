@@ -28,7 +28,7 @@
       "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/button.json",
       "registryPath": "registry/base-nova/ui/button.tsx",
       "registryContentSha256": "93edbf2075d6104e1b20d263419d91a9587208d3d05efdd06dfafcfe4d0dfd65",
-      "generatedContentSha256": "78fa2028ca261a75c3357430aa22e5dc443438a5b17973d6bda5a5e8a7145854",
+      "generatedContentSha256": "60d0a765e25c2b2ad5dd37c4a8fce40d80795044b7a629c3a96c993ff8403ab5",
       "addTarget": "@shadcn/button",
       "upstreamRepo": "shadcn-ui/ui",
       "upstreamPath": "apps/v4/registry/bases/base/ui/button.tsx",
@@ -39,7 +39,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-07-31",
       "license": "MIT",
-      "modified": "DESIGN.md §5 適合のため focus ring の透明度合成と値系 arbitrary value を除去し、ButtonProps を追加。v1.8 state contract に合わせ、primary / secondary / destructive / outline / ghost の hover と surface を正規化",
+      "modified": "DESIGN.md §5 適合のため focus ring の透明度合成と値系 arbitrary value を除去し、ButtonProps を追加。v1.8 state contract に合わせ、primary / secondary / destructive / outline / ghost の hover と surface を正規化。2026-09-04: loading prop と Spinner 表示・disabled / aria-busy / data-loading 連携を追加（Issue #46）",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。generatedContentSha256 は CLI 生成直後ではなく standards 正規化を適用したあとの現行ファイルのハッシュである。正規化では DESIGN.md §5 適合のためフォーカスリングの透明度合成と値系 arbitrary value を除去した。この機構を dialog の時点で導入したため、先行コンポーネントの生成直後の値は遡って記録できない。2026-07-31: modified の固定文言を実態に合わせて訂正した。ハッシュは変更していない。"
     },
     "dialog": {
@@ -49,7 +49,7 @@
       "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/dialog.json",
       "registryPath": "registry/base-nova/ui/dialog.tsx",
       "registryContentSha256": "4a20c4f16cf1564f0852155736a6041a7f2a5a94d29c3103c06ba2a1aed3a72f",
-      "generatedContentSha256": "dd373d38c46f0e2227238fb517a7e58351cba91cd8b4a663641b7cfab7fbd697",
+      "generatedContentSha256": "23eb6c3fad5d1c093bc35e9d6e9beeb73d6977bc6cd78e3d330b0f349f6d4e5f",
       "addTarget": "@shadcn/dialog",
       "upstreamRepo": "shadcn-ui/ui",
       "upstreamPath": "apps/v4/registry/bases/base/ui/dialog.tsx",
@@ -60,7 +60,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-07-31",
       "license": "MIT",
-      "modified": "DESIGN.md §5 適合のため値系 arbitrary value を theme token へ移行し、全 public export の Props 型を追加。v1.8 state contract に合わせ、overlay と footer surface を semantic token へ正規化",
+      "modified": "DESIGN.md §5 適合のため値系 arbitrary value を theme token へ移行し、全 public export の Props 型を追加。v1.8 state contract に合わせ、overlay と footer surface を semantic token へ正規化。2026-09-04: modal と closeLabel prop を追加し、非モーダル時の backdrop 非描画と閉じるラベル指定に対応（Issue #48）",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。CLI が use client 除去・import 書き換え・icon 具体化・preset 変数の解決を行うため。registryContentSha256 は受け取った配信物、generatedContentSha256 は記録時の手元の生成物の錨であり、両者の byte 一致は主張しない。upstreamPathSha は元テンプレートを最後に変更した commit を指す。2026-07-31: modified の固定文言を実態に合わせて訂正した。ハッシュは変更していない。"
     },
     "input": {
@@ -1141,7 +1141,7 @@
       "registryUrl": "https://ui.shadcn.com/r/styles/base-nova/sheet.json",
       "registryPath": "registry/base-nova/ui/sheet.tsx",
       "registryContentSha256": "2457641a7ef9dd578859999b38649854cc7b044c3d6c711aa7643b1fe83d0bb0",
-      "generatedContentSha256": "e80712ffb97f01a3568523bc67c85823c882e86fb4ec922f5af13831ed3e22fe",
+      "generatedContentSha256": "11a31e8c3a73225b874e16ef22eaa382f170856cc8a558276d4391925d254016",
       "addTarget": "@shadcn/sheet",
       "upstreamRepo": "shadcn-ui/ui",
       "upstreamPath": "apps/v4/registry/bases/base/ui/sheet.tsx",
@@ -1152,7 +1152,7 @@
       "shadcnRange": "^4.16.0",
       "fetchedAt": "2026-08-02",
       "license": "MIT",
-      "modified": "全 PascalCase export の Props 型公開、IconPlaceholder を Lucide XIcon へ置換、close の accessible name を日本語化、font・値系 arbitrary translate・overlay 色を semantic utility へ正規化、barrel export、modal open・close・dismiss・focus・背景 inert の preview と light/dark route、hydration selector を追加",
+      "modified": "全 PascalCase export の Props 型公開、IconPlaceholder を Lucide XIcon へ置換、close の accessible name を日本語化、font・値系 arbitrary translate・overlay 色を semantic utility へ正規化、barrel export、modal open・close・dismiss・focus・背景 inert の preview と light/dark route、hydration selector を追加。2026-09-04: modal と closeLabel prop を追加し、非モーダル時の backdrop 非描画と閉じるラベル指定に対応（Issue #47）",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
     },
     "toast": {

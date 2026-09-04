@@ -5,6 +5,8 @@ import type * as React from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+const DEFAULT_CLOSE_LABEL = "閉じる";
+
 type SheetProps = SheetPrimitive.Root.Props;
 
 function Sheet(props: SheetProps) {
@@ -47,6 +49,10 @@ function SheetOverlay({ className, ...props }: SheetOverlayProps) {
 type SheetContentProps = SheetPrimitive.Popup.Props & {
   side?: "top" | "right" | "bottom" | "left";
   showCloseButton?: boolean;
+  /** false のとき backdrop を描かない。フォーカストラップ等の解除は親 Sheet（Dialog.Root）の modal={false} が担うので、非モーダル用途では両方に false を渡す。既定 true */
+  modal?: boolean;
+  /** 閉じるボタンの accessible name。既定は "閉じる" */
+  closeLabel?: string;
 };
 
 function SheetContent({
@@ -54,11 +60,13 @@ function SheetContent({
   children,
   side = "right",
   showCloseButton = true,
+  modal = true,
+  closeLabel = DEFAULT_CLOSE_LABEL,
   ...props
 }: SheetContentProps) {
   return (
     <SheetPortal>
-      <SheetOverlay />
+      {modal && <SheetOverlay />}
       <SheetPrimitive.Popup
         data-slot="sheet-content"
         data-side={side}
@@ -75,7 +83,7 @@ function SheetContent({
             render={<Button variant="ghost" className="absolute top-3 right-3" size="icon-sm" />}
           >
             <XIcon aria-hidden="true" />
-            <span className="sr-only">閉じる</span>
+            <span className="sr-only">{closeLabel}</span>
           </SheetPrimitive.Close>
         )}
       </SheetPrimitive.Popup>

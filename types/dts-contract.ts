@@ -149,6 +149,7 @@ import type {
   SelectSeparatorProps,
   SelectTriggerProps,
   SelectValueProps,
+  SheetContentProps,
   SpinnerProps,
   SwitchProps,
   TableBodyProps,
@@ -282,6 +283,9 @@ const size: ButtonProps["size"] = "sm"
 // その場合 tsc は「未使用の @ts-expect-error」として失敗するので、
 // 潰れを検出できる。
 const invalid: ButtonProps["variant"] = "存在しない variant"
+const loading: ButtonProps["loading"] = true
+// @ts-expect-error Button の loading は文字列を受けない。
+const invalidLoading: ButtonProps["loading"] = "yes"
 
 type CheckboxContracts = [CheckboxProps]
 const checkboxContractsReachable: CheckboxContracts extends unknown[] ? true : never = true
@@ -362,7 +366,15 @@ type DialogContracts = [
 
 const dialogContentCloseButton: DialogContentProps["showCloseButton"] = true
 const dialogFooterCloseButton: DialogFooterProps["showCloseButton"] = false
+const dialogContentModal: DialogContentProps["modal"] = false
+const dialogContentCloseLabel: DialogContentProps["closeLabel"] = "閉じる"
+const dialogFooterCloseLabel: DialogFooterProps["closeLabel"] = "閉じる"
 const dialogContractsReachable: DialogContracts extends unknown[] ? true : never = true
+
+const sheetContentModal: SheetContentProps["modal"] = false
+const sheetContentCloseLabel: SheetContentProps["closeLabel"] = "閉じる"
+// @ts-expect-error SheetContent の modal は文字列を受けない。
+const invalidSheetContentModal: SheetContentProps["modal"] = "yes"
 
 type DrawerContracts = [
   DrawerProps,
@@ -547,7 +559,13 @@ export {
   invalidHoverCardDefaultOpen,
   dialogContentCloseButton,
   dialogFooterCloseButton,
+  dialogContentModal,
+  dialogContentCloseLabel,
+  dialogFooterCloseLabel,
   dialogContractsReachable,
+  sheetContentModal,
+  sheetContentCloseLabel,
+  invalidSheetContentModal,
   markerContractsReachable,
   markerVariant,
   invalidMarkerVariant,
