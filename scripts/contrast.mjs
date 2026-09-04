@@ -45,9 +45,10 @@ const REQUIRED_CONSUMER_CASE_LABELS = new Set([
   "Chart /50 grid stroke",
   "overlay token",
   "warning pair",
+  "info pair",
 ]);
 const REQUIRED_CONSUMER_CONTRACT_DIGEST =
-  "fdfb48b0122bb0dd5ecaa3b07bb2facbc40ea7d95855a9d139383a14d92cee24";
+  "2a6ff5ba437dfdda4b81d5f6fe177c79dc734dcbc22b693886b185a81bfca788";
 
 const stableValue = (value) => {
   if (Array.isArray(value)) return value.map(stableValue);

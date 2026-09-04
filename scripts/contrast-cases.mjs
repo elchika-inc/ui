@@ -379,4 +379,10 @@ export const CONSUMER_CASES = [
     reason: "warning の本文 pair は通常テキストとして AA を満たす必要がある",
     risk: "RISK-006",
   }),
+  foregroundOn({
+    label: "info pair",
+    foreground: "info-foreground",
+    background: "info",
+    reason: "info の本文 pair は通常テキストとして AA を満たす必要がある",
+  }),
 ];
