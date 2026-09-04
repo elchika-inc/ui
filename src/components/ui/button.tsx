@@ -1,6 +1,7 @@
 import { Button as ButtonPrimitive } from "@base-ui/react/button";
 import { cva, type VariantProps } from "class-variance-authority";
 
+import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
@@ -39,15 +40,41 @@ const buttonVariants = cva(
   },
 );
 
-export type ButtonProps = ButtonPrimitive.Props & VariantProps<typeof buttonVariants>;
+export type ButtonProps = ButtonPrimitive.Props &
+  VariantProps<typeof buttonVariants> & {
+    /** true のとき disabled を強制し、children の前に Spinner を描画して aria-busy を付ける。既定 false */
+    loading?: boolean;
+  };
 
-function Button({ className, variant = "default", size = "default", ...props }: ButtonProps) {
+function Button({
+  className,
+  variant = "default",
+  size = "default",
+  loading = false,
+  disabled,
+  children,
+  "aria-busy": ariaBusy,
+  ...props
+}: ButtonProps) {
+  const spinnerSizes: Partial<Record<NonNullable<ButtonProps["size"]>, string>> = {
+    xs: "size-3",
+    "icon-xs": "size-3",
+    sm: "size-3.5",
+  };
+  const spinnerSize = size ? spinnerSizes[size] : undefined;
+
   return (
     <ButtonPrimitive
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
+      disabled={disabled || loading}
       {...props}
-    />
+      aria-busy={loading ? true : ariaBusy}
+      data-loading={loading || undefined}
+    >
+      {loading && <Spinner aria-hidden="true" className={cn("text-current", spinnerSize)} />}
+      {children}
+    </ButtonPrimitive>
   );
 }
 
