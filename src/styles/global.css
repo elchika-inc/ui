@@ -47,6 +47,8 @@
     --color-success-foreground: var(--success-foreground);
     --color-warning: var(--warning);
     --color-warning-foreground: var(--warning-foreground);
+    --color-info: var(--info);
+    --color-info-foreground: var(--info-foreground);
     --color-accent-foreground: var(--accent-foreground);
     --color-accent: var(--accent);
     --color-muted-foreground: var(--muted-foreground);
@@ -104,6 +106,8 @@
     --success-foreground: rgb(var(--color-status-success-text));
     --warning: rgb(var(--color-status-warning-bg));
     --warning-foreground: rgb(var(--color-status-warning-text));
+    --info: rgb(var(--color-status-info-bg));
+    --info-foreground: rgb(var(--color-status-info-text));
     --border: rgb(var(--color-border-default));
     --input: rgb(var(--color-border-control));
     --ring: rgb(var(--color-brand-primary));
@@ -150,6 +154,8 @@
     --success-foreground: rgb(var(--color-status-success-text));
     --warning: rgb(var(--color-status-warning-bg));
     --warning-foreground: rgb(var(--color-status-warning-text));
+    --info: rgb(var(--color-status-info-bg));
+    --info-foreground: rgb(var(--color-status-info-text));
     --border: rgb(var(--color-border-default));
     --input: rgb(var(--color-border-control));
     --ring: rgb(var(--color-brand-primary));
