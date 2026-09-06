@@ -1,0 +1,60 @@
+{
+  "current": {
+    "card": {
+      "x": 312,
+      "y": 80,
+      "width": 262,
+      "right": 574
+    },
+    "header": {
+      "x": 313,
+      "y": 97,
+      "width": 260,
+      "right": 573
+    },
+    "title": {
+      "x": 329,
+      "y": 121,
+      "width": 171.125,
+      "right": 500.125,
+      "text": "¥1,250,000"
+    },
+    "badge": {
+      "x": 504.125,
+      "y": 97,
+      "width": 79.78125,
+      "right": 583.90625,
+      "text": "+12.5%"
+    },
+    "overflow": "hidden"
+  },
+  "originalValue": {
+    "card": {
+      "x": 312,
+      "y": 80,
+      "width": 262,
+      "right": 574
+    },
+    "header": {
+      "x": 313,
+      "y": 97,
+      "width": 260,
+      "right": 573
+    },
+    "title": {
+      "x": 329,
+      "y": 121,
+      "width": 151.140625,
+      "right": 480.140625,
+      "text": "$1,250.00"
+    },
+    "badge": {
+      "x": 484.140625,
+      "y": 97,
+      "width": 79.78125,
+      "right": 563.921875,
+      "text": "+12.5%"
+    },
+    "overflow": "hidden"
+  }
+}

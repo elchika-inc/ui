@@ -1,0 +1,626 @@
+[
+  {
+    "theme": "light",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "cards": [
+      {
+        "card": {
+          "x": 312,
+          "y": 80,
+          "right": 574,
+          "bottom": 249,
+          "width": 262,
+          "height": 169
+        },
+        "title": {
+          "x": 329,
+          "y": 121,
+          "right": 473.21875,
+          "bottom": 153,
+          "width": 144.21875,
+          "height": 32
+        },
+        "titleInk": {
+          "x": 329,
+          "y": 119,
+          "right": 465.90625,
+          "bottom": 155,
+          "width": 136.90625,
+          "height": 36
+        },
+        "badge": {
+          "x": 477.21875,
+          "y": 97,
+          "right": 557,
+          "bottom": 117,
+          "width": 79.78125,
+          "height": 20
+        },
+        "fontSize": "24px",
+        "text": "¥1,250,000"
+      },
+      {
+        "card": {
+          "x": 590,
+          "y": 80,
+          "right": 852,
+          "bottom": 249,
+          "width": 262,
+          "height": 169
+        },
+        "title": {
+          "x": 607,
+          "y": 121,
+          "right": 764.90625,
+          "bottom": 153,
+          "width": 157.90625,
+          "height": 32
+        },
+        "titleInk": {
+          "x": 607,
+          "y": 119,
+          "right": 675,
+          "bottom": 155,
+          "width": 68,
+          "height": 36
+        },
+        "badge": {
+          "x": 768.90625,
+          "y": 97,
+          "right": 835,
+          "bottom": 117,
+          "width": 66.09375,
+          "height": 20
+        },
+        "fontSize": "24px",
+        "text": "1,234"
+      },
+      {
+        "card": {
+          "x": 868,
+          "y": 80,
+          "right": 1130,
+          "bottom": 249,
+          "width": 262,
+          "height": 169
+        },
+        "title": {
+          "x": 885,
+          "y": 121,
+          "right": 1029.21875,
+          "bottom": 153,
+          "width": 144.21875,
+          "height": 32
+        },
+        "titleInk": {
+          "x": 885,
+          "y": 119,
+          "right": 968.140625,
+          "bottom": 155,
+          "width": 83.140625,
+          "height": 36
+        },
+        "badge": {
+          "x": 1033.21875,
+          "y": 97,
+          "right": 1113,
+          "bottom": 117,
+          "width": 79.78125,
+          "height": 20
+        },
+        "fontSize": "24px",
+        "text": "45,678"
+      },
+      {
+        "card": {
+          "x": 1146,
+          "y": 80,
+          "right": 1408,
+          "bottom": 249,
+          "width": 262,
+          "height": 169
+        },
+        "title": {
+          "x": 1163,
+          "y": 121,
+          "right": 1314.765625,
+          "bottom": 153,
+          "width": 151.765625,
+          "height": 32
+        },
+        "titleInk": {
+          "x": 1163,
+          "y": 119,
+          "right": 1224.953125,
+          "bottom": 155,
+          "width": 61.953125,
+          "height": 36
+        },
+        "badge": {
+          "x": 1318.765625,
+          "y": 97,
+          "right": 1391,
+          "bottom": 117,
+          "width": 72.234375,
+          "height": 20
+        },
+        "fontSize": "24px",
+        "text": "4.5%"
+      }
+    ],
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "pageerror": []
+  },
+  {
+    "theme": "light",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "cards": [
+      {
+        "card": {
+          "x": 16,
+          "y": 64,
+          "right": 374,
+          "bottom": 233,
+          "width": 358,
+          "height": 169
+        },
+        "title": {
+          "x": 33,
+          "y": 105,
+          "right": 273.21875,
+          "bottom": 137,
+          "width": 240.21875,
+          "height": 32
+        },
+        "titleInk": {
+          "x": 33,
+          "y": 103,
+          "right": 169.90625,
+          "bottom": 139,
+          "width": 136.90625,
+          "height": 36
+        },
+        "badge": {
+          "x": 277.21875,
+          "y": 81,
+          "right": 357,
+          "bottom": 101,
+          "width": 79.78125,
+          "height": 20
+        },
+        "fontSize": "24px",
+        "text": "¥1,250,000"
+      },
+      {
+        "card": {
+          "x": 16,
+          "y": 249,
+          "right": 374,
+          "bottom": 418,
+          "width": 358,
+          "height": 169
+        },
+        "title": {
+          "x": 33,
+          "y": 290,
+          "right": 286.90625,
+          "bottom": 322,
+          "width": 253.90625,
+          "height": 32
+        },
+        "titleInk": {
+          "x": 33,
+          "y": 288,
+          "right": 101,
+          "bottom": 324,
+          "width": 68,
+          "height": 36
+        },
+        "badge": {
+          "x": 290.90625,
+          "y": 266,
+          "right": 357,
+          "bottom": 286,
+          "width": 66.09375,
+          "height": 20
+        },
+        "fontSize": "24px",
+        "text": "1,234"
+      },
+      {
+        "card": {
+          "x": 16,
+          "y": 434,
+          "right": 374,
+          "bottom": 603,
+          "width": 358,
+          "height": 169
+        },
+        "title": {
+          "x": 33,
+          "y": 475,
+          "right": 273.21875,
+          "bottom": 507,
+          "width": 240.21875,
+          "height": 32
+        },
+        "titleInk": {
+          "x": 33,
+          "y": 473,
+          "right": 116.140625,
+          "bottom": 509,
+          "width": 83.140625,
+          "height": 36
+        },
+        "badge": {
+          "x": 277.21875,
+          "y": 451,
+          "right": 357,
+          "bottom": 471,
+          "width": 79.78125,
+          "height": 20
+        },
+        "fontSize": "24px",
+        "text": "45,678"
+      },
+      {
+        "card": {
+          "x": 16,
+          "y": 619,
+          "right": 374,
+          "bottom": 788,
+          "width": 358,
+          "height": 169
+        },
+        "title": {
+          "x": 33,
+          "y": 660,
+          "right": 280.765625,
+          "bottom": 692,
+          "width": 247.765625,
+          "height": 32
+        },
+        "titleInk": {
+          "x": 33,
+          "y": 658,
+          "right": 94.953125,
+          "bottom": 694,
+          "width": 61.953125,
+          "height": 36
+        },
+        "badge": {
+          "x": 284.765625,
+          "y": 636,
+          "right": 357,
+          "bottom": 656,
+          "width": 72.234375,
+          "height": 20
+        },
+        "fontSize": "24px",
+        "text": "4.5%"
+      }
+    ],
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "pageerror": []
+  },
+  {
+    "theme": "dark",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "cards": [
+      {
+        "card": {
+          "x": 312,
+          "y": 80,
+          "right": 574,
+          "bottom": 249,
+          "width": 262,
+          "height": 169
+        },
+        "title": {
+          "x": 329,
+          "y": 121,
+          "right": 473.21875,
+          "bottom": 153,
+          "width": 144.21875,
+          "height": 32
+        },
+        "titleInk": {
+          "x": 329,
+          "y": 119,
+          "right": 465.90625,
+          "bottom": 155,
+          "width": 136.90625,
+          "height": 36
+        },
+        "badge": {
+          "x": 477.21875,
+          "y": 97,
+          "right": 557,
+          "bottom": 117,
+          "width": 79.78125,
+          "height": 20
+        },
+        "fontSize": "24px",
+        "text": "¥1,250,000"
+      },
+      {
+        "card": {
+          "x": 590,
+          "y": 80,
+          "right": 852,
+          "bottom": 249,
+          "width": 262,
+          "height": 169
+        },
+        "title": {
+          "x": 607,
+          "y": 121,
+          "right": 764.90625,
+          "bottom": 153,
+          "width": 157.90625,
+          "height": 32
+        },
+        "titleInk": {
+          "x": 607,
+          "y": 119,
+          "right": 675,
+          "bottom": 155,
+          "width": 68,
+          "height": 36
+        },
+        "badge": {
+          "x": 768.90625,
+          "y": 97,
+          "right": 835,
+          "bottom": 117,
+          "width": 66.09375,
+          "height": 20
+        },
+        "fontSize": "24px",
+        "text": "1,234"
+      },
+      {
+        "card": {
+          "x": 868,
+          "y": 80,
+          "right": 1130,
+          "bottom": 249,
+          "width": 262,
+          "height": 169
+        },
+        "title": {
+          "x": 885,
+          "y": 121,
+          "right": 1029.21875,
+          "bottom": 153,
+          "width": 144.21875,
+          "height": 32
+        },
+        "titleInk": {
+          "x": 885,
+          "y": 119,
+          "right": 968.140625,
+          "bottom": 155,
+          "width": 83.140625,
+          "height": 36
+        },
+        "badge": {
+          "x": 1033.21875,
+          "y": 97,
+          "right": 1113,
+          "bottom": 117,
+          "width": 79.78125,
+          "height": 20
+        },
+        "fontSize": "24px",
+        "text": "45,678"
+      },
+      {
+        "card": {
+          "x": 1146,
+          "y": 80,
+          "right": 1408,
+          "bottom": 249,
+          "width": 262,
+          "height": 169
+        },
+        "title": {
+          "x": 1163,
+          "y": 121,
+          "right": 1314.765625,
+          "bottom": 153,
+          "width": 151.765625,
+          "height": 32
+        },
+        "titleInk": {
+          "x": 1163,
+          "y": 119,
+          "right": 1224.953125,
+          "bottom": 155,
+          "width": 61.953125,
+          "height": 36
+        },
+        "badge": {
+          "x": 1318.765625,
+          "y": 97,
+          "right": 1391,
+          "bottom": 117,
+          "width": 72.234375,
+          "height": 20
+        },
+        "fontSize": "24px",
+        "text": "4.5%"
+      }
+    ],
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "pageerror": []
+  },
+  {
+    "theme": "dark",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "cards": [
+      {
+        "card": {
+          "x": 16,
+          "y": 64,
+          "right": 374,
+          "bottom": 233,
+          "width": 358,
+          "height": 169
+        },
+        "title": {
+          "x": 33,
+          "y": 105,
+          "right": 273.21875,
+          "bottom": 137,
+          "width": 240.21875,
+          "height": 32
+        },
+        "titleInk": {
+          "x": 33,
+          "y": 103,
+          "right": 169.90625,
+          "bottom": 139,
+          "width": 136.90625,
+          "height": 36
+        },
+        "badge": {
+          "x": 277.21875,
+          "y": 81,
+          "right": 357,
+          "bottom": 101,
+          "width": 79.78125,
+          "height": 20
+        },
+        "fontSize": "24px",
+        "text": "¥1,250,000"
+      },
+      {
+        "card": {
+          "x": 16,
+          "y": 249,
+          "right": 374,
+          "bottom": 418,
+          "width": 358,
+          "height": 169
+        },
+        "title": {
+          "x": 33,
+          "y": 290,
+          "right": 286.90625,
+          "bottom": 322,
+          "width": 253.90625,
+          "height": 32
+        },
+        "titleInk": {
+          "x": 33,
+          "y": 288,
+          "right": 101,
+          "bottom": 324,
+          "width": 68,
+          "height": 36
+        },
+        "badge": {
+          "x": 290.90625,
+          "y": 266,
+          "right": 357,
+          "bottom": 286,
+          "width": 66.09375,
+          "height": 20
+        },
+        "fontSize": "24px",
+        "text": "1,234"
+      },
+      {
+        "card": {
+          "x": 16,
+          "y": 434,
+          "right": 374,
+          "bottom": 603,
+          "width": 358,
+          "height": 169
+        },
+        "title": {
+          "x": 33,
+          "y": 475,
+          "right": 273.21875,
+          "bottom": 507,
+          "width": 240.21875,
+          "height": 32
+        },
+        "titleInk": {
+          "x": 33,
+          "y": 473,
+          "right": 116.140625,
+          "bottom": 509,
+          "width": 83.140625,
+          "height": 36
+        },
+        "badge": {
+          "x": 277.21875,
+          "y": 451,
+          "right": 357,
+          "bottom": 471,
+          "width": 79.78125,
+          "height": 20
+        },
+        "fontSize": "24px",
+        "text": "45,678"
+      },
+      {
+        "card": {
+          "x": 16,
+          "y": 619,
+          "right": 374,
+          "bottom": 788,
+          "width": 358,
+          "height": 169
+        },
+        "title": {
+          "x": 33,
+          "y": 660,
+          "right": 280.765625,
+          "bottom": 692,
+          "width": 247.765625,
+          "height": 32
+        },
+        "titleInk": {
+          "x": 33,
+          "y": 658,
+          "right": 94.953125,
+          "bottom": 694,
+          "width": 61.953125,
+          "height": 36
+        },
+        "badge": {
+          "x": 284.765625,
+          "y": 636,
+          "right": 357,
+          "bottom": 656,
+          "width": 72.234375,
+          "height": 20
+        },
+        "fontSize": "24px",
+        "text": "4.5%"
+      }
+    ],
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "pageerror": []
+  }
+]
