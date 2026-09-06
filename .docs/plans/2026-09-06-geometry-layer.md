@@ -87,6 +87,8 @@
 
 - 司令塔裁定（2026-09-06）: `scripts/contrast-cases.mjs` / `scripts/contrast.mjs` は consumer contract の同期に限り変更可。`check:all` が削除済み `ring-foreground/10` の固定契約で失敗したため、border on card（Card）/ border on popover（AlertDialog / Dialog / Combobox / Menubar）へ同期し、必須ラベルとdigestを更新する。decorative gate・閾値・他caseは維持する。旧digest / 新digestと各比率をPR本文に記録し、再レビューと収束の対を更新する。
 
+- 司令塔裁定（2026-09-06）: `provenance.json` は `--resync` による6件のハッシュ同期に限り変更可。`font-bold` 置換で block 実体と `generatedContentSha256` が不一致になり、completeness が失敗したため、既存手順で対象6件だけを再同期する。`--modified` / `--force` は付けず、他フィールド不変と `shasum -a 256` の独立再計算で照合する。
+
 ## 4. 検証（rubric）。結果は worker_done の body に実測値（コマンドと exit code）で含める
 
 1. `node src/styles/design-system/build-tokens.mjs --check` が exit 0。
