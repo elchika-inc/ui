@@ -15,37 +15,37 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Create your account</CardTitle>
-          <CardDescription>Enter your email below to create your account</CardDescription>
+          <CardTitle className="text-xl">アカウントを作成</CardTitle>
+          <CardDescription>メールアドレスを入力してアカウントを作成します。</CardDescription>
         </CardHeader>
         <CardContent>
           <form>
             <FieldGroup>
               <Field>
-                <FieldLabel htmlFor={nameId}>Full Name</FieldLabel>
-                <Input id={nameId} type="text" placeholder="John Doe" required />
+                <FieldLabel htmlFor={nameId}>氏名</FieldLabel>
+                <Input id={nameId} type="text" placeholder="佐藤 美咲" required />
               </Field>
               <Field>
-                <FieldLabel htmlFor={emailId}>Email</FieldLabel>
-                <Input id={emailId} type="email" placeholder="m@example.com" required />
+                <FieldLabel htmlFor={emailId}>メールアドレス</FieldLabel>
+                <Input id={emailId} type="email" placeholder="misaki.sato@example.com" required />
               </Field>
               <Field>
                 <Field className="grid grid-cols-2 gap-4">
                   <Field>
-                    <FieldLabel htmlFor={passwordId}>Password</FieldLabel>
+                    <FieldLabel htmlFor={passwordId}>パスワード</FieldLabel>
                     <Input id={passwordId} type="password" required />
                   </Field>
                   <Field>
-                    <FieldLabel htmlFor={confirmPasswordId}>Confirm Password</FieldLabel>
+                    <FieldLabel htmlFor={confirmPasswordId}>パスワード（確認）</FieldLabel>
                     <Input id={confirmPasswordId} type="password" required />
                   </Field>
                 </Field>
-                <FieldDescription>Must be at least 8 characters long.</FieldDescription>
+                <FieldDescription>8文字以上で入力します。</FieldDescription>
               </Field>
               <Field>
-                <Button type="submit">Create Account</Button>
+                <Button type="submit">アカウントを作成</Button>
                 <FieldDescription className="text-center">
-                  Already have an account? <a href="/">Sign in</a>
+                  アカウントをお持ちの場合は <a href="/">ログイン</a>
                 </FieldDescription>
               </Field>
             </FieldGroup>
@@ -53,8 +53,8 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
         </CardContent>
       </Card>
       <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <a href="/">Terms of Service</a> and{" "}
-        <a href="/">Privacy Policy</a>.
+        続行すると、<a href="/">利用規約</a>と<a href="/">プライバシーポリシー</a>
+        に同意したことになります。
       </FieldDescription>
     </div>
   );

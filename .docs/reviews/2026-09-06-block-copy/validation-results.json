@@ -1,0 +1,461 @@
+{
+  "measured_head": "6db49d563668285d783e6a812bd66461ab251045",
+  "checks": [
+    "standards",
+    "design tokens",
+    "contrast",
+    "completeness",
+    "distribution",
+    "preview render",
+    "evidence"
+  ],
+  "commands": [
+    {
+      "artifact": "browser-capture-final.result.json",
+      "name": "browser-capture-final",
+      "command": [
+        "node",
+        "/tmp/issue-54-block-copy/browser.mjs",
+        "--capture"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 111.27,
+      "at": "2026-09-06T09:45:00.159699+00:00"
+    },
+    {
+      "artifact": "browser-capture.result.json",
+      "name": "browser-capture",
+      "command": [
+        "node",
+        "/tmp/issue-54-block-copy/browser.mjs",
+        "--capture"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 113.86,
+      "at": "2026-09-06T09:28:10.454283+00:00"
+    },
+    {
+      "artifact": "browser-preflight.result.json",
+      "name": "browser-preflight",
+      "command": [
+        "node",
+        "/tmp/issue-54-block-copy/browser.mjs"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 552.05,
+      "at": "2026-09-06T09:05:06.987110+00:00"
+    },
+    {
+      "artifact": "build-site-card-fixed.result.json",
+      "name": "build-site-card-fixed",
+      "command": [
+        "npm",
+        "run",
+        "build:site"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 3.67,
+      "at": "2026-09-06T09:30:17.455626+00:00"
+    },
+    {
+      "artifact": "build-site-evidence.result.json",
+      "name": "build-site-evidence",
+      "command": [
+        "npm",
+        "run",
+        "build:site"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 3.72,
+      "at": "2026-09-06T09:37:18.975744+00:00"
+    },
+    {
+      "artifact": "build-site-final-copy.result.json",
+      "name": "build-site-final-copy",
+      "command": [
+        "npm",
+        "run",
+        "build:site"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 4.32,
+      "at": "2026-09-06T09:40:25.214946+00:00"
+    },
+    {
+      "artifact": "build-site-final.result.json",
+      "name": "build-site-final",
+      "command": [
+        "npm",
+        "run",
+        "build:site"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 3.96,
+      "at": "2026-09-06T09:24:18.518222+00:00"
+    },
+    {
+      "artifact": "build-site-fixed.result.json",
+      "name": "build-site-fixed",
+      "command": [
+        "npm",
+        "run",
+        "build:site"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 4.18,
+      "at": "2026-09-06T09:19:46.580373+00:00"
+    },
+    {
+      "artifact": "build-site.result.json",
+      "name": "build-site",
+      "command": [
+        "npm",
+        "run",
+        "build:site"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 3.6,
+      "at": "2026-09-06T08:53:46.146920+00:00"
+    },
+    {
+      "artifact": "calendar-final-corrected.result.json",
+      "name": "calendar-final-corrected",
+      "command": [
+        "node",
+        "/tmp/issue-54-block-copy/calendar-final.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 7.39,
+      "at": "2026-09-06T09:42:51.325389+00:00"
+    },
+    {
+      "artifact": "calendar-final.result.json",
+      "name": "calendar-final",
+      "command": [
+        "node",
+        "/tmp/issue-54-block-copy/calendar-final.mjs"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 2.14,
+      "at": "2026-09-06T09:42:18.516004+00:00"
+    },
+    {
+      "artifact": "card-after.result.json",
+      "name": "card-after",
+      "command": [
+        "node",
+        "/tmp/issue-54-block-copy/card-after.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.63,
+      "at": "2026-09-06T09:31:21.979219+00:00"
+    },
+    {
+      "artifact": "check-all-before-metadata.result.json",
+      "command": [
+        "npm",
+        "run",
+        "check:all"
+      ],
+      "exit_code": 130,
+      "reason": "証跡段階で既知の文書形式不備を修正するため中断。修正後に全7検査を再実行する。",
+      "at": "2026-09-06T10:14:00.180773+00:00"
+    },
+    {
+      "artifact": "check-all-final.result.json",
+      "name": "check-all-final",
+      "command": [
+        "npm",
+        "run",
+        "check:all"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 3574.66,
+      "at": "2026-09-06T11:27:47.056856+00:00"
+    },
+    {
+      "artifact": "completeness-final.result.json",
+      "name": "completeness-final",
+      "command": [
+        "node",
+        "scripts/check-completeness.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.69,
+      "at": "2026-09-06T09:44:19.582902+00:00"
+    },
+    {
+      "artifact": "completeness.result.json",
+      "name": "completeness",
+      "command": [
+        "node",
+        "scripts/check-completeness.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.53,
+      "at": "2026-09-06T08:54:08.730085+00:00"
+    },
+    {
+      "artifact": "evidence-before-metadata.result.json",
+      "name": "evidence-final",
+      "command": [
+        "node",
+        "scripts/check-evidence.mjs"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 404.92,
+      "at": "2026-09-06T10:01:51.370304+00:00"
+    },
+    {
+      "artifact": "evidence-final.result.json",
+      "name": "evidence-final",
+      "command": [
+        "node",
+        "scripts/check-evidence.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 757.18,
+      "at": "2026-09-06T10:26:53.896482+00:00"
+    },
+    {
+      "artifact": "hydration-test-green.result.json",
+      "name": "hydration-test-green",
+      "command": [
+        "node",
+        "--test",
+        "scripts/dashboard-blocks.test.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.3,
+      "at": "2026-09-06T09:19:42.233615+00:00"
+    },
+    {
+      "artifact": "hydration-test-red.result.json",
+      "name": "hydration-test-red",
+      "command": [
+        "node",
+        "--test",
+        "--test-name-pattern",
+        "既定 locale が異なっても",
+        "scripts/dashboard-blocks.test.mjs"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 0.27,
+      "at": "2026-09-06T09:19:18.181604+00:00"
+    },
+    {
+      "artifact": "icons-final.result.json",
+      "name": "icons-final",
+      "command": [
+        "node",
+        "scripts/check-block-icons.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 7.35,
+      "at": "2026-09-06T09:43:31.549707+00:00"
+    },
+    {
+      "artifact": "icons-initial.result.json",
+      "name": "icons-initial",
+      "command": [
+        "node",
+        "scripts/check-block-icons.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 7.61,
+      "at": "2026-09-06T08:54:17.332531+00:00"
+    },
+    {
+      "artifact": "interactions.result.json",
+      "name": "interactions",
+      "command": [
+        "node",
+        "/tmp/issue-54-block-copy/interactions.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 8.46,
+      "at": "2026-09-06T09:22:17.513784+00:00"
+    },
+    {
+      "artifact": "lint-before-freeze.result.json",
+      "name": "lint-before-freeze",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.41,
+      "at": "2026-09-06T09:41:15.427470+00:00"
+    },
+    {
+      "artifact": "lint-convergence.result.json",
+      "name": "lint-convergence",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.41,
+      "at": "2026-09-06T09:25:39.730248+00:00"
+    },
+    {
+      "artifact": "lint-final.result.json",
+      "name": "lint-final",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.85,
+      "at": "2026-09-06T09:44:20.744502+00:00"
+    },
+    {
+      "artifact": "lint-initial.result.json",
+      "name": "lint-initial",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 505.99,
+      "at": "2026-09-06T08:52:58.197178+00:00"
+    },
+    {
+      "artifact": "registry-build-final.result.json",
+      "name": "registry-build-final",
+      "command": [
+        "npm",
+        "run",
+        "registry:build"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.22,
+      "at": "2026-09-06T09:31:50.293555+00:00"
+    },
+    {
+      "artifact": "registry-build-preview.result.json",
+      "name": "registry-build-preview",
+      "command": [
+        "npm",
+        "run",
+        "registry:build"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.17,
+      "at": "2026-09-06T09:40:02.660955+00:00"
+    },
+    {
+      "artifact": "registry-build.result.json",
+      "name": "registry-build",
+      "command": [
+        "npm",
+        "run",
+        "registry:build"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.27,
+      "at": "2026-09-06T09:20:35.777774+00:00"
+    },
+    {
+      "artifact": "standards-convergence.result.json",
+      "name": "standards-convergence",
+      "command": [
+        "node",
+        "scripts/check-standards.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.42,
+      "at": "2026-09-06T09:25:40.306815+00:00"
+    },
+    {
+      "artifact": "standards-final.result.json",
+      "name": "standards-final",
+      "command": [
+        "node",
+        "scripts/check-standards.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.49,
+      "at": "2026-09-06T09:44:19.392121+00:00"
+    },
+    {
+      "artifact": "standards-initial.result.json",
+      "name": "standards-initial",
+      "command": [
+        "node",
+        "scripts/check-standards.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.64,
+      "at": "2026-09-06T08:44:32.849886+00:00"
+    },
+    {
+      "artifact": "tests-dashboard.result.json",
+      "name": "tests-dashboard",
+      "command": [
+        "node",
+        "--test",
+        "scripts/dashboard-blocks.test.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.23,
+      "at": "2026-09-06T08:55:54.763774+00:00"
+    },
+    {
+      "artifact": "tests-final.result.json",
+      "name": "tests-final",
+      "command": [
+        "node",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/*.test.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 546.25,
+      "at": "2026-09-06T09:54:57.311304+00:00"
+    },
+    {
+      "artifact": "tests-initial.result.json",
+      "name": "tests-initial",
+      "command": [
+        "node",
+        "--test",
+        "scripts/*.test.mjs"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 516.09,
+      "at": "2026-09-06T08:53:08.302536+00:00"
+    },
+    {
+      "artifact": "tests-serial.result.json",
+      "name": "tests-serial",
+      "command": [
+        "node",
+        "--test",
+        "--test-concurrency=1",
+        "scripts/*.test.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 543.42,
+      "at": "2026-09-06T09:16:25.076921+00:00"
+    },
+    {
+      "artifact": "tests-targeted-before.result.json",
+      "name": "tests-targeted-before",
+      "command": [
+        "node",
+        "--test",
+        "--test-name-pattern",
+        "dashboard-01 は上流の架空社名",
+        "scripts/dashboard-blocks.test.mjs"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 0.17,
+      "at": "2026-09-06T08:53:52.072049+00:00"
+    }
+  ]
+}

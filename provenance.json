@@ -1324,7 +1324,7 @@
           "path": "src/blocks/login-01/components/login-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/login-01/components/login-form.tsx",
           "upstreamPathSha": "b9f62a83999dc7df855738a8715f40ab156b1f10",
-          "generatedContentSha256": "3c96754196b97ec0d454c864e2dd681ca297d90d4b64879568e64f9fab3c9d44"
+          "generatedContentSha256": "49f7cd8507219b19061ace4340d8ab183fda88a3e04ee8ea5159f7bf8bbbd9d4"
         },
         {
           "dropped": true,
@@ -1354,7 +1354,7 @@
           "path": "src/blocks/login-02/components/login-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/login-02/components/login-form.tsx",
           "upstreamPathSha": "67c99dd33cb21519941d26dd3d9f9ba6f2e65b98",
-          "generatedContentSha256": "060b8ae46571abf92cd06ff83d9ac2a1f1fc96ed44a161970c58882678a5257c"
+          "generatedContentSha256": "7f09c45e59b356069389f546dfadf452a73294c73b75651b65c09b8b3866a72e"
         },
         {
           "dropped": true,
@@ -1384,7 +1384,7 @@
           "path": "src/blocks/login-03/components/login-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/login-03/components/login-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "b196c0d87e3878acf125c6b690c75758b3b90135722c707c2238337e0df095a8"
+          "generatedContentSha256": "be03304a138a98115707296e0c70de95d4dedaffa113ac5bb273ea9a81cfe232"
         },
         {
           "dropped": true,
@@ -1414,7 +1414,7 @@
           "path": "src/blocks/login-04/components/login-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/login-04/components/login-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "5ac94af697ad9b63e9a058df87cfab603c73afbb8e855780154b4ccf49a4b452"
+          "generatedContentSha256": "28915650a48c29c4a6806c4c64fafb37f761399a1b1a28ec3c5c89ab7155a2f9"
         },
         {
           "dropped": true,
@@ -1444,7 +1444,7 @@
           "path": "src/blocks/login-05/components/login-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/login-05/components/login-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "db6a3e087c788d2acc5ee113ae325204c9cf1598923a851f2625d38d26895b6b"
+          "generatedContentSha256": "9cea5fe69551ab37c2d814657267bf26e049469ff6c3ea62ea35c6ba7f99158c"
         },
         {
           "dropped": true,
@@ -1474,7 +1474,7 @@
           "path": "src/blocks/signup-01/components/signup-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-01/components/signup-form.tsx",
           "upstreamPathSha": "b9f62a83999dc7df855738a8715f40ab156b1f10",
-          "generatedContentSha256": "40bad359022064360b9c432f7c12622f9601b7fb7336d7e1a88683c7ec0c6715"
+          "generatedContentSha256": "77ed155d217bc262699ee42af9544f10fa04c19a6410766e12eee593ee6f0f63"
         },
         {
           "dropped": true,
@@ -1504,7 +1504,7 @@
           "path": "src/blocks/signup-02/components/signup-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-02/components/signup-form.tsx",
           "upstreamPathSha": "67c99dd33cb21519941d26dd3d9f9ba6f2e65b98",
-          "generatedContentSha256": "a37d9d0ffbdd4705a7b21b8d60343761e04cef84bd5b2ebd7354b19561f45f3f"
+          "generatedContentSha256": "216e4349ceb0af538de2ecab93490217249fc2a5a07c93edb481e7d9d214bdee"
         },
         {
           "dropped": true,
@@ -1534,7 +1534,7 @@
           "path": "src/blocks/signup-03/components/signup-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-03/components/signup-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "9f9805e19b4e0e6bb814d4a9d064e08c5a2773b8a5ac40db5d0900f3347d0a19"
+          "generatedContentSha256": "31a92cef34ea05e143be4d99f9221b84eb4f2788bad01a7e5c24b90c0263aefc"
         },
         {
           "dropped": true,
@@ -1564,7 +1564,7 @@
           "path": "src/blocks/signup-04/components/signup-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-04/components/signup-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "cdf00785a2ed7f26d1bc58c776d9980eaa7cd27ead4a16609164edce4412cabc"
+          "generatedContentSha256": "5698d916acf4643097d2d1801261a654f95e0ed75efbf3ac54e5d6256c96de7f"
         },
         {
           "dropped": true,
@@ -1594,7 +1594,7 @@
           "path": "src/blocks/signup-05/components/signup-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-05/components/signup-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "3ae8adf0c9eef2c67105a8e03b47356faa444a89f699f20fa3758b357831965f"
+          "generatedContentSha256": "324a184be7d25238074f79264c6adf1901156be2853f269f21c15c83821070f1"
         },
         {
           "dropped": true,
@@ -1624,19 +1624,19 @@
           "path": "src/blocks/sidebar-01/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-01/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "48e52b0a90b3f1122f6268e93ca33aed8ce75fb59364822a94fce8f792829942"
+          "generatedContentSha256": "67b9557bcddf64be20cb4d89dfee0cf1374e3cf37ec60e0f46f446f9b22832be"
         },
         {
           "path": "src/blocks/sidebar-01/components/search-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-01/components/search-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "c1fae10977726cbf76a0b6fc6dca84aa843ff42f74584fc971f2c7a2599b65bb"
+          "generatedContentSha256": "336e805167ce9c6fbbd8921e746a4d8631e09bd4aa696931ff12ebc4d3c5fba2"
         },
         {
           "path": "src/blocks/sidebar-01/components/version-switcher.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-01/components/version-switcher.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "78614bca6ee9137273b39dedb2cb8b6aa76131d7e7675758ea545dba5fac4704"
+          "generatedContentSha256": "71f501322183154420215872a8377fb5b93eaa0448203e26f080362f54225a0d"
         },
         {
           "dropped": true,
@@ -1666,19 +1666,19 @@
           "path": "src/blocks/sidebar-02/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-02/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "a02d6d9b19f8deca84ab72a178b3a91a182f989d71a6e2fc837aa16cfb6e7f28"
+          "generatedContentSha256": "9ec05416a79c64eba8f28c24e12a13c5e1818e8284d1e23d28b53152060e76b6"
         },
         {
           "path": "src/blocks/sidebar-02/components/search-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-02/components/search-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "12a151dd89149b80e6b710fa674178215da19e8ac603d93eca29f0a9ee23a61e"
+          "generatedContentSha256": "4ce59bea98d0e8dfd21a8d8fe670b47b95cffdf3098c293c3a4c262b065aaade"
         },
         {
           "path": "src/blocks/sidebar-02/components/version-switcher.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-02/components/version-switcher.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "7997ae76b3061e68811b550a383df47d1c651f0ae6de9fbf50ddaa74947af9d4"
+          "generatedContentSha256": "d177d6f1ac87e985b55dbde2757aa3efd994d0b32457ba04bf31c1972f8f7ef5"
         },
         {
           "dropped": true,
@@ -1708,7 +1708,7 @@
           "path": "src/blocks/sidebar-03/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-03/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "5c1a053fb9eed6a320509045fb296b1602f454e1f482c910cc9df05e66c68e01"
+          "generatedContentSha256": "a3b1b2420be7ba2591fa1cbf3e3c04fa548d2c9401922de6ce886c6b0e68e5a4"
         },
         {
           "dropped": true,
@@ -1738,7 +1738,7 @@
           "path": "src/blocks/sidebar-04/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-04/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "3ff50a973c2610c9ef6716eb4f84108bda439b8eb08af3407450a13e3957c9c6"
+          "generatedContentSha256": "228bfa533b5d496bbc3537d588d973b83fb1c82a5bbd0bac97849bdd3d6d2be6"
         },
         {
           "dropped": true,
@@ -1768,13 +1768,13 @@
           "path": "src/blocks/sidebar-05/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-05/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "897005614b7729ec6c9e749acd1273c3639caa95f357ebee2453336ab456ba83"
+          "generatedContentSha256": "4ac18a1011caef9fce7d0745dfc4564da749a836ff9f9c910300c4e908f7ce76"
         },
         {
           "path": "src/blocks/sidebar-05/components/search-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-05/components/search-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "12a151dd89149b80e6b710fa674178215da19e8ac603d93eca29f0a9ee23a61e"
+          "generatedContentSha256": "4ce59bea98d0e8dfd21a8d8fe670b47b95cffdf3098c293c3a4c262b065aaade"
         },
         {
           "dropped": true,
@@ -1804,7 +1804,7 @@
           "path": "src/blocks/sidebar-06/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-06/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "c2b3a5205857e1c29b5e54d7f59849d2fee6643a14137265e6d191b50191fdf5"
+          "generatedContentSha256": "acfe28f44b2729940aca98f5fd5cae717e2d88ec81f34897dde014f6d8ea03c2"
         },
         {
           "path": "src/blocks/sidebar-06/components/nav-main.tsx",
@@ -1816,7 +1816,7 @@
           "path": "src/blocks/sidebar-06/components/sidebar-opt-in-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-06/components/sidebar-opt-in-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "12ce4b4ea58cfb182f3c3eb83b4eff361074f69750c71ce2dc3a7653014246f4"
+          "generatedContentSha256": "e9e9e84c0a84a87875ce93c18aaa7a6039e7a68c3741dd92bb0174f32f4c6478"
         },
         {
           "dropped": true,
@@ -1846,31 +1846,31 @@
           "path": "src/blocks/sidebar-07/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-07/components/app-sidebar.tsx",
           "upstreamPathSha": "df1752dfe092957f84aa467d2270436139e3ecc7",
-          "generatedContentSha256": "316068de6fc91b5d332f0427c0872e3589a7d5cd1e2d5d2235856fd6b8db1bef"
+          "generatedContentSha256": "acca724ba4b4f3a8d9907b46ceb75d31efda7c539dc263501b0749a9ee53fae1"
         },
         {
           "path": "src/blocks/sidebar-07/components/nav-main.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-07/components/nav-main.tsx",
           "upstreamPathSha": "df1752dfe092957f84aa467d2270436139e3ecc7",
-          "generatedContentSha256": "95b6b300a20e1c06023e5252181829554291fe4367f46e68aac585fdda09df9f"
+          "generatedContentSha256": "8f5068ee1670c93a1a12c69eedecc94b0d6c4244a73463977ffcd7783fa42b4a"
         },
         {
           "path": "src/blocks/sidebar-07/components/nav-projects.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-07/components/nav-projects.tsx",
           "upstreamPathSha": "df1752dfe092957f84aa467d2270436139e3ecc7",
-          "generatedContentSha256": "643851c41b5504f3810178459f4b2dc937db279364550c49eeeea4e45411e1b8"
+          "generatedContentSha256": "dacc6cb75f1b9f7d1959829d910858812369f3c05cf8580b058d1c046e42e120"
         },
         {
           "path": "src/blocks/sidebar-07/components/nav-user.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-07/components/nav-user.tsx",
           "upstreamPathSha": "df1752dfe092957f84aa467d2270436139e3ecc7",
-          "generatedContentSha256": "9f46630be616e7e6d603f852228af526cea1a2f6a4042e838418bb0e5306bf17"
+          "generatedContentSha256": "57a1f4826a6ac177d328b11f9c491288937d94c0c22611bb7b7c9978c518af1b"
         },
         {
           "path": "src/blocks/sidebar-07/components/team-switcher.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-07/components/team-switcher.tsx",
           "upstreamPathSha": "df1752dfe092957f84aa467d2270436139e3ecc7",
-          "generatedContentSha256": "f379553493c96efe5f34e195e15e09fa6aa208164884ceae22514a1cee236590"
+          "generatedContentSha256": "8f5cc4f140d3cb7b6d4374132fb09a64cac6c9be96a04e1f4135a84b08626d81"
         },
         {
           "dropped": true,
@@ -1900,19 +1900,19 @@
           "path": "src/blocks/sidebar-08/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-08/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "37adcb98743ac2c33373c526880c421f3df3d0ae3379b078fba17052c1c2850f"
+          "generatedContentSha256": "7bbf7cf037feaff6f517bb4a771d5c635c32dcaf0b12a42159aec0826cbfcb68"
         },
         {
           "path": "src/blocks/sidebar-08/components/nav-main.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-08/components/nav-main.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "bada70227475c237204ae45fcb8ea17f0d5b5f5e14b2b555cedfeb41d28e2fda"
+          "generatedContentSha256": "a9d82cbde1e5566e20b8368a616d66506e69e0856234adc8310d7f9277ed2703"
         },
         {
           "path": "src/blocks/sidebar-08/components/nav-projects.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-08/components/nav-projects.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "17dc44211a7fd05cec7ba4e6b9729070e75bc430ce5c24c2226f0e32c01f4bae"
+          "generatedContentSha256": "19f318b1fffb3b64f29bdf5ddff8b5a629d4feea4add4f82397fbb8513ed2a99"
         },
         {
           "path": "src/blocks/sidebar-08/components/nav-secondary.tsx",
@@ -1924,7 +1924,7 @@
           "path": "src/blocks/sidebar-08/components/nav-user.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-08/components/nav-user.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "873839c368117355c95938e8e8c19c378af15d373ce7d0b3ab160377f9693ccb"
+          "generatedContentSha256": "1e4d7b4dfe263c25123c22e8f8903f9856ef457fabbd894d6fbcd1e884beae10"
         },
         {
           "dropped": true,
@@ -1954,13 +1954,13 @@
           "path": "src/blocks/sidebar-09/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-09/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "e069d45db5282d42e0fdec5d0ceecf7fb2beff38fa29cb6ca21f3a3ed4243eb6"
+          "generatedContentSha256": "76fc452f8c6d2fe7ce368e883b3df8e02ea18a2b770e54324e18f4a5e747a267"
         },
         {
           "path": "src/blocks/sidebar-09/components/nav-user.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-09/components/nav-user.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "d0d8e4cd8e9319bd181b5882eeda0469542ba774f5ad5779267fda0f8cde72db"
+          "generatedContentSha256": "2499559b5c5686976149a27e4548f2c0774a80abef75b423d409408e92fb41d5"
         },
         {
           "dropped": true,
@@ -1990,19 +1990,19 @@
           "path": "src/blocks/sidebar-10/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-10/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "2bd26f23f108daba7498ecd4f3b0e70d92c171feef145dacf9fead929684bd37"
+          "generatedContentSha256": "a48852940963860cde8d692b7b9152663c9bb286d96488a578d084106ea013fd"
         },
         {
           "path": "src/blocks/sidebar-10/components/nav-actions.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-10/components/nav-actions.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "d82eea6bc5f9ba27c7eba0fe3612392d9820599eb572fb3479305cdc005aa852"
+          "generatedContentSha256": "646f5d3b4dfe37a744cf566a6b95e1349d8194fc7ec9761ac9a021ca6cbac28a"
         },
         {
           "path": "src/blocks/sidebar-10/components/nav-favorites.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-10/components/nav-favorites.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "ca05b133b48fabc6d1b149b11b1ecfa6538ad9ad68bc239a027460762439ae77"
+          "generatedContentSha256": "d40ebcc92c91116ab6af2b932abc4759e22a2e92d48b7830379161d9ba2e8e4f"
         },
         {
           "path": "src/blocks/sidebar-10/components/nav-main.tsx",
@@ -2020,13 +2020,13 @@
           "path": "src/blocks/sidebar-10/components/nav-workspaces.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-10/components/nav-workspaces.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "3cede0d80cfa770000c7f4fa223088952605d43b71b925ed547e5dd947415761"
+          "generatedContentSha256": "8e8cc9f24928bc03aacc9323c9740e2ffd8372190c6eae7d21fe1bfe165d2e89"
         },
         {
           "path": "src/blocks/sidebar-10/components/team-switcher.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-10/components/team-switcher.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "2cc7c2393c78332f587ec3088d4420891b773d05b363d26613946ba4ffafe7d1"
+          "generatedContentSha256": "c6243095b2774956817a409df5f21dcab2d9959a2165a55f5dcdaf03768289d2"
         },
         {
           "dropped": true,
@@ -2056,7 +2056,7 @@
           "path": "src/blocks/sidebar-11/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-11/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "4c5784c382f2c077f06eb3b351f9704849830129289927b4c6ee7f4051c2c207"
+          "generatedContentSha256": "52ec922af0eacdccf5974e928eae4acb1846c48421aedf458de38d37ce421a56"
         },
         {
           "dropped": true,
@@ -2086,7 +2086,7 @@
           "path": "src/blocks/sidebar-12/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-12/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "a8a6c3a96f466e5b8c0c5a96ad8a8eb3d7d216a5660f6a7440848c596da45195"
+          "generatedContentSha256": "8561f230827e33aee6d0698f6f4b44c21a6788c646684acf97fd97c13fad8446"
         },
         {
           "path": "src/blocks/sidebar-12/components/calendars.tsx",
@@ -2098,13 +2098,13 @@
           "path": "src/blocks/sidebar-12/components/date-picker.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-12/components/date-picker.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "e132501181df98b32f9cd71fbdac505077b12cf318f2736a9d85777f33bef4ce"
+          "generatedContentSha256": "45d6f7dc514a85f335cd832c45ca85a95cd68bd8841d522ce3c047803c3c88b9"
         },
         {
           "path": "src/blocks/sidebar-12/components/nav-user.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-12/components/nav-user.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "106e2fade735cd6b38832fd2c8aea35a3b72736bfef62b2c4917e777e119038e"
+          "generatedContentSha256": "f1a5e16b7db696b7246f9bb95ae7fef05529096fb146188e67fb804a9f219d76"
         },
         {
           "dropped": true,
@@ -2134,7 +2134,7 @@
           "path": "src/blocks/sidebar-13/components/settings-dialog.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-13/components/settings-dialog.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "06e892e1f25ac56838fce7ac7c6de527b392b4e14e27b3355b2295d7497ab434"
+          "generatedContentSha256": "9b429adb95e35e0d32b0298be3c932118abf1a20ec4a21c8a22a7928e3f3c40c"
         },
         {
           "dropped": true,
@@ -2164,7 +2164,7 @@
           "path": "src/blocks/sidebar-14/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-14/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "abcf270176fdda6936114387e3a1e5c30f85094aa005f5804764cdb36819bb59"
+          "generatedContentSha256": "a5864e5fa234a5cdcc79512951bbede7f4e5401d15222f5f20038faeaf7553fd"
         },
         {
           "dropped": true,
@@ -2200,13 +2200,13 @@
           "path": "src/blocks/sidebar-15/components/date-picker.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/date-picker.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "e132501181df98b32f9cd71fbdac505077b12cf318f2736a9d85777f33bef4ce"
+          "generatedContentSha256": "45d6f7dc514a85f335cd832c45ca85a95cd68bd8841d522ce3c047803c3c88b9"
         },
         {
           "path": "src/blocks/sidebar-15/components/nav-favorites.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/nav-favorites.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "05d7e737251d3f014ecacfe146e70468d178e90982c9aed0e55ffee0d7ad6445"
+          "generatedContentSha256": "7a39076186199c449a3ce505c27dec011fb9c97229c43c04368e9588a68db41f"
         },
         {
           "path": "src/blocks/sidebar-15/components/nav-main.tsx",
@@ -2224,31 +2224,31 @@
           "path": "src/blocks/sidebar-15/components/nav-user.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/nav-user.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "a24d7e25c98a90133aadab5850e174fb905f0b62f095c024f84d9d76b9cb3baf"
+          "generatedContentSha256": "500e43e3392ef832bce33b681fd5b74fe53e726dba5f317a6c3f18bebd70c2ce"
         },
         {
           "path": "src/blocks/sidebar-15/components/nav-workspaces.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/nav-workspaces.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "3cede0d80cfa770000c7f4fa223088952605d43b71b925ed547e5dd947415761"
+          "generatedContentSha256": "8e8cc9f24928bc03aacc9323c9740e2ffd8372190c6eae7d21fe1bfe165d2e89"
         },
         {
           "path": "src/blocks/sidebar-15/components/sidebar-left.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/sidebar-left.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "82f2764bd23cfc2eab83aa47081b9612cae6a446b33fb19cf018563cc55cccbc"
+          "generatedContentSha256": "00252e522cda889000f37fb0775b9c340e0d3beb3472f28ff739e47454af8323"
         },
         {
           "path": "src/blocks/sidebar-15/components/sidebar-right.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/sidebar-right.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "4aafd12bcfbf35f12b6bf402849202f8cfbceb3d64b49864ae6d3e1bfed88a08"
+          "generatedContentSha256": "fd0dd4325df9ae1df1229da1d93912fbfa80b16d27e6dd12c7a1b7d19f32c248"
         },
         {
           "path": "src/blocks/sidebar-15/components/team-switcher.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/team-switcher.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "9f012b0b486a96eb7e8664ae7ceba9fc9a2f1ee404e8ce96e8750b28f65762bb"
+          "generatedContentSha256": "681b8bb5fda9b4463cb18d33ec57c32c08f2a6ac81a53ce6360039efddcfa74b"
         },
         {
           "dropped": true,
@@ -2278,19 +2278,19 @@
           "path": "src/blocks/sidebar-16/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "2563a0a15b77864862da6a25c5ec1269f85881f748854b28ee7b06c3fa1912e4"
+          "generatedContentSha256": "0f2bf0d5364d679761c2d6fc9e8dda6d80309cf35b793d292b0a2af3179cb51b"
         },
         {
           "path": "src/blocks/sidebar-16/components/nav-main.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/nav-main.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "a5f48ca0b6ab2a43241e0f5801b37b52f4b9a3b808d938402648e680e73a22f3"
+          "generatedContentSha256": "48de01a318441baa45b066dc0a13ab4bc626a9957dbfe8548fa7586bf0e2d2d8"
         },
         {
           "path": "src/blocks/sidebar-16/components/nav-projects.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/nav-projects.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "a6951e5f5d6de1ccfa0eee650bb27049b354fc59e4d22caee88a74b96e1b1bb2"
+          "generatedContentSha256": "2db43a9b4a5e4835bdcd4f4c321ed5d949dac9cea7fc4fd84677ad8166505b68"
         },
         {
           "path": "src/blocks/sidebar-16/components/nav-secondary.tsx",
@@ -2302,19 +2302,19 @@
           "path": "src/blocks/sidebar-16/components/nav-user.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/nav-user.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "cf4f6c20b8030872f33f45cbae4c8123a8cee3dde4ad14f22b945a78a67d7d6b"
+          "generatedContentSha256": "b5eef03c17e0fccc99a3b83c9c2c8ef6e5205ec5dd579524651622225a3df37a"
         },
         {
           "path": "src/blocks/sidebar-16/components/search-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/search-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "64da1da00753d01a81e25c4fc4e1120ef18a42e154f6ee4b5f0dee79e1253672"
+          "generatedContentSha256": "db570bca9a4666b5ee96a95900baa9c60b0e1bfdf36182eb6bfda04c6cde8fda"
         },
         {
           "path": "src/blocks/sidebar-16/components/site-header.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-16/components/site-header.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "f6e6f50d035c89ef2f0edd22cdcaf81efed50d7e956517d45bc9d66d897686ad"
+          "generatedContentSha256": "1cfa4647668e94995d3ea6ae972acc05bede187eeca6ca3bcd751f149a230cc0"
         },
         {
           "dropped": true,
@@ -2344,31 +2344,31 @@
           "path": "src/blocks/dashboard-01/data.json",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/dashboard-01/data.json",
           "upstreamPathSha": "6261bd89f72d794aea491482cc2acfd8dc3d63e2",
-          "generatedContentSha256": "a8dcfbe6d014ab33adb4be2ccc221313d0bbf5d1d69a06bc08527b66148e849a"
+          "generatedContentSha256": "e3072a9fcb0f5c433ddfc247c1b1f5bdbd13018cc563a2a027d57bac4850beb8"
         },
         {
           "path": "src/blocks/dashboard-01/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/dashboard-01/components/app-sidebar.tsx",
           "upstreamPathSha": "6261bd89f72d794aea491482cc2acfd8dc3d63e2",
-          "generatedContentSha256": "73e97803b0f4834ba31ff5f7ec42c131e185f1c727b4e4d9dea52289962c94b8"
+          "generatedContentSha256": "fa4e1afc972dfc59de3f453e1ba67f094b0dc3c31f90b4eaf36203ebb2cf38d8"
         },
         {
           "path": "src/blocks/dashboard-01/components/chart-area-interactive.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/dashboard-01/components/chart-area-interactive.tsx",
           "upstreamPathSha": "6261bd89f72d794aea491482cc2acfd8dc3d63e2",
-          "generatedContentSha256": "6cc616fd58f36b5dd9bd8375d46e9d9f2adf3e81af25d4fcabd33511fb2d31b2"
+          "generatedContentSha256": "91b688a5d25269347f4232fe62670166d614689a7fdbf5034dd5be2092e70700"
         },
         {
           "path": "src/blocks/dashboard-01/components/nav-documents.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/dashboard-01/components/nav-documents.tsx",
           "upstreamPathSha": "6261bd89f72d794aea491482cc2acfd8dc3d63e2",
-          "generatedContentSha256": "c68bb311cb9e7f63d4f9445bf2f195324d00e64c40bfca278220863af770eb7e"
+          "generatedContentSha256": "9cbcbbfde81b81d9f5cae646a9d3ec2cb34369e57901bc1f2e998d0ba4a27fd6"
         },
         {
           "path": "src/blocks/dashboard-01/components/nav-main.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/dashboard-01/components/nav-main.tsx",
           "upstreamPathSha": "6261bd89f72d794aea491482cc2acfd8dc3d63e2",
-          "generatedContentSha256": "9f66fa712aba008e67cecdf6a3f89ffadd05268f9807ae611cd3d2f880bcf2ea"
+          "generatedContentSha256": "5689d356aa0904c2453766fdba0e39bbbe24a6cb5be506050cd5affa22cca851"
         },
         {
           "path": "src/blocks/dashboard-01/components/nav-secondary.tsx",
@@ -2380,19 +2380,19 @@
           "path": "src/blocks/dashboard-01/components/nav-user.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/dashboard-01/components/nav-user.tsx",
           "upstreamPathSha": "6261bd89f72d794aea491482cc2acfd8dc3d63e2",
-          "generatedContentSha256": "6c0b73dd833c697b2b82fa5a2e996603be6c4d752d5ec8c75db39b1fdcac9eff"
+          "generatedContentSha256": "b02f27ce424f5581187b3027fc39693fc875a26d104252f110b0c3ee909ddc4a"
         },
         {
           "path": "src/blocks/dashboard-01/components/section-cards.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/dashboard-01/components/section-cards.tsx",
           "upstreamPathSha": "6261bd89f72d794aea491482cc2acfd8dc3d63e2",
-          "generatedContentSha256": "edbd61fa59aa668932b9409428bcd765b4371382500a66b3783c7ba27404a5e1"
+          "generatedContentSha256": "8811643a0f4ce8a48fd17b32fe5871df2ad447a7644e0a2e36cd296185a71c99"
         },
         {
           "path": "src/blocks/dashboard-01/components/site-header.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/dashboard-01/components/site-header.tsx",
           "upstreamPathSha": "6261bd89f72d794aea491482cc2acfd8dc3d63e2",
-          "generatedContentSha256": "ec9cf9fdcb2fa9b000b1fb36d83932412cf03bb8ecac54e396859e1b3295d930"
+          "generatedContentSha256": "954511151a2cb3b121ddbb059454f538f690c3161423083fcacf9f9ef357ef3e"
         },
         {
           "dropped": true,
@@ -2414,7 +2414,7 @@
       "files": [
         {
           "path": "src/blocks/dashboard-table/components/dashboard-table.tsx",
-          "generatedContentSha256": "dea27802b25c0965a6bcbe188f8166acce94777039231b38fc1c4a3f92714f9c"
+          "generatedContentSha256": "820d43896a68950be590e8b13176decf4739e31e0a6c17f2256ee77ae498f922"
         }
       ]
     }

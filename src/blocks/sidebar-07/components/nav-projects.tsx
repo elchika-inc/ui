@@ -30,7 +30,7 @@ export function NavProjects({
   const { isMobile } = useSidebar();
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Projects</SidebarGroupLabel>
+      <SidebarGroupLabel>プロジェクト</SidebarGroupLabel>
       <SidebarMenu>
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>
@@ -43,7 +43,7 @@ export function NavProjects({
                 render={<SidebarMenuAction showOnHover className="aria-expanded:bg-muted" />}
               >
                 <MoreHorizontalIcon />
-                <span className="sr-only">More</span>
+                <span className="sr-only">その他</span>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 className="w-fit"
@@ -52,16 +52,16 @@ export function NavProjects({
               >
                 <DropdownMenuItem>
                   <FolderIcon />
-                  <span>View Project</span>
+                  <span>プロジェクトを表示</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <ArrowRightIcon />
-                  <span>Share Project</span>
+                  <span>プロジェクトを共有</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem variant="destructive">
                   <Trash2Icon />
-                  <span>Delete Project</span>
+                  <span>プロジェクトを削除</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -70,7 +70,7 @@ export function NavProjects({
         <SidebarMenuItem>
           <SidebarMenuButton className="text-sidebar-foreground/70">
             <MoreHorizontalIcon className="text-sidebar-foreground/70" />
-            <span>More</span>
+            <span>その他</span>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>

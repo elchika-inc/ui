@@ -1,0 +1,13 @@
+{
+  "before": "503b3b07bfc2a2d549e3a747eb06e2eb74d4d02a",
+  "remote_before": "503b3b07bfc2a2d549e3a747eb06e2eb74d4d02a",
+  "after": "2e815ed324ec1889018a371283924b67189bbd0e",
+  "changed": [
+    ".docs/reviews/2026-09-06-block-copy/lens-review.md",
+    ".docs/reviews/2026-09-06-block-copy/translations.md"
+  ],
+  "stat": " .docs/reviews/2026-09-06-block-copy/lens-review.md  | 2 ++\n .docs/reviews/2026-09-06-block-copy/translations.md | 2 ++\n 2 files changed, 4 insertions(+)\n",
+  "preserved_preview_reports": 28,
+  "preserved_images": 56,
+  "preserved_verified_impl_sha": "60d941edae9839bdfec65fb4d5dfe2b0d4719999"
+}

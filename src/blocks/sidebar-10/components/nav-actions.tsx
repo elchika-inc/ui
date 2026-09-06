@@ -31,61 +31,61 @@ import {
 const data = [
   [
     {
-      label: "Customize Page",
+      label: "ページを編集",
       icon: <Settings2Icon />,
     },
     {
-      label: "Turn into wiki",
+      label: "共有資料に変更",
       icon: <FileTextIcon />,
     },
   ],
   [
     {
-      label: "Copy Link",
+      label: "リンクをコピー",
       icon: <LinkIcon />,
     },
     {
-      label: "Duplicate",
+      label: "複製",
       icon: <CopyIcon />,
     },
     {
-      label: "Move to",
+      label: "移動",
       icon: <CornerUpRightIcon />,
     },
     {
-      label: "Move to Trash",
+      label: "ゴミ箱に移動",
       icon: <Trash2Icon />,
     },
   ],
   [
     {
-      label: "Undo",
+      label: "元に戻す",
       icon: <CornerUpLeftIcon />,
     },
     {
-      label: "View analytics",
+      label: "分析を表示",
       icon: <ChartLineIcon />,
     },
     {
-      label: "Version History",
+      label: "変更履歴",
       icon: <GalleryVerticalEndIcon />,
     },
     {
-      label: "Show delete pages",
+      label: "削除済みページを表示",
       icon: <TrashIcon />,
     },
     {
-      label: "Notifications",
+      label: "通知",
       icon: <BellIcon />,
     },
   ],
   [
     {
-      label: "Import",
+      label: "読み込む",
       icon: <ArrowUpIcon />,
     },
     {
-      label: "Export",
+      label: "書き出す",
       icon: <ArrowDownIcon />,
     },
   ],
@@ -97,15 +97,15 @@ export function NavActions({ autoOpen = false }: { autoOpen?: boolean }) {
   }, [autoOpen]);
   return (
     <div className="flex items-center gap-2 text-sm">
-      <div className="hidden font-medium text-muted-foreground md:inline-block">Edit Oct 08</div>
-      <Button aria-label="Add to favorites" variant="ghost" size="icon" className="h-7 w-7">
+      <div className="hidden font-medium text-muted-foreground md:inline-block">10月8日に編集</div>
+      <Button aria-label="お気に入りに追加" variant="ghost" size="icon" className="h-7 w-7">
         <StarIcon />
       </Button>
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger
           render={
             <Button
-              aria-label="Open page actions"
+              aria-label="ページ操作を開く"
               variant="ghost"
               size="icon"
               className="h-7 w-7 data-open:bg-accent"

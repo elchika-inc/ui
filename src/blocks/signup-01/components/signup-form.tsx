@@ -13,41 +13,41 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
   return (
     <Card {...props}>
       <CardHeader>
-        <CardTitle>Create an account</CardTitle>
-        <CardDescription>Enter your information below to create your account</CardDescription>
+        <CardTitle>アカウントを作成</CardTitle>
+        <CardDescription>必要な情報を入力してアカウントを作成します。</CardDescription>
       </CardHeader>
       <CardContent>
         <form>
           <FieldGroup>
             <Field>
-              <FieldLabel htmlFor={nameId}>Full Name</FieldLabel>
-              <Input id={nameId} type="text" placeholder="John Doe" required />
+              <FieldLabel htmlFor={nameId}>氏名</FieldLabel>
+              <Input id={nameId} type="text" placeholder="佐藤 美咲" required />
             </Field>
             <Field>
-              <FieldLabel htmlFor={emailId}>Email</FieldLabel>
-              <Input id={emailId} type="email" placeholder="m@example.com" required />
+              <FieldLabel htmlFor={emailId}>メールアドレス</FieldLabel>
+              <Input id={emailId} type="email" placeholder="misaki.sato@example.com" required />
               <FieldDescription>
-                We&apos;ll use this to contact you. We will not share your email with anyone else.
+                メールアドレスは連絡に使用します。第三者には共有しません。
               </FieldDescription>
             </Field>
             <Field>
-              <FieldLabel htmlFor={passwordId}>Password</FieldLabel>
+              <FieldLabel htmlFor={passwordId}>パスワード</FieldLabel>
               <Input id={passwordId} type="password" required />
-              <FieldDescription>Must be at least 8 characters long.</FieldDescription>
+              <FieldDescription>8文字以上で入力します。</FieldDescription>
             </Field>
             <Field>
-              <FieldLabel htmlFor={confirmPasswordId}>Confirm Password</FieldLabel>
+              <FieldLabel htmlFor={confirmPasswordId}>パスワード（確認）</FieldLabel>
               <Input id={confirmPasswordId} type="password" required />
-              <FieldDescription>Please confirm your password.</FieldDescription>
+              <FieldDescription>確認のため同じパスワードを入力します。</FieldDescription>
             </Field>
             <FieldGroup>
               <Field>
-                <Button type="submit">Create Account</Button>
+                <Button type="submit">アカウントを作成</Button>
                 <Button variant="outline" type="button">
-                  Sign up with Google
+                  Google で登録
                 </Button>
                 <FieldDescription className="px-6 text-center">
-                  Already have an account? <a href="/">Sign in</a>
+                  アカウントをお持ちの場合は <a href="/">ログイン</a>
                 </FieldDescription>
               </Field>
             </FieldGroup>

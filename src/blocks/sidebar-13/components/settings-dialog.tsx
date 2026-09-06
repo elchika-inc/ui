@@ -45,51 +45,51 @@ import {
 const data = {
   nav: [
     {
-      name: "Notifications",
+      name: "通知",
       icon: <BellIcon />,
     },
     {
-      name: "Navigation",
+      name: "ナビゲーション",
       icon: <MenuIcon />,
     },
     {
-      name: "Home",
+      name: "ホーム",
       icon: <HomeIcon />,
     },
     {
-      name: "Appearance",
+      name: "外観",
       icon: <PaintbrushIcon />,
     },
     {
-      name: "Messages & media",
+      name: "メッセージ・メディア",
       icon: <MessageCircleIcon />,
     },
     {
-      name: "Language & region",
+      name: "言語・地域",
       icon: <GlobeIcon />,
     },
     {
-      name: "Accessibility",
+      name: "アクセシビリティ",
       icon: <KeyboardIcon />,
     },
     {
-      name: "Mark as read",
+      name: "既読にする",
       icon: <CheckIcon />,
     },
     {
-      name: "Audio & video",
+      name: "音声・動画",
       icon: <VideoIcon />,
     },
     {
-      name: "Connected accounts",
+      name: "連携アカウント",
       icon: <LinkIcon />,
     },
     {
-      name: "Privacy & visibility",
+      name: "プライバシー・公開範囲",
       icon: <LockIcon />,
     },
     {
-      name: "Advanced",
+      name: "詳細設定",
       icon: <SettingsIcon />,
     },
   ],
@@ -99,10 +99,10 @@ export function SettingsDialog() {
   const [open, setOpen] = React.useState(true);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button size="sm" />}>Open Dialog</DialogTrigger>
+      <DialogTrigger render={<Button size="sm" />}>設定を開く</DialogTrigger>
       <DialogContent className="overflow-hidden p-0 md:max-h-125 md:max-w-175 lg:max-w-200">
-        <DialogTitle className="sr-only">Settings</DialogTitle>
-        <DialogDescription className="sr-only">Customize your settings here.</DialogDescription>
+        <DialogTitle className="sr-only">設定</DialogTitle>
+        <DialogDescription className="sr-only">表示や通知などを設定します。</DialogDescription>
         <SidebarProvider className="items-start">
           <Sidebar collapsible="none" className="hidden md:flex">
             <SidebarContent>
@@ -112,7 +112,7 @@ export function SettingsDialog() {
                     {data.nav.map((item) => (
                       <SidebarMenuItem key={item.name}>
                         <SidebarMenuButton
-                          isActive={item.name === "Messages & media"}
+                          isActive={item.name === "メッセージ・メディア"}
                           render={<a href="/" />}
                         >
                           {item.icon}
@@ -131,11 +131,11 @@ export function SettingsDialog() {
                 <Breadcrumb>
                   <BreadcrumbList>
                     <BreadcrumbItem className="hidden md:block">
-                      <BreadcrumbLink href="/">Settings</BreadcrumbLink>
+                      <BreadcrumbLink href="/">設定</BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator className="hidden md:block" />
                     <BreadcrumbItem>
-                      <BreadcrumbPage>Messages & media</BreadcrumbPage>
+                      <BreadcrumbPage>メッセージ・メディア</BreadcrumbPage>
                     </BreadcrumbItem>
                   </BreadcrumbList>
                 </Breadcrumb>

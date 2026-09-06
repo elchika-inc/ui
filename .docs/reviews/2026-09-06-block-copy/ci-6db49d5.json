@@ -1,0 +1,203 @@
+{
+  "conclusion": "success",
+  "headSha": "6db49d563668285d783e6a812bd66461ab251045",
+  "jobs": [
+    {
+      "completedAt": "2026-09-06T10:17:49Z",
+      "conclusion": "success",
+      "databaseId": 101469268498,
+      "name": "Lint, typecheck, test & build",
+      "startedAt": "2026-09-06T10:14:27Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-09-06T10:14:28Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-09-06T10:14:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-06T10:14:30Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 2,
+          "startedAt": "2026-09-06T10:14:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-06T10:14:37Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-node@v4",
+          "number": 3,
+          "startedAt": "2026-09-06T10:14:30Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-06T10:14:52Z",
+          "conclusion": "success",
+          "name": "Install dependencies",
+          "number": 4,
+          "startedAt": "2026-09-06T10:14:37Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-06T10:14:53Z",
+          "conclusion": "success",
+          "name": "Lint",
+          "number": 5,
+          "startedAt": "2026-09-06T10:14:52Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-06T10:15:11Z",
+          "conclusion": "success",
+          "name": "Typecheck",
+          "number": 6,
+          "startedAt": "2026-09-06T10:14:53Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-06T10:16:18Z",
+          "conclusion": "success",
+          "name": "Unit tests",
+          "number": 7,
+          "startedAt": "2026-09-06T10:15:11Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-06T10:16:19Z",
+          "conclusion": "success",
+          "name": "Design token build",
+          "number": 8,
+          "startedAt": "2026-09-06T10:16:18Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-06T10:16:19Z",
+          "conclusion": "success",
+          "name": "Token contrast",
+          "number": 9,
+          "startedAt": "2026-09-06T10:16:19Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-06T10:16:21Z",
+          "conclusion": "success",
+          "name": "Standards check",
+          "number": 10,
+          "startedAt": "2026-09-06T10:16:19Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-06T10:16:22Z",
+          "conclusion": "success",
+          "name": "Build registry",
+          "number": 11,
+          "startedAt": "2026-09-06T10:16:21Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-06T10:16:22Z",
+          "conclusion": "success",
+          "name": "Bundle legal files",
+          "number": 12,
+          "startedAt": "2026-09-06T10:16:22Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-06T10:16:23Z",
+          "conclusion": "success",
+          "name": "Distribution check",
+          "number": 13,
+          "startedAt": "2026-09-06T10:16:22Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-06T10:16:30Z",
+          "conclusion": "success",
+          "name": "Build library",
+          "number": 14,
+          "startedAt": "2026-09-06T10:16:23Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-06T10:16:34Z",
+          "conclusion": "success",
+          "name": "Props contract",
+          "number": 15,
+          "startedAt": "2026-09-06T10:16:30Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-06T10:16:35Z",
+          "conclusion": "success",
+          "name": "Completeness check",
+          "number": 16,
+          "startedAt": "2026-09-06T10:16:34Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-06T10:16:35Z",
+          "conclusion": "success",
+          "name": "Preview render declaration",
+          "number": 17,
+          "startedAt": "2026-09-06T10:16:35Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-06T10:17:39Z",
+          "conclusion": "success",
+          "name": "Evidence check",
+          "number": 18,
+          "startedAt": "2026-09-06T10:16:35Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-06T10:17:47Z",
+          "conclusion": "success",
+          "name": "Build site",
+          "number": 19,
+          "startedAt": "2026-09-06T10:17:39Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-06T10:17:47Z",
+          "conclusion": "success",
+          "name": "Dist registry check",
+          "number": 20,
+          "startedAt": "2026-09-06T10:17:47Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-06T10:17:47Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@v4",
+          "number": 39,
+          "startedAt": "2026-09-06T10:17:47Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-06T10:17:47Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 40,
+          "startedAt": "2026-09-06T10:17:47Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-06T10:17:47Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 41,
+          "startedAt": "2026-09-06T10:17:47Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/elchika-inc/ui/actions/runs/34026862120/job/101469268498"
+    }
+  ],
+  "status": "completed",
+  "url": "https://github.com/elchika-inc/ui/actions/runs/34026862120"
+}

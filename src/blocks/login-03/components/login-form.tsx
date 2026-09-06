@@ -19,8 +19,8 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Welcome back</CardTitle>
-          <CardDescription>Login with your Apple or Google account</CardDescription>
+          <CardTitle className="text-xl">ログイン</CardTitle>
+          <CardDescription>Apple または Google のアカウントでログインします。</CardDescription>
         </CardHeader>
         <CardContent>
           <form>
@@ -33,7 +33,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
                       fill="currentColor"
                     />
                   </svg>
-                  Login with Apple
+                  Apple でログイン
                 </Button>
                 <Button variant="outline" type="button">
                   <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -42,29 +42,29 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
                       fill="currentColor"
                     />
                   </svg>
-                  Login with Google
+                  Google でログイン
                 </Button>
               </Field>
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
-                Or continue with
+                または
               </FieldSeparator>
               <Field>
-                <FieldLabel htmlFor={emailId}>Email</FieldLabel>
-                <Input id={emailId} type="email" placeholder="m@example.com" required />
+                <FieldLabel htmlFor={emailId}>メールアドレス</FieldLabel>
+                <Input id={emailId} type="email" placeholder="misaki.sato@example.com" required />
               </Field>
               <Field>
                 <div className="flex items-center">
-                  <FieldLabel htmlFor={passwordId}>Password</FieldLabel>
+                  <FieldLabel htmlFor={passwordId}>パスワード</FieldLabel>
                   <a href="/" className="ml-auto text-sm underline-offset-4 hover:underline">
-                    Forgot your password?
+                    パスワードを忘れた場合
                   </a>
                 </div>
                 <Input id={passwordId} type="password" required />
               </Field>
               <Field>
-                <Button type="submit">Login</Button>
+                <Button type="submit">ログイン</Button>
                 <FieldDescription className="text-center">
-                  Don&apos;t have an account? <a href="/">Sign up</a>
+                  アカウントをお持ちでない場合は <a href="/">アカウントを作成</a>
                 </FieldDescription>
               </Field>
             </FieldGroup>
@@ -72,8 +72,8 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
         </CardContent>
       </Card>
       <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <a href="/">Terms of Service</a> and{" "}
-        <a href="/">Privacy Policy</a>.
+        続行すると、<a href="/">利用規約</a>と<a href="/">プライバシーポリシー</a>
+        に同意したことになります。
       </FieldDescription>
     </div>
   );

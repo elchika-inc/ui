@@ -25,21 +25,21 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
               <div className="flex size-8 items-center justify-center rounded-md">
                 <GalleryVerticalEndIcon className="size-6" />
               </div>
-              <span className="sr-only">Acme</span>
+              <span className="sr-only">elchika</span>
             </a>
-            <h1 className="text-xl font-semibold">Welcome to Acme</h1>
+            <h1 className="text-xl font-semibold">アカウントを作成</h1>
             <FieldDescription>
-              Already have an account? <a href="/">Sign in</a>
+              アカウントをお持ちの場合は <a href="/">ログイン</a>
             </FieldDescription>
           </div>
           <Field>
-            <FieldLabel htmlFor={emailId}>Email</FieldLabel>
-            <Input id={emailId} type="email" placeholder="m@example.com" required />
+            <FieldLabel htmlFor={emailId}>メールアドレス</FieldLabel>
+            <Input id={emailId} type="email" placeholder="misaki.sato@example.com" required />
           </Field>
           <Field>
-            <Button type="submit">Create Account</Button>
+            <Button type="submit">アカウントを作成</Button>
           </Field>
-          <FieldSeparator>Or</FieldSeparator>
+          <FieldSeparator>または</FieldSeparator>
           <Field className="grid gap-4 sm:grid-cols-2">
             <Button variant="outline" type="button">
               <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -48,7 +48,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
                   fill="currentColor"
                 />
               </svg>
-              Continue with Apple
+              Apple で登録
             </Button>
             <Button variant="outline" type="button">
               <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -57,14 +57,14 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
                   fill="currentColor"
                 />
               </svg>
-              Continue with Google
+              Google で登録
             </Button>
           </Field>
         </FieldGroup>
       </form>
       <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <a href="/">Terms of Service</a> and{" "}
-        <a href="/">Privacy Policy</a>.
+        続行すると、<a href="/">利用規約</a>と<a href="/">プライバシーポリシー</a>
+        に同意したことになります。
       </FieldDescription>
     </div>
   );

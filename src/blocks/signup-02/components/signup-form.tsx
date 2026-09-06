@@ -20,48 +20,48 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"form">
     <form className={cn("flex flex-col gap-6", className)} {...props}>
       <FieldGroup>
         <div className="flex flex-col items-center gap-1 text-center">
-          <h1 className="text-2xl font-semibold">Create your account</h1>
+          <h1 className="text-2xl font-semibold">アカウントを作成</h1>
           <p className="text-sm text-balance text-muted-foreground">
-            Fill in the form below to create your account
+            必要な情報を入力してアカウントを作成します。
           </p>
         </div>
         <Field>
-          <FieldLabel htmlFor={nameId}>Full Name</FieldLabel>
+          <FieldLabel htmlFor={nameId}>氏名</FieldLabel>
           <Input
             id={nameId}
             type="text"
-            placeholder="John Doe"
+            placeholder="佐藤 美咲"
             required
             className="bg-background"
           />
         </Field>
         <Field>
-          <FieldLabel htmlFor={emailId}>Email</FieldLabel>
+          <FieldLabel htmlFor={emailId}>メールアドレス</FieldLabel>
           <Input
             id={emailId}
             type="email"
-            placeholder="m@example.com"
+            placeholder="misaki.sato@example.com"
             required
             className="bg-background"
           />
           <FieldDescription>
-            We&apos;ll use this to contact you. We will not share your email with anyone else.
+            メールアドレスは連絡に使用します。第三者には共有しません。
           </FieldDescription>
         </Field>
         <Field>
-          <FieldLabel htmlFor={passwordId}>Password</FieldLabel>
+          <FieldLabel htmlFor={passwordId}>パスワード</FieldLabel>
           <Input id={passwordId} type="password" required className="bg-background" />
-          <FieldDescription>Must be at least 8 characters long.</FieldDescription>
+          <FieldDescription>8文字以上で入力します。</FieldDescription>
         </Field>
         <Field>
-          <FieldLabel htmlFor={confirmPasswordId}>Confirm Password</FieldLabel>
+          <FieldLabel htmlFor={confirmPasswordId}>パスワード（確認）</FieldLabel>
           <Input id={confirmPasswordId} type="password" required className="bg-background" />
-          <FieldDescription>Please confirm your password.</FieldDescription>
+          <FieldDescription>確認のため同じパスワードを入力します。</FieldDescription>
         </Field>
         <Field>
-          <Button type="submit">Create Account</Button>
+          <Button type="submit">アカウントを作成</Button>
         </Field>
-        <FieldSeparator>Or continue with</FieldSeparator>
+        <FieldSeparator>または</FieldSeparator>
         <Field>
           <Button variant="outline" type="button">
             <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -70,10 +70,10 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"form">
                 fill="currentColor"
               />
             </svg>
-            Sign up with GitHub
+            GitHub で登録
           </Button>
           <FieldDescription className="px-6 text-center">
-            Already have an account? <a href="/">Sign in</a>
+            アカウントをお持ちの場合は <a href="/">ログイン</a>
           </FieldDescription>
         </Field>
       </FieldGroup>

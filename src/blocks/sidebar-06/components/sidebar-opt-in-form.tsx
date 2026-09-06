@@ -6,15 +6,15 @@ export function SidebarOptInForm() {
   return (
     <Card className="gap-2 py-4 shadow-none">
       <CardHeader className="px-4">
-        <CardTitle className="text-sm">Subscribe to our newsletter</CardTitle>
-        <CardDescription>Opt-in to receive updates and news about the sidebar.</CardDescription>
+        <CardTitle className="text-sm">ニュースレターを購読</CardTitle>
+        <CardDescription>新機能やお知らせをメールで受け取ります。</CardDescription>
       </CardHeader>
       <CardContent className="px-4">
         <form>
           <div className="grid gap-2.5">
-            <SidebarInput aria-label="Email" type="email" placeholder="Email" />
+            <SidebarInput aria-label="メールアドレス" type="email" placeholder="メールアドレス" />
             <Button className="w-full bg-sidebar-primary text-sidebar-primary-foreground shadow-none">
-              Subscribe
+              購読を登録
             </Button>
           </div>
         </form>

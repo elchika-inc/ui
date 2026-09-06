@@ -32,7 +32,7 @@ export function SidebarOneTwoPreview({ mode = "isolated" }: PreviewProps) {
               <Breadcrumb>
                 <BreadcrumbList>
                   <BreadcrumbItem>
-                    <BreadcrumbPage>October 2024</BreadcrumbPage>
+                    <BreadcrumbPage>2024年10月</BreadcrumbPage>
                   </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>

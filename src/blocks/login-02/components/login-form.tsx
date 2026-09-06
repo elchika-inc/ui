@@ -18,28 +18,28 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
     <form className={cn("flex flex-col gap-6", className)} {...props}>
       <FieldGroup>
         <div className="flex flex-col items-center gap-1 text-center">
-          <h1 className="text-2xl font-semibold">Login to your account</h1>
+          <h1 className="text-2xl font-semibold">ログイン</h1>
           <p className="text-sm text-balance text-muted-foreground">
-            Enter your email below to login to your account
+            登録したメールアドレスでログインします。
           </p>
         </div>
         <Field>
-          <FieldLabel htmlFor={emailId}>Email</FieldLabel>
-          <Input id={emailId} type="email" placeholder="m@example.com" required />
+          <FieldLabel htmlFor={emailId}>メールアドレス</FieldLabel>
+          <Input id={emailId} type="email" placeholder="misaki.sato@example.com" required />
         </Field>
         <Field>
           <div className="flex items-center">
-            <FieldLabel htmlFor={passwordId}>Password</FieldLabel>
+            <FieldLabel htmlFor={passwordId}>パスワード</FieldLabel>
             <a href="/" className="ml-auto text-sm underline-offset-4 hover:underline">
-              Forgot your password?
+              パスワードを忘れた場合
             </a>
           </div>
           <Input id={passwordId} type="password" required />
         </Field>
         <Field>
-          <Button type="submit">Login</Button>
+          <Button type="submit">ログイン</Button>
         </Field>
-        <FieldSeparator>Or continue with</FieldSeparator>
+        <FieldSeparator>または</FieldSeparator>
         <Field>
           <Button variant="outline" type="button">
             <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -48,12 +48,12 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
                 fill="currentColor"
               />
             </svg>
-            Login with GitHub
+            GitHub でログイン
           </Button>
           <FieldDescription className="text-center">
-            Don&apos;t have an account?{" "}
+            アカウントをお持ちでない場合は{" "}
             <a href="/" className="underline underline-offset-4">
-              Sign up
+              アカウントを作成
             </a>
           </FieldDescription>
         </Field>

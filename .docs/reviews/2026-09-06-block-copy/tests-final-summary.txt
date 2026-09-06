@@ -1,0 +1,12 @@
+✔ CLIがregistry.jsonからindex.jsonを生成する (30.639958ms)
+✔ Workers Assetsがdistの静的ページをfallback無しで配信する (0.577542ms)
+✔ deploy workflowがmain pushと手動実行で型検査・テスト・build後にWranglerを実行する (0.40075ms)
+✔ Wranglerのローカル状態をversion管理へ入れない (15.132625ms)
+ℹ tests 500
+ℹ suites 0
+ℹ pass 500
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 546217.814916

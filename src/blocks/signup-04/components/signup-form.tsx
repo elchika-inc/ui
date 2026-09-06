@@ -23,36 +23,36 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
           <form className="p-6 md:p-8">
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
-                <h1 className="text-2xl font-semibold">Create your account</h1>
+                <h1 className="text-2xl font-semibold">アカウントを作成</h1>
                 <p className="text-sm text-balance text-muted-foreground">
-                  Enter your email below to create your account
+                  メールアドレスを入力してアカウントを作成します。
                 </p>
               </div>
               <Field>
-                <FieldLabel htmlFor={emailId}>Email</FieldLabel>
-                <Input id={emailId} type="email" placeholder="m@example.com" required />
+                <FieldLabel htmlFor={emailId}>メールアドレス</FieldLabel>
+                <Input id={emailId} type="email" placeholder="misaki.sato@example.com" required />
                 <FieldDescription>
-                  We&apos;ll use this to contact you. We will not share your email with anyone else.
+                  メールアドレスは連絡に使用します。第三者には共有しません。
                 </FieldDescription>
               </Field>
               <Field>
                 <Field className="grid grid-cols-2 gap-4">
                   <Field>
-                    <FieldLabel htmlFor={passwordId}>Password</FieldLabel>
+                    <FieldLabel htmlFor={passwordId}>パスワード</FieldLabel>
                     <Input id={passwordId} type="password" required />
                   </Field>
                   <Field>
-                    <FieldLabel htmlFor={confirmPasswordId}>Confirm Password</FieldLabel>
+                    <FieldLabel htmlFor={confirmPasswordId}>パスワード（確認）</FieldLabel>
                     <Input id={confirmPasswordId} type="password" required />
                   </Field>
                 </Field>
-                <FieldDescription>Must be at least 8 characters long.</FieldDescription>
+                <FieldDescription>8文字以上で入力します。</FieldDescription>
               </Field>
               <Field>
-                <Button type="submit">Create Account</Button>
+                <Button type="submit">アカウントを作成</Button>
               </Field>
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
-                Or continue with
+                または
               </FieldSeparator>
               <Field className="grid grid-cols-3 gap-4">
                 <Button variant="outline" type="button">
@@ -62,7 +62,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
                       fill="currentColor"
                     />
                   </svg>
-                  <span className="sr-only">Sign up with Apple</span>
+                  <span className="sr-only">Apple で登録</span>
                 </Button>
                 <Button variant="outline" type="button">
                   <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -71,7 +71,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
                       fill="currentColor"
                     />
                   </svg>
-                  <span className="sr-only">Sign up with Google</span>
+                  <span className="sr-only">Google で登録</span>
                 </Button>
                 <Button variant="outline" type="button">
                   <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -80,11 +80,11 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
                       fill="currentColor"
                     />
                   </svg>
-                  <span className="sr-only">Sign up with Meta</span>
+                  <span className="sr-only">Meta で登録</span>
                 </Button>
               </Field>
               <FieldDescription className="text-center">
-                Already have an account? <a href="/">Sign in</a>
+                アカウントをお持ちの場合は <a href="/">ログイン</a>
               </FieldDescription>
             </FieldGroup>
           </form>
@@ -92,8 +92,8 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
         </CardContent>
       </Card>
       <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <a href="/">Terms of Service</a> and{" "}
-        <a href="/">Privacy Policy</a>.
+        続行すると、<a href="/">利用規約</a>と<a href="/">プライバシーポリシー</a>
+        に同意したことになります。
       </FieldDescription>
     </div>
   );

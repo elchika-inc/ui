@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import ts from "typescript";
@@ -184,12 +185,13 @@ test("dashboard navigation は受け取った URL を link として描画する
   assert.match(source, /render={<a href={item\.url} \/>}/);
 });
 
-test("dashboard-01 は上流の架空社名 Acme Inc. を表示する", () => {
+test("dashboard-01 は共通の組織名 elchika を表示する", () => {
   const { sourceFile } = parseTsx("src/blocks/dashboard-01/components/app-sidebar.tsx");
   const values = jsxTextValues(sourceFile);
 
-  assert.ok(values.includes("Acme Inc."), "Acme Inc. が JSX text として表示される");
-  assert.equal(values.includes("Acme"), false, "法人格を落とした Acme だけの表記は残さない");
+  assert.ok(values.includes("elchika"), "elchika が JSX text として表示される");
+  assert.equal(values.includes("Acme"), false, "旧組織名 Acme は表示しない");
+  assert.equal(values.includes("Acme Inc."), false, "旧組織名 Acme Inc. は表示しない");
 });
 
 test("dashboard-01 の来歴は法人格表記を除去したと記録しない", () => {
@@ -543,6 +545,41 @@ test("dashboard table は数値と非数値の target を全順序で安定し�
     values: [5, 10, 7.5, 10, 10],
     maximum: 10,
   });
+});
+
+test("dashboard table は既定 locale が異なっても日本語の並び順を保つ", () => {
+  const { compareRows, dashboardMetricNumber } = loadTsxLogic(
+    "src/blocks/dashboard-table/components/dashboard-table.tsx",
+    ["compareRows", "dashboardMetricNumber"],
+  );
+  const rows = [
+    { id: 1, header: "表紙", target: "表紙" },
+    { id: 2, header: "機能", target: "機能" },
+    { id: 3, header: "設計", target: "設計" },
+    { id: 4, header: "目次", target: "目次" },
+  ];
+  const script = `
+    const dashboardMetricNumber = ${dashboardMetricNumber.toString()};
+    const compareRows = ${compareRows.toString()};
+    const rows = ${JSON.stringify(rows)};
+    console.log(JSON.stringify({
+      locale: new Intl.Collator().resolvedOptions().locale,
+      orders: ["header", "target"].map((key) =>
+        [...rows].sort((left, right) => compareRows(left, right, key)).map((row) => row.id)
+      ),
+    }));
+  `;
+  const results = ["en_US.UTF-8", "ja_JP.UTF-8"].map((locale) =>
+    JSON.parse(
+      execFileSync(process.execPath, ["--input-type=module", "-e", script], {
+        encoding: "utf8",
+        env: { ...process.env, LANG: locale, LC_ALL: locale },
+      }),
+    ),
+  );
+  assert.equal(results[0].locale, "en-US", "英語の既定 locale で実行する");
+  assert.equal(results[1].locale, "ja-JP", "日本語の既定 locale で実行する");
+  assert.deepEqual(results[0].orders, results[1].orders, "見出しと非数値の目標の順序が一致する");
 });
 
 test("dashboard table の helper 結果は checkbox・drawer・詳細 button へ配線される", () => {

@@ -1,0 +1,182 @@
+[
+  {
+    "command": [
+      "rg",
+      "-n",
+      "--fixed-strings",
+      "--",
+      "Acme",
+      "src/blocks"
+    ],
+    "exit_code": 1,
+    "count": 0
+  },
+  {
+    "command": [
+      "rg",
+      "-n",
+      "--fixed-strings",
+      "--",
+      "shadcn",
+      "src/blocks"
+    ],
+    "exit_code": 1,
+    "count": 0
+  },
+  {
+    "command": [
+      "rg",
+      "-n",
+      "--fixed-strings",
+      "--",
+      "m@example.com",
+      "src/blocks"
+    ],
+    "exit_code": 1,
+    "count": 0
+  },
+  {
+    "command": [
+      "rg",
+      "-n",
+      "--fixed-strings",
+      "--",
+      "John Doe",
+      "src/blocks"
+    ],
+    "exit_code": 1,
+    "count": 0
+  },
+  {
+    "command": [
+      "rg",
+      "-n",
+      "--fixed-strings",
+      "--",
+      "Evil Corp",
+      "src/blocks"
+    ],
+    "exit_code": 1,
+    "count": 0
+  },
+  {
+    "command": [
+      "rg",
+      "-n",
+      "--fixed-strings",
+      "--",
+      "from-primary/5",
+      "src/blocks"
+    ],
+    "exit_code": 1,
+    "count": 0
+  },
+  {
+    "command": [
+      "rg",
+      "-n",
+      "--fixed-strings",
+      "--",
+      "en-US",
+      "src/blocks"
+    ],
+    "exit_code": 1,
+    "count": 0
+  },
+  {
+    "command": [
+      "rg",
+      "-n",
+      "--fixed-strings",
+      "--",
+      "Login to your account",
+      "src/blocks"
+    ],
+    "exit_code": 1,
+    "count": 0
+  },
+  {
+    "command": [
+      "rg",
+      "-n",
+      "--fixed-strings",
+      "--",
+      "Playground",
+      "src/blocks"
+    ],
+    "exit_code": 1,
+    "count": 0
+  },
+  {
+    "command": [
+      "rg",
+      "-n",
+      "--fixed-strings",
+      "--",
+      "Total Revenue",
+      "src/blocks"
+    ],
+    "exit_code": 1,
+    "count": 0
+  },
+  {
+    "command": [
+      "rg",
+      "-n",
+      "--fixed-strings",
+      "--",
+      "In Process",
+      "src/blocks"
+    ],
+    "exit_code": 1,
+    "count": 0
+  },
+  {
+    "command": [
+      "rg",
+      "-n",
+      "--fixed-strings",
+      "--",
+      "Acme",
+      "src/previews"
+    ],
+    "exit_code": 1,
+    "count": 0
+  },
+  {
+    "command": [
+      "rg",
+      "-n",
+      "--fixed-strings",
+      "--",
+      "October 2024",
+      "src/previews"
+    ],
+    "exit_code": 1,
+    "count": 0
+  },
+  {
+    "command": [
+      "rg",
+      "-n",
+      "--pcre2",
+      ">[A-Z][a-z]+(?: [A-Za-z]+)*<",
+      "src/blocks"
+    ],
+    "exit_code": 1,
+    "count": 0,
+    "output": ""
+  },
+  {
+    "command": [
+      "rg",
+      "-n",
+      "--pcre2",
+      ">[A-Z][a-z]+(?: [A-Za-z]+)*<",
+      "src/previews"
+    ],
+    "exit_code": 0,
+    "count": 5,
+    "output": "src/previews/toggle.tsx:47:        <h2 className=\"font-medium text-foreground\">Variants</h2>\nsrc/previews/toggle.tsx:58:        <h2 className=\"font-medium text-foreground\">Sizes</h2>\nsrc/previews/kbd.tsx:10:        <Kbd>Esc</Kbd>\nsrc/previews/native-select.tsx:68:              <NativeSelectOption value=\"linux\">Linux</NativeSelectOption>\nsrc/previews/native-select.tsx:72:              <NativeSelectOption value=\"android\">Android</NativeSelectOption>\n"
+  }
+]

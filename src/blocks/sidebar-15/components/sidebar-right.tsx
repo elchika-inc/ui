@@ -17,21 +17,21 @@ import { NavUser } from "./nav-user";
 // サンプルデータ。
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
+    name: "佐藤 美咲",
+    email: "misaki.sato@example.com",
   },
   calendars: [
     {
-      name: "My Calendars",
-      items: ["Personal", "Work", "Family"],
+      name: "自分のカレンダー",
+      items: ["個人", "仕事", "家族"],
     },
     {
-      name: "Favorites",
-      items: ["Holidays", "Birthdays"],
+      name: "お気に入り",
+      items: ["祝日", "誕生日"],
     },
     {
-      name: "Other",
-      items: ["Travel", "Reminders", "Deadlines"],
+      name: "その他",
+      items: ["出張", "リマインダー", "締め切り"],
     },
   ],
 };
@@ -52,7 +52,7 @@ export function SidebarRight({ ...props }: React.ComponentProps<typeof Sidebar>)
           <SidebarMenuItem>
             <SidebarMenuButton>
               <PlusIcon />
-              <span>New Calendar</span>
+              <span>カレンダーを追加</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

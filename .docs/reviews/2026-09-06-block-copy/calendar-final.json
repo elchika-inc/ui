@@ -1,0 +1,42 @@
+[
+  {
+    "name": "sidebar-12",
+    "theme": "light",
+    "options": [
+      "2026",
+      "9月"
+    ],
+    "weekdays": "日\n月\n火\n水\n木\n金\n土",
+    "pageerror": []
+  },
+  {
+    "name": "sidebar-12",
+    "theme": "dark",
+    "options": [
+      "2026",
+      "9月"
+    ],
+    "weekdays": "日\n月\n火\n水\n木\n金\n土",
+    "pageerror": []
+  },
+  {
+    "name": "sidebar-15",
+    "theme": "light",
+    "options": [
+      "2026",
+      "9月"
+    ],
+    "weekdays": "日\n月\n火\n水\n木\n金\n土",
+    "pageerror": []
+  },
+  {
+    "name": "sidebar-15",
+    "theme": "dark",
+    "options": [
+      "2026",
+      "9月"
+    ],
+    "weekdays": "日\n月\n火\n水\n木\n金\n土",
+    "pageerror": []
+  }
+]

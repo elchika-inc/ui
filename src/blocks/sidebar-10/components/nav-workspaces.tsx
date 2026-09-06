@@ -27,7 +27,7 @@ export function NavWorkspaces({
 }) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Workspaces</SidebarGroupLabel>
+      <SidebarGroupLabel>ワークスペース</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
           {workspaces.map((workspace) => (
@@ -66,7 +66,7 @@ export function NavWorkspaces({
           <SidebarMenuItem>
             <SidebarMenuButton className="text-sidebar-foreground/70">
               <MoreHorizontalIcon />
-              <span>More</span>
+              <span>その他</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

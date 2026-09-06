@@ -25,40 +25,40 @@ import { TeamSwitcher } from "./team-switcher";
 const data = {
   teams: [
     {
-      name: "Acme",
+      name: "elchika",
       logo: <TerminalIcon />,
-      plan: "Enterprise",
+      plan: "エンタープライズ",
     },
     {
-      name: "Acme Corp.",
+      name: "elchika ラボ",
       logo: <AudioLinesIcon />,
-      plan: "Startup",
+      plan: "スタートアップ",
     },
     {
-      name: "Evil Corp.",
+      name: "elchika スタジオ",
       logo: <TerminalIcon />,
-      plan: "Free",
+      plan: "無料",
     },
   ],
   navMain: [
     {
-      title: "Search",
+      title: "検索",
       url: "#",
       icon: <SearchIcon />,
     },
     {
-      title: "Ask AI",
+      title: "AI に相談",
       url: "#",
       icon: <SparklesIcon />,
     },
     {
-      title: "Home",
+      title: "ホーム",
       url: "#",
       icon: <HomeIcon />,
       isActive: true,
     },
     {
-      title: "Inbox",
+      title: "受信箱",
       url: "#",
       icon: <InboxIcon />,
       badge: "10",
@@ -66,184 +66,184 @@ const data = {
   ],
   navSecondary: [
     {
-      title: "Calendar",
+      title: "カレンダー",
       url: "#",
       icon: <CalendarIcon />,
     },
     {
-      title: "Settings",
+      title: "設定",
       url: "#",
       icon: <Settings2Icon />,
     },
     {
-      title: "Templates",
+      title: "テンプレート",
       url: "#",
       icon: <BlocksIcon />,
     },
     {
-      title: "Trash",
+      title: "ゴミ箱",
       url: "#",
       icon: <Trash2Icon />,
     },
     {
-      title: "Help",
+      title: "ヘルプ",
       url: "#",
       icon: <MessageCircleQuestionIcon />,
     },
   ],
   favorites: [
     {
-      name: "Project Management & Task Tracking",
+      name: "プロジェクト・タスク管理",
       url: "#",
       emoji: "📊",
     },
     {
-      name: "Family Recipe Collection & Meal Planning",
+      name: "家庭のレシピ・献立",
       url: "#",
       emoji: "🍳",
     },
     {
-      name: "Fitness Tracker & Workout Routines",
+      name: "運動記録・トレーニング",
       url: "#",
       emoji: "💪",
     },
     {
-      name: "Book Notes & Reading List",
+      name: "読書メモ・書籍リスト",
       url: "#",
       emoji: "📚",
     },
     {
-      name: "Sustainable Gardening Tips & Plant Care",
+      name: "環境にやさしい園芸・植物の手入れ",
       url: "#",
       emoji: "🌱",
     },
     {
-      name: "Language Learning Progress & Resources",
+      name: "語学学習の進捗・教材",
       url: "#",
       emoji: "🗣️",
     },
     {
-      name: "Home Renovation Ideas & Budget Tracker",
+      name: "住まいの改修案・予算",
       url: "#",
       emoji: "🏠",
     },
     {
-      name: "Personal Finance & Investment Portfolio",
+      name: "資産管理・投資記録",
       url: "#",
       emoji: "💰",
     },
     {
-      name: "Movie & TV Show Watchlist with Reviews",
+      name: "映画・番組リストと感想",
       url: "#",
       emoji: "🎬",
     },
     {
-      name: "Daily Habit Tracker & Goal Setting",
+      name: "毎日の習慣・目標",
       url: "#",
       emoji: "✅",
     },
   ],
   workspaces: [
     {
-      name: "Personal Life Management",
+      name: "日々の暮らし",
       emoji: "🏠",
       pages: [
         {
-          name: "Daily Journal & Reflection",
+          name: "日記・振り返り",
           url: "#",
           emoji: "📔",
         },
         {
-          name: "Health & Wellness Tracker",
+          name: "健康記録",
           url: "#",
           emoji: "🍏",
         },
         {
-          name: "Personal Growth & Learning Goals",
+          name: "成長記録・学習目標",
           url: "#",
           emoji: "🌟",
         },
       ],
     },
     {
-      name: "Professional Development",
+      name: "仕事のスキルアップ",
       emoji: "💼",
       pages: [
         {
-          name: "Career Objectives & Milestones",
+          name: "キャリアの目標・達成記録",
           url: "#",
           emoji: "🎯",
         },
         {
-          name: "Skill Acquisition & Training Log",
+          name: "スキル習得・研修記録",
           url: "#",
           emoji: "🧠",
         },
         {
-          name: "Networking Contacts & Events",
+          name: "交流先・イベント",
           url: "#",
           emoji: "🤝",
         },
       ],
     },
     {
-      name: "Creative Projects",
+      name: "創作活動",
       emoji: "🎨",
       pages: [
         {
-          name: "Writing Ideas & Story Outlines",
+          name: "執筆アイデア・物語の構成",
           url: "#",
           emoji: "✍️",
         },
         {
-          name: "Art & Design Portfolio",
+          name: "アート・デザインの作品集",
           url: "#",
           emoji: "🖼️",
         },
         {
-          name: "Music Composition & Practice Log",
+          name: "作曲・練習記録",
           url: "#",
           emoji: "🎵",
         },
       ],
     },
     {
-      name: "Home Management",
+      name: "暮らしの管理",
       emoji: "🏡",
       pages: [
         {
-          name: "Household Budget & Expense Tracking",
+          name: "家計・支出管理",
           url: "#",
           emoji: "💰",
         },
         {
-          name: "Home Maintenance Schedule & Tasks",
+          name: "住まいの手入れ・作業予定",
           url: "#",
           emoji: "🔧",
         },
         {
-          name: "Family Calendar & Event Planning",
+          name: "家族の予定・行事",
           url: "#",
           emoji: "📅",
         },
       ],
     },
     {
-      name: "Travel & Adventure",
+      name: "旅行・冒険",
       emoji: "🧳",
       pages: [
         {
-          name: "Trip Planning & Itineraries",
+          name: "旅行の計画・日程",
           url: "#",
           emoji: "🗺️",
         },
         {
-          name: "Travel Bucket List & Inspiration",
+          name: "行きたい場所・旅のアイデア",
           url: "#",
           emoji: "🌎",
         },
         {
-          name: "Travel Journal & Photo Gallery",
+          name: "旅行記・写真",
           url: "#",
           emoji: "📸",
         },
