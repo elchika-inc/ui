@@ -27,7 +27,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
               </div>
               <span className="sr-only">Acme</span>
             </a>
-            <h1 className="text-xl font-bold">Welcome to Acme</h1>
+            <h1 className="text-xl font-semibold">Welcome to Acme</h1>
             <FieldDescription>
               Already have an account? <a href="/">Sign in</a>
             </FieldDescription>

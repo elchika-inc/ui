@@ -125,17 +125,17 @@
   --container-wide: 70rem;
 
   /* ---------- RADIUS ---------- */
-  --radius-xs: 0.25rem; --radius-sm: 0.375rem; --radius-md: 0.5rem;
-  --radius-lg: 0.75rem; --radius-xl: 1rem; --radius-full: 9999px;
+  --rounding-xs: 0.25rem; --radius-xs: var(--rounding-xs); --rounding-sm: 0.375rem; --radius-sm: var(--rounding-sm); --rounding-md: 0.5rem; --radius-md: var(--rounding-md);
+  --rounding-lg: 0.75rem; --radius-lg: var(--rounding-lg); --rounding-xl: 1rem; --radius-xl: var(--rounding-xl); --rounding-full: 9999px; --radius-full: var(--rounding-full);
 
   /* ---------- BORDER ---------- */
   --border-hairline: 0.5px; --border-thin: 1px; --border-thick: 2px;
 
   /* ---------- ELEVATION ---------- */
-  --shadow-xs: 0 1px 2px rgb(26 28 33 / 0.04);
-  --shadow-sm: 0 1px 3px rgb(26 28 33 / 0.06), 0 1px 2px rgb(26 28 33 / 0.04);
-  --shadow-md: 0 4px 12px rgb(26 28 33 / 0.08);
-  --shadow-lg: 0 12px 32px rgb(26 28 33 / 0.10);
+  --elevation-xs: 0 1px 2px rgb(26 28 33 / 0.04); --shadow-xs: var(--elevation-xs);
+  --elevation-sm: 0 1px 3px rgb(26 28 33 / 0.06), 0 1px 2px rgb(26 28 33 / 0.04); --shadow-sm: var(--elevation-sm);
+  --elevation-md: 0 4px 12px rgb(26 28 33 / 0.08); --shadow-md: var(--elevation-md);
+  --elevation-lg: 0 12px 32px rgb(26 28 33 / 0.10); --shadow-lg: var(--elevation-lg);
   --shadow-focus: 0 0 0 3px rgb(var(--brand-600) / 0.28);
 
   /* ---------- MOTION ---------- */
@@ -274,10 +274,10 @@
   --color-status-info-bg: var(--brand-700);
   --color-status-info-text: var(--brand-300);
 
-  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.30);
-  --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.40), 0 1px 2px rgb(0 0 0 / 0.30);
-  --shadow-md: 0 4px 12px rgb(0 0 0 / 0.45);
-  --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.55);
+  --elevation-xs: 0 1px 2px rgb(0 0 0 / 0.30); --shadow-xs: var(--elevation-xs);
+  --elevation-sm: 0 1px 3px rgb(0 0 0 / 0.40), 0 1px 2px rgb(0 0 0 / 0.30); --shadow-sm: var(--elevation-sm);
+  --elevation-md: 0 4px 12px rgb(0 0 0 / 0.45); --shadow-md: var(--elevation-md);
+  --elevation-lg: 0 12px 32px rgb(0 0 0 / 0.55); --shadow-lg: var(--elevation-lg);
   --shadow-focus: 0 0 0 3px rgb(var(--brand-400) / 0.36);
 
   /* Tint lightens instead of darkening, and needs slightly more of it to
@@ -1654,6 +1654,10 @@ h3.sub { font-size: var(--text-base); font-weight: var(--font-weight-semibold); 
 <b>node build-tokens.mjs</b>          # tokens.css と brands.css を生成し検証
 <b>node build-tokens.mjs --check</b>  # 検証のみ（CI 用・不合格なら exit 1）</pre>
     <div class="log">
+      <div class="entry">
+        <h4>角丸と影の値は Tailwind と衝突しない別名に置く</h4>
+        <p>Tailwind の <span class="token">@theme</span> と同名の変数は layer 順で Tailwind 側が勝つため、値は <span class="token">--rounding-*</span> / <span class="token">--elevation-*</span> に置き、<span class="token">--radius-*</span> / <span class="token">--shadow-*</span> はその参照にします。<span class="token">--font-code</span> と同じ理由で、utility を design system の値へ接続するためです。</p>
+      </div>
       <div class="entry">
         <h4>ブランドカラーは青がメイン、黄色がサブ</h4>
         <p>「知的で好奇心旺盛」という方向から。青が構造を担い、黄色は発見の一点にだけ灯す。補色関係でコントラストが強く出るため、黄色は面積を絞って使います。</p>
