@@ -67,6 +67,8 @@
 - `verified_impl_sha` は **トークン変更を含む commit より後の commit** を指す（同じ commit を指すと `check-evidence` の祖先判定を通らない）。証跡は実装 commit の後に別 commit で追加する。
 - report に 4 節 5 項の computed style 実測表を含める。
 
+- 司令塔裁定（2026-09-06）: `check-evidence` の component stale 判定を解消するため、変更21件の component 固有 `*-preview.md` と light / dark の画像を追加する。対象は badge / button / input / card / dialog / native-select / select / textarea / alert-dialog / button-group / chart / combobox / input-group / menubar / toast、および login-02 / 04 / 05、signup-02 / 04 / 05。画像と個別 report は同じ commit に追加し、既存の証跡は変更しない。追加裁定により、共有と重複する6件も再撮影し、21 report と42画像を新規 commit にまとめる。レビュー記録2件の検証SHAだけを補正した commit `25b528c` は以後 amend しない。
+
 ### 2.5 仕様と記録を残す
 
 - この仕様の 1〜7 節を `.docs/plans/2026-09-06-geometry-layer.md` として保存する（本文はそのまま。冒頭に issue #52 へのリンクを付ける）。
