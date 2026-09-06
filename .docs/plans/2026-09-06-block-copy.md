@@ -102,6 +102,10 @@ dashboard:
 
 ## 3. スコープ外
 
+追加裁定（同日）: `src/previews` は英語のデモ文字列に限り変更可。上記5ファイルに加え、sidebar-01〜08・14の `Build Your Application` / `Data Fetching` とsidebar-09の `All Inboxes` / `Inbox` を日本語化する。合計15ファイル25箇所。previewの構造・class・selectorは維持する。英語残存検査を `src/previews` へも適用して全件記録する。
+
+2026-09-06追加裁定: `src/previews/login-02.tsx` / `login-03.tsx` / `signup-02.tsx` / `signup-03.tsx` の `Acme` → `elchika`、`src/previews/sidebar-12.tsx` の `October 2024` → `2024年10月` は指定文字列に限り変更可。`src/blocks/sidebar-12/components/date-picker.tsx` と sidebar-15 の `enUS` import・locale指定を `ja` へ変更可。利用者が見る画像に旧組織名と英語の月・曜日が残る問題を除くため。負の検査に `src/previews` の `Acme` / `October 2024` を追加し、同じレビュアーによるラウンド3の対象差分再確認と証跡撮り直しを行う。
+
 - 司令塔裁定（2026-09-06）: 日本語化で顕在化したSSRとブラウザーの既定locale差によるhydration不一致を解消するため、dashboard-tableのlocaleCompare 2箇所の第2引数にja-JPを指定する。並べ替えの他ロジックとUIは維持する。`scripts/dashboard-blocks.test.mjs` は既定 locale 差の回帰 test 1 件に限り追加可。修正前後のen-US / ja-JPの行ID順とpageerror件数をreportとPRへ記録する。
 
 - 司令塔裁定（2026-09-06）: `scripts/dashboard-blocks.test.mjs` は表示文言の契約同期に限り変更可。187行目の1testの名称・期待値だけをelchika表示必須、Acme / Acme Inc.非表示へ同期する。他test・検査スクリプト・閾値は維持し、当該ファイル全testと全件testを再実行する。
@@ -159,3 +163,7 @@ dashboard:
 - sidebar-11の技術ファイル名は内容そのものなので維持する。展開・選択状態の名前比較も維持し、Changes / Filesなどのラベルだけを日本語化する。状態バッジM / UはGitの慣習的な1文字表記なので維持する。
 
 - 全件検証と収束の対は `node --test --test-concurrency=1 "scripts/*.test.mjs"` で実行する。既定の並列実行でシェル・Orca・Chromeの応答が約8分停止する現象を2回観測し、うち1回をCtrl-Cでexit 130へ中断したため。対象499件は維持し、コマンド差分・理由と最終pass / fail / skip件数をPR本文へ記録する。環境側の現象として残る課題へ記録し、AGENTS.mdのKey Commandsの変更は別途human判断とする。
+
+- 売上カードの円表示によるバッジ切断を解消する最小class調整を承認する。4枚のstatカードを同じ調整に揃える。①CardTitleの`@[250px]/card:text-3xl`を外してtext-2xlを維持し、1440px / 390pxで実測する。②①で切れる場合だけCardActionへshrink-0 / whitespace-nowrap、CardTitleへmin-w-0を付ける。③それでも収まらない場合だけcol-span系を検討し、その前にaskする。数値のtruncate・省略は禁止。前後のカード右端とバッジ右端をreport / PRへ記録し、来歴同期・再レビュー・証跡再撮影を行う。component層は変更しない。
+
+- preview全体の英語残存5件は司令塔裁定により維持する。Linux / Androidは固有名、Escはキー名、Variants / Sizesは対象外の既存toggle preview文言。toggleの2語は次PR候補として記録する。

@@ -2098,7 +2098,7 @@
           "path": "src/blocks/sidebar-12/components/date-picker.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-12/components/date-picker.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "e132501181df98b32f9cd71fbdac505077b12cf318f2736a9d85777f33bef4ce"
+          "generatedContentSha256": "45d6f7dc514a85f335cd832c45ca85a95cd68bd8841d522ce3c047803c3c88b9"
         },
         {
           "path": "src/blocks/sidebar-12/components/nav-user.tsx",
@@ -2200,7 +2200,7 @@
           "path": "src/blocks/sidebar-15/components/date-picker.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-15/components/date-picker.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "e132501181df98b32f9cd71fbdac505077b12cf318f2736a9d85777f33bef4ce"
+          "generatedContentSha256": "45d6f7dc514a85f335cd832c45ca85a95cd68bd8841d522ce3c047803c3c88b9"
         },
         {
           "path": "src/blocks/sidebar-15/components/nav-favorites.tsx",
@@ -2386,7 +2386,7 @@
           "path": "src/blocks/dashboard-01/components/section-cards.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/dashboard-01/components/section-cards.tsx",
           "upstreamPathSha": "6261bd89f72d794aea491482cc2acfd8dc3d63e2",
-          "generatedContentSha256": "df82fed0737417728992fea8a880435994a53e44c7e991c93fa4d08fc6cc7c06"
+          "generatedContentSha256": "8811643a0f4ce8a48fd17b32fe5871df2ad447a7644e0a2e36cd296185a71c99"
         },
         {
           "path": "src/blocks/dashboard-01/components/site-header.tsx",

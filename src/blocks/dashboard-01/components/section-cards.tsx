@@ -15,9 +15,7 @@ export function SectionCards() {
       <Card className="@container/card">
         <CardHeader>
           <CardDescription>売上高</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            ¥1,250,000
-          </CardTitle>
+          <CardTitle className="text-2xl font-semibold tabular-nums">¥1,250,000</CardTitle>
           <CardAction>
             <Badge variant="outline">
               <TrendingUpIcon />
@@ -35,9 +33,7 @@ export function SectionCards() {
       <Card className="@container/card">
         <CardHeader>
           <CardDescription>新規顧客</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            1,234
-          </CardTitle>
+          <CardTitle className="text-2xl font-semibold tabular-nums">1,234</CardTitle>
           <CardAction>
             <Badge variant="outline">
               <TrendingDownIcon />
@@ -55,9 +51,7 @@ export function SectionCards() {
       <Card className="@container/card">
         <CardHeader>
           <CardDescription>有効アカウント</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            45,678
-          </CardTitle>
+          <CardTitle className="text-2xl font-semibold tabular-nums">45,678</CardTitle>
           <CardAction>
             <Badge variant="outline">
               <TrendingUpIcon />
@@ -75,9 +69,7 @@ export function SectionCards() {
       <Card className="@container/card">
         <CardHeader>
           <CardDescription>成長率</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            4.5%
-          </CardTitle>
+          <CardTitle className="text-2xl font-semibold tabular-nums">4.5%</CardTitle>
           <CardAction>
             <Badge variant="outline">
               <TrendingUpIcon />

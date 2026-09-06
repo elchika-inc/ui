@@ -40,11 +40,11 @@ export function SidebarZeroNinePreview({ mode = "isolated" }: PreviewProps) {
               <Breadcrumb>
                 <BreadcrumbList>
                   <BreadcrumbItem className="hidden md:block">
-                    <BreadcrumbLink href="/">All Inboxes</BreadcrumbLink>
+                    <BreadcrumbLink href="/">すべての受信箱</BreadcrumbLink>
                   </BreadcrumbItem>
                   <BreadcrumbSeparator className="hidden md:block" />
                   <BreadcrumbItem>
-                    <BreadcrumbPage>Inbox</BreadcrumbPage>
+                    <BreadcrumbPage>受信箱</BreadcrumbPage>
                   </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
