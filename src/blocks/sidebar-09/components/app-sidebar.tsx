@@ -29,36 +29,36 @@ import { NavUser } from "./nav-user";
 // サンプルデータ。
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
+    name: "佐藤 美咲",
+    email: "misaki.sato@example.com",
   },
   navMain: [
     {
-      title: "Inbox",
+      title: "受信箱",
       url: "#",
       icon: <InboxIcon />,
       isActive: true,
     },
     {
-      title: "Drafts",
+      title: "下書き",
       url: "#",
       icon: <FileIcon />,
       isActive: false,
     },
     {
-      title: "Sent",
+      title: "送信済み",
       url: "#",
       icon: <SendIcon />,
       isActive: false,
     },
     {
-      title: "Junk",
+      title: "迷惑メール",
       url: "#",
       icon: <ArchiveXIcon />,
       isActive: false,
     },
     {
-      title: "Trash",
+      title: "ゴミ箱",
       url: "#",
       icon: <Trash2Icon />,
       isActive: false,
@@ -66,84 +66,74 @@ const data = {
   ],
   mails: [
     {
-      name: "William Smith",
-      email: "williamsmith@example.com",
-      subject: "Meeting Tomorrow",
-      date: "09:34 AM",
-      teaser:
-        "Hi team, just a reminder about our meeting tomorrow at 10 AM.\nPlease come prepared with your project updates.",
+      name: "鈴木 健太",
+      email: "kenta.suzuki@example.com",
+      subject: "明日の会議",
+      date: "9:34",
+      teaser: "明日10時の会議についての案内。各プロジェクトの進捗を持ち寄って共有。",
     },
     {
-      name: "Alice Smith",
-      email: "alicesmith@example.com",
-      subject: "Re: Project Update",
-      date: "Yesterday",
-      teaser:
-        "Thanks for the update. The progress looks great so far.\nLet's schedule a call to discuss the next steps.",
+      name: "高橋 さくら",
+      email: "sakura.takahashi@example.com",
+      subject: "返信：プロジェクトの進捗",
+      date: "昨日",
+      teaser: "進捗の共有を確認。次の進め方について打ち合わせの日程を調整。",
     },
     {
-      name: "Bob Johnson",
-      email: "bobjohnson@example.com",
-      subject: "Weekend Plans",
-      date: "2 days ago",
-      teaser:
-        "Hey everyone! I'm thinking of organizing a team outing this weekend.\nWould you be interested in a hiking trip or a beach day?",
+      name: "田中 大輔",
+      email: "daisuke.tanaka@example.com",
+      subject: "週末の予定",
+      date: "2日前",
+      teaser: "週末のチーム交流会を計画中。ハイキングや海辺での散策など、希望を募集。",
     },
     {
-      name: "Emily Davis",
-      email: "emilydavis@example.com",
-      subject: "Re: Question about Budget",
-      date: "2 days ago",
-      teaser:
-        "I've reviewed the budget numbers you sent over.\nCan we set up a quick call to discuss some potential adjustments?",
+      name: "伊藤 結衣",
+      email: "yui.ito@example.com",
+      subject: "返信：予算について",
+      date: "2日前",
+      teaser: "共有された予算を確認。一部の調整について短い打ち合わせを希望。",
     },
     {
-      name: "Michael Wilson",
-      email: "michaelwilson@example.com",
-      subject: "Important Announcement",
-      date: "1 week ago",
-      teaser:
-        "Please join us for an all-hands meeting this Friday at 3 PM.\nWe have some exciting news to share about the company's future.",
+      name: "渡辺 翔",
+      email: "sho.watanabe@example.com",
+      subject: "大切なお知らせ",
+      date: "1週間前",
+      teaser: "今週金曜15時から全体会議。今後の活動についてのお知らせを共有。",
     },
     {
-      name: "Sarah Brown",
-      email: "sarahbrown@example.com",
-      subject: "Re: Feedback on Proposal",
-      date: "1 week ago",
-      teaser:
-        "Thank you for sending over the proposal. I've reviewed it and have some thoughts.\nCould we schedule a meeting to discuss my feedback in detail?",
+      name: "山本 葵",
+      email: "aoi.yamamoto@example.com",
+      subject: "返信：提案へのフィードバック",
+      date: "1週間前",
+      teaser: "提案内容を確認。フィードバックの詳細を共有する打ち合わせを調整。",
     },
     {
-      name: "David Lee",
-      email: "davidlee@example.com",
-      subject: "New Project Idea",
-      date: "1 week ago",
-      teaser:
-        "I've been brainstorming and came up with an interesting project concept.\nDo you have time this week to discuss its potential impact and feasibility?",
+      name: "中村 陽菜",
+      email: "hina.nakamura@example.com",
+      subject: "新しいプロジェクトの案",
+      date: "1週間前",
+      teaser: "新しいプロジェクトの案を整理。期待できる効果と実現方法について今週中に相談。",
     },
     {
-      name: "Olivia Wilson",
-      email: "oliviawilson@example.com",
-      subject: "Vacation Plans",
-      date: "1 week ago",
-      teaser:
-        "Just a heads up that I'll be taking a two-week vacation next month.\nI'll make sure all my projects are up to date before I leave.",
+      name: "小林 蓮",
+      email: "ren.kobayashi@example.com",
+      subject: "休暇の予定",
+      date: "1週間前",
+      teaser: "来月は2週間の休暇を予定。担当プロジェクトの進捗を整理してから引き継ぎ。",
     },
     {
-      name: "James Martin",
-      email: "jamesmartin@example.com",
-      subject: "Re: Conference Registration",
-      date: "1 week ago",
-      teaser:
-        "I've completed the registration for the upcoming tech conference.\nLet me know if you need any additional information from my end.",
+      name: "加藤 美月",
+      email: "mitsuki.kato@example.com",
+      subject: "返信：勉強会への参加登録",
+      date: "1週間前",
+      teaser: "次回の技術勉強会への参加登録が完了。追加で必要な情報があれば連絡を希望。",
     },
     {
-      name: "Sophia White",
-      email: "sophiawhite@example.com",
-      subject: "Team Dinner",
-      date: "1 week ago",
-      teaser:
-        "To celebrate our recent project success, I'd like to organize a team dinner.\nAre you available next Friday evening? Please let me know your preferences.",
+      name: "吉田 陸",
+      email: "riku.yoshida@example.com",
+      subject: "チームの食事会",
+      date: "1週間前",
+      teaser: "プロジェクトの達成を祝うチームの食事会を計画中。来週金曜の夜の予定と希望を募集。",
     },
   ],
 };
@@ -174,8 +164,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <TerminalIcon className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">Acme</span>
-                  <span className="truncate text-xs">Enterprise</span>
+                  <span className="truncate font-medium">elchika</span>
+                  <span className="truncate text-xs">エンタープライズ</span>
                 </div>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -222,11 +212,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <div className="flex w-full items-center justify-between">
             <div className="text-base font-medium text-foreground">{activeItem?.title}</div>
             <Label className="flex items-center gap-2 text-sm">
-              <span>Unreads</span>
+              <span>未読</span>
               <Switch className="shadow-none" />
             </Label>
           </div>
-          <SidebarInput aria-label="Search" placeholder="Type to search..." />
+          <SidebarInput aria-label="検索" placeholder="検索語を入力" />
         </SidebarHeader>
         <SidebarContent>
           <SidebarGroup className="px-0">

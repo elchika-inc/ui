@@ -31,79 +31,79 @@ import { NavUser } from "./nav-user";
 
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
+    name: "佐藤 美咲",
+    email: "misaki.sato@example.com",
   },
   navMain: [
     {
-      title: "Dashboard",
+      title: "ダッシュボード",
       url: "#",
       icon: <LayoutDashboardIcon />,
     },
     {
-      title: "Lifecycle",
+      title: "ライフサイクル",
       url: "#",
       icon: <ListIcon />,
     },
     {
-      title: "Analytics",
+      title: "分析",
       url: "#",
       icon: <ChartBarIcon />,
     },
     {
-      title: "Projects",
+      title: "プロジェクト",
       url: "#",
       icon: <FolderIcon />,
     },
     {
-      title: "Team",
+      title: "チーム",
       url: "#",
       icon: <UsersIcon />,
     },
   ],
   navClouds: [
     {
-      title: "Capture",
+      title: "取り込み",
       icon: <CameraIcon />,
       isActive: true,
       url: "#",
       items: [
         {
-          title: "Active Proposals",
+          title: "進行中の提案",
           url: "#",
         },
         {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Proposal",
-      icon: <FileTextIcon />,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
+          title: "アーカイブ済み",
           url: "#",
         },
       ],
     },
     {
-      title: "Prompts",
+      title: "提案",
       icon: <FileTextIcon />,
       url: "#",
       items: [
         {
-          title: "Active Proposals",
+          title: "進行中の提案",
           url: "#",
         },
         {
-          title: "Archived",
+          title: "アーカイブ済み",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "依頼文",
+      icon: <FileTextIcon />,
+      url: "#",
+      items: [
+        {
+          title: "進行中の提案",
+          url: "#",
+        },
+        {
+          title: "アーカイブ済み",
           url: "#",
         },
       ],
@@ -111,34 +111,34 @@ const data = {
   ],
   navSecondary: [
     {
-      title: "Settings",
+      title: "設定",
       url: "#",
       icon: <Settings2Icon />,
     },
     {
-      title: "Get Help",
+      title: "ヘルプ",
       url: "#",
       icon: <CircleHelpIcon />,
     },
     {
-      title: "Search",
+      title: "検索",
       url: "#",
       icon: <SearchIcon />,
     },
   ],
   documents: [
     {
-      name: "Data Library",
+      name: "データ",
       url: "#",
       icon: <DatabaseIcon />,
     },
     {
-      name: "Reports",
+      name: "レポート",
       url: "#",
       icon: <FileChartColumnIcon />,
     },
     {
-      name: "Word Assistant",
+      name: "文書アシスタント",
       url: "#",
       icon: <FileIcon />,
     },
@@ -155,7 +155,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               render={<a href="/" />}
             >
               <CommandIcon className="size-5!" />
-              <span className="text-base font-semibold">Acme Inc.</span>
+              <span className="text-base font-semibold">elchika</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

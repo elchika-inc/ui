@@ -13,9 +13,9 @@ export function SearchForm({ ...props }: React.ComponentProps<"form">) {
       <SidebarGroup className="py-0">
         <SidebarGroupContent className="relative">
           <Label htmlFor={searchId} className="sr-only">
-            Search
+            検索
           </Label>
-          <SidebarInput id={searchId} placeholder="Search the docs..." className="pl-8" />
+          <SidebarInput id={searchId} placeholder="ドキュメントを検索" className="pl-8" />
           <SearchIcon className="pointer-events-none absolute top-1/2 left-2 size-4 -translate-y-1/2 opacity-50 select-none" />
         </SidebarGroupContent>
       </SidebarGroup>

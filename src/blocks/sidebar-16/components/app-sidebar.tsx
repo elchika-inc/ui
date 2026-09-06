@@ -27,91 +27,91 @@ import { NavUser } from "./nav-user";
 
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
+    name: "佐藤 美咲",
+    email: "misaki.sato@example.com",
   },
   navMain: [
     {
-      title: "Playground",
+      title: "作業スペース",
       url: "#",
       icon: <TerminalSquareIcon />,
       isActive: true,
       items: [
         {
-          title: "History",
+          title: "履歴",
           url: "#",
         },
         {
-          title: "Starred",
+          title: "お気に入り",
           url: "#",
         },
         {
-          title: "Settings",
+          title: "設定",
           url: "#",
         },
       ],
     },
     {
-      title: "Models",
+      title: "テンプレート",
       url: "#",
       icon: <BotIcon />,
       items: [
         {
-          title: "Genesis",
+          title: "標準",
           url: "#",
         },
         {
-          title: "Explorer",
+          title: "調査用",
           url: "#",
         },
         {
-          title: "Quantum",
+          title: "分析用",
           url: "#",
         },
       ],
     },
     {
-      title: "Documentation",
+      title: "ドキュメント",
       url: "#",
       icon: <BookOpenIcon />,
       items: [
         {
-          title: "Introduction",
+          title: "はじめに",
           url: "#",
         },
         {
-          title: "Get Started",
+          title: "導入",
           url: "#",
         },
         {
-          title: "Tutorials",
+          title: "チュートリアル",
           url: "#",
         },
         {
-          title: "Changelog",
+          title: "変更履歴",
           url: "#",
         },
       ],
     },
     {
-      title: "Settings",
+      title: "設定",
       url: "#",
       icon: <Settings2Icon />,
       items: [
         {
-          title: "General",
+          title: "全般",
           url: "#",
         },
         {
-          title: "Team",
+          title: "チーム",
           url: "#",
         },
         {
-          title: "Billing",
+          title: "請求",
           url: "#",
         },
         {
-          title: "Limits",
+          title: "上限",
           url: "#",
         },
       ],
@@ -119,29 +119,29 @@ const data = {
   ],
   navSecondary: [
     {
-      title: "Support",
+      title: "サポート",
       url: "#",
       icon: <LifeBuoyIcon />,
     },
     {
-      title: "Feedback",
+      title: "フィードバック",
       url: "#",
       icon: <SendIcon />,
     },
   ],
   projects: [
     {
-      name: "Design Engineering",
+      name: "デザイン",
       url: "#",
       icon: <FrameIcon />,
     },
     {
-      name: "Sales & Marketing",
+      name: "営業・マーケティング",
       url: "#",
       icon: <PieChartIcon />,
     },
     {
-      name: "Travel",
+      name: "出張",
       url: "#",
       icon: <MapIcon />,
     },
@@ -161,8 +161,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <TerminalIcon className="size-4" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">Acme</span>
-                <span className="truncate text-xs">Enterprise</span>
+                <span className="truncate font-medium">elchika</span>
+                <span className="truncate text-xs">エンタープライズ</span>
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>

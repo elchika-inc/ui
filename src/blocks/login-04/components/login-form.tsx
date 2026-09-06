@@ -22,27 +22,27 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
           <form className="p-6 md:p-8">
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
-                <h1 className="text-2xl font-semibold">Welcome back</h1>
-                <p className="text-balance text-muted-foreground">Login to your Acme account</p>
+                <h1 className="text-2xl font-semibold">ログイン</h1>
+                <p className="text-balance text-muted-foreground">elchika にログイン</p>
               </div>
               <Field>
-                <FieldLabel htmlFor={emailId}>Email</FieldLabel>
-                <Input id={emailId} type="email" placeholder="m@example.com" required />
+                <FieldLabel htmlFor={emailId}>メールアドレス</FieldLabel>
+                <Input id={emailId} type="email" placeholder="misaki.sato@example.com" required />
               </Field>
               <Field>
                 <div className="flex items-center">
-                  <FieldLabel htmlFor={passwordId}>Password</FieldLabel>
+                  <FieldLabel htmlFor={passwordId}>パスワード</FieldLabel>
                   <a href="/" className="ml-auto text-sm underline-offset-2 hover:underline">
-                    Forgot your password?
+                    パスワードを忘れた場合
                   </a>
                 </div>
                 <Input id={passwordId} type="password" required />
               </Field>
               <Field>
-                <Button type="submit">Login</Button>
+                <Button type="submit">ログイン</Button>
               </Field>
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
-                Or continue with
+                または
               </FieldSeparator>
               <Field className="grid grid-cols-3 gap-4">
                 <Button variant="outline" type="button">
@@ -52,7 +52,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
                       fill="currentColor"
                     />
                   </svg>
-                  <span className="sr-only">Login with Apple</span>
+                  <span className="sr-only">Apple でログイン</span>
                 </Button>
                 <Button variant="outline" type="button">
                   <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -61,7 +61,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
                       fill="currentColor"
                     />
                   </svg>
-                  <span className="sr-only">Login with Google</span>
+                  <span className="sr-only">Google でログイン</span>
                 </Button>
                 <Button variant="outline" type="button">
                   <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -70,11 +70,11 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
                       fill="currentColor"
                     />
                   </svg>
-                  <span className="sr-only">Login with Meta</span>
+                  <span className="sr-only">Meta でログイン</span>
                 </Button>
               </Field>
               <FieldDescription className="text-center">
-                Don&apos;t have an account? <a href="/">Sign up</a>
+                アカウントをお持ちでない場合は <a href="/">アカウントを作成</a>
               </FieldDescription>
             </FieldGroup>
           </form>
@@ -82,8 +82,8 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
         </CardContent>
       </Card>
       <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <a href="/">Terms of Service</a> and{" "}
-        <a href="/">Privacy Policy</a>.
+        続行すると、<a href="/">利用規約</a>と<a href="/">プライバシーポリシー</a>
+        に同意したことになります。
       </FieldDescription>
     </div>
   );

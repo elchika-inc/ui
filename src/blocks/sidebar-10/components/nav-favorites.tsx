@@ -37,7 +37,7 @@ export function NavFavorites({
   const { isMobile } = useSidebar();
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Favorites</SidebarGroupLabel>
+      <SidebarGroupLabel>お気に入り</SidebarGroupLabel>
       <SidebarMenu>
         {favorites.map((item) => (
           <SidebarMenuItem key={item.name}>
@@ -50,7 +50,7 @@ export function NavFavorites({
                 render={<SidebarMenuAction showOnHover className="aria-expanded:bg-muted" />}
               >
                 <MoreHorizontalIcon />
-                <span className="sr-only">More</span>
+                <span className="sr-only">その他</span>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 className="w-56 rounded-lg"
@@ -60,23 +60,23 @@ export function NavFavorites({
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
                     <StarOffIcon className="text-muted-foreground" />
-                    <span>Remove from Favorites</span>
+                    <span>お気に入りから削除</span>
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
                     <LinkIcon className="text-muted-foreground" />
-                    <span>Copy Link</span>
+                    <span>リンクをコピー</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <ArrowUpRightIcon className="text-muted-foreground" />
-                    <span>Open in New Tab</span>
+                    <span>新しいタブで開く</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
                     <Trash2Icon className="text-muted-foreground" />
-                    <span>Delete</span>
+                    <span>削除</span>
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
@@ -86,7 +86,7 @@ export function NavFavorites({
         <SidebarMenuItem>
           <SidebarMenuButton className="text-sidebar-foreground/70">
             <MoreHorizontalIcon />
-            <span>More</span>
+            <span>その他</span>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>

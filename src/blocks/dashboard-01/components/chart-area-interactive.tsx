@@ -26,7 +26,7 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-export const description = "An interactive area chart";
+export const description = "期間を切り替える訪問者数チャート";
 
 const chartData = [
   { date: "2024-04-01", desktop: 222, mobile: 150 },
@@ -124,14 +124,14 @@ const chartData = [
 
 const chartConfig = {
   visitors: {
-    label: "Visitors",
+    label: "訪問者数",
   },
   desktop: {
-    label: "Desktop",
+    label: "パソコン",
     color: "var(--primary)",
   },
   mobile: {
-    label: "Mobile",
+    label: "モバイル",
     color: "var(--primary)",
   },
 } satisfies ChartConfig;
@@ -139,13 +139,13 @@ const chartConfig = {
 type TimeRange = "90d" | "30d" | "7d";
 
 const TIME_RANGES: Record<TimeRange, { days: number; description: string; short: string }> = {
-  "90d": { days: 90, description: "the last 3 months", short: "Last 3 months" },
-  "30d": { days: 30, description: "the last 30 days", short: "Last 30 days" },
-  "7d": { days: 7, description: "the last 7 days", short: "Last 7 days" },
+  "90d": { days: 90, description: "過去 3 か月", short: "過去 3 か月" },
+  "30d": { days: 30, description: "過去 30 日", short: "過去 30 日" },
+  "7d": { days: 7, description: "過去 7 日", short: "過去 7 日" },
 };
 
-const chartDateFormatter = new Intl.DateTimeFormat("en-US", {
-  month: "short",
+const chartDateFormatter = new Intl.DateTimeFormat("ja-JP", {
+  month: "numeric",
   day: "numeric",
   timeZone: "UTC",
 });
@@ -199,9 +199,9 @@ export function ChartAreaInteractive() {
   return (
     <Card className="@container/card">
       <CardHeader>
-        <CardTitle>Total Visitors</CardTitle>
+        <CardTitle>訪問者数</CardTitle>
         <CardDescription>
-          <span className="hidden @[540px]/card:block">Total for {selectedRange.description}</span>
+          <span className="hidden @[540px]/card:block">{selectedRange.description}の合計</span>
           <span className="@[540px]/card:hidden">{selectedRange.short}</span>
         </CardDescription>
         <CardAction>
@@ -215,9 +215,9 @@ export function ChartAreaInteractive() {
             variant="outline"
             className="hidden *:data-[slot=toggle-group-item]:px-4! @[767px]/card:flex"
           >
-            <ToggleGroupItem value="90d">Last 3 months</ToggleGroupItem>
-            <ToggleGroupItem value="30d">Last 30 days</ToggleGroupItem>
-            <ToggleGroupItem value="7d">Last 7 days</ToggleGroupItem>
+            <ToggleGroupItem value="90d">過去 3 か月</ToggleGroupItem>
+            <ToggleGroupItem value="30d">過去 30 日</ToggleGroupItem>
+            <ToggleGroupItem value="7d">過去 7 日</ToggleGroupItem>
           </ToggleGroup>
           <Select
             value={timeRange}
@@ -230,19 +230,19 @@ export function ChartAreaInteractive() {
             <SelectTrigger
               className="flex w-40 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[767px]/card:hidden"
               size="sm"
-              aria-label="Select a value"
+              aria-label="値を選択"
             >
-              <SelectValue placeholder="Last 3 months" />
+              <SelectValue placeholder="過去 3 か月" />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
               <SelectItem value="90d" className="rounded-lg">
-                Last 3 months
+                過去 3 か月
               </SelectItem>
               <SelectItem value="30d" className="rounded-lg">
-                Last 30 days
+                過去 30 日
               </SelectItem>
               <SelectItem value="7d" className="rounded-lg">
-                Last 7 days
+                過去 7 日
               </SelectItem>
             </SelectContent>
           </Select>

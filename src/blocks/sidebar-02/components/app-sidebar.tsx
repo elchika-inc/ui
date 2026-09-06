@@ -21,136 +21,136 @@ const data = {
   versions: ["1.0.1", "1.1.0-alpha", "2.0.0-beta1"] satisfies [string, ...string[]],
   navMain: [
     {
-      title: "Getting Started",
+      title: "導入",
       url: "#",
       items: [
         {
-          title: "Installation",
+          title: "インストール",
           url: "#",
         },
         {
-          title: "Project Structure",
+          title: "プロジェクト構成",
           url: "#",
         },
       ],
     },
     {
-      title: "Build Your Application",
+      title: "アプリケーションの構築",
       url: "#",
       items: [
         {
-          title: "Routing",
+          title: "ページの移動",
           url: "#",
         },
         {
-          title: "Data Fetching",
+          title: "データ取得",
           url: "#",
           isActive: true,
         },
         {
-          title: "Rendering",
+          title: "画面の描画",
           url: "#",
         },
         {
-          title: "Caching",
+          title: "データの一時保存",
           url: "#",
         },
         {
-          title: "Styling",
+          title: "見た目の調整",
           url: "#",
         },
         {
-          title: "Optimizing",
+          title: "最適化",
           url: "#",
         },
         {
-          title: "Configuring",
+          title: "設定",
           url: "#",
         },
         {
-          title: "Testing",
+          title: "テスト",
           url: "#",
         },
         {
-          title: "Authentication",
+          title: "認証",
           url: "#",
         },
         {
-          title: "Deploying",
+          title: "公開",
           url: "#",
         },
         {
-          title: "Upgrading",
+          title: "更新",
           url: "#",
         },
         {
-          title: "Examples",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "API Reference",
-      url: "#",
-      items: [
-        {
-          title: "Components",
-          url: "#",
-        },
-        {
-          title: "File Conventions",
-          url: "#",
-        },
-        {
-          title: "Functions",
-          url: "#",
-        },
-        {
-          title: "next.config.js Options",
-          url: "#",
-        },
-        {
-          title: "CLI",
-          url: "#",
-        },
-        {
-          title: "Edge Runtime",
+          title: "使用例",
           url: "#",
         },
       ],
     },
     {
-      title: "Architecture",
+      title: "機能ガイド",
       url: "#",
       items: [
         {
-          title: "Accessibility",
+          title: "画面部品",
           url: "#",
         },
         {
-          title: "Fast Refresh",
+          title: "ファイルの規約",
           url: "#",
         },
         {
-          title: "Next.js Compiler",
+          title: "機能",
           url: "#",
         },
         {
-          title: "Supported Browsers",
+          title: "アプリケーションの設定",
           url: "#",
         },
         {
-          title: "Turbopack",
+          title: "コマンド操作",
+          url: "#",
+        },
+        {
+          title: "実行環境",
           url: "#",
         },
       ],
     },
     {
-      title: "Community",
+      title: "全体構成",
       url: "#",
       items: [
         {
-          title: "Contribution Guide",
+          title: "アクセシビリティ",
+          url: "#",
+        },
+        {
+          title: "変更の即時反映",
+          url: "#",
+        },
+        {
+          title: "アプリケーションの変換",
+          url: "#",
+        },
+        {
+          title: "対応ブラウザー",
+          url: "#",
+        },
+        {
+          title: "高速ビルド",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "コミュニティ",
+      url: "#",
+      items: [
+        {
+          title: "参加ガイド",
           url: "#",
         },
       ],

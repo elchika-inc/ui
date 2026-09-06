@@ -19,7 +19,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 flex w-full items-center border-b bg-background">
       <div className="flex h-(--header-height) w-full items-center gap-2 px-4">
         <Button
-          aria-label="Toggle sidebar"
+          aria-label="サイドバーを切り替える"
           className="h-8 w-8"
           variant="ghost"
           size="icon"
@@ -34,11 +34,11 @@ export function SiteHeader() {
         <Breadcrumb className="hidden sm:block">
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/">Build Your Application</BreadcrumbLink>
+              <BreadcrumbLink href="/">アプリケーションの構築</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+              <BreadcrumbPage>データ取得</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>

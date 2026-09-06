@@ -56,11 +56,11 @@ type SortState = { key: SortKey; direction: "ascending" | "descending" };
 type TableView = "all" | "review";
 
 const OPTIONAL_COLUMNS = [
-  { key: "type", label: "Type" },
-  { key: "status", label: "Status" },
-  { key: "target", label: "Target" },
-  { key: "limit", label: "Limit" },
-  { key: "reviewer", label: "Reviewer" },
+  { key: "type", label: "種別" },
+  { key: "status", label: "状態" },
+  { key: "target", label: "目標" },
+  { key: "limit", label: "上限" },
+  { key: "reviewer", label: "担当者" },
 ] as const;
 
 const INITIAL_COLUMNS: Record<OptionalColumn, boolean> = {
@@ -115,10 +115,10 @@ export function compareRows(left: DashboardTableRow, right: DashboardTableRow, k
       return comparison === 0 ? left.id - right.id : comparison;
     }
     if (leftIsNumeric !== rightIsNumeric) return leftIsNumeric ? -1 : 1;
-    const comparison = left.target.localeCompare(right.target);
+    const comparison = left.target.localeCompare(right.target, "ja-JP");
     return comparison === 0 ? left.id - right.id : comparison;
   }
-  return left[key].localeCompare(right[key]);
+  return left[key].localeCompare(right[key], "ja-JP");
 }
 
 export function dashboardMetricValues(row: Pick<DashboardTableRow, "target" | "limit">) {
@@ -194,7 +194,7 @@ function DashboardTableDataRow({
       {visibleColumns.type ? <TableCell>{row.type}</TableCell> : null}
       {visibleColumns.status ? (
         <TableCell>
-          <Badge variant={row.status === "Done" ? "secondary" : "outline"}>{row.status}</Badge>
+          <Badge variant={row.status === "完了" ? "secondary" : "outline"}>{row.status}</Badge>
         </TableCell>
       ) : null}
       {visibleColumns.target ? (
@@ -233,7 +233,7 @@ function DashboardDataTable({
   return (
     <div className="overflow-hidden rounded-xl border border-border bg-card">
       <Table className="min-w-4xl">
-        <caption className="sr-only">Dashboard documents</caption>
+        <caption className="sr-only">ダッシュボードの文書</caption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-10">
@@ -245,23 +245,23 @@ function DashboardDataTable({
               />
             </TableHead>
             <TableHead aria-sort={sort.key === "header" ? sort.direction : "none"}>
-              <SortButton label="Document" sortKey="header" sort={sort} onSort={onSort} />
+              <SortButton label="文書" sortKey="header" sort={sort} onSort={onSort} />
             </TableHead>
-            {visibleColumns.type ? <TableHead>Type</TableHead> : null}
+            {visibleColumns.type ? <TableHead>種別</TableHead> : null}
             {visibleColumns.status ? (
               <TableHead aria-sort={sort.key === "status" ? sort.direction : "none"}>
-                <SortButton label="Status" sortKey="status" sort={sort} onSort={onSort} />
+                <SortButton label="状態" sortKey="status" sort={sort} onSort={onSort} />
               </TableHead>
             ) : null}
             {visibleColumns.target ? (
               <TableHead aria-sort={sort.key === "target" ? sort.direction : "none"}>
-                <SortButton label="Target" sortKey="target" sort={sort} onSort={onSort} />
+                <SortButton label="目標" sortKey="target" sort={sort} onSort={onSort} />
               </TableHead>
             ) : null}
-            {visibleColumns.limit ? <TableHead>Limit</TableHead> : null}
+            {visibleColumns.limit ? <TableHead>上限</TableHead> : null}
             {visibleColumns.reviewer ? (
               <TableHead aria-sort={sort.key === "reviewer" ? sort.direction : "none"}>
-                <SortButton label="Reviewer" sortKey="reviewer" sort={sort} onSort={onSort} />
+                <SortButton label="担当者" sortKey="reviewer" sort={sort} onSort={onSort} />
               </TableHead>
             ) : null}
           </TableRow>
@@ -318,7 +318,7 @@ function DetailChart({ row }: { row: DashboardTableRow }) {
     >
       <svg
         role="img"
-        aria-label="Target と limit の推移"
+        aria-label="目標と上限の推移"
         className="absolute inset-0 h-full w-full"
         width="100%"
         height="100%"
@@ -373,7 +373,7 @@ export function DashboardTable({ data, className }: DashboardTableProps) {
   const rows = React.useMemo(() => {
     const normalizedQuery = query.trim().toLocaleLowerCase();
     const filtered = data.filter((row) => {
-      const inView = view === "all" || row.status === "In Process";
+      const inView = view === "all" || row.status === "作業中";
       if (!inView) return false;
       if (!normalizedQuery) return true;
       return [row.header, row.type, row.status, row.reviewer].some((value) =>
@@ -437,8 +437,8 @@ export function DashboardTable({ data, className }: DashboardTableProps) {
       <Tabs value={view} onValueChange={(value) => setView(value as TableView)} className="min-w-0">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <TabsList aria-label="ドキュメント表示">
-            <TabsTrigger value="all">All documents</TabsTrigger>
-            <TabsTrigger value="review">In review</TabsTrigger>
+            <TabsTrigger value="all">すべての文書</TabsTrigger>
+            <TabsTrigger value="review">作業中</TabsTrigger>
           </TabsList>
           <div className="flex flex-1 flex-col gap-2 sm:max-w-xl sm:flex-row sm:justify-end">
             <Input
@@ -446,16 +446,16 @@ export function DashboardTable({ data, className }: DashboardTableProps) {
               value={query}
               onChange={(event) => setQuery(event.currentTarget.value)}
               aria-label="ドキュメントを絞り込む"
-              placeholder="Filter documents..."
+              placeholder="文書を絞り込む"
               className="sm:max-w-xs"
             />
             <DropdownMenu>
               <DropdownMenuTrigger render={<Button type="button" variant="outline" />}>
-                Columns
+                列を編集
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuGroup>
-                  <DropdownMenuLabel>Visible columns</DropdownMenuLabel>
+                  <DropdownMenuLabel>表示する列</DropdownMenuLabel>
                   {OPTIONAL_COLUMNS.map(({ key, label }) => (
                     <DropdownMenuCheckboxItem
                       key={key}
@@ -501,15 +501,15 @@ export function DashboardTable({ data, className }: DashboardTableProps) {
             <div className="grid gap-4 overflow-y-auto p-4">
               <div className="grid gap-3 sm:grid-cols-3">
                 <div className="rounded-lg border border-border bg-muted p-3">
-                  <p className="text-xs text-muted-foreground">Target</p>
+                  <p className="text-xs text-muted-foreground">目標</p>
                   <p className="font-mono text-xl font-semibold tabular-nums">{activeRow.target}</p>
                 </div>
                 <div className="rounded-lg border border-border bg-muted p-3">
-                  <p className="text-xs text-muted-foreground">Limit</p>
+                  <p className="text-xs text-muted-foreground">上限</p>
                   <p className="font-mono text-xl font-semibold tabular-nums">{activeRow.limit}</p>
                 </div>
                 <div className="rounded-lg border border-border bg-muted p-3">
-                  <p className="text-xs text-muted-foreground">Reviewer</p>
+                  <p className="text-xs text-muted-foreground">担当者</p>
                   <p className="truncate font-medium">{activeRow.reviewer}</p>
                 </div>
               </div>

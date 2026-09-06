@@ -30,7 +30,7 @@ export function NavMain({
 }) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      <SidebarGroupLabel>プラットフォーム</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible key={item.title} defaultOpen={item.isActive} render={<SidebarMenuItem />}>
@@ -45,7 +45,7 @@ export function NavMain({
                   className="size-6! aria-expanded:rotate-90"
                 >
                   <ChevronRightIcon />
-                  <span className="sr-only">Toggle</span>
+                  <span className="sr-only">開閉を切り替える</span>
                 </SidebarMenuAction>
                 <CollapsibleContent>
                   <SidebarMenuSub>
