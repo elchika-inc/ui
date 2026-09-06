@@ -37,7 +37,8 @@ const REQUIRED_CONSUMER_CASE_LABELS = new Set([
   "destructive subtle hover",
   "solid destructive menu focus",
   "focus ring on background",
-  "foreground /10 container ring",
+  "border on card",
+  "border on popover",
   "input /30 decorative border",
   "invalid control boundary",
   "Attachment destructive /30 border",
@@ -48,7 +49,7 @@ const REQUIRED_CONSUMER_CASE_LABELS = new Set([
   "info pair",
 ]);
 const REQUIRED_CONSUMER_CONTRACT_DIGEST =
-  "2a6ff5ba437dfdda4b81d5f6fe177c79dc734dcbc22b693886b185a81bfca788";
+  "d5435643e7ee0c4baac2f86a7c585fc905d0372bcbf6f41341fee3932c222c19";
 
 const stableValue = (value) => {
   if (Array.isArray(value)) return value.map(stableValue);

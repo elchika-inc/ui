@@ -111,17 +111,17 @@
   --container-wide: 70rem;
 
   /* ---------- RADIUS ---------- */
-  --radius-xs: 0.25rem; --radius-sm: 0.375rem; --radius-md: 0.5rem;
-  --radius-lg: 0.75rem; --radius-xl: 1rem; --radius-full: 9999px;
+  --rounding-xs: 0.25rem; --radius-xs: var(--rounding-xs); --rounding-sm: 0.375rem; --radius-sm: var(--rounding-sm); --rounding-md: 0.5rem; --radius-md: var(--rounding-md);
+  --rounding-lg: 0.75rem; --radius-lg: var(--rounding-lg); --rounding-xl: 1rem; --radius-xl: var(--rounding-xl); --rounding-full: 9999px; --radius-full: var(--rounding-full);
 
   /* ---------- BORDER ---------- */
   --border-hairline: 0.5px; --border-thin: 1px; --border-thick: 2px;
 
   /* ---------- ELEVATION ---------- */
-  --shadow-xs: 0 1px 2px rgb(26 28 33 / 0.04);
-  --shadow-sm: 0 1px 3px rgb(26 28 33 / 0.06), 0 1px 2px rgb(26 28 33 / 0.04);
-  --shadow-md: 0 4px 12px rgb(26 28 33 / 0.08);
-  --shadow-lg: 0 12px 32px rgb(26 28 33 / 0.10);
+  --elevation-xs: 0 1px 2px rgb(26 28 33 / 0.04); --shadow-xs: var(--elevation-xs);
+  --elevation-sm: 0 1px 3px rgb(26 28 33 / 0.06), 0 1px 2px rgb(26 28 33 / 0.04); --shadow-sm: var(--elevation-sm);
+  --elevation-md: 0 4px 12px rgb(26 28 33 / 0.08); --shadow-md: var(--elevation-md);
+  --elevation-lg: 0 12px 32px rgb(26 28 33 / 0.10); --shadow-lg: var(--elevation-lg);
   --shadow-focus: 0 0 0 3px rgb(var(--brand-600) / 0.28);
 
   /* ---------- MOTION ---------- */
@@ -260,10 +260,10 @@
   --color-status-info-bg: var(--brand-700);
   --color-status-info-text: var(--brand-300);
 
-  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.30);
-  --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.40), 0 1px 2px rgb(0 0 0 / 0.30);
-  --shadow-md: 0 4px 12px rgb(0 0 0 / 0.45);
-  --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.55);
+  --elevation-xs: 0 1px 2px rgb(0 0 0 / 0.30); --shadow-xs: var(--elevation-xs);
+  --elevation-sm: 0 1px 3px rgb(0 0 0 / 0.40), 0 1px 2px rgb(0 0 0 / 0.30); --shadow-sm: var(--elevation-sm);
+  --elevation-md: 0 4px 12px rgb(0 0 0 / 0.45); --shadow-md: var(--elevation-md);
+  --elevation-lg: 0 12px 32px rgb(0 0 0 / 0.55); --shadow-lg: var(--elevation-lg);
   --shadow-focus: 0 0 0 3px rgb(var(--brand-400) / 0.36);
 
   /* Tint lightens instead of darkening, and needs slightly more of it to

@@ -41,12 +41,11 @@ const opaqueMutedSources = [
   source("table", ["bg-muted"]),
 ];
 
-const ringForegroundSources = [
-  source("alert-dialog", ["ring-foreground/10"]),
-  source("card", ["ring-foreground/10"]),
-  source("combobox", ["ring-foreground/10"]),
-  source("dialog", ["ring-foreground/10"]),
-  source("menubar", ["ring-foreground/10"]),
+const popoverBorderSources = [
+  source("alert-dialog", ["border-border"]),
+  source("combobox", ["border-border"]),
+  source("dialog", ["border-border"]),
+  source("menubar", ["border-border"]),
 ];
 
 const invalidBorderSources = [
@@ -309,12 +308,20 @@ export const CONSUMER_CASES = [
     ],
   }),
   foregroundOn({
-    label: "foreground /10 container ring",
-    foreground: { token: "foreground", alpha: 0.1 },
+    label: "border on card",
+    foreground: "border",
     background: "card",
     gate: "decorative",
-    reason: "container ring は focus 情報でない装飾境界として比率だけを観測する",
-    sourceClasses: ringForegroundSources,
+    reason: "card の border は focus 情報でない装飾境界として比率だけを観測する",
+    sourceClasses: [source("card", ["border-border"])],
+  }),
+  foregroundOn({
+    label: "border on popover",
+    foreground: "border",
+    background: "popover",
+    gate: "decorative",
+    reason: "popover の border は focus 情報でない装飾境界として比率だけを観測する",
+    sourceClasses: popoverBorderSources,
   }),
   foregroundOn({
     label: "input /30 decorative border",

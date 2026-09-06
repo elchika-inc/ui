@@ -68,13 +68,46 @@
     --color-state-hover: var(--state-hover-bg);
     --color-state-press: var(--state-press-bg);
     --color-state-selected: var(--state-selected-bg);
-    --radius-sm: calc(var(--radius) * 0.6);
-    --radius-md: calc(var(--radius) * 0.8);
-    --radius-lg: var(--radius);
-    --radius-xl: calc(var(--radius) * 1.4);
-    --radius-2xl: calc(var(--radius) * 1.8);
-    --radius-3xl: calc(var(--radius) * 2.2);
-    --radius-4xl: calc(var(--radius) * 2.6);
+    /* design system の角丸 --rounding-xs へ接続する。 */
+    --radius-xs: var(--rounding-xs);
+    /* design system の角丸 --rounding-sm へ接続する。 */
+    --radius-sm: var(--rounding-sm);
+    /* design system の角丸 --rounding-md へ接続する。 */
+    --radius-md: var(--rounding-md);
+    /* design system の角丸 --rounding-lg へ接続する。 */
+    --radius-lg: var(--rounding-lg);
+    /* design system の角丸 --rounding-xl へ接続する。 */
+    --radius-xl: var(--rounding-xl);
+    /* design system の --elevation-* に揃えるため、既定の影を解除する。 */
+    --shadow-*: initial;
+    /* design system の影 --elevation-xs へ接続する。 */
+    --shadow-xs: var(--elevation-xs);
+    /* design system の影 --elevation-sm へ接続する。 */
+    --shadow-sm: var(--elevation-sm);
+    /* design system の影 --elevation-md へ接続する。 */
+    --shadow-md: var(--elevation-md);
+    /* design system の影 --elevation-lg へ接続する。 */
+    --shadow-lg: var(--elevation-lg);
+    /* design-tokens.html の --font-weight-regular / medium / semibold を正本とし、同名衝突を避けて値を直書きする。 */
+    --font-weight-*: initial;
+    /* design system の --font-weight-regular の値へ揃える。 */
+    --font-weight-normal: 400;
+    /* design system の --font-weight-medium の値へ揃える。 */
+    --font-weight-medium: 500;
+    /* design system の --font-weight-semibold の値へ揃える。 */
+    --font-weight-semibold: 600;
+    /* design system の --duration-fast へ接続する。 */
+    --default-transition-duration: var(--duration-fast);
+    /* design system の --ease-standard へ接続する。 */
+    --default-transition-timing-function: var(--ease-standard);
+    /* design system の --control-height-sm へ接続する。 */
+    --spacing-control-sm: var(--control-height-sm);
+    /* design system の --control-height-md へ接続する。 */
+    --spacing-control-md: var(--control-height-md);
+    /* design system の --control-height-lg へ接続する。 */
+    --spacing-control-lg: var(--control-height-lg);
+    /* design system の --control-padding-x へ接続する。 */
+    --spacing-control-x: var(--control-padding-x);
     --container-dialog: calc(100% - 2rem);
     --spacing-tabs-trigger: calc(100% - 1px);
 }
@@ -116,7 +149,6 @@
     --chart-3: rgb(var(--chart-series-3));
     --chart-4: rgb(var(--chart-series-4));
     --chart-5: rgb(var(--chart-series-5));
-    --radius: 0.625rem;
     /* 面の alias とペアを保つ */
     --sidebar: var(--card);
     --sidebar-foreground: var(--card-foreground);
@@ -164,7 +196,6 @@
     --chart-3: rgb(var(--chart-series-3));
     --chart-4: rgb(var(--chart-series-4));
     --chart-5: rgb(var(--chart-series-5));
-    --radius: 0.625rem;
     --sidebar: var(--card);
     --sidebar-foreground: var(--card-foreground);
     --sidebar-primary: var(--primary);

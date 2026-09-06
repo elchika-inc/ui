@@ -23,7 +23,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
           <form className="p-6 md:p-8">
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
-                <h1 className="text-2xl font-bold">Create your account</h1>
+                <h1 className="text-2xl font-semibold">Create your account</h1>
                 <p className="text-sm text-balance text-muted-foreground">
                   Enter your email below to create your account
                 </p>

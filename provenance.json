@@ -1354,7 +1354,7 @@
           "path": "src/blocks/login-02/components/login-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/login-02/components/login-form.tsx",
           "upstreamPathSha": "67c99dd33cb21519941d26dd3d9f9ba6f2e65b98",
-          "generatedContentSha256": "1e8c9102d82f4145322922e8b71949268e21376d5e66ae47b5e922894b3641ce"
+          "generatedContentSha256": "060b8ae46571abf92cd06ff83d9ac2a1f1fc96ed44a161970c58882678a5257c"
         },
         {
           "dropped": true,
@@ -1414,7 +1414,7 @@
           "path": "src/blocks/login-04/components/login-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/login-04/components/login-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "69a890e491232374ebe9d4687978cbe604a982c234810535fc6989147c279d82"
+          "generatedContentSha256": "5ac94af697ad9b63e9a058df87cfab603c73afbb8e855780154b4ccf49a4b452"
         },
         {
           "dropped": true,
@@ -1444,7 +1444,7 @@
           "path": "src/blocks/login-05/components/login-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/login-05/components/login-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "53058601d308434dd85dc3e0bc828c4172b80663eef2081b58178a8d3e1f2b92"
+          "generatedContentSha256": "db6a3e087c788d2acc5ee113ae325204c9cf1598923a851f2625d38d26895b6b"
         },
         {
           "dropped": true,
@@ -1504,7 +1504,7 @@
           "path": "src/blocks/signup-02/components/signup-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-02/components/signup-form.tsx",
           "upstreamPathSha": "67c99dd33cb21519941d26dd3d9f9ba6f2e65b98",
-          "generatedContentSha256": "3bb850994216a2351c2fbdf7b4176879ca3e918ae599af13f2578c752c16e95f"
+          "generatedContentSha256": "a37d9d0ffbdd4705a7b21b8d60343761e04cef84bd5b2ebd7354b19561f45f3f"
         },
         {
           "dropped": true,
@@ -1564,7 +1564,7 @@
           "path": "src/blocks/signup-04/components/signup-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-04/components/signup-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "b36a3fe26dce0e446a67233062fe4743f6fd095940390b30e4e5fd08a68caab7"
+          "generatedContentSha256": "cdf00785a2ed7f26d1bc58c776d9980eaa7cd27ead4a16609164edce4412cabc"
         },
         {
           "dropped": true,
@@ -1594,7 +1594,7 @@
           "path": "src/blocks/signup-05/components/signup-form.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/signup-05/components/signup-form.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "61556ac18ae2e1e0e67e71bd0fb9d3904f3d1a8fbbee408522408468bf6e48e9"
+          "generatedContentSha256": "3ae8adf0c9eef2c67105a8e03b47356faa444a89f699f20fa3758b357831965f"
         },
         {
           "dropped": true,
