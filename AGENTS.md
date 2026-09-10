@@ -19,7 +19,7 @@ elchika-inc の共有 UI コンポーネント。Base UI + Tailwind CSS v4。sha
 - Astro 7 / React 19 / TypeScript / Base UI (@base-ui/react) / Tailwind CSS v4 / Biome。パッケージマネージャは npm。
 - standards_version: 2026-08-27 (rev.82)。
 - branch_policy: `protected`（PR 必須で、直 push の bypass を設けない）。
-- merge_policy: `auto-on-green`（owner `elchika-inc` の既定。DOCS_OPS §5）。当リポジトリは `package-lock.json` という「正しさが base の内容に依存する成果物」を持つため、DOCS_OPS §5 は required status check と、strict 設定または merge queue の有効化を MUST としている。2026-09-10 の実測では branch ruleset（id=20105508、enforcement=active）が `pull_request` rule に加えて `required_status_checks` rule を持ち、その context は PR CI の `Lint, typecheck, test & build`、`strict_required_status_checks_policy` は true、リポジトリ設定の `allow_auto_merge` も true であり、この MUST を満たす。したがって `auto-on-green` は実効であり、DOCS_OPS §5 の前提条件をすべて満たす PR はエージェントがマージしてよい。**1 つでも欠ける場合・判定できない場合は human 承認へ落とす。**ruleset の `allowed_merge_methods` は `merge` / `squash` / `rebase` を許可しているため、後述の「merge commit でマージする」規定に技術ゲートは無く運用規律に依存する。
+- merge_policy: `auto-on-green`（owner `elchika-inc` の既定。DOCS_OPS §5）。当リポジトリは `package-lock.json` という「正しさが base の内容に依存する成果物」を持つため、DOCS_OPS §5 は required status check と、strict 設定または merge queue の有効化を MUST としている。2026-09-10 の実測では branch ruleset（id=20105508、enforcement=active）が `pull_request` rule に加えて `required_status_checks` rule を持ち、その context は PR CI の `Lint, typecheck, test & build`、`strict_required_status_checks_policy` は true、リポジトリ設定の `allow_auto_merge` も true であり、この MUST を満たす。したがって `auto-on-green` は実効であり、DOCS_OPS §5 の前提条件をすべて満たす PR はエージェントがマージしてよい。**1 つでも欠ける場合・判定できない場合は human 承認へ落とす。** ruleset の `allowed_merge_methods` は `merge` / `squash` / `rebase` を許可しているため、後述の「merge commit でマージする」規定に技術ゲートは無く運用規律に依存する。
 
 ## Key Commands
 
