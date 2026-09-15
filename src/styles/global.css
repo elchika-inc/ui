@@ -1,7 +1,6 @@
 @import "./design-system/tokens.css" layer(design-system);
 @import "./design-system/brands.css" layer(design-system);
 @import "tailwindcss";
-@import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
@@ -141,6 +140,7 @@
     /* design system の --ease-standard へ接続する。 */
     --default-transition-timing-function: var(--ease-standard);
     /* design system の曲線 --curve-standard へ接続する。 */
+    --ease-*: initial;
     --ease-standard: var(--curve-standard);
     /* design system の曲線 --curve-entrance へ接続する。 */
     --ease-entrance: var(--curve-entrance);
@@ -150,6 +150,12 @@
     --ease-bounce: var(--curve-bounce);
     /* design system の曲線 --curve-bounce-strong へ接続する。 */
     --ease-bounce-strong: var(--curve-bounce-strong);
+    /* caret の段は design system に無いため、既存の点滅周期 1.25s を維持する。 */
+    --animate-caret-blink: caret-blink 1.25s var(--curve-entrance) infinite;
+    @keyframes caret-blink {
+      0%, 70%, 100% { opacity: 1; }
+      20%, 50% { opacity: 0; }
+    }
     /* design system の --control-height-sm へ接続する。 */
     --spacing-control-sm: var(--control-height-sm);
     /* design system の --control-height-md へ接続する。 */
@@ -270,9 +276,9 @@
 
 /*
  * WCAG 2.3.3 Animation from Interactions / 2.2.2 Pause, Stop, Hide.
- * Respect the user's reduced-motion preference by neutralizing animations,
- * transitions and smooth scrolling app-wide (tw-animate-css, Tailwind
- * transition utilities, driver.js tour, skeleton shimmer, etc.).
+ * reduced-motion の設定に従い、アプリ全体の animation・transition・
+ * smooth scrolling（caret、Tailwind の transition utility、
+ * driver.js tour、skeleton shimmer 等）を抑制する。
  */
 @media (prefers-reduced-motion: reduce) {
   *,

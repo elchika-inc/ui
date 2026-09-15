@@ -374,12 +374,7 @@ test("wrapper が pin add から2つの hash・来歴・registryまで記録し�
   assert.equal(provenance.components.calendar.modified, "Props 型を追加。");
   const registry = JSON.parse(readFileSync(join(root, "registry.json"), "utf8"));
   assert.deepEqual(registry.items[0].registryDependencies, ["@elchika/button"]);
-  assert.deepEqual(registry.items[0].dependencies, [
-    "@base-ui/react",
-    "date-fns",
-    "shadcn",
-    "tw-animate-css",
-  ]);
+  assert.deepEqual(registry.items[0].dependencies, ["@base-ui/react", "date-fns", "shadcn"]);
   assert.deepEqual(
     registry.items[0].files.filter(({ target }) => target?.endsWith("tokens.css")),
     [
@@ -1669,7 +1664,7 @@ test("block の registry item は配布ファイルの import から npm 依存�
   });
 
   assert.ok(result.registryItem.dependencies.includes("sonner"));
-  assert.deepEqual(result.registryItem.dependencies, ["shadcn", "sonner", "tw-animate-css"]);
+  assert.deepEqual(result.registryItem.dependencies, ["shadcn", "sonner"]);
 });
 
 test("block の registry item は配布ファイルの UI import から宣言漏れを補う", async (t) => {
@@ -2155,7 +2150,7 @@ test("明示除外 block の動的 import から npm dependency を保持する"
     target,
   );
 
-  assert.deepEqual(item.dependencies, ["optional-widget", "shadcn", "tw-animate-css"]);
+  assert.deepEqual(item.dependencies, ["optional-widget", "shadcn"]);
 });
 
 test("明示除外 block の非 literal 動的 import は推測せず停止する", async () => {

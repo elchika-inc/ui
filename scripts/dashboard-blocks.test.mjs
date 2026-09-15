@@ -375,12 +375,7 @@ test("dashboard block の配布 manifest は除外後の依存集合と共有依
 
   assert.ok(dashboard, "dashboard-01 registry item がある");
   assert.ok(table, "dashboard-table registry item がある");
-  assert.deepEqual([...dashboard.dependencies].sort(), [
-    "lucide-react",
-    "recharts",
-    "shadcn",
-    "tw-animate-css",
-  ]);
+  assert.deepEqual([...dashboard.dependencies].sort(), ["lucide-react", "recharts", "shadcn"]);
   assert.deepEqual([...dashboard.registryDependencies].sort(), [
     "@elchika/avatar",
     "@elchika/badge",
@@ -396,7 +391,7 @@ test("dashboard block の配布 manifest は除外後の依存集合と共有依
     "@elchika/toggle-group",
     "@elchika/use-mobile",
   ]);
-  assert.deepEqual([...table.dependencies].sort(), ["shadcn", "tw-animate-css"]);
+  assert.deepEqual([...table.dependencies].sort(), ["shadcn"]);
 });
 
 test("dashboard table は部分選択を mixed state として計算する", () => {

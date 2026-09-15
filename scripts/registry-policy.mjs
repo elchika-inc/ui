@@ -1,6 +1,6 @@
 // 全 registry item へ同梱する共有配布物と、それ自体が要求する npm 依存。
 // 生成側と常設 completeness が同じ定義を参照し、片方だけの更新を防ぐ。
-export const SHARED_DEPENDENCIES = ["tw-animate-css", "shadcn"];
+export const SHARED_DEPENDENCIES = ["shadcn"];
 
 export const SHARED_REGISTRY_FILES = [
   {
