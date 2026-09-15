@@ -42,6 +42,7 @@ standards の [`DESIGN.md`](https://github.com/elchika-inc/standards/blob/main/D
 - **色だけでステータスを伝える** — 記号（✓ ! × i）と形（円・角丸・菱形）を必ず併用する
 - **和欧の間に手動でスペースを入れる** — 四分アキは組版の仕事
 - **既存プロダクトの現行テーマに寄せる** — トークン側を正とし、プロダクト側を寄せる
+- **モーションに Tailwind 既定の `duration-<数値>` / `ease-out` や生の `ms` / `cubic-bezier()` を書く** — 段は Motion 節の用途表から `duration-<段>` / `ease-<名前>` で選ぶ。`check-standards.mjs` の `motion-literal` が検知する
 
 ## 再検討トリガー
 

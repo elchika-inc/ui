@@ -127,9 +127,20 @@
   /* ---------- MOTION ---------- */
   --duration-instant: 0ms; --duration-fast: 120ms; --duration-base: 180ms;
   --duration-slow: 260ms; --duration-slower: 400ms;
-  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
-  --ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --duration-stagger: 40ms; --duration-micro: 80ms; --duration-emphasis: 500ms;
+  --curve-standard: cubic-bezier(0.2, 0, 0, 1);
+  --curve-entrance: cubic-bezier(0.16, 1, 0.3, 1);
+  --curve-exit: cubic-bezier(0.4, 0, 1, 1);
+  --curve-bounce: cubic-bezier(0.34, 1.36, 0.64, 1);
+  --curve-bounce-strong: cubic-bezier(0.34, 3.85, 0.64, 1);
+  --ease-standard: var(--curve-standard);
+  --ease-entrance: var(--curve-entrance);
+  --ease-exit: var(--curve-exit);
+  --ease-bounce: var(--curve-bounce);
+  --ease-bounce-strong: var(--curve-bounce-strong);
+  --motion-distance-sm: 4px; --motion-distance-md: 8px; --motion-distance-lg: 12px;
+  --motion-scale-lg: 0.96; --motion-scale-md: 0.97; --motion-scale-sm: 0.98;
+  --motion-blur-sm: 2px; --motion-blur-lg: 8px;
 
   /* ---------- STATE ----------
      States are tokenised once and shared, rather than redefined per

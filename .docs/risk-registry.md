@@ -138,3 +138,12 @@
 - status: accepted
 - reason: DOCS_OPS §5 は「`auto-on-green` は auto-deploy を意味する」と明記する。当リポジトリは main push を起点に `npx wrangler deploy` が走るため、前提条件が揃った後はエージェントのマージがそのまま配信を起動する。配布物は registry を経由して全利用者へ届くので誤配信の影響範囲は広い。それでも受容するのは、配信物が静的アセットのみで巻き戻しが再 deploy で足りること、および §5 の前提条件（required status check の green・レビューサイクル収束・ブラウザ検証証跡）が配信前のゲートとして機能するためである。緩和として deploy job へ型検査とユニットテストを build より前に追加し、CI が赤のまま配信される経路を塞いだ — 従来 deploy job は同じ main push で並行に走る CI workflow の成否を待っておらず、CI が赤でも配信が完了しえた。
 - anchor: `scripts/site-delivery.test.mjs` の「deploy workflowがmain pushと手動実行で型検査・テスト・build後にWranglerを実行する」が deploy.yml のステップ順序を `npm ci → npm run typecheck → node --test → npm run build → npx wrangler deploy` の順で検査する。型検査またはユニットテストのステップが消える場合も、build より後ろへ回った場合も赤になる。
+
+## RISK-016: transitions.dev の利用条件（LICENSE ファイル無し、再配布禁止条項あり）
+
+- date: 2026-09-15
+- confidence: high
+- location: `.docs/plans/2026-09-15-motion-token-layer.md` §1.1
+- status: accepted
+- reason: 上流に SPDX ライセンスが無く、terms は値と設計の参照・改変・商用利用を認め、コレクションの再配布を禁じている。当リポジトリは公開 registry の component kit なので、snippet（`t-*` クラス、`.is-open` / `.is-closing`、`_root.css`）を持ち込まず、段の値と用途表だけを参照する。コードを持ち込まないため THIRD_PARTY_LICENSES は変えない。
+- anchor: 仕様 §4.8 の grep で、検査対象の `src/components` / `src/blocks` / `src/styles/global.css` に `t-` 接頭辞の CSS クラス（引用符または空白の後の `t-` に英字が続くもの）と `is-open` / `is-closing` クラスが存在しないことを確認する。`src/styles/design-system/design-tokens.html` の決定記録が出典と利用条件を持つ。

@@ -5,11 +5,62 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
-import { checkFile, checkFiles } from "./check-standards.mjs";
+import { checkFile, checkFiles, staleMotionAllowlist } from "./check-standards.mjs";
 
 function readSource(path) {
   return readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 }
+
+test("モーションの生値を検出する", () => {
+  const results = checkFiles(
+    new Map([
+      [
+        "x.tsx",
+        `export const probe = <div className="duration-100 ease-out ease-in-out [transition:transform_500ms_cubic-bezier(0.22,1,0.36,1)] [transition:opacity_200ms_ease]" />;`,
+      ],
+    ]),
+  );
+  const violations = results.get("x.tsx").violations.filter((v) => v.rule === "motion-literal");
+  assert.equal(violations.length, 5);
+  assert.deepEqual(
+    violations.map((v) => v.text),
+    [
+      "duration-100",
+      "ease-out",
+      "ease-in-out",
+      "[transition:transform_500ms_cubic-bezier(0.22,1,0.36,1)]",
+      "[transition:opacity_200ms_ease]",
+    ],
+  );
+});
+
+test("design system の段は検出しない", () => {
+  const results = checkFiles(
+    new Map([
+      [
+        "x.tsx",
+        `export const probe = <div className="duration-fast ease-entrance ease-linear translate-y-(--motion-distance-md) blur-(--motion-blur-sm) animate-in fade-in-0" />;`,
+      ],
+    ]),
+  );
+  assert.deepEqual(
+    results.get("x.tsx").violations.filter((v) => v.rule === "motion-literal"),
+    [],
+  );
+});
+
+test("allowlist の実在しないエントリを失敗させる", () => {
+  const allowlist = new Map([
+    ["x.tsx", ["duration-100"]],
+    ["y.tsx", ["duration-200"]],
+  ]);
+  const absent = checkFiles(new Map([["x.tsx", `export const probe = "duration-fast";`]]));
+  assert.deepEqual(staleMotionAllowlist(absent, allowlist), [
+    { path: "x.tsx", rule: "motion-literal-allowlist-stale", line: 0, text: "duration-100" },
+  ]);
+  const present = checkFiles(new Map([["x.tsx", `export const probe = "duration-100";`]]));
+  assert.deepEqual(staleMotionAllowlist(present, allowlist), []);
+});
 
 test("透明度を合成したフォーカスリングを検出する", () => {
   const { violations } = checkFile(
