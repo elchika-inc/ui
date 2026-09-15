@@ -1,0 +1,535 @@
+{
+  "baseline": [
+    {
+      "path": "src/components/ui/input-otp.tsx",
+      "pattern": "animate-in|animate-out|fade-in-0|fade-out-0|zoom-in-95|zoom-out-95|slide-in-from|animate-accordion|delayed-open",
+      "command": [
+        "grep",
+        "-cE",
+        "animate-in|animate-out|fade-in-0|fade-out-0|zoom-in-95|zoom-out-95|slide-in-from|animate-accordion|delayed-open",
+        "/tmp/overlay-motion-e-validation/base-0.tsx"
+      ],
+      "exit": 1,
+      "count": 0,
+      "status": "N/A（origin/main でも 0 件）"
+    },
+    {
+      "path": "src/components/ui/input-otp.tsx",
+      "pattern": "\\b(duration|delay)-[0-9]+\\b",
+      "command": [
+        "grep",
+        "-cE",
+        "\\b(duration|delay)-[0-9]+\\b",
+        "/tmp/overlay-motion-e-validation/base-0.tsx"
+      ],
+      "exit": 0,
+      "count": 1,
+      "status": "陽性"
+    },
+    {
+      "path": "src/components/ui/input-otp.tsx",
+      "pattern": "\\bease-(in|out|in-out)\\b",
+      "command": [
+        "grep",
+        "-cE",
+        "\\bease-(in|out|in-out)\\b",
+        "/tmp/overlay-motion-e-validation/base-0.tsx"
+      ],
+      "exit": 1,
+      "count": 0,
+      "status": "N/A（origin/main でも 0 件）"
+    },
+    {
+      "path": "src/components/ui/item.tsx",
+      "pattern": "animate-in|animate-out|fade-in-0|fade-out-0|zoom-in-95|zoom-out-95|slide-in-from|animate-accordion|delayed-open",
+      "command": [
+        "grep",
+        "-cE",
+        "animate-in|animate-out|fade-in-0|fade-out-0|zoom-in-95|zoom-out-95|slide-in-from|animate-accordion|delayed-open",
+        "/tmp/overlay-motion-e-validation/base-1.tsx"
+      ],
+      "exit": 1,
+      "count": 0,
+      "status": "N/A（origin/main でも 0 件）"
+    },
+    {
+      "path": "src/components/ui/item.tsx",
+      "pattern": "\\b(duration|delay)-[0-9]+\\b",
+      "command": [
+        "grep",
+        "-cE",
+        "\\b(duration|delay)-[0-9]+\\b",
+        "/tmp/overlay-motion-e-validation/base-1.tsx"
+      ],
+      "exit": 0,
+      "count": 1,
+      "status": "陽性"
+    },
+    {
+      "path": "src/components/ui/item.tsx",
+      "pattern": "\\bease-(in|out|in-out)\\b",
+      "command": [
+        "grep",
+        "-cE",
+        "\\bease-(in|out|in-out)\\b",
+        "/tmp/overlay-motion-e-validation/base-1.tsx"
+      ],
+      "exit": 1,
+      "count": 0,
+      "status": "N/A（origin/main でも 0 件）"
+    },
+    {
+      "path": "src/components/ui/message-scroller.tsx",
+      "pattern": "animate-in|animate-out|fade-in-0|fade-out-0|zoom-in-95|zoom-out-95|slide-in-from|animate-accordion|delayed-open",
+      "command": [
+        "grep",
+        "-cE",
+        "animate-in|animate-out|fade-in-0|fade-out-0|zoom-in-95|zoom-out-95|slide-in-from|animate-accordion|delayed-open",
+        "/tmp/overlay-motion-e-validation/base-2.tsx"
+      ],
+      "exit": 1,
+      "count": 0,
+      "status": "N/A（origin/main でも 0 件）"
+    },
+    {
+      "path": "src/components/ui/message-scroller.tsx",
+      "pattern": "\\b(duration|delay)-[0-9]+\\b",
+      "command": [
+        "grep",
+        "-cE",
+        "\\b(duration|delay)-[0-9]+\\b",
+        "/tmp/overlay-motion-e-validation/base-2.tsx"
+      ],
+      "exit": 0,
+      "count": 1,
+      "status": "陽性"
+    },
+    {
+      "path": "src/components/ui/message-scroller.tsx",
+      "pattern": "\\bease-(in|out|in-out)\\b",
+      "command": [
+        "grep",
+        "-cE",
+        "\\bease-(in|out|in-out)\\b",
+        "/tmp/overlay-motion-e-validation/base-2.tsx"
+      ],
+      "exit": 0,
+      "count": 1,
+      "status": "陽性"
+    },
+    {
+      "path": "src/components/ui/sidebar.tsx",
+      "pattern": "animate-in|animate-out|fade-in-0|fade-out-0|zoom-in-95|zoom-out-95|slide-in-from|animate-accordion|delayed-open",
+      "command": [
+        "grep",
+        "-cE",
+        "animate-in|animate-out|fade-in-0|fade-out-0|zoom-in-95|zoom-out-95|slide-in-from|animate-accordion|delayed-open",
+        "/tmp/overlay-motion-e-validation/base-3.tsx"
+      ],
+      "exit": 1,
+      "count": 0,
+      "status": "N/A（origin/main でも 0 件）"
+    },
+    {
+      "path": "src/components/ui/sidebar.tsx",
+      "pattern": "\\b(duration|delay)-[0-9]+\\b",
+      "command": [
+        "grep",
+        "-cE",
+        "\\b(duration|delay)-[0-9]+\\b",
+        "/tmp/overlay-motion-e-validation/base-3.tsx"
+      ],
+      "exit": 0,
+      "count": 3,
+      "status": "陽性"
+    },
+    {
+      "path": "src/components/ui/sidebar.tsx",
+      "pattern": "\\bease-(in|out|in-out)\\b",
+      "command": [
+        "grep",
+        "-cE",
+        "\\bease-(in|out|in-out)\\b",
+        "/tmp/overlay-motion-e-validation/base-3.tsx"
+      ],
+      "exit": 1,
+      "count": 0,
+      "status": "N/A（origin/main でも 0 件）"
+    },
+    {
+      "path": "src/blocks/sidebar-07/components/nav-main.tsx",
+      "pattern": "animate-in|animate-out|fade-in-0|fade-out-0|zoom-in-95|zoom-out-95|slide-in-from|animate-accordion|delayed-open",
+      "command": [
+        "grep",
+        "-cE",
+        "animate-in|animate-out|fade-in-0|fade-out-0|zoom-in-95|zoom-out-95|slide-in-from|animate-accordion|delayed-open",
+        "/tmp/overlay-motion-e-validation/base-4.tsx"
+      ],
+      "exit": 1,
+      "count": 0,
+      "status": "N/A（origin/main でも 0 件）"
+    },
+    {
+      "path": "src/blocks/sidebar-07/components/nav-main.tsx",
+      "pattern": "\\b(duration|delay)-[0-9]+\\b",
+      "command": [
+        "grep",
+        "-cE",
+        "\\b(duration|delay)-[0-9]+\\b",
+        "/tmp/overlay-motion-e-validation/base-4.tsx"
+      ],
+      "exit": 0,
+      "count": 1,
+      "status": "陽性"
+    },
+    {
+      "path": "src/blocks/sidebar-07/components/nav-main.tsx",
+      "pattern": "\\bease-(in|out|in-out)\\b",
+      "command": [
+        "grep",
+        "-cE",
+        "\\bease-(in|out|in-out)\\b",
+        "/tmp/overlay-motion-e-validation/base-4.tsx"
+      ],
+      "exit": 1,
+      "count": 0,
+      "status": "N/A（origin/main でも 0 件）"
+    },
+    {
+      "path": "src/blocks/dashboard-01/components/nav-main.tsx",
+      "pattern": "animate-in|animate-out|fade-in-0|fade-out-0|zoom-in-95|zoom-out-95|slide-in-from|animate-accordion|delayed-open",
+      "command": [
+        "grep",
+        "-cE",
+        "animate-in|animate-out|fade-in-0|fade-out-0|zoom-in-95|zoom-out-95|slide-in-from|animate-accordion|delayed-open",
+        "/tmp/overlay-motion-e-validation/base-5.tsx"
+      ],
+      "exit": 1,
+      "count": 0,
+      "status": "N/A（origin/main でも 0 件）"
+    },
+    {
+      "path": "src/blocks/dashboard-01/components/nav-main.tsx",
+      "pattern": "\\b(duration|delay)-[0-9]+\\b",
+      "command": [
+        "grep",
+        "-cE",
+        "\\b(duration|delay)-[0-9]+\\b",
+        "/tmp/overlay-motion-e-validation/base-5.tsx"
+      ],
+      "exit": 0,
+      "count": 1,
+      "status": "陽性"
+    },
+    {
+      "path": "src/blocks/dashboard-01/components/nav-main.tsx",
+      "pattern": "\\bease-(in|out|in-out)\\b",
+      "command": [
+        "grep",
+        "-cE",
+        "\\bease-(in|out|in-out)\\b",
+        "/tmp/overlay-motion-e-validation/base-5.tsx"
+      ],
+      "exit": 1,
+      "count": 0,
+      "status": "N/A（origin/main でも 0 件）"
+    },
+    {
+      "path": "一時人工陽性対照（削除済み）",
+      "pattern": "animate-in|animate-out|fade-in-0|fade-out-0|zoom-in-95|zoom-out-95|slide-in-from|animate-accordion|delayed-open",
+      "exit": 0,
+      "count": 1
+    },
+    {
+      "path": "一時人工陽性対照（削除済み）",
+      "pattern": "\\b(duration|delay)-[0-9]+\\b",
+      "exit": 0,
+      "count": 1
+    },
+    {
+      "path": "一時人工陽性対照（削除済み）",
+      "pattern": "\\bease-(in|out|in-out)\\b",
+      "exit": 0,
+      "count": 1
+    }
+  ],
+  "negatives": [
+    {
+      "command": [
+        "grep",
+        "-cE",
+        "animate-in|animate-out|fade-in-0|fade-out-0|zoom-in-95|zoom-out-95|slide-in-from|animate-accordion|delayed-open",
+        "src/components/ui/input-otp.tsx"
+      ],
+      "exit": 1,
+      "count": 0
+    },
+    {
+      "command": [
+        "grep",
+        "-cE",
+        "\\b(duration|delay)-[0-9]+\\b",
+        "src/components/ui/input-otp.tsx"
+      ],
+      "exit": 1,
+      "count": 0
+    },
+    {
+      "command": [
+        "grep",
+        "-cE",
+        "\\bease-(in|out|in-out)\\b",
+        "src/components/ui/input-otp.tsx"
+      ],
+      "exit": 1,
+      "count": 0
+    },
+    {
+      "command": [
+        "grep",
+        "-cE",
+        "animate-in|animate-out|fade-in-0|fade-out-0|zoom-in-95|zoom-out-95|slide-in-from|animate-accordion|delayed-open",
+        "src/components/ui/item.tsx"
+      ],
+      "exit": 1,
+      "count": 0
+    },
+    {
+      "command": [
+        "grep",
+        "-cE",
+        "\\b(duration|delay)-[0-9]+\\b",
+        "src/components/ui/item.tsx"
+      ],
+      "exit": 1,
+      "count": 0
+    },
+    {
+      "command": [
+        "grep",
+        "-cE",
+        "\\bease-(in|out|in-out)\\b",
+        "src/components/ui/item.tsx"
+      ],
+      "exit": 1,
+      "count": 0
+    },
+    {
+      "command": [
+        "grep",
+        "-cE",
+        "animate-in|animate-out|fade-in-0|fade-out-0|zoom-in-95|zoom-out-95|slide-in-from|animate-accordion|delayed-open",
+        "src/components/ui/message-scroller.tsx"
+      ],
+      "exit": 1,
+      "count": 0
+    },
+    {
+      "command": [
+        "grep",
+        "-cE",
+        "\\b(duration|delay)-[0-9]+\\b",
+        "src/components/ui/message-scroller.tsx"
+      ],
+      "exit": 1,
+      "count": 0
+    },
+    {
+      "command": [
+        "grep",
+        "-cE",
+        "\\bease-(in|out|in-out)\\b",
+        "src/components/ui/message-scroller.tsx"
+      ],
+      "exit": 1,
+      "count": 0
+    },
+    {
+      "command": [
+        "grep",
+        "-cE",
+        "animate-in|animate-out|fade-in-0|fade-out-0|zoom-in-95|zoom-out-95|slide-in-from|animate-accordion|delayed-open",
+        "src/components/ui/sidebar.tsx"
+      ],
+      "exit": 1,
+      "count": 0
+    },
+    {
+      "command": [
+        "grep",
+        "-cE",
+        "\\b(duration|delay)-[0-9]+\\b",
+        "src/components/ui/sidebar.tsx"
+      ],
+      "exit": 1,
+      "count": 0
+    },
+    {
+      "command": [
+        "grep",
+        "-cE",
+        "\\bease-(in|out|in-out)\\b",
+        "src/components/ui/sidebar.tsx"
+      ],
+      "exit": 1,
+      "count": 0
+    },
+    {
+      "command": [
+        "grep",
+        "-cE",
+        "animate-in|animate-out|fade-in-0|fade-out-0|zoom-in-95|zoom-out-95|slide-in-from|animate-accordion|delayed-open",
+        "src/blocks/sidebar-07/components/nav-main.tsx"
+      ],
+      "exit": 1,
+      "count": 0
+    },
+    {
+      "command": [
+        "grep",
+        "-cE",
+        "\\b(duration|delay)-[0-9]+\\b",
+        "src/blocks/sidebar-07/components/nav-main.tsx"
+      ],
+      "exit": 1,
+      "count": 0
+    },
+    {
+      "command": [
+        "grep",
+        "-cE",
+        "\\bease-(in|out|in-out)\\b",
+        "src/blocks/sidebar-07/components/nav-main.tsx"
+      ],
+      "exit": 1,
+      "count": 0
+    },
+    {
+      "command": [
+        "grep",
+        "-cE",
+        "animate-in|animate-out|fade-in-0|fade-out-0|zoom-in-95|zoom-out-95|slide-in-from|animate-accordion|delayed-open",
+        "src/blocks/dashboard-01/components/nav-main.tsx"
+      ],
+      "exit": 1,
+      "count": 0
+    },
+    {
+      "command": [
+        "grep",
+        "-cE",
+        "\\b(duration|delay)-[0-9]+\\b",
+        "src/blocks/dashboard-01/components/nav-main.tsx"
+      ],
+      "exit": 1,
+      "count": 0
+    },
+    {
+      "command": [
+        "grep",
+        "-cE",
+        "\\bease-(in|out|in-out)\\b",
+        "src/blocks/dashboard-01/components/nav-main.tsx"
+      ],
+      "exit": 1,
+      "count": 0
+    },
+    {
+      "command": [
+        "grep",
+        "-rn",
+        "tw-animate",
+        "src",
+        "package.json",
+        "registry.json",
+        "public/r"
+      ],
+      "exit": 1,
+      "count": 0
+    },
+    {
+      "command": [
+        "grep",
+        "-rn",
+        "tw-animate",
+        "scripts"
+      ],
+      "exit": 1,
+      "count": 0
+    },
+    {
+      "command": [
+        "grep",
+        "-rnE",
+        "\\b(duration|delay)-[0-9]+\\b|\\bease-(in|out|in-out)\\b|animate-in|animate-out",
+        "src",
+        "--include=*.tsx",
+        "--include=*.astro"
+      ],
+      "exit": 1,
+      "count": 0
+    }
+  ],
+  "css": [
+    {
+      "command": [
+        "grep",
+        "-o",
+        "\\.duration-slow{[^}]*}",
+        "dist/_astro/global.BO12mFFC.css"
+      ],
+      "exit": 0,
+      "output": ".duration-slow{transition-duration:var(--duration-slow);--tw-duration:var(--duration-slow)}\n"
+    },
+    {
+      "command": [
+        "grep",
+        "-o",
+        "\\.ease-entrance{[^}]*}",
+        "dist/_astro/global.BO12mFFC.css"
+      ],
+      "exit": 0,
+      "output": ".ease-entrance{--tw-ease:var(--curve-entrance);transition-timing-function:var(--curve-entrance)}\n"
+    },
+    {
+      "command": [
+        "grep",
+        "-c",
+        "data-starting-style",
+        "dist/_astro/global.BO12mFFC.css"
+      ],
+      "exit": 0,
+      "output": "1\n"
+    },
+    {
+      "command": [
+        "grep",
+        "-c",
+        "\\.ease-out{",
+        "dist/_astro/global.BO12mFFC.css"
+      ],
+      "exit": 1,
+      "output": "0\n"
+    },
+    {
+      "command": [
+        "grep",
+        "-c",
+        "\\.ease-linear{",
+        "dist/_astro/global.BO12mFFC.css"
+      ],
+      "exit": 0,
+      "output": "1\n"
+    },
+    {
+      "command": [
+        "grep",
+        "-o",
+        "\\.animate-caret-blink{[^}]*}",
+        "dist/_astro/global.BO12mFFC.css"
+      ],
+      "exit": 0,
+      "output": ".animate-caret-blink{animation:caret-blink 1.25s var(--curve-entrance) infinite}\n"
+    }
+  ]
+}

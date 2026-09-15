@@ -1,0 +1,590 @@
+[
+  {
+    "subject": "catalog",
+    "theme": "light",
+    "route": "/catalog/",
+    "http": 200,
+    "selector": "[data-slot=\"verification-catalog\"]",
+    "height": 27302,
+    "selectorCount": 1,
+    "disabled": 17,
+    "dark": false,
+    "overflow": false,
+    "toolbar": 0,
+    "errors": [],
+    "pageErrors": [],
+    "faviconErrors": [],
+    "tiles": [
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-0.png",
+        "y": 0
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-900.png",
+        "y": 900
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-1800.png",
+        "y": 1800
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-2700.png",
+        "y": 2700
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-3600.png",
+        "y": 3600
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-4500.png",
+        "y": 4500
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-5400.png",
+        "y": 5400
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-6300.png",
+        "y": 6300
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-7200.png",
+        "y": 7200
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-8100.png",
+        "y": 8100
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-9000.png",
+        "y": 9000
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-9900.png",
+        "y": 9900
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-10800.png",
+        "y": 10800
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-11700.png",
+        "y": 11700
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-12600.png",
+        "y": 12600
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-13500.png",
+        "y": 13500
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-14400.png",
+        "y": 14400
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-15300.png",
+        "y": 15300
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-16200.png",
+        "y": 16200
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-17100.png",
+        "y": 17100
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-18000.png",
+        "y": 18000
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-18900.png",
+        "y": 18900
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-19800.png",
+        "y": 19800
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-20700.png",
+        "y": 20700
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-21600.png",
+        "y": 21600
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-22500.png",
+        "y": 22500
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-23400.png",
+        "y": 23400
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-24300.png",
+        "y": 24300
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-25200.png",
+        "y": 25200
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-26100.png",
+        "y": 26100
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-light-26402.png",
+        "y": 26402
+      }
+    ],
+    "bottom": {
+      "y": 26402,
+      "text": "debar-12\n\n隔離プレビューを開く\nSidebar 13\n\nsidebar-13\n\n隔離プレビューを開く\nSidebar 14\n\nsidebar-14\n\n隔離プレビューを開く\nSidebar 15\n\nsidebar-15\n\n隔離プレビューを開く\nSidebar 16\n\nsidebar-16\n\n隔離プレビューを開く\nSignup 01\n\nsignup-01\n\n隔離プレビューを開く\nSignup 02\n\nsignup-02\n\n隔離プレビューを開く\nSignup 03\n\nsignup-03\n\n隔離プレビューを開く\nSignup 04\n\nsignup-04\n\n隔離プレビューを開く\nSignup 05\n\nsignup-05\n\n隔離プレビューを開く\nSkeleton\n\nskeleton\n\nSlider\n\nslider\n\n音量\n\n矢印キーで調整できます。\n\n音量\n40\nSonner\n\nsonner\n\n通知を表示\nSpinner\n\nspinner\n\n読み込み表示\n\n処理中であることを、単独またはラベルと組み合わせて伝えます。\n\n単独の読み込み表示\nデータを同期しています\n小\n標準\n大\nSwitch\n\nswitch\n\n通知設定\n\nクリックとSpaceキーで通知の有効状態を切り替えられます。\n\n更新通知\n更新通知: オフ\n管理者によって固定\nTable\n\ntable\n\n注文一覧\n\n見出し、本文、合計を native table の意味論で関連付けます。\n\n2026年8月の注文\n注文番号\t商品\t金額\nORD-240801-001\tワイヤレスキーボード\t¥12,800\nORD-240801-002\t長い商品名でも横スクロールで確認できるディスプレイスタンド\t¥8,400\n合計\t¥21,200\nTabs\n\ntabs\n\n概要\n設定\n共有 UI の概要を表示しています。\nTextarea\n\ntextarea\n\nメモ\n編集可能\n入力値: 確認事項を入力してください。 / 選択: 0-0 / フォーカス: なし\n無効\n読み取り専用\nToast\n\ntoast\n\n通知を追加\nホバー検証通知\nAction付き通知\n複数通知\n背景入力\nAction実行: 0回\nToggle\n\ntoggle\n\n表示設定\n\nクリックとSpaceキーで押下状態を切り替えられます。\n\n制御状態\nお気に入り\n無効\nお気に入り: オフ\nVariants\ndefault\noutline\nSizes\nsm\ndefault\nlg\nToggle Group\n\ntoggle-group\n\n表示形式\n\n単一選択と複数選択、それぞれの方向キー移動を確認できます。\n\n単一選択\n左揃え\n中央揃え\n右揃え\n選択: center\n複数選択\n太字\n斜体\n下線\n選択: bold\nTooltip\n\ntooltip\n\n詳細を見る\n背景操作: 0\n5月",
+      "fixedVisible": 0
+    }
+  },
+  {
+    "subject": "catalog",
+    "theme": "dark",
+    "route": "/catalog-dark/",
+    "http": 200,
+    "selector": "[data-slot=\"verification-catalog\"]",
+    "height": 27302,
+    "selectorCount": 1,
+    "disabled": 17,
+    "dark": true,
+    "overflow": false,
+    "toolbar": 0,
+    "errors": [],
+    "pageErrors": [],
+    "faviconErrors": [],
+    "tiles": [
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-0.png",
+        "y": 0
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-900.png",
+        "y": 900
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-1800.png",
+        "y": 1800
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-2700.png",
+        "y": 2700
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-3600.png",
+        "y": 3600
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-4500.png",
+        "y": 4500
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-5400.png",
+        "y": 5400
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-6300.png",
+        "y": 6300
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-7200.png",
+        "y": 7200
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-8100.png",
+        "y": 8100
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-9000.png",
+        "y": 9000
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-9900.png",
+        "y": 9900
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-10800.png",
+        "y": 10800
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-11700.png",
+        "y": 11700
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-12600.png",
+        "y": 12600
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-13500.png",
+        "y": 13500
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-14400.png",
+        "y": 14400
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-15300.png",
+        "y": 15300
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-16200.png",
+        "y": 16200
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-17100.png",
+        "y": 17100
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-18000.png",
+        "y": 18000
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-18900.png",
+        "y": 18900
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-19800.png",
+        "y": 19800
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-20700.png",
+        "y": 20700
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-21600.png",
+        "y": 21600
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-22500.png",
+        "y": 22500
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-23400.png",
+        "y": 23400
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-24300.png",
+        "y": 24300
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-25200.png",
+        "y": 25200
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-26100.png",
+        "y": 26100
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/catalog-dark-26402.png",
+        "y": 26402
+      }
+    ],
+    "bottom": {
+      "y": 26402,
+      "text": "debar-12\n\n隔離プレビューを開く\nSidebar 13\n\nsidebar-13\n\n隔離プレビューを開く\nSidebar 14\n\nsidebar-14\n\n隔離プレビューを開く\nSidebar 15\n\nsidebar-15\n\n隔離プレビューを開く\nSidebar 16\n\nsidebar-16\n\n隔離プレビューを開く\nSignup 01\n\nsignup-01\n\n隔離プレビューを開く\nSignup 02\n\nsignup-02\n\n隔離プレビューを開く\nSignup 03\n\nsignup-03\n\n隔離プレビューを開く\nSignup 04\n\nsignup-04\n\n隔離プレビューを開く\nSignup 05\n\nsignup-05\n\n隔離プレビューを開く\nSkeleton\n\nskeleton\n\nSlider\n\nslider\n\n音量\n\n矢印キーで調整できます。\n\n音量\n40\nSonner\n\nsonner\n\n通知を表示\nSpinner\n\nspinner\n\n読み込み表示\n\n処理中であることを、単独またはラベルと組み合わせて伝えます。\n\n単独の読み込み表示\nデータを同期しています\n小\n標準\n大\nSwitch\n\nswitch\n\n通知設定\n\nクリックとSpaceキーで通知の有効状態を切り替えられます。\n\n更新通知\n更新通知: オフ\n管理者によって固定\nTable\n\ntable\n\n注文一覧\n\n見出し、本文、合計を native table の意味論で関連付けます。\n\n2026年8月の注文\n注文番号\t商品\t金額\nORD-240801-001\tワイヤレスキーボード\t¥12,800\nORD-240801-002\t長い商品名でも横スクロールで確認できるディスプレイスタンド\t¥8,400\n合計\t¥21,200\nTabs\n\ntabs\n\n概要\n設定\n共有 UI の概要を表示しています。\nTextarea\n\ntextarea\n\nメモ\n編集可能\n入力値: 確認事項を入力してください。 / 選択: 0-0 / フォーカス: なし\n無効\n読み取り専用\nToast\n\ntoast\n\n通知を追加\nホバー検証通知\nAction付き通知\n複数通知\n背景入力\nAction実行: 0回\nToggle\n\ntoggle\n\n表示設定\n\nクリックとSpaceキーで押下状態を切り替えられます。\n\n制御状態\nお気に入り\n無効\nお気に入り: オフ\nVariants\ndefault\noutline\nSizes\nsm\ndefault\nlg\nToggle Group\n\ntoggle-group\n\n表示形式\n\n単一選択と複数選択、それぞれの方向キー移動を確認できます。\n\n単一選択\n左揃え\n中央揃え\n右揃え\n選択: center\n複数選択\n太字\n斜体\n下線\n選択: bold\nTooltip\n\ntooltip\n\n詳細を見る\n背景操作: 0\n5月",
+      "fixedVisible": 0
+    }
+  },
+  {
+    "subject": "disabled-controls",
+    "theme": "light",
+    "route": "/catalog/",
+    "http": 200,
+    "selector": "[data-slot=\"verification-catalog\"]",
+    "height": 27302,
+    "selectorCount": 1,
+    "disabled": 17,
+    "dark": false,
+    "overflow": false,
+    "toolbar": 0,
+    "errors": [],
+    "pageErrors": [],
+    "faviconErrors": [],
+    "tiles": [
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-0.png",
+        "y": 0
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-900.png",
+        "y": 900
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-1800.png",
+        "y": 1800
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-2700.png",
+        "y": 2700
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-3600.png",
+        "y": 3600
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-4500.png",
+        "y": 4500
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-5400.png",
+        "y": 5400
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-6300.png",
+        "y": 6300
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-7200.png",
+        "y": 7200
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-8100.png",
+        "y": 8100
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-9000.png",
+        "y": 9000
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-9900.png",
+        "y": 9900
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-10800.png",
+        "y": 10800
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-11700.png",
+        "y": 11700
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-12600.png",
+        "y": 12600
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-13500.png",
+        "y": 13500
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-14400.png",
+        "y": 14400
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-15300.png",
+        "y": 15300
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-16200.png",
+        "y": 16200
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-17100.png",
+        "y": 17100
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-18000.png",
+        "y": 18000
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-18900.png",
+        "y": 18900
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-19800.png",
+        "y": 19800
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-20700.png",
+        "y": 20700
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-21600.png",
+        "y": 21600
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-22500.png",
+        "y": 22500
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-23400.png",
+        "y": 23400
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-24300.png",
+        "y": 24300
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-25200.png",
+        "y": 25200
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-26100.png",
+        "y": 26100
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-light-26402.png",
+        "y": 26402
+      }
+    ],
+    "bottom": {
+      "y": 26402,
+      "text": "debar-12\n\n隔離プレビューを開く\nSidebar 13\n\nsidebar-13\n\n隔離プレビューを開く\nSidebar 14\n\nsidebar-14\n\n隔離プレビューを開く\nSidebar 15\n\nsidebar-15\n\n隔離プレビューを開く\nSidebar 16\n\nsidebar-16\n\n隔離プレビューを開く\nSignup 01\n\nsignup-01\n\n隔離プレビューを開く\nSignup 02\n\nsignup-02\n\n隔離プレビューを開く\nSignup 03\n\nsignup-03\n\n隔離プレビューを開く\nSignup 04\n\nsignup-04\n\n隔離プレビューを開く\nSignup 05\n\nsignup-05\n\n隔離プレビューを開く\nSkeleton\n\nskeleton\n\nSlider\n\nslider\n\n音量\n\n矢印キーで調整できます。\n\n音量\n40\nSonner\n\nsonner\n\n通知を表示\nSpinner\n\nspinner\n\n読み込み表示\n\n処理中であることを、単独またはラベルと組み合わせて伝えます。\n\n単独の読み込み表示\nデータを同期しています\n小\n標準\n大\nSwitch\n\nswitch\n\n通知設定\n\nクリックとSpaceキーで通知の有効状態を切り替えられます。\n\n更新通知\n更新通知: オフ\n管理者によって固定\nTable\n\ntable\n\n注文一覧\n\n見出し、本文、合計を native table の意味論で関連付けます。\n\n2026年8月の注文\n注文番号\t商品\t金額\nORD-240801-001\tワイヤレスキーボード\t¥12,800\nORD-240801-002\t長い商品名でも横スクロールで確認できるディスプレイスタンド\t¥8,400\n合計\t¥21,200\nTabs\n\ntabs\n\n概要\n設定\n共有 UI の概要を表示しています。\nTextarea\n\ntextarea\n\nメモ\n編集可能\n入力値: 確認事項を入力してください。 / 選択: 0-0 / フォーカス: なし\n無効\n読み取り専用\nToast\n\ntoast\n\n通知を追加\nホバー検証通知\nAction付き通知\n複数通知\n背景入力\nAction実行: 0回\nToggle\n\ntoggle\n\n表示設定\n\nクリックとSpaceキーで押下状態を切り替えられます。\n\n制御状態\nお気に入り\n無効\nお気に入り: オフ\nVariants\ndefault\noutline\nSizes\nsm\ndefault\nlg\nToggle Group\n\ntoggle-group\n\n表示形式\n\n単一選択と複数選択、それぞれの方向キー移動を確認できます。\n\n単一選択\n左揃え\n中央揃え\n右揃え\n選択: center\n複数選択\n太字\n斜体\n下線\n選択: bold\nTooltip\n\ntooltip\n\n詳細を見る\n背景操作: 0\n5月",
+      "fixedVisible": 0
+    }
+  },
+  {
+    "subject": "disabled-controls",
+    "theme": "dark",
+    "route": "/catalog-dark/",
+    "http": 200,
+    "selector": "[data-slot=\"verification-catalog\"]",
+    "height": 27302,
+    "selectorCount": 1,
+    "disabled": 17,
+    "dark": true,
+    "overflow": false,
+    "toolbar": 0,
+    "errors": [],
+    "pageErrors": [],
+    "faviconErrors": [],
+    "tiles": [
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-0.png",
+        "y": 0
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-900.png",
+        "y": 900
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-1800.png",
+        "y": 1800
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-2700.png",
+        "y": 2700
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-3600.png",
+        "y": 3600
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-4500.png",
+        "y": 4500
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-5400.png",
+        "y": 5400
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-6300.png",
+        "y": 6300
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-7200.png",
+        "y": 7200
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-8100.png",
+        "y": 8100
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-9000.png",
+        "y": 9000
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-9900.png",
+        "y": 9900
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-10800.png",
+        "y": 10800
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-11700.png",
+        "y": 11700
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-12600.png",
+        "y": 12600
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-13500.png",
+        "y": 13500
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-14400.png",
+        "y": 14400
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-15300.png",
+        "y": 15300
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-16200.png",
+        "y": 16200
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-17100.png",
+        "y": 17100
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-18000.png",
+        "y": 18000
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-18900.png",
+        "y": 18900
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-19800.png",
+        "y": 19800
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-20700.png",
+        "y": 20700
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-21600.png",
+        "y": 21600
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-22500.png",
+        "y": 22500
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-23400.png",
+        "y": 23400
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-24300.png",
+        "y": 24300
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-25200.png",
+        "y": 25200
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-26100.png",
+        "y": 26100
+      },
+      {
+        "path": "/Users/nishikawa/orca/workspaces/ui/overlay-motion-e/.playwright-mcp/overlay-motion-e/disabled-controls-dark-26402.png",
+        "y": 26402
+      }
+    ],
+    "bottom": {
+      "y": 26402,
+      "text": "debar-12\n\n隔離プレビューを開く\nSidebar 13\n\nsidebar-13\n\n隔離プレビューを開く\nSidebar 14\n\nsidebar-14\n\n隔離プレビューを開く\nSidebar 15\n\nsidebar-15\n\n隔離プレビューを開く\nSidebar 16\n\nsidebar-16\n\n隔離プレビューを開く\nSignup 01\n\nsignup-01\n\n隔離プレビューを開く\nSignup 02\n\nsignup-02\n\n隔離プレビューを開く\nSignup 03\n\nsignup-03\n\n隔離プレビューを開く\nSignup 04\n\nsignup-04\n\n隔離プレビューを開く\nSignup 05\n\nsignup-05\n\n隔離プレビューを開く\nSkeleton\n\nskeleton\n\nSlider\n\nslider\n\n音量\n\n矢印キーで調整できます。\n\n音量\n40\nSonner\n\nsonner\n\n通知を表示\nSpinner\n\nspinner\n\n読み込み表示\n\n処理中であることを、単独またはラベルと組み合わせて伝えます。\n\n単独の読み込み表示\nデータを同期しています\n小\n標準\n大\nSwitch\n\nswitch\n\n通知設定\n\nクリックとSpaceキーで通知の有効状態を切り替えられます。\n\n更新通知\n更新通知: オフ\n管理者によって固定\nTable\n\ntable\n\n注文一覧\n\n見出し、本文、合計を native table の意味論で関連付けます。\n\n2026年8月の注文\n注文番号\t商品\t金額\nORD-240801-001\tワイヤレスキーボード\t¥12,800\nORD-240801-002\t長い商品名でも横スクロールで確認できるディスプレイスタンド\t¥8,400\n合計\t¥21,200\nTabs\n\ntabs\n\n概要\n設定\n共有 UI の概要を表示しています。\nTextarea\n\ntextarea\n\nメモ\n編集可能\n入力値: 確認事項を入力してください。 / 選択: 0-0 / フォーカス: なし\n無効\n読み取り専用\nToast\n\ntoast\n\n通知を追加\nホバー検証通知\nAction付き通知\n複数通知\n背景入力\nAction実行: 0回\nToggle\n\ntoggle\n\n表示設定\n\nクリックとSpaceキーで押下状態を切り替えられます。\n\n制御状態\nお気に入り\n無効\nお気に入り: オフ\nVariants\ndefault\noutline\nSizes\nsm\ndefault\nlg\nToggle Group\n\ntoggle-group\n\n表示形式\n\n単一選択と複数選択、それぞれの方向キー移動を確認できます。\n\n単一選択\n左揃え\n中央揃え\n右揃え\n選択: center\n複数選択\n太字\n斜体\n下線\n選択: bold\nTooltip\n\ntooltip\n\n詳細を見る\n背景操作: 0\n5月",
+      "fixedVisible": 0
+    }
+  }
+]

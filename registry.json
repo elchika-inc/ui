@@ -40,7 +40,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "lucide-react", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -169,7 +169,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["class-variance-authority", "shadcn", "tw-animate-css"],
+      "dependencies": ["class-variance-authority", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -298,7 +298,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "shadcn"],
       "registryDependencies": ["@elchika/button"],
       "cssVars": {
         "light": {
@@ -518,7 +518,7 @@
           "sidebar-ring": "var(--ring)"
         }
       },
-      "dependencies": ["shadcn", "tw-animate-css"]
+      "dependencies": ["shadcn"]
     },
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
@@ -557,7 +557,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "class-variance-authority", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "class-variance-authority", "shadcn"],
       "registryDependencies": ["@elchika/button"],
       "cssVars": {
         "light": {
@@ -687,7 +687,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -816,7 +816,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "class-variance-authority", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "class-variance-authority", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -945,7 +945,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "lucide-react", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -1074,7 +1074,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "class-variance-authority", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "class-variance-authority", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -1203,7 +1203,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "class-variance-authority", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "class-variance-authority", "shadcn"],
       "registryDependencies": ["@elchika/spinner"],
       "cssVars": {
         "light": {
@@ -1333,7 +1333,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "class-variance-authority", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "class-variance-authority", "shadcn"],
       "registryDependencies": ["@elchika/separator"],
       "cssVars": {
         "light": {
@@ -1463,13 +1463,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": [
-        "date-fns",
-        "lucide-react",
-        "react-day-picker@latest",
-        "shadcn",
-        "tw-animate-css"
-      ],
+      "dependencies": ["date-fns", "lucide-react", "react-day-picker@latest", "shadcn"],
       "registryDependencies": ["@elchika/button"],
       "cssVars": {
         "light": {
@@ -1689,7 +1683,7 @@
           "sidebar-ring": "var(--ring)"
         }
       },
-      "dependencies": ["shadcn", "tw-animate-css"]
+      "dependencies": ["shadcn"]
     },
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
@@ -1728,7 +1722,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["embla-carousel-react", "lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["embla-carousel-react", "lucide-react", "shadcn"],
       "registryDependencies": ["@elchika/button"],
       "cssVars": {
         "light": {
@@ -1862,7 +1856,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["recharts@3.8.0", "shadcn", "tw-animate-css"],
+      "dependencies": ["recharts@3.8.0", "shadcn"],
       "registryDependencies": ["@elchika/card"],
       "cssVars": {
         "light": {
@@ -1992,7 +1986,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "lucide-react", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -2121,7 +2115,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -2250,7 +2244,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "lucide-react", "shadcn"],
       "registryDependencies": ["@elchika/button", "@elchika/input-group"],
       "cssVars": {
         "light": {
@@ -2380,7 +2374,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["cmdk", "lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["cmdk", "lucide-react", "shadcn"],
       "registryDependencies": ["@elchika/dialog", "@elchika/input-group"],
       "cssVars": {
         "light": {
@@ -2510,7 +2504,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "lucide-react", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -2672,7 +2666,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["lucide-react", "recharts", "shadcn", "tw-animate-css"],
+      "dependencies": ["lucide-react", "recharts", "shadcn"],
       "registryDependencies": [
         "@elchika/sidebar",
         "@elchika/separator",
@@ -2816,7 +2810,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["shadcn", "tw-animate-css"],
+      "dependencies": ["shadcn"],
       "registryDependencies": [
         "@elchika/badge",
         "@elchika/button",
@@ -2956,7 +2950,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "lucide-react", "shadcn"],
       "registryDependencies": ["@elchika/button"],
       "cssVars": {
         "light": {
@@ -3086,7 +3080,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -3215,7 +3209,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -3344,7 +3338,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "lucide-react", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -3473,7 +3467,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["class-variance-authority", "shadcn", "tw-animate-css"],
+      "dependencies": ["class-variance-authority", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -3602,7 +3596,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["class-variance-authority", "shadcn", "tw-animate-css"],
+      "dependencies": ["class-variance-authority", "shadcn"],
       "registryDependencies": ["@elchika/label", "@elchika/separator"],
       "cssVars": {
         "light": {
@@ -3732,7 +3726,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -3861,7 +3855,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -3990,7 +3984,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["class-variance-authority", "shadcn", "tw-animate-css"],
+      "dependencies": ["class-variance-authority", "shadcn"],
       "registryDependencies": ["@elchika/button", "@elchika/input", "@elchika/textarea"],
       "cssVars": {
         "light": {
@@ -4120,7 +4114,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["input-otp", "shadcn", "tw-animate-css"],
+      "dependencies": ["input-otp", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -4249,7 +4243,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "class-variance-authority", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "class-variance-authority", "shadcn"],
       "registryDependencies": ["@elchika/separator"],
       "cssVars": {
         "light": {
@@ -4469,7 +4463,7 @@
           "sidebar-ring": "var(--ring)"
         }
       },
-      "dependencies": ["shadcn", "tw-animate-css"]
+      "dependencies": ["shadcn"]
     },
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
@@ -4598,7 +4592,7 @@
           "sidebar-ring": "var(--ring)"
         }
       },
-      "dependencies": ["shadcn", "tw-animate-css"]
+      "dependencies": ["shadcn"]
     },
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
@@ -4637,7 +4631,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["shadcn", "tw-animate-css"],
+      "dependencies": ["shadcn"],
       "registryDependencies": [
         "@elchika/button",
         "@elchika/card",
@@ -4773,7 +4767,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["shadcn", "tw-animate-css"],
+      "dependencies": ["shadcn"],
       "registryDependencies": [
         "@elchika/button",
         "@elchika/input",
@@ -4908,7 +4902,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["shadcn", "tw-animate-css"],
+      "dependencies": ["shadcn"],
       "registryDependencies": [
         "@elchika/button",
         "@elchika/card",
@@ -5044,7 +5038,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["shadcn", "tw-animate-css"],
+      "dependencies": ["shadcn"],
       "registryDependencies": [
         "@elchika/button",
         "@elchika/card",
@@ -5180,7 +5174,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["lucide-react", "shadcn"],
       "registryDependencies": [
         "@elchika/button",
         "@elchika/input",
@@ -5315,7 +5309,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "class-variance-authority", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "class-variance-authority", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -5444,7 +5438,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "lucide-react", "shadcn"],
       "registryDependencies": ["@elchika/dropdown-menu"],
       "cssVars": {
         "light": {
@@ -5664,7 +5658,7 @@
           "sidebar-ring": "var(--ring)"
         }
       },
-      "dependencies": ["shadcn", "tw-animate-css"]
+      "dependencies": ["shadcn"]
     },
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
@@ -5703,7 +5697,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@shadcn/react", "lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@shadcn/react", "lucide-react", "shadcn"],
       "registryDependencies": ["@elchika/button"],
       "cssVars": {
         "light": {
@@ -5833,7 +5827,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["lucide-react", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -5962,13 +5956,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": [
-        "@base-ui/react",
-        "class-variance-authority",
-        "lucide-react",
-        "shadcn",
-        "tw-animate-css"
-      ],
+      "dependencies": ["@base-ui/react", "class-variance-authority", "lucide-react", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -6097,7 +6085,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["lucide-react", "shadcn"],
       "registryDependencies": ["@elchika/button"],
       "cssVars": {
         "light": {
@@ -6227,7 +6215,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -6356,7 +6344,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -6485,7 +6473,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -6614,7 +6602,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["react-resizable-panels", "shadcn", "tw-animate-css"],
+      "dependencies": ["react-resizable-panels", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -6743,7 +6731,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -6872,7 +6860,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "lucide-react", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -7001,7 +6989,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -7130,7 +7118,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "lucide-react", "shadcn"],
       "registryDependencies": ["@elchika/button"],
       "cssVars": {
         "light": {
@@ -7260,13 +7248,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": [
-        "@base-ui/react",
-        "class-variance-authority",
-        "lucide-react",
-        "shadcn",
-        "tw-animate-css"
-      ],
+      "dependencies": ["@base-ui/react", "class-variance-authority", "lucide-react", "shadcn"],
       "registryDependencies": [
         "@elchika/button",
         "@elchika/input",
@@ -7412,7 +7394,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["lucide-react", "shadcn"],
       "registryDependencies": [
         "@elchika/sidebar",
         "@elchika/breadcrumb",
@@ -7556,7 +7538,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["lucide-react", "shadcn"],
       "registryDependencies": [
         "@elchika/sidebar",
         "@elchika/breadcrumb",
@@ -7693,7 +7675,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["lucide-react", "shadcn"],
       "registryDependencies": ["@elchika/sidebar", "@elchika/breadcrumb"],
       "cssVars": {
         "light": {
@@ -7823,7 +7805,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["lucide-react", "shadcn"],
       "registryDependencies": ["@elchika/sidebar", "@elchika/breadcrumb", "@elchika/separator"],
       "cssVars": {
         "light": {
@@ -7957,7 +7939,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["lucide-react", "shadcn"],
       "registryDependencies": [
         "@elchika/sidebar",
         "@elchika/breadcrumb",
@@ -8101,7 +8083,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["lucide-react", "shadcn"],
       "registryDependencies": [
         "@elchika/sidebar",
         "@elchika/breadcrumb",
@@ -8254,7 +8236,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["lucide-react", "shadcn"],
       "registryDependencies": [
         "@elchika/sidebar",
         "@elchika/breadcrumb",
@@ -8407,7 +8389,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["lucide-react", "shadcn"],
       "registryDependencies": [
         "@elchika/sidebar",
         "@elchika/breadcrumb",
@@ -8548,7 +8530,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["lucide-react", "shadcn"],
       "registryDependencies": [
         "@elchika/sidebar",
         "@elchika/breadcrumb",
@@ -8711,7 +8693,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["lucide-react", "shadcn"],
       "registryDependencies": [
         "@elchika/sidebar",
         "@elchika/breadcrumb",
@@ -8849,7 +8831,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["lucide-react", "shadcn"],
       "registryDependencies": [
         "@elchika/sidebar",
         "@elchika/breadcrumb",
@@ -8996,7 +8978,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["date-fns", "lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["date-fns", "lucide-react", "shadcn"],
       "registryDependencies": [
         "@elchika/sidebar",
         "@elchika/breadcrumb",
@@ -9134,7 +9116,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["lucide-react", "shadcn"],
       "registryDependencies": [
         "@elchika/sidebar",
         "@elchika/breadcrumb",
@@ -9269,7 +9251,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["shadcn", "tw-animate-css"],
+      "dependencies": ["shadcn"],
       "registryDependencies": ["@elchika/sidebar", "@elchika/breadcrumb"],
       "cssVars": {
         "light": {
@@ -9435,7 +9417,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["date-fns", "lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["date-fns", "lucide-react", "shadcn"],
       "registryDependencies": [
         "@elchika/sidebar",
         "@elchika/breadcrumb",
@@ -9598,7 +9580,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["lucide-react", "shadcn"],
       "registryDependencies": [
         "@elchika/sidebar",
         "@elchika/breadcrumb",
@@ -9737,7 +9719,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["shadcn", "tw-animate-css"],
+      "dependencies": ["shadcn"],
       "registryDependencies": [
         "@elchika/button",
         "@elchika/card",
@@ -9873,7 +9855,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["shadcn", "tw-animate-css"],
+      "dependencies": ["shadcn"],
       "registryDependencies": [
         "@elchika/button",
         "@elchika/input",
@@ -10008,7 +9990,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["shadcn", "tw-animate-css"],
+      "dependencies": ["shadcn"],
       "registryDependencies": [
         "@elchika/button",
         "@elchika/card",
@@ -10144,7 +10126,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["shadcn", "tw-animate-css"],
+      "dependencies": ["shadcn"],
       "registryDependencies": [
         "@elchika/button",
         "@elchika/card",
@@ -10280,7 +10262,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["lucide-react", "shadcn"],
       "registryDependencies": [
         "@elchika/button",
         "@elchika/input",
@@ -10505,7 +10487,7 @@
           "sidebar-ring": "var(--ring)"
         }
       },
-      "dependencies": ["shadcn", "tw-animate-css"]
+      "dependencies": ["shadcn"]
     },
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
@@ -10544,7 +10526,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -10673,7 +10655,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["lucide-react", "next-themes", "shadcn", "sonner", "tw-animate-css"],
+      "dependencies": ["lucide-react", "next-themes", "shadcn", "sonner"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -10802,7 +10784,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["lucide-react", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -10931,7 +10913,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -11150,7 +11132,7 @@
           "sidebar-ring": "var(--ring)"
         }
       },
-      "dependencies": ["shadcn", "tw-animate-css"]
+      "dependencies": ["shadcn"]
     },
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
@@ -11189,7 +11171,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "class-variance-authority", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "class-variance-authority", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -11408,7 +11390,7 @@
           "sidebar-ring": "var(--ring)"
         }
       },
-      "dependencies": ["shadcn", "tw-animate-css"]
+      "dependencies": ["shadcn"]
     },
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
@@ -11447,7 +11429,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "lucide-react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "lucide-react", "shadcn"],
       "registryDependencies": ["@elchika/button"],
       "cssVars": {
         "light": {
@@ -11577,7 +11559,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "class-variance-authority", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "class-variance-authority", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -11706,7 +11688,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "class-variance-authority", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "class-variance-authority", "shadcn"],
       "registryDependencies": ["@elchika/toggle"],
       "cssVars": {
         "light": {
@@ -11836,7 +11818,7 @@
           "target": "~/elchika-ui/THIRD_PARTY_LICENSES"
         }
       ],
-      "dependencies": ["@base-ui/react", "shadcn", "tw-animate-css"],
+      "dependencies": ["@base-ui/react", "shadcn"],
       "cssVars": {
         "light": {
           "background": "rgb(var(--color-bg-canvas))",
@@ -12055,7 +12037,7 @@
           "sidebar-ring": "var(--ring)"
         }
       },
-      "dependencies": ["shadcn", "tw-animate-css"]
+      "dependencies": ["shadcn"]
     }
   ]
 }
