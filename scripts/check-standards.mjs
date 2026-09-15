@@ -46,18 +46,12 @@ const MOTION_ARBITRARY_LITERAL =
 // 既存箇所の許容。path ごとの token の配列。エントリは issue #58 のサブプロジェクト 2〜4 で減らす。
 // 実在しないエントリは motion-literal-allowlist-stale として失敗させる（ratchet）。
 const MOTION_LITERAL_ALLOWLIST = new Map([
-  ["src/components/ui/combobox.tsx", ["duration-100"]],
-  ["src/components/ui/context-menu.tsx", ["duration-100"]],
-  ["src/components/ui/dropdown-menu.tsx", ["duration-100"]],
   ["src/components/ui/input-otp.tsx", ["duration-1000"]],
   ["src/components/ui/item.tsx", ["duration-100"]],
-  ["src/components/ui/menubar.tsx", ["duration-100"]],
   [
     "src/components/ui/message-scroller.tsx",
     ["duration-200", "duration-400", "ease-in", "ease-out"],
   ],
-  ["src/components/ui/navigation-menu.tsx", ["duration-300", "ease-out", "duration-150"]],
-  ["src/components/ui/select.tsx", ["duration-100"]],
   ["src/components/ui/sidebar.tsx", ["duration-200"]],
   ["src/blocks/sidebar-07/components/nav-main.tsx", ["duration-200"]],
   ["src/blocks/dashboard-01/components/nav-main.tsx", ["duration-200"]],
