@@ -1,0 +1,77 @@
+{
+  "grep": [
+    {
+      "command": [
+        "grep",
+        "-o",
+        "\\.duration-slow{[^}]*}",
+        "dist/_astro/global.BO12mFFC.css"
+      ],
+      "exit": 0,
+      "output": ".duration-slow{transition-duration:var(--duration-slow);--tw-duration:var(--duration-slow)}\n"
+    },
+    {
+      "command": [
+        "grep",
+        "-o",
+        "\\.ease-entrance{[^}]*}",
+        "dist/_astro/global.BO12mFFC.css"
+      ],
+      "exit": 0,
+      "output": ".ease-entrance{--tw-ease:var(--curve-entrance);transition-timing-function:var(--curve-entrance)}\n"
+    },
+    {
+      "command": [
+        "grep",
+        "-c",
+        "data-starting-style",
+        "dist/_astro/global.BO12mFFC.css"
+      ],
+      "exit": 0,
+      "output": "1\n"
+    },
+    {
+      "command": [
+        "grep",
+        "-c",
+        "\\.ease-out{",
+        "dist/_astro/global.BO12mFFC.css"
+      ],
+      "exit": 1,
+      "output": "0\n"
+    },
+    {
+      "command": [
+        "grep",
+        "-c",
+        "\\.ease-linear{",
+        "dist/_astro/global.BO12mFFC.css"
+      ],
+      "exit": 0,
+      "output": "1\n"
+    },
+    {
+      "command": [
+        "grep",
+        "-o",
+        "\\.animate-caret-blink{[^}]*}",
+        "dist/_astro/global.BO12mFFC.css"
+      ],
+      "exit": 0,
+      "output": ".animate-caret-blink{animation:caret-blink 1.25s var(--curve-entrance) infinite}\n"
+    },
+    {
+      "command": [
+        "grep",
+        "-c",
+        "@keyframes caret-blink",
+        "dist/_astro/global.BO12mFFC.css"
+      ],
+      "exit": 0,
+      "output": "1\n"
+    }
+  ],
+  "keyframes": [
+    "@keyframes caret-blink{0%,70%,to{opacity:1}20%,50%{opacity:0}}"
+  ]
+}

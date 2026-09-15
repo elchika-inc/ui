@@ -1,0 +1,60 @@
+[
+  {
+    "subject": "message-scroller",
+    "theme": "light",
+    "inactive": {
+      "active": "false",
+      "duration": "0.4s",
+      "timing": "cubic-bezier(0.2, 0, 0, 1)",
+      "opacity": "0"
+    },
+    "active": {
+      "active": "true",
+      "duration": "0.18s",
+      "timing": "cubic-bezier(0.16, 1, 0.3, 1)",
+      "opacity": "1"
+    },
+    "returned": {
+      "active": "false",
+      "duration": "0.4s",
+      "timing": "cubic-bezier(0.2, 0, 0, 1)",
+      "opacity": "0"
+    }
+  },
+  {
+    "subject": "sidebar",
+    "theme": "light",
+    "before": "expanded",
+    "after": "collapsed",
+    "returned": "expanded"
+  },
+  {
+    "subject": "message-scroller",
+    "theme": "dark",
+    "inactive": {
+      "active": "false",
+      "duration": "0.4s",
+      "timing": "cubic-bezier(0.2, 0, 0, 1)",
+      "opacity": "0"
+    },
+    "active": {
+      "active": "true",
+      "duration": "0.18s",
+      "timing": "cubic-bezier(0.16, 1, 0.3, 1)",
+      "opacity": "1"
+    },
+    "returned": {
+      "active": "false",
+      "duration": "0.4s",
+      "timing": "cubic-bezier(0.2, 0, 0, 1)",
+      "opacity": "0"
+    }
+  },
+  {
+    "subject": "sidebar",
+    "theme": "dark",
+    "before": "expanded",
+    "after": "collapsed",
+    "returned": "expanded"
+  }
+]
