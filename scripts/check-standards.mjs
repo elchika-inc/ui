@@ -49,7 +49,6 @@ const MOTION_LITERAL_ALLOWLIST = new Map([
   ["src/components/ui/combobox.tsx", ["duration-100"]],
   ["src/components/ui/context-menu.tsx", ["duration-100"]],
   ["src/components/ui/dropdown-menu.tsx", ["duration-100"]],
-  ["src/components/ui/hover-card.tsx", ["duration-100"]],
   ["src/components/ui/input-otp.tsx", ["duration-1000"]],
   ["src/components/ui/item.tsx", ["duration-100"]],
   ["src/components/ui/menubar.tsx", ["duration-100"]],
@@ -58,7 +57,6 @@ const MOTION_LITERAL_ALLOWLIST = new Map([
     ["duration-200", "duration-400", "ease-in", "ease-out"],
   ],
   ["src/components/ui/navigation-menu.tsx", ["duration-300", "ease-out", "duration-150"]],
-  ["src/components/ui/popover.tsx", ["duration-100"]],
   ["src/components/ui/select.tsx", ["duration-100"]],
   ["src/components/ui/sidebar.tsx", ["duration-200"]],
   [
