@@ -66,14 +66,6 @@ const MOTION_LITERAL_ALLOWLIST = new Map([
   ["src/components/ui/select.tsx", ["duration-100"]],
   ["src/components/ui/sheet.tsx", ["duration-150", "duration-200", "ease-in-out"]],
   ["src/components/ui/sidebar.tsx", ["duration-200"]],
-  [
-    "src/components/ui/toast.tsx",
-    [
-      "[transition:transform_500ms_cubic-bezier(0.22,1,0.36,1),opacity_500ms,height_150ms]",
-      "duration-250",
-      "ease-out",
-    ],
-  ],
   ["src/blocks/sidebar-07/components/nav-main.tsx", ["duration-200"]],
   ["src/blocks/dashboard-01/components/nav-main.tsx", ["duration-200"]],
 ]);
