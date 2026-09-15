@@ -50,7 +50,7 @@ function Toast({ className, ...props }: ToastProps) {
       className={cn(
         "group/toast pointer-events-auto absolute right-0 bottom-0 z-(--toast-z-index) w-full origin-bottom rounded-lg border bg-popover text-popover-foreground shadow-lg will-change-transform outline-none select-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring",
         "[--gap:0.75rem] [--height:var(--toast-frontmost-height,var(--toast-height))] [--offset-y:calc(var(--toast-offset-y)*-1+calc(var(--toast-index)*var(--gap)*-1)+var(--toast-swipe-movement-y))] [--peek:0.75rem] [--scale:calc(max(0,1-(var(--toast-index)*0.1)))] [--shrink:calc(1-var(--scale))] [--toast-hitbox-height:calc(var(--gap)+1px)] [--toast-z-index:calc(1000-var(--toast-index))]",
-        "h-(--height) [transform:translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--toast-swipe-movement-y)-(var(--toast-index)*var(--peek))-(var(--shrink)*var(--height))))_scale(var(--scale))] [transition:transform_500ms_cubic-bezier(0.22,1,0.36,1),opacity_500ms,height_150ms]",
+        "h-(--height) [transform:translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--toast-swipe-movement-y)-(var(--toast-index)*var(--peek))-(var(--shrink)*var(--height))))_scale(var(--scale))] blur-none transition-[transform,opacity,height,filter] duration-slower ease-entrance data-starting-style:blur-(--motion-blur-sm) data-ending-style:blur-(--motion-blur-sm)",
         "after:absolute after:top-full after:left-0 after:h-(--toast-hitbox-height) after:w-full after:content-['']",
         "data-expanded:h-(--toast-height) data-expanded:[transform:translateX(var(--toast-swipe-movement-x))_translateY(var(--offset-y))]",
         "data-limited:opacity-0 data-starting-style:[transform:translateY(150%)]",
@@ -77,7 +77,7 @@ function ToastContent({ className, ...props }: ToastContentProps) {
     <ToastPrimitive.Content
       data-slot="toast-content"
       className={cn(
-        "flex h-full items-center gap-3 overflow-hidden p-4 transition-opacity duration-250 ease-out data-behind:opacity-0 data-expanded:opacity-100",
+        "flex h-full items-center gap-3 overflow-hidden p-4 transition-opacity duration-slower ease-entrance data-behind:opacity-0 data-expanded:opacity-100",
         className,
       )}
       {...props}
