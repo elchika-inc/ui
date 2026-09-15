@@ -141,9 +141,20 @@
   /* ---------- MOTION ---------- */
   --duration-instant: 0ms; --duration-fast: 120ms; --duration-base: 180ms;
   --duration-slow: 260ms; --duration-slower: 400ms;
-  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
-  --ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --duration-stagger: 40ms; --duration-micro: 80ms; --duration-emphasis: 500ms;
+  --curve-standard: cubic-bezier(0.2, 0, 0, 1);
+  --curve-entrance: cubic-bezier(0.16, 1, 0.3, 1);
+  --curve-exit: cubic-bezier(0.4, 0, 1, 1);
+  --curve-bounce: cubic-bezier(0.34, 1.36, 0.64, 1);
+  --curve-bounce-strong: cubic-bezier(0.34, 3.85, 0.64, 1);
+  --ease-standard: var(--curve-standard);
+  --ease-entrance: var(--curve-entrance);
+  --ease-exit: var(--curve-exit);
+  --ease-bounce: var(--curve-bounce);
+  --ease-bounce-strong: var(--curve-bounce-strong);
+  --motion-distance-sm: 4px; --motion-distance-md: 8px; --motion-distance-lg: 12px;
+  --motion-scale-lg: 0.96; --motion-scale-md: 0.97; --motion-scale-sm: 0.98;
+  --motion-blur-sm: 2px; --motion-blur-lg: 8px;
 
   /* ---------- STATE ----------
      States are tokenised once and shared, rather than redefined per
@@ -1069,7 +1080,7 @@ h3.sub { font-size: var(--text-base); font-weight: var(--font-weight-semibold); 
 
   <!-- MOTION -->
   <section class="band" id="motion">
-    <span class="eyebrow">--duration-* / --ease-*</span>
+    <span class="eyebrow">--duration-* / --ease-* / --motion-*</span>
     <h2>Motion</h2>
     <p class="lede">カーソルを重ねると実際の速度と曲線が確かめられます。標準は立ち上がりが速く減速する曲線で、キビキビした操作感になります。</p>
     <div class="motion">
@@ -1077,6 +1088,26 @@ h3.sub { font-size: var(--text-base); font-weight: var(--font-weight-semibold); 
       <div class="track base" tabindex="0"><div class="cap"><span class="token">--duration-base · 180ms</span><span class="token">--ease-standard</span></div><div class="rail"><div class="dot2"></div></div></div>
       <div class="track entr" tabindex="0"><div class="cap"><span class="token">--duration-slow · 260ms</span><span class="token">--ease-entrance</span></div><div class="rail"><div class="dot2"></div></div></div>
       <div class="track exit" tabindex="0"><div class="cap"><span class="token">--duration-slower · 400ms</span><span class="token">--ease-exit</span></div><div class="rail"><div class="dot2"></div></div></div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Token</th><th>Value</th><th>用途</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">--duration-stagger</td><td class="mono">40ms</td><td>リスト項目の stagger 間隔</td></tr>
+          <tr><td class="mono">--duration-micro</td><td class="mono">80ms</td><td>tooltip の appear delay、shake の 1 セグメント</td></tr>
+          <tr><td class="mono">--duration-fast</td><td class="mono">120ms</td><td>modal / dropdown の close、tooltip の appear、text swap、状態色（<span class="token">--state-transition</span>）</td></tr>
+          <tr><td class="mono">--duration-base</td><td class="mono">180ms</td><td>位置・サイズの微調整</td></tr>
+          <tr><td class="mono">--duration-slow</td><td class="mono">260ms</td><td>modal / dropdown の open、icon swap、tabs の indicator、page slide</td></tr>
+          <tr><td class="mono">--duration-slower</td><td class="mono">400ms</td><td>panel / toast / sheet の open と close、skeleton から content への reveal</td></tr>
+          <tr><td class="mono">--duration-emphasis</td><td class="mono">500ms</td><td>強調の一点（success check、badge の appear、text reveal）</td></tr>
+          <tr><td class="mono">--ease-standard</td><td class="mono">cubic-bezier(0.2, 0, 0, 1)</td><td>状態色・位置の標準</td></tr>
+          <tr><td class="mono">--ease-entrance</td><td class="mono">cubic-bezier(0.16, 1, 0.3, 1)</td><td>overlay の open と close、page slide、resize</td></tr>
+          <tr><td class="mono">--ease-exit</td><td class="mono">cubic-bezier(0.4, 0, 1, 1)</td><td>画面外へ退場する要素</td></tr>
+          <tr><td class="mono">--ease-bounce</td><td class="mono">cubic-bezier(0.34, 1.36, 0.64, 1)</td><td>badge の pop、switch の thumb</td></tr>
+          <tr><td class="mono">--ease-bounce-strong</td><td class="mono">cubic-bezier(0.34, 3.85, 0.64, 1)</td><td>hover 解除時の戻り（avatar group）</td></tr>
+          <tr><td class="mono">--motion-distance-* / --motion-scale-* / --motion-blur-*</td><td class="mono">4 / 8 / 12px、0.96 / 0.97 / 0.98、2 / 8px</td><td>開閉の translate 距離、開閉の初期 scale（modal は lg、dropdown は md、tooltip は sm）、cross-blur</td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
@@ -1654,6 +1685,10 @@ h3.sub { font-size: var(--text-base); font-weight: var(--font-weight-semibold); 
 <b>node build-tokens.mjs</b>          # tokens.css と brands.css を生成し検証
 <b>node build-tokens.mjs --check</b>  # 検証のみ（CI 用・不合格なら exit 1）</pre>
     <div class="log">
+      <div class="entry">
+        <h4>モーションは段の値を固定し、段の追加は用途を伴うときだけ認める</h4>
+        <p><span class="token">--duration-*</span> の既存の段の値は動かさず、両端の stagger / micro / emphasis と、easing の bounce 2 種、幾何の distance / scale / blur を足しました。段は数値でなく用途で選び、Motion 節の用途表を正本とします。easing の値は Tailwind の <span class="token">@theme</span> と同名衝突しない <span class="token">--curve-*</span> に置き、<span class="token">--ease-*</span> はその参照にします。<span class="token">--rounding-*</span> と同じ理由であり、幾何も Tailwind の <span class="token">--blur-*</span> 名前空間を避けるため <span class="token">--motion-</span> 接頭辞を使います。用途表と段の値は <a href="https://transitions.dev/">transitions.dev</a> を出典とし、当リポジトリの既存スケールへ用途で写像しました。同サイトの <a href="https://transitions.dev/terms.html">terms</a> は値と設計の参照・改変を認め、コレクションの再配布を禁じているため、snippet を持ち込まず値と設計だけを参照します。</p>
+      </div>
       <div class="entry">
         <h4>角丸と影の値は Tailwind と衝突しない別名に置く</h4>
         <p>Tailwind の <span class="token">@theme</span> と同名の変数は layer 順で Tailwind 側が勝つため、値は <span class="token">--rounding-*</span> / <span class="token">--elevation-*</span> に置き、<span class="token">--radius-*</span> / <span class="token">--shadow-*</span> はその参照にします。<span class="token">--font-code</span> と同じ理由で、utility を design system の値へ接続するためです。</p>

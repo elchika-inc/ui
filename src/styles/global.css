@@ -14,6 +14,46 @@
   opacity: var(--opacity-disabled);
 }
 
+@utility duration-instant {
+  transition-duration: var(--duration-instant);
+  --tw-duration: var(--duration-instant);
+}
+
+@utility duration-stagger {
+  transition-duration: var(--duration-stagger);
+  --tw-duration: var(--duration-stagger);
+}
+
+@utility duration-micro {
+  transition-duration: var(--duration-micro);
+  --tw-duration: var(--duration-micro);
+}
+
+@utility duration-fast {
+  transition-duration: var(--duration-fast);
+  --tw-duration: var(--duration-fast);
+}
+
+@utility duration-base {
+  transition-duration: var(--duration-base);
+  --tw-duration: var(--duration-base);
+}
+
+@utility duration-slow {
+  transition-duration: var(--duration-slow);
+  --tw-duration: var(--duration-slow);
+}
+
+@utility duration-slower {
+  transition-duration: var(--duration-slower);
+  --tw-duration: var(--duration-slower);
+}
+
+@utility duration-emphasis {
+  transition-duration: var(--duration-emphasis);
+  --tw-duration: var(--duration-emphasis);
+}
+
 @theme inline {
     /* design system 層の書体へ接続する。ブランドノブとして見出しだけ差し替えたい場合は
        利用側 CSS の :root で --font-display を上書きする（@theme inline は値を展開するため
@@ -100,6 +140,16 @@
     --default-transition-duration: var(--duration-fast);
     /* design system の --ease-standard へ接続する。 */
     --default-transition-timing-function: var(--ease-standard);
+    /* design system の曲線 --curve-standard へ接続する。 */
+    --ease-standard: var(--curve-standard);
+    /* design system の曲線 --curve-entrance へ接続する。 */
+    --ease-entrance: var(--curve-entrance);
+    /* design system の曲線 --curve-exit へ接続する。 */
+    --ease-exit: var(--curve-exit);
+    /* design system の曲線 --curve-bounce へ接続する。 */
+    --ease-bounce: var(--curve-bounce);
+    /* design system の曲線 --curve-bounce-strong へ接続する。 */
+    --ease-bounce-strong: var(--curve-bounce-strong);
     /* design system の --control-height-sm へ接続する。 */
     --spacing-control-sm: var(--control-height-sm);
     /* design system の --control-height-md へ接続する。 */
