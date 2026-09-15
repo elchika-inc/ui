@@ -47,23 +47,17 @@ const MOTION_ARBITRARY_LITERAL =
 // 実在しないエントリは motion-literal-allowlist-stale として失敗させる（ratchet）。
 const MOTION_LITERAL_ALLOWLIST = new Map([
   ["src/components/ui/alert-dialog.tsx", ["duration-100"]],
-  ["src/components/ui/combobox.tsx", ["duration-100"]],
-  ["src/components/ui/context-menu.tsx", ["duration-100"]],
   ["src/components/ui/dialog.tsx", ["duration-100"]],
   [
     "src/components/ui/drawer.tsx",
     ["duration-300", "duration-0", "ease-out", "duration-200", "duration-450"],
   ],
-  ["src/components/ui/dropdown-menu.tsx", ["duration-100"]],
   ["src/components/ui/input-otp.tsx", ["duration-1000"]],
   ["src/components/ui/item.tsx", ["duration-100"]],
-  ["src/components/ui/menubar.tsx", ["duration-100"]],
   [
     "src/components/ui/message-scroller.tsx",
     ["duration-200", "duration-400", "ease-in", "ease-out"],
   ],
-  ["src/components/ui/navigation-menu.tsx", ["duration-300", "ease-out", "duration-150"]],
-  ["src/components/ui/select.tsx", ["duration-100"]],
   ["src/components/ui/sheet.tsx", ["duration-150", "duration-200", "ease-in-out"]],
   ["src/components/ui/sidebar.tsx", ["duration-200"]],
   [

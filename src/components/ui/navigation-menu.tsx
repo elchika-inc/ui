@@ -63,7 +63,7 @@ function NavigationMenuTrigger({ className, children, ...props }: NavigationMenu
     >
       {children}{" "}
       <ChevronDownIcon
-        className="relative top-px ml-1 size-3 transition duration-300 group-data-popup-open/navigation-menu-trigger:rotate-180 group-data-open/navigation-menu-trigger:rotate-180"
+        className="relative top-px ml-1 size-3 transition duration-slow group-data-popup-open/navigation-menu-trigger:rotate-180 group-data-open/navigation-menu-trigger:rotate-180"
         aria-hidden="true"
       />
     </NavigationMenuPrimitive.Trigger>
@@ -75,7 +75,7 @@ function NavigationMenuContent({ className, ...props }: NavigationMenuContentPro
     <NavigationMenuPrimitive.Content
       data-slot="navigation-menu-content"
       className={cn(
-        "h-full w-auto p-1 transition-[opacity,transform,translate] duration-300 ease-out group-data-[viewport=false]/navigation-menu:rounded-lg group-data-[viewport=false]/navigation-menu:bg-popover group-data-[viewport=false]/navigation-menu:text-popover-foreground group-data-[viewport=false]/navigation-menu:shadow group-data-[viewport=false]/navigation-menu:ring-1 group-data-[viewport=false]/navigation-menu:ring-border group-data-[viewport=false]/navigation-menu:duration-300 data-ending-style:opacity-0 data-starting-style:opacity-0 data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 data-[motion^=from-]:animate-in data-[motion^=from-]:fade-in data-[motion^=to-]:animate-out data-[motion^=to-]:fade-out group-data-[viewport=false]/navigation-menu:data-open:animate-in group-data-[viewport=false]/navigation-menu:data-open:fade-in-0 group-data-[viewport=false]/navigation-menu:data-open:zoom-in-95 group-data-[viewport=false]/navigation-menu:data-closed:animate-out group-data-[viewport=false]/navigation-menu:data-closed:fade-out-0 group-data-[viewport=false]/navigation-menu:data-closed:zoom-out-95",
+        "h-full w-auto p-1 transition-[opacity,transform,translate] duration-slow ease-entrance group-data-[viewport=false]/navigation-menu:rounded-lg group-data-[viewport=false]/navigation-menu:bg-popover group-data-[viewport=false]/navigation-menu:text-popover-foreground group-data-[viewport=false]/navigation-menu:shadow group-data-[viewport=false]/navigation-menu:ring-1 group-data-[viewport=false]/navigation-menu:ring-border group-data-[viewport=false]/navigation-menu:duration-slow data-ending-style:opacity-0 data-starting-style:opacity-0 data-ending-style:duration-fast data-[activation-direction=left]:data-starting-style:-translate-x-(--motion-distance-lg) data-[activation-direction=right]:data-starting-style:translate-x-(--motion-distance-lg) data-[activation-direction=left]:data-ending-style:translate-x-(--motion-distance-lg) data-[activation-direction=right]:data-ending-style:-translate-x-(--motion-distance-lg)",
         className,
       )}
       {...props}
@@ -99,12 +99,12 @@ function NavigationMenuPositioner({
         align={align}
         alignOffset={alignOffset}
         className={cn(
-          "isolate z-50 h-(--positioner-height) w-(--positioner-width) max-w-(--available-width) transition-[top,left,right,bottom] duration-300 ease-out data-instant:transition-none data-[side=bottom]:before:-top-2.5 data-[side=bottom]:before:right-0 data-[side=bottom]:before:left-0",
+          "isolate z-50 h-(--positioner-height) w-(--positioner-width) max-w-(--available-width) transition-[top,left,right,bottom] duration-slow ease-entrance data-instant:transition-none data-[side=bottom]:before:-top-2.5 data-[side=bottom]:before:right-0 data-[side=bottom]:before:left-0",
           className,
         )}
         {...props}
       >
-        <NavigationMenuPrimitive.Popup className="relative h-(--popup-height) w-(--popup-width) origin-(--transform-origin) rounded-lg bg-popover text-popover-foreground shadow ring-1 ring-border transition-[opacity,transform,width,height,scale,translate] duration-300 ease-out outline-none data-ending-style:scale-90 data-ending-style:opacity-0 data-ending-style:duration-150 data-starting-style:scale-90 data-starting-style:opacity-0">
+        <NavigationMenuPrimitive.Popup className="relative h-(--popup-height) w-(--popup-width) origin-(--transform-origin) rounded-lg bg-popover text-popover-foreground shadow ring-1 ring-border transition-[opacity,transform,width,height,scale,translate] duration-slow ease-entrance outline-none data-ending-style:scale-90 data-ending-style:opacity-0 data-ending-style:duration-fast data-starting-style:scale-90 data-starting-style:opacity-0">
           <NavigationMenuViewport />
         </NavigationMenuPrimitive.Popup>
       </NavigationMenuPrimitive.Positioner>
@@ -139,10 +139,7 @@ function NavigationMenuIndicator({ className, ...props }: NavigationMenuIndicato
   return (
     <NavigationMenuPrimitive.Icon
       data-slot="navigation-menu-indicator"
-      className={cn(
-        "top-full z-1 flex h-1.5 items-end justify-center overflow-hidden data-[state=hidden]:animate-out data-[state=hidden]:fade-out data-[state=visible]:animate-in data-[state=visible]:fade-in",
-        className,
-      )}
+      className={cn("top-full z-1 flex h-1.5 items-end justify-center overflow-hidden", className)}
       {...props}
     >
       <div className="relative top-1 h-2 w-2 rotate-45 rounded-tl-sm bg-border shadow-md" />
