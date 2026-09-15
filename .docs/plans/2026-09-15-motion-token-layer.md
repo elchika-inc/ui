@@ -139,7 +139,7 @@
    ]);
    ```
 
-2. `checkFileWithAnalysis` の行ループ内、`BOOLEAN_DATA_INSET` の `for` ループの**直後**に、3 つの正規表現それぞれについて `for (const m of line.matchAll(<正規表現>))` を回し、`MOTION_LITERAL_ALLOWLIST.get(path)` に `m[0]` が含まれていなければ `{ rule: "motion-literal", line: i + 1, text: m[0] }` を push する。含まれていれば「その path でその token が実在した」ことを記録し、`checkFileWithAnalysis` の戻り値に `motionLiteralsSeen`（実在した token の `Set`）を足して返す（3 の stale 判定に使う。既存の `violations` フィールドはそのまま）。既存の `unique` による重複排除はそのまま効く。
+2. `checkFileWithAnalysis` の行ループ内、`BOOLEAN_DATA_INSET` の `for` ループの**直後**に、3 つの正規表現それぞれについて `for (const m of line.matchAll(<正規表現>))` を回し、`MOTION_LITERAL_ALLOWLIST.get(path)` に `m[0]` が含まれていなければ `{ rule: "motion-literal", line: i + 1, text: m[0] }` を push する。含まれていれば「その path でその token が実在した」ことを記録し、`checkFileWithAnalysis` の戻り値に `motionLiteralsSeen`（実在した token の `Set`）を足して返す（3 の stale 判定に使う。既存の `violations` フィールドはそのまま）。既存の `unique` による重複排除はそのまま効く。 司令塔裁定（2026-09-15）: motionLiteralsSeen は allowlist の有無に関係なく検出した全 token を記録する。§2.4.5 の第 3 テストと整合させるため。
 
 3. `checkFiles` / `checkFile` のシグネチャは変えない。新しい export として `staleMotionAllowlist(results, allowlist = MOTION_LITERAL_ALLOWLIST)` を足す。`results` は `checkFiles` の戻り値（`Map<path, { violations, motionLiteralsSeen }>`）で、**`results` に含まれる path についてだけ** allowlist の各 token が `motionLiteralsSeen` に無ければ `{ path, rule: "motion-literal-allowlist-stale", line: 0, text: <token> }` を配列で返す。`results` に含まれない path の allowlist エントリは判定しない（単体テストが 1 ファイルだけ渡すときに他の全エントリが stale にならないようにするため）。
 
