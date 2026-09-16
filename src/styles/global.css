@@ -53,6 +53,11 @@
   --tw-duration: var(--duration-emphasis);
 }
 
+/* 状態色の遷移。design system の --state-transition（fast + standard）をそのまま流す。 */
+@utility transition-state {
+  transition: var(--state-transition);
+}
+
 @theme inline {
     /* design system 層の書体へ接続する。ブランドノブとして見出しだけ差し替えたい場合は
        利用側 CSS の :root で --font-display を上書きする（@theme inline は値を展開するため
@@ -155,6 +160,13 @@
     @keyframes caret-blink {
       0%, 70%, 100% { opacity: 1; }
       20%, 50% { opacity: 0; }
+    }
+    /* Field の invalid shake。micro × 4 セグメント、振幅は --motion-distance-sm。 */
+    --animate-shake: shake calc(var(--duration-micro) * 4) var(--curve-standard);
+    @keyframes shake {
+      0%, 100% { translate: 0 0; }
+      25%, 75% { translate: calc(-1 * var(--motion-distance-sm)) 0; }
+      50% { translate: var(--motion-distance-sm) 0; }
     }
     /* design system の --control-height-sm へ接続する。 */
     --spacing-control-sm: var(--control-height-sm);
