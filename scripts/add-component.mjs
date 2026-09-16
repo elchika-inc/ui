@@ -1,4 +1,4 @@
-// shadcn component の追加を、来歴・registry 更新・副作用検査まで含む1コマンドにまとめる。
+// component の追加を、来歴・registry 更新・副作用検査まで含む1コマンドにまとめる。
 
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
@@ -71,8 +71,16 @@ export function parseArgs(argv) {
   let modified;
   let force = false;
   let resync = false;
+  let original = false;
   for (let index = 0; index < options.length; index++) {
     const option = options[index];
+    if (option === "--original") {
+      if (original) {
+        throw new Error("--original は1回だけ指定すること");
+      }
+      original = true;
+      continue;
+    }
     // 正規化（biome 整形・standards 適合）を行った後に来歴のハッシュだけを取り直す。
     // --force は CLI を再実行するので正規化済みファイルを生成物で上書きしてしまい、
     // lint を直すと今度は sha がずれる——正規化と来歴を同時に満たす経路が無くなる。
@@ -104,6 +112,9 @@ export function parseArgs(argv) {
     }
     throw new Error(`未対応の引数: ${option}`);
   }
+  if (original && (force || resync)) {
+    throw new Error("--original と --force / --resync は同時に指定できない");
+  }
   // --resync は既存の来歴を保ったままハッシュだけ取り直す経路なので --modified は任意。
   // 必須にすると、手順書の例文をそのまま打った人が「上流から何を変えたか」の
   // 唯一の記録（移設・page 除外・a11y 適合の 3 つ）を 1 行へ潰してしまう。
@@ -115,7 +126,7 @@ export function parseArgs(argv) {
     throw new Error("--resync と --force は同時に指定できない");
   }
 
-  return { name, modified: modified?.trim(), force, resync };
+  return { name, modified: modified?.trim(), force, resync, original };
 }
 
 export function shadcnCommand(version, itemPath) {
@@ -1061,6 +1072,105 @@ export function resyncBlockHashes({ root, name, modified, provenance, log = cons
   return { skipped: false, resynced: true, updated };
 }
 
+// 自作は先に書いた部品を登録する。上流取得や CLI による実体の再生成は行わない。
+export function scaffoldOriginalComponent({ root, name, modified, log = console.log }) {
+  const sourcePath = `src/components/ui/${name}.tsx`;
+  assertPathWithoutSymlinks(root, `${name}: component の path`, sourcePath);
+  if (!existsSync(join(root, sourcePath))) {
+    throw new Error(`${name}: ${sourcePath} が無い（先に部品を書く）`);
+  }
+  for (const path of ["provenance.json", "registry.json"]) {
+    assertPathWithoutSymlinks(root, `${name}: 登録先`, path);
+  }
+  const provenance = readJson(root, "provenance.json");
+  const registry = readJson(root, "registry.json");
+  if (
+    Object.hasOwn(provenance.components ?? {}, name) ||
+    Object.hasOwn(provenance.blocks ?? {}, name) ||
+    registry.items.some((item) => item.name === name) ||
+    existsSync(join(root, "src/blocks", name))
+  ) {
+    throw new Error(`${name}: component と block の同名衝突がある`);
+  }
+
+  const source = readFileSync(join(root, sourcePath), "utf8");
+  const registryDependencies = registryItemImports(source).map(({ name: dependency }) => {
+    if (!registry.items.some((item) => item.name === dependency)) {
+      throw new Error(`registry dependency ${dependency} に対応する registry item が存在しない`);
+    }
+    return `@elchika/${dependency}`;
+  });
+  const registryItem = buildRegistryItem(name, { registryDependencies }, source, {
+    itemType: "registry:ui",
+    targetPath: sourcePath,
+  });
+  const entry = {
+    origin: "elchika original",
+    generatedContentSha256: sha256(source),
+    license: "MIT",
+    modified,
+    notes:
+      "上流を持たない自作 component。generatedContentSha256 は記録時点の手元のファイルの錨で、変更後は --resync で取り直す。",
+  };
+  const previewName = `${registryItem.title.replaceAll(" ", "")}Preview`;
+  const previewPaths = ["", "-dark"].map((suffix) => `src/pages/preview/${name}${suffix}.astro`);
+  for (const path of previewPaths) {
+    assertPathWithoutSymlinks(root, `${name}: preview の path`, path);
+  }
+  for (const [index, path] of previewPaths.entries()) {
+    if (existsSync(join(root, path))) continue;
+    mkdirSync(dirname(join(root, path)), { recursive: true });
+    writeFileSync(
+      join(root, path),
+      `---
+import { ${previewName} } from "@/previews/${name}";
+import "@/styles/global.css";
+---
+<html lang="ja"${index === 1 ? ' class="dark"' : ""} data-theme="${index === 1 ? "dark" : "light"}">
+  <head><meta charset="utf-8" /><title>${registryItem.title}</title></head>
+  <body class="bg-background text-foreground">
+    <${previewName} client:load />
+  </body>
+</html>
+`,
+      { flag: "wx" },
+    );
+  }
+  provenance.components ??= {};
+  provenance.components[name] = entry;
+  registry.items.push(registryItem);
+  registry.items.sort((a, b) => a.name.localeCompare(b.name));
+  writeJson(root, "provenance.json", provenance);
+  writeJson(root, "registry.json", registry);
+  log(`${name}: 自作 component を登録した`);
+  log(`記録時 SHA-256: ${entry.generatedContentSha256}`);
+  return { skipped: false, entry, registryItem };
+}
+
+export function resyncComponentHash({ root, name, modified, provenance, log = console.log }) {
+  const entry = provenance.components?.[name];
+  if (!entry) {
+    throw new Error(`${name}: provenance.components に来歴が無い（先に add を実行する）`);
+  }
+  if (entry.origin !== "elchika original") {
+    throw new Error(
+      `${name}: shadcn 由来の component は --resync の対象外（generatedContentSha256 は CLI 生成直後の錨）`,
+    );
+  }
+  const path = `src/components/ui/${name}.tsx`;
+  assertPathWithoutSymlinks(root, `${name}: component の path`, path);
+  assertPathWithoutSymlinks(root, `${name}: 登録先`, "provenance.json");
+  const actual = sha256(readFileSync(join(root, path), "utf8"));
+  const before = entry.generatedContentSha256;
+  entry.generatedContentSha256 = actual;
+  if (modified !== undefined) entry.modified = modified;
+  writeJson(root, "provenance.json", provenance);
+  const updated = before === actual ? [] : [{ path, before, after: actual }];
+  if (updated.length) log(`ハッシュを更新: ${path} ${before.slice(0, 8)} -> ${actual.slice(0, 8)}`);
+  else log(`${name}: 来歴のハッシュは実体と一致していた（更新なし）`);
+  return { skipped: false, resynced: true, updated };
+}
+
 export async function runAddComponent({
   argv = process.argv.slice(2),
   root = process.cwd(),
@@ -1068,12 +1178,20 @@ export async function runAddComponent({
   runCommand = execFileSync,
   log = console.log,
 } = {}) {
-  const { name, modified, force, resync } = parseArgs(argv);
+  const { name, modified, force, resync, original } = parseArgs(argv);
   const repositoryRoot = git(root, ["rev-parse", "--show-toplevel"]).trim();
+  if (original) return scaffoldOriginalComponent({ root: repositoryRoot, name, modified, log });
   if (!resync) ensureClean(repositoryRoot);
 
   const provenance = readJson(repositoryRoot, "provenance.json");
-  if (resync) return resyncBlockHashes({ root: repositoryRoot, name, modified, provenance, log });
+  if (resync) {
+    const args = { root: repositoryRoot, name, modified, provenance, log };
+    if (Object.hasOwn(provenance.blocks ?? {}, name)) return resyncBlockHashes(args);
+    if (Object.hasOwn(provenance.components ?? {}, name)) return resyncComponentHash(args);
+    throw new Error(
+      `${name}: provenance.components / provenance.blocks に来歴が無い（先に add を実行する）`,
+    );
+  }
 
   const packageBefore = readJson(repositoryRoot, "package.json");
   const trackedBefore = trackedFiles(repositoryRoot);

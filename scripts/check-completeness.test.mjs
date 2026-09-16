@@ -19,6 +19,7 @@ const complete = {
   provenance: {
     components: {
       button: {
+        origin: "shadcn/ui registry",
         sourceUrl: "https://example.com/button.tsx",
         upstreamPath: "apps/v4/registry/bases/base/ui/button.tsx",
         upstreamPathSha: "0123456789abcdef0123456789abcdef01234567",
@@ -35,6 +36,85 @@ const complete = {
     },
   },
 };
+
+const completeOriginalComponent = {
+  ...complete,
+  components: ["zz-probe"],
+  barrel: 'export { ZzProbe } from "./components/ui/zz-probe";',
+  dts: "export type { ZzProbeProps }; export { ZzProbe };",
+  registry: { items: [{ name: "zz-probe", type: "registry:ui" }] },
+  previewFiles: ["zz-probe.astro", "zz-probe-dark.astro"],
+  previewSources: ["zz-probe.tsx"],
+  provenance: {
+    components: {
+      "zz-probe": {
+        origin: "elchika original",
+        generatedContentSha256: "b".repeat(64),
+        license: "MIT",
+        modified: "既存トークンで自作",
+      },
+    },
+  },
+};
+
+test("自作 component は上流由来キーを要求されない", () => {
+  assert.deepEqual(checkCompleteness(completeOriginalComponent).problems, []);
+});
+
+test("自作 component は上流由来のメタを持たない（forbidden 全キー）", () => {
+  for (const key of [
+    "sourceUrl",
+    "upstreamPath",
+    "upstreamPathSha",
+    "registry",
+    "registryUrl",
+    "registryPath",
+    "registryContentSha256",
+    "addTarget",
+    "upstreamRepo",
+    "style",
+    "shadcnCliVersion",
+    "shadcnVersion",
+    "shadcnRange",
+    "fetchedAt",
+  ]) {
+    for (const value of ["x", "", undefined]) {
+      const provenance = structuredClone(completeOriginalComponent.provenance);
+      provenance.components["zz-probe"][key] = value;
+      assert.deepEqual(
+        checkCompleteness({ ...completeOriginalComponent, provenance }).problems,
+        [`zz-probe: 自作 component は ${key} を持たない`],
+        key,
+      );
+    }
+  }
+});
+
+test("component の未知の origin は fail-closed で弾く", () => {
+  for (const origin of ["unknown-source", "constructor", "__proto__"]) {
+    const provenance = structuredClone(completeOriginalComponent.provenance);
+    provenance.components["zz-probe"].origin = origin;
+    assert.deepEqual(checkCompleteness({ ...completeOriginalComponent, provenance }).problems, [
+      `zz-probe: provenance の origin が未対応: ${origin}`,
+    ]);
+  }
+});
+
+test("component の origin が無ければ検出する", () => {
+  const provenance = structuredClone(completeOriginalComponent.provenance);
+  delete provenance.components["zz-probe"].origin;
+  assert.deepEqual(checkCompleteness({ ...completeOriginalComponent, provenance }).problems, [
+    "zz-probe: provenance の origin が無い",
+  ]);
+});
+
+test("既存の shadcn 由来 component は従来どおり上流由来キーを要求される", () => {
+  const provenance = structuredClone(complete.provenance);
+  delete provenance.components.button.upstreamPathSha;
+  assert.deepEqual(checkCompleteness({ ...complete, provenance }).problems, [
+    "button: provenance の upstreamPathSha が無い",
+  ]);
+});
 
 test("barrel export の欠落を検出する", () => {
   const { problems } = checkCompleteness({ ...complete, barrel: "" });

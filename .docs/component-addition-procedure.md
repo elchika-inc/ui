@@ -77,6 +77,57 @@ npm run check:pre
 - overlay を初期 open にするか、操作後 open にするか
 - shared surface 変更後に、どの既存証跡を再撮影するか
 
+## 自作 component（elchika original）を追加する場合の差分
+
+上流を持たない component は、手元の実装を `--original` で登録する。通常の add と異なり、
+clean な worktree を要求せず、上流取得や shadcn CLI の実行も行わない。
+
+1. `src/components/ui/<name>.tsx` に部品と `<Name>Props` を書く。
+2. `src/previews/<name>.tsx` に `<Name>Preview` を export する preview を書く。
+3. `src/index.ts` に値と Props 型の export をファイル名順で追加する。
+4. `preview-selectors.json` に安定 selector を追加する。
+5. `src/catalog/component-categories.mjs` の該当カテゴリへ追加する。
+6. 次を実行する。`@/components/ui/<x>` / `@/hooks/<x>` を import する場合、参照先の
+   registry item を先に登録する。未登録なら scaffold は停止する。
+
+   ```bash
+   node scripts/add-component.mjs <name> --original --modified "自作した用途と参照元、実際の変更内容"
+   ```
+
+   `registry.json`、`provenance.json`、light / dark の astro route 2 枚を生成する。
+   既存の astro route は上書きしない。部品実装、preview tsx、barrel、selector、カテゴリは
+   scaffold の対象外で、上の手順で用意する。同名の来歴・registry item・block 実体があれば停止する。
+7. トークンを配布定義へ載せ、registry と型定義を生成して検査する。
+
+   ```bash
+   npm run registry:tokens
+   npm run registry:build
+   npm run build:lib
+   npm run check:pre
+   ```
+
+8. 実装を commit する。
+9. その実装 commit の light / dark preview を §4 に従って実ブラウザで検証する。
+10. 新規証跡を別 commit にまとめる。
+
+登録後に部品を編集したら、実装 commit 前に次を実行し `generatedContentSha256` を取り直す。
+自作 component のハッシュは記録時点の手元の実装の錨である。
+
+```bash
+node scripts/add-component.mjs <name> --resync
+```
+
+`--modified` を省略すると既存の説明を保つ。説明も更新するときだけ、既存の内容を含む全文を
+`--modified` に渡す。shadcn 由来の component は CLI 生成直後のハッシュを保つため、
+component の `--resync` は自作に限る。
+
+`--force` は使わない。上流取得と shadcn CLI の再実行による上書きのためのオプションであり、
+自作の登録やハッシュ同期には適さない。`--original` と `--force` / `--resync` の同時指定は拒否する。
+
+自作の来歴は `origin: "elchika original"` とハッシュ・ライセンス・変更内容で記録する。
+`sourceUrl`、`upstreamPath`、registry や shadcn CLI の情報など上流由来キーは禁止する。
+移植品を自作と誤分類して上流の来歴を失うことを防ぐため、空の値であっても混入は検出する。
+
 ## registry:block を追加する場合の差分
 
 block は部品（`registry:ui`）と同じ手順を使うが、次の点だけ異なる。実装計画

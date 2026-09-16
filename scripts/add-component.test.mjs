@@ -2340,3 +2340,267 @@ test("--resync と --force は同時に指定できない", async () => {
   const { parseArgs } = await loadModule();
   assert.throws(() => parseArgs(["login-01", "--resync", "--force"]), /同時に指定できない/);
 });
+
+test("--original は --modified 必須で1回だけ指定できる", async () => {
+  const { parseArgs } = await loadModule();
+  assert.throws(() => parseArgs(["zz-probe", "--original"]), /--modified/);
+  assert.throws(() => parseArgs(["zz-probe", "--original", "--modified", " "]), /--modified/);
+  assert.throws(
+    () => parseArgs(["zz-probe", "--original", "--original", "--modified", "自作"]),
+    /--original.*1回/,
+  );
+  assert.deepEqual(parseArgs(["zz-probe", "--original", "--modified", " 自作 "]), {
+    name: "zz-probe",
+    modified: "自作",
+    original: true,
+    force: false,
+    resync: false,
+  });
+});
+
+test("--original と --force / --resync は同時指定できない", async () => {
+  const { parseArgs } = await loadModule();
+  for (const option of ["--force", "--resync"]) {
+    for (const options of [
+      ["--original", option],
+      [option, "--original"],
+    ]) {
+      assert.throws(
+        () => parseArgs(["zz-probe", ...options, "--modified", "自作"]),
+        /同時に指定できない/,
+      );
+    }
+  }
+});
+
+test("scaffoldOriginalComponent は registry item と自作の来歴と astro 2 枚を書く", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { scaffoldOriginalComponent, runAddComponent } = await loadModule();
+  const { SHARED_REGISTRY_FILES } = await import("./registry-policy.mjs");
+  seedRegistryGraph(root, [
+    { name: "button", type: "registry:ui" },
+    { name: "use-mobile", type: "registry:hook" },
+  ]);
+  const source = [
+    'import { Button } from "@/components/ui/button";',
+    'import { useMobile } from "@/hooks/use-mobile";',
+    'import { cn } from "@/lib/utils";',
+    'import { Check } from "lucide-react";',
+    'import * as React from "react";',
+    'export const ZzProbe = () => <Button className={cn("flex")}><Check /></Button>;',
+  ].join("\n");
+  assert.throws(
+    () => scaffoldOriginalComponent({ root, name: "zz-probe", modified: "自作", log: () => {} }),
+    /zz-probe: src\/components\/ui\/zz-probe.tsx が無い（先に部品を書く）/,
+  );
+  writeFileSync(join(root, "src/components/ui/zz-probe.tsx"), source);
+  const result = await runAddComponent({
+    argv: ["zz-probe", "--original", "--modified", "既存トークンで自作"],
+    root,
+    fetchImpl: async () => {
+      throw new Error("fetch してはならない");
+    },
+    runCommand: () => {
+      throw new Error("CLI を実行してはならない");
+    },
+    log: () => {},
+  });
+  assert.equal(result.skipped, false);
+  const registry = JSON.parse(readFileSync(join(root, "registry.json"), "utf8"));
+  assert.deepEqual(
+    registry.items.map(({ name }) => name),
+    ["button", "use-mobile", "zz-probe"],
+  );
+  assert.deepEqual(registry.items[2], {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "zz-probe",
+    type: "registry:ui",
+    title: "Zz Probe",
+    description: "zz-probe component.",
+    files: [
+      { path: "src/components/ui/zz-probe.tsx", type: "registry:ui" },
+      ...SHARED_REGISTRY_FILES,
+    ],
+    dependencies: ["lucide-react", "shadcn"],
+    registryDependencies: ["@elchika/button", "@elchika/use-mobile"],
+  });
+  const provenance = JSON.parse(readFileSync(join(root, "provenance.json"), "utf8"));
+  assert.deepEqual(provenance.components["zz-probe"], {
+    origin: "elchika original",
+    generatedContentSha256: createHash("sha256").update(source).digest("hex"),
+    license: "MIT",
+    modified: "既存トークンで自作",
+    notes:
+      "上流を持たない自作 component。generatedContentSha256 は記録時点の手元のファイルの錨で、変更後は --resync で取り直す。",
+  });
+  for (const suffix of ["", "-dark"]) {
+    const astro = readFileSync(join(root, `src/pages/preview/zz-probe${suffix}.astro`), "utf8");
+    assert.match(astro, /import \{ ZzProbePreview \} from "@\/previews\/zz-probe"/);
+    assert.match(astro, /import "@\/styles\/global.css"/);
+    assert.match(astro, /<title>Zz Probe<\/title>/);
+    assert.match(astro, /<ZzProbePreview client:load \/>/);
+    assert.ok(
+      astro.includes(
+        suffix
+          ? '<html lang="ja" class="dark" data-theme="dark">'
+          : '<html lang="ja" data-theme="light">',
+      ),
+    );
+  }
+  assert.equal(readFileSync(join(root, "src/components/ui/zz-probe.tsx"), "utf8"), source);
+
+  // 既存 route は手書きの内容を保ち、依存が無ければ registryDependencies を書かない。
+  writeFileSync(
+    join(root, "src/components/ui/aa-probe.tsx"),
+    "export const AaProbe = () => null;\n",
+  );
+  writeFileSync(join(root, "src/pages/preview/aa-probe.astro"), "既存の light route\n");
+  writeFileSync(join(root, "src/pages/preview/aa-probe-dark.astro"), "既存の dark route\n");
+  scaffoldOriginalComponent({ root, name: "aa-probe", modified: "自作", log: () => {} });
+  const updatedRegistry = JSON.parse(readFileSync(join(root, "registry.json"), "utf8"));
+  assert.equal(updatedRegistry.items[0].name, "aa-probe");
+  assert.equal(Object.hasOwn(updatedRegistry.items[0], "registryDependencies"), false);
+  assert.deepEqual(updatedRegistry.items[0].dependencies, ["shadcn"]);
+  for (const theme of ["light", "dark"]) {
+    assert.equal(
+      readFileSync(
+        join(root, `src/pages/preview/aa-probe${theme === "dark" ? "-dark" : ""}.astro`),
+        "utf8",
+      ),
+      `既存の ${theme} route\n`,
+    );
+  }
+
+  // 来歴・registry・block 実体のいずれかに同名があれば上書きしない。
+  for (const collision of ["component", "block", "registry", "disk"]) {
+    const collisionRoot = prepareWrapperRepo();
+    t.after(() => rmSync(collisionRoot, { recursive: true, force: true }));
+    writeFileSync(join(collisionRoot, "src/components/ui/zz-probe.tsx"), source);
+    writeJson(join(collisionRoot, "provenance.json"), {
+      components: collision === "component" ? { "zz-probe": { origin: "elchika original" } } : {},
+      blocks: collision === "block" ? { "zz-probe": { origin: "elchika original" } } : {},
+    });
+    if (collision === "registry")
+      writeJson(join(collisionRoot, "registry.json"), {
+        items: [{ name: "zz-probe", type: "registry:ui" }],
+      });
+    if (collision === "disk")
+      mkdirSync(join(collisionRoot, "src/blocks/zz-probe"), { recursive: true });
+    const before = readFileSync(join(collisionRoot, "provenance.json"), "utf8");
+    assert.throws(
+      () =>
+        scaffoldOriginalComponent({
+          root: collisionRoot,
+          name: "zz-probe",
+          modified: "自作",
+          log: () => {},
+        }),
+      /component と block の同名衝突がある/,
+    );
+    assert.equal(readFileSync(join(collisionRoot, "provenance.json"), "utf8"), before);
+    assert.equal(existsSync(join(collisionRoot, "src/pages/preview/zz-probe.astro")), false);
+  }
+});
+
+test("自作 component の参照先が registry に無い import は停止する", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { scaffoldOriginalComponent } = await loadModule();
+  const before = readFileSync(join(root, "provenance.json"), "utf8");
+  for (const path of ["components/ui/button", "hooks/use-mobile"]) {
+    writeFileSync(
+      join(root, "src/components/ui/zz-probe.tsx"),
+      `import { Missing } from "@/${path}";\n`,
+    );
+    assert.throws(
+      () => scaffoldOriginalComponent({ root, name: "zz-probe", modified: "自作", log: () => {} }),
+      /registry item が存在しない/,
+    );
+    assert.equal(readFileSync(join(root, "provenance.json"), "utf8"), before);
+    assert.deepEqual(JSON.parse(readFileSync(join(root, "registry.json"), "utf8")), { items: [] });
+    assert.equal(existsSync(join(root, "src/pages/preview/zz-probe.astro")), false);
+  }
+});
+
+test("--resync は自作 component のハッシュを実体へ揃える", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { scaffoldOriginalComponent, runAddComponent, resyncComponentHash } = await loadModule();
+  assert.throws(
+    () =>
+      resyncComponentHash({
+        root,
+        name: "zz-probe",
+        provenance: { components: {} },
+        log: () => {},
+      }),
+    /provenance.components に来歴が無い/,
+  );
+  writeFileSync(
+    join(root, "src/components/ui/zz-probe.tsx"),
+    "export const ZzProbe = () => null;\n",
+  );
+  scaffoldOriginalComponent({ root, name: "zz-probe", modified: "自作の記録", log: () => {} });
+  const source = 'export const ZzProbe = () => <span data-slot="zz-probe" />;\n';
+  writeFileSync(join(root, "src/components/ui/zz-probe.tsx"), source);
+  const options = {
+    root,
+    fetchImpl: async () => {
+      throw new Error("fetch してはならない");
+    },
+    runCommand: () => {
+      throw new Error("CLI を実行してはならない");
+    },
+    log: () => {},
+  };
+  const result = await runAddComponent({ ...options, argv: ["zz-probe", "--resync"] });
+  assert.equal(result.resynced, true);
+  let provenance = JSON.parse(readFileSync(join(root, "provenance.json"), "utf8"));
+  assert.equal(
+    provenance.components["zz-probe"].generatedContentSha256,
+    createHash("sha256").update(source).digest("hex"),
+  );
+  assert.equal(provenance.components["zz-probe"].modified, "自作の記録");
+  assert.equal(readFileSync(join(root, "src/components/ui/zz-probe.tsx"), "utf8"), source);
+  const logs = [];
+  await runAddComponent({
+    ...options,
+    argv: ["zz-probe", "--resync", "--modified", "変更を追記した記録"],
+    log: (message) => logs.push(message),
+  });
+  provenance = JSON.parse(readFileSync(join(root, "provenance.json"), "utf8"));
+  assert.equal(provenance.components["zz-probe"].modified, "変更を追記した記録");
+  assert.ok(logs.some((message) => message.includes("更新なし")));
+});
+
+test("--resync は shadcn 由来の component を拒む", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+  writeJson(join(root, "provenance.json"), {
+    components: {
+      button: {
+        origin: "shadcn/ui registry",
+        generatedContentSha256: "a".repeat(64),
+        modified: "移植",
+      },
+    },
+  });
+  const before = readFileSync(join(root, "provenance.json"), "utf8");
+  await assert.rejects(
+    runAddComponent({
+      root,
+      argv: ["button", "--resync"],
+      fetchImpl: async () => {
+        throw new Error("fetch してはならない");
+      },
+      runCommand: () => {
+        throw new Error("CLI を実行してはならない");
+      },
+      log: () => {},
+    }),
+    /button: shadcn 由来の component は --resync の対象外（generatedContentSha256 は CLI 生成直後の錨）/,
+  );
+  assert.equal(readFileSync(join(root, "provenance.json"), "utf8"), before);
+});

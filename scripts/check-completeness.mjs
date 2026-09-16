@@ -96,6 +96,35 @@ const PROVENANCE_SPEC = {
   modified: /\S/,
 };
 
+const ORIGINAL_COMPONENT_PROVENANCE_SPEC = {
+  generatedContentSha256: /^[0-9a-f]{64}$/,
+  license: /^\S+$/,
+  modified: /\S/,
+};
+
+const COMPONENT_ORIGINS = {
+  "shadcn/ui registry": { spec: PROVENANCE_SPEC, forbidden: [] },
+  "elchika original": {
+    spec: ORIGINAL_COMPONENT_PROVENANCE_SPEC,
+    forbidden: [
+      "sourceUrl",
+      "upstreamPath",
+      "upstreamPathSha",
+      "registry",
+      "registryUrl",
+      "registryPath",
+      "registryContentSha256",
+      "addTarget",
+      "upstreamRepo",
+      "style",
+      "shadcnCliVersion",
+      "shadcnVersion",
+      "shadcnRange",
+      "fetchedAt",
+    ],
+  },
+};
+
 // block の来歴。component と違い配布ファイルが複数あるため、共通メタと files[] を分けて検査する。
 // 単一ファイル前提の PROVENANCE_SPEC を流用すると、dashboard-01 の data.json が
 // upstreamPath の `\.tsx$` に一致せず、正しい来歴を誤って弾く。
@@ -541,7 +570,22 @@ function componentProblems(name, barrelPaths, registry, previewFiles, previewSou
     problems.push(`${name}: provenance.json に来歴が無い`);
     return problems;
   }
-  return [...problems, ...provenanceMetaProblems(name, p, PROVENANCE_SPEC)];
+  if (!p.origin) {
+    problems.push(`${name}: provenance の origin が無い`);
+    return problems;
+  }
+  if (!Object.hasOwn(COMPONENT_ORIGINS, p.origin)) {
+    problems.push(`${name}: provenance の origin が未対応: ${p.origin}`);
+    return problems;
+  }
+  const origin = COMPONENT_ORIGINS[p.origin];
+  problems.push(...provenanceMetaProblems(name, p, origin.spec));
+  for (const key of origin.forbidden) {
+    if (Object.hasOwn(p, key)) {
+      problems.push(`${name}: 自作 component は ${key} を持たない`);
+    }
+  }
+  return problems;
 }
 
 export function checkCompleteness({
