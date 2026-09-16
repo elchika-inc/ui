@@ -413,6 +413,8 @@ export type {
   HoverCardTriggerProps,
 } from "./components/ui/hover-card";
 export { HoverCard, HoverCardContent, HoverCardTrigger } from "./components/ui/hover-card";
+export type { IconSwapFromProps, IconSwapProps, IconSwapToProps } from "./components/ui/icon-swap";
+export { IconSwap, IconSwapFrom, IconSwapTo } from "./components/ui/icon-swap";
 export type { InputProps } from "./components/ui/input";
 export { Input } from "./components/ui/input";
 export type {
@@ -757,6 +759,8 @@ export type { SpinnerProps } from "./components/ui/spinner";
 export { Spinner } from "./components/ui/spinner";
 export type { StreamingTextProps } from "./components/ui/streaming-text";
 export { StreamingText } from "./components/ui/streaming-text";
+export type { SuccessCheckProps } from "./components/ui/success-check";
+export { SuccessCheck } from "./components/ui/success-check";
 export type { SwitchProps } from "./components/ui/switch";
 export { Switch } from "./components/ui/switch";
 export type {
@@ -794,8 +798,14 @@ export {
   TabsTrigger,
   tabsListVariants,
 } from "./components/ui/tabs";
+export type { TextRevealProps } from "./components/ui/text-reveal";
+export { TextReveal } from "./components/ui/text-reveal";
+export type { TextSwapProps } from "./components/ui/text-swap";
+export { TextSwap } from "./components/ui/text-swap";
 export type { TextareaProps } from "./components/ui/textarea";
 export { Textarea } from "./components/ui/textarea";
+export type { ThinkingStatesProps } from "./components/ui/thinking-states";
+export { ThinkingStates } from "./components/ui/thinking-states";
 export type {
   ToastActionProps,
   ToastCloseProps,

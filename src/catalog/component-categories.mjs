@@ -62,11 +62,18 @@ export const componentCategories = [
   },
   {
     name: "モーション",
-    items: ["animated-number"],
+    items: ["animated-number", "icon-swap", "success-check", "text-reveal", "text-swap"],
   },
   {
     name: "チャット",
-    items: ["attachment", "bubble", "message", "message-scroller", "streaming-text"],
+    items: [
+      "attachment",
+      "bubble",
+      "message",
+      "message-scroller",
+      "streaming-text",
+      "thinking-states",
+    ],
   },
   {
     name: "レイアウト",
