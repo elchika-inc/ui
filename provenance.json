@@ -1301,6 +1301,20 @@
       "license": "MIT",
       "modified": "DirectionProvider と useDirection を公開し、DirectionProviderProps 契約と LTR / RTL consumer preview を追加し、Provider が HTML / CSS の文字方向を変更しない利用契約を README に記録",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "streaming-text": {
+      "origin": "elchika original",
+      "generatedContentSha256": "7ddbc4579a630f097546836199991a4293e79c392bd64e9c54d03a6f9ebfa4f8",
+      "license": "MIT",
+      "modified": "transitions.dev のストリーミング表示を参照し、既存トークンと React だけで自作",
+      "notes": "上流を持たない自作 component。generatedContentSha256 は記録時点の手元のファイルの錨で、変更後は --resync で取り直す。"
+    },
+    "animated-number": {
+      "origin": "elchika original",
+      "generatedContentSha256": "ab66e2cfdc07647130a06576209b1fef150e41a782106d86b962289c024fb608",
+      "license": "MIT",
+      "modified": "transitions.dev の数値補間を参照し、既存トークンと React だけで自作",
+      "notes": "上流を持たない自作 component。generatedContentSha256 は記録時点の手元のファイルの錨で、変更後は --resync で取り直す。"
     }
   },
   "blocks": {
