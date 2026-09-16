@@ -83,7 +83,7 @@ elchika-inc の共有 UI コンポーネント。Base UI + Tailwind CSS v4。sha
 - dev-data-safety: local。
 - routes:
   - `/` — 利用者向け導入手順と component 索引。
-  - `/components/` — component と block を横断し、カテゴリ別に全 89 件を並べる一覧ページ。component は preview を直接描画し、block は明示操作で隔離プレビューを縮小表示する。
+  - `/components/` — component と block を横断し、カテゴリ別に全 96 件を並べる一覧ページ。component は preview を直接描画し、block は明示操作で隔離プレビューを縮小表示する。
   - `/components/button/` — Button の公開 component ページ。
   - `/components/login-01/` — login-01（block）の公開ページ。block はソースリンクがディレクトリの tree URL を指し、Props セクションを出さない。
   - `/catalog/` — 横断検証カタログ（既存証跡の対象）。

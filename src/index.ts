@@ -45,6 +45,8 @@ export {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./components/ui/alert-dialog";
+export type { AnimatedNumberProps } from "./components/ui/animated-number";
+export { AnimatedNumber } from "./components/ui/animated-number";
 export type { AspectRatioProps } from "./components/ui/aspect-ratio";
 export { AspectRatio } from "./components/ui/aspect-ratio";
 export type {
@@ -755,6 +757,8 @@ export type { ToasterProps } from "./components/ui/sonner";
 export { Toaster } from "./components/ui/sonner";
 export type { SpinnerProps } from "./components/ui/spinner";
 export { Spinner } from "./components/ui/spinner";
+export type { StreamingTextProps } from "./components/ui/streaming-text";
+export { StreamingText } from "./components/ui/streaming-text";
 export type { SuccessCheckProps } from "./components/ui/success-check";
 export { SuccessCheck } from "./components/ui/success-check";
 export type { SwitchProps } from "./components/ui/switch";
