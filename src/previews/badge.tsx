@@ -14,6 +14,7 @@ export function BadgePreview() {
       >
         詳細を見る
       </Badge>
+      <Badge appear>新着</Badge>
     </div>
   );
 }

@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive dark:aria-invalid:border-destructive dark:aria-invalid:ring-destructive [&>svg]:pointer-events-none [&>svg]:size-3!",
+  "group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-state focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive dark:aria-invalid:border-destructive dark:aria-invalid:ring-destructive [&>svg]:pointer-events-none [&>svg]:size-3! data-appear:transition-[opacity,scale] data-appear:duration-emphasis data-appear:ease-bounce data-appear:starting:opacity-0 data-appear:starting:scale-75",
   {
     variants: {
       variant: {
@@ -24,9 +24,12 @@ const badgeVariants = cva(
   },
 );
 
-export type BadgeProps = useRender.ComponentProps<"span"> & VariantProps<typeof badgeVariants>;
+export type BadgeProps = useRender.ComponentProps<"span"> &
+  VariantProps<typeof badgeVariants> & {
+    appear?: boolean;
+  };
 
-function Badge({ className, variant = "default", render, ...props }: BadgeProps) {
+function Badge({ className, variant = "default", appear, render, ...props }: BadgeProps) {
   return useRender({
     defaultTagName: "span",
     props: mergeProps<"span">(
@@ -39,6 +42,7 @@ function Badge({ className, variant = "default", render, ...props }: BadgeProps)
     state: {
       slot: "badge",
       variant,
+      appear: appear || undefined,
     },
   });
 }
