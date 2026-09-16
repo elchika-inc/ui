@@ -2521,6 +2521,24 @@ test("自作 component の参照先が registry に無い import は停止する
     assert.deepEqual(JSON.parse(readFileSync(join(root, "registry.json"), "utf8")), { items: [] });
     assert.equal(existsSync(join(root, "src/pages/preview/zz-probe.astro")), false);
   }
+  for (const [path, name, wrongType, expectedType] of [
+    ["hooks/use-mobile", "use-mobile", "registry:ui", "registry:hook"],
+    ["components/ui/button", "button", "registry:hook", "registry:ui"],
+  ]) {
+    writeFileSync(
+      join(root, "src/components/ui/zz-probe.tsx"),
+      `import { Missing } from "@/${path}";\n`,
+    );
+    const registry = { items: [{ name, type: wrongType }] };
+    writeJson(join(root, "registry.json"), registry);
+    assert.throws(
+      () => scaffoldOriginalComponent({ root, name: "zz-probe", modified: "自作", log: () => {} }),
+      { message: `zz-probe: ${name} の type が ${expectedType} でない` },
+    );
+    assert.equal(readFileSync(join(root, "provenance.json"), "utf8"), before);
+    assert.deepEqual(JSON.parse(readFileSync(join(root, "registry.json"), "utf8")), registry);
+    assert.equal(existsSync(join(root, "src/pages/preview/zz-probe.astro")), false);
+  }
 });
 
 test("--resync は自作 component のハッシュを実体へ揃える", async (t) => {

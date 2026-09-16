@@ -1094,12 +1094,7 @@ export function scaffoldOriginalComponent({ root, name, modified, log = console.
   }
 
   const source = readFileSync(join(root, sourcePath), "utf8");
-  const registryDependencies = registryItemImports(source).map(({ name: dependency }) => {
-    if (!registry.items.some((item) => item.name === dependency)) {
-      throw new Error(`registry dependency ${dependency} に対応する registry item が存在しない`);
-    }
-    return `@elchika/${dependency}`;
-  });
+  const registryDependencies = completeBlockRegistryDependencies(name, [], source, registry.items);
   const registryItem = buildRegistryItem(name, { registryDependencies }, source, {
     itemType: "registry:ui",
     targetPath: sourcePath,
