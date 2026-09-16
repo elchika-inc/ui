@@ -206,3 +206,33 @@
 | avatar | `src/components/ui/avatar.tsx`、`src/previews/avatar.tsx` | `AvatarGroup` の class を `group/avatar-group flex -space-x-2 hover:-space-x-0.5 *:transition-[margin] *:duration-base *:ease-bounce-strong hover:*:ease-standard *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background` にする。preview に `AvatarGroup`（Avatar 3 つ + `AvatarGroupCount`）の例を足す | `[data-slot="avatar-group"]` | hover で子 avatar の `getAnimations()` に `margin-inline-start` または `margin-inline-end` の transition（duration 180ms、easing `cubic-bezier(0.2, 0, 0, 1)`）、pointer を外して easing `cubic-bezier(0.34, 3.85, 0.64, 1)` の transition。生成 CSS（minify 済みで空白なし）から `grep -o '[^{]*hover[^{]*ease-standard[^{]*{' <css>` で selector を取り出して report に写し、`:hover>*` の形（group の hover が子へ効く）であることを確認する。逆（`>*:hover`）になっていれば止めて ask |
 
 期待値（4 節 5 項）: 状態遷移の要素は `transition-duration` `0.12s`、`transition-timing-function` `cubic-bezier(0.2, 0, 0, 1)`。
+
+---
+
+## 8. 実装後の裁定一覧（2026-09-16 追記）
+
+PR 3-0 / 3-1 / 3-2（#68 / #70 / #69）の実装中に判明した spec の誤記と、spec に無かった判断の司令塔裁定をまとめる。§6 の「この spec ファイルは編集しない」は並走中の conflict を避けるための規定で、全 PR がマージされ issue #67 が閉じた後に司令塔が追記した。§1〜§C の本文は訂正せず、この節を正とする。裁定の原文は各 PR 本文と Orca orchestration Run `run_86207abd0fd5` にある。
+
+### 8.1 spec の誤記と実体
+
+| 箇所 | spec の記述 | 実体と裁定 | PR |
+|---|---|---|---|
+| §4.4 | 3-0 では `animate-shake` を使う部品が無いため生成 CSS に出ない | Tailwind v4 の自動ソース走査が `.docs/plans/` 内の class 文字列を拾うため、`.animate-shake{…}` と `@keyframes shake` が各 1 件出た。「0 でよい」は下限の緩和なので 1 件を合格とする | #68 |
+| §B TabsTrigger | `group-has-data-[slot=tabs-indicator]/tabs-list:data-active:shadow-none` | 同 specificity の既存 `group-data-[variant=default]/tabs-list:data-active:shadow-sm` が生成 CSS で後置され影が残る。`shadow-none!` に変更（`!` 接尾辞は `[&>svg]:size-3!` として既存） | #70 |
+| §B tabs の観測 | `--active-tab-left` が trigger の `offsetLeft` と一致 | Base UI は小数 px、`offsetLeft` は整数丸め。判定基準を「差が 1px 以内」とし、block の 100.73 / 101 も一致扱い | #70 |
+| §B | block を変更したときの手順が無い | `src/blocks/*` を変更したら `node scripts/add-component.mjs <block> --resync` で `provenance.json` の `generatedContentSha256` を再同期する。書き漏れのため初回 CI の Completeness check が fail し、再同期 commit で解消 | #70 |
+| §C field の観測 | `getAnimations()` の `effect.getTiming().easing` が `cubic-bezier(0.2, 0, 0, 1)` | CSS animation では `animation-timing-function` は keyframe 間の easing として keyframes 側に載り、effect 全体の easing は `linear` を返す。computed `animation-timing-function` と keyframes の easing を証拠にして合格 | #69 |
+| §C avatar の観測 | `transitionProperty` が `margin-inline-start` または `margin-inline-end` | Chromium は論理プロパティの transition を物理 longhand `margin-right` で報告する。computed `margin-inline-end` の -8px → -2px → -8px を証拠にして合格 | #69 |
+
+### 8.2 運用上の裁定
+
+- 同じマシンで 2 worker が並走すると `claude -p` のレビュアーと check-evidence の応答が数分単位で遅れる。15 分超過の報告は想定内として打ち切らず継続させ、レンズごとの所要時間と exit code を PR 本文に記録する。
+- 2 本目の PR は `git merge origin/main` で追随し、担当ファイルが実装 commit と byte 一致なら証跡を撮り直さない（#60 spec §8.2 と同じ）。
+- レビュアーの出力が形式不正のときは同じレンズを 1 回だけ再取得し、再取得の記録を残す。
+
+### 8.3 サブプロジェクト 4 へ持ち越す点
+
+- `TabsIndicator` の色は foreground / card のまま。黄アクセントの用途確定（#60 でスコープ外とした件）は別 issue。
+- Badge の `appear` を付けると transition が opacity / scale に置き換わり、状態色の遷移と併用できない（レビューの optional、採用せず）。
+- `TabsIndicator` の `renderBeforeHydration` はインラインスクリプトを出すため、CSP を導入するときに再検討する。
+- sidebar rail の `transition-all ease-linear` は用途が違うため据え置き。
