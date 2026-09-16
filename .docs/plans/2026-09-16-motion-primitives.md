@@ -114,3 +114,22 @@
 | streaming-text | `StreamingText`（`React.ComponentProps<"span"> & { text: string; streaming?: boolean }`） | root: `<span data-slot="streaming-text" aria-busy={streaming || undefined}>`。確定済み文字列 `committed` を state に持ち、`text` が `committed` で始まるなら差分を `<span data-slot="streaming-text-chunk" className="transition-opacity duration-fast ease-standard starting:opacity-0">` として末尾に足し、その `onTransitionEnd` で `committed` に畳む（transitionend が来ない環境のために `text` が更に進んだときも畳む）。始まらないなら全置換して演出なし。`streaming` のとき末尾に `<span data-slot="streaming-text-caret" aria-hidden className="ml-px inline-block h-4 w-px animate-caret-blink bg-current align-text-bottom" />` | button でチャンクを 3 回追記し、各 chunk の `getAnimations()` に `opacity` の transition（120ms、`cubic-bezier(0.2, 0, 0, 1)`）、caret の computed `animation-name` = `caret-blink`、`streaming` を false にすると caret が消える |
 
 各部品の `src/index.ts` への export は値と `<Name>Props`。scaffold の `--modified` の書き方は §B と同じ。
+
+## 8. 実装後の裁定一覧（PR 4-0 / 4-1 / 4-2）
+
+### 8.1 spec の誤記・書き漏れ
+
+1. §A.3 の fixture 補完は `check-completeness.test.mjs` しか挙げていなかったが、`check-cli-smoke.test.mjs` の button fixture にも `origin` が要る（origin 必須化で CI の全件テストが 1 件 fail。PR #74 でスコープ追加）。
+2. §B TextReveal / §C AnimatedNumber の root `<span aria-label>` は Biome `lint/a11y/useAriaPropsSupportedByRole` が弾く（generic な span は名前を持てない）。裁定: root に `role="img"` を足す。両部品で統一し、API・`data-slot`・視覚構造は不変（PR #75 / #76）。
+
+### 8.2 運用
+
+- レビュー用 diff は担当ファイルに絞ってよい。先頭 commit の spec は §4.9 の例外でレビュー対象に含めない。
+- 1 行の fixture 補完のような追加レビューは Fresh Eyes + Tests の 2 レンズで可（記録に縮めた旨を書く）。
+- codex worker を同時に 3 本以上走らせると IPv4 一時ポートが TIME_WAIT で枯渇し、`gh` / `git push` / `127.0.0.1` への接続が失敗する。証跡の配信は `npx astro preview --host ::1` で回避でき、remote 操作は接続回復まで待つ（PR #75 / #76 の「環境障害の記録」）。
+- Orca 再起動で worker 端末が失効したら、同じ worktree に「残りの手順だけ」の再開 brief で fresh worker を起動する（`--retry-of` は `--task` が要るので `--spec` で新規 task）。codex の exec_command が無応答になる場合は `--agent claude` に切り替える。ファイルを変更しない remote 手順（push・PR 作成・CI 確認）は司令塔が代行してよく、理由を PR 本文に残す。
+
+### 8.3 持ち越し
+
+- `AGENTS.md` の「全 96 件」は PR 4-2 が先にマージされた場合に一時的に実数と食い違う設計だったが、実際は 4-1 → 4-2 の順でマージされたので食い違いは発生しなかった。
+- TextReveal の `Array.from` フォールバック（`Intl.Segmenter` 非搭載環境）では書記素クラスタが分かれる。仕様が明示した互換経路の制約として記録し、追加ライブラリは入れない。
