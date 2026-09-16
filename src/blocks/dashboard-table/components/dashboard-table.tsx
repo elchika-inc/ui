@@ -32,7 +32,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsIndicator, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
 export type DashboardTableRow = {
@@ -439,6 +439,7 @@ export function DashboardTable({ data, className }: DashboardTableProps) {
           <TabsList aria-label="ドキュメント表示">
             <TabsTrigger value="all">すべての文書</TabsTrigger>
             <TabsTrigger value="review">作業中</TabsTrigger>
+            <TabsIndicator />
           </TabsList>
           <div className="flex flex-1 flex-col gap-2 sm:max-w-xl sm:flex-row sm:justify-end">
             <Input
