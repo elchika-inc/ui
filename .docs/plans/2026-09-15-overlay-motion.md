@@ -191,3 +191,44 @@ allowlist から削除する行: `src/components/ui/toast.tsx`（複数行）。
 7. 共有面証跡 28 枚 + report を撮る（`global.css` 変更のため）。
 
 期待値（4 節 5 項）: `/preview/input-otp/` の caret 要素の `animation-name` が `caret-blink`。`/preview/item/` の item の `transition-duration` が `0.12s`。
+
+---
+
+## 8. 実装後の裁定一覧（2026-09-16 追記）
+
+PR A〜E（#61〜#65）の実装中に判明した spec の誤記と、spec に無かった判断の司令塔裁定をまとめる。§6 の「この spec ファイルは編集しない」は並走中の add/add conflict を避けるための規定で、全 PR がマージされ issue #60 が閉じた後に司令塔が追記した。§1〜§E の本文は訂正せず、この節を正とする。裁定の原文は各 PR 本文と Orca orchestration Run `run_b4713a63e969` にある。
+
+### 8.1 spec の誤記と実体
+
+| 箇所 | spec の記述 | 実体と裁定 | PR |
+|---|---|---|---|
+| §B 表 | `slide-in-from-…-2` は 5 個 | 実在は 6 個（popover / hover-card / tooltip とも）。§2 の「すべて取り除く」を正とし全削除 | #61 |
+| §A 期待値 | drawer の popup は `0.4s` / `cubic-bezier(0.16, 1, 0.3, 1)` | 「生値を段へ写像するだけで構造は変えない」を優先。Popup（`[data-slot="drawer-popup"]`）は `duration-450` → `duration-emphasis` で `0.5s`、既存の `ease-[cubic-bezier(0.22,1,0.36,1)]` は保持。Content（`[data-slot="drawer-content"]`）は `0.4s` / `cubic-bezier(0.16, 1, 0.3, 1)` | #62 |
+| §C navigation-menu | viewport の `data-[activation-direction=…]` 別 translate は既存構造を維持 | その構造は存在せず、実装にあったのは旧 `data-motion` 系クラス。Base UI は Content に `data-activation-direction` を出し `data-motion` は出さない。旧クラスを全除去し、Content に `transition-[opacity,transform,translate] duration-slow ease-entrance` と left / right 別の `translate-x-(--motion-distance-lg)`（left は starting 負 / ending 正、right は逆）を接続。up / down は対象外 | #64 |
+| §C navigation-menu | Indicator の扱いは未記載 | Indicator の旧クラスは `data-state` を参照しており、Base UI Icon が出す属性は `data-popup-open` だけなので元から無効だった。削除のみ行い、`data-popup-open` への接続はサブプロジェクト 3 で扱う（8.4） | #64 |
+| §D accordion | 高さ 3 クラスは Panel に「既存」 | 内側 div にあった。Panel へ移し、内側 div の余白・子要素スタイルは保持 | #63 |
+| §E 2 項 | caret-blink の曲線は `ease-out` | check-standards は `.css` も走査するため生値として検知される。`var(--curve-entrance)` へ写像し、`1.25s` とコメントは維持 | #65 |
+| §E 3 項 | `npm run registry:build` で `public/r` を再生成する（依存は build が引き直す前提） | `scripts/registry-policy.mjs` の `SHARED_DEPENDENCIES` が依存を必須にしており、build 後も 90 件残った。policy から削除したうえで `registry.json` は Node で機械削除。`public/r` は `.gitignore` 対象なので再生成と配布検査にだけ使い追跡しない。途中の「生成物を commit に含めてよい」は撤回 | #65 |
+
+### 8.2 spec に無かった判断
+
+- **§4.2 の陽性対照**は「ファイル単位」ではなく「検索式単位」で判定する。origin/main の担当ファイルのどれかで 1 件以上あれば合格。origin/main でも 0 件の組合せは N/A とし、必要なら人工の陽性対照（1 行の一時ファイル）で検査経路を検算してから削除する。
+- **§4.8 の diff scope** に対し、司令塔が入れた spec ファイル追加の commit（PR A `d8ce65a`、PR B `e0467c5`）は明記した例外。
+- **§B の `data-instant` 分岐**: popover / hover-card は通常操作で属性が付かないため `data-instant:transition-none` を付ける。context-menu は通常の右クリック open で `data-instant="click"`、Escape close で `dismiss` を観測したため、同部品だけ `data-instant:transition-none` を外す（裁定 `msg_1160542c2e6e`）。dropdown-menu / menubar / combobox / select / dialog 系はテンプレどおり付ける。
+- **Select の align-trigger**: レビューの flag（3 レンズ同一）を変形して採用。`data-[align-trigger=true]:animate-none` を削除し、共通テンプレの後に `data-[align-trigger=true]:data-starting-style:scale-100 data-[align-trigger=true]:data-ending-style:scale-100` を足す（整列時は opacity だけ遷移し、レビューの `transition-none` 案は必須の transition が消えるため採らない。裁定 `msg_ae75134f7a15`）。
+- **Select の close 終点**: Base UI Select は DOM を保持し親 Positioner が `hidden` になるため、§4.5 の「要素が消える」は `checkVisibility()=false` で判定する。
+- **navigation-menu Indicator**: 旧 4 クラスの削除だけを行い、代わりを足さない（裁定 `msg_b1e0f0463509`）。
+- **証跡の commit 分割（PR E）**: 共有トークン変更を含む PR は「トークン変更」「実装」「証跡」の順に commit を分け、`verified_impl_sha` / `targeted_dynamic_sha` がトークン変更 commit より後を指すようにする（check-evidence の `strictAncestor` 判定のため）。
+- **base 追随後の証跡**: `git merge origin/main` で担当部品が実装 commit と byte 一致なら撮り直し不要。
+- **§E の既存機構との衝突**: 依存を固定していたテスト（`add-component.test.mjs` 3 箇所、`check-completeness.test.mjs` 1 箇所、`dashboard-blocks.test.mjs` 2 箇所）を同期し、block の provenance ハッシュは `record-provenance.mjs` に再同期オプションが無いため `node scripts/add-component.mjs <block> --resync` で更新する。
+
+### 8.3 運用上の裁定
+
+- **レビュアーの起動経路**: worker から `orca orchestration worker-start` でレビュアーを起動すると `consumer_fenced` で失敗する。代替は `claude -p --model sonnet --tools Read,Glob,Grep --strict-mcp-config --safe-mode --permission-mode dontAsk --no-session-persistence` を 1 レンズ 1 呼び出しの fresh context で逐次実行する経路。次回の委任仕様には最初からこの経路を書く。
+- **司令塔の独立検証**: `node scripts/check-evidence.mjs` や全件テストを worker の稼働中に司令塔が回すと worker が「無応答」に見える。重い検証は worker_done の後に回す。
+- **全件テスト・typecheck・check:all** はローカルで実行せず PR CI の `Lint, typecheck, test & build` で代替する（§4.6 の規定どおり。§4.7 の check-evidence だけは worker が単独実行する）。
+
+### 8.4 サブプロジェクト 3 へ持ち越す残課題
+
+- drawer Popup の `ease-[cubic-bezier(0.22,1,0.36,1)]` はトークン化していない（`--curve-*` に相当する段が無い。段を足すか `ease-entrance` へ寄せるかを決める）。
+- navigation-menu の Indicator は `data-popup-open` に接続しておらず常時表示のまま。
