@@ -51,7 +51,7 @@ function NavigationMenuItem({ className, ...props }: NavigationMenuItemProps) {
 }
 
 const navigationMenuTriggerStyle = cva(
-  "group/navigation-menu-trigger inline-flex h-9 w-max items-center justify-center rounded-lg px-2.5 py-1.5 text-sm font-medium transition-all outline-none hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:ring-ring focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-disabled data-popup-open:bg-state-hover data-popup-open:hover:bg-muted data-open:bg-state-hover data-open:hover:bg-muted data-open:focus:bg-muted",
+  "group/navigation-menu-trigger inline-flex h-9 w-max items-center justify-center rounded-lg px-2.5 py-1.5 text-sm font-medium transition-state outline-none hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:ring-ring focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-disabled data-popup-open:bg-state-hover data-popup-open:hover:bg-muted data-open:bg-state-hover data-open:hover:bg-muted data-open:focus:bg-muted",
 );
 
 function NavigationMenuTrigger({ className, children, ...props }: NavigationMenuTriggerProps) {
@@ -127,7 +127,7 @@ function NavigationMenuLink({ className, ...props }: NavigationMenuLinkProps) {
     <NavigationMenuPrimitive.Link
       data-slot="navigation-menu-link"
       className={cn(
-        "flex items-center gap-2 rounded-lg p-2 text-sm transition-all outline-none hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:ring-ring focus-visible:outline-1 in-data-[slot=navigation-menu-content]:rounded-md data-active:bg-state-hover data-active:hover:bg-muted data-active:focus:bg-muted [&_svg:not([class*='size-'])]:size-4",
+        "flex items-center gap-2 rounded-lg p-2 text-sm transition-state outline-none hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:ring-ring focus-visible:outline-1 in-data-[slot=navigation-menu-content]:rounded-md data-active:bg-state-hover data-active:hover:bg-muted data-active:focus:bg-muted [&_svg:not([class*='size-'])]:size-4",
         className,
       )}
       {...props}
@@ -139,7 +139,10 @@ function NavigationMenuIndicator({ className, ...props }: NavigationMenuIndicato
   return (
     <NavigationMenuPrimitive.Icon
       data-slot="navigation-menu-indicator"
-      className={cn("top-full z-1 flex h-1.5 items-end justify-center overflow-hidden", className)}
+      className={cn(
+        "top-full z-1 flex h-1.5 items-end justify-center overflow-hidden opacity-0 transition-opacity duration-slow ease-entrance data-popup-open:opacity-100",
+        className,
+      )}
       {...props}
     >
       <div className="relative top-1 h-2 w-2 rotate-45 rounded-tl-sm bg-border shadow-md" />
