@@ -24,6 +24,7 @@ standards の [`DESIGN.md`](https://github.com/elchika-inc/standards/blob/main/D
 | アクセント（黄） | コーポレート固定。プロダクトは変えない | 「別プロダクトだと分かるが、同じ会社に見える」状態を作っている面 |
 | ステータス色 | 上書き禁止 | ブランド表現ではなく、安全に関わる語彙として扱う |
 | 書体 | IBM Plex スーパーファミリー。Mono は「ラベルと数値」専用レイヤー | `--font-display` と `--font-body` は同一。`:lang(en)` が和欧の並び順と組版を切り替える |
+| アイコン | UI アイコンは lucide-react（standards §5 が正本）。ソーシャルログインのブランドロゴ（GitHub / Apple / Google / Meta）は lucide に無いので、上流 shadcn block が持つ inline SVG を逐語で写す | ブランドロゴのために依存を足さない。来歴は block 単位の `provenance.json` が担う。上流 block に無いロゴの扱いは決めていない |
 | 密度・余白・ニュートラル | 共有 | プロダクトごとに変えない |
 
 **上書きしてよい面は `--brand-*` の 5 個だけ**（1プロダクト＝5行）。セマンティック層はその参照だけで値が決まる構造になっており、プロダクトが直接触るとライト・ダーク・状態の組み合わせで定義が増え続けて破綻する。
@@ -43,6 +44,7 @@ standards の [`DESIGN.md`](https://github.com/elchika-inc/standards/blob/main/D
 - **和欧の間に手動でスペースを入れる** — 四分アキは組版の仕事
 - **既存プロダクトの現行テーマに寄せる** — トークン側を正とし、プロダクト側を寄せる
 - **モーションに Tailwind 既定の `duration-<数値>` / `ease-out` や生の `ms` / `cubic-bezier()` を書く** — 段は Motion 節の用途表から `duration-<段>` / `ease-<名前>` で選ぶ。`check-standards.mjs` の `motion-literal` が検知する
+- **ブランドロゴのために別のアイコンライブラリ（simple-icons 等）を足す** — lucide はブランドアイコンを収録していない。上流 shadcn block が持つ inline SVG を逐語で写し、来歴は `provenance.json` に残す
 
 ## 再検討トリガー
 
