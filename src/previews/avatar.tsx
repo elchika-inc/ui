@@ -1,4 +1,10 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarGroup,
+  AvatarGroupCount,
+  AvatarImage,
+} from "@/components/ui/avatar";
 
 const avatarImage =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%231d4ed8'/%3E%3Ccircle cx='32' cy='25' r='12' fill='%23bfdbfe'/%3E%3Cpath d='M10 60c3-14 12-21 22-21s19 7 22 21' fill='%23bfdbfe'/%3E%3C/svg%3E";
@@ -15,6 +21,18 @@ export function AvatarPreview() {
         <AvatarImage alt="" />
         <AvatarFallback delay={0}>UI</AvatarFallback>
       </Avatar>
+      <AvatarGroup aria-label="チームメンバー">
+        <Avatar aria-label="メンバー1">
+          <AvatarFallback delay={0}>田</AvatarFallback>
+        </Avatar>
+        <Avatar aria-label="メンバー2">
+          <AvatarFallback delay={0}>山</AvatarFallback>
+        </Avatar>
+        <Avatar aria-label="メンバー3">
+          <AvatarFallback delay={0}>川</AvatarFallback>
+        </Avatar>
+        <AvatarGroupCount aria-label="ほか2人">+2</AvatarGroupCount>
+      </AvatarGroup>
     </div>
   );
 }
