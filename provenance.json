@@ -1301,6 +1301,41 @@
       "license": "MIT",
       "modified": "DirectionProvider と useDirection を公開し、DirectionProviderProps 契約と LTR / RTL consumer preview を追加し、Provider が HTML / CSS の文字方向を変更しない利用契約を README に記録",
       "notes": "registry 配信物と CLI 生成物は byte 等価でない。registryContentSha256 は受け取った配信物、generatedContentSha256 は CLI 生成直後の手元の生成物の錨である。upstreamPathSha は元テンプレートを最後に変更した commit を指す。standards 正規化後は生成直後 hash と一致しない。"
+    },
+    "icon-swap": {
+      "origin": "elchika original",
+      "generatedContentSha256": "92678b2c6767b656d2a71fbc34fac0d32112201204b969304aeb3d4c74318bed",
+      "license": "MIT",
+      "modified": "transitions.dev の icon swap を参照し、既存トークンと React だけで自作",
+      "notes": "上流を持たない自作 component。generatedContentSha256 は記録時点の手元のファイルの錨で、変更後は --resync で取り直す。"
+    },
+    "success-check": {
+      "origin": "elchika original",
+      "generatedContentSha256": "0e47d2db27f12d9a303df61acd88063a86db07478ff73aac66920e1e5037c585",
+      "license": "MIT",
+      "modified": "transitions.dev の success check を参照し、既存トークンと React だけで自作",
+      "notes": "上流を持たない自作 component。generatedContentSha256 は記録時点の手元のファイルの錨で、変更後は --resync で取り直す。"
+    },
+    "text-swap": {
+      "origin": "elchika original",
+      "generatedContentSha256": "dfb0282d3a6c3084ee848f4df9a8fbcbafbbaf710da96884ce73e16659f838cb",
+      "license": "MIT",
+      "modified": "transitions.dev の text swap を参照し、既存トークンと React だけで自作",
+      "notes": "上流を持たない自作 component。generatedContentSha256 は記録時点の手元のファイルの錨で、変更後は --resync で取り直す。"
+    },
+    "text-reveal": {
+      "origin": "elchika original",
+      "generatedContentSha256": "08ca02bd95af09a65b1a7aaf8b67a8d73f664b73c58eaac6acc55f0058ddf353",
+      "license": "MIT",
+      "modified": "transitions.dev の text reveal を参照し、既存トークンと React だけで自作",
+      "notes": "上流を持たない自作 component。generatedContentSha256 は記録時点の手元のファイルの錨で、変更後は --resync で取り直す。"
+    },
+    "thinking-states": {
+      "origin": "elchika original",
+      "generatedContentSha256": "587303d57cedb41b6cc8eb3e7aea145af532a563d004f55503f207ec6f7462c0",
+      "license": "MIT",
+      "modified": "transitions.dev の thinking states を参照し、既存トークンと React だけで自作",
+      "notes": "上流を持たない自作 component。generatedContentSha256 は記録時点の手元のファイルの錨で、変更後は --resync で取り直す。"
     }
   },
   "blocks": {
