@@ -96,6 +96,7 @@ const createFixture = () => {
   writeJson(root, "provenance.json", {
     components: {
       button: {
+        origin: "shadcn/ui registry",
         sourceUrl: "https://example.com/button.tsx",
         upstreamPath: "apps/v4/registry/bases/base/ui/button.tsx",
         upstreamPathSha: "0".repeat(40),
