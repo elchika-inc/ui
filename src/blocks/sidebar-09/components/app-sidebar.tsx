@@ -165,7 +165,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">elchika</span>
-                  <span className="truncate text-xs">エンタープライズ</span>
+                  <span className="truncate text-2xs">エンタープライズ</span>
                 </div>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -228,10 +228,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   className="flex flex-col items-start gap-2 border-b p-4 text-sm leading-tight whitespace-nowrap last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                 >
                   <div className="flex w-full items-center gap-2">
-                    <span>{mail.name}</span> <span className="ml-auto text-xs">{mail.date}</span>
+                    <span>{mail.name}</span> <span className="ml-auto text-2xs">{mail.date}</span>
                   </div>
                   <span className="font-medium">{mail.subject}</span>
-                  <span className="line-clamp-2 w-65 text-xs whitespace-break-spaces">
+                  <span className="line-clamp-2 w-65 text-2xs whitespace-break-spaces">
                     {mail.teaser}
                   </span>
                 </a>

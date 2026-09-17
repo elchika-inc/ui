@@ -106,7 +106,7 @@ export function SidebarPreview({ mode = "isolated" }: PreviewProps) {
               </SidebarGroup>
             </SidebarContent>
             <SidebarFooter>
-              <span className="px-2 text-xs text-sidebar-foreground">elchika-inc</span>
+              <span className="px-2 text-2xs text-sidebar-foreground">elchika-inc</span>
             </SidebarFooter>
             <SidebarRail />
           </Sidebar>

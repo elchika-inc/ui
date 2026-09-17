@@ -40,7 +40,7 @@ export function TablePreview() {
             <TableRow>
               <TableHead scope="col">注文番号</TableHead>
               <TableHead scope="col">商品</TableHead>
-              <TableHead scope="col" className="text-right">
+              <TableHead scope="col" numeric>
                 金額
               </TableHead>
             </TableRow>
@@ -50,14 +50,14 @@ export function TablePreview() {
               <TableRow key={order.number}>
                 <TableCell>{order.number}</TableCell>
                 <TableCell>{order.product}</TableCell>
-                <TableCell className="text-right tabular-nums">{order.amount}</TableCell>
+                <TableCell numeric>{order.amount}</TableCell>
               </TableRow>
             ))}
           </TableBody>
           <TableFooter>
             <TableRow>
               <TableCell colSpan={2}>合計</TableCell>
-              <TableCell className="text-right tabular-nums">¥21,200</TableCell>
+              <TableCell numeric>¥21,200</TableCell>
             </TableRow>
           </TableFooter>
         </Table>
