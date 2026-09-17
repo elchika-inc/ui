@@ -181,7 +181,7 @@ function ComboboxLabel({ className, ...props }: ComboboxLabelProps) {
   return (
     <ComboboxPrimitive.GroupLabel
       data-slot="combobox-label"
-      className={cn("px-2 py-1.5 text-xs text-muted-foreground", className)}
+      className={cn("px-2 py-1.5 text-2xs text-muted-foreground", className)}
       {...props}
     />
   );
@@ -245,7 +245,7 @@ function ComboboxChip({ className, children, showRemove = true, ...props }: Comb
     <ComboboxPrimitive.Chip
       data-slot="combobox-chip"
       className={cn(
-        "flex h-(--combobox-chip-height) w-fit items-center justify-center gap-1 rounded-sm bg-muted px-1.5 text-xs font-medium whitespace-nowrap text-foreground [--combobox-chip-height:calc(--spacing(5.25))] has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 has-data-[slot=combobox-chip-remove]:pr-0",
+        "flex h-(--combobox-chip-height) w-fit items-center justify-center gap-1 rounded-sm bg-muted px-1.5 text-2xs leading-none font-medium whitespace-nowrap text-foreground [--combobox-chip-height:calc(--spacing(5.25))] has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 has-data-[slot=combobox-chip-remove]:pr-0",
         className,
       )}
       {...props}

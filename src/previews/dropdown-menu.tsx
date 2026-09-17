@@ -10,6 +10,7 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
+  DropdownMenuShortcut,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -27,7 +28,10 @@ export function DropdownMenuPreview({ mode = "isolated" }: PreviewProps) {
         <DropdownMenuContent>
           <DropdownMenuGroup>
             <DropdownMenuLabel>ファイル</DropdownMenuLabel>
-            <DropdownMenuItem label="new">新規作成</DropdownMenuItem>
+            <DropdownMenuItem label="new">
+              新規作成
+              <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
+            </DropdownMenuItem>
             <DropdownMenuCheckboxItem defaultChecked>隠しファイルを表示</DropdownMenuCheckboxItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
