@@ -65,9 +65,9 @@ function ComponentIndexCard({
           <div className="grid h-full place-items-center p-6 text-center">
             <div className="flex max-w-xs flex-col items-center gap-4">
               <div>
-                <p className="font-mono text-xs text-muted-foreground">{name}</p>
+                <p className="font-mono text-2xs text-muted-foreground">{name}</p>
                 <p className="mt-1 font-heading text-lg font-semibold">隔離プレビューを開始</p>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                <p className="mt-2 text-sm leading-normal text-muted-foreground">
                   focus trap を一覧ページから分離した状態で読み込みます。
                 </p>
               </div>
@@ -137,13 +137,13 @@ export function ComponentIndex({ categories, blockNames }: ComponentIndexProps) 
       {(theme) => (
         <>
           <header className="flex flex-col gap-3 border-b border-border pb-8">
-            <p className="font-mono text-xs font-medium tracking-wider text-primary uppercase">
+            <p className="font-mono text-3xs font-medium tracking-label text-primary uppercase">
               Component index
             </p>
-            <h1 className="font-heading text-4xl font-semibold tracking-tight">
+            <h1 className="font-heading text-4xl font-semibold tracking-heading">
               コンポーネント一覧
             </h1>
-            <p className="max-w-2xl leading-7 text-muted-foreground">
+            <p className="max-w-2xl leading-normal text-muted-foreground">
               配布する component と組み立て済みの block を、カテゴリごとに確認できます。
             </p>
           </header>
@@ -152,7 +152,7 @@ export function ComponentIndex({ categories, blockNames }: ComponentIndexProps) 
             <section key={category.name} className="flex flex-col gap-5">
               <div className="flex items-baseline justify-between gap-4 border-b border-border pb-3">
                 <h2 className="font-heading text-2xl font-semibold">{category.name}</h2>
-                <p className="font-mono text-xs text-muted-foreground">
+                <p className="font-mono text-2xs text-muted-foreground">
                   {category.items.length} items
                 </p>
               </div>

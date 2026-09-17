@@ -58,11 +58,11 @@ export function DocumentationShell({
           <SidebarHeader className="gap-3 px-4 py-4">
             <a
               href="/"
-              className="rounded-md font-heading text-base font-semibold tracking-tight focus-visible:ring-3 focus-visible:ring-sidebar-ring focus-visible:outline-none"
+              className="rounded-md font-heading text-base font-semibold tracking-heading focus-visible:ring-3 focus-visible:ring-sidebar-ring focus-visible:outline-none"
             >
               elchika-inc/ui
             </a>
-            <p className="text-xs leading-relaxed text-muted-foreground">共有 UI の導入と参照</p>
+            <p className="text-2xs leading-relaxed text-muted-foreground">共有 UI の導入と参照</p>
           </SidebarHeader>
           <SidebarSeparator />
           <SidebarContent>

@@ -56,10 +56,10 @@ export function ComponentDocumentation({
         return (
           <>
             <header className="flex flex-col gap-3 border-b border-border pb-8">
-              <p className="font-mono text-xs font-medium tracking-wider text-primary uppercase">
+              <p className="font-mono text-3xs font-medium tracking-label text-primary uppercase">
                 {isBlock ? "Block" : "Component"}
               </p>
-              <h1 className="font-heading text-4xl font-semibold tracking-tight">{title}</h1>
+              <h1 className="font-heading text-4xl font-semibold tracking-heading">{title}</h1>
               <p className="max-w-2xl text-muted-foreground">
                 {isBlock
                   ? "組み立て済みの雛形です。コピーして自分のアプリで編集する前提のため、ライブラリからは export しません。"
@@ -98,7 +98,7 @@ export function ComponentDocumentation({
                     <div className="flex max-w-md flex-col items-center gap-4">
                       <div>
                         <h3 className="font-heading text-lg font-semibold">隔離プレビューを開始</h3>
-                        <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                        <p className="mt-2 text-sm leading-normal text-muted-foreground">
                           Dialog などの focus trap をこのページから分離した状態で読み込みます。
                         </p>
                       </div>
