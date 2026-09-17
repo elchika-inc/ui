@@ -12,6 +12,7 @@ import {
   ContextMenuRadioGroup,
   ContextMenuRadioItem,
   ContextMenuSeparator,
+  ContextMenuShortcut,
   ContextMenuSub,
   ContextMenuSubContent,
   ContextMenuSubTrigger,
@@ -50,7 +51,10 @@ export function ContextMenuPreview({ mode = "isolated" }: PreviewProps) {
         <ContextMenuContent>
           <ContextMenuGroup>
             <ContextMenuLabel>ファイル</ContextMenuLabel>
-            <ContextMenuItem label="new">新規作成</ContextMenuItem>
+            <ContextMenuItem label="new">
+              新規作成
+              <ContextMenuShortcut>⌘K</ContextMenuShortcut>
+            </ContextMenuItem>
             <ContextMenuCheckboxItem defaultChecked>隠しファイルを表示</ContextMenuCheckboxItem>
           </ContextMenuGroup>
           <ContextMenuSeparator />

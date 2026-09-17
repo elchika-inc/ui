@@ -15,6 +15,10 @@ export function BadgePreview() {
         詳細を見る
       </Badge>
       <Badge appear>新着</Badge>
+      <Badge numeric>1,234</Badge>
+      <Badge variant="secondary" numeric>
+        99+
+      </Badge>
     </div>
   );
 }

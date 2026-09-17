@@ -163,7 +163,7 @@ function MenubarShortcut({ className, ...props }: MenubarShortcutProps) {
     <DropdownMenuShortcut
       data-slot="menubar-shortcut"
       className={cn(
-        "ml-auto text-xs tracking-widest text-muted-foreground group-focus/menubar-item:text-accent-foreground",
+        "ml-auto font-mono text-2xs tracking-label text-muted-foreground group-focus/menubar-item:text-accent-foreground",
         className,
       )}
       {...props}

@@ -63,7 +63,7 @@ function EmptyTitle({ className, ...props }: EmptyTitleProps) {
   return (
     <h3
       data-slot="empty-title"
-      className={cn("font-heading text-sm font-medium tracking-tight", className)}
+      className={cn("font-heading text-sm font-medium tracking-heading", className)}
       {...props}
     />
   );
