@@ -63,6 +63,8 @@
        利用側 CSS の :root で --font-display を上書きする（@theme inline は値を展開するため
        --font-heading の :root 上書きでは効かない）。 */
     --font-heading: var(--font-display);
+    /* design system の --font-feature-display。欧文には無害なので言語で分けない。 */
+    --font-heading--font-feature-settings: "palt" 1;
     --font-sans: var(--font-body);
     /* Tailwind の @theme が同名の --font-mono を持ち cascade layer 順で勝つため、
        design system 側の別名 --font-code を経由して再マップする。 */
@@ -178,6 +180,47 @@
     --spacing-control-x: var(--control-padding-x);
     --container-dialog: calc(100% - 2rem);
     --spacing-tabs-trigger: calc(100% - 1px);
+}
+
+/* 組版は :lang(en) の再調整を残すため inline にしない。 */
+@theme {
+  /* design-tokens.html の Typography 節を正本とし、Tailwind と同名のトークンは値を直書きする（scripts/theme-typography.test.mjs が tokens.css と突合する）。 */
+  --text-*: initial;
+  --text-3xs: 0.6875rem;
+  --text-3xs--line-height: 1.5;
+  --text-2xs: 0.75rem;
+  --text-2xs--line-height: 1.5;
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.5;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.5;
+  --text-base: 1rem;
+  --text-base--line-height: 1.75;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.9;
+  --text-xl: 1.3125rem;
+  --text-xl--line-height: 1.35;
+  --text-2xl: 1.5625rem;
+  --text-2xl--line-height: 1.35;
+  --text-3xl: 1.875rem;
+  --text-3xl--line-height: 1.35;
+  --text-4xl: 2.25rem;
+  --text-4xl--line-height: 1.35;
+  --text-5xl: 2.75rem;
+  --text-5xl--line-height: 1.35;
+  --text-6xl: 3.375rem;
+  --text-6xl--line-height: 1.35;
+  --leading-*: initial;
+  --leading-none: 1;
+  --leading-tight: 1.25;
+  --leading-display: 1.35;
+  --leading-snug: 1.5;
+  --leading-normal: 1.75;
+  --leading-relaxed: 1.9;
+  --tracking-display: -0.02em;
+  --tracking-heading: -0.01em;
+  --tracking-normal: 0.02em;
+  --tracking-label: 0.08em;
 }
 
 /* solid destructive の AA を満たす濃色。status danger は subtle / indicator で引き続き使う。 */
