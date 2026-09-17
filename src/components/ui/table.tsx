@@ -7,8 +7,12 @@ export type TableHeaderProps = React.ComponentProps<"thead">;
 export type TableBodyProps = React.ComponentProps<"tbody">;
 export type TableFooterProps = React.ComponentProps<"tfoot">;
 export type TableRowProps = React.ComponentProps<"tr">;
-export type TableHeadProps = React.ComponentProps<"th">;
-export type TableCellProps = React.ComponentProps<"td">;
+export type TableHeadProps = React.ComponentProps<"th"> & {
+  numeric?: boolean;
+};
+export type TableCellProps = React.ComponentProps<"td"> & {
+  numeric?: boolean;
+};
 export type TableCaptionProps = React.ComponentProps<"caption">;
 
 function Table({ className, ...props }: TableProps) {
@@ -60,12 +64,13 @@ function TableRow({ className, ...props }: TableRowProps) {
   );
 }
 
-function TableHead({ className, ...props }: TableHeadProps) {
+function TableHead({ className, numeric, ...props }: TableHeadProps) {
   return (
     <th
       data-slot="table-head"
+      data-numeric={numeric ? "" : undefined}
       className={cn(
-        "h-10 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground [&:has([role=checkbox])]:pr-0",
+        "h-10 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground data-numeric:text-right data-numeric:font-mono data-numeric:tabular-nums [&:has([role=checkbox])]:pr-0",
         className,
       )}
       {...props}
@@ -73,11 +78,15 @@ function TableHead({ className, ...props }: TableHeadProps) {
   );
 }
 
-function TableCell({ className, ...props }: TableCellProps) {
+function TableCell({ className, numeric, ...props }: TableCellProps) {
   return (
     <td
       data-slot="table-cell"
-      className={cn("p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0", className)}
+      data-numeric={numeric ? "" : undefined}
+      className={cn(
+        "p-2 align-middle whitespace-nowrap data-numeric:text-right data-numeric:font-mono data-numeric:tabular-nums [&:has([role=checkbox])]:pr-0",
+        className,
+      )}
       {...props}
     />
   );

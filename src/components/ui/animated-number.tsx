@@ -110,7 +110,7 @@ function AnimatedNumber({
       ref={attachRef}
       data-slot="animated-number"
       role="img"
-      className={cn("tabular-nums", className)}
+      className={cn("font-mono tabular-nums", className)}
       aria-label={formatter.format(value)}
     >
       <span aria-hidden>{formatter.format(displayed)}</span>

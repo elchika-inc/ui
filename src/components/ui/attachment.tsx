@@ -115,7 +115,7 @@ function AttachmentDescription({ className, ...props }: AttachmentDescriptionPro
     <span
       data-slot="attachment-description"
       className={cn(
-        "mt-0.5 block min-w-0 truncate text-xs text-muted-foreground group-data-[state=error]/attachment:text-destructive-subtle-foreground",
+        "mt-0.5 block min-w-0 truncate text-2xs text-muted-foreground group-data-[state=error]/attachment:text-destructive-subtle-foreground",
         "max-w-full",
         className,
       )}
