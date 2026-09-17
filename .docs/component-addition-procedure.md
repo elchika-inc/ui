@@ -221,3 +221,12 @@ evidence が「preview が証跡の検証 SHA より新しい」を見ている�
 - 配布ファイルが同一 block の sibling を `@/components/<name>` で import する場合、
   `add-component.mjs` はその sibling が配布ファイル集合に実在するときだけ相対 import へ変換する。
   `@/components/ui/*` と `@/lib/utils` は共有部品なので変換しない。
+
+## 組版 utility の使い方
+
+- `text-3xs` は Mono ラベル・eyebrow（11px）、`text-2xs` はバッジ・注釈（12px）、`text-xs` は密度の高い UI（13px）に使う。
+- 字間はラベルに `tracking-label`、見出しに `tracking-heading`、大見出しに `tracking-display` を使う。
+- 行間は `leading-none`（1）、`leading-tight`（1.25、欧文の大見出しのみ）、`leading-display`（1.35、和文見出し）、`leading-snug`（1.5、密度の高い UI）、`leading-normal`（1.75、和文本文）、`leading-relaxed`（1.9、長文）から選ぶ。
+- 旧名 `tracking-tight` / `tracking-wider` / `tracking-widest` と数値 `leading-N` は使わない。
+- サイズ・行間・字間の値系 arbitrary value は禁止する。正本にある utility を使う。
+- `font-heading` は見出し書体に加えて `palt` を有効にする。欧文にも同じ指定を使う。
