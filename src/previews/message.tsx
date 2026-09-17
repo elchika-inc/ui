@@ -7,7 +7,7 @@ import {
   MessageHeader,
 } from "@/components/ui/message";
 
-const actionClassName = "text-xs text-primary underline underline-offset-3 hover:text-foreground";
+const actionClassName = "text-2xs text-primary underline underline-offset-3 hover:text-foreground";
 
 export function MessagePreview() {
   return (

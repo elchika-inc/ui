@@ -230,3 +230,5 @@ evidence が「preview が証跡の検証 SHA より新しい」を見ている�
 - 旧名 `tracking-tight` / `tracking-wider` / `tracking-widest` と数値 `leading-N` は使わない。
 - サイズ・行間・字間の値系 arbitrary value は禁止する。正本にある utility を使う。
 - `font-heading` は見出し書体に加えて `palt` を有効にする。欧文にも同じ指定を使う。
+- Mono はラベルと数値だけに使う（Kbd / SidebarGroupLabel / shortcut / `numeric` prop / AnimatedNumber）。
+- 本文・ボタンには Mono を乗せない。

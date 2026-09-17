@@ -197,12 +197,8 @@ function DashboardTableDataRow({
           <Badge variant={row.status === "完了" ? "secondary" : "outline"}>{row.status}</Badge>
         </TableCell>
       ) : null}
-      {visibleColumns.target ? (
-        <TableCell className="font-mono tabular-nums">{row.target}</TableCell>
-      ) : null}
-      {visibleColumns.limit ? (
-        <TableCell className="font-mono tabular-nums">{row.limit}</TableCell>
-      ) : null}
+      {visibleColumns.target ? <TableCell numeric>{row.target}</TableCell> : null}
+      {visibleColumns.limit ? <TableCell numeric>{row.limit}</TableCell> : null}
       {visibleColumns.reviewer ? <TableCell>{row.reviewer}</TableCell> : null}
     </TableRow>
   );
@@ -254,11 +250,11 @@ function DashboardDataTable({
               </TableHead>
             ) : null}
             {visibleColumns.target ? (
-              <TableHead aria-sort={sort.key === "target" ? sort.direction : "none"}>
+              <TableHead numeric aria-sort={sort.key === "target" ? sort.direction : "none"}>
                 <SortButton label="目標" sortKey="target" sort={sort} onSort={onSort} />
               </TableHead>
             ) : null}
-            {visibleColumns.limit ? <TableHead>上限</TableHead> : null}
+            {visibleColumns.limit ? <TableHead numeric>上限</TableHead> : null}
             {visibleColumns.reviewer ? (
               <TableHead aria-sort={sort.key === "reviewer" ? sort.direction : "none"}>
                 <SortButton label="担当者" sortKey="reviewer" sort={sort} onSort={onSort} />
@@ -502,15 +498,15 @@ export function DashboardTable({ data, className }: DashboardTableProps) {
             <div className="grid gap-4 overflow-y-auto p-4">
               <div className="grid gap-3 sm:grid-cols-3">
                 <div className="rounded-lg border border-border bg-muted p-3">
-                  <p className="text-xs text-muted-foreground">目標</p>
+                  <p className="text-2xs text-muted-foreground">目標</p>
                   <p className="font-mono text-xl font-semibold tabular-nums">{activeRow.target}</p>
                 </div>
                 <div className="rounded-lg border border-border bg-muted p-3">
-                  <p className="text-xs text-muted-foreground">上限</p>
+                  <p className="text-2xs text-muted-foreground">上限</p>
                   <p className="font-mono text-xl font-semibold tabular-nums">{activeRow.limit}</p>
                 </div>
                 <div className="rounded-lg border border-border bg-muted p-3">
-                  <p className="text-xs text-muted-foreground">担当者</p>
+                  <p className="text-2xs text-muted-foreground">担当者</p>
                   <p className="truncate font-medium">{activeRow.reviewer}</p>
                 </div>
               </div>
