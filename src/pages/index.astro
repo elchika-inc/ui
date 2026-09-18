@@ -1,16 +1,11 @@
 ---
-import { categorizePreviewItems } from "@/catalog/component-categories.mjs";
-import { previewItems } from "@/catalog/previews";
 import DocsLayout from "@/layouts/docs.astro";
 import { DocumentationHome } from "@/site/documentation-home";
-
-// biome-ignore lint/correctness/noUnusedVariables: Astro template から参照する値。
-const categories = categorizePreviewItems(previewItems);
 ---
 
 <DocsLayout
   title="elchika-inc/ui - はじめに"
   description="elchika-inc の共有 UI を shadcn registry から導入する手順"
 >
-  <DocumentationHome categories={categories} client:load />
+  <DocumentationHome client:load />
 </DocsLayout>

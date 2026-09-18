@@ -113,14 +113,14 @@ test("catalog は block だけを隔離プレビューの iframe で埋め込み
   }
 });
 
-test("index と個別 route が全 preview のcomponentページを列挙する", () => {
+test("トップが一覧へ案内し、個別 route が全 preview のcomponentページを生成する", () => {
   const html = builtPage("");
   assert.match(html, /href="#main-content"/);
   assert.match(html, /<main[^>]*id="main-content"/);
+  assert.match(html, /href="\/components\/"/);
 
   const blocks = blockNames();
   for (const name of previewNames()) {
-    assert.match(html, new RegExp(`href="/components/${name}/"`), `${name}: component link`);
     const componentHtml = builtPage(`components/${name}`);
     assert.match(componentHtml, /href="#main-content"/);
     assert.match(componentHtml, /<main[^>]*id="main-content"/);
@@ -161,17 +161,27 @@ test("index と個別 route が全 preview のcomponentページを列挙する"
   }
 });
 
-test("トップとcomponentページが同じdocs shellとサイドバー導線を使う", () => {
+test("トップと component ページが同じ masthead を共有し、component ページだけ docs shell を使う", () => {
   const homeHtml = builtPage("");
   const componentHtml = builtPage("components/button");
 
   for (const html of [homeHtml, componentHtml]) {
-    assert.match(html, /data-docs-shell="true"/);
-    assert.match(html, /aria-label="ドキュメントナビゲーション"/);
-    assert.match(html, /href="\/"[^>]*><span>はじめに<\/span>/);
+    assert.equal(html.match(/data-site-masthead="true"/g)?.length, 1);
   }
 
-  assert.match(homeHtml, /aria-current="page"[^>]*href="\/"/);
+  assert.doesNotMatch(homeHtml, /data-docs-shell/);
+  assert.doesNotMatch(homeHtml, /data-slot="sidebar"/);
+  assert.equal(homeHtml.match(/data-site-subnav="true"/g)?.length, 1);
+  assert.equal(homeHtml.match(/data-site-hero="true"/g)?.length, 1);
+  const masthead = homeHtml.match(/<header\b[^>]*data-site-masthead="true"[^>]*>(.*?)<\/header>/s);
+  assert.ok(masthead, "トップに masthead がある");
+  assert.match(
+    masthead[1],
+    /<a href="\/"[^>]*>elchika-inc<span class="text-primary">\/ui<\/span><\/a>/,
+  );
+  assert.match(componentHtml, /data-docs-shell="true"/);
+  assert.match(componentHtml, /aria-label="ドキュメントナビゲーション"/);
+  assert.match(componentHtml, /href="\/"[^>]*><span>はじめに<\/span>/);
   assert.doesNotMatch(componentHtml, /aria-current="page"[^>]*href="\/"/);
 });
 

@@ -151,7 +151,15 @@ export function ComponentIndex({ categories, blockNames }: ComponentIndexProps) 
           {categories.map((category) => (
             <section key={category.name} className="flex flex-col gap-5">
               <div className="flex items-baseline justify-between gap-4 border-b border-border pb-3">
-                <h2 className="font-heading text-2xl font-semibold">{category.name}</h2>
+                <div>
+                  <span
+                    data-site-eyebrow
+                    className="block font-mono text-3xs font-medium tracking-label text-highlight-text uppercase"
+                  >
+                    section
+                  </span>
+                  <h2 className="mt-3 font-heading text-2xl font-semibold">{category.name}</h2>
+                </div>
                 <p className="font-mono text-2xs text-muted-foreground">
                   {category.items.length} items
                 </p>
