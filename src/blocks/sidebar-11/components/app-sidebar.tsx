@@ -103,11 +103,11 @@ function Tree({ item }: { item: TreeItem }) {
   return (
     <SidebarMenuItem>
       <Collapsible
-        className="group/collapsible [&[data-state=open]>button>svg:first-child]:rotate-90"
+        className="group/collapsible"
         defaultOpen={name === "components" || name === "ui"}
       >
-        <SidebarMenuButton render={<CollapsibleTrigger />}>
-          <ChevronRightIcon className="transition-transform" />
+        <SidebarMenuButton className="group/collapsible-trigger" render={<CollapsibleTrigger />}>
+          <ChevronRightIcon className="transition-transform group-data-panel-open/collapsible-trigger:rotate-90" />
           <FolderIcon />
           {name}
         </SidebarMenuButton>
