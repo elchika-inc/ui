@@ -95,6 +95,9 @@
     --color-warning-foreground: var(--warning-foreground);
     --color-info: var(--info);
     --color-info-foreground: var(--info-foreground);
+    --color-highlight: var(--highlight);
+    --color-highlight-bg: var(--highlight-bg);
+    --color-highlight-text: var(--highlight-text);
     --color-accent-foreground: var(--accent-foreground);
     --color-accent: var(--accent);
     --color-muted-foreground: var(--muted-foreground);
@@ -252,6 +255,10 @@
     --warning-foreground: rgb(var(--color-status-warning-text));
     --info: rgb(var(--color-status-info-bg));
     --info-foreground: rgb(var(--color-status-info-text));
+    /* design system の黄アクセント --color-accent-highlight* へ接続する。shadcn の --accent と名前が衝突するため highlight で出す。 */
+    --highlight: rgb(var(--color-accent-highlight));
+    --highlight-bg: rgb(var(--color-accent-highlight-bg));
+    --highlight-text: rgb(var(--color-accent-highlight-text));
     --border: rgb(var(--color-border-default));
     --input: rgb(var(--color-border-control));
     --ring: rgb(var(--color-brand-primary));
@@ -299,6 +306,10 @@
     --warning-foreground: rgb(var(--color-status-warning-text));
     --info: rgb(var(--color-status-info-bg));
     --info-foreground: rgb(var(--color-status-info-text));
+    /* design system の黄アクセント --color-accent-highlight* へ接続する。shadcn の --accent と名前が衝突するため highlight で出す。 */
+    --highlight: rgb(var(--color-accent-highlight));
+    --highlight-bg: rgb(var(--color-accent-highlight-bg));
+    --highlight-text: rgb(var(--color-accent-highlight-text));
     --border: rgb(var(--color-border-default));
     --input: rgb(var(--color-border-control));
     --ring: rgb(var(--color-brand-primary));
