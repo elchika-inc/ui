@@ -98,3 +98,21 @@ assert.doesNotMatch(globalCss, /--text-(?:[7-9]|\d{2,})xl\b|--leading-loose\b/);
 - `.docs/reviews/<日付>-tracking-initial/report.md`（先頭 3 行: `verified_impl_sha: <commit 1>`、`evidence_scope: shared-token-migration`、`targeted_dynamic_sha: <commit 1>`）。内容: §4.5 の before / after 表、§4.6 の computed style、14 subject × light / dark の HTTP / console / pageerror 表、画像一覧。
 - 画像 28 枚（`<日付>-<subject>-preview-light.jpg` / `-dark.jpg`、1440×900 JPEG、新規撮影）。
 - レビュー記録 `.docs/reviews/cycles/<日付>-tracking-initial.md`。
+
+## 8. 実装後の裁定一覧（PR #92）
+
+### 8.1 spec の誤記・書き漏れ
+
+1. §A の commit 分割が誤っていた。`src/styles/global.css` と `scripts/theme-typography.test.mjs` を 1 commit にまとめ、その commit を report の `verified_impl_sha` / `targeted_dynamic_sha` に指定していたが、`scripts/check-evidence.mjs` の `sharedTokenReportProblems` は `SHARED_TOKEN_PATHS` の最終変更 commit が `report.sha` の**厳密な**祖先であることを要求するため、必ず失敗する。worker が着手前の question で指摘し、司令塔が同スクリプトを読んで裏を取ったうえで **(1) global.css のみ / (2) theme-typography.test.mjs のみ / (3) 証跡とレビュー記録** の 3 commit に分け、report の両 SHA を (2) に向ける裁定を返した。空 commit で祖先を作る代替案は採らなかった（履歴に意味のある commit だけを残すため）。
+2. 1 の一般化: **共有トークンを変える委任仕様は、トークンファイルを単独 commit に切り出す指示を最初から書く**。AGENTS.md は「`verified_impl_sha` はトークン変更コミットより後」とだけ書いており、commit をどう割ればその条件を満たせるかまでは書いていないため、brief を書く側が同じ誤りを繰り返す。
+
+### 8.2 運用
+
+- worker の裁量で陽性対照テストを 1 件足した（`--tracking-*: initial;` を削った文字列に対して `assert.throws` が `ERR_ASSERTION` を投げることを確かめる）。負の検査が沈黙していないことを確かめる方針に合致するので採用した。既存テストは削除・skip せず、名前だけ実態へ合わせて改名している（件数 6 → 7、削除 0）。
+- 生成 CSS の検査は**名前ベース**で行う（`.tracking-tight{` の有無）。値で突合すると minify で `0.05em` が `.05em` になり偽の通過を作る。負の検査は、存在すべき `.tracking-display{` 等が 1 件ヒットすることを陽性対照にして健全性を確かめる。
+- 司令塔の完了ゲートも実体で測った。生成 CSS の旧 utility 5 種が 0 件、design system の 4 種が各 1 件、実ブラウザの computed letterSpacing が 4 段に対応、`check-evidence` exit 0、`git merge-base --is-ancestor` による祖先関係の検算まで独立に実施した。
+
+### 8.3 持ち越し
+
+- 段階 3 からの持ち越しだった `--tracking-*: initial` は本 PR で解消した。
+- `check-evidence` が出す既存の shared stale 2 件と過去履歴 92 件は本 PR の範囲外で、そのまま残る。
