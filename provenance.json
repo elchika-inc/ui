@@ -2105,7 +2105,7 @@
           "path": "src/blocks/sidebar-11/components/app-sidebar.tsx",
           "upstreamPath": "apps/v4/registry/bases/base/blocks/sidebar-11/components/app-sidebar.tsx",
           "upstreamPathSha": "f31ed81983653919dd4fe77aee4b4859f610f1dc",
-          "generatedContentSha256": "52ec922af0eacdccf5974e928eae4acb1846c48421aedf458de38d37ce421a56"
+          "generatedContentSha256": "1a5a218020aaf10804d48258aefb244385c5fc2402253ca83cb834a44b2bcab3"
         },
         {
           "dropped": true,
