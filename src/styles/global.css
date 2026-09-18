@@ -220,6 +220,8 @@
   --leading-snug: 1.5;
   --leading-normal: 1.75;
   --leading-relaxed: 1.9;
+  /* Tailwind 既定の tracking を解除し、design system の 4 段だけを残す。 */
+  --tracking-*: initial;
   --tracking-display: -0.02em;
   --tracking-heading: -0.01em;
   --tracking-normal: 0.02em;
