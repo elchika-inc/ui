@@ -107,3 +107,23 @@
 ### A.3 手順書
 
 `.docs/component-addition-procedure.md` の「ドキュメントサイトの意匠」節の末尾に、一覧の絞り込みで使う属性（`data-index-search` / `-clear` / `-status` / `-empty`）と「grid / flex の item に長いコードブロックを置くときは `min-w-0` を付ける」を 5 行以内で足す。
+
+## 8. 実装後の裁定一覧（PR #91）
+
+### 8.1 spec の誤記・書き漏れ
+
+1. 検索対象を §A.1 で「名前 / 表示名 / カテゴリ名 / 種別（block・component）」の 4 つと定めたが、起票時にユーザーが選んだのは「名前・表示名・カテゴリ名」の 3 つだった。**種別は spec を書く段階で司令塔が足したもの**で、worker は spec どおりに実装している。非破壊だが選択を広げた事実として記録する（不要なら別 PR で外す）。
+2. report の命名は spec の時点で `<日付>-index-search.md` に直してあり実装で問題は起きなかった。`2026-09-18-index-page.md` は PR #87 が作成済みで証跡は immutable なので、同名で上書きできない。**証跡を追加する仕様を書くときは、既存の同名 stem の有無を先に確かめる**。
+
+### 8.2 運用
+
+- 検索欄の `type` は spec が選択を委ね、worker は `type="search"` と `[&::-webkit-search-cancel-button]:hidden` の併用を選んだ（Chromium のネイティブ ✕ が `data-index-search-clear` と二重になるのを避けるため）。arbitrary *variant* なので `check-standards` の値系検査には当たらない。
+- base 追随は**司令塔が `gh pr update-branch` で実行する**。worker_done 済みの dispatch には status を送れず、追随のためだけに新しい Dispatch を立てるのは割に合わない。追随後は新しい head で verdict を投稿し直し、`--match-head-commit` に新 head を渡す。
+- 共有トークンを変える PR と並走する場合、**併合後の木で `check-evidence` を 1 回回す**。各ブランチ単独の実行は、トークン変更と site 変更が同居する状態を検査していない。本 PR では追随後の head でこれを実施して exit 0 を確認した（CI の Evidence check step も同じ状態を検査する）。
+- `## 解説（eli5）` は N/A にした。プラグインは `~/.claude/plugins/cache/claude-community/eli5` にキャッシュされているが、本セッションの skill 一覧に載らず起動できなかった。
+- Orca のメッセージ待ちは `--types question,escalation,worker_done,status` で絞る。無指定だと heartbeat が届くたびに司令塔が起こされ、往復だけが増える。
+
+### 8.3 持ち越し
+
+- issue #52 の持ち越し 2 件（`--tracking-*: initial` と 375px の install カード overflow）は PR #92 と本 PR で解消した。
+- スコープ外のまま残す: 検索結果の並び替え、タグ付け、URL クエリへの検索語の反映、キーボードショートカット（`/` や Esc）、サイドバーのナビの絞り込み。
