@@ -243,3 +243,5 @@ evidence が「preview が証跡の検証 SHA より新しい」を見ている�
 - `data-site-eyebrow` は `font-mono text-3xs font-medium tracking-label text-highlight-text uppercase`。issue #86 で合意した site の見出しラベルにも濃黄を使う。
 - 値系 arbitrary value は使わず、ch 幅の代わりに既定の `max-w-*` を選び、hero の見出し2〜3行・リード3行以内を実ブラウザで確認する。
 - `bg-background/88` は site 限定とし、配布部品や共有トークンには持ち込まない。
+- 一覧の絞り込みは入力を `data-index-search`、クリア操作を `data-index-search-clear`、件数表示を `data-index-search-status`、0 件案内を `data-index-search-empty` で識別する。
+- grid / flex の item に長いコードブロックを置くときは `min-w-0` を付ける。
