@@ -124,14 +124,14 @@ export function ComponentDocumentation({
                 </p>
               </div>
               <div className="grid gap-5 lg:grid-cols-2">
-                <article className="flex flex-col gap-3 rounded-xl border border-border p-5">
+                <article className="flex min-w-0 flex-col gap-3 rounded-xl border border-border p-5">
                   <h3 className="font-medium">直接 URL</h3>
                   <p className="text-sm text-muted-foreground">
                     設定を追加せず、{isBlock ? "このブロック" : "この component"}を取得します。
                   </p>
                   <CommandBlock>{directInstallCommand(name)}</CommandBlock>
                 </article>
-                <article className="flex flex-col gap-3 rounded-xl border border-border p-5">
+                <article className="flex min-w-0 flex-col gap-3 rounded-xl border border-border p-5">
                   <h3 className="font-medium">@elchika 名前空間</h3>
                   <p className="text-sm text-muted-foreground">
                     components.json の registry 設定を使います。

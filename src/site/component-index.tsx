@@ -1,7 +1,22 @@
+import { SearchIcon, SearchXIcon, XIcon } from "lucide-react";
 import { useRef, useState } from "react";
 
 import { type PreviewItem, previewItems } from "@/catalog/previews";
 import { Button } from "@/components/ui/button";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 import { DocumentationShell, type NavigationCategory } from "@/site/documentation-shell";
 import type { SiteTheme } from "@/site/theme-toggle";
 
@@ -11,6 +26,7 @@ type ComponentIndexProps = {
 };
 
 const previewsByName = new Map(previewItems.map((item) => [item.name, item]));
+const normalizeSearch = (value: string) => value.toLowerCase().replace(/[\s-]/g, "");
 
 type ComponentIndexCardProps = {
   item: PreviewItem;
@@ -100,9 +116,31 @@ function ComponentIndexCard({
 }
 
 export function ComponentIndex({ categories, blockNames }: ComponentIndexProps) {
+  const [search, setSearch] = useState("");
+  const searchInput = useRef<HTMLInputElement>(null);
   const [loadedBlocks, setLoadedBlocks] = useState<ReadonlySet<string>>(() => new Set());
   const scrollPositions = useRef(new Map<string, number>());
   const blocks = new Set(blockNames);
+  const query = normalizeSearch(search);
+  const filteredCategories = categories
+    .map((category) => ({
+      ...category,
+      items: category.items.filter(({ name, title }) =>
+        [name, title, category.name, blocks.has(name) ? "block" : "component"].some((value) =>
+          normalizeSearch(value).includes(query),
+        ),
+      ),
+    }))
+    .filter((category) => category.items.length > 0);
+  const resultCount = filteredCategories.reduce(
+    (count, category) => count + category.items.length,
+    0,
+  );
+
+  const clearSearch = () => {
+    setSearch("");
+    searchInput.current?.focus();
+  };
 
   const captureScrollPosition = (name: string) => {
     scrollPositions.current.set(name, window.scrollY);
@@ -148,7 +186,63 @@ export function ComponentIndex({ categories, blockNames }: ComponentIndexProps) 
             </p>
           </header>
 
-          {categories.map((category) => (
+          <div className="flex flex-col gap-3">
+            <InputGroup>
+              <InputGroupAddon>
+                <SearchIcon aria-hidden="true" />
+              </InputGroupAddon>
+              <InputGroupInput
+                ref={searchInput}
+                data-index-search
+                type="search"
+                aria-label="コンポーネントを絞り込む"
+                placeholder="名前・表示名・カテゴリで絞り込む"
+                className="[&::-webkit-search-cancel-button]:hidden"
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+              />
+              {search && (
+                <InputGroupAddon align="inline-end">
+                  <InputGroupButton
+                    data-index-search-clear
+                    aria-label="絞り込みを消す"
+                    size="icon-sm"
+                    onClick={clearSearch}
+                  >
+                    <XIcon aria-hidden="true" />
+                  </InputGroupButton>
+                </InputGroupAddon>
+              )}
+            </InputGroup>
+            <p
+              data-index-search-status
+              aria-live="polite"
+              className="text-sm text-muted-foreground"
+            >
+              {resultCount} 件{resultCount === 0 ? "：該当するコンポーネントがありません" : ""}
+            </p>
+          </div>
+
+          {resultCount === 0 && (
+            <Empty data-index-search-empty>
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <SearchXIcon aria-hidden="true" />
+                </EmptyMedia>
+                <EmptyTitle>該当するコンポーネントがありません</EmptyTitle>
+                <EmptyDescription>
+                  名前・表示名・カテゴリを変えて絞り込んでください。
+                </EmptyDescription>
+              </EmptyHeader>
+              <EmptyContent>
+                <Button type="button" onClick={clearSearch}>
+                  絞り込みを消す
+                </Button>
+              </EmptyContent>
+            </Empty>
+          )}
+
+          {filteredCategories.map((category) => (
             <section key={category.name} className="flex flex-col gap-5">
               <div className="flex items-baseline justify-between gap-4 border-b border-border pb-3">
                 <div>
