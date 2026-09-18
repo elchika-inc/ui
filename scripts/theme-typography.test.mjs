@@ -72,11 +72,11 @@ test("サイズ別行間は spec §1.1 の割り当てと一致する", () => {
   assert.deepEqual(actual, expected);
 });
 
-test("サイズと行間の既定値を解除し、移行中の字間 utility は残す", () => {
+test("サイズ・行間・字間の既定値を解除する", () => {
   const theme = typographyTheme(globalCss);
   assert.match(theme, /--text-\*:\s*initial;/);
   assert.match(theme, /--leading-\*:\s*initial;/);
-  assert.doesNotMatch(theme, /--tracking-\*:/);
+  assert.match(theme, /--tracking-\*:\s*initial;/);
   assert.doesNotMatch(globalCss, /--text-(?:[7-9]|\d{2,})xl\b|--leading-loose\b/);
 });
 
@@ -97,4 +97,12 @@ test("陽性対照: 組版トークンが欠落すると突合が失敗する", 
   const mutated = globalCss.replace("--text-3xs: 0.6875rem;", "");
   assert.notEqual(mutated, globalCss, "陽性対照の削除が実行されたこと");
   assert.throws(() => assertMatchesTokens(mutated), { code: "ERR_ASSERTION" });
+});
+
+test("陽性対照: tracking の既定値解除が欠落すると検査が失敗する", () => {
+  const mutated = globalCss.replace("--tracking-*: initial;", "");
+  assert.notEqual(mutated, globalCss, "陽性対照の削除が実行されたこと");
+  assert.throws(() => assert.match(typographyTheme(mutated), /--tracking-\*:\s*initial;/), {
+    code: "ERR_ASSERTION",
+  });
 });
