@@ -30,6 +30,8 @@ const REQUIRED_CONSUMER_CASE_LABELS = new Set([
   "Switch unchecked surface",
   "Tabs inactive on muted",
   "Tabs inactive on background",
+  "Tabs line indicator on background",
+  "Tabs line indicator on card",
   "Sidebar foreground",
   "Attachment destructive text",
   "Alert destructive text",
@@ -49,7 +51,7 @@ const REQUIRED_CONSUMER_CASE_LABELS = new Set([
   "info pair",
 ]);
 const REQUIRED_CONSUMER_CONTRACT_DIGEST =
-  "d5435643e7ee0c4baac2f86a7c585fc905d0372bcbf6f41341fee3932c222c19";
+  "abdd18090aac3904a70ed2f64e40fda5dc1513118b6765ab331539af7863caa0";
 
 const stableValue = (value) => {
   if (Array.isArray(value)) return value.map(stableValue);
@@ -61,7 +63,7 @@ const stableValue = (value) => {
   );
 };
 
-const consumerCaseContract = ({
+export const consumerCaseContract = ({
   background,
   foreground,
   gate,
