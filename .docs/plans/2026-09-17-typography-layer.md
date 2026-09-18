@@ -217,3 +217,31 @@ B1 はブランチ `naoto24kawa/typography-b1`、B2 は `naoto24kawa/typography-
 | 手順書 | `.docs/component-addition-procedure.md` の「組版 utility の使い方」節に「Mono はラベルと数値だけ（Kbd / SidebarGroupLabel / shortcut / `numeric` prop / AnimatedNumber）。本文・ボタンには乗せない」を 2 行で足す |
 
 - 証跡: calendar / chart / sidebar / message / attachment / table / animated-number の 7 本 + 14 枚、block の dashboard-01 / dashboard-table / sidebar-07 / 08 / 09 / 10 / 12 / 15 / 16 の 9 本 + 18 枚（書式は `.docs/reviews/2026-09-06-block-copy/2026-09-06-dashboard-01-preview.md` と同じディレクトリの画像に倣う）。§4.7 の Mono 確認（computed fontFamily、`document.fonts.check`、`fontVariantNumeric`）を Mono を触った report に載せる。
+
+## 8. 実装後の裁定一覧（PR A / B1 / B2）
+
+### 8.1 spec の誤記・書き漏れ
+
+1. §A.3 の site の数値 leading は「9 箇所」でなく 10 件（documentation-home 7、component-index 2、component-documentation 1）。指定ファイル内の全件を置換した（PR #79）。
+2. §4.7 の陽性対照 `--text-2xs--line-height: 2.5` は B の再タグ付け後の前提で、PR A では badge が `text-xs` のままだった。通常状態で既に溢れが検出されたため追加の上書きは不要とし、report にその旨を書いた（PR #79）。
+3. §4.3 は B2 にも `typography-usage.test.mjs` の成功を要求していたが、同ファイルは B1 が作るので B2 では実行不能。B2 は「実行不能」を記録し、B1 が追随後に成功を確認した（PR #81 / #80）。
+4. variant 付きの `text-xs`（`…:text-xs`）が 5 箇所あり一覧に無かった。command のグループ見出しと calendar の `[&>span]` は 12px 役割で `text-2xs`、sidebar SidebarMenuSubButton sm / avatar sm / item xs は 13px 役割で残す。usage テストは variant 付きも検知し、残す箇所と previews の card / bubble / alert を明示許可する（PR #80 / #81）。
+5. dropdown-menu / context-menu の preview は Shortcut を、combobox の preview は GroupLabel / Chip を描画していなかった。一時 probe でなく preview に最小例を追加した（PR #80。担当部品なので証跡は増えない）。
+
+### 8.2 設計の補正（正本には無い決定）
+
+- 固定高さのチップ（badge `h-5 py-0.5 border`、kbd `h-5`、SidebarMenuBadge `h-5`、combobox chip）は 12〜13px × 1.5 の行間が入らず溢れる（PR A で badge 7 件、scrollHeight 21 > clientHeight 18 を実測）。段のトークンは変えず、チップ側の class に `leading-none` を明示した（PR #80 / #81）。PR A では ACCEPTED_RISKS として記録した中間状態。
+- dashboard-table の数値セルを `TableCell numeric` にすると対応する `TableHead` が左寄せのまま残る（Core Logic の flag）。対応する `TableHead` にも `numeric` を付けた（PR #81）。
+- `--tracking-*: initial` は旧名の再タグ付けが B に来るため見送り、ソース側テスト `scripts/typography-usage.test.mjs` で縛る。theme からの削除は段階 5 の global.css 変更時に同梱する。
+
+### 8.3 運用
+
+- 再タグ付けと Mono 適用を同じ PR にまとめ、部品ごとの証跡を 1 回にする（A / B1 / B2 構成に組み替えた理由）。
+- `document.fonts.check` は和文のみの preview では false になる（Google Fonts の unicode-range 分割で Latin 用 face が要求されない）。`fonts.load` 前後の両方を記録し、computed fontFamily を本体の合格条件とする。和文ラベルが Plex Sans JP にフォールバックするのは設計どおり。
+- レビュアーの形式不正が 2 回続いた場合は、2 回目の境界内を改変せず採用してよい。
+- worker_done を送った Dispatch は完了扱いになり status が届かない。マージ後の追随は同じ worktree に新しい Dispatch を立てる（PR #80）。
+
+### 8.4 持ち越し
+
+- `<html lang="en">` 全体での `:lang(en)` 再調整は theme 層の `:root` が勝つため未対応（`--text-<size>--line-height` のリテラルも同様）。lang="en" のページは現状無い。
+- `src/previews/card.tsx` / `bubble.tsx` / `alert.tsx` の `text-xs`（デモ注釈）は 13px のまま。
