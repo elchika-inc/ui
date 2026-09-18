@@ -232,3 +232,4 @@ evidence が「preview が証跡の検証 SHA より新しい」を見ている�
 - `font-heading` は見出し書体に加えて `palt` を有効にする。欧文にも同じ指定を使う。
 - Mono はラベルと数値だけに使う（Kbd / SidebarGroupLabel / shortcut / `numeric` prop / AnimatedNumber）。
 - 本文・ボタンには Mono を乗せない。
+- 黄アクセント（`bg-highlight` / `bg-highlight-bg` / `text-highlight-text`）は Tabs line の下線にだけ使う。他の部品へ広げるときは issue で合意し、light のコントラスト（500 は 1.68:1）を contrast-cases に登録する。

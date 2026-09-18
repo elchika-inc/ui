@@ -240,6 +240,28 @@ export const CONSUMER_CASES = [
     reason: "inactive tab label が bare background に出る場合も AA を満たす必要がある",
   }),
   foregroundOn({
+    label: "Tabs line indicator on background",
+    foreground: "highlight",
+    background: "background",
+    gate: "decorative",
+    reason:
+      "line variant の下線はブランドの黄（light 500 / dark 400）を補助表現として使う。active は文字色（foreground vs muted-foreground）でも識別できるため非テキスト 3:1 の対象外とする。light の実測 1.55:1、dark 12.03:1",
+    sourceClasses: [
+      source("tabs", ["group-data-[variant=line]/tabs-list:bg-highlight", "after:bg-highlight"]),
+    ],
+  }),
+  foregroundOn({
+    label: "Tabs line indicator on card",
+    foreground: "highlight",
+    background: "card",
+    gate: "decorative",
+    reason:
+      "line variant の下線はブランドの黄（light 500 / dark 400）を補助表現として使う。active は文字色（foreground vs muted-foreground）でも識別できるため非テキスト 3:1 の対象外とする。light の実測 1.68:1、dark 11.07:1",
+    sourceClasses: [
+      source("tabs", ["group-data-[variant=line]/tabs-list:bg-highlight", "after:bg-highlight"]),
+    ],
+  }),
+  foregroundOn({
     label: "Sidebar foreground",
     foreground: "sidebar-foreground",
     background: "sidebar",
