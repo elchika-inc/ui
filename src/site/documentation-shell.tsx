@@ -17,7 +17,8 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { type SiteTheme, ThemeToggle, useSiteTheme } from "@/site/theme-toggle";
+import { SiteMasthead } from "@/site/site-masthead";
+import { type SiteTheme, useSiteTheme } from "@/site/theme-toggle";
 
 export type NavigationCategory = {
   name: string;
@@ -128,17 +129,13 @@ export function DocumentationShell({
         </Sidebar>
 
         <SidebarInset id="main-content" tabIndex={-1}>
-          <header className="sticky top-0 z-20 flex h-14 items-center gap-3 border-b border-border bg-background/95 px-4 backdrop-blur sm:px-6">
-            <SidebarTrigger />
-            <a
-              href="/"
-              className="mr-auto rounded-sm text-sm font-medium text-muted-foreground hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring focus-visible:outline-none"
-            >
-              はじめに
-            </a>
-            <ThemeToggle theme={theme} onThemeChange={setTheme} />
-            {headerAction}
-          </header>
+          <SiteMasthead
+            className="px-4 sm:px-6"
+            leadingAction={<SidebarTrigger />}
+            headerAction={headerAction}
+            theme={theme}
+            onThemeChange={setTheme}
+          />
 
           <div className="mx-auto flex w-full max-w-5xl flex-col gap-10 px-4 py-10 sm:px-8 lg:py-14">
             {typeof children === "function" ? children(theme) : children}

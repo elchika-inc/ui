@@ -1,4 +1,3 @@
-import { MoonIcon, SunIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -42,13 +41,14 @@ export function ThemeToggle({ theme: controlledTheme, onThemeChange }: ThemeTogg
   return (
     <Button
       type="button"
-      variant="ghost"
-      size="icon"
+      variant="outline"
+      data-site-theme-toggle
+      className="rounded-full bg-transparent px-4 py-2 font-mono text-3xs tracking-label text-muted-foreground uppercase focus-visible:ring-3 focus-visible:ring-ring focus-visible:outline-none"
       aria-label={label}
       title={label}
       onClick={() => (onThemeChange ? onThemeChange(nextTheme) : setLocalTheme(nextTheme))}
     >
-      {theme === "dark" ? <SunIcon aria-hidden="true" /> : <MoonIcon aria-hidden="true" />}
+      {nextTheme}
     </Button>
   );
 }

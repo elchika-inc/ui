@@ -233,3 +233,13 @@ evidence が「preview が証跡の検証 SHA より新しい」を見ている�
 - Mono はラベルと数値だけに使う（Kbd / SidebarGroupLabel / shortcut / `numeric` prop / AnimatedNumber）。
 - 本文・ボタンには Mono を乗せない。
 - 黄アクセント（`bg-highlight` / `bg-highlight-bg` / `text-highlight-text`）は Tabs line の下線にだけ使う。他の部品へ広げるときは issue で合意し、light のコントラスト（500 は 1.68:1）を contrast-cases に登録する。
+
+## ドキュメントサイトの意匠
+
+- 公開ページは `SiteMasthead` を共有し、`data-site-masthead` に sticky・半透明背景・blur を適用する。
+- 版ラベルは `data-site-version`、ピル型のテーマ切替は `data-site-theme-toggle` にする。issue #86 の site 限定の例外として、テーマボタンにも Mono を使う。
+- トップは masthead と `data-site-subnav` を同じ sticky な `data-site-header` に収め、subnav の位置を固定値で合わせない。
+- `data-site-hero` の下にセクションを並べ、本文には skip link の到達先 `id="main-content" tabIndex={-1}` を置く。
+- `data-site-eyebrow` は `font-mono text-3xs font-medium tracking-label text-highlight-text uppercase`。issue #86 で合意した site の見出しラベルにも濃黄を使う。
+- 値系 arbitrary value は使わず、ch 幅の代わりに既定の `max-w-*` を選び、hero の見出し2〜3行・リード3行以内を実ブラウザで確認する。
+- `bg-background/88` は site 限定とし、配布部品や共有トークンには持ち込まない。

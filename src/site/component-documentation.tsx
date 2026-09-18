@@ -56,7 +56,10 @@ export function ComponentDocumentation({
         return (
           <>
             <header className="flex flex-col gap-3 border-b border-border pb-8">
-              <p className="font-mono text-3xs font-medium tracking-label text-primary uppercase">
+              <p
+                data-site-eyebrow
+                className="font-mono text-3xs font-medium tracking-label text-highlight-text uppercase"
+              >
                 {isBlock ? "Block" : "Component"}
               </p>
               <h1 className="font-heading text-4xl font-semibold tracking-heading">{title}</h1>
