@@ -103,3 +103,22 @@ issue #52 の段階計画の 4 番目。design-tokens.html の黄アクセント
 ### A.5 手順書
 
 `.docs/component-addition-procedure.md` の「組版 utility の使い方」節の末尾に「黄アクセント（`bg-highlight` / `bg-highlight-bg` / `text-highlight-text`）は Tabs line の下線にだけ使う。他の部品へ広げるときは issue で合意し、light のコントラスト（500 は 1.68:1）を contrast-cases に登録する」を 3 行以内で足す。
+
+## 8. 実装後の裁定一覧（PR #84）
+
+### 8.1 spec の誤記・書き漏れ
+
+1. §A.2: case を足すと `scripts/contrast.test.mjs` の「全 case 削除」テストが新 label を必須扱いで要求する。`REQUIRED_CONSUMER_CASE_LABELS` にも 2 label を登録した（テストは変えない）。
+2. §1 / §4.4: 「background 1.68」は surface（card）の値。background（canvas）は light 1.55 / dark 12.03、card は light 1.68 / dark 11.07。case の reason は実測値で書いた。陽性対照は 2 case の light FAIL と digest 不一致の両方を記録した。
+3. §4.7: 生成 CSS の `after\:bg-foreground` は Tailwind が spec 本文（`.docs/plans/*.md`）も走査するため残る（#67 §8 と同じ現象）。probe は `tabs.tsx` 上の不在（0 件）と computed 色に置き換えた。`tabs-list\]\:bg-highlight` の grep 式は実 selector（`]` 無し）に補正した。
+4. §A.5: 手順書の追記は commit (3) に同居でよい。
+
+### 8.2 運用
+
+- レビュアーが境界マーカー無しの LGTM を 2 回返した場合は、2 回目の全文を改変せず採用して flag 0 とする（3 回目は起動しない）。
+- 司令塔の完了ゲートで Playwright MCP を使う場合、worktree に Playwright は入っていないので `npx astro preview --host ::1` で配信し MCP のブラウザで computed 値を測る。
+
+### 8.3 持ち越し
+
+- light の下線はブランドの黄 500 で 1.55〜1.68:1。非テキスト 3:1 は満たさず、active の文字色を主表現とみなして decorative gate で受容している。文字色の差だけで active を識別しにくいという指摘が出たら、濃黄 accent-text（5.22:1）への切り替えを再検討する。
+- Sidebar active レール / Progress 充填への黄の展開はしない（正本の「面積を絞る」）。
