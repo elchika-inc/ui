@@ -14,6 +14,7 @@ standards の [`DESIGN.md`](https://github.com/elchika-inc/standards/blob/main/D
 
 - プロダクト側が「自分の `DESIGN.md` に何を書くか」を判定するための入口
 - design system として避けるもの（正本では各決定に分散している）
+- 生成エージェントが方向づけ無しに寄りやすい見た目（design system の決定ではなく、外部の観測に基づく）
 - 再検討トリガー（正本にほぼ無い）
 
 ## プロダクトが継承する既定
@@ -45,6 +46,16 @@ standards の [`DESIGN.md`](https://github.com/elchika-inc/standards/blob/main/D
 - **既存プロダクトの現行テーマに寄せる** — トークン側を正とし、プロダクト側を寄せる
 - **モーションに Tailwind 既定の `duration-<数値>` / `ease-out` や生の `ms` / `cubic-bezier()` を書く** — 段は Motion 節の用途表から `duration-<段>` / `ease-<名前>` で選ぶ。`check-standards.mjs` の `motion-literal` が検知する
 - **ブランドロゴのために別のアイコンライブラリ（simple-icons 等）を足す** — lucide はブランドアイコンを収録していない。上流 shadcn block が持つ inline SVG を逐語で写し、来歴は `provenance.json` に残す
+
+## 生成時に寄りがちな既定の見た目（避けるもの）
+
+トークンが決めていない面や、トークンを使わずに作る画面（試作・ランディングページ・Artifact 等）で、生成エージェントが方向づけ無しに寄りやすい見た目。デザインを依頼するときは、この一覧を具体名のまま渡す。出典は Anthropic の [Getting the most out of Opus 5.5 in Claude and Claude Code](https://claude.dev/blog/getting-the-most-out-of-opus-5-5/)（2026-09-22）で、「ありきたりな見た目を避ける」のような一般的な指示は既定を別の既定へ入れ替えるだけで、具体的なパターン名を挙げるほうが効く、としている。
+
+- **暖色のクリーム・オフホワイトの背景** — canvas は中立のグレー、surface は白（`tokens.css` の `--color-bg-canvas` / `--color-bg-surface`）
+- **見出しの一部の語だけを斜体にして強調する**
+- **「01 / 02 / 03」のような番号付きのセクションラベル**
+
+記事はこのほかに「等幅のラベル」と「pill 型のボタン」を挙げるが、この一覧には入れない。等幅のラベルは、この design system が Mono を「ラベルと数値」専用のレイヤーとして採用している（上の「プロダクトが継承する既定」の書体の行）。pill 型のボタンは、このリポジトリのドキュメントサイトのテーマ切替（`src/site/theme-toggle.tsx`）が採用している。
 
 ## 再検討トリガー
 
