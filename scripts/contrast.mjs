@@ -305,7 +305,7 @@ const resolveRgbAliasAlpha = (themes, theme, normalized, rawAlpha, alphaName) =>
 
 export function resolveToken(themes, theme, name, seen = new Set()) {
   const normalized = tokenName(name);
-  if (!themes?.[theme]) return { problem: `theme が不正: ${theme}` };
+  if (!(themes?.[theme] instanceof Map)) return { problem: `theme が不正: ${theme}` };
   if (seen.has(normalized)) return { problem: `--${normalized}: alias が循環している` };
   const raw = rawToken(themes, theme, normalized);
   if (raw === undefined) return { problem: `--${normalized}: token が無い` };

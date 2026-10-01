@@ -423,6 +423,20 @@ test("theme が themes に無いとき、または themes が無いとき、them
   assert.deepEqual(resolveToken(undefined, "light", "brand"), { problem: "theme が不正: light" });
 });
 
+test("theme に themes の Map 以外のプロパティ名を渡すと、TypeError にせず theme 不正の problem を返す", async () => {
+  const { parseThemes, resolveToken } = await loadContrast();
+  const themes = parseThemes(
+    themeCss({
+      light: "  --brand: 47 95 209;",
+      dark: "  --placeholder: 0 0 0;",
+    }),
+  );
+
+  for (const theme of ["problems", "constructor", "__proto__"]) {
+    assert.deepEqual(resolveToken(themes, theme, "brand"), { problem: `theme が不正: ${theme}` });
+  }
+});
+
 test("problem の文言は、解決できなかった token 名を -- 付きで前置する", async () => {
   const { parseThemes, resolveToken } = await loadContrast();
   const themes = parseThemes(
@@ -480,19 +494,6 @@ test("seen を渡して alias を解決しても、渡した seen は書き換�
   resolveToken(themes, "light", "alias", seen);
 
   assert.deepEqual([...seen], ["unrelated"]);
-});
-
-// 次の 1 件は既知のバグを含む現在の振る舞いを固定する（#100 で直す）。
-test("現状: theme に themes の Map 以外のプロパティ名を渡すと、problem でなく TypeError を投げる", async () => {
-  const { parseThemes, resolveToken } = await loadContrast();
-  const themes = parseThemes(
-    themeCss({
-      light: "  --brand: 47 95 209;",
-      dark: "  --placeholder: 0 0 0;",
-    }),
-  );
-
-  assert.throws(() => resolveToken(themes, "problems", "brand"), TypeError);
 });
 
 test("text-aa と nontext-ui だけを閾値で gate する", async () => {
