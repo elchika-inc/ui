@@ -194,6 +194,7 @@ block は部品（`registry:ui`）と同じ手順を使うが、次の点だけ�
 | 来歴の `generatedContentSha256` を書き換える | completeness |
 | 上流 fixture の `IconPlaceholder` から `lucide` を落とす | block icons（`node scripts/check-block-icons.mjs`） |
 | page-only icon を対応する preview から落とす | block icons（`node scripts/check-block-icons.mjs`） |
+| `INTENTIONAL_ICON_CHANGES` に、上流の期待に無いエントリを足す | block icons（`node scripts/check-block-icons.mjs`） |
 | block の証跡 Markdown を消す | evidence |
 | preview の tsx で存在しない export を import する | **typecheck**（`npm run typecheck`）。下記の注記を読むこと |
 
@@ -218,6 +219,8 @@ evidence が「preview が証跡の検証 SHA より新しい」を見ている�
   1. 全上流ファイルの `IconPlaceholder` に `lucide` 属性がある。
   2. `registry:component` のアイコン・引継ぎ属性が対応する `src/blocks/<name>/` の同一生成fileにある。
   3. `registry:page` のアイコン・引継ぎ属性が対応する `src/previews/<name>.tsx` にある。
+
+  上流から意図的にアイコンの引継ぎ属性を変えたとき（例: モーションの生値をトークンへ置き換えた）は、`scripts/check-block-icons.mjs` の `INTENTIONAL_ICON_CHANGES` に、生成 path・アイコン・上流の属性・手元の属性・理由を 1 件足す。足したエントリが上流の期待に見つからなくなると（上流が変わった、または不要になった）検査が失敗するので、そのエントリを外す。
 - 配布ファイルが同一 block の sibling を `@/components/<name>` で import する場合、
   `add-component.mjs` はその sibling が配布ファイル集合に実在するときだけ相対 import へ変換する。
   `@/components/ui/*` と `@/lib/utils` は共有部品なので変換しない。
