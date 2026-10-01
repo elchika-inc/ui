@@ -111,6 +111,63 @@ function droppedRelativePaths(name, item, droppedUpstreamPaths, problems) {
   return dropped;
 }
 
+function iconPlaceholders(parsed) {
+  const placeholders = [];
+  const visit = (node) => {
+    if (
+      (ts.isJsxSelfClosingElement(node) || ts.isJsxOpeningElement(node)) &&
+      tagName(node) === "IconPlaceholder"
+    ) {
+      placeholders.push({ node, icon: stringAttribute(node, "lucide") });
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(parsed);
+  return placeholders;
+}
+
+// 上流ファイル 1 つの IconPlaceholder を検査し、生成物に求めるアイコンを filesByTarget へ積む。
+function collectUpstreamFile(name, file, droppedPaths, filesByTarget) {
+  const path = typeof file.path === "string" ? file.path : `${name}:unknown.tsx`;
+  const target = file.type === "registry:page" ? "previews" : "blocks";
+  const targetPath = generatedPath(name, file, target);
+  const isDroppedComponent =
+    file.type === "registry:component" &&
+    droppedPaths.has(blockRelativePath(name, file.path, "registry/base-nova"));
+  const placeholders = iconPlaceholders(sourceFile(path, file.content));
+  const problems = [];
+
+  for (const [index, { node, icon }] of placeholders.entries()) {
+    if (!icon) {
+      problems.push(`${name}: ${path} の IconPlaceholder #${index + 1} に lucide 属性が無い`);
+      continue;
+    }
+    if (isDroppedComponent) continue;
+    if (!targetPath) {
+      problems.push(`${name}: ${path} を生成物 path へ対応付けられない`);
+      continue;
+    }
+    const expectedFile = filesByTarget[target].get(targetPath) ?? { occurrences: [] };
+    expectedFile.occurrences.push({ icon, attributes: preservedAttributes(node) });
+    filesByTarget[target].set(targetPath, expectedFile);
+  }
+
+  const expectedFile = filesByTarget[target].get(targetPath);
+  if (expectedFile) {
+    const baselineOccurrences = inspectGeneratedSource({
+      path,
+      source: file.content,
+    }).occurrences;
+    if (baselineOccurrences.length > 0) expectedFile.baselineOccurrences = baselineOccurrences;
+    expectedFile.orderedOccurrences = inspectGeneratedSource({
+      path,
+      source: file.content,
+      includePlaceholders: true,
+    }).occurrences;
+  }
+  return { problems, placeholderIcons: placeholders.map(({ icon }) => icon) };
+}
+
 export function inspectUpstreamBlocks(entries, { droppedUpstreamPathsByBlock = {} } = {}) {
   const problems = [];
   const expectedByTarget = { blocks: {}, previews: {} };
@@ -131,72 +188,27 @@ export function inspectUpstreamBlocks(entries, { droppedUpstreamPathsByBlock = {
       problems,
     );
     const filesByTarget = { blocks: new Map(), previews: new Map() };
-    let blockPlaceholderCount = 0;
+    // lucide 属性が無い placeholder は undefined のまま入る。
+    const placeholderIcons = [];
     for (const file of item.files) {
       if (typeof file?.content !== "string") continue;
-      const path = typeof file.path === "string" ? file.path : `${name}:unknown.tsx`;
-      const target = file.type === "registry:page" ? "previews" : "blocks";
-      const targetPath = generatedPath(name, file, target);
-      const parsed = sourceFile(path, file.content);
-      let filePlaceholderIndex = 0;
-      const visit = (node) => {
-        if (
-          (ts.isJsxSelfClosingElement(node) || ts.isJsxOpeningElement(node)) &&
-          tagName(node) === "IconPlaceholder"
-        ) {
-          filePlaceholderIndex++;
-          blockPlaceholderCount++;
-          placeholderCount++;
-          const icon = stringAttribute(node, "lucide");
-          if (!icon) {
-            missingLucideCount++;
-            problems.push(
-              `${name}: ${path} の IconPlaceholder #${filePlaceholderIndex} に lucide 属性が無い`,
-            );
-          } else {
-            const relativePath = blockRelativePath(name, file.path, "registry/base-nova");
-            const droppedComponent =
-              file.type === "registry:component" && droppedPaths.has(relativePath);
-            if (!droppedComponent) {
-              if (!targetPath) {
-                problems.push(`${name}: ${path} を生成物 path へ対応付けられない`);
-              } else {
-                const expectedFile = filesByTarget[target].get(targetPath) ?? {
-                  occurrences: [],
-                };
-                expectedFile.occurrences.push({ icon, attributes: preservedAttributes(node) });
-                filesByTarget[target].set(targetPath, expectedFile);
-              }
-            }
-            uniqueIcons.add(icon);
-          }
-        }
-        ts.forEachChild(node, visit);
-      };
-      visit(parsed);
-      const expectedFile = filesByTarget[target].get(targetPath);
-      if (!expectedFile) continue;
-      const baselineOccurrences = inspectGeneratedSource({
-        path,
-        source: file.content,
-      }).occurrences;
-      if (baselineOccurrences.length > 0) expectedFile.baselineOccurrences = baselineOccurrences;
-      expectedFile.orderedOccurrences = inspectGeneratedSource({
-        path,
-        source: file.content,
-        includePlaceholders: true,
-      }).occurrences;
+      const collected = collectUpstreamFile(name, file, droppedPaths, filesByTarget);
+      problems.push(...collected.problems);
+      placeholderIcons.push(...collected.placeholderIcons);
     }
-    if (blockPlaceholderCount > 0) {
-      blocksWithPlaceholders++;
-      for (const target of ["blocks", "previews"]) {
-        const files = filesByTarget[target];
-        if (files.size > 0) {
-          expectedByTarget[target][name] = [...files.entries()].map(([path, expectedFile]) => ({
-            path,
-            ...expectedFile,
-          }));
-        }
+
+    placeholderCount += placeholderIcons.length;
+    missingLucideCount += placeholderIcons.filter((icon) => !icon).length;
+    for (const icon of placeholderIcons.filter(Boolean)) uniqueIcons.add(icon);
+    if (placeholderIcons.length === 0) continue;
+    blocksWithPlaceholders++;
+    for (const target of ["blocks", "previews"]) {
+      const files = filesByTarget[target];
+      if (files.size > 0) {
+        expectedByTarget[target][name] = [...files.entries()].map(([path, expectedFile]) => ({
+          path,
+          ...expectedFile,
+        }));
       }
     }
   }
