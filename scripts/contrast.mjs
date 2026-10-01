@@ -104,6 +104,8 @@ const clamp = (value) => Math.min(Math.max(value, 0), 1);
 
 const parseAlpha = (raw) => {
   const value = raw.trim();
+  // Number("") は 0 を返すので、空の α を先に弾かないと透明な色として通ってしまう。
+  if (value === "") throw new Error("alpha が空");
   const percentage = value.match(/^([+-]?(?:\d+(?:\.\d*)?|\.\d+))%$/);
   const number = percentage ? Number(percentage[1]) / 100 : Number(value);
   if (!Number.isFinite(number) || number < 0 || number > 1) {
@@ -303,7 +305,7 @@ const resolveRgbAliasAlpha = (themes, theme, normalized, rawAlpha, alphaName) =>
 
 export function resolveToken(themes, theme, name, seen = new Set()) {
   const normalized = tokenName(name);
-  if (!themes?.[theme]) return { problem: `theme が不正: ${theme}` };
+  if (!(themes?.[theme] instanceof Map)) return { problem: `theme が不正: ${theme}` };
   if (seen.has(normalized)) return { problem: `--${normalized}: alias が循環している` };
   const raw = rawToken(themes, theme, normalized);
   if (raw === undefined) return { problem: `--${normalized}: token が無い` };
