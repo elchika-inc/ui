@@ -1196,3 +1196,228 @@ test("複数 block の stats は、block 数・期待数・一致数をそれぞ
     stats: { blocksChecked: 2, expectedOccurrences: 3, matchedOccurrences: 2 },
   });
 });
+
+test("意図的な差分として許可した属性は、上流の期待の occurrences・ordered・baseline で手元の属性に置き換える", async () => {
+  const { applyIntentionalIconChanges } = await loadChecker();
+  const expectedByTarget = {
+    blocks: {
+      "x-01": [
+        {
+          path: "src/blocks/x-01/a.tsx",
+          occurrences: [{ icon: "AIcon", attributes: ['className="up"'] }],
+          orderedOccurrences: [
+            { icon: "AIcon", attributes: ['className="up"'] },
+            { icon: "BIcon", attributes: [] },
+          ],
+          baselineOccurrences: [
+            { icon: "AIcon", attributes: ['className="up"'] },
+            { icon: "BIcon", attributes: [] },
+          ],
+        },
+      ],
+    },
+    previews: {},
+  };
+  const changes = new Map([
+    [
+      "src/blocks/x-01/a.tsx",
+      [
+        {
+          icon: "AIcon",
+          upstreamAttributes: ['className="up"'],
+          localAttributes: ['className="local"'],
+          reason: "テスト",
+        },
+      ],
+    ],
+  ]);
+
+  assert.deepEqual(applyIntentionalIconChanges(expectedByTarget, changes), {
+    expectedByTarget: {
+      blocks: {
+        "x-01": [
+          {
+            path: "src/blocks/x-01/a.tsx",
+            occurrences: [{ icon: "AIcon", attributes: ['className="local"'] }],
+            orderedOccurrences: [
+              { icon: "AIcon", attributes: ['className="local"'] },
+              { icon: "BIcon", attributes: [] },
+            ],
+            baselineOccurrences: [
+              { icon: "AIcon", attributes: ['className="local"'] },
+              { icon: "BIcon", attributes: [] },
+            ],
+          },
+        ],
+      },
+      previews: {},
+    },
+    problems: [],
+  });
+});
+
+test("preview の期待にも、意図的な差分を同じように当てる", async () => {
+  const { applyIntentionalIconChanges } = await loadChecker();
+  const expectedByTarget = {
+    blocks: {},
+    previews: {
+      "x-01": [
+        {
+          path: "src/previews/x-01.tsx",
+          occurrences: [{ icon: "AIcon", attributes: ['className="up"'] }],
+          orderedOccurrences: [{ icon: "AIcon", attributes: ['className="up"'] }],
+        },
+      ],
+    },
+  };
+  const changes = new Map([
+    [
+      "src/previews/x-01.tsx",
+      [
+        {
+          icon: "AIcon",
+          upstreamAttributes: ['className="up"'],
+          localAttributes: ['className="local"'],
+          reason: "テスト",
+        },
+      ],
+    ],
+  ]);
+
+  assert.deepEqual(applyIntentionalIconChanges(expectedByTarget, changes), {
+    expectedByTarget: {
+      blocks: {},
+      previews: {
+        "x-01": [
+          {
+            path: "src/previews/x-01.tsx",
+            occurrences: [{ icon: "AIcon", attributes: ['className="local"'] }],
+            orderedOccurrences: [{ icon: "AIcon", attributes: ['className="local"'] }],
+          },
+        ],
+      },
+    },
+    problems: [],
+  });
+});
+
+test("許可していないアイコンや属性は置き換えない", async () => {
+  const { applyIntentionalIconChanges } = await loadChecker();
+  const expectedByTarget = {
+    blocks: {
+      "x-01": [
+        {
+          path: "src/blocks/x-01/a.tsx",
+          occurrences: [
+            { icon: "BIcon", attributes: ['className="up"'] },
+            { icon: "AIcon", attributes: ['className="other"'] },
+          ],
+        },
+      ],
+    },
+    previews: {},
+  };
+  const changes = new Map([
+    [
+      "src/blocks/x-01/a.tsx",
+      [
+        {
+          icon: "AIcon",
+          upstreamAttributes: ['className="up"'],
+          localAttributes: ['className="local"'],
+          reason: "テスト",
+        },
+      ],
+    ],
+  ]);
+
+  assert.deepEqual(applyIntentionalIconChanges(expectedByTarget, changes), {
+    expectedByTarget: {
+      blocks: {
+        "x-01": [
+          {
+            path: "src/blocks/x-01/a.tsx",
+            occurrences: [
+              { icon: "BIcon", attributes: ['className="up"'] },
+              { icon: "AIcon", attributes: ['className="other"'] },
+            ],
+          },
+        ],
+      },
+      previews: {},
+    },
+    problems: [
+      'src/blocks/x-01/a.tsx: 意図的な差分として許可した AIcon className="up" が上流の期待に無い。上流が変わったか不要になったので INTENTIONAL_ICON_CHANGES から外す',
+    ],
+  });
+});
+
+test("意図的な差分として許可したエントリが上流の期待に無いとき、使われていないエントリとして問題にする", async () => {
+  const { applyIntentionalIconChanges } = await loadChecker();
+  const changes = new Map([
+    [
+      "src/blocks/x-01/missing.tsx",
+      [
+        {
+          icon: "AIcon",
+          upstreamAttributes: ['className="up"'],
+          localAttributes: ['className="local"'],
+          reason: "テスト",
+        },
+        {
+          icon: "BIcon",
+          upstreamAttributes: [],
+          localAttributes: ['className="local"'],
+          reason: "テスト",
+        },
+      ],
+    ],
+  ]);
+  const result = applyIntentionalIconChanges({ blocks: {}, previews: {} }, changes);
+
+  assert.deepEqual(result.problems, [
+    'src/blocks/x-01/missing.tsx: 意図的な差分として許可した AIcon className="up" が上流の期待に無い。上流が変わったか不要になったので INTENTIONAL_ICON_CHANGES から外す',
+    "src/blocks/x-01/missing.tsx: 意図的な差分として許可した BIcon 属性なし が上流の期待に無い。上流が変わったか不要になったので INTENTIONAL_ICON_CHANGES から外す",
+  ]);
+});
+
+test("意図的な差分を当てても、入力の期待値は書き換えない", async () => {
+  const { applyIntentionalIconChanges } = await loadChecker();
+  const expectedByTarget = {
+    blocks: {
+      "x-01": [
+        {
+          path: "src/blocks/x-01/a.tsx",
+          occurrences: [{ icon: "AIcon", attributes: ['className="up"'] }],
+          orderedOccurrences: [
+            { icon: "AIcon", attributes: ['className="up"'] },
+            { icon: "BIcon", attributes: [] },
+          ],
+          baselineOccurrences: [
+            { icon: "AIcon", attributes: ['className="up"'] },
+            { icon: "BIcon", attributes: [] },
+          ],
+        },
+      ],
+    },
+    previews: {},
+  };
+  const before = structuredClone(expectedByTarget);
+  const changes = new Map([
+    [
+      "src/blocks/x-01/a.tsx",
+      [
+        {
+          icon: "AIcon",
+          upstreamAttributes: ['className="up"'],
+          localAttributes: ['className="local"'],
+          reason: "テスト",
+        },
+      ],
+    ],
+  ]);
+
+  applyIntentionalIconChanges(expectedByTarget, changes);
+
+  assert.deepEqual(expectedByTarget, before);
+});

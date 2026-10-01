@@ -12,6 +12,39 @@ import { pathToFileURL } from "node:url";
 import ts from "typescript";
 import { listBlockFiles, scanBlockNames } from "./block-scan.mjs";
 
+// 上流から意図的に変えたアイコン属性を生成 path ごとに許可する。
+// 上流の期待で使われないエントリは検査を失敗させる（ratchet）。
+const INTENTIONAL_ICON_CHANGES = new Map([
+  [
+    "src/blocks/sidebar-07/components/nav-main.tsx",
+    [
+      {
+        icon: "ChevronRightIcon",
+        upstreamAttributes: [
+          'className="ml-auto transition-transform duration-200 group-data-open/collapsible:rotate-90"',
+        ],
+        localAttributes: [
+          'className="ml-auto transition-transform duration-base group-data-open/collapsible:rotate-90"',
+        ],
+        reason: "モーションの生値をデザイントークンへ統一した（59a5d6d）",
+      },
+    ],
+  ],
+  [
+    "src/blocks/sidebar-11/components/app-sidebar.tsx",
+    [
+      {
+        icon: "ChevronRightIcon",
+        upstreamAttributes: ['className="transition-transform"'],
+        localAttributes: [
+          'className="transition-transform group-data-panel-open/collapsible-trigger:rotate-90"',
+        ],
+        reason: "上流の chevron が回転しない不具合を直した（issue #95、4e586dd）",
+      },
+    ],
+  ],
+]);
+
 export function listIconAuditBlockNames(root = ".") {
   const blockNames = scanBlockNames(join(root, "src/blocks"));
   const provenancePath = join(root, "provenance.json");
@@ -297,6 +330,49 @@ function sameAttributes(left, right) {
   return JSON.stringify(left) === JSON.stringify(right);
 }
 
+function replaceExpectedAttributes(file, change) {
+  let applied = false;
+  for (const key of ["occurrences", "orderedOccurrences", "baselineOccurrences"]) {
+    if (!file[key]) continue;
+    file[key] = file[key].map((occurrence) => {
+      if (
+        occurrence.icon !== change.icon ||
+        !sameAttributes(occurrence.attributes, change.upstreamAttributes)
+      ) {
+        return occurrence;
+      }
+      applied = true;
+      return { ...occurrence, attributes: [...change.localAttributes] };
+    });
+  }
+  return applied;
+}
+
+export function applyIntentionalIconChanges(expectedByTarget, changes = INTENTIONAL_ICON_CHANGES) {
+  const adjusted = Object.fromEntries(
+    Object.entries(expectedByTarget).map(([target, blocks]) => [
+      target,
+      Object.fromEntries(
+        Object.entries(blocks).map(([name, files]) => [name, files.map((file) => ({ ...file }))]),
+      ),
+    ]),
+  );
+  const expectedFiles = Object.values(adjusted).flatMap((blocks) => Object.values(blocks).flat());
+  const problems = [];
+  for (const [path, entries] of changes) {
+    const files = expectedFiles.filter((file) => file.path === path);
+    for (const change of entries) {
+      const applied = files.map((file) => replaceExpectedAttributes(file, change));
+      if (!applied.includes(true)) {
+        problems.push(
+          `${path}: 意図的な差分として許可した ${change.icon} ${change.upstreamAttributes.join(" ") || "属性なし"} が上流の期待に無い。上流が変わったか不要になったので INTENTIONAL_ICON_CHANGES から外す`,
+        );
+      }
+    }
+  }
+  return { expectedByTarget: adjusted, problems };
+}
+
 function describeOccurrence(occurrence) {
   if (!occurrence) return "なし";
   return `${occurrence.icon} ${occurrence.attributes.join(" ") || "属性なし"}`;
@@ -501,21 +577,23 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
       console.error(`上流 IconPlaceholder の検査に失敗:\n  ${upstream.problems.join("\n  ")}`);
       process.exitCode = 1;
     } else {
+      const intentional = applyIntentionalIconChanges(upstream.expectedByTarget);
       const generated = inspectGeneratedIcons(
-        upstream.expectedByTarget.blocks,
-        readGeneratedBlocks(upstream.expectedByTarget.blocks),
+        intentional.expectedByTarget.blocks,
+        readGeneratedBlocks(intentional.expectedByTarget.blocks),
       );
       console.log(
         `生成物突合 (block): block ${generated.stats.blocksChecked} 件 / 期待 ${generated.stats.expectedOccurrences} 箇所 / 一致 ${generated.stats.matchedOccurrences} 箇所`,
       );
       const previews = inspectGeneratedIcons(
-        upstream.expectedByTarget.previews,
-        readGeneratedPreviews(upstream.expectedByTarget.previews),
+        intentional.expectedByTarget.previews,
+        readGeneratedPreviews(intentional.expectedByTarget.previews),
       );
       console.log(
         `生成物突合 (preview): block ${previews.stats.blocksChecked} 件 / 期待 ${previews.stats.expectedOccurrences} 箇所 / 一致 ${previews.stats.matchedOccurrences} 箇所`,
       );
       const generatedProblems = [
+        ...intentional.problems.map((problem) => `許可リスト: ${problem}`),
         ...generated.problems.map((problem) => `block: ${problem}`),
         ...previews.problems.map((problem) => `preview: ${problem}`),
       ];
