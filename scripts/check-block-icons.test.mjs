@@ -776,8 +776,7 @@ test("IconPlaceholder の属性は、アイコンライブラリの属性を除�
   ]);
 });
 
-// 次の 1 件は既知のバグを含む現在の振る舞いを固定する（PR 本文「見つけたバグ」参照）。
-test("現状: 同じ block に registry:page が 2 つあると、occurrences は足し合わせ、ordered は最後の page で上書きする", async () => {
+test("同じ block に registry:page が 2 つ以上あるとき、preview へ対応付けられない問題にし、preview の期待値を作らない", async () => {
   const { inspectUpstreamBlocks } = await loadChecker();
   const page = (path, content) => ({
     path: `registry/base-nova/blocks/x-01/${path}`,
@@ -807,23 +806,70 @@ test("現状: 同じ block に registry:page が 2 つあると、occurrences �
     },
   ]);
 
-  assert.deepEqual(bothWithIcons.expectedByTarget.previews["x-01"], [
+  assert.deepEqual(bothWithIcons, {
+    problems: [
+      "x-01: registry:page が 2 件あり、preview（src/previews/x-01.tsx）へ対応付けられない",
+    ],
+    expectedByTarget: { blocks: {}, previews: {} },
+    stats: {
+      jsonCount: 1,
+      blocksWithPlaceholders: 1,
+      placeholderCount: 2,
+      uniqueIconCount: 2,
+      missingLucideCount: 0,
+    },
+  });
+  assert.deepEqual(secondWithoutIcons, {
+    problems: [
+      "x-01: registry:page が 2 件あり、preview（src/previews/x-01.tsx）へ対応付けられない",
+    ],
+    expectedByTarget: { blocks: {}, previews: {} },
+    stats: {
+      jsonCount: 1,
+      blocksWithPlaceholders: 1,
+      placeholderCount: 1,
+      uniqueIconCount: 1,
+      missingLucideCount: 0,
+    },
+  });
+});
+
+test("registry:page が複数ある block でも、page の lucide 欠損は検出する", async () => {
+  const { inspectUpstreamBlocks } = await loadChecker();
+  const result = inspectUpstreamBlocks([
     {
-      path: "src/previews/x-01.tsx",
-      occurrences: [
-        { icon: "AIcon", attributes: [] },
-        { icon: "BIcon", attributes: [] },
-      ],
-      orderedOccurrences: [{ icon: "BIcon", attributes: [] }],
+      name: "x-01",
+      item: {
+        files: [
+          {
+            path: "registry/base-nova/blocks/x-01/page.tsx",
+            type: "registry:page",
+            content: '<IconPlaceholder tabler="IconA" />',
+          },
+          {
+            path: "registry/base-nova/blocks/x-01/other-page.tsx",
+            type: "registry:page",
+            content: '<IconPlaceholder lucide="BIcon" />',
+          },
+        ],
+      },
     },
   ]);
-  assert.deepEqual(secondWithoutIcons.expectedByTarget.previews["x-01"], [
-    {
-      path: "src/previews/x-01.tsx",
-      occurrences: [{ icon: "AIcon", attributes: [] }],
-      orderedOccurrences: [],
+
+  assert.deepEqual(result, {
+    problems: [
+      "x-01: registry:page が 2 件あり、preview（src/previews/x-01.tsx）へ対応付けられない",
+      "x-01: registry/base-nova/blocks/x-01/page.tsx の IconPlaceholder #1 に lucide 属性が無い",
+    ],
+    expectedByTarget: { blocks: {}, previews: {} },
+    stats: {
+      jsonCount: 1,
+      blocksWithPlaceholders: 1,
+      placeholderCount: 2,
+      uniqueIconCount: 1,
+      missingLucideCount: 1,
     },
-  ]);
+  });
 });
 
 const generatedPathA = "src/blocks/x-01/a.tsx";
@@ -921,8 +967,7 @@ test("生成物に IconPlaceholder が残るとき、path 付きの期待は「<
   assert.deepEqual(legacy.problems, ["x-01: IconPlaceholder が残っている（1 箇所）"]);
 });
 
-// 次の 1 件は既知のバグを含む現在の振る舞いを固定する（PR 本文「見つけたバグ」参照）。
-test("現状: 順序なしの比較では、IconPlaceholder が残っていても一致数に数える", async () => {
+test("順序なしの比較でも、IconPlaceholder が残るときは一致数に数えない", async () => {
   const { inspectGeneratedIcons } = await loadChecker();
   const result = inspectGeneratedIcons(
     { "x-01": [{ path: generatedPathA, occurrences: [{ icon: "AIcon", attributes: [] }] }] },
@@ -936,10 +981,9 @@ test("現状: 順序なしの比較では、IconPlaceholder が残っていて�
     },
   );
 
-  assert.deepEqual(result.stats, {
-    blocksChecked: 1,
-    expectedOccurrences: 1,
-    matchedOccurrences: 1,
+  assert.deepEqual(result, {
+    problems: ["x-01: src/blocks/x-01/a.tsx に IconPlaceholder が残っている（1 箇所）"],
+    stats: { blocksChecked: 1, expectedOccurrences: 1, matchedOccurrences: 0 },
   });
 });
 
@@ -1089,8 +1133,7 @@ test("順序なしの比較で同じアイコンの属性が違うとき、期�
   });
 });
 
-// 次の 1 件は既知のバグを含む現在の振る舞いを固定する（PR 本文「見つけたバグ」参照）。
-test("現状: 順序なしの比較で不足を報告するとき、実測数は baseline を差し引く前の数になる", async () => {
+test("順序なしの比較で不足を報告するとき、期待数は同じアイコンの baseline を含めて数える", async () => {
   const { inspectGeneratedIcons } = await loadChecker();
   const result = inspectGeneratedIcons(
     {
@@ -1113,7 +1156,7 @@ test("現状: 順序なしの比較で不足を報告するとき、実測数は
   );
 
   assert.deepEqual(result, {
-    problems: ["x-01: src/blocks/x-01/a.tsx の AIcon の JSX 使用が不足している（期待 2 / 実測 2）"],
+    problems: ["x-01: src/blocks/x-01/a.tsx の AIcon の JSX 使用が不足している（期待 3 / 実測 2）"],
     stats: { blocksChecked: 1, expectedOccurrences: 2, matchedOccurrences: 1 },
   });
 });

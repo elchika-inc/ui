@@ -127,7 +127,7 @@ function iconPlaceholders(parsed) {
 }
 
 // 上流ファイル 1 つの IconPlaceholder を検査し、生成物に求めるアイコンを filesByTarget へ積む。
-function collectUpstreamFile(name, file, droppedPaths, filesByTarget) {
+function collectUpstreamFile(name, file, droppedPaths, filesByTarget, skipPreviewExpectation) {
   const path = typeof file.path === "string" ? file.path : `${name}:unknown.tsx`;
   const target = file.type === "registry:page" ? "previews" : "blocks";
   const targetPath = generatedPath(name, file, target);
@@ -142,7 +142,7 @@ function collectUpstreamFile(name, file, droppedPaths, filesByTarget) {
       problems.push(`${name}: ${path} の IconPlaceholder #${index + 1} に lucide 属性が無い`);
       continue;
     }
-    if (isDroppedComponent) continue;
+    if (isDroppedComponent || skipPreviewExpectation) continue;
     if (!targetPath) {
       problems.push(`${name}: ${path} を生成物 path へ対応付けられない`);
       continue;
@@ -152,7 +152,7 @@ function collectUpstreamFile(name, file, droppedPaths, filesByTarget) {
     filesByTarget[target].set(targetPath, expectedFile);
   }
 
-  const expectedFile = filesByTarget[target].get(targetPath);
+  const expectedFile = skipPreviewExpectation ? undefined : filesByTarget[target].get(targetPath);
   if (expectedFile) {
     const baselineOccurrences = inspectGeneratedSource({
       path,
@@ -187,12 +187,24 @@ export function inspectUpstreamBlocks(entries, { droppedUpstreamPathsByBlock = {
       droppedUpstreamPathsByBlock[name] ?? [],
       problems,
     );
+    const pageCount = item.files.filter((file) => file?.type === "registry:page").length;
+    if (pageCount > 1) {
+      problems.push(
+        `${name}: registry:page が ${pageCount} 件あり、preview（src/previews/${name}.tsx）へ対応付けられない`,
+      );
+    }
     const filesByTarget = { blocks: new Map(), previews: new Map() };
     // lucide 属性が無い placeholder は undefined のまま入る。
     const placeholderIcons = [];
     for (const file of item.files) {
       if (typeof file?.content !== "string") continue;
-      const collected = collectUpstreamFile(name, file, droppedPaths, filesByTarget);
+      const collected = collectUpstreamFile(
+        name,
+        file,
+        droppedPaths,
+        filesByTarget,
+        file.type === "registry:page" && pageCount > 1,
+      );
       problems.push(...collected.problems);
       placeholderIcons.push(...collected.placeholderIcons);
     }
@@ -352,9 +364,10 @@ function compareIgnoringOrder(problemPrefix, expectedFile, candidates, importedI
       );
       continue;
     }
-    const expectedCount = expectedFile.occurrences.filter(
-      (candidate) => candidate.icon === occurrence.icon,
-    ).length;
+    const expectedCount = [
+      ...expectedFile.occurrences,
+      ...(expectedFile.baselineOccurrences ?? []),
+    ].filter((candidate) => candidate.icon === occurrence.icon).length;
     const actualCount = candidates
       .flatMap((file) => file.occurrences)
       .filter((candidate) => candidate.icon === occurrence.icon).length;
@@ -394,7 +407,7 @@ function compareExpectedFile(name, expectedFile, inspected) {
     : compareIgnoringOrder(problemPrefix, expectedFile, candidates, importedIcons);
   return {
     problems: [...problems, ...comparison.problems],
-    matchedOccurrences: comparison.matchedOccurrences,
+    matchedOccurrences: remainingPlaceholders === 0 ? comparison.matchedOccurrences : 0,
   };
 }
 
