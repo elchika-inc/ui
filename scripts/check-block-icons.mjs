@@ -282,6 +282,114 @@ function describeOccurrence(occurrence) {
   return `${occurrence.icon} ${occurrence.attributes.join(" ") || "属性なし"}`;
 }
 
+function firstMismatchIndex(expected, actual) {
+  const length = Math.max(expected.length, actual.length);
+  for (let index = 0; index < length; index++) {
+    const isSame =
+      expected[index] &&
+      actual[index] &&
+      expected[index].icon === actual[index].icon &&
+      sameAttributes(expected[index].attributes, actual[index].attributes);
+    if (!isSame) return index;
+  }
+  return undefined;
+}
+
+function compareInOrder(problemPrefix, expectedFile, candidates, remainingPlaceholders) {
+  const ordered = expectedFile.orderedOccurrences;
+  const actual = candidates.flatMap((file) => file.occurrences);
+  const mismatchIndex = firstMismatchIndex(ordered, actual);
+  if (mismatchIndex !== undefined) {
+    const expectedAtPosition = describeOccurrence(ordered[mismatchIndex]);
+    const actualAtPosition = describeOccurrence(actual[mismatchIndex]);
+    return {
+      problems: [
+        `${problemPrefix}アイコン位置 #${mismatchIndex + 1} が一致しない（期待 ${expectedAtPosition} / 実測 ${actualAtPosition}）`,
+      ],
+      matchedOccurrences: 0,
+    };
+  }
+  const matchedOccurrences = remainingPlaceholders === 0 ? expectedFile.occurrences.length : 0;
+  return { problems: [], matchedOccurrences };
+}
+
+function compareIgnoringOrder(problemPrefix, expectedFile, candidates, importedIcons) {
+  const problems = [];
+  let matchedOccurrences = 0;
+  const actual = candidates.flatMap((file) => file.occurrences).map((item) => ({ ...item }));
+  for (const baseline of expectedFile.baselineOccurrences ?? []) {
+    const match = actual.findIndex(
+      (candidate) =>
+        candidate.icon === baseline.icon &&
+        sameAttributes(candidate.attributes, baseline.attributes),
+    );
+    if (match >= 0) actual.splice(match, 1);
+  }
+  for (const occurrence of expectedFile.occurrences) {
+    if (!importedIcons.has(occurrence.icon)) continue;
+    const match = actual.findIndex(
+      (candidate) =>
+        candidate.icon === occurrence.icon &&
+        (occurrence.attributes === undefined ||
+          sameAttributes(candidate.attributes, occurrence.attributes)),
+    );
+    if (match >= 0) {
+      actual.splice(match, 1);
+      matchedOccurrences++;
+      continue;
+    }
+    if (actual.some((candidate) => candidate.icon === occurrence.icon)) {
+      problems.push(
+        `${problemPrefix}${occurrence.icon} の属性が一致しない（期待 ${occurrence.attributes.join(" ") || "属性なし"}）`,
+      );
+      continue;
+    }
+    const expectedCount = expectedFile.occurrences.filter(
+      (candidate) => candidate.icon === occurrence.icon,
+    ).length;
+    const actualCount = candidates
+      .flatMap((file) => file.occurrences)
+      .filter((candidate) => candidate.icon === occurrence.icon).length;
+    problems.push(
+      `${problemPrefix}${occurrence.icon} の JSX 使用が不足している（期待 ${expectedCount} / 実測 ${actualCount}）`,
+    );
+  }
+  return { problems, matchedOccurrences };
+}
+
+function compareExpectedFile(name, expectedFile, inspected) {
+  const candidates = expectedFile.path
+    ? inspected.filter((file) => file.path === expectedFile.path)
+    : inspected;
+  if (candidates.length === 0) {
+    return { problems: [`${name}: ${expectedFile.path} の生成物が無い`], matchedOccurrences: 0 };
+  }
+  const problemPrefix = `${name}: ${expectedFile.path ? `${expectedFile.path} の ` : ""}`;
+  const problems = [];
+  const remainingPlaceholders = candidates.reduce((sum, file) => sum + file.placeholderCount, 0);
+  if (remainingPlaceholders > 0) {
+    problems.push(
+      `${name}: ${expectedFile.path ? `${expectedFile.path} に ` : ""}IconPlaceholder が残っている（${remainingPlaceholders} 箇所）`,
+    );
+  }
+  const importedIcons = new Set(candidates.flatMap((file) => [...file.importedIcons]));
+  for (const occurrence of expectedFile.occurrences) {
+    if (!importedIcons.has(occurrence.icon)) {
+      problems.push(
+        `${problemPrefix}${occurrence.icon} が lucide-react から named import されていない`,
+      );
+    }
+  }
+  // 上流から導出した期待は orderedOccurrences を持つので並びまで比べる。件数だけの旧形式などは並びを問わない。
+  const comparison = expectedFile.orderedOccurrences
+    ? compareInOrder(problemPrefix, expectedFile, candidates, remainingPlaceholders)
+    : compareIgnoringOrder(problemPrefix, expectedFile, candidates, importedIcons);
+  return {
+    problems: [...problems, ...comparison.problems],
+    matchedOccurrences: comparison.matchedOccurrences,
+  };
+}
+
 export function inspectGeneratedIcons(expectedByBlock, generatedByBlock) {
   const problems = [];
   let expectedOccurrences = 0;
@@ -291,102 +399,16 @@ export function inspectGeneratedIcons(expectedByBlock, generatedByBlock) {
   for (const [name, expected] of entries) {
     const files = generatedByBlock[name];
     const expectedFiles = normalizedExpectedFiles(expected);
-    const blockExpected = expectedFiles.reduce((sum, file) => sum + file.occurrences.length, 0);
-    expectedOccurrences += blockExpected;
+    expectedOccurrences += expectedFiles.reduce((sum, file) => sum + file.occurrences.length, 0);
     if (!Array.isArray(files) || files.length === 0) {
       problems.push(`${name}: 生成物が無い`);
       continue;
     }
     const inspected = files.map(inspectGeneratedSource);
     for (const expectedFile of expectedFiles) {
-      const candidates = expectedFile.path
-        ? inspected.filter((file) => file.path === expectedFile.path)
-        : inspected;
-      if (candidates.length === 0) {
-        problems.push(`${name}: ${expectedFile.path} の生成物が無い`);
-        continue;
-      }
-      const problemPrefix = `${name}: ${expectedFile.path ? `${expectedFile.path} の ` : ""}`;
-      const remainingPlaceholders = candidates.reduce(
-        (sum, file) => sum + file.placeholderCount,
-        0,
-      );
-      if (remainingPlaceholders > 0) {
-        problems.push(
-          `${name}: ${expectedFile.path ? `${expectedFile.path} に ` : ""}IconPlaceholder が残っている（${remainingPlaceholders} 箇所）`,
-        );
-      }
-      const importedIcons = new Set(candidates.flatMap((file) => [...file.importedIcons]));
-      const actual = candidates.flatMap((file) => file.occurrences).map((item) => ({ ...item }));
-      for (const occurrence of expectedFile.occurrences) {
-        if (!importedIcons.has(occurrence.icon)) {
-          problems.push(
-            `${problemPrefix}${occurrence.icon} が lucide-react から named import されていない`,
-          );
-        }
-      }
-      if (expectedFile.orderedOccurrences) {
-        const ordered = expectedFile.orderedOccurrences;
-        const mismatchIndex = Array.from(
-          { length: Math.max(ordered.length, actual.length) },
-          (_, index) => index,
-        ).find(
-          (index) =>
-            !ordered[index] ||
-            !actual[index] ||
-            ordered[index].icon !== actual[index].icon ||
-            !sameAttributes(ordered[index].attributes, actual[index].attributes),
-        );
-        if (mismatchIndex !== undefined) {
-          const expectedAtPosition = describeOccurrence(ordered[mismatchIndex]);
-          const actualAtPosition = describeOccurrence(actual[mismatchIndex]);
-          problems.push(
-            `${problemPrefix}アイコン位置 #${mismatchIndex + 1} が一致しない（期待 ${expectedAtPosition} / 実測 ${actualAtPosition}）`,
-          );
-        } else if (remainingPlaceholders === 0) {
-          matchedOccurrences += expectedFile.occurrences.length;
-        }
-        continue;
-      }
-      for (const baseline of expectedFile.baselineOccurrences ?? []) {
-        const match = actual.findIndex(
-          (candidate) =>
-            candidate.icon === baseline.icon &&
-            sameAttributes(candidate.attributes, baseline.attributes),
-        );
-        if (match >= 0) actual.splice(match, 1);
-      }
-      for (const occurrence of expectedFile.occurrences) {
-        if (!importedIcons.has(occurrence.icon)) {
-          continue;
-        }
-        const match = actual.findIndex(
-          (candidate) =>
-            candidate.icon === occurrence.icon &&
-            (occurrence.attributes === undefined ||
-              sameAttributes(candidate.attributes, occurrence.attributes)),
-        );
-        if (match >= 0) {
-          actual.splice(match, 1);
-          matchedOccurrences++;
-          continue;
-        }
-        if (actual.some((candidate) => candidate.icon === occurrence.icon)) {
-          problems.push(
-            `${problemPrefix}${occurrence.icon} の属性が一致しない（期待 ${occurrence.attributes.join(" ") || "属性なし"}）`,
-          );
-        } else {
-          const expectedCount = expectedFile.occurrences.filter(
-            (candidate) => candidate.icon === occurrence.icon,
-          ).length;
-          const actualCount = candidates
-            .flatMap((file) => file.occurrences)
-            .filter((candidate) => candidate.icon === occurrence.icon).length;
-          problems.push(
-            `${problemPrefix}${occurrence.icon} の JSX 使用が不足している（期待 ${expectedCount} / 実測 ${actualCount}）`,
-          );
-        }
-      }
+      const comparison = compareExpectedFile(name, expectedFile, inspected);
+      problems.push(...comparison.problems);
+      matchedOccurrences += comparison.matchedOccurrences;
     }
   }
 
