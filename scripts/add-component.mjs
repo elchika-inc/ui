@@ -1166,6 +1166,35 @@ export function resyncComponentHash({ root, name, modified, provenance, log = co
   return { skipped: false, resynced: true, updated };
 }
 
+// block でも配布ファイルの実体を読んで渡す。空文字にすると buildRegistryItem の
+// externalImports が空走し、「上流 item の dependencies 宣言漏れを生成物の import から
+// 拾い直す」安全網が block レーンだけ黙って無効になる（上流 dashboard-01 は実際に
+// recharts / sonner の宣言を欠く）。generatedContentSha256 は block では
+// blockProvenanceEntry が files ごとに個別計算するので、この連結値は来歴へ入らない。
+function readGeneratedSource(root, target, isBlock) {
+  if (!isBlock) return readFileSync(join(root, target.targetPath), "utf8");
+  return target.files
+    .map(({ targetPath }) => readFileSync(join(root, targetPath), "utf8"))
+    .join("\n");
+}
+
+function upsertRegistryItem(items, name, registryItem) {
+  const existingIndex = items.findIndex((item) => item.name === name);
+  if (existingIndex === -1) items.push(registryItem);
+  else items[existingIndex] = registryItem;
+  items.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+function logAddSummary(log, entry, isBlock) {
+  if (isBlock) {
+    log(`配布ファイル: ${entry.files.filter((f) => !f.dropped).length} 件`);
+    log(`配布しない page: ${entry.files.filter((f) => f.dropped).length} 件`);
+  } else {
+    log(`生成直後 SHA-256: ${entry.generatedContentSha256}`);
+  }
+  log(`registry SHA-256: ${entry.registryContentSha256}`);
+}
+
 function resyncRecorded(args) {
   const { name, provenance } = args;
   if (Object.hasOwn(provenance.blocks ?? {}, name)) return resyncBlockHashes(args);
@@ -1286,16 +1315,7 @@ export async function runAddComponent({
 
   ensureGenerated(repositoryRoot, target, isBlock);
 
-  // block でも配布ファイルの実体を読んで渡す。空文字にすると buildRegistryItem の
-  // externalImports が空走し、「上流 item の dependencies 宣言漏れを生成物の import から
-  // 拾い直す」安全網が block レーンだけ黙って無効になる（上流 dashboard-01 は実際に
-  // recharts / sonner の宣言を欠く）。generatedContentSha256 は block では
-  // blockProvenanceEntry が files ごとに個別計算するので、この連結値は来歴へ入らない。
-  const generatedSource = isBlock
-    ? target.files
-        .map(({ targetPath }) => readFileSync(join(repositoryRoot, targetPath), "utf8"))
-        .join("\n")
-    : readFileSync(join(repositoryRoot, target.targetPath), "utf8");
+  const generatedSource = readGeneratedSource(repositoryRoot, target, isBlock);
   const entry = createProvenanceEntry({
     root: repositoryRoot,
     isBlock,
@@ -1310,13 +1330,9 @@ export async function runAddComponent({
     ...provenanceMetadata,
   });
 
-  if (isBlock) {
-    provenance.blocks ??= {};
-    provenance.blocks[name] = entry;
-  } else {
-    provenance.components ??= {};
-    provenance.components[name] = entry;
-  }
+  const lane = isBlock ? "blocks" : "components";
+  provenance[lane] ??= {};
+  provenance[lane][name] = entry;
   const registryItem = buildRegistryItem(
     name,
     upstreamItem,
@@ -1324,20 +1340,11 @@ export async function runAddComponent({
     target,
     registry.items,
   );
-  const existingIndex = registry.items.findIndex((item) => item.name === name);
-  if (existingIndex === -1) registry.items.push(registryItem);
-  else registry.items[existingIndex] = registryItem;
-  registry.items.sort((a, b) => a.name.localeCompare(b.name));
+  upsertRegistryItem(registry.items, name, registryItem);
 
   writeJson(repositoryRoot, "provenance.json", provenance);
   writeJson(repositoryRoot, "registry.json", registry);
-  if (isBlock) {
-    log(`配布ファイル: ${entry.files.filter((f) => !f.dropped).length} 件`);
-    log(`配布しない page: ${entry.files.filter((f) => f.dropped).length} 件`);
-  } else {
-    log(`生成直後 SHA-256: ${entry.generatedContentSha256}`);
-  }
-  log(`registry SHA-256: ${entry.registryContentSha256}`);
+  logAddSummary(log, entry, isBlock);
   return { skipped: false, entry, registryItem, reconciled };
 }
 
