@@ -188,6 +188,290 @@ test("missing alias、cycle、未知形式、範囲外 channel を fail-closed �
   assert.match(resolveToken(themes, "light", "out-of-range").problem, /範囲外/);
 });
 
+test("rgb(var()) に alpha が無いとき、alpha 1 として解決する", async () => {
+  const { parseThemes, resolveToken } = await loadContrast();
+  const themes = parseThemes(
+    themeCss({
+      light: `
+        --brand: 47 95 209;
+        --opaque: rgb(var(--brand));`,
+      dark: "  --placeholder: 0 0 0;",
+    }),
+  );
+
+  assert.deepEqual(resolveToken(themes, "light", "opaque"), {
+    rgb: [47 / 255, 95 / 255, 209 / 255],
+    alpha: 1,
+  });
+});
+
+test("rgb(var() / 数値) と rgb(var() / 百分率) は、書かれた alpha で解決する", async () => {
+  const { parseThemes, resolveToken } = await loadContrast();
+  const themes = parseThemes(
+    themeCss({
+      light: `
+        --brand: 47 95 209;
+        --number: rgb(var(--brand) / 0.5);
+        --percent: rgb(var(--brand) / 50%);`,
+      dark: "  --placeholder: 0 0 0;",
+    }),
+  );
+
+  assert.equal(resolveToken(themes, "light", "number").alpha, 0.5);
+  assert.equal(resolveToken(themes, "light", "percent").alpha, 0.5);
+});
+
+test("rgb(var() / α) の α が 0 と 1 ちょうどのとき、その値で解決する", async () => {
+  const { parseThemes, resolveToken } = await loadContrast();
+  const themes = parseThemes(
+    themeCss({
+      light: `
+        --brand: 47 95 209;
+        --transparent: rgb(var(--brand) / 0);
+        --opaque: rgb(var(--brand) / 1);`,
+      dark: "  --placeholder: 0 0 0;",
+    }),
+  );
+
+  assert.equal(resolveToken(themes, "light", "transparent").alpha, 0);
+  assert.equal(resolveToken(themes, "light", "opaque").alpha, 1);
+});
+
+test("rgb(var() / α) の α が 0〜1 の外のとき、範囲外の problem を返す", async () => {
+  const { parseThemes, resolveToken } = await loadContrast();
+  const themes = parseThemes(
+    themeCss({
+      light: `
+        --brand: 47 95 209;
+        --over: rgb(var(--brand) / 1.01);
+        --under: rgb(var(--brand) / -0.01);`,
+      dark: "  --placeholder: 0 0 0;",
+    }),
+  );
+
+  assert.deepEqual(resolveToken(themes, "light", "over"), {
+    problem: "--over: alpha が範囲外: 1.01",
+  });
+  assert.deepEqual(resolveToken(themes, "light", "under"), {
+    problem: "--under: alpha が範囲外: -0.01",
+  });
+});
+
+test("rgb(var() / α) の α が数値でないとき、範囲外の problem を返す", async () => {
+  const { parseThemes, resolveToken } = await loadContrast();
+  const themes = parseThemes(
+    themeCss({
+      light: `
+        --brand: 47 95 209;
+        --word: rgb(var(--brand) / half);`,
+      dark: "  --placeholder: 0 0 0;",
+    }),
+  );
+
+  assert.deepEqual(resolveToken(themes, "light", "word"), {
+    problem: "--word: alpha が範囲外: half",
+  });
+});
+
+test("rgb(var()) の参照先が alpha を持つとき、参照先の alpha と書かれた alpha を掛ける", async () => {
+  const { parseColor, parseThemes, resolveToken } = await loadContrast();
+  const themes = parseThemes(
+    themeCss({
+      light: `
+        --tinted: oklch(0.5 0.1 30 / 10%);
+        --half-tinted: rgb(var(--tinted) / 0.5);`,
+      dark: "  --placeholder: 0 0 0;",
+    }),
+  );
+
+  assert.deepEqual(resolveToken(themes, "light", "half-tinted"), {
+    rgb: parseColor("oklch(0.5 0.1 30)").rgb,
+    alpha: 0.1 * 0.5,
+  });
+});
+
+test("rgb(var()) の参照先が無いとき、参照先の problem を返す", async () => {
+  const { parseThemes, resolveToken } = await loadContrast();
+  const themes = parseThemes(
+    themeCss({
+      light: "  --orphan: rgb(var(--not-found) / 0.5);",
+      dark: "  --placeholder: 0 0 0;",
+    }),
+  );
+
+  assert.deepEqual(resolveToken(themes, "light", "orphan"), {
+    problem: "--not-found: token が無い",
+  });
+});
+
+test("rgb(var() / var()) の alpha 側の token が無いとき、alpha 側の problem を返す", async () => {
+  const { parseThemes, resolveToken } = await loadContrast();
+  const themes = parseThemes(
+    themeCss({
+      light: `
+        --brand: 47 95 209;
+        --orphan-alpha: rgb(var(--brand) / var(--not-found));`,
+      dark: "  --placeholder: 0 0 0;",
+    }),
+  );
+
+  assert.deepEqual(resolveToken(themes, "light", "orphan-alpha"), {
+    problem: "--not-found: token が無い",
+  });
+});
+
+test("rgb(var() / var()) の alpha 側の alias が循環するとき、循環の problem を返す", async () => {
+  const { parseThemes, resolveToken } = await loadContrast();
+  const themes = parseThemes(
+    themeCss({
+      light: `
+        --brand: 47 95 209;
+        --alpha-a: var(--alpha-b);
+        --alpha-b: var(--alpha-a);
+        --cyclic-alpha: rgb(var(--brand) / var(--alpha-a));`,
+      dark: "  --placeholder: 0 0 0;",
+    }),
+  );
+
+  assert.deepEqual(resolveToken(themes, "light", "cyclic-alpha"), {
+    problem: "--alpha-a: alias が循環している",
+  });
+});
+
+test("rgb(var() / var()) の alpha 側の値が 0〜1 の外のとき、alpha 側の範囲外の problem を返す", async () => {
+  const { parseThemes, resolveToken } = await loadContrast();
+  const themes = parseThemes(
+    themeCss({
+      light: `
+        --brand: 47 95 209;
+        --two: 2;
+        --over-alpha: rgb(var(--brand) / var(--two));`,
+      dark: "  --placeholder: 0 0 0;",
+    }),
+  );
+
+  assert.deepEqual(resolveToken(themes, "light", "over-alpha"), {
+    problem: "--two: alpha が範囲外: 2",
+  });
+});
+
+test("token 名に -- を付けても付けなくても、同じ結果に解決する", async () => {
+  const { parseThemes, resolveToken } = await loadContrast();
+  const themes = parseThemes(
+    themeCss({
+      light: "  --brand: 47 95 209;",
+      dark: "  --placeholder: 0 0 0;",
+    }),
+  );
+
+  assert.deepEqual(
+    resolveToken(themes, "light", "--brand"),
+    resolveToken(themes, "light", "brand"),
+  );
+});
+
+test("theme が themes に無いとき、または themes が無いとき、theme 不正の problem を返す", async () => {
+  const { parseThemes, resolveToken } = await loadContrast();
+  const themes = parseThemes(
+    themeCss({
+      light: "  --brand: 47 95 209;",
+      dark: "  --placeholder: 0 0 0;",
+    }),
+  );
+
+  assert.deepEqual(resolveToken(themes, "sepia", "brand"), { problem: "theme が不正: sepia" });
+  assert.deepEqual(resolveToken(undefined, "light", "brand"), { problem: "theme が不正: light" });
+});
+
+test("problem の文言は、解決できなかった token 名を -- 付きで前置する", async () => {
+  const { parseThemes, resolveToken } = await loadContrast();
+  const themes = parseThemes(
+    themeCss({
+      light: `
+        --missing: var(--not-found);
+        --cycle-a: var(--cycle-b);
+        --cycle-b: var(--cycle-a);
+        --unknown: color(display-p3 1 0 0);
+        --out-of-range: 256 0 0;`,
+      dark: "  --placeholder: 0 0 0;",
+    }),
+  );
+
+  assert.deepEqual(resolveToken(themes, "light", "missing"), {
+    problem: "--not-found: token が無い",
+  });
+  assert.deepEqual(resolveToken(themes, "light", "cycle-a"), {
+    problem: "--cycle-a: alias が循環している",
+  });
+  assert.deepEqual(resolveToken(themes, "light", "unknown"), {
+    problem: "--unknown: 色の値を解釈できない: color(display-p3 1 0 0)",
+  });
+  assert.deepEqual(resolveToken(themes, "light", "out-of-range"), {
+    problem: "--out-of-range: RGB channel が範囲外: 256 0 0",
+  });
+});
+
+test("seen に既に入っている token を解決すると、循環の problem を返す", async () => {
+  const { parseThemes, resolveToken } = await loadContrast();
+  const themes = parseThemes(
+    themeCss({
+      light: "  --brand: 47 95 209;",
+      dark: "  --placeholder: 0 0 0;",
+    }),
+  );
+
+  assert.deepEqual(resolveToken(themes, "light", "brand", new Set(["brand"])), {
+    problem: "--brand: alias が循環している",
+  });
+});
+
+test("seen を渡して alias を解決しても、渡した seen は書き換えない", async () => {
+  const { parseThemes, resolveToken } = await loadContrast();
+  const themes = parseThemes(
+    themeCss({
+      light: `
+        --brand: 47 95 209;
+        --alias: var(--brand);`,
+      dark: "  --placeholder: 0 0 0;",
+    }),
+  );
+  const seen = new Set(["unrelated"]);
+
+  resolveToken(themes, "light", "alias", seen);
+
+  assert.deepEqual([...seen], ["unrelated"]);
+});
+
+// 以下の 2 件は既知のバグを含む現在の振る舞いを固定する（直すのは別 PR。PR 本文「見つけたバグ」参照）。
+test("現状: rgb(var() / ) のように α が空白だけのとき、problem でなく alpha 0 で解決する", async () => {
+  const { parseThemes, resolveToken } = await loadContrast();
+  const themes = parseThemes(
+    themeCss({
+      light: `
+        --brand: 47 95 209;
+        --blank-alpha: rgb(var(--brand) / );`,
+      dark: "  --placeholder: 0 0 0;",
+    }),
+  );
+
+  assert.deepEqual(resolveToken(themes, "light", "blank-alpha"), {
+    rgb: [47 / 255, 95 / 255, 209 / 255],
+    alpha: 0,
+  });
+});
+
+test("現状: theme に themes の Map 以外のプロパティ名を渡すと、problem でなく TypeError を投げる", async () => {
+  const { parseThemes, resolveToken } = await loadContrast();
+  const themes = parseThemes(
+    themeCss({
+      light: "  --brand: 47 95 209;",
+      dark: "  --placeholder: 0 0 0;",
+    }),
+  );
+
+  assert.throws(() => resolveToken(themes, "problems", "brand"), TypeError);
+});
+
 test("text-aa と nontext-ui だけを閾値で gate する", async () => {
   const { evaluateCase, parseThemes } = await loadContrast();
   const themes = parseThemes(
