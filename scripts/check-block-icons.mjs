@@ -277,6 +277,11 @@ function sameAttributes(left, right) {
   return JSON.stringify(left) === JSON.stringify(right);
 }
 
+function describeOccurrence(occurrence) {
+  if (!occurrence) return "なし";
+  return `${occurrence.icon} ${occurrence.attributes.join(" ") || "属性なし"}`;
+}
+
 export function inspectGeneratedIcons(expectedByBlock, generatedByBlock) {
   const problems = [];
   let expectedOccurrences = 0;
@@ -301,6 +306,7 @@ export function inspectGeneratedIcons(expectedByBlock, generatedByBlock) {
         problems.push(`${name}: ${expectedFile.path} の生成物が無い`);
         continue;
       }
+      const problemPrefix = `${name}: ${expectedFile.path ? `${expectedFile.path} の ` : ""}`;
       const remainingPlaceholders = candidates.reduce(
         (sum, file) => sum + file.placeholderCount,
         0,
@@ -315,7 +321,7 @@ export function inspectGeneratedIcons(expectedByBlock, generatedByBlock) {
       for (const occurrence of expectedFile.occurrences) {
         if (!importedIcons.has(occurrence.icon)) {
           problems.push(
-            `${name}: ${expectedFile.path ? `${expectedFile.path} の ` : ""}${occurrence.icon} が lucide-react から named import されていない`,
+            `${problemPrefix}${occurrence.icon} が lucide-react から named import されていない`,
           );
         }
       }
@@ -332,10 +338,10 @@ export function inspectGeneratedIcons(expectedByBlock, generatedByBlock) {
             !sameAttributes(ordered[index].attributes, actual[index].attributes),
         );
         if (mismatchIndex !== undefined) {
-          const expectedAtPosition = ordered[mismatchIndex];
-          const actualAtPosition = actual[mismatchIndex];
+          const expectedAtPosition = describeOccurrence(ordered[mismatchIndex]);
+          const actualAtPosition = describeOccurrence(actual[mismatchIndex]);
           problems.push(
-            `${name}: ${expectedFile.path ? `${expectedFile.path} の ` : ""}アイコン位置 #${mismatchIndex + 1} が一致しない（期待 ${expectedAtPosition ? `${expectedAtPosition.icon} ${expectedAtPosition.attributes.join(" ") || "属性なし"}` : "なし"} / 実測 ${actualAtPosition ? `${actualAtPosition.icon} ${actualAtPosition.attributes.join(" ") || "属性なし"}` : "なし"}）`,
+            `${problemPrefix}アイコン位置 #${mismatchIndex + 1} が一致しない（期待 ${expectedAtPosition} / 実測 ${actualAtPosition}）`,
           );
         } else if (remainingPlaceholders === 0) {
           matchedOccurrences += expectedFile.occurrences.length;
@@ -367,7 +373,7 @@ export function inspectGeneratedIcons(expectedByBlock, generatedByBlock) {
         }
         if (actual.some((candidate) => candidate.icon === occurrence.icon)) {
           problems.push(
-            `${name}: ${expectedFile.path ? `${expectedFile.path} の ` : ""}${occurrence.icon} の属性が一致しない（期待 ${occurrence.attributes.join(" ") || "属性なし"}）`,
+            `${problemPrefix}${occurrence.icon} の属性が一致しない（期待 ${occurrence.attributes.join(" ") || "属性なし"}）`,
           );
         } else {
           const expectedCount = expectedFile.occurrences.filter(
@@ -377,7 +383,7 @@ export function inspectGeneratedIcons(expectedByBlock, generatedByBlock) {
             .flatMap((file) => file.occurrences)
             .filter((candidate) => candidate.icon === occurrence.icon).length;
           problems.push(
-            `${name}: ${expectedFile.path ? `${expectedFile.path} の ` : ""}${occurrence.icon} の JSX 使用が不足している（期待 ${expectedCount} / 実測 ${actualCount}）`,
+            `${problemPrefix}${occurrence.icon} の JSX 使用が不足している（期待 ${expectedCount} / 実測 ${actualCount}）`,
           );
         }
       }
