@@ -776,8 +776,7 @@ test("IconPlaceholder の属性は、アイコンライブラリの属性を除�
   ]);
 });
 
-// 次の 1 件は既知のバグを含む現在の振る舞いを固定する（PR 本文「見つけたバグ」参照）。
-test("現状: 同じ block に registry:page が 2 つあると、occurrences は足し合わせ、ordered は最後の page で上書きする", async () => {
+test("同じ block に registry:page が 2 つ以上あるとき、preview へ対応付けられない問題にし、preview の期待値を作らない", async () => {
   const { inspectUpstreamBlocks } = await loadChecker();
   const page = (path, content) => ({
     path: `registry/base-nova/blocks/x-01/${path}`,
@@ -807,23 +806,70 @@ test("現状: 同じ block に registry:page が 2 つあると、occurrences �
     },
   ]);
 
-  assert.deepEqual(bothWithIcons.expectedByTarget.previews["x-01"], [
+  assert.deepEqual(bothWithIcons, {
+    problems: [
+      "x-01: registry:page が 2 件あり、preview（src/previews/x-01.tsx）へ対応付けられない",
+    ],
+    expectedByTarget: { blocks: {}, previews: {} },
+    stats: {
+      jsonCount: 1,
+      blocksWithPlaceholders: 1,
+      placeholderCount: 2,
+      uniqueIconCount: 2,
+      missingLucideCount: 0,
+    },
+  });
+  assert.deepEqual(secondWithoutIcons, {
+    problems: [
+      "x-01: registry:page が 2 件あり、preview（src/previews/x-01.tsx）へ対応付けられない",
+    ],
+    expectedByTarget: { blocks: {}, previews: {} },
+    stats: {
+      jsonCount: 1,
+      blocksWithPlaceholders: 1,
+      placeholderCount: 1,
+      uniqueIconCount: 1,
+      missingLucideCount: 0,
+    },
+  });
+});
+
+test("registry:page が複数ある block でも、page の lucide 欠損は検出する", async () => {
+  const { inspectUpstreamBlocks } = await loadChecker();
+  const result = inspectUpstreamBlocks([
     {
-      path: "src/previews/x-01.tsx",
-      occurrences: [
-        { icon: "AIcon", attributes: [] },
-        { icon: "BIcon", attributes: [] },
-      ],
-      orderedOccurrences: [{ icon: "BIcon", attributes: [] }],
+      name: "x-01",
+      item: {
+        files: [
+          {
+            path: "registry/base-nova/blocks/x-01/page.tsx",
+            type: "registry:page",
+            content: '<IconPlaceholder tabler="IconA" />',
+          },
+          {
+            path: "registry/base-nova/blocks/x-01/other-page.tsx",
+            type: "registry:page",
+            content: '<IconPlaceholder lucide="BIcon" />',
+          },
+        ],
+      },
     },
   ]);
-  assert.deepEqual(secondWithoutIcons.expectedByTarget.previews["x-01"], [
-    {
-      path: "src/previews/x-01.tsx",
-      occurrences: [{ icon: "AIcon", attributes: [] }],
-      orderedOccurrences: [],
+
+  assert.deepEqual(result, {
+    problems: [
+      "x-01: registry:page が 2 件あり、preview（src/previews/x-01.tsx）へ対応付けられない",
+      "x-01: registry/base-nova/blocks/x-01/page.tsx の IconPlaceholder #1 に lucide 属性が無い",
+    ],
+    expectedByTarget: { blocks: {}, previews: {} },
+    stats: {
+      jsonCount: 1,
+      blocksWithPlaceholders: 1,
+      placeholderCount: 2,
+      uniqueIconCount: 1,
+      missingLucideCount: 1,
     },
-  ]);
+  });
 });
 
 const generatedPathA = "src/blocks/x-01/a.tsx";
