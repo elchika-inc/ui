@@ -1205,8 +1205,8 @@ export async function runAddComponent({
   // lane の衝突を provenance だけで判断すると、台帳の部分欠損時に同名の
   // registry item や disk 実体を上書きできてしまう。CLI の副作用より前に、
   // 独立した 3 根（provenance / registry / disk）をすべて照合する。
-  const registryBefore = readJson(repositoryRoot, "registry.json");
-  const existingRegistryItems = registryBefore.items.filter((item) => item.name === name);
+  const registry = readJson(repositoryRoot, "registry.json");
+  const existingRegistryItems = registry.items.filter((item) => item.name === name);
   if (existingRegistryItems.length > 1) {
     throw new Error(`${name}: registry item が重複している（${existingRegistryItems.length} 件）`);
   }
@@ -1251,7 +1251,7 @@ export async function runAddComponent({
   // TOCTOUが生じるため、shadcn公式のlocal item入力を使う。
   const pinnedItem = pinnedRegistryItem(
     name,
-    registryTextForCli(upstreamText, upstreamItem, target, registryBefore.items),
+    registryTextForCli(upstreamText, upstreamItem, target, registry.items),
   );
   try {
     const command = shadcnCommand(cliVersion, pinnedItem.path);
@@ -1292,7 +1292,7 @@ export async function runAddComponent({
     root: repositoryRoot,
     isBlock,
     name,
-    modified: modifiedWithDroppedDependencies(modified, upstreamItem, target, registryBefore.items),
+    modified: modifiedWithDroppedDependencies(modified, upstreamItem, target, registry.items),
     cliVersion,
     generatedSource,
     upstreamItem,
@@ -1309,7 +1309,6 @@ export async function runAddComponent({
     provenance.components ??= {};
     provenance.components[name] = entry;
   }
-  const registry = registryBefore;
   const registryItem = buildRegistryItem(
     name,
     upstreamItem,
