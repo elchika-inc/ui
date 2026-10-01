@@ -136,6 +136,7 @@ export function inspectUpstreamBlocks(entries, { droppedUpstreamPathsByBlock = {
       if (typeof file?.content !== "string") continue;
       const path = typeof file.path === "string" ? file.path : `${name}:unknown.tsx`;
       const target = file.type === "registry:page" ? "previews" : "blocks";
+      const targetPath = generatedPath(name, file, target);
       const parsed = sourceFile(path, file.content);
       let filePlaceholderIndex = 0;
       const visit = (node) => {
@@ -157,7 +158,6 @@ export function inspectUpstreamBlocks(entries, { droppedUpstreamPathsByBlock = {
             const droppedComponent =
               file.type === "registry:component" && droppedPaths.has(relativePath);
             if (!droppedComponent) {
-              const targetPath = generatedPath(name, file, target);
               if (!targetPath) {
                 problems.push(`${name}: ${path} を生成物 path へ対応付けられない`);
               } else {
@@ -174,22 +174,18 @@ export function inspectUpstreamBlocks(entries, { droppedUpstreamPathsByBlock = {
         ts.forEachChild(node, visit);
       };
       visit(parsed);
-      for (const files of Object.values(filesByTarget)) {
-        const expectedFile = files.get(
-          generatedPath(name, file, file.type === "registry:page" ? "previews" : "blocks"),
-        );
-        if (!expectedFile) continue;
-        const baselineOccurrences = inspectGeneratedSource({
-          path,
-          source: file.content,
-        }).occurrences;
-        if (baselineOccurrences.length > 0) expectedFile.baselineOccurrences = baselineOccurrences;
-        expectedFile.orderedOccurrences = inspectGeneratedSource({
-          path,
-          source: file.content,
-          includePlaceholders: true,
-        }).occurrences;
-      }
+      const expectedFile = filesByTarget[target].get(targetPath);
+      if (!expectedFile) continue;
+      const baselineOccurrences = inspectGeneratedSource({
+        path,
+        source: file.content,
+      }).occurrences;
+      if (baselineOccurrences.length > 0) expectedFile.baselineOccurrences = baselineOccurrences;
+      expectedFile.orderedOccurrences = inspectGeneratedSource({
+        path,
+        source: file.content,
+        includePlaceholders: true,
+      }).occurrences;
     }
     if (blockPlaceholderCount > 0) {
       blocksWithPlaceholders++;
