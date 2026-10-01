@@ -290,6 +290,17 @@ const resolveScalar = (themes, theme, name, seen) => {
   }
 };
 
+const resolveRgbAliasAlpha = (themes, theme, normalized, rawAlpha, alphaName) => {
+  if (!rawAlpha) return { value: 1 };
+  // alpha の参照は resolveScalar の中だけを辿り色の token へ戻らないので、色側の seen は引き継がない。
+  if (alphaName) return resolveScalar(themes, theme, alphaName, new Set());
+  try {
+    return { value: parseAlpha(rawAlpha) };
+  } catch (error) {
+    return { problem: `--${normalized}: ${error.message}` };
+  }
+};
+
 export function resolveToken(themes, theme, name, seen = new Set()) {
   const normalized = tokenName(name);
   if (!themes?.[theme]) return { problem: `theme が不正: ${theme}` };
@@ -308,21 +319,9 @@ export function resolveToken(themes, theme, name, seen = new Set()) {
     const [, baseName, rawAlpha, alphaName] = rgbAlias;
     const base = resolveToken(themes, theme, baseName, nextSeen);
     if (base.problem) return base;
-    let alpha = 1;
-    if (rawAlpha) {
-      if (alphaName) {
-        const scalar = resolveScalar(themes, theme, alphaName, new Set());
-        if (scalar.problem) return scalar;
-        alpha = scalar.value;
-      } else {
-        try {
-          alpha = parseAlpha(rawAlpha);
-        } catch (error) {
-          return { problem: `--${normalized}: ${error.message}` };
-        }
-      }
-    }
-    return { rgb: base.rgb, alpha: base.alpha * alpha };
+    const alpha = resolveRgbAliasAlpha(themes, theme, normalized, rawAlpha, alphaName);
+    if (alpha.problem) return alpha;
+    return { rgb: base.rgb, alpha: base.alpha * alpha.value };
   }
 
   try {
