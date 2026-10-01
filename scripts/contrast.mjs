@@ -104,6 +104,8 @@ const clamp = (value) => Math.min(Math.max(value, 0), 1);
 
 const parseAlpha = (raw) => {
   const value = raw.trim();
+  // Number("") は 0 を返すので、空の α を先に弾かないと透明な色として通ってしまう。
+  if (value === "") throw new Error("alpha が空");
   const percentage = value.match(/^([+-]?(?:\d+(?:\.\d*)?|\.\d+))%$/);
   const number = percentage ? Number(percentage[1]) / 100 : Number(value);
   if (!Number.isFinite(number) || number < 0 || number > 1) {

@@ -101,6 +101,13 @@ test("OKLCH intrinsic alpha と RGB triplet を正規化する", async () => {
   });
 });
 
+test("rgb() と oklch() の α が空白だけのとき、alpha 0 にせず空のエラーを投げる", async () => {
+  const { parseColor } = await loadContrast();
+
+  assert.throws(() => parseColor("rgb(255 0 0 / )"), { message: "alpha が空" });
+  assert.throws(() => parseColor("oklch(0.5 0.1 30 / )"), { message: "alpha が空" });
+});
+
 test("multi-hop alias と rgb(var() / var()) を解決する", async () => {
   const { parseThemes, resolveToken } = await loadContrast();
   const themes = parseThemes(
@@ -273,6 +280,22 @@ test("rgb(var() / α) の α が数値でないとき、範囲外の problem を
   });
 });
 
+test("rgb(var() / α) の α が空白だけのとき、alpha 0 にせず空の problem を返す", async () => {
+  const { parseThemes, resolveToken } = await loadContrast();
+  const themes = parseThemes(
+    themeCss({
+      light: `
+        --brand: 47 95 209;
+        --blank-alpha: rgb(var(--brand) / );`,
+      dark: "  --placeholder: 0 0 0;",
+    }),
+  );
+
+  assert.deepEqual(resolveToken(themes, "light", "blank-alpha"), {
+    problem: "--blank-alpha: alpha が空",
+  });
+});
+
 test("rgb(var()) の参照先が alpha を持つとき、参照先の alpha と書かれた alpha を掛ける", async () => {
   const { parseColor, parseThemes, resolveToken } = await loadContrast();
   const themes = parseThemes(
@@ -352,6 +375,23 @@ test("rgb(var() / var()) の alpha 側の値が 0〜1 の外のとき、alpha �
 
   assert.deepEqual(resolveToken(themes, "light", "over-alpha"), {
     problem: "--two: alpha が範囲外: 2",
+  });
+});
+
+test("rgb(var() / var()) の alpha 側の値が空のとき、alpha 側の空の problem を返す", async () => {
+  const { parseThemes, resolveToken } = await loadContrast();
+  const themes = parseThemes(
+    themeCss({
+      light: `
+        --brand: 47 95 209;
+        --empty: ;
+        --empty-alpha: rgb(var(--brand) / var(--empty));`,
+      dark: "  --placeholder: 0 0 0;",
+    }),
+  );
+
+  assert.deepEqual(resolveToken(themes, "light", "empty-alpha"), {
+    problem: "--empty: alpha が空",
   });
 });
 
@@ -442,24 +482,7 @@ test("seen を渡して alias を解決しても、渡した seen は書き換�
   assert.deepEqual([...seen], ["unrelated"]);
 });
 
-// 以下の 2 件は既知のバグを含む現在の振る舞いを固定する（直すのは別 PR。PR 本文「見つけたバグ」参照）。
-test("現状: rgb(var() / ) のように α が空白だけのとき、problem でなく alpha 0 で解決する", async () => {
-  const { parseThemes, resolveToken } = await loadContrast();
-  const themes = parseThemes(
-    themeCss({
-      light: `
-        --brand: 47 95 209;
-        --blank-alpha: rgb(var(--brand) / );`,
-      dark: "  --placeholder: 0 0 0;",
-    }),
-  );
-
-  assert.deepEqual(resolveToken(themes, "light", "blank-alpha"), {
-    rgb: [47 / 255, 95 / 255, 209 / 255],
-    alpha: 0,
-  });
-});
-
+// 次の 1 件は既知のバグを含む現在の振る舞いを固定する（#100 で直す）。
 test("現状: theme に themes の Map 以外のプロパティ名を渡すと、problem でなく TypeError を投げる", async () => {
   const { parseThemes, resolveToken } = await loadContrast();
   const themes = parseThemes(
