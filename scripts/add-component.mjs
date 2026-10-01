@@ -1166,6 +1166,15 @@ export function resyncComponentHash({ root, name, modified, provenance, log = co
   return { skipped: false, resynced: true, updated };
 }
 
+function resyncRecorded(args) {
+  const { name, provenance } = args;
+  if (Object.hasOwn(provenance.blocks ?? {}, name)) return resyncBlockHashes(args);
+  if (Object.hasOwn(provenance.components ?? {}, name)) return resyncComponentHash(args);
+  throw new Error(
+    `${name}: provenance.components / provenance.blocks に来歴が無い（先に add を実行する）`,
+  );
+}
+
 // lane の衝突を provenance だけで判断すると、台帳の部分欠損時に同名の
 // registry item や disk 実体を上書きできてしまう。CLI の副作用より前に、
 // 独立した 3 根（provenance / registry / disk）をすべて照合する。
@@ -1199,14 +1208,7 @@ export async function runAddComponent({
   if (!resync) ensureClean(repositoryRoot);
 
   const provenance = readJson(repositoryRoot, "provenance.json");
-  if (resync) {
-    const args = { root: repositoryRoot, name, modified, provenance, log };
-    if (Object.hasOwn(provenance.blocks ?? {}, name)) return resyncBlockHashes(args);
-    if (Object.hasOwn(provenance.components ?? {}, name)) return resyncComponentHash(args);
-    throw new Error(
-      `${name}: provenance.components / provenance.blocks に来歴が無い（先に add を実行する）`,
-    );
-  }
+  if (resync) return resyncRecorded({ root: repositoryRoot, name, modified, provenance, log });
 
   const packageBefore = readJson(repositoryRoot, "package.json");
   const trackedBefore = trackedFiles(repositoryRoot);
