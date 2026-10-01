@@ -1166,6 +1166,26 @@ export function resyncComponentHash({ root, name, modified, provenance, log = co
   return { skipped: false, resynced: true, updated };
 }
 
+// lane の衝突を provenance だけで判断すると、台帳の部分欠損時に同名の
+// registry item や disk 実体を上書きできてしまう。CLI の副作用より前に、
+// 独立した 3 根（provenance / registry / disk）をすべて照合する。
+function assertNoLaneConflict({ root, name, isBlock, provenance, registryItems }) {
+  const sameNameItems = registryItems.filter((item) => item.name === name);
+  if (sameNameItems.length > 1) {
+    throw new Error(`${name}: registry item が重複している（${sameNameItems.length} 件）`);
+  }
+  const [sameNameItem] = sameNameItems;
+  const otherLaneRecord = isBlock ? provenance.components?.[name] : provenance.blocks?.[name];
+  const sameNameItemIsBlock = sameNameItem?.type === "registry:block";
+  const registryLaneConflict = sameNameItem !== undefined && sameNameItemIsBlock !== isBlock;
+  const otherLaneDiskPath = isBlock
+    ? join(root, "src/components/ui", `${name}.tsx`)
+    : join(root, "src/blocks", name);
+  if (otherLaneRecord || registryLaneConflict || existsSync(otherLaneDiskPath)) {
+    throw new Error(`${name}: component と block の同名衝突がある`);
+  }
+}
+
 export async function runAddComponent({
   argv = process.argv.slice(2),
   root = process.cwd(),
@@ -1202,28 +1222,14 @@ export async function runAddComponent({
     assertPathWithoutSymlinks(repositoryRoot, `${name}: CLI 生成先`, target.targetPath);
   }
 
-  // lane の衝突を provenance だけで判断すると、台帳の部分欠損時に同名の
-  // registry item や disk 実体を上書きできてしまう。CLI の副作用より前に、
-  // 独立した 3 根（provenance / registry / disk）をすべて照合する。
   const registry = readJson(repositoryRoot, "registry.json");
-  const existingRegistryItems = registry.items.filter((item) => item.name === name);
-  if (existingRegistryItems.length > 1) {
-    throw new Error(`${name}: registry item が重複している（${existingRegistryItems.length} 件）`);
-  }
-  const existingRegistryItem = existingRegistryItems[0];
-  const oppositeDiskPath = isBlock
-    ? join(repositoryRoot, "src/components/ui", `${name}.tsx`)
-    : join(repositoryRoot, "src/blocks", name);
-
-  const otherLane = isBlock ? provenance.components?.[name] : provenance.blocks?.[name];
-  const registryLaneConflict = existingRegistryItem
-    ? isBlock
-      ? existingRegistryItem.type !== "registry:block"
-      : existingRegistryItem.type === "registry:block"
-    : false;
-  if (otherLane || registryLaneConflict || existsSync(oppositeDiskPath)) {
-    throw new Error(`${name}: component と block の同名衝突がある`);
-  }
+  assertNoLaneConflict({
+    root: repositoryRoot,
+    name,
+    isBlock,
+    provenance,
+    registryItems: registry.items,
+  });
 
   if (shouldSkipRecorded(provenance, name, force, isBlock ? "block" : "component")) {
     log(`${name}: 既に記録済み（--force で上書き可能）`);
