@@ -967,8 +967,7 @@ test("生成物に IconPlaceholder が残るとき、path 付きの期待は「<
   assert.deepEqual(legacy.problems, ["x-01: IconPlaceholder が残っている（1 箇所）"]);
 });
 
-// 次の 1 件は既知のバグを含む現在の振る舞いを固定する（PR 本文「見つけたバグ」参照）。
-test("現状: 順序なしの比較では、IconPlaceholder が残っていても一致数に数える", async () => {
+test("順序なしの比較でも、IconPlaceholder が残るときは一致数に数えない", async () => {
   const { inspectGeneratedIcons } = await loadChecker();
   const result = inspectGeneratedIcons(
     { "x-01": [{ path: generatedPathA, occurrences: [{ icon: "AIcon", attributes: [] }] }] },
@@ -982,10 +981,9 @@ test("現状: 順序なしの比較では、IconPlaceholder が残っていて�
     },
   );
 
-  assert.deepEqual(result.stats, {
-    blocksChecked: 1,
-    expectedOccurrences: 1,
-    matchedOccurrences: 1,
+  assert.deepEqual(result, {
+    problems: ["x-01: src/blocks/x-01/a.tsx に IconPlaceholder が残っている（1 箇所）"],
+    stats: { blocksChecked: 1, expectedOccurrences: 1, matchedOccurrences: 0 },
   });
 });
 

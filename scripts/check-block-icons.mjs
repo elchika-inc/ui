@@ -407,7 +407,7 @@ function compareExpectedFile(name, expectedFile, inspected) {
     : compareIgnoringOrder(problemPrefix, expectedFile, candidates, importedIcons);
   return {
     problems: [...problems, ...comparison.problems],
-    matchedOccurrences: comparison.matchedOccurrences,
+    matchedOccurrences: remainingPlaceholders === 0 ? comparison.matchedOccurrences : 0,
   };
 }
 
