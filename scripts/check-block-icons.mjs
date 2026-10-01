@@ -364,9 +364,10 @@ function compareIgnoringOrder(problemPrefix, expectedFile, candidates, importedI
       );
       continue;
     }
-    const expectedCount = expectedFile.occurrences.filter(
-      (candidate) => candidate.icon === occurrence.icon,
-    ).length;
+    const expectedCount = [
+      ...expectedFile.occurrences,
+      ...(expectedFile.baselineOccurrences ?? []),
+    ].filter((candidate) => candidate.icon === occurrence.icon).length;
     const actualCount = candidates
       .flatMap((file) => file.occurrences)
       .filter((candidate) => candidate.icon === occurrence.icon).length;

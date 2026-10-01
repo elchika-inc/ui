@@ -1135,8 +1135,7 @@ test("順序なしの比較で同じアイコンの属性が違うとき、期�
   });
 });
 
-// 次の 1 件は既知のバグを含む現在の振る舞いを固定する（PR 本文「見つけたバグ」参照）。
-test("現状: 順序なしの比較で不足を報告するとき、実測数は baseline を差し引く前の数になる", async () => {
+test("順序なしの比較で不足を報告するとき、期待数は同じアイコンの baseline を含めて数える", async () => {
   const { inspectGeneratedIcons } = await loadChecker();
   const result = inspectGeneratedIcons(
     {
@@ -1159,7 +1158,7 @@ test("現状: 順序なしの比較で不足を報告するとき、実測数は
   );
 
   assert.deepEqual(result, {
-    problems: ["x-01: src/blocks/x-01/a.tsx の AIcon の JSX 使用が不足している（期待 2 / 実測 2）"],
+    problems: ["x-01: src/blocks/x-01/a.tsx の AIcon の JSX 使用が不足している（期待 3 / 実測 2）"],
     stats: { blocksChecked: 1, expectedOccurrences: 2, matchedOccurrences: 1 },
   });
 });
