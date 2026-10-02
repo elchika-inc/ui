@@ -206,6 +206,153 @@ function createClassAnalysis(sources) {
   };
 }
 
+const simpleReference = (expression) => {
+  let current = expression;
+  while (
+    ts.isParenthesizedExpression(current) ||
+    ts.isAsExpression(current) ||
+    ts.isSatisfiesExpression(current) ||
+    ts.isNonNullExpression(current)
+  ) {
+    current = current.expression;
+  }
+  return ts.isIdentifier(current) ||
+    ts.isPropertyAccessExpression(current) ||
+    ts.isElementAccessExpression(current)
+    ? current
+    : undefined;
+};
+
+const literalIdentity = (expression) => {
+  if (
+    ts.isStringLiteral(expression) ||
+    ts.isNumericLiteral(expression) ||
+    ts.isNoSubstitutionTemplateLiteral(expression) ||
+    expression.kind === ts.SyntaxKind.TrueKeyword ||
+    expression.kind === ts.SyntaxKind.FalseKeyword ||
+    expression.kind === ts.SyntaxKind.NullKeyword
+  ) {
+    return expression.getText(expression.getSourceFile());
+  }
+  return undefined;
+};
+
+const unwrapBooleanOperand = (expression, truthy) => {
+  let current = expression;
+  let required = truthy;
+  while (ts.isParenthesizedExpression(current)) current = current.expression;
+  while (
+    ts.isPrefixUnaryExpression(current) &&
+    current.operator === ts.SyntaxKind.ExclamationToken
+  ) {
+    required = !required;
+    current = current.operand;
+    while (ts.isParenthesizedExpression(current)) current = current.expression;
+  }
+  return { current, required };
+};
+
+const equalityKind = (operator) => {
+  if (
+    operator === ts.SyntaxKind.EqualsEqualsToken ||
+    operator === ts.SyntaxKind.EqualsEqualsEqualsToken
+  ) {
+    return "equal";
+  }
+  if (
+    operator === ts.SyntaxKind.ExclamationEqualsToken ||
+    operator === ts.SyntaxKind.ExclamationEqualsEqualsToken
+  ) {
+    return "not-equal";
+  }
+  return undefined;
+};
+
+const withRequirement = (candidates, requirementsToAdd) =>
+  candidates.flatMap((candidate) => {
+    const requirements = new Map(candidate.requirements);
+    for (const requirement of requirementsToAdd) {
+      const existing = requirements.get(requirement.key);
+      if (existing !== undefined && existing !== requirement.required) return [];
+      requirements.set(requirement.key, requirement.required);
+    }
+    return [{ ...candidate, requirements }];
+  });
+
+const mergeCandidates = (left, right) => {
+  const requirements = new Map(left.requirements);
+  for (const [key, required] of right.requirements) {
+    const existing = requirements.get(key);
+    if (existing !== undefined && existing !== required) return undefined;
+    requirements.set(key, required);
+  }
+  return { nodes: [...left.nodes, ...right.nodes], requirements };
+};
+
+const combineCandidateSets = (sets) =>
+  sets.reduce(
+    (combined, candidates) =>
+      combined.flatMap((left) =>
+        candidates.flatMap((right) => {
+          const merged = mergeCandidates(left, right);
+          return merged ? [merged] : [];
+        }),
+      ),
+    [{ nodes: [], requirements: new Map() }],
+  );
+
+const directReturnExpressions = (body) => {
+  if (!ts.isBlock(body)) return [body];
+  const returns = [];
+  const visit = (node) => {
+    if (node !== body && ts.isFunctionLike(node)) return;
+    if (ts.isReturnStatement(node) && node.expression) {
+      returns.push(node.expression);
+      return;
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(body);
+  return returns;
+};
+
+const functionBody = (declaration) => {
+  if (
+    (ts.isFunctionDeclaration(declaration) || ts.isMethodDeclaration(declaration)) &&
+    declaration.body
+  ) {
+    return declaration.body;
+  }
+  if (
+    (ts.isVariableDeclaration(declaration) ||
+      ts.isPropertyAssignment(declaration) ||
+      ts.isPropertyDeclaration(declaration)) &&
+    declaration.initializer &&
+    (ts.isArrowFunction(declaration.initializer) ||
+      ts.isFunctionExpression(declaration.initializer))
+  ) {
+    return declaration.initializer.body;
+  }
+  return undefined;
+};
+
+const emptyCandidate = () => ({ nodes: [], requirements: new Map() });
+
+const nodeCandidate = (node) => ({ nodes: [node], requirements: new Map() });
+
+const transparentExpression = (expression) => {
+  if (ts.isParenthesizedExpression(expression)) return expression.expression;
+  if (ts.isAsExpression(expression)) return expression.expression;
+  if (ts.isSatisfiesExpression(expression)) return expression.expression;
+  if (ts.isNonNullExpression(expression)) return expression.expression;
+  return undefined;
+};
+
+const isResolvableReference = (expression) =>
+  ts.isIdentifier(expression) ||
+  ts.isPropertyAccessExpression(expression) ||
+  ts.isElementAccessExpression(expression);
+
 function classNameExpressions(path, analysis) {
   if (!path.endsWith(".tsx")) return [];
   const entry = analysis.entryForPath(path);
@@ -244,22 +391,6 @@ function classNameExpressions(path, analysis) {
         : undefined;
     }
     return undefined;
-  };
-  const simpleReference = (expression) => {
-    let current = expression;
-    while (
-      ts.isParenthesizedExpression(current) ||
-      ts.isAsExpression(current) ||
-      ts.isSatisfiesExpression(current) ||
-      ts.isNonNullExpression(current)
-    ) {
-      current = current.expression;
-    }
-    return ts.isIdentifier(current) ||
-      ts.isPropertyAccessExpression(current) ||
-      ts.isElementAccessExpression(current)
-      ? current
-      : undefined;
   };
   const immutableAliasInitializer = (symbol) => {
     for (const declaration of canonicalSymbol(symbol).declarations ?? []) {
@@ -305,48 +436,6 @@ function classNameExpressions(path, analysis) {
     if (identity) return identity;
     return `expression:${current.getSourceFile().fileName}:${current.getStart()}:${current.getText()}`;
   };
-  const literalIdentity = (expression) => {
-    if (
-      ts.isStringLiteral(expression) ||
-      ts.isNumericLiteral(expression) ||
-      ts.isNoSubstitutionTemplateLiteral(expression) ||
-      expression.kind === ts.SyntaxKind.TrueKeyword ||
-      expression.kind === ts.SyntaxKind.FalseKeyword ||
-      expression.kind === ts.SyntaxKind.NullKeyword
-    ) {
-      return expression.getText(expression.getSourceFile());
-    }
-    return undefined;
-  };
-  const unwrapBooleanOperand = (expression, truthy) => {
-    let current = expression;
-    let required = truthy;
-    while (ts.isParenthesizedExpression(current)) current = current.expression;
-    while (
-      ts.isPrefixUnaryExpression(current) &&
-      current.operator === ts.SyntaxKind.ExclamationToken
-    ) {
-      required = !required;
-      current = current.operand;
-      while (ts.isParenthesizedExpression(current)) current = current.expression;
-    }
-    return { current, required };
-  };
-  const equalityKind = (operator) => {
-    if (
-      operator === ts.SyntaxKind.EqualsEqualsToken ||
-      operator === ts.SyntaxKind.EqualsEqualsEqualsToken
-    ) {
-      return "equal";
-    }
-    if (
-      operator === ts.SyntaxKind.ExclamationEqualsToken ||
-      operator === ts.SyntaxKind.ExclamationEqualsEqualsToken
-    ) {
-      return "not-equal";
-    }
-    return undefined;
-  };
   const equalityRequirement = (expression, required) => {
     if (!ts.isBinaryExpression(expression)) return undefined;
     const kind = equalityKind(expression.operatorToken.kind);
@@ -370,39 +459,6 @@ function classNameExpressions(path, analysis) {
     if (equality) return equality;
     return [{ key: referenceIdentity(current), required }];
   };
-
-  const withRequirement = (candidates, requirementsToAdd) =>
-    candidates.flatMap((candidate) => {
-      const requirements = new Map(candidate.requirements);
-      for (const requirement of requirementsToAdd) {
-        const existing = requirements.get(requirement.key);
-        if (existing !== undefined && existing !== requirement.required) return [];
-        requirements.set(requirement.key, requirement.required);
-      }
-      return [{ ...candidate, requirements }];
-    });
-
-  const mergeCandidates = (left, right) => {
-    const requirements = new Map(left.requirements);
-    for (const [key, required] of right.requirements) {
-      const existing = requirements.get(key);
-      if (existing !== undefined && existing !== required) return undefined;
-      requirements.set(key, required);
-    }
-    return { nodes: [...left.nodes, ...right.nodes], requirements };
-  };
-
-  const combineCandidateSets = (sets) =>
-    sets.reduce(
-      (combined, candidates) =>
-        combined.flatMap((left) =>
-          candidates.flatMap((right) => {
-            const merged = mergeCandidates(left, right);
-            return merged ? [merged] : [];
-          }),
-        ),
-      [{ nodes: [], requirements: new Map() }],
-    );
 
   const symbolForExpression = (expression) => {
     const symbol = propertySymbol(expression) ?? checker.getSymbolAtLocation(expression);
@@ -438,41 +494,6 @@ function classNameExpressions(path, analysis) {
     return { symbol, initializers: declarationInitializersForSymbol(symbol) };
   };
 
-  const directReturnExpressions = (body) => {
-    if (!ts.isBlock(body)) return [body];
-    const returns = [];
-    const visit = (node) => {
-      if (node !== body && ts.isFunctionLike(node)) return;
-      if (ts.isReturnStatement(node) && node.expression) {
-        returns.push(node.expression);
-        return;
-      }
-      ts.forEachChild(node, visit);
-    };
-    visit(body);
-    return returns;
-  };
-
-  const functionBody = (declaration) => {
-    if (
-      (ts.isFunctionDeclaration(declaration) || ts.isMethodDeclaration(declaration)) &&
-      declaration.body
-    ) {
-      return declaration.body;
-    }
-    if (
-      (ts.isVariableDeclaration(declaration) ||
-        ts.isPropertyAssignment(declaration) ||
-        ts.isPropertyDeclaration(declaration)) &&
-      declaration.initializer &&
-      (ts.isArrowFunction(declaration.initializer) ||
-        ts.isFunctionExpression(declaration.initializer))
-    ) {
-      return declaration.initializer.body;
-    }
-    return undefined;
-  };
-
   const staticReturnExpressions = (expression) => {
     const symbol = symbolForExpression(expression);
     if (!symbol) return {};
@@ -482,9 +503,6 @@ function classNameExpressions(path, analysis) {
     });
     return { symbol, returns };
   };
-
-  const emptyCandidate = () => ({ nodes: [], requirements: new Map() });
-  const nodeCandidate = (node) => ({ nodes: [node], requirements: new Map() });
 
   const candidatesForBinaryExpression = (expression, resolving) => {
     const operator = expression.operatorToken.kind;
@@ -554,19 +572,6 @@ function classNameExpressions(path, analysis) {
         [nodeCandidate(span.literal)],
       ]),
     ]);
-
-  const transparentExpression = (expression) => {
-    if (ts.isParenthesizedExpression(expression)) return expression.expression;
-    if (ts.isAsExpression(expression)) return expression.expression;
-    if (ts.isSatisfiesExpression(expression)) return expression.expression;
-    if (ts.isNonNullExpression(expression)) return expression.expression;
-    return undefined;
-  };
-
-  const isResolvableReference = (expression) =>
-    ts.isIdentifier(expression) ||
-    ts.isPropertyAccessExpression(expression) ||
-    ts.isElementAccessExpression(expression);
 
   const candidatesForConditionalExpression = (expression, resolving) => [
     ...withRequirement(
