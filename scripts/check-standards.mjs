@@ -353,13 +353,9 @@ const isResolvableReference = (expression) =>
   ts.isPropertyAccessExpression(expression) ||
   ts.isElementAccessExpression(expression);
 
-function classNameExpressions(path, analysis) {
-  if (!path.endsWith(".tsx")) return [];
-  const entry = analysis.entryForPath(path);
-  if (!entry?.sourceFile) return [];
-  const { checker } = analysis;
-  const { prefix, sourceFile } = entry;
-  const expressions = [];
+// checker を使って className の式を、同時に適用されうる node の組（候補）へ展開する。
+// 記号の番号付けは解決ごとに持つので、classNameExpressions の呼び出しごとに作る。
+function createCandidateResolver(checker) {
   const symbolKeys = new WeakMap();
   let nextSymbolKey = 1;
   const canonicalSymbol = (symbol) => {
@@ -624,31 +620,43 @@ function classNameExpressions(path, analysis) {
     return [nodeCandidate(expression)];
   };
 
-  const expressionFragments = (expression) => {
-    const candidates = candidatesForExpression(expression);
-    return candidates.map((candidate) => {
-      const fragments = new Map();
-      for (const node of candidate.nodes) {
-        const nodeSourceFile = node.getSourceFile();
-        const sameSource = nodeSourceFile === sourceFile;
-        const key = `${nodeSourceFile.fileName}:${node.getStart()}:${node.getEnd()}`;
-        fragments.set(key, {
-          text: node.getText(nodeSourceFile),
-          offset: sameSource
-            ? Math.max(0, node.getStart() - prefix.length)
-            : Math.max(0, expression.getStart() - prefix.length),
-        });
-      }
-      return [...fragments.values()];
-    });
-  };
+  return candidatesForExpression;
+}
+
+function candidateFragments(candidates, expression, sourceFile, prefix) {
+  return candidates.map((candidate) => {
+    const fragments = new Map();
+    for (const node of candidate.nodes) {
+      const nodeSourceFile = node.getSourceFile();
+      const sameSource = nodeSourceFile === sourceFile;
+      const key = `${nodeSourceFile.fileName}:${node.getStart()}:${node.getEnd()}`;
+      fragments.set(key, {
+        text: node.getText(nodeSourceFile),
+        offset: sameSource
+          ? Math.max(0, node.getStart() - prefix.length)
+          : Math.max(0, expression.getStart() - prefix.length),
+      });
+    }
+    return [...fragments.values()];
+  });
+}
+
+function classNameExpressions(path, analysis) {
+  if (!path.endsWith(".tsx")) return [];
+  const entry = analysis.entryForPath(path);
+  if (!entry?.sourceFile) return [];
+  const { prefix, sourceFile } = entry;
+  const candidatesForExpression = createCandidateResolver(analysis.checker);
+  const expressions = [];
   const visit = (node) => {
     if (ts.isJsxAttribute(node) && node.name.getText() === "className" && node.initializer) {
       const value = ts.isJsxExpression(node.initializer)
         ? node.initializer.expression
         : node.initializer;
       if (value) {
-        expressions.push(...expressionFragments(value));
+        expressions.push(
+          ...candidateFragments(candidatesForExpression(value), value, sourceFile, prefix),
+        );
       }
     }
     ts.forEachChild(node, visit);
