@@ -1005,3 +1005,240 @@ test("レビュー修正を実ブラウザで到達できるpreview probeがあ�
   assert.match(inputGroup, /data-input-group-textarea-addon/);
   assert.match(sidebar, /<SidebarMenuSkeleton showIcon/);
 });
+
+// 以下は classNameExpressions の書き直しの前に、候補の展開と枝刈りの振る舞いを違反の結果で固定するテスト。
+
+test("tsx 以外（jsx）は className の式を候補へ展開せず、行単位の検査だけにする", () => {
+  const { violations } = checkFile(
+    "src/view.jsx",
+    `export const View = ({ open }) => (
+  <div
+    className={cn(
+      "focus-visible:ring-2",
+      "ring-ring/50",
+    )}
+  />
+);`,
+  );
+  assert.deepEqual(violations, []);
+});
+
+test("as で包んだ条件も元の binding と同じ条件として扱い、相反する branch を同時適用と誤認しない", () => {
+  const { violations } = checkFile(
+    "src/view.tsx",
+    `const View = ({ open }: { open: boolean }) => (
+  <div
+    className={cn(
+      (open as boolean) && "focus-visible:ring-2",
+      !open && "ring-ring/50",
+    )}
+  />
+);`,
+  );
+  assert.deepEqual(violations, []);
+});
+
+test("let の alias は元の binding と同じ条件とみなさず、相反しうる class を組み合わせて検出する", () => {
+  const { violations } = checkFile(
+    "src/view.tsx",
+    `const View = ({ open }: { open: boolean }) => {
+  let shown = open;
+  return (
+    <div
+      className={cn(
+        shown && "focus-visible:ring-2",
+        !open && "ring-ring/50",
+      )}
+    />
+  );
+};`,
+  );
+  assert.deepEqual(violations, [{ rule: "focus-ring-opacity", line: 7, text: "ring-ring/50" }]);
+});
+
+test("symbol を持たない this の property 条件も、同じ this として相反条件に正規化する", () => {
+  const { violations } = checkFile(
+    "src/view.tsx",
+    `function View() {
+  return (
+    <div
+      className={cn(
+        this.open && "focus-visible:ring-2",
+        !this.open && "ring-ring/50",
+      )}
+    />
+  );
+}`,
+  );
+  assert.deepEqual(violations, []);
+});
+
+test("外側の ternary と矛盾する内側の branch を候補から外す", () => {
+  const { violations } = checkFile(
+    "src/view.tsx",
+    `const View = ({ open }: { open: boolean }) => (
+  <div
+    className={cn(
+      open ? "pointer-events-none" : open ? "focus-visible:ring-2" : "opacity-50",
+      "ring-ring/50",
+    )}
+  />
+);`,
+  );
+  assert.deepEqual(violations, []);
+});
+
+test("parameter の default initializer を解決する", () => {
+  const { violations } = checkFile(
+    "src/view.tsx",
+    `function View(ring = "focus-visible:ring-2") {
+  return (
+    <div
+      className={cn(
+        ring,
+        "ring-ring/50",
+      )}
+    />
+  );
+}`,
+  );
+  assert.deepEqual(violations, [{ rule: "focus-ring-opacity", line: 6, text: "ring-ring/50" }]);
+});
+
+test("helper の静的 return には、入れ子の関数の return を含めない", () => {
+  const { violations } = checkFile(
+    "src/view.tsx",
+    `function classes() {
+  const unused = () => {
+    return "focus-visible:ring-2";
+  };
+  return "pointer-events-none";
+}
+const View = () => (
+  <div
+    className={cn(
+      classes(),
+      "ring-ring/50",
+    )}
+  />
+);`,
+  );
+  assert.deepEqual(violations, []);
+});
+
+test("相反する && 条件の片方が偽の空候補と、もう片方の class を組み合わせて検出する", () => {
+  const { violations } = checkFile(
+    "src/view.tsx",
+    `const View = ({ open }: { open: boolean }) => (
+  <div
+    className={cn(
+      open && "pointer-events-none",
+      !open && "focus-visible:ring-2",
+      "ring-ring/50",
+    )}
+  />
+);`,
+  );
+  assert.deepEqual(violations, [{ rule: "focus-ring-opacity", line: 6, text: "ring-ring/50" }]);
+});
+
+test("|| の右辺は、左辺が偽のときだけの候補として扱う", () => {
+  const { violations } = checkFile(
+    "src/view.tsx",
+    `const View = ({ open }: { open: boolean }) => (
+  <div
+    className={cn(
+      open || "focus-visible:ring-2",
+      open && "ring-ring/50",
+    )}
+  />
+);`,
+  );
+  assert.deepEqual(violations, []);
+});
+
+test("?? の右辺の fallback も候補に含めて検出する", () => {
+  const { violations } = checkFile(
+    "src/view.tsx",
+    `const View = ({ tone }: { tone?: string }) => (
+  <div
+    className={cn(
+      tone ?? "focus-visible:ring-2",
+      "ring-ring/50",
+    )}
+  />
+);`,
+  );
+  assert.deepEqual(violations, [{ rule: "focus-ring-opacity", line: 5, text: "ring-ring/50" }]);
+});
+
+test("+ で連結した reference と literal を 1 つの候補に組み合わせて検出する", () => {
+  const { violations } = checkFile(
+    "src/view.tsx",
+    `const focusRing = "focus-visible:ring-2";
+const View = () => (
+  <div
+    className={focusRing + " " +
+      "ring-ring/50"}
+  />
+);`,
+  );
+  assert.deepEqual(violations, [{ rule: "focus-ring-opacity", line: 5, text: "ring-ring/50" }]);
+});
+
+test("ternary の偽の branch と他の class を組み合わせて検出する", () => {
+  const { violations } = checkFile(
+    "src/view.tsx",
+    `const View = ({ open }: { open: boolean }) => (
+  <div
+    className={cn(
+      open ? "pointer-events-none" : "focus-visible:ring-2",
+      "ring-ring/50",
+    )}
+  />
+);`,
+  );
+  assert.deepEqual(violations, [{ rule: "focus-ring-opacity", line: 5, text: "ring-ring/50" }]);
+});
+
+test("as で包んだ reference の initializer を解決して検出する", () => {
+  const { violations } = checkFile(
+    "src/view.tsx",
+    `const focusRing = "focus-visible:ring-2";
+const View = () => (
+  <div
+    className={cn(
+      focusRing as string,
+      "ring-ring/50",
+    )}
+  />
+);`,
+  );
+  assert.deepEqual(violations, [{ rule: "focus-ring-opacity", line: 6, text: "ring-ring/50" }]);
+});
+
+test("別 file から import した class の違反は、使う側の式の行で報告する", () => {
+  const results = checkFiles(
+    new Map([
+      [
+        "src/ring.tsx",
+        `export const focusRing = cn(
+  "focus-visible:ring-2",
+  "ring-ring/50",
+);`,
+      ],
+      [
+        "src/view.tsx",
+        `import { focusRing } from "./ring";
+export const View = () => (
+  <div
+    className={focusRing}
+  />
+);`,
+      ],
+    ]),
+  );
+  assert.deepEqual(results.get("src/view.tsx").violations, [
+    { rule: "focus-ring-opacity", line: 4, text: "ring-ring/50" },
+  ]);
+});
