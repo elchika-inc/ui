@@ -2622,3 +2622,153 @@ test("--resync は shadcn 由来の component を拒む", async (t) => {
   );
   assert.equal(readFileSync(join(root, "provenance.json"), "utf8"), before);
 });
+
+// 以下は runAddComponent の書き直しの前に、ログの並びと戻り値の形を完全一致で固定するテスト。
+const CALENDAR_GENERATED = [
+  'import { Calendar } from "@base-ui/react/calendar";',
+  'import { format } from "date-fns";',
+  "export { Calendar, format };",
+  "",
+].join("\n");
+const CALENDAR_SERVED = "registry calendar source\n";
+const sha256 = (text) => createHash("sha256").update(text).digest("hex");
+
+const addCalendarComponent = async (root, runAddComponent, log) => {
+  const upstreamItem = {
+    type: "registry:ui",
+    dependencies: ["date-fns"],
+    registryDependencies: ["button"],
+    files: [
+      {
+        type: "registry:ui",
+        path: "registry/base-nova/ui/calendar.tsx",
+        content: CALENDAR_SERVED,
+      },
+    ],
+  };
+  const runCommand = () => {
+    writeFileSync(join(root, "src/components/ui/calendar.tsx"), CALENDAR_GENERATED);
+    writeFileSync(join(root, "src/components/ui/input.tsx"), "input overwritten\n");
+    const pkg = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
+    pkg.dependencies["date-fns"] = "^4.1.0";
+    writeJson(join(root, "package.json"), pkg);
+    writeJson(join(root, "package-lock.json"), { lockfileVersion: 3, packages: { dateFns: {} } });
+  };
+  const fetchImpl = async (url) => {
+    let body;
+    if (url.includes("ui.shadcn.com")) body = upstreamItem;
+    else if (url.includes("/commits?")) body = [{ sha: "a".repeat(40) }];
+    else body = { path: "apps/v4/registry/bases/base/ui/calendar.tsx" };
+    return {
+      ok: true,
+      status: 200,
+      json: async () => body,
+      text: async () => JSON.stringify(body),
+    };
+  };
+  return runAddComponent({
+    argv: ["calendar", "--modified", "Props 型を追加。"],
+    root,
+    fetchImpl,
+    runCommand,
+    log,
+  });
+};
+
+const addLoginBlock = async (root, runAddComponent, log) => {
+  seedRegistryItems(root, ["button"]);
+  return runAddComponent({
+    argv: ["login-01", "--modified", "registry:page を配布から除外"],
+    root,
+    fetchImpl: blockFetch(JSON.stringify(loginUpstream)),
+    runCommand: () => {
+      writeFileSync(
+        join(root, "src/components/login-form.tsx"),
+        'import { Button } from "@/components/ui/button";\nexport const LoginForm = Button;\n',
+      );
+      writeFileSync(join(root, "src/components/ui/button.tsx"), "button overwritten\n");
+    },
+    log,
+  });
+};
+
+test("component を add すると、復元・追加依存・manifest の保持・2 つの SHA-256 をこの順にログへ出す", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+  const logs = [];
+
+  await addCalendarComponent(root, runAddComponent, (message) => logs.push(message));
+
+  assert.deepEqual(logs, [
+    "復元: src/components/ui/input.tsx",
+    "追加依存: dependencies: date-fns@^4.1.0",
+    "依存 manifest を保持: package-lock.json",
+    "依存 manifest を保持: package.json",
+    `生成直後 SHA-256: ${sha256(CALENDAR_GENERATED)}`,
+    `registry SHA-256: ${sha256(CALENDAR_SERVED)}`,
+  ]);
+});
+
+test("component を add した戻り値は skipped・entry・registryItem・reconciled を持ち、書き込んだ来歴と registry item に等しい", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+
+  const result = await addCalendarComponent(root, runAddComponent, () => {});
+
+  const provenance = JSON.parse(readFileSync(join(root, "provenance.json"), "utf8"));
+  const registry = JSON.parse(readFileSync(join(root, "registry.json"), "utf8"));
+  assert.deepEqual(Object.keys(result), ["skipped", "entry", "registryItem", "reconciled"]);
+  assert.equal(result.skipped, false);
+  assert.deepEqual(result.entry, provenance.components.calendar);
+  assert.deepEqual(
+    result.registryItem,
+    registry.items.find((item) => item.name === "calendar"),
+  );
+  assert.deepEqual(result.reconciled, {
+    restored: ["src/components/ui/input.tsx"],
+    addedDependencies: ["dependencies: date-fns@^4.1.0"],
+    keptManifests: ["package-lock.json", "package.json"],
+  });
+});
+
+test("block を add すると、移設・復元・配布ファイル数・配布しない page 数・registry SHA-256 をこの順にログへ出す", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+  const logs = [];
+
+  await addLoginBlock(root, runAddComponent, (message) => logs.push(message));
+
+  assert.deepEqual(logs, [
+    "移設: src/components/login-form.tsx -> src/blocks/login-01/components/login-form.tsx",
+    "復元: src/components/ui/button.tsx",
+    "配布ファイル: 1 件",
+    "配布しない page: 1 件",
+    `registry SHA-256: ${sha256(JSON.stringify(loginUpstream))}`,
+  ]);
+});
+
+test("block を add した戻り値は skipped・entry・registryItem・reconciled を持ち、書き込んだ来歴の blocks と registry item に等しい", async (t) => {
+  const root = prepareWrapperRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const { runAddComponent } = await loadModule();
+
+  const result = await addLoginBlock(root, runAddComponent, () => {});
+
+  const provenance = JSON.parse(readFileSync(join(root, "provenance.json"), "utf8"));
+  const registry = JSON.parse(readFileSync(join(root, "registry.json"), "utf8"));
+  assert.deepEqual(Object.keys(result), ["skipped", "entry", "registryItem", "reconciled"]);
+  assert.equal(result.skipped, false);
+  assert.deepEqual(result.entry, provenance.blocks["login-01"]);
+  assert.deepEqual(
+    result.registryItem,
+    registry.items.find((item) => item.name === "login-01"),
+  );
+  assert.deepEqual(result.reconciled, {
+    restored: ["src/components/ui/button.tsx"],
+    addedDependencies: [],
+    keptManifests: [],
+  });
+});
