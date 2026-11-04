@@ -1,0 +1,230 @@
+{
+  "base": "d6aa645cf9d86841792f76df8bfc39cd80bbb11e",
+  "head": "202926127c7bfcbb4813fb1bbcff8d6c8bb67c03",
+  "current": {
+    "results": [
+      {
+        "theme": "light",
+        "width": 1440,
+        "documentWidth": 1440,
+        "codexConfig": [
+          "npx shadcn@latest mcp init --client claude",
+          "[mcp_servers.shadcn]\ncommand = \"npx\"\nargs = [\"shadcn@latest\", \"mcp\"]"
+        ]
+      },
+      {
+        "theme": "light",
+        "width": 390,
+        "documentWidth": 390,
+        "codexConfig": [
+          "npx shadcn@latest mcp init --client claude",
+          "[mcp_servers.shadcn]\ncommand = \"npx\"\nargs = [\"shadcn@latest\", \"mcp\"]"
+        ]
+      },
+      {
+        "theme": "light",
+        "axeVersion": "4.14.0",
+        "violations": [
+          {
+            "id": "label-content-name-mismatch",
+            "impact": "serious",
+            "nodes": 1
+          },
+          {
+            "id": "scrollable-region-focusable",
+            "impact": "serious",
+            "nodes": 3
+          }
+        ]
+      },
+      {
+        "theme": "dark",
+        "width": 1440,
+        "documentWidth": 1440,
+        "codexConfig": [
+          "npx shadcn@latest mcp init --client claude",
+          "[mcp_servers.shadcn]\ncommand = \"npx\"\nargs = [\"shadcn@latest\", \"mcp\"]"
+        ]
+      },
+      {
+        "theme": "dark",
+        "width": 390,
+        "documentWidth": 390,
+        "codexConfig": [
+          "npx shadcn@latest mcp init --client claude",
+          "[mcp_servers.shadcn]\ncommand = \"npx\"\nargs = [\"shadcn@latest\", \"mcp\"]"
+        ]
+      },
+      {
+        "theme": "dark",
+        "axeVersion": "4.14.0",
+        "violations": [
+          {
+            "id": "label-content-name-mismatch",
+            "impact": "serious",
+            "nodes": 1
+          },
+          {
+            "id": "scrollable-region-focusable",
+            "impact": "serious",
+            "nodes": 3
+          }
+        ]
+      }
+    ],
+    "focus": [
+      {
+        "tag": "A",
+        "text": "install",
+        "href": "#install"
+      },
+      {
+        "tag": "A",
+        "text": "tokens",
+        "href": "#tokens"
+      },
+      {
+        "tag": "A",
+        "text": "components",
+        "href": "#components"
+      },
+      {
+        "tag": "PRE",
+        "text": "npx shadcn@latest add https://ui.elchika.dev/r/button.json",
+        "href": null
+      },
+      {
+        "tag": "PRE",
+        "text": "{\n  \"registries\": {\n    \"@elchika\": \"https://ui.elchika.dev/r/{name}.json\"\n  }\n}",
+        "href": null
+      },
+      {
+        "tag": "PRE",
+        "text": "npx shadcn@latest add @elchika/button",
+        "href": null
+      },
+      {
+        "tag": "PRE",
+        "text": "npx shadcn@latest mcp init --client claude",
+        "href": null
+      },
+      {
+        "tag": "A",
+        "text": "shadcn の公式 MCP 手順",
+        "href": "https://ui.shadcn.com/docs/mcp"
+      },
+      {
+        "tag": "A",
+        "text": "Button のドキュメント",
+        "href": "/components/button/"
+      },
+      {
+        "tag": "A",
+        "text": "コンポーネント一覧を見る",
+        "href": "/components/"
+      },
+      {
+        "tag": "A",
+        "text": "本文へ移動",
+        "href": "#main-content"
+      }
+    ]
+  },
+  "baseline": [
+    {
+      "theme": "light",
+      "violations": [
+        {
+          "id": "label-content-name-mismatch",
+          "impact": "serious",
+          "nodes": [
+            {
+              "target": [
+                "button"
+              ],
+              "html": "<button type=\"button\" tabindex=\"0\" data-slot=\"button\" data-site-theme-togg...=\"true\" aria-label=\"ダークテーマに切り替える\" title=\"ダークテーマに切り替える\" class=\"group/button inline-...\">"
+            }
+          ]
+        },
+        {
+          "id": "scrollable-region-focusable",
+          "impact": "serious",
+          "nodes": [
+            {
+              "target": [
+                "li:nth-child(1) > pre"
+              ],
+              "html": "<pre class=\"overflow-x-auto rounded-lg border border-border bg-muted px-4 py-3 text-sm text-foreground\"><code>npx shadcn@latest add https://ui.elchika.dev/r/button.json</code></pre>"
+            },
+            {
+              "target": [
+                ".border-t:nth-child(2) > pre:nth-child(2)"
+              ],
+              "html": "<pre class=\"overflow-x-auto rounded-lg border border-border bg-muted px-4 py-3 text-sm text-foreground\"><code>{\n  \"registries\": {\n    \"@elchika\": \"https://ui.elchika.dev/r/{name}.json\"\n  }\n}</code></pre>"
+            },
+            {
+              "target": [
+                ".border-t:nth-child(3) > pre"
+              ],
+              "html": "<pre class=\"overflow-x-auto rounded-lg border border-border bg-muted px-4 py-3 text-sm text-foreground\"><code>npx shadcn@latest mcp init --client claude</code></pre>"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": [
+            {
+              "target": [
+                "button"
+              ],
+              "html": "<button type=\"button\" tabindex=\"0\" data-slot=\"button\" data-site-theme-togg...=\"true\" aria-label=\"ライトテーマに切り替える\" title=\"ライトテーマに切り替える\" class=\"group/button inline-...\">"
+            }
+          ]
+        },
+        {
+          "id": "label-content-name-mismatch",
+          "impact": "serious",
+          "nodes": [
+            {
+              "target": [
+                "button"
+              ],
+              "html": "<button type=\"button\" tabindex=\"0\" data-slot=\"button\" data-site-theme-togg...=\"true\" aria-label=\"ライトテーマに切り替える\" title=\"ライトテーマに切り替える\" class=\"group/button inline-...\">"
+            }
+          ]
+        },
+        {
+          "id": "scrollable-region-focusable",
+          "impact": "serious",
+          "nodes": [
+            {
+              "target": [
+                "li:nth-child(1) > pre"
+              ],
+              "html": "<pre class=\"overflow-x-auto rounded-lg border border-border bg-muted px-4 py-3 text-sm text-foreground\"><code>npx shadcn@latest add https://ui.elchika.dev/r/button.json</code></pre>"
+            },
+            {
+              "target": [
+                ".border-t:nth-child(2) > pre:nth-child(2)"
+              ],
+              "html": "<pre class=\"overflow-x-auto rounded-lg border border-border bg-muted px-4 py-3 text-sm text-foreground\"><code>{\n  \"registries\": {\n    \"@elchika\": \"https://ui.elchika.dev/r/{name}.json\"\n  }\n}</code></pre>"
+            },
+            {
+              "target": [
+                ".border-t:nth-child(3) > pre"
+              ],
+              "html": "<pre class=\"overflow-x-auto rounded-lg border border-border bg-muted px-4 py-3 text-sm text-foreground\"><code>npx shadcn@latest mcp init --client claude</code></pre>"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "equivalent_impl_sha": "8e89837ddb887f64f6926bf02b664890598c2139"
+}

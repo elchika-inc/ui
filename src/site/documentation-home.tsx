@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { CommandBlock } from "@/site/documentation-shell";
 import {
+  CODEX_MCP_CONFIG,
   directInstallCommand,
   MCP_INIT_COMMAND,
   NAMESPACE_REGISTRY_CONFIG,
@@ -81,11 +82,33 @@ export function DocumentationHome() {
               <div>
                 <h3 className="font-heading text-xl font-semibold">3. shadcn MCP</h3>
                 <p className="mt-2 leading-normal text-muted-foreground">
-                  shadcn CLI 同梱 MCP を初期化し、生成された .mcp.json を有効にするため Claude
+                  shadcn CLI 同梱の MCP を、利用するクライアントに登録します。 components.json の
+                  registries が探索対象になります。
+                </p>
+              </div>
+              <div>
+                <h4 className="font-semibold">Claude Code</h4>
+                <p className="mt-2 leading-normal text-muted-foreground">
+                  プロジェクトで初期化し、生成された .mcp.json を読み込むため Claude Code
                   を再起動します。
                 </p>
               </div>
               <CommandBlock>{MCP_INIT_COMMAND}</CommandBlock>
+              <div>
+                <h4 className="font-semibold">Codex</h4>
+                <p className="mt-2 leading-normal text-muted-foreground">
+                  ~/.codex/config.toml に次の設定を追加し、Codex を再起動します。
+                  同じ設定が既にある場合は追記せず、内容を確認してください。
+                </p>
+              </div>
+              <CommandBlock>{CODEX_MCP_CONFIG}</CommandBlock>
+              <p className="leading-normal text-muted-foreground">
+                その他のクライアントや接続の確認方法は、
+                <a className="underline underline-offset-4" href="https://ui.shadcn.com/docs/mcp">
+                  shadcn の公式 MCP 手順
+                </a>
+                を参照してください。
+              </p>
             </li>
           </ol>
         </section>

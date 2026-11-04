@@ -78,11 +78,24 @@ npx shadcn@latest add @elchika/button
 
 ### shadcn MCP
 
-shadcn CLI 同梱の MCP を初期化する。生成された `.mcp.json` を有効にするため、初期化後に Claude を再起動する。MCP server の自前実装は不要で、`components.json` の `registries` が探索対象になる。
+shadcn CLI 同梱の MCP を、利用するクライアントに登録する。MCP server の自前実装は不要で、`components.json` の `registries` が探索対象になる。
+
+**Claude Code**: プロジェクトで次を実行し、生成された `.mcp.json` を読み込むため Claude Code を再起動する。
 
 ```bash
 npx shadcn@latest mcp init --client claude
 ```
+
+**Codex**: `~/.codex/config.toml` に次を追加し、Codex を再起動する。同じ設定が既にある場合は追記せず、内容を確認する。
+
+```toml
+[mcp_servers.shadcn]
+command = "npx"
+args = ["shadcn@latest", "mcp"]
+```
+
+その他のクライアントや接続の確認方法は [shadcn の公式 MCP 手順](https://ui.shadcn.com/docs/mcp) を参照する。
+
 
 ### block
 

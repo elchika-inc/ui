@@ -243,6 +243,11 @@ test("トップがLP要素なしで3経路とtoken置換を順に案内する", 
   assert.match(html, /npx shadcn@latest add https:\/\/ui\.elchika\.dev\/r\/button\.json/);
   assert.match(html, /npx shadcn@latest add @elchika\/button/);
   assert.match(html, /npx shadcn@latest mcp init --client claude/);
+  assert.match(html, /Claude Code/);
+  assert.match(html, /Codex/);
+  assert.match(html, /~\/\.codex\/config\.toml/);
+  assert.match(html, /\[mcp_servers\.shadcn\]/);
+  assert.match(html, /https:\/\/ui\.shadcn\.com\/docs\/mcp/);
   assert.match(html, /add するたびに[^<]*再削除/);
   assert.match(html, /href="\/components\/button\/"/);
   assert.doesNotMatch(html, /Shared interface registry/i);
