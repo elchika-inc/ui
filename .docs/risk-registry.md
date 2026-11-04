@@ -147,3 +147,14 @@
 - status: accepted
 - reason: 上流に SPDX ライセンスが無く、terms は値と設計の参照・改変・商用利用を認め、コレクションの再配布を禁じている。当リポジトリは公開 registry の component kit なので、snippet（`t-*` クラス、`.is-open` / `.is-closing`、`_root.css`）を持ち込まず、段の値と用途表だけを参照する。コードを持ち込まないため THIRD_PARTY_LICENSES は変えない。
 - anchor: 仕様 §4.8 の grep で、検査対象の `src/components` / `src/blocks` / `src/styles/global.css` に `t-` 接頭辞の CSS クラス（引用符または空白の後の `t-` に英字が続くもの）と `is-open` / `is-closing` クラスが存在しないことを確認する。`src/styles/design-system/design-tokens.html` の決定記録が出典と利用条件を持つ。
+
+## RISK-017: 導入ページに既存のアクセシビリティ違反が残る
+
+- date: 2026-11-05
+- confidence: high
+- location: `src/site/theme-toggle.tsx` / `src/site/documentation-shell.tsx` の CommandBlock とトップページの既存コード表示
+- status: accepted
+- reason: Codex 導入案内の追加時に axe 4.14.0 で serious の label-content-name-mismatch（テーマボタン）と scrollable-region-focusable（既存コード3箇所）を観測。変更前 base を別ディレクトリでビルド・配信した同じ検査でも再現した。今回は導入案内の追加に範囲を限定し、共通UIの修正を混在させない。追加した Codex 表示には検出がないが、ページ全体の a11y を合格と扱わない。受容判断は実装エージェントが行い、人間が PR で確認する。
+- impact: 見えるテーマ名とアクセシブル名が一致せず、横スクロール領域のキーボード操作に検査上の不備が残る。
+- mitigation: #112 の残課題として記録し、共通UIを触る作業で修正と実ブラウザ回帰検証を行う。
+- anchor: `.docs/reviews/2026-11-05-agent-portability-review.md` の再現手順と同日の browser.json。変更前・変更後を同じ axe タグで測った観測を固定し、後続検証で違反数や対象が増えればこの受容範囲外と判定できる。
