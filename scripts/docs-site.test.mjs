@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
+import * as installation from "../src/site/installation.mjs";
 
 import {
   directInstallCommand,
@@ -27,6 +28,18 @@ test("名前空間の設定とinstall commandを生成する", () => {
 
 test("shadcn同梱MCPの初期化commandを公開する", () => {
   assert.equal(MCP_INIT_COMMAND, "npx shadcn@latest mcp init --client claude");
+});
+
+test("Codexで導入するとき → 自動初期化ではなくTOML設定を案内する", () => {
+  assert.equal(
+    installation.CODEX_MCP_CONFIG,
+    '[mcp_servers.shadcn]\ncommand = "npx"\nargs = ["shadcn@latest", "mcp"]',
+  );
+  const readme = readFileSync(new URL("../README.md", import.meta.url), "utf8");
+  assert.ok(readme.includes(installation.CODEX_MCP_CONFIG));
+  assert.match(readme, /~\/\.codex\/config\.toml/);
+  assert.match(readme, /Codex を再起動/);
+  assert.match(readme, /https:\/\/ui\.shadcn\.com\/docs\/mcp/);
 });
 
 test("component名にpathを混入できない", () => {

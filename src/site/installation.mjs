@@ -1,5 +1,8 @@
 export const REGISTRY_ORIGIN = "https://ui.elchika.dev";
 export const MCP_INIT_COMMAND = "npx shadcn@latest mcp init --client claude";
+export const CODEX_MCP_CONFIG = `[mcp_servers.shadcn]
+command = "npx"
+args = ["shadcn@latest", "mcp"]`;
 export const NAMESPACE_REGISTRY_CONFIG = JSON.stringify(
   {
     registries: {
